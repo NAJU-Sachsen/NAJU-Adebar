@@ -1,0 +1,30 @@
+
+main {
+   width: 60%;
+   margin: 0 auto;
+}
+
+.status {
+   display: flex;
+   margin: 0.5em;
+   padding: 1em;
+   min-height: 4em;
+   border-radius: 5px;
+   align-items: center;
+}
+
+#status {
+   margin: 2em 15% 0 15%;
+}
+
+.status p {
+   margin: 0 auto;
+}
+.item-title {
+   display: inline-block;
+   width: 15%;
+}
+
+ul.dropdown-menu.confirm-delete {
+   text-align: center;
+}
