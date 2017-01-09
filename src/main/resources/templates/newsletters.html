@@ -157,7 +157,7 @@
                         <div class="form-group">
                            <label for="newsletter-ids" class="col-sm-2 control-label">Abonnierte Newsletter</label>
                            <div class="col-sm-10">
-                              <select id="newsletter-ids" class="form-control"  name="newsletters" multiple="multiple" required="required" th:remove="all-but-first">
+                              <select id="newsletter-ids" class="form-control"  name="newsletters" multiple="multiple" required="required" th:remove="all-but-first" data-toggle="tooltip" data-placement="top" data-title="Mit [Strg] mehrere auswählen">
                                  <option value="1" th:each="newsletter : ${newsletters}" th:value="${newsletter.id}" th:text="${newsletter.name}">NAJU Allgemein (NAJU Sachsen)</option>
                                  <option value="2">Puppenstuben (Puppenstuben-Projekt)</option>
                                  <option value="3">HIFA-Camp (HIFA)</option>
@@ -215,7 +215,7 @@
                         <div class="form-group">
                            <label for="edit-subscribed" class="col-sm-2 control-label">Abonnierte Newsletter</label>
                            <div class="col-sm-10">
-                              <select id="edit-subscribed" class="form-control"  name="edit-subscribed" multiple="multiple" required="required" th:remove="all-but-first">
+                              <select id="edit-subscribed" class="form-control"  name="edit-subscribed" multiple="multiple" required="required" th:remove="all-but-first" data-toggle="tooltip" data-placement="top" data-title="Mit [Strg] mehrere auswählen">
                                  <option id="nid-1" value="1" th:each="newsletter : ${newsletters}" th:value="${newsletter.id}" th:text="${newsletter.name}" th:id="'nid-' + ${newsletter.id}">NAJU Allgemein (NAJU Sachsen)</option>
                                  <option id="nid-2" value="2">Puppenstuben (Puppenstuben-Projekt)</option>
                                  <option id="nid-3" value="3">HIFA-Camp (HIFA)</option>
