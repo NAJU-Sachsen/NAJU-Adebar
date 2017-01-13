@@ -15,3 +15,7 @@ function $i(id) {
 $('.modal').on('shown.bs.modal', function() {
     $(this).find('[autofocus]').focus();
 });
+
+$("[data-toggle=tooltip]").tooltip({
+	placement: $(this).data("placement") || 'top'
+});
