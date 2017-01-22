@@ -1,13 +1,14 @@
-package adebar.model.newsletter;
+package de.naju.adebar.model.newsletter;
 
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 import org.springframework.util.Assert;
 
-import adebar.util.Validation;
+import de.naju.adebar.util.Validation;
 
 /**
  * Abstraction of person that subscribed to a newsletter.
@@ -16,8 +17,8 @@ import adebar.util.Validation;
  * </p>
  * <p>
  * This class is necessary, as not all persons that subscribe to a newsletter have to be
- * tracked as {@link adebar.model.human.Person Person}, e.g. one may solely subscribe to a newsletter through
- * a website and therefore will not become part of the database itself.
+ * tracked as {@link de.naju.adebar.model.human.Person Person}, e.g. one may solely subscribe to a newsletter through
+ * a website and therefore will not become part of the activist database itself.
  * </p>
  * @author Rico Bergmann
  *
@@ -30,8 +31,9 @@ public class Subscriber implements Serializable {
 	 */
 	private final static long serialVersionUID = 7082774853885904589L;
 	
+	@Id @GeneratedValue private long id;
 	private String firstName, lastName;
-	@Id private String email;
+	private String email;
 	
 	// constructors
 	
@@ -73,6 +75,13 @@ public class Subscriber implements Serializable {
 	// default getter
 	
 	/**
+	 * @return the subscriber's id (= primary key)
+	 */
+	public long getId() {
+		return id;
+	}
+	
+	/**
 	 * @return the subsriber's first name
 	 */
 	public String getFirstName() {
@@ -80,7 +89,7 @@ public class Subscriber implements Serializable {
 	}
 
 	/**
-	 * @return the subsriber's last name
+	 * @return the subscriber's last name
 	 */
 	public String getLastName() {
 		return lastName;
@@ -128,9 +137,21 @@ public class Subscriber implements Serializable {
 		}
 		this.email = email;
 	}
+
+    /**
+     * Updates the subscriber's id (= primary key). As this method should only be called by Spring, it is
+     * {@literal protected}
+     * @param id the new id
+     */
+	protected void setId(long id) {
+	    this.id = id;
+    }
 	
 	// "advanced" getters
-	
+
+    /**
+     * @return the subscriber's name, which basically is {@code firstName + " " + lastName}
+     */
 	public String getName() {
 		StringBuilder nameBuilder = new StringBuilder();
 		if (firstName != null && !firstName.isEmpty()) {
@@ -145,16 +166,24 @@ public class Subscriber implements Serializable {
 	}
 	
 	// checkers
-	
+
+    /**
+     * @return {@code true} if at least first name or last name is not empty
+     */
 	public boolean hasName() {
-		return !(firstName.isEmpty() && lastName.isEmpty());
+	    if (firstName == null && lastName == null) {
+	        return false;
+        } else if (firstName == null && lastName.isEmpty()) {
+	        return false;
+        } else if (lastName == null && firstName.isEmpty()) {
+	        return false;
+        } else {
+	        return true;
+        }
 	}
 	
-	// overriden from Object
-	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
+	// overridden from Object
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -163,9 +192,6 @@ public class Subscriber implements Serializable {
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -187,10 +213,7 @@ public class Subscriber implements Serializable {
 		}
 		return true;
 	}
-	
-	/**
-	 * 
-	 */
+
 	@Override
 	public String toString() {
 		return String.format("NewsletterSubscriber: %s %s (%s)", firstName, lastName, getEmail());

@@ -1,5 +1,7 @@
-package adebar.model.newsletter;
+package de.naju.adebar.app.newsletter;
 
+import de.naju.adebar.model.newsletter.Newsletter;
+import de.naju.adebar.model.newsletter.Subscriber;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 

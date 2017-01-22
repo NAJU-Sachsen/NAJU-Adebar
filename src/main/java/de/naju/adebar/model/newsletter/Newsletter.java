@@ -1,4 +1,4 @@
-package adebar.model.newsletter;
+package de.naju.adebar.model.newsletter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +70,7 @@ public class Newsletter {
 	}
 	
 	/**
-	 * @return 
+	 * @return the newsletter's subscribers
 	 */
 	public Iterable<Subscriber> getSubscribers() {
 		return subscribers;
@@ -110,7 +110,11 @@ public class Newsletter {
 	}
 	
 	// checker
-	
+
+    /**
+     * @param subscriber the subscriber to check
+     * @return {@code true} if the subscriber subscribed to the newsletter
+     */
 	public boolean hasSubscriber(Subscriber subscriber) {
 		return subscribers.contains(subscriber);
 	}
@@ -126,12 +130,13 @@ public class Newsletter {
 	/**
 	 * Adds a new subscriber to the newsletter. He will be able to receive emails after that.
 	 * @param subscriber the new subscriber
-	 * @throws IllegalArgumentException if the {@literal subscriber} is {@code null} or already a subscriber
-	 */
+	 * @throws IllegalArgumentException if the {@literal subscriber} is {@code null}
+     * @throws AlreadySubscribedException if the {@literal subscriber} is already a subscriber
+     */
 	public void addSubscriber(Subscriber subscriber) {
 		Assert.notNull(subscriber, "New subscriber may not be null!");
 		if (subscribers.contains(subscriber)) {
-			throw new IllegalArgumentException(
+			throw new AlreadySubscribedException(
 					String.format("%s did already subscribe to %s", subscriber.toString(), this.toString()));
 		}
 		subscribers.add(subscriber);	
@@ -141,7 +146,8 @@ public class Newsletter {
 	/**
 	 * Removes a subscriber from the newsletter. He will not receive any emails from the newsletter after that.
 	 * @param subscriber the subscriber to remove
-	 * @throws IllegalArgumentException if the {@literal subscriber} is {@code null} or did not subscribe
+	 * @throws IllegalArgumentException if the {@literal subscriber} is {@code null}
+     * @throws NoSuchSubscriberException if the {@literal subscriber} is not subscribed
 	 */
 	public void removeSubscriber(Subscriber subscriber) {
 		Assert.notNull(subscriber, "Subscriber to remove may not be null!");
@@ -153,10 +159,7 @@ public class Newsletter {
 	}
 	
 	// overridden from Object
-	
-	/**
-	 * 
-	 */
+
 	@Override public String toString() {
 		return String.format("Newsletter %d: %s (%d subscribers)", id, name, subscribers.size());
 	}
