@@ -177,9 +177,11 @@ public class Subscriber implements Serializable {
 	        return false;
         } else if (lastName == null && firstName.isEmpty()) {
 	        return false;
+        } else if (firstName.isEmpty() && lastName.isEmpty()){
+	        return false;
         } else {
-	        return true;
-        }
+        	return true;
+		}
 	}
 	
 	// overridden from Object
