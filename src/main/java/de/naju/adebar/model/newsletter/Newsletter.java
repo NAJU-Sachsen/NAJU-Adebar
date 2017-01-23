@@ -46,6 +46,7 @@ public class Newsletter {
 	
 	/**
 	 * @param name the newsletter's name
+	 * @throws IllegalArgumentException if the name was {@code null} or empty
 	 */
 	public Newsletter(String name) {
 		Assert.hasText(name, "Must specify a name for the newsletter, but was: " + name);
