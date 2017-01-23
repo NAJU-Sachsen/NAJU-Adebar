@@ -38,7 +38,7 @@ public class NewsletterController {
     @RequestMapping("/newsletters")
     public String showNewsletters(Model model) {
         model.addAttribute("newsletters", newsletterRepo.findAll());
-        model.addAttribute("subscribers", subscriberRepo.findAll());
+        model.addAttribute("subscribers", subscriberRepo.findFirst10ByOrderByEmail());
         return "newsletters";
     }
 

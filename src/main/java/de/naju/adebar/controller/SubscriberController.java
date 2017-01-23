@@ -38,14 +38,17 @@ public class SubscriberController {
     }
 
     /**
-     * Displays the subscriber overview
+     * Displays the subscriber overview with all subscribers
      * @param model model to display the data in
      * @return the newsletters' overview view
      */
-    @RequestMapping("/newsletters/subscribers")
-    public String showNewsletterSubscribers(Model model) {
-        model.addAttribute("subscribers", subscriberRepo.findFirst10ByOrderByEmail());
-        return "subscribers";
+    @RequestMapping(value="newsletters/subscribers/all")
+    public String showAllNewsletterSubscribers(Model model) {
+        model.addAttribute("newsletters", newsletterRepo.findAll());
+        model.addAttribute("subscribers", subscriberRepo.findAll());
+        model.addAttribute("tab", "subscribers");
+        model.addAttribute("subscriberDisplay", "all");
+        return "newsletters";
     }
 
     /**

@@ -19,3 +19,8 @@ $('.modal').on('shown.bs.modal', function() {
 $("[data-toggle=tooltip]").tooltip({
 	placement: $(this).data("placement") || 'top'
 });
+
+
+$('.btn-loading').click(function() {
+    $(this).find('.glyphicon-refresh').addClass('glyphicon-load-animate');
+});
