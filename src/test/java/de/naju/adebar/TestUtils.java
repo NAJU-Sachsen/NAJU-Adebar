@@ -1,4 +1,4 @@
-package adebar;
+package de.naju.adebar;
 
 /**
  * @author Rico Bergmann
