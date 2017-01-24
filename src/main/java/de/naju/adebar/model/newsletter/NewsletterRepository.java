@@ -1,11 +1,13 @@
 package de.naju.adebar.model.newsletter;
 
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 /**
  * Repository to access {@link Newsletter}
  * @author Rico Bergmann
  */
+@Repository
 public interface NewsletterRepository extends CrudRepository<Newsletter, Long> {
 
     /**

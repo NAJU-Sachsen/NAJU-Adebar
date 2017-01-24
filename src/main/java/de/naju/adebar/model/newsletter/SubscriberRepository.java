@@ -1,6 +1,7 @@
 package de.naju.adebar.model.newsletter;
 
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
@@ -8,6 +9,7 @@ import java.util.Optional;
  * Repository to access {@link Subscriber}
  * @author Rico Bergmann
  */
+@Repository
 public interface SubscriberRepository extends CrudRepository<Subscriber, Long> {
 
     /**

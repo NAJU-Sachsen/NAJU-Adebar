@@ -56,9 +56,8 @@ public class PersistentNewsletterManager implements NewsletterManager {
 	
 	@Override
 	public void subscribePersonToNewsletter(Person person, Newsletter newsletter) {
-		Subscriber subscriber;
-		subscriber = new Subscriber(person.getFirstName(), person.getLastName(), person.getEmail());
-		if (!subscriberRepo.exists(person.getId())) {
+		Subscriber subscriber = new Subscriber(person.getFirstName(), person.getLastName(), person.getEmail());
+		if (!subscriberRepo.findByEmail(person.getEmail()).isPresent()) {
 			subscriber = subscriberRepo.save(subscriber);
 		} else {
 			if (!subscriberRepo.findOne(subscriber.getId()).equals(subscriber)) {

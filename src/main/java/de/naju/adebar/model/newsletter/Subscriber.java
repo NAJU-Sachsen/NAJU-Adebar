@@ -2,6 +2,7 @@ package de.naju.adebar.model.newsletter;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -33,7 +34,7 @@ public class Subscriber implements Serializable {
 	
 	@Id @GeneratedValue private long id;
 	private String firstName, lastName;
-	private String email;
+	@Column(unique=true) private String email;
 	
 	// constructors
 	

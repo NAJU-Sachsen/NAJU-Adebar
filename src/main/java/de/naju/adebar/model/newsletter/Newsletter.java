@@ -162,6 +162,6 @@ public class Newsletter {
 	// overridden from Object
 
 	@Override public String toString() {
-		return String.format("Newsletter %d: %s (%d subscribers)", id, name, subscribers.size());
+		return String.format("Newsletter [id=%d, %name=%s, subscribers=%d]", id, name, subscribers.size());
 	}
 }
