@@ -1,9 +1,9 @@
 package de.naju.adebar.model.newsletter;
 
 import de.naju.adebar.TestUtils;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.util.Assert;
 
 /**
  * @author Rico Bergmann
@@ -37,16 +37,16 @@ public class NewsletterUnitTets {
 
     @Test public void testAddValidSubscriber() {
         hifaNewsletter.addSubscriber(hans);
-        Assert.isTrue(hifaNewsletter.hasSubscriber(hans), String.format("%s should have been added!", hans));
+        Assert.assertTrue(String.format("%s should have been added!", hans), hifaNewsletter.hasSubscriber(hans));
     }
 
     @Test public void testAddMultipleSubscriber() {
         hifaNewsletter.addSubscriber(hans);
         hifaNewsletter.addSubscriber(berta);
         hifaNewsletter.addSubscriber(claus);
-        Assert.isTrue(TestUtils.iterableContains(hifaNewsletter.getSubscribers(), hans), String.format("%s should have been added!", hans));
-        Assert.isTrue(TestUtils.iterableContains(hifaNewsletter.getSubscribers(), berta), String.format("%s should have been added!", berta));
-        Assert.isTrue(TestUtils.iterableContains(hifaNewsletter.getSubscribers(), claus), String.format("%s should have been added!", claus));
+        Assert.assertTrue(String.format("%s should have been added!", hans), TestUtils.iterableContains(hifaNewsletter.getSubscribers(), hans));
+        Assert.assertTrue(String.format("%s should have been added!", berta), TestUtils.iterableContains(hifaNewsletter.getSubscribers(), berta) );
+        Assert.assertTrue(String.format("%s should have been added!", claus), TestUtils.iterableContains(hifaNewsletter.getSubscribers(), claus) );
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -64,6 +64,6 @@ public class NewsletterUnitTets {
     public void testRemoveSubscriber() {
         hifaNewsletter.addSubscriber(hans);
         hifaNewsletter.removeSubscriber(hans);
-        Assert.isTrue(!hifaNewsletter.hasSubscriber(hans), String.format("%s should have been removed!", hans));
+        Assert.assertFalse(String.format("%s should have been removed!", hans), hifaNewsletter.hasSubscriber(hans));
     }
 }

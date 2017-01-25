@@ -1,7 +1,7 @@
 package de.naju.adebar.model.newsletter;
 
+import org.junit.Assert;
 import org.junit.Test;
-import org.springframework.util.Assert;
 
 /**
  * @author Rico Bergmann
@@ -20,12 +20,12 @@ public class SubscriberUnitTest {
 
     @Test public void testHasName() {
         Subscriber sub = new Subscriber("Claus", "", "claus@web.de");
-        Assert.isTrue(sub.hasName());
+        Assert.assertTrue("Subscriber should have a name", sub.hasName());
     }
 
     @Test public void testHasNoName() {
         Subscriber sub = new Subscriber("", "", "claus@web.de");
-        Assert.isTrue(!sub.hasName());
+        Assert.assertFalse("Subscriber should not have a name", sub.hasName());
     }
 
 

@@ -1,17 +1,14 @@
 package de.naju.adebar.model.newsletter;
 
 import de.naju.adebar.controller.NewsletterController;
-import de.naju.adebar.model.newsletter.*;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Arrays;
 
@@ -42,15 +39,15 @@ public class NewsletterIntegrationTest {
     }
 
     @Test public void testSubscription() {
-        Assert.isTrue(!hifaNewsletter.hasSubscriber(hans), String.format("%s should not have subscribed already", hans));
+        Assert.assertFalse(String.format("%s should not have subscribed already", hans), hifaNewsletter.hasSubscriber(hans));
         newsletterManager.subscribe(hans, hifaNewsletter);
-        Assert.isTrue(hifaNewsletter.hasSubscriber(hans), String.format("%s should have subscribed", hans));
+        Assert.assertTrue(String.format("%s should have subscribed", hans), hifaNewsletter.hasSubscriber(hans));
     }
 
     @Test public void testDeletion() {
         newsletterManager.subscribe(hans, hifaNewsletter);
         newsletterManager.unsubscribe(hans, hifaNewsletter);
-        Assert.isTrue(!hifaNewsletter.hasSubscriber(hans), String.format("%s should have unsubscribed", hans));
+        Assert.assertFalse(String.format("%s should have unsubscribed", hans), hifaNewsletter.hasSubscriber(hans));
     }
 
     /**
@@ -59,7 +56,7 @@ public class NewsletterIntegrationTest {
     @Test public void testNewsletterDeletion() {
         newsletterManager.subscribe(hans, hifaNewsletter);
         newsletterManager.deleteNewsletter(hifaNewsletter.getId());
-        Assert.isTrue(!subscriberRepo.exists(hans.getId()), String.format("%s should be deleted", hans));
+        Assert.assertFalse(String.format("%s should be deleted", hans), subscriberRepo.exists(hans.getId()));
     }
 
     /**
@@ -68,7 +65,7 @@ public class NewsletterIntegrationTest {
     @Test public void testUnsubscription() {
         newsletterManager.subscribe(hans, hifaNewsletter);
         newsletterManager.unsubscribe(hans, hifaNewsletter);
-        Assert.isTrue(!subscriberRepo.exists(hans.getId()), String.format("%s should be deleted", hans));
+        Assert.assertFalse(String.format("%s should be deleted", hans), subscriberRepo.exists(hans.getId()));
     }
 
 }
