@@ -31,7 +31,7 @@ public class NewsletterDataProcessor {
 	 * Concatenates all subscribers of the newsletters given and returns them as one large {@code String}.
 	 * This may be especially useful, when used as recipients of emails.
 	 * @param newsletters the newsletters to examine
-	 * @return concatenation of all subscribers, separated by the {@literal EMAIL_DELIMITER} 
+	 * @return concatenation of all subscribers, separated by the {@code EMAIL_DELIMITER}
 	 */
 	public String getSubscriberEmails(Newsletter... newsletters) {
 		Assert.noNullElements(newsletters, "Newsletter may not be null!");

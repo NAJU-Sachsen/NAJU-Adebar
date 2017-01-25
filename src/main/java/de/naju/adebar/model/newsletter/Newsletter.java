@@ -81,7 +81,7 @@ public class Newsletter {
 	
 	/**
 	 * @param name the newsletter's new name
-	 * @throws IllegalArgumentException when the {@literal name} is empty or {@code null}
+	 * @throws IllegalArgumentException when the {@code name} is empty or {@code null}
 	 */
 	public void setName(String name) {
 		Assert.hasText(name, "A newsletters name may not be empty, but was: " + name);
@@ -103,7 +103,7 @@ public class Newsletter {
 	
 	/**
 	 * @param subscribers the newsletter's subscribers
-	 * @throws IllegalArgumentException if {@literal subscribers} is {@code null}
+	 * @throws IllegalArgumentException if {@code subscribers} is {@code null}
 	 */
 	protected void setSubscribers(List<Subscriber> subscribers) {
 		Assert.notNull(subscribers, "Subscribers may not be null!");
@@ -131,8 +131,8 @@ public class Newsletter {
 	/**
 	 * Adds a new subscriber to the newsletter. He will be able to receive emails after that.
 	 * @param subscriber the new subscriber
-	 * @throws IllegalArgumentException if the {@literal subscriber} is {@code null}
-     * @throws AlreadySubscribedException if the {@literal subscriber} is already a subscriber
+	 * @throws IllegalArgumentException if the {@code subscriber} is {@code null}
+     * @throws AlreadySubscribedException if the {@code subscriber} is already a subscriber
      */
 	public void addSubscriber(Subscriber subscriber) {
 		Assert.notNull(subscriber, "New subscriber may not be null!");
@@ -147,8 +147,8 @@ public class Newsletter {
 	/**
 	 * Removes a subscriber from the newsletter. He will not receive any emails from the newsletter after that.
 	 * @param subscriber the subscriber to remove
-	 * @throws IllegalArgumentException if the {@literal subscriber} is {@code null}
-     * @throws NoSuchSubscriberException if the {@literal subscriber} is not subscribed
+	 * @throws IllegalArgumentException if the {@code subscriber} is {@code null}
+     * @throws NoSuchSubscriberException if the {@code subscriber} is not subscribed
 	 */
 	public void removeSubscriber(Subscriber subscriber) {
 		Assert.notNull(subscriber, "Subscriber to remove may not be null!");

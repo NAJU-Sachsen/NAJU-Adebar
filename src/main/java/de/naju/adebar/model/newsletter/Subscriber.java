@@ -141,7 +141,7 @@ public class Subscriber implements Serializable {
 
     /**
      * Updates the subscriber's id (= primary key). As this method should only be called by Spring, it is
-     * {@literal protected}
+     * {@code protected}
      * @param id the new id
      */
 	protected void setId(long id) {

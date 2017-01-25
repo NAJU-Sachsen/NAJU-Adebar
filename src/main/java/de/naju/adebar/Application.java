@@ -12,7 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Application {
 	
 	/**
-	 * Just the main-method calling {@literal Spring} to take care of all the rest.
+	 * Just the main-method calling Spring to take care of all the rest.
 	 * @param args application arguments
 	 */
 	public static void main(String[] args) {
