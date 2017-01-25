@@ -1,6 +1,5 @@
 package de.naju.adebar.model.newsletter;
 
-import de.naju.adebar.controller.NewsletterController;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,10 +9,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 
 /**
- * Basic behavior testing for the @{link {@link NewsletterController}}
+ * Basic behavior testing for the {@link PersistentNewsletterManager}
  * @author Rico Bergmann
  */
 @RunWith(SpringRunner.class)
@@ -21,21 +19,18 @@ import java.util.Arrays;
 @Transactional
 public class NewsletterIntegrationTest {
 
-    @Autowired private NewsletterManager newsletterManager;
-    @Autowired private SubscriberManager subscriberManager;
+    @Autowired private PersistentNewsletterManager newsletterManager;
     @Autowired private NewsletterRepository newsletterRepo;
     @Autowired private SubscriberRepository subscriberRepo;
-    private Newsletter hifaNewsletter, bwcNewsletter;
-    private Subscriber hans, berta, claus;
+    private Newsletter hifaNewsletter;
+    private Subscriber hans;
 
     @Before public void setUp() {
         hifaNewsletter = new Newsletter("HIFA");
         hans = new Subscriber("Hans", "Wurst", "hans.wurst@web.de");
-        berta = new Subscriber("Berta", "Beate", "bbeate@gmail.com");
-        claus = new Subscriber("cccclllaaus@gmx.net");
 
         newsletterRepo.save(hifaNewsletter);
-        subscriberRepo.save(Arrays.asList(new Subscriber[]{hans, berta, claus}));
+        subscriberRepo.save(hans);
     }
 
     @Test public void testSubscription() {
