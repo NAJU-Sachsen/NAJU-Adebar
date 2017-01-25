@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Optional;
 
-import de.naju.adebar.util.Iteration;
+import com.google.common.collect.Iterables;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -100,7 +100,7 @@ public class PersistentNewsletterManager implements NewsletterManager {
         newsletterRepo.save(newsletter);
 
         // if this was the last newsletter the subscriber read, we will delete it
-        if (Iteration.isEmpty(newsletterRepo.findBySubscribersContains(subscriber))) {
+        if (Iterables.isEmpty(newsletterRepo.findBySubscribersContains(subscriber))) {
             subscriberRepo.delete(subscriber);
         }
     }
