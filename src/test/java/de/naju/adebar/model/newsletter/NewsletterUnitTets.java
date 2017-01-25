@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
+ * Basic testing of the {@link Newsletter} class
  * @author Rico Bergmann
  */
 public class NewsletterUnitTets {

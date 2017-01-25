@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
+ * Basic testing of the {@link Subscriber} class
  * @author Rico Bergmann
  */
 public class SubscriberUnitTest {
