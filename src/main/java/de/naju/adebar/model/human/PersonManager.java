@@ -1,7 +1,43 @@
 package de.naju.adebar.model.human;
 
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.Optional;
+
 /**
- * Created by strix on 24.01.17.
+ * Service to take care of {@link Person Persons}
+ * @author Rico Bergmann
+ * @see Person
  */
+@Service
 public interface PersonManager {
+
+    /**
+     * Saves a given person
+     * @param person the person to save
+     * @return the saved person. As its internal state may differ after the save, this instance should be used
+     * for future operations
+     */
+    Person savePerson(Person person);
+
+    /**
+     * Creates a new person
+     * @param firstName the person's first name
+     * @param lastName the person's last name
+     * @param email the person's email
+     * @param gender the person's gender
+     * @param address the person's address
+     * @param dob the person's date of birth
+     * @return the freshly created person instance
+     */
+    Person createPerson(String firstName, String lastName, String email, Gender gender, Address address, LocalDate dob);
+
+    /**
+     * Changes the state of a saved person
+     * @param personId the person to update
+     * @param newPerson the new person data
+     * @return the updated (and saved) person
+     */
+    Person updatePerson(PersonId personId, Person newPerson);
 }

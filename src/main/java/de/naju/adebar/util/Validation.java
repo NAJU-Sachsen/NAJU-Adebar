@@ -21,6 +21,7 @@ public class Validation {
 	 * @param text the text to check
 	 * @return {@code true} if the text is a valid email address and {@code false} otherwise
 	 * @see <a href="https://tools.ietf.org/html/rfc5322">RFC 5322</a>
+     * @throws IllegalArgumentException if {@code text == null}
 	 */
 	public static boolean isEmail(String text) {
 		Assert.notNull(text, "Text to validate may not be null!");

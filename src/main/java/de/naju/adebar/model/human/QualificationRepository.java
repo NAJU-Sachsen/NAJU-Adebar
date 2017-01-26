@@ -1,7 +1,11 @@
 package de.naju.adebar.model.human;
 
+import org.springframework.data.repository.CrudRepository;
+
 /**
- * Created by strix on 23.01.17.
+ * Repository to access {@link Qualification} instances
+ * @author Rico Bergmann
+ * @see Qualification
  */
-public class QualificationRepository {
+public interface QualificationRepository extends CrudRepository<Qualification, String> {
 }
