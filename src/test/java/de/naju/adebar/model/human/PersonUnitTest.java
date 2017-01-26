@@ -13,16 +13,16 @@ public class PersonUnitTest {
 
     @Test
     public void testValidEmail() {
-        new Person("", "", "hans@wurst.de", Gender.FEMALE, new Address(), dob);
+        new Person("Hans", "Wurst", "hans@wurst.de", Gender.FEMALE, new Address(), dob);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testInvalidEmail() {
-        new Person("", "", "hans@.de", Gender.FEMALE, new Address(), dob);
+        new Person("Hans", "Wurst", "hans@.de", Gender.FEMALE, new Address(), dob);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testInvalidDateOfBirth() {
-        new Person("", "", "hans@.de", Gender.FEMALE, new Address(), LocalDate.MAX);
+        new Person("Hans", "Wurst", "hans@.de", Gender.FEMALE, new Address(), LocalDate.MAX);
     }
 }
