@@ -61,6 +61,8 @@ public class Person {
         this.gender = gender;
         this.address = address;
         this.dateOfBirth = dateOfBirth;
+        this.eatingHabit = "";
+        this.healthImpairments = "";
     }
 
     /**
@@ -92,6 +94,8 @@ public class Person {
         this.gender = gender;
         this.address = address;
         this.dateOfBirth = dateOfBirth;
+        this.eatingHabit = "";
+        this.healthImpairments = "";
     }
 
     /**
