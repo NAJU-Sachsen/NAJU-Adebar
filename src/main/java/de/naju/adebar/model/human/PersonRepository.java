@@ -72,6 +72,11 @@ public interface PersonRepository extends CrudRepository<Person, PersonId> {
 	Iterable<Person> findByAddressZip(String zip);
 
     /**
+     * @return the first 25 persons
+     */
+	Iterable<Person> findFirst25ByOrderByLastName();
+
+    /**
      * @return all persisted persons as a stream. Nice for accessing them in a functional way
      * @see Stream
      * @see <a href="https://en.wikipedia.org/wiki/Functional_programming">Functional programming</a>
