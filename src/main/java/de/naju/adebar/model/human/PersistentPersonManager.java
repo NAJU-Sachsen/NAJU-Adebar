@@ -30,6 +30,15 @@ public class PersistentPersonManager implements PersonManager {
     }
 
     @Override
+    public Person persistPerson(Person person) {
+        if (person.hasId()) {
+            throw new IllegalStateException("Person has already specified a ID: " + person);
+        }
+        person.setId(new PersonId());
+        return personRepo.save(person);
+    }
+
+    @Override
     public Person createPerson(String firstName, String lastName, String email, Gender gender, Address address, LocalDate dob) {
         Person person = new Person(new PersonId(), firstName, lastName, email, gender, address, dob);
         return personRepo.save(person);

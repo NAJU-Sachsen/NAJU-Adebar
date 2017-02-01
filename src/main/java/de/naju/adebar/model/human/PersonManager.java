@@ -14,12 +14,23 @@ import java.util.Optional;
 public interface PersonManager {
 
     /**
-     * Saves a given person
+     * Saves a given person. It may or may not be saved already - however it must have an ID specified
      * @param person the person to save
      * @return the saved person. As its internal state may differ after the save, this instance should be used
      * for future operations
+     * @throws IllegalStateException if the person has no ID specified
      */
     Person savePerson(Person person);
+
+    /**
+     * Persists a given person. In opposition to {@link #savePerson(Person)} the person may not be part of the database
+     * already. (And therefore has no ID specified. Thus {@code person.hasId()} must return {@code false})
+     * @param person the person to save
+     * @return the saved person. As its internal state may differ after the save, this instance should be used
+     * for future operations
+     * @throws IllegalStateException if the person already has an ID specified
+     */
+    Person persistPerson(Person person);
 
     /**
      * Creates a new person
