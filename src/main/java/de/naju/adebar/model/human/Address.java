@@ -32,16 +32,14 @@ public class Address implements Serializable {
 	 * @param zip the zip, must be 5 characters long
 	 * @param city the city, may not be empty
 	 * @param additionalInfo the additional info, may be empty but not {@code null}
-     * @throws IllegalArgumentException if any of the parameters is null or empty (when it should not be)
+     * @throws IllegalArgumentException if any of the parameters is {@code null}
 	 */
 	public Address(String street, String zip, String city, String additionalInfo) {
 		String[] params = {street, zip, city, additionalInfo};
 		Assert.noNullElements(params, "No parameter may be null!");
-		Assert.hasText(street, "Street may not be empty, but was " + street);
-		Assert.hasText(city, "City may not be empty, but was " + city);
 
 		zip = zip.trim();
-		Assert.isTrue(zip.length() == ZIP_LENGTH, "Zip must be " + ZIP_LENGTH + " long, but was: " + zip);
+		Assert.isTrue(zip.isEmpty() || zip.length() == ZIP_LENGTH, "Zip must be " + ZIP_LENGTH + " long or empty, but was: " + zip);
 		
 		this.street = street;
 		this.zip = zip;
