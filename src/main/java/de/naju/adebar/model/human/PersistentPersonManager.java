@@ -24,17 +24,8 @@ public class PersistentPersonManager implements PersonManager {
     @Override
     public Person savePerson(Person person) {
         if (!person.hasId()) {
-            throw new IllegalStateException("Person must specify an ID: " + person);
+            person.setId(new PersonId());
         }
-        return personRepo.save(person);
-    }
-
-    @Override
-    public Person persistPerson(Person person) {
-        if (person.hasId()) {
-            throw new IllegalStateException("Person has already specified a ID: " + person);
-        }
-        person.setId(new PersonId());
         return personRepo.save(person);
     }
 
