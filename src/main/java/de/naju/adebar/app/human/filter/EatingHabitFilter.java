@@ -1,0 +1,23 @@
+package de.naju.adebar.app.human.filter;
+
+import de.naju.adebar.model.human.Person;
+
+import java.util.stream.Stream;
+
+/**
+ * Filter for persons depending on their eating habit. The filter is'fuzzy' - i.e. the eating habits do not
+ * need to be exactly equal, but the person's data need to contain the eating habit specified
+ * @author Rico Bergmann
+ */
+public class EatingHabitFilter implements PersonFilter {
+    private String eatingHabit;
+
+    public EatingHabitFilter(String eatingHabit) {
+        this.eatingHabit = eatingHabit;
+    }
+
+    @Override
+    public Stream<Person> filter(Stream<Person> personStream) {
+        return personStream.filter(p -> p.getEatingHabit().contains(eatingHabit));
+    }
+}
