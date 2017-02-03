@@ -26,8 +26,11 @@ public class PersistentReferentManager implements ReferentManager {
     }
 
     @Override
-    public Referent createReferentForPerson(Person person) {
+    public Referent createReferentForPerson(Person person, Qualification... qualifications) {
         Referent referent = new Referent(person.getId());
+        for (Qualification q : qualifications) {
+            referent.addQualification(q);
+        }
         return referentRepo.save(referent);
     }
 

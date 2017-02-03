@@ -23,7 +23,7 @@ public interface ReferentManager {
      * @param person the person
      * @return the freshly created referent instance
      */
-    Referent createReferentForPerson(Person person);
+    Referent createReferentForPerson(Person person, Qualification... qualifications);
 
     /**
      * Changes the state of a saved referent

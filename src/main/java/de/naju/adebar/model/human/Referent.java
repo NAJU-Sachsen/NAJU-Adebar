@@ -1,9 +1,11 @@
 package de.naju.adebar.model.human;
 
+import com.google.common.collect.Iterables;
 import org.springframework.util.Assert;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.*;
@@ -26,11 +28,20 @@ public class Referent implements Serializable {
     /**
      * Full constructor
      * @param person the person to turn into a referent
+     * @param qualifications the person's qualifications
      */
-	Referent(PersonId person) {
+	Referent(PersonId person, Qualification... qualifications) {
         Assert.notNull(person, "Associated person may not be null!");
         this.associatedPerson = person;
-        this.qualifications = new ArrayList<>();
+        this.qualifications = new ArrayList<>(qualifications.length);
+
+        for (Qualification q : qualifications) {
+            if (this.qualifications.contains(q)) {
+                throw new IllegalArgumentException("Duplicate qualification: " + q);
+            } else {
+                this.qualifications.add(q);
+            }
+        }
     }
 
     /**
@@ -88,6 +99,13 @@ public class Referent implements Serializable {
             throw new IllegalArgumentException("Referent " + this + " already has qualification " + qualification);
         }
         qualifications.add(qualification);
+    }
+
+    /**
+     * @param qualifications the qualifications to add
+     */
+    public void addAllQualifications(Iterable<Qualification> qualifications) {
+        qualifications.forEach(this::addQualification);
     }
 
     /**
