@@ -3,6 +3,7 @@ package de.naju.adebar.model.human;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Map;
 
 /**
  * Service to take care of {@link Activist Activists}
@@ -55,5 +56,10 @@ public interface ActivistManager {
      * @throws NoActivistException if the person is not an activist
      */
     LocalDate getJuleicaExpiryDateForPerson(Person person);
+
+    /**
+     * @return a map featuring the juleica expiry date of each person that has one
+     */
+    Map<Person, LocalDate> getJuleicaExpiryDates();
 
 }

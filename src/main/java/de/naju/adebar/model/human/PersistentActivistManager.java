@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A {@link ActivistManager} that persists the data in a database
@@ -12,11 +14,14 @@ import java.time.LocalDate;
  */
 @Service
 public class PersistentActivistManager implements ActivistManager {
+    private PersonRepository personRepo;
     private ActivistRepository activistRepo;
 
     @Autowired
-    public PersistentActivistManager(ActivistRepository activistRepo) {
+    public PersistentActivistManager(PersonRepository personRepo, ActivistRepository activistRepo) {
+        Assert.notNull(personRepo, "Person repository may not be null!");
         Assert.notNull(activistRepo, "Activist repository may not be null!");
+        this.personRepo = personRepo;
         this.activistRepo = activistRepo;
     }
 
@@ -57,5 +62,14 @@ public class PersistentActivistManager implements ActivistManager {
             throw new NoActivistException("Person is no activist: " + person);
         }
         return findActivistByPerson(person).getJuleicaExpiryDate();
+    }
+
+    @Override
+    public Map<Person, LocalDate> getJuleicaExpiryDates() {
+        Map<Person, LocalDate> activistsMap = new HashMap<>();
+        for (Activist activist : activistRepo.findByJuleicaExpiryDateIsNotNull()) {
+            activistsMap.put(personRepo.findOne(activist.getAssociatedPerson()), activist.getJuleicaExpiryDate());
+        }
+        return activistsMap;
     }
 }

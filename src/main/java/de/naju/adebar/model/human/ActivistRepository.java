@@ -34,6 +34,11 @@ public interface ActivistRepository extends CrudRepository<Activist, PersonId> {
     Iterable<Activist> findByJuleicaExpiryDateIsAfter(LocalDate date);
 
     /**
+     * @return all activists with a JuLeiCa expiry date
+     */
+    Iterable<Activist> findByJuleicaExpiryDateIsNotNull();
+
+    /**
      * @return all persisted activists as a stream. Nice for accessing them in a functional way
      * @see Stream
      * @see <a href="https://en.wikipedia.org/wiki/Functional_programming">Functional programming</a>
