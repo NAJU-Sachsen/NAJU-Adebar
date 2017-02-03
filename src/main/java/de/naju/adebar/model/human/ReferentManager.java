@@ -1,6 +1,7 @@
 package de.naju.adebar.model.human;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Service to take care of {@link Referent Referents}
@@ -53,4 +54,9 @@ public interface ReferentManager {
      * @see Qualification
      */
     Iterable<Qualification> getQualificationsForPerson(Person person);
+
+    /**
+     * @return a map featuring the qualifications of each person that is a referent
+     */
+    Map<Person, Iterable<Qualification>> getQualifications();
 }

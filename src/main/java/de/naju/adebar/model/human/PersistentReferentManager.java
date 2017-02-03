@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A {@link ReferentManager} that persists its data in a database
@@ -12,11 +14,14 @@ import java.util.List;
  */
 @Service
 public class PersistentReferentManager implements ReferentManager {
+    private PersonRepository personRepo;
     private ReferentRepository referentRepo;
 
     @Autowired
-    public PersistentReferentManager(ReferentRepository referentRepo) {
+    public PersistentReferentManager(PersonRepository personRepo, ReferentRepository referentRepo) {
+        Assert.notNull(personRepo, "Person repository may not be null!");
         Assert.notNull(referentRepo, "Activist repository may not be null!");
+        this.personRepo = personRepo;
         this.referentRepo = referentRepo;
     }
 
@@ -60,5 +65,14 @@ public class PersistentReferentManager implements ReferentManager {
             throw new NoReferentException("Person is no referent: " + person);
         }
         return findReferentByPerson(person).getQualifications();
+    }
+
+    @Override
+    public Map<Person, Iterable<Qualification>> getQualifications() {
+        Map<Person, Iterable<Qualification>> qualificationMap = new HashMap<>();
+        for (Referent r : referentRepo.findAll()) {
+            qualificationMap.put(personRepo.findOne(r.getAssociatedPerson()), r.getQualifications());
+        }
+        return qualificationMap;
     }
 }
