@@ -14,7 +14,8 @@ import java.util.Optional;
 public interface PersonManager {
 
     /**
-     * Saves a given person. It may or may not be saved already - however it must have an ID specified
+     * Saves a given person. It may or may not be saved already. If it has no ID specified, one will automatically
+     * be generated
      * @param person the person to save
      * @return the saved person. As its internal state may differ after the save, this instance should be used
      * for future operations
