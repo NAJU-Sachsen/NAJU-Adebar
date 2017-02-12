@@ -24,15 +24,23 @@ public class PersonStreamConverter {
         this.personRepo = personRepo;
     }
 
+    /**
+     * @param activistStream the activists to convert
+     * @return a stream consisting of the persons associated to the activists
+     */
     public Stream<Person> convertActivistStream(Stream<Activist> activistStream) {
         Stream.Builder<Person> personStreamBuilder = Stream.builder();
-        activistStream.forEach(activist -> personStreamBuilder.add(personRepo.findOne(activist.getAssociatedPerson())));
+        activistStream.forEach(activist -> personStreamBuilder.accept(personRepo.findOne(activist.getAssociatedPerson())));
         return personStreamBuilder.build();
     }
 
+    /**
+     * @param referentStream the referents to convert
+     * @return a stream consisting of the persons associated to the referents
+     */
     public Stream<Person> convertReferentStream(Stream<Referent> referentStream) {
         Stream.Builder<Person> personStreamBuilder = Stream.builder();
-        referentStream.forEach(referent -> personStreamBuilder.add(personRepo.findOne(referent.getAssociatedPerson())));
+        referentStream.forEach(referent -> personStreamBuilder.accept(personRepo.findOne(referent.getAssociatedPerson())));
         return personStreamBuilder.build();
     }
 }
