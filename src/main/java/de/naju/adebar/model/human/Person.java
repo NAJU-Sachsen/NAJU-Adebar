@@ -286,10 +286,10 @@ public class Person {
         result = 31 * result + lastName.hashCode();
         result = 31 * result + email.hashCode();
         result = 31 * result + gender.hashCode();
-        result = 31 * result + address.hashCode();
-        result = 31 * result + dateOfBirth.hashCode();
-        result = 31 * result + eatingHabit.hashCode();
-        result = 31 * result + healthImpairments.hashCode();
+        result = 31 * result + (address != null ? address.hashCode() : 0);
+        result = 31 * result + (dateOfBirth != null ? dateOfBirth.hashCode() : 0);
+        result = 31 * result + (eatingHabit != null ? eatingHabit.hashCode() : 0);
+        result = 31 * result + (healthImpairments != null ? healthImpairments.hashCode() : 0);
         return result;
     }
 
@@ -304,10 +304,10 @@ public class Person {
         if (!lastName.equals(person.lastName)) return false;
         if (!email.equals(person.email)) return false;
         if (gender != person.gender) return false;
-        if (!address.equals(person.address)) return false;
-        if (!dateOfBirth.equals(person.dateOfBirth)) return false;
-        if (!eatingHabit.equals(person.eatingHabit)) return false;
-        return healthImpairments.equals(person.healthImpairments);
+        if (address != null ? !address.equals(person.address) : person.address != null) return false;
+        if (dateOfBirth != null ? !dateOfBirth.equals(person.dateOfBirth) : person.dateOfBirth != null) return false;
+        if (eatingHabit != null ? !eatingHabit.equals(person.eatingHabit) : person.eatingHabit != null) return false;
+        return healthImpairments != null ? healthImpairments.equals(person.healthImpairments) : person.healthImpairments == null;
     }
 
     @Override
