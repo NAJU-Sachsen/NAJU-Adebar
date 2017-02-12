@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
+ * Utility functions on streams. Mostly of mathematical nature.
  * @author Rico Bergmann
  * @see Stream
  */
@@ -13,11 +14,14 @@ public class Streams {
 
     /**
      * Calculates a stream c, such that {@code c := a \u2229 b}
+     * @param a the first stream
+     * @param b the second stream
+     * @return c
      */
     public static <T> Stream<T> intersect(Stream<T> a, Stream<T> b) {
         List<T> listA = a.collect(Collectors.toList());
         List<T> listB = b.collect(Collectors.toList());
-        List<T> result = new LinkedList<T>();
+        List<T> result = new LinkedList<>();
         listA.forEach(elem -> {
             if (listB.contains(elem)) {
                 result.add(elem);
@@ -28,6 +32,9 @@ public class Streams {
 
     /**
      * Calculates a stream c, such that {@code c := a \ b}
+     * @param a the first stream
+     * @param b the second stream
+     * @return c
      */
     public static <T> Stream<T> subtract(Stream<T> a, Stream<T> b) {
         List<T> listA = a.collect(Collectors.toList());
