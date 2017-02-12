@@ -16,22 +16,17 @@ public class PersistentHumanManager implements HumanManager {
     private ActivistManager activistManager;
     private ReferentManager referentManager;
     private PersonRepository personRepo;
-    private ActivistRepository activistRepo;
-    private ReferentRepository referentRepo;
 
 
     @Autowired
     public PersistentHumanManager(PersistentPersonManager personManager, PersistentActivistManager activistManager,
-                                  PersistentReferentManager referentManager, PersonRepository personRepo,
-                                  ActivistRepository activistRepo, ReferentRepository referentRepo) {
-        Object[] params = {personManager, activistManager, referentManager, personRepo, activistRepo, referentRepo};
+                                  PersistentReferentManager referentManager, PersonRepository personRepo) {
+        Object[] params = {personManager, activistManager, referentManager, personRepo};
         Assert.noNullElements(params, "At least one parameter was null: " + Arrays.toString(params));
         this.personManager = personManager;
         this.activistManager = activistManager;
         this.referentManager = referentManager;
         this.personRepo = personRepo;
-        this.activistRepo = activistRepo;
-        this.referentRepo = referentRepo;
     }
 
     @Override
@@ -45,8 +40,8 @@ public class PersistentHumanManager implements HumanManager {
     }
 
     @Override
-    public Referent createReferent(Person person) {
-        return referentManager.createReferentForPerson(person);
+    public Referent createReferent(Person person, Qualification... qualifications) {
+        return referentManager.createReferentForPerson(person, qualifications);
     }
 
     @Override
@@ -70,17 +65,17 @@ public class PersistentHumanManager implements HumanManager {
     }
 
     @Override
-    public PersonManager getPersonManager() {
+    public PersonManager personManager() {
         return personManager;
     }
 
     @Override
-    public ActivistManager getActivistManager() {
+    public ActivistManager activistManager() {
         return activistManager;
     }
 
     @Override
-    public ReferentManager getReferentManager() {
+    public ReferentManager referentManager() {
         return referentManager;
     }
 }

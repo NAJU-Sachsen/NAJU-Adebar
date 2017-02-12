@@ -20,14 +20,68 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public interface HumanManager {
+
+    /**
+     * Saves a given person. It may or may not be saved already. If it has no ID specified, one will automatically
+     * be generated
+     * @param person the person to save
+     * @return the saved person. As its internal state may differ after the save, this instance should be used
+     * for future operations
+     */
     Person savePerson(Person person);
+
+    /**
+     * Turns a person into an activist
+     * @param person the person
+     * @return the freshly created activist instance
+     */
     Activist createActivist(Person person);
-    Referent createReferent(Person person);
+
+    /**
+     * Turns a person into a referent
+     * @param person the person
+     * @return the freshly created referent instance
+     */
+    Referent createReferent(Person person, Qualification... qualifications);
+
+    /**
+     * @param person the person to query for
+     * @return the associated activist
+     * @throws NoActivistException if the person is not an activist
+     */
     Activist findActivist(Person person);
+
+    /**
+     * @param person the person to query for
+     * @return the associated referent
+     * @throws NoReferentException if the person is not a referent
+     */
     Referent findReferent(Person person);
+
+    /**
+     * @param activist the activist to query for
+     * @return the associated person
+     */
     Person findPerson(Activist activist);
+
+    /**
+     * @param referent the referent to query for
+     * @return the associated person
+     */
     Person findPerson(Referent referent);
-    PersonManager getPersonManager();
-    ActivistManager getActivistManager();
-    ReferentManager getReferentManager();
+
+    /**
+     * @return an instance of a person manager for more specific queries
+     */
+    PersonManager personManager();
+
+    /**
+     * @return an instance of an activist mananager for more specific queries
+     */
+    ActivistManager activistManager();
+
+    /**
+     * @return an instance of a referent manager for more specific queries
+     */
+    ReferentManager referentManager();
 }
