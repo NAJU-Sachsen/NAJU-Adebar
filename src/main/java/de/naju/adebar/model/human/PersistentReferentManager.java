@@ -16,13 +16,16 @@ import java.util.Map;
 public class PersistentReferentManager implements ReferentManager {
     private PersonRepository personRepo;
     private ReferentRepository referentRepo;
+    private ReadOnlyReferentRepository roReferentRepo;
 
     @Autowired
-    public PersistentReferentManager(PersonRepository personRepo, ReferentRepository referentRepo) {
+    public PersistentReferentManager(PersonRepository personRepo, ReferentRepository referentRepo, ReadOnlyReferentRepository roReferentRepo) {
         Assert.notNull(personRepo, "Person repository may not be null!");
         Assert.notNull(referentRepo, "Activist repository may not be null!");
+        Assert.notNull(roReferentRepo, "Read only referent repository may not be null!");
         this.personRepo = personRepo;
         this.referentRepo = referentRepo;
+        this.roReferentRepo = roReferentRepo;
     }
 
     @Override
@@ -74,5 +77,10 @@ public class PersistentReferentManager implements ReferentManager {
             qualificationMap.put(personRepo.findOne(r.getAssociatedPerson()), r.getQualifications());
         }
         return qualificationMap;
+    }
+
+    @Override
+    public ReadOnlyReferentRepository repository() {
+        return roReferentRepo;
     }
 }

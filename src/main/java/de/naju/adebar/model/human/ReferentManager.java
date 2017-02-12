@@ -59,4 +59,10 @@ public interface ReferentManager {
      * @return a map featuring the qualifications of each person that is a referent
      */
     Map<Person, Iterable<Qualification>> getQualifications();
+
+    /**
+     * Provides access to the underlying data
+     * @return a read only repository instance
+     */
+    ReadOnlyReferentRepository repository();
 }

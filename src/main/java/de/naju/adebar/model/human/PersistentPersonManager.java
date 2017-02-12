@@ -14,11 +14,14 @@ import java.util.Optional;
 @Service
 public class PersistentPersonManager implements PersonManager {
     private PersonRepository personRepo;
+    private ReadOnlyPersonRepository roPersonRepo;
 
     @Autowired
-    public PersistentPersonManager(PersonRepository personRepo) {
+    public PersistentPersonManager(PersonRepository personRepo, ReadOnlyPersonRepository roPersonRepo) {
         Assert.notNull(personRepo, "Person repository may not be null!");
+        Assert.notNull(roPersonRepo, "Read only person repository may not be null!");
         this.personRepo = personRepo;
+        this.roPersonRepo = roPersonRepo;
     }
 
     @Override
@@ -41,5 +44,10 @@ public class PersistentPersonManager implements PersonManager {
         Assert.notNull(newPerson, "New person may not be null!");
         newPerson.setId(personId);
         return personRepo.save(newPerson);
+    }
+
+    @Override
+    public ReadOnlyPersonRepository repository() {
+        return roPersonRepo;
     }
 }

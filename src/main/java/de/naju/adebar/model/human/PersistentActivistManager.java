@@ -16,13 +16,16 @@ import java.util.Map;
 public class PersistentActivistManager implements ActivistManager {
     private PersonRepository personRepo;
     private ActivistRepository activistRepo;
+    private ReadOnlyActivistRepository roRepo;
 
     @Autowired
-    public PersistentActivistManager(PersonRepository personRepo, ActivistRepository activistRepo) {
+    public PersistentActivistManager(PersonRepository personRepo, ActivistRepository activistRepo, ReadOnlyActivistRepository roRepo) {
         Assert.notNull(personRepo, "Person repository may not be null!");
         Assert.notNull(activistRepo, "Activist repository may not be null!");
+        Assert.notNull(roRepo, "Read only activist repository may not be null!");
         this.personRepo = personRepo;
         this.activistRepo = activistRepo;
+        this.roRepo = roRepo;
     }
 
     @Override
@@ -71,5 +74,10 @@ public class PersistentActivistManager implements ActivistManager {
             activistsMap.put(personRepo.findOne(activist.getAssociatedPerson()), activist.getJuleicaExpiryDate());
         }
         return activistsMap;
+    }
+
+    @Override
+    public ReadOnlyActivistRepository repository() {
+        return roRepo;
     }
 }

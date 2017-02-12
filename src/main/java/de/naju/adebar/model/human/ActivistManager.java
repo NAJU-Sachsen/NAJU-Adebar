@@ -62,4 +62,10 @@ public interface ActivistManager {
      */
     Map<Person, LocalDate> getJuleicaExpiryDates();
 
+    /**
+     * Provides access to the underlying data
+     * @return a read only repository instance
+     */
+    ReadOnlyActivistRepository repository();
+
 }

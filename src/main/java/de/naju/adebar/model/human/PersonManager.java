@@ -41,4 +41,10 @@ public interface PersonManager {
      * @return the updated (and saved) person
      */
     Person updatePerson(PersonId personId, Person newPerson);
+
+    /**
+     * Provides access to the underlying data
+     * @return a read only repository instance
+     */
+    ReadOnlyPersonRepository repository();
 }
