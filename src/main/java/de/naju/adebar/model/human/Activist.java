@@ -19,6 +19,7 @@ public class Activist implements Serializable {
 	
 	@EmbeddedId private PersonId associatedPerson;
 	private LocalDate juleicaExpiryDate;
+	private boolean active;
 
 	// constructors
 
@@ -32,6 +33,7 @@ public class Activist implements Serializable {
 		Assert.notNull(associatedPerson, "The Person associated to an activist may not be null!");
 		this.associatedPerson = associatedPerson;
 		this.juleicaExpiryDate = juleicaExpiryDate;
+		this.active = true;
 	}
 
     /**
@@ -78,7 +80,24 @@ public class Activist implements Serializable {
 		this.associatedPerson = associatedPerson;
 	}
 
-	// checker
+    /**
+     * As activists may be in association with many other objects but a person may not be an activist for ever (i.e.
+     * a person may just participate in events but withdraw from organising them) they will not be deleted as soon as
+     * they withdraw but rather be deactivated and therefore not be selectable as organisers, etc. any more.
+     * @return {@code true} if the activist is still active
+     */
+    public boolean isActive() {
+        return active;
+    }
+
+    /**
+     * @param active the activist's status (active/inactive)
+     */
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    // checker
 
     /**
      * @return {@code true} if the activist has a JuLeiCa card, no matter if the card is still valid or not.
