@@ -278,6 +278,13 @@ public class Person {
         return id != null;
     }
 
+    /**
+     * @return {@code true} if the person's date of birth is set
+     */
+    public boolean hasDateOfBirth() {
+        return dateOfBirth != null;
+    }
+
     // overridden from Object
 
     @Override
