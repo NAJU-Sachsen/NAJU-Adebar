@@ -45,7 +45,7 @@ class PersonId implements Serializable {
     }
 
     @Override  public String toString() {
-        return "PersonId [id=" + id + "]";
+        return id;
     }
 
 }
