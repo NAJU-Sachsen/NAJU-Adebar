@@ -34,3 +34,67 @@ ul.dropdown-menu.confirm-delete {
 td {
     padding-left: 1em !important;
 }
+
+a {
+    cursor: pointer;
+}
+
+.address .street {
+    margin-bottom: 5px;
+}
+
+fieldset.inline-options {
+    display: inline-block;
+    margin-left: 15px;
+}
+
+fieldset.inline-options label {
+    margin-left: 10px;
+}
+
+.no-padding-left {
+    padding-left: 0;
+}
+
+.margin-top-sm {
+    margin-top: 3px;
+}
+
+.margin-btm-sm {
+    margin-bottom: 3px;
+}
+
+
+.margin-top-lg {
+    margin-top: 15px;
+}
+
+.hide-initially {
+    display: none;
+}
+
+.calendar {
+	line-height: 1.2em;
+}
+
+.jumbotron-cst {
+	padding: 2em;
+	border-radius: 3px;
+	border: solid 1px #DDD;
+	text-align: center;
+}
+
+.panel-title small {
+    font-size: 0.9em;
+}
+
+.qualification-list small {
+    font-size: 0.9em;
+    color: #777;
+}
+
+#main-footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+}

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width,initial-scale=1" name="viewport"/>
+    <title>Personen | Adebar</title>
+    <script type="text/javascript" src="../static/resources/js/jquery.min.js" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script type="text/javascript" src="../static/resources/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" type="text/css" href="../static/resources/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+
+    <link rel="stylesheet" type="text/css" href="../static/resources/css/style.css" th:href="@{/resources/css/style.css}"/>
+
+    <script type="text/javascript" src="../static/resources/js/list.min.js" th:src="@{/resources/js/list.min.js}"></script>
+    <script type="text/javascript" src="../static/resources/js/list.fuzzysearch.min.js" th:src="@{/resources/js/list.fuzzysearch.min.js}"></script>
+
+    <link rel="stylesheet" type="text/css" href="../static/resources/css/bootstrap-datetimepicker.min.css" th:href="@{/resources/css/bootstrap-datetimepicker.min.css}" />
+    <script type="text/javascript" src="../static/resources/js/moment-with-locales.min.js" th:src="@{/resources/js/moment-with-locales.min.js}"></script>
+    <script type="text/javascript" src="../static/resources/js/bootstrap-datetimepicker.min.js" th:src="@{/resources/js/bootstrap-datetimepicker.min.js}"></script>
+
+    <link rel="stylesheet" href="../static/resources/css/bootstrap-select.min.css" th:href="@{/resources/css/bootstrap-select.min.css}"/>
+    <script src="../static/resources/js/bootstrap-select.min.js" th:src="@{/resources/js/bootstrap-select.min.js}"></script>
+</head>
+<body>
+
+<!-- central navigation -->
+<nav id="top-nav" class="navbar navbar-default navbar-static-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-nav"
+                    aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">NAJU Adebar</a>
+        </div>
+
+        <div id="main-nav" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li role="presentation">
+                    <a href="overview.html" th:href="@{/overview}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Übersicht</a>
+                </li>
+                <li role="presentation" class="active">
+                    <a href="persons.html" th:href="@{/persons}"><span class="glyphicon glyphicon-user nav-icon" aria-hidden="true"></span> Personen <span class="sr-only">(akutell)</span></a>
+                </li>
+                <li class="disabled" role="presentation">
+                    <a href="#" th:href="@{/events}"><span class="glyphicon glyphicon-tent nav-icon" aria-hidden="true"></span> Veranstaltungen</a>
+                </li>
+                <li class="disabled" role="presentation">
+                    <a href="#" th:href="@{/localGroups}"><span class="glyphicon glyphicon-map-marker nav-icon" aria-hidden="true"></span> Ortsgruppen</a>
+                </li>
+                <li role="presentation">
+                    <a href="newsletters.html" th:href="@{/newsletters}"><span class="glyphicon glyphicon-envelope nav-icon" aria-hidden="true"></span> Newsletter</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Verschiedenes <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li class="disabled"><a href="#"><span class="glyphicon glyphicon-leaf"></span> Über</a></li>
+                        <li class="disabled"><a href="#"><span class="glyphicon glyphicon-globe"></span> Hilfe</a></li>
+                        <li><a href="#"><span class="glyphicon glyphicon-flash"></span> Fehler melden</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- modal dialogs -->
+<section>
+  <h2 class="hidden">Dialoge</h2>
+
+  <!-- 'edit person' modal -->
+  <section id="edit-person-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="edit-person-label">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <header class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times;</span></button>
+                  <h3 id="edit-person-label" class="modal-title">Person bearbeiten</h3>
+              </header>
+              <section class="modal-body">
+                  <form id="edit-person-form" class="form-horizontal" method="post" th:object="${editPersonForm}" th:action="@{'/persons/' + ${person.id} + '/edit'}">
+                      <div class="form-group">
+                          <label for="edit-firstname" class="col-sm-3 control-label">Vorname</label>
+                          <div class="col-sm-9">
+                              <input type="text" id="edit-firstname" name="firstname" class="form-control" placeholder="Vorname" th:field="*{firstName}"/>
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <label for="edit-lastname" class="col-sm-3 control-label">Nachname</label>
+                          <div class="col-sm-9">
+                              <input type="text" id="edit-lastname" name="lastname" class="form-control" placeholder="Nachname" th:field="*{lastName}"/>
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <label for="edit-email" class="col-sm-3 control-label">E-Mail</label>
+                          <div class="col-sm-9">
+                              <input type="email" id="edit-email" name="email" class="form-control" placeholder="E-Mail" th:field="*{email}"/>
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <label for="edit-gender" class="col-sm-3 control-label">Geschlecht</label>
+                          <div class="col-sm-9">
+                              <fieldset id="edit-gender">
+                                  <label class="radio-inline">
+                                      <input type="radio" name="gender" value="FEMALE" checked="checked" th:field="*{gender}" />
+                                      Weiblich
+                                  </label>
+                                  <label class="radio-inline">
+                                      <input type="radio" name="gender" value="MALE" th:field="*{gender}" />
+                                      Männlich
+                                  </label>
+                                  <label class="radio-inline">
+                                      <input type="radio" name="gender" value="OTHER" th:field="*{gender}" />
+                                      Anderes
+                                  </label>
+                              </fieldset>
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <label for="dob" class="col-sm-3 control-label">Geburtsdatum
+                              <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" data-title="Format: DD.MM.YYYY"></span>
+                          </label>
+                          <div class="col-sm-9">
+                              <div class="input-group date" id="dob-picker">
+                                  <input type="text" class="form-control" name="dob" id="dob" placeholder="Geburtsdatum" th:field="*{dateOfBirth}"/>
+                                  <span class="input-group-addon">
+                                      <span class="glyphicon glyphicon-calendar"></span>
+                                  </span>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <label for="eatingHabit" class="col-sm-3 control-label">Ernährung</label>
+                          <div class="col-sm-9">
+                              <textarea class="form-control" name="eatingHabit" id="eatingHabit"
+                                  placeholder="Essgewohnheiten (Vegetarier, Unverträglichkeiten...)" th:field="*{eatingHabit}"></textarea>
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <label for="healthImpairments" class="col-sm-3 control-label">Allergien o.ä.</label>
+                          <div class="col-sm-9">
+                              <textarea class="form-control" name="healthImpairments" id="healthImpairments"
+                                  placeholder="Allergien" th:field="*{healthImpairments}"></textarea>
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <label for="add-person-address" class="col-sm-3 control-label">Adresse</label>
+                          <div class="col-sm-9 address" id="add-person-address">
+                              <input type="text" class="form-control street" name="street" placeholder="Straße, HNr." th:field="*{street}"/>
+                              <input type="text" class="form-control zip" name="zip" placeholder="Plz" style="width: 30%; float: left;" th:field="*{zip}"/>
+                              <input type="text" class="form-control city" name="city" placeholder="Stadt" style="width: 67%; float: right;" th:field="*{city}"/>
+                          </div>
+                      </div>
+                  </form>
+              </section>
+              <footer class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+                  <button type="submit" form="edit-person-form" class="btn btn-primary">Aktualisieren</button>
+              </footer>
+          </div>
+      </div>
+  </section>
+
+  <!-- 'edit activist' modal -->
+  <section id="edit-activist-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="edit-activist-label">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <header class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times;</span></button>
+                  <h3 id="edit-activist-label" class="modal-title">Aktiven bearbeiten</h3>
+              </header>
+              <section class="modal-body">
+                  <form id="edit-activist-form" class="form-horizontal" method="post" th:object="${editActivistForm}" th:action="@{'/persons/' + ${person.id} + '/edit-activist'}">
+                      <div class="form-group">
+                          <label class="col-sm-2 control-label">Allgemein</label>
+                          <div class="col-sm-10">
+                              <div class="checkbox">
+                                 <label><input type="checkbox" name="is-activist" id="edit-activist-isActivist" th:field="*{activist}"/> die Person ist ein Aktiver</label>
+                             </div>
+                         </div>
+                     </div>
+                     <div class="form-group" id="edit-activist-juleica-container">
+                         <label class="col-sm-2 control-label">JuLeiCa</label>
+                         <div class="col-sm-10">
+                             <div class="checkbox">
+                                 <label><input type="checkbox" name="has-juleica" id="edit-activist-hasJuleica" th:field="*{owningJuleica}"/> die Person hat eine JuLeiCa</label>
+                             </div>
+                             <div id="edit-activist-juleica" style="margin-top: 12px;">
+                                 <div class="input-group date datetimepicker" id="edit-activist-juleica-picker">
+                                     <input type="text" class="form-control" name="juleicaExpiryDate" placeholder="JuLeiCa-Ablaufdatum"
+                                         data-toggle="tooltip" data-placement="left" data-title="Format: DD.MM.YYYY" th:field="*{juleicaExpiryDate}"/>
+                                     <span class="input-group-addon">
+                                         <span class="glyphicon glyphicon-calendar"></span>
+                                     </span>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                  </form>
+              </section>
+              <footer class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+                  <button type="submit" form="edit-activist-form" class="btn btn-primary">Aktualisieren</button>
+              </footer>
+          </div>
+      </div>
+  </section>
+
+  <!-- 'add qualification' modal -->
+  <section id="add-qualification-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="add-qualification-label">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <header class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times;</span></button>
+          <h3 id="add-qualification-label" class="modal-title">Qualifikation hinzufügen</h3>
+        </header>
+        <section class="modal-body row">
+            <div class="col-md-4">
+              <ul class="nav nav-pills nav-stacked" id="add-qualification-tabs" role="tablist">
+                <li class="active" role="presentation"><a href="#add-qualification-tab-existing" aria-controls="add-qualification-tab-existing" role="tab" data-toggle="tab" data-tab="EXISTING">Existierende</a></li>
+                <li role="presentation"><a href="#add-qualification-tab-new" aria-controls="add-qualification-tab-new" role="tab" data-toggle="tab" data-tab="NEW">Neu</a></li>
+              </ul>
+            </div>
+            <div class="col-md-8">
+              <form id="add-qualification-form" class="form-horizontal tab-content" method="post" th:object="${addQualificationForm}" th:action="@{'/persons/' + ${person.id} + '/add-qualification'}">
+                <div role="tabpanel" class="tab-pane fade in active" id="add-qualification-tab-existing">
+                  <select id="add-qualification-existing" class="selectpicker" data-live-search="true" th:field="*{qualification}" th:remove="all-but-first" th:each="qualification : ${qualifications}">
+                    <option th:text="${qualification.name}" th:value="${{qualification.name}}" th:field="*{qualification}">Erste-Hilfe-Kurs</option>
+                    <option>Storchenkoffer</option>
+                    <option>Öffentlichkeitsarbeit</option>
+                  </select>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="add-qualification-tab-new">
+                  <input type="text" class="form-control" placeholder="Name" style="margin-bottom: 3px;" th:field="*{name}" />
+                  <textarea class="form-control" placeholder="Beschreibung" th:field="*{description}"></textarea>
+                </div>
+                <input type="hidden" name="addType" id="add-qualification-type" th:field="*{addType}" />
+              </form>
+          </div>
+        </section>
+        <footer class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+          <button type="submit" form="add-qualification-form" class="btn btn-primary">Hinzufügen</button>
+        </footer>
+      </div>
+    </div>
+    <script>
+      $('#add-qualification-modal  a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+        $('#add-qualification-type').val(e.target.dataset.tab)
+      })
+    </script>
+  </section>
+
+  <!-- 'delete qualification' modal -->
+  <section id="delete-qualification-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="delete-qualification-label">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <header class="modal-header">
+               <button type="button" class="close" data-dismiss="modal" aria-label="Abbrechen">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+               <h3 class="modal-title" id="delete-qualification-label">Qualifikation entfernen</h3>
+            </header>
+            <section class="modal-body">
+               <form id="delete-qualification" method="post" th:action="@{'/persons/' + ${person.id} + '/qualifications/remove'}">
+                  <input type="text" class="form-control" name="name" readonly="readonly" value="Erste-Hilfe-Kurs" />
+               </form>
+           </section>
+           <footer class="modal-footer">
+               <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+               <div class="btn-group">
+                  <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                     <span class="glyphicon glyphicon-trash"></span> Löschen <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu confirm-delete">
+                     <li><button type="submit" class="btn btn-link" form="delete-qualification">Löschen</button></li>
+                  </ul>
+               </div>
+           </footer>
+         </div>
+      </div>
+  </section>
+
+</section>
+
+<!-- page specific content-->
+<main id="main">
+
+    <!-- the 'real' content finally -->
+    <section id="content" class="tab-content" style="margin-top: 2em;">
+
+            <h1>Personen Details</h1>
+
+            <section class="panel panel-default">
+                <header class="panel-heading clearfix">
+                    <h2 class="panel-title pull-left" style="margin-top: 7.5px; margin-right: 2em;">Allgemeines</h2>
+                    <div class="input-group pull-right" style="margin-left: 1em;">
+                      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#edit-person-modal"><span class="glyphicon glyphicon-pencil"></span> Anpassen</button>
+                   </div>
+                </header>
+                <ul class="list-group">
+                    <li class="list-group-item"><span class="item-title"><span class="glyphicon glyphicon-user"></span> Name:</span> <span th:value="${person.name}">Max Mustermann</span></li>
+                    <li class="list-group-item"><span class="item-title"><span class="glyphicon glyphicon-calendar"></span> Geburtsdatum:</span> <span th:value="${person.dateOfBirth}">30.02.1999</span></li>
+                    <li class="list-group-item"><span class="item-title"><span class="glyphicon glyphicon-envelope"></span> E-Mail Adresse:</span> <a href="mailto:max_muster@aol.com" th:href="'mailto:' + ${person.email}" th:text="${person.email}">max_muster@aol.com</a></li>
+                    <li class="list-group-item"><span class="item-title"><span class="glyphicon glyphicon-home"></span> Adresse:</span> <span th:text="${person.address.street} + ', ' + ${person.address.zip} + ' ' + ${person.address.city}">Zu Hause 15, 01234 Entenhausen</span></li>
+                    <li class="list-group-item"><span class="item-title"><span class="glyphicon glyphicon-cutlery"></span> Vegetarier o.ä.:</span> <span th:text="${person.eatingHabit}">Veganer, Laktose-intolerant</span></li>
+                    <li class="list-group-item"><span class="item-title"><span class="glyphicon glyphicon-bed"></span> Allergien o.ä.:</span> <span th:text="${person.healthImpairments}">Heuschnupfen</span></li>
+                </ul>
+            </section>
+
+            <section class="panel panel-default">
+                <input type="hidden" id="person-is-activist" value="false" th:value="${isActivist}" />
+                <input type="hidden" id="activist-has-juleica" value="false" th:value="${hasJuleica}" />
+                <header class="panel-heading clearfix">
+                    <h2 class="panel-title pull-left" style="margin-top: 7.5px; margin-right: 2em;">Aktiven-Details</h2>
+                    <div class="input-group pull-right" style="margin-left: 1em;">
+                      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#edit-activist-modal"><span class="glyphicon glyphicon-pencil"></span> Anpassen</button>
+                   </div>
+                </header>
+                <ul class="list-group" th:if="${isActivist}">
+                    <li class="list-group-item"><span class="item-title"><span class="glyphicon glyphicon-map-marker"></span> Ortsgruppe:</span> <a href="#" th:unless="${true}">NAJU Freiberg</a></li>
+                    <li class="list-group-item"><span class="item-title"><span class="glyphicon glyphicon-credit-card"></span> Juleica:</span> <span th:if="${hasJuleica}" th:text="${{activist.juleicaExpiryDate}}">lief am <strong>07.03.2015</strong> aus</span><span th:unless="${hasJuleica}">keine</span></li>
+                    <li class="list-group-item"><span class="item-title"><span class="glyphicon glyphicon-briefcase"></span> Vorstand:</span> <span th:unless="${true}">nicht im Vorstand aktiv</span></li>
+                </ul>
+                <section class="panel-body" th:unless="${isActivist}">
+                    <p>
+                        Die Person ist kein Aktiver
+                    </p>
+                </section>
+            </section>
+
+            <section class="panel panel-default" id="qualifications">
+                <header class="panel-heading clearfix">
+                    <h2 class="panel-title pull-left" style="margin-top: 7.5px; margin-right: 2em;">Referenten-Details - <small>Qualifikationen</small></h2>
+                    <div class="input-group pull-right" style="margin-left: 1em;">
+                      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-qualification-modal"><span class="glyphicon glyphicon-plus"></span> Hinzufügen</button>
+                   </div>
+                   <form class="form-inline pull-right">
+                      <div class="form-group">
+                         <label class="sr-only" for="qualifications">Name oder Beschreibung</label>
+                         <div class="input-group">
+                            <input type="text" class="form-control fuzzy-search" id="qualifications" name="qualifications" placeholder="Name oder Beschreibung"/>
+                            <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
+                         </div>
+                      </div>
+                   </form>
+                </header>
+                <div class="list-group qualification-list" th:if="${isReferent}" th:remove="all-but-first">
+                    <button type="button" class="list-group-item" data-toggle="modal" data-target="#delete-qualification-modal" data-qualification="Erste-Hilfe-Kurs" th:each="qualification : ${qualifications}" th:attr="data-qualification=${qualification.name}"><span class="qualification-title" th:text="${qualification.name}">Erste-Hilfe-Kurs</span> <small class="qualification-description" th:text="${qualification.description}">der Referent darf grundlegende Ersthilfe-Kurse leiten</small></button>
+                    <button type="button" class="list-group-item" data-toggle="modal" data-target="#delete-qualification-modal" data-qualification="Storchenkoffer"><span class="qualification-title">Storchenkoffer</span> <small class="qualification-description">der Referent wurde für das "Ein Storch auf Reisen" Projekt weitergebildet</small></button>
+                    <button type="button" class="list-group-item" data-toggle="modal" data-target="#delete-qualification-modal" data-qualification="Öffentlichkeitsarbeit"><span class="qualification-title">Öffentlichkeitsarbeit</span> <small class="qualification-description">der Referent kann Workshops zum Thema Öffentlichkeitsarbeit leiten</small></button>
+                </div>
+                <section class="panel-body" th:unless="${isReferent}">
+                    <p>
+                        Die Person ist kein Referent
+                    </p>
+                </section>
+            </section>
+
+    </section>
+
+    <!-- initialize search bar -->
+    <script type="text/javascript">
+        var fuzzyOptions = {
+           searchClass: "fuzzy-search",
+           location: 0,
+           distance: 150,
+           threshold: 0.4,
+           multiSearch: true,
+         }
+         var options = {
+            listClass: "qualification-list",
+            valueNames: ['qualification-title', 'qualification-description'],
+            plugins: [ListFuzzySearch(fuzzyOptions)],
+         }
+         var qualificationList = new List('qualifications', options)
+    </script>
+
+</main>
+<script src="../static/resources/js/customInitialization.js" th:src="@{/resources/js/customInitialization.js}"></script>
+<script src="../static/resources/js/customInitialization.personDetails.js" th:src="@{/resources/js/customInitialization.personDetails.js}"></script>
+</body>
+</html>
