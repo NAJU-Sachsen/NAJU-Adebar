@@ -9,6 +9,10 @@ function $i(id) {
    return document.getElementById(id)
 }
 
+function $c(cl) {
+    return document.getElementsByClassName(cl);
+}
+
 /*
  * fix autofocus on bootstrap-modals
  */
@@ -16,8 +20,8 @@ $('.modal').on('shown.bs.modal', function() {
     $(this).find('[autofocus]').focus();
 });
 
-$("[data-toggle=tooltip]").tooltip({
-	placement: $(this).data("placement") || 'top'
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
 });
 
 
