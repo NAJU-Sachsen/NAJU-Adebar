@@ -2,6 +2,8 @@ package de.naju.adebar.model.human;
 
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 /**
  * A high-level service mainly for convenience reasons.
  *
@@ -59,16 +61,23 @@ public interface HumanManager {
     Referent findReferent(Person person);
 
     /**
+     * Queries for a specific person
+     * @param id the person's id
+     * @return the person
+     */
+    Optional<Person> findPerson(String id);
+
+    /**
      * @param activist the activist to query for
      * @return the associated person
      */
-    Person findPerson(Activist activist);
+    Optional<Person> findPerson(Activist activist);
 
     /**
      * @param referent the referent to query for
      * @return the associated person
      */
-    Person findPerson(Referent referent);
+    Optional<Person> findPerson(Referent referent);
 
     /**
      * @return an instance of a person manager for more specific queries

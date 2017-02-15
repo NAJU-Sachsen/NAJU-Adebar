@@ -43,6 +43,13 @@ public interface PersonManager {
     Person updatePerson(PersonId personId, Person newPerson);
 
     /**
+     * Queries for a specific person
+     * @param id the person's id
+     * @return an optional containing the person if it exists, otherwise the optional is empty
+     */
+    Optional<Person> findPerson(String id);
+
+    /**
      * Provides access to the underlying data
      * @return a read only repository instance
      */

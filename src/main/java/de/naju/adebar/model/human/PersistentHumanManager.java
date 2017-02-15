@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 /**
  * A {@link HumanManager} that persists its data in a database
@@ -55,13 +56,18 @@ public class PersistentHumanManager implements HumanManager {
     }
 
     @Override
-    public Person findPerson(Activist activist) {
-        return personRepo.findOne(activist.getAssociatedPerson());
+    public Optional<Person> findPerson(String id) {
+        return personManager.findPerson(id);
     }
 
     @Override
-    public Person findPerson(Referent referent) {
-        return personRepo.findOne(referent.getAssociatedPerson());
+    public Optional<Person> findPerson(Activist activist) {
+        return personManager.findPerson(activist.getAssociatedPerson().getId());
+    }
+
+    @Override
+    public Optional<Person> findPerson(Referent referent) {
+        return personManager.findPerson(referent.getAssociatedPerson().getId());
     }
 
     @Override
