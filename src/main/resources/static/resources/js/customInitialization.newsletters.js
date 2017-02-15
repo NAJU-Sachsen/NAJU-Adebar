@@ -40,7 +40,7 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
     e.target; // newly activated tab
     e.relatedTarget; // previous active tab
     toggleModal($i('add-button'));
-})
+});
 
 /*
  * display the last active tab on data update
@@ -73,4 +73,4 @@ $('#edit-subscriber-form').on('show.bs.modal', function(event) {
         url: '/api/subscriberDetails',
     };
     $.ajax(request);
-})
+});

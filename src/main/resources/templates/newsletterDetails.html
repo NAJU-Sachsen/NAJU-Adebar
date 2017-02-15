@@ -29,11 +29,11 @@
 
          <div id="main-nav" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-               <li class="disabled" role="presentation">
-                  <a href="#"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Übersicht <span class="sr-only">(akutell)</span></a>
+               <li role="presentation">
+                  <a href="index.html"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Übersicht</a>
                </li>
-               <li class="disabled" role="presentation">
-                  <a href="#"><span class="glyphicon glyphicon-user nav-icon" aria-hidden="true"></span> Personen</a>
+               <li role="presentation">
+                  <a href="persons.html" th:href="@{/persons}"><span class="glyphicon glyphicon-user nav-icon" aria-hidden="true"></span> Personen</a>
                </li>
                <li class="disabled" role="presentation">
                   <a href="#"><span class="glyphicon glyphicon-tent nav-icon" aria-hidden="true"></span> Veranstaltungen</a>
@@ -42,7 +42,7 @@
                   <a href="#"><span class="glyphicon glyphicon-map-marker nav-icon" aria-hidden="true"></span> Ortsgruppen</a>
                </li>
                <li role="presentation" class="active">
-                  <a href="#" th:href="@{/newsletters}"><span class="glyphicon glyphicon-envelope nav-icon" aria-hidden="true"></span> Newsletter</a>
+                  <a href="#" th:href="@{/newsletters}"><span class="glyphicon glyphicon-envelope nav-icon" aria-hidden="true"></span> Newsletter <span class="sr-only">(akutell)</span></a>
                </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
@@ -238,11 +238,11 @@
                </form>
             </div>
             <div class="panel-body list-group subscriber-list" th:remove="all-but-first">
-               <button type="button" class="list-group-item" data-toggle="modal" data-target="#delete-subscriber-modal" data-whatever="max.muster@email.com" th:each="subscriber : ${newsletter.subscribers}" th:attr="data-whatever=${subscriber.email}">
+               <button type="button" class="list-group-item" data-toggle="modal" data-target="#delete-subscriber-modal" data-email="max.muster@email.com" th:each="subscriber : ${newsletter.subscribers}" th:attr="data-email=${subscriber.email}">
                	<span class="subscriber-item"><span th:text="${subscriber.email}">max.muster@email.com</span> <span th:if="${subscriber.hasName()}" th:text="'(' + ${subscriber.name} + ')'">(Max Muster)</span></span>
                </button>
-               <button type="button" class="list-group-item" data-toggle="modal" data-target="#delete-subscriber-modal" data-whatever="hans.wurst@email.com"><span class="subscriber-item">hans.wurst@email.com (Hans Wurst)</span></button>
-               <button type="button" class="list-group-item" data-toggle="modal" data-target="#delete-subscriber-modal" data-whatever="anon@ymous.org">      <span class="subscriber-item">anon@ymous.org                   </span></button>
+               <button type="button" class="list-group-item" data-toggle="modal" data-target="#delete-subscriber-modal" data-email="hans.wurst@email.com"><span class="subscriber-item">hans.wurst@email.com (Hans Wurst)</span></button>
+               <button type="button" class="list-group-item" data-toggle="modal" data-target="#delete-subscriber-modal" data-email="anon@ymous.org">      <span class="subscriber-item">anon@ymous.org                   </span></button>
             </div>
          </div>
       </section>
@@ -255,25 +255,25 @@
            distance: 100,
            threshold: 0.4,
            multiSearch: true,
-         }
+         };
          var options = {
             listClass: "subscriber-list",
             valueNames: ['subscriber-item'],
             plugins: [ListFuzzySearch(fuzzyOptions)],
-         }
+         };
          var subscriberList = new List('subscribers-list', options)
       </script>
 
       <!-- fetch content for 'delete subscriber' dialog -->
       <script type="text/javascript">
       $('#delete-subscriber-modal').on('show.bs.modal', function (event) {
-         var button = $(event.relatedTarget) // Button that triggered the modal
-         var recipient = button.data('whatever') // Extract info from data-* attributes
+         var button = $(event.relatedTarget); // Button that triggered the modal
+         var recipient = button.data('email'); // Extract info from data-* attributes
          // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
          // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-         var modal = $(this)
+         var modal = $(this);
          modal.find('.modal-body input').val(recipient)
-         })
+         });
       </script>
 
       <!-- general non-important information -->

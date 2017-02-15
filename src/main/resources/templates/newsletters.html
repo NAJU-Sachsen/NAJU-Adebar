@@ -1,4 +1,5 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<!--suppress ThymeleafVariablesResolveInspection -->
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
@@ -39,12 +40,12 @@
 
         <div id="main-nav" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li class="disabled" role="presentation">
-                    <a class="disabled" href="#" th:href="@{/overview}"><span class="glyphicon glyphicon-home"
-                                                                              aria-hidden="true"></span> Übersicht</a>
+                <li role="presentation">
+                    <a href="overview.html" th:href="@{/overview}"><span class="glyphicon glyphicon-home"
+                                                                         aria-hidden="true"></span> Übersicht</a>
                 </li>
-                <li class="disabled" role="presentation">
-                    <a href="#" th:href="@{/persons}"><span class="glyphicon glyphicon-user nav-icon"
+                <li role="presentation">
+                    <a href="persons.html" th:href="@{/persons}"><span class="glyphicon glyphicon-user nav-icon"
                                                             aria-hidden="true"></span> Personen</a>
                 </li>
                 <li class="disabled" role="presentation">
@@ -112,18 +113,18 @@
 
     <!-- page specific dialogs -->
     <section id="dialogs">
-
+        <h2 class="hidden">Formulare</h2>
         <!-- 'create newsletter' dialog -->
         <div class="modal fade" id="add-newsletter-form" tabindex="-1" role="dialog"
              aria-labelled-by="add-newsletter-label">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <header class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
-                        <h2 class="modal-title" id="add-newsletter-label">Newsletter erstellen</h2>
-                    </div>
+                        <h3 class="modal-title" id="add-newsletter-label">Newsletter erstellen</h3>
+                    </header>
                     <div class="modal-body">
                         <form id="add-newsletter" th:action="@{/newsletters/add}" method="post">
                             <div class="input-group">
@@ -146,12 +147,12 @@
              aria-labelled-by="add-subscriber-label">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <header class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
-                        <h2 class="modal-title" id="add-subscriber-label">Abonnent erstellen</h2>
-                    </div>
+                        <h3 class="modal-title" id="add-subscriber-label">Abonnent erstellen</h3>
+                    </header>
                     <div class="modal-body">
                         <form id="add-subscriber" class="form-horizontal" th:action="@{/newsletters/subscribers/add}"
                               method="post">
@@ -183,12 +184,13 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="newsletter-ids" class="col-sm-2 control-label">Abonnierte Newsletter</label>
+                                <label for="newsletter-ids" class="col-sm-2 control-label">Abonnierte Newsletter
+                                    <span class="pull-left glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" data-title="Mit [Strg] mehrere auswählen">
+                                    </span>
+                                </label>
                                 <div class="col-sm-10">
                                     <select id="newsletter-ids" class="form-control" name="newsletters"
-                                            multiple="multiple" required="required" th:remove="all-but-first"
-                                            data-toggle="tooltip" data-placement="top"
-                                            data-title="Mit [Strg] mehrere auswählen">
+                                            multiple="multiple" required="required" th:remove="all-but-first">
                                         <option value="1" th:each="newsletter : ${newsletters}"
                                                 th:value="${newsletter.id}" th:text="${newsletter.name}">NAJU Allgemein
                                             (NAJU Sachsen)
@@ -214,12 +216,12 @@
              aria-labelledby="edit-subscriber-label">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <header class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Schließen">
                             <span aria-hidden="true">&times;</span>
                         </button>
-                        <h2 class="modal-title" id="edit-subscriber-label">Abonnent bearbeiten</h2>
-                    </div>
+                        <h3 class="modal-title" id="edit-subscriber-label">Abonnent bearbeiten</h3>
+                    </header>
                     <div class="modal-body">
                         <form id="edit-subscriber" class="form-horizontal"
                               th:action="@{/newsletters/subscribers/update}" method="post">
@@ -375,25 +377,25 @@
                     <td class="newsletter-id" th:text="${newsletter.id}">1</td>
                     <td class="newsletter-name" th:text="${newsletter.name}">NAJU Allgemein</td>
                     <td class="newsletter-belonging" th:text="---">NAJU Sachsen</td>
-                    <td><a href="#" th:href="@{'/newsletters/' + ${newsletter.id}}">Details</a></td>
+                    <td><a href="newsletterDetails.html" th:href="@{'/newsletters/' + ${newsletter.id}}">Details</a></td>
                 </tr>
                 <tr>
                     <td class="newsletter-id">2</td>
                     <td class="newsletter-name">Puppenstuben</td>
                     <td class="newsletter-belonging">Puppenstuben-Projekt</td>
-                    <td><a href="#">Details</a></td>
+                    <td><a href="newsletterDetails.html">Details</a></td>
                 </tr>
                 <tr>
                     <td class="newsletter-id">3</td>
                     <td class="newsletter-name">HIFA-Camp</td>
                     <td class="newsletter-belonging">HIFA</td>
-                    <td><a href="#">Details</a></td>
+                    <td><a href="newsletterDetails.html">Details</a></td>
                 </tr>
                 <tr>
                     <td class="newsletter-id">4</td>
                     <td class="newsletter-name">NAJU Dresden</td>
                     <td class="newsletter-belonging">NAJU Dresden</td>
-                    <td><a href="#">Details</a></td>
+                    <td><a href="newsletterDetails.html">Details</a></td>
                 </tr>
                 </tbody>
             </table>
@@ -429,9 +431,10 @@
                 </tbody>
             </table>
             <form class="text-center" th:action="@{/newsletters/subscribers/all}" th:unless="${subscriberDisplay == 'all'}">
-                <button type="submit" class="btn btn-link btn-loading" data-toggle="tooltip" data-placement="bottom" title="Das kann eine ganze Weile dauern">
+                <button type="submit" class="btn btn-link btn-loading">
                     <span class="glyphicon glyphicon-refresh"></span> Alle Abonnenten anzeigen
                 </button>
+                <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" title="Das kann eine ganze Weile dauern"></span>
             </form>
         </div>
     </section>
