@@ -16,6 +16,11 @@ import java.util.stream.Stream;
 public interface ActivistRepository extends CrudRepository<Activist, PersonId> {
 
     /**
+     * @return all active activists
+     */
+    Iterable<Activist> findAllByActiveIsTrue();
+
+    /**
      * @param date the JuLeiCa expiry date to query for
      * @return all activists with the given JuLeiCa expiry date
      */

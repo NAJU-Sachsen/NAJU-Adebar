@@ -38,6 +38,14 @@ public interface ActivistManager {
     Activist updateActivist(PersonId activistId, Activist newActivist);
 
     /**
+     * If the activist does not exists it will be created, otherwise if it is not active any more it will be made active
+     * again and the existing activist will be returned.
+     * @param person the associated person
+     * @return the activist
+     */
+    Activist createActivistIfNotExists(Person person);
+
+    /**
      * @param person the person to query for
      * @return the associated activist
      * @throws NoActivistException if the person is not an activist
@@ -49,6 +57,18 @@ public interface ActivistManager {
      * @return {@code true} if an activist is associated to that person, {@code false} otherwise
      */
     boolean isActivist(Person person);
+
+    /**
+     * @param person the person to check
+     * @return {@code true} if the person is an active activst, or {@code false} if any of the conditions are violated
+     */
+    boolean activistIsActive(Person person);
+
+    /**
+     * It the person is an activist, it will be deactivated
+     * @param person the associated person
+     */
+    void deactivateActivistIfExists(Person person);
 
     /**
      * @param person the person to query for

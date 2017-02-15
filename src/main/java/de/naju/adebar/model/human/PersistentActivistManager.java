@@ -46,6 +46,19 @@ public class PersistentActivistManager implements ActivistManager {
     }
 
     @Override
+    public Activist createActivistIfNotExists(Person person) {
+        if (!isActivist(person)) {
+            return createActivistForPerson(person);
+        }
+        Activist activist = findActivistByPerson(person);
+        if (!activist.isActive()) {
+            activist.setActive(true);
+            return updateActivist(person.getId(), activist);
+        }
+        return activist;
+    }
+
+    @Override
     public Activist findActivistByPerson(Person person) {
         Activist activist = activistRepo.findOne(person.getId());
         if (activist == null) {
@@ -57,6 +70,20 @@ public class PersistentActivistManager implements ActivistManager {
     @Override
     public boolean isActivist(Person person) {
         return activistRepo.findOne(person.getId()) != null;
+    }
+
+    @Override
+    public boolean activistIsActive(Person person) {
+        return isActivist(person) && findActivistByPerson(person).isActive();
+    }
+
+    @Override
+    public void deactivateActivistIfExists(Person person) {
+        if (isActivist(person)) {
+            Activist activist = findActivistByPerson(person);
+            activist.setActive(false);
+            updateActivist(person.getId(), activist);
+        }
     }
 
     @Override
