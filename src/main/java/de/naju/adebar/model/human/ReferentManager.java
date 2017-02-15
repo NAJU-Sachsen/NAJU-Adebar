@@ -35,6 +35,13 @@ public interface ReferentManager {
     Referent updateReferent(PersonId referentId, Referent newReferent);
 
     /**
+     * If the referent does not exists, it will be created. Otherwise the existing referent is returned
+     * @param person the associated person
+     * @return the referent
+     */
+    Referent createReferentIfNotExists(Person person);
+
+    /**
      * @param person the person to query for
      * @return the associated referent
      * @throws NoReferentException if the person is not a referent

@@ -49,6 +49,14 @@ public class PersistentReferentManager implements ReferentManager {
     }
 
     @Override
+    public Referent createReferentIfNotExists(Person person) {
+        if (!isReferent(person)) {
+            return createReferentForPerson(person);
+        }
+        return findReferentByPerson(person);
+    }
+
+    @Override
     public Referent findReferentByPerson(Person person) {
         Referent referent = referentRepo.findOne(person.getId());
         if (referent == null) {
