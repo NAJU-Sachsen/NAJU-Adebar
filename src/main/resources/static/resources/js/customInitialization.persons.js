@@ -14,16 +14,19 @@ $('#dob-picker').datetimepicker({
 
 });
 
+// initialize the juleica expiry date picker
 $('#add-person-juleica').datetimepicker({
     format: 'DD.MM.YYYY',
     showTodayButton: true,
 });
 
+// initialize the date of birth datepicker for filters
 $('#filter-dob-container').datetimepicker({
     format: 'DD.MM.YYYY',
     showTodayButton: true,
 });
 
+// initialize the juleica expiry date picker for filters
 $('#filter-juleica-expiry-container').datetimepicker({
     format: 'DD.MM.YYYY',
     showTodayButton: true,
@@ -38,6 +41,9 @@ $('#add-person-isActivist').click(function() {
 // juleica or not
 $('#add-person-hasJuleica').click(function() {
     $('#add-person-juleica-container').slideToggle();
+
+    // toggle the required property of the expiry date
+    $('#add-person-juleica input').prop('required', function(i,v) {return !v;});
 });
 
 

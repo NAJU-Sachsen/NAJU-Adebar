@@ -50,32 +50,25 @@
         <div id="main-nav" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
                 <li role="presentation">
-                    <a href="overview.html" th:href="@{/overview}"><span class="glyphicon glyphicon-home"
-                                                                         aria-hidden="true"></span> Übersicht</a>
+                    <a href="overview.html" th:href="@{/overview}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Übersicht</a>
                 </li>
                 <li role="presentation" class="active">
                     <a href="#" th:href="@{/persons}"><span class="glyphicon glyphicon-user nav-icon"
-                                                            aria-hidden="true"></span> Personen <span
-                        class="sr-only">(akutell)</span></a>
+                                                            aria-hidden="true"></span> Personen <span class="sr-only">(akutell)</span></a>
                 </li>
                 <li class="disabled" role="presentation">
-                    <a href="#" th:href="@{/events}"><span class="glyphicon glyphicon-tent nav-icon"
-                                                           aria-hidden="true"></span> Veranstaltungen</a>
+                    <a href="#" th:href="@{/events}"><span class="glyphicon glyphicon-tent nav-icon" aria-hidden="true"></span> Veranstaltungen</a>
                 </li>
                 <li class="disabled" role="presentation">
-                    <a href="#" th:href="@{/localGroups}"><span class="glyphicon glyphicon-map-marker nav-icon"
-                                                                aria-hidden="true"></span> Ortsgruppen</a>
+                    <a href="#" th:href="@{/localGroups}"><span class="glyphicon glyphicon-map-marker nav-icon" aria-hidden="true"></span> Ortsgruppen</a>
                 </li>
                 <li role="presentation">
-                    <a href="newsletters.html" th:href="@{/newsletters}"><span class="glyphicon glyphicon-envelope nav-icon"
-                                                                aria-hidden="true"></span> Newsletter</a>
+                    <a href="newsletters.html" th:href="@{/newsletters}"><span class="glyphicon glyphicon-envelope nav-icon" aria-hidden="true"></span> Newsletter</a>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">
-                        Verschiedenes <span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Verschiedenes <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li class="disabled"><a href="#"><span class="glyphicon glyphicon-leaf"></span> Über</a></li>
                         <li class="disabled"><a href="#"><span class="glyphicon glyphicon-globe"></span> Hilfe</a></li>
@@ -101,21 +94,18 @@
             <div class="form-group">
                 <label class="sr-only" for="persons">Name, E-Mail o.ä.</label>
                 <div class="input-group">
-                    <input id="persons" type="text" class="form-control fuzzy-search" name="persons"
-                           placeholder="Name, E-Mail o.ä."/>
+                    <input id="persons" type="text" class="form-control fuzzy-search" name="persons" placeholder="Name, E-Mail o.ä."/>
                     <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
                 </div>
             </div>
             <div class="btn-group">
                 <!-- 'add' button -->
-                <button type="button" id="add-button" class="btn btn-default" data-toggle="modal"
-                        data-target="#add-person-form">
+                <button type="button" id="add-button" class="btn btn-default" data-toggle="modal" data-target="#add-person-form">
                     <span class="glyphicon glyphicon-plus"></span> Hinzufügen
                 </button>
 
                 <!-- 'filter' button -->
-                <button type="button" id="filter-button" class="btn btn-default" data-toggle="modal"
-                        data-target="#filter-persons-form">
+                <button type="button" id="filter-button" class="btn btn-default" data-toggle="modal" data-target="#filter-persons-form">
                         <span class="glyphicon glyphicon-filter"></span> Filtern
                 </button>
             </div>
@@ -141,19 +131,19 @@
                             <div class="form-group">
                                 <label for="firstname" class="col-sm-3 control-label">Vorname</label>
                                 <div class="col-sm-9">
-                                    <input type="text" id="firstname" class="form-control" name="firstName" placeholder="Vorname" autofocus="" th:field="*{firstName}"/>
+                                    <input type="text" id="firstname" class="form-control" name="firstName" placeholder="Vorname" autofocus="" required="required" th:field="*{firstName}"/>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="lastname" class="col-sm-3 control-label">Nachname</label>
                                 <div class="col-sm-9">
-                                    <input type="text" id="lastname" class="form-control" name="lastName" placeholder="Nachname" th:field="*{lastName}" />
+                                    <input type="text" id="lastname" class="form-control" name="lastName" placeholder="Nachname" required="required" th:field="*{lastName}" />
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="email" class="col-sm-3 control-label">E-Mail</label>
                                 <div class="col-sm-9">
-                                    <input type="email" id="email" class="form-control" name="email" placeholder="E-Mail" th:field="*{email}" />
+                                    <input type="email" id="email" class="form-control" name="email" placeholder="E-Mail" required="required" th:field="*{email}" />
                                 </div>
                             </div>
                             <div class="form-group">
@@ -226,8 +216,7 @@
                                         </div>
                                         <div id="add-person-juleica-container" class="hide-initially" style="margin-top: 12px;">
                                             <div id="add-person-juleica" class="input-group date datetimepicker">
-                                                <input type="text" class="form-control" name="juleicaExpiryDate" placeholder="JuLeiCa-Ablaufdatum"
-                                                    data-toggle="tooltip" data-placement="left" data-title="Format: DD.MM.YYYY" th:field="*{juleicaExpiryDate}"/>
+                                                <input type="text" class="form-control" name="juleicaExpiryDate" placeholder="JuLeiCa-Ablaufdatum" data-toggle="tooltip" data-placement="left" data-title="Format: DD.MM.YYYY" th:field="*{juleicaExpiryDate}"/>
                                                 <span class="input-group-addon">
                                                     <span class="glyphicon glyphicon-calendar"></span>
                                                 </span>
@@ -252,8 +241,8 @@
                                         <div class="margin-top-sm">
                                             <select class="selectpicker" name="referent-qualifications" id="add-person-referent-qualifications"
                                                     multiple="multiple" data-width="auto" data-live-search="true" title="Auswählen"
-                                                    th:remove="all-but-first" th:each="qualification : ${qualifications}" th:field="*{qualifications}">
-                                                <option th:text="${qualification.name}" th:value="${{qualification.name}}" th:field="*{qualifications}">
+                                                    th:remove="all-but-first" th:field="*{qualifications}">
+                                                <option th:each="qualification : ${qualifications}" th:text="${qualification.name}" th:value="${{qualification.name}}" th:field="*{qualifications}">
                                                     Erste-Hilfe Kurs
                                                 </option>
                                                 <option>Wildlife-Workshop</option>

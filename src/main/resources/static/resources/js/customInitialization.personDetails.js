@@ -24,6 +24,7 @@ $('#edit-activist-isActivist').click(function() {
 
 $('#edit-activist-hasJuleica').click(function() {
     $('#edit-activist-juleica').slideToggle();
+    $('edit-activist-juleica-picker input').prop('required', function(i,v) {return !v;});
 });
 
 $(function() {
@@ -32,8 +33,10 @@ $(function() {
     if (!isActivist) {
         $('#edit-activist-juleica-container').addClass('hide-initially');
     }
-    
+
     if (!hasJuleica) {
         $('#edit-activist-juleica').addClass('hide-initially');
     }
+
+    $('edit-activist-juleica-picker input').prop('required', hasJuleica);
 });
