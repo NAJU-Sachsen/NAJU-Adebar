@@ -145,6 +145,7 @@ public class PersonController {
             model.addAttribute("hasJuleica", activist.hasJuleica());
             model.addAttribute("editActivistForm", new ActivistToEditActivistFormConverter().convertToEditActivistForm(activist));
         } else {
+            model.addAttribute("isActivist", false);
             model.addAttribute("editActivistForm", new EditActivistForm());
         }
 
@@ -152,6 +153,8 @@ public class PersonController {
             model.addAttribute("isReferent", true);
             model.addAttribute("referent", humanManager.referentManager().findReferentByPerson(person));
             model.addAttribute("qualifications", humanManager.referentManager().findReferentByPerson(person).getQualifications());
+        } else {
+            model.addAttribute("isReferent", false);
         }
 
         model.addAttribute("allQualifications", qualificationManager.repository().findAll());
@@ -181,7 +184,13 @@ public class PersonController {
     public String deletePerson(@PathVariable("pid") String personId, RedirectAttributes redirAttr) {
         Person person = humanManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
 
-        humanManager.deactivatePerson(person);
+        try {
+            humanManager.deactivatePerson(person);
+        } catch (IllegalStateException e) {
+            redirAttr.addFlashAttribute("deletionError", true);
+            return "redirect:/persons/" + personId;
+        }
+
 
         redirAttr.addFlashAttribute("personDeleted", true);
         return "redirect:/persons/";
