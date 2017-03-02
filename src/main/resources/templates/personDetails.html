@@ -105,15 +105,15 @@
                           <div class="col-sm-9">
                               <fieldset id="edit-gender">
                                   <label class="radio-inline">
-                                      <input type="radio" name="gender" value="FEMALE" checked="checked" th:field="*{gender}" />
+                                      <input type="radio" name="gender" value="FEMALE" required="required" checked="checked" th:field="*{gender}" />
                                       Weiblich
                                   </label>
                                   <label class="radio-inline">
-                                      <input type="radio" name="gender" value="MALE" th:field="*{gender}" />
+                                      <input type="radio" name="gender" value="MALE" required="required" th:field="*{gender}" />
                                       Männlich
                                   </label>
                                   <label class="radio-inline">
-                                      <input type="radio" name="gender" value="OTHER" th:field="*{gender}" />
+                                      <input type="radio" name="gender" value="OTHER" required="required" th:field="*{gender}" />
                                       Anderes
                                   </label>
                               </fieldset>
@@ -152,6 +152,17 @@
                               <input type="text" class="form-control street" name="street" placeholder="Straße, HNr." th:field="*{street}"/>
                               <input type="text" class="form-control zip" name="zip" placeholder="Plz" style="width: 30%; float: left;" th:field="*{zip}"/>
                               <input type="text" class="form-control city" name="city" placeholder="Stadt" style="width: 67%; float: right;" th:field="*{city}"/>
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <label for="add-person-nabu" class="col-sm-3 control-label">NABU</label>
+                          <div class="col-sm-9">
+                              <div class="input-group" id="add-person-nabu">
+                                  <label class="input-group-addon">
+                                      <input type="checkbox" name="nabuMember" id="add-person-isNabuMember" th:field="*{nabuMember}" /> NABU-Mitglied
+                                  </label>
+                                  <input type="text" name="nabuNr" class="form-control" id="add-person-nabuNr" placeholder="Mitgliedsnr."  th:field="*{nabuNumber}" />
+                              </div>
                           </div>
                       </div>
                   </form>
@@ -324,6 +335,7 @@
             </section>
 
             <section class="panel panel-default">
+                <input type="hidden" id="person-is-nabu-member" value="true" th:value="${isNabuMember}" />
                 <header class="panel-heading clearfix">
                     <h2 class="panel-title pull-left" style="margin-top: 7.5px; margin-right: 2em;">Allgemeines</h2>
                     <div class="input-group pull-right" style="margin-left: 1em;">
@@ -334,9 +346,11 @@
                     <li class="list-group-item"><span class="item-title"><span class="glyphicon glyphicon-user"></span> Name:</span> <span th:text="${person.name}">Max Mustermann</span></li>
                     <li class="list-group-item"><span class="item-title"><span class="glyphicon glyphicon-calendar"></span> Geburtsdatum:</span> <span th:text="${{person.dateOfBirth}}">30.02.1999</span></li>
                     <li class="list-group-item"><span class="item-title"><span class="glyphicon glyphicon-envelope"></span> E-Mail Adresse:</span> <a href="mailto:max_muster@aol.com" th:href="'mailto:' + ${person.email}" th:text="${person.email}">max_muster@aol.com</a></li>
-                    <li class="list-group-item"><span class="item-title"><span class="glyphicon glyphicon-home"></span> Adresse:</span> <span th:text="${person.address.street} + ', ' + ${person.address.zip} + ' ' + ${person.address.city}">Zu Hause 15, 01234 Entenhausen</span></li>
+                    <li class="list-group-item"><span class="item-title"><span class="glyphicon glyphicon-home"></span> Adresse:</span> <span th:text="${person.address.street} + ' ' + ${person.address.zip} + ' ' + ${person.address.city}">Zu Hause 15, 01234 Entenhausen</span></li>
                     <li class="list-group-item"><span class="item-title"><span class="glyphicon glyphicon-cutlery"></span> Vegetarier o.ä.:</span> <span th:text="${person.eatingHabit}">Veganer, Laktose-intolerant</span></li>
                     <li class="list-group-item"><span class="item-title"><span class="glyphicon glyphicon-bed"></span> Allergien o.ä.:</span> <span th:text="${person.healthImpairments}">Heuschnupfen</span></li>
+                    <li class="list-group-item"><span class="item-title"><span class="glyphicon glyphicon-tree-deciduous"></span> NABU-Mitglied</span> <span th:if="${isNabuMember}" th:text="'Mitgliedsnummer: ' + ${person.nabuMembership.membershipNumber}">Mitgliedsnummer: 9874563</span><span th:unless="${isNabuMember}">kein Mitglied</span>
+                    </li>
                 </ul>
             </section>
 

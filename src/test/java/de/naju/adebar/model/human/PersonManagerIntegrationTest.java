@@ -33,13 +33,13 @@ public class PersonManagerIntegrationTest {
         Address clausAddress = new Address("Hinner der Boje 7", "24103", "Auf'm Meer");
         LocalDate clausDob = LocalDate.now().minusYears(42L);
         this.claus = new Person(clausId, "Claus", "Störtebecker", "der_kaeptn@web.de",
-                Gender.MALE, clausAddress, clausDob);
+                Gender.MALE, clausAddress, clausDob, new NabuMembership());
 
         this.bertaId = new PersonId();
         this.bertaAddress = new Address("An der Schiefen Ebene 2", "01234", "Entenhausen", "Zimmer 13");
         LocalDate bertaDob = LocalDate.now().minusYears(27L);
         this.berta = new Person(bertaId, "Berta", "Beate", "berta@gmx.net",
-                Gender.FEMALE, bertaAddress, bertaDob);
+                Gender.FEMALE, bertaAddress, bertaDob, new NabuMembership());
 
         this.heinzAddress = new Address("Zu Hause", "98765", "Teudschland");
         this.heinzDob = LocalDate.now().minusYears(3);

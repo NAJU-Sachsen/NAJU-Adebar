@@ -31,7 +31,12 @@ public class CreatePersonFormDataExtractor {
     public Person extractPerson(CreatePersonForm personForm) {
         Gender gender = Gender.valueOf(personForm.getGender());
         LocalDate dob = personForm.hasDateOfBirth() ? LocalDate.parse(personForm.getDateOfBirth(), dateFormatter) : null;
-        return new Person(personForm.getFirstName(), personForm.getLastName(), personForm.getEmail(), gender, extractAddress(personForm), dob);
+        NabuMembership nabu = personForm.isNabuMember() ? new NabuMembership(personForm.getNabuNumber()) : new NabuMembership();
+        Person person = new Person(personForm.getFirstName(), personForm.getLastName(), personForm.getEmail(), gender, extractAddress(personForm), dob);
+        person.setNabuMembership(nabu);
+        person.setEatingHabit(personForm.getEatingHabit());
+        person.setHealthImpairments(personForm.getHealthImpairments());
+        return person;
     }
 
     /**

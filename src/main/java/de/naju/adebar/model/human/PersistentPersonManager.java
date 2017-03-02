@@ -34,7 +34,7 @@ public class PersistentPersonManager implements PersonManager {
 
     @Override
     public Person createPerson(String firstName, String lastName, String email, Gender gender, Address address, LocalDate dob) {
-        Person person = new Person(new PersonId(), firstName, lastName, email, gender, address, dob);
+        Person person = new Person(new PersonId(), firstName, lastName, email, gender, address, dob, new NabuMembership());
         return personRepo.save(person);
     }
 

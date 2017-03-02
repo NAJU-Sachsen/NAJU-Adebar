@@ -4,6 +4,7 @@ import de.naju.adebar.controller.forms.CreatePersonForm;
 import de.naju.adebar.controller.forms.EditPersonForm;
 import de.naju.adebar.model.human.Address;
 import de.naju.adebar.model.human.Gender;
+import de.naju.adebar.model.human.NabuMembership;
 import de.naju.adebar.model.human.Person;
 import org.springframework.stereotype.Service;
 
@@ -30,10 +31,12 @@ public class EditPersonFormDataExtractor {
      * @return the {@link Person} object encoded by the form
      */
     public Person extractPerson(EditPersonForm personForm) {
+        LocalDate dob = personForm.hasDateOfBirth() ? LocalDate.parse(personForm.getDateOfBirth(), dateFormatter) : null;
         Person person = new Person(personForm.getFirstName(), personForm.getLastName(), personForm.getEmail(), Gender.valueOf(personForm.getGender()),
-                new Address(personForm.getStreet(), personForm.getZip(), personForm.getCity()), LocalDate.parse(personForm.getDateOfBirth(), dateFormatter));
+                new Address(personForm.getStreet(), personForm.getZip(), personForm.getCity()), dob);
         person.setEatingHabit(personForm.getEatingHabit());
         person.setHealthImpairments(personForm.getHealthImpairments());
+        person.setNabuMembership(personForm.isNabuMember() ? new NabuMembership(personForm.getNabuNumber()) : new NabuMembership());
         return person;
     }
 

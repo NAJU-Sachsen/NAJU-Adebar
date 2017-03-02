@@ -37,7 +37,7 @@ public class ReferentManagerIntegrationTest {
         Address clausAddress = new Address("Hinner der Boje 7", "24103", "Auf'm Meer");
         LocalDate clausDob = LocalDate.now().minusYears(42L);
         this.clausPerson = new Person(clausId, "Claus", "Störtebecker", "der_kaeptn@web.de",
-                Gender.MALE, clausAddress, clausDob);
+                Gender.MALE, clausAddress, clausDob, new NabuMembership());
         this.clausReferent = new Referent(clausId);
         this.qualification = new Qualification("Erste Hilfe Kurs",
                 "Hat die Qualifikation, einen Erste-Hilfe Kurs zu leiten");
@@ -83,7 +83,7 @@ public class ReferentManagerIntegrationTest {
         Address bertaAddress = new Address("An der Schiefen Ebene 2", "01234", "Entenhausen", "Zimmer 13");
         LocalDate bertaDob = LocalDate.now().minusYears(27L);
         Person berta = new Person(bertaId, "Berta", "Beate", "berta@gmx.net",
-                Gender.FEMALE, bertaAddress, bertaDob);
+                Gender.FEMALE, bertaAddress, bertaDob, new NabuMembership());
 
         Assert.assertFalse(berta.toString() + " is not an activist", referentManager.isReferent(berta));
     }

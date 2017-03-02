@@ -135,6 +135,7 @@ public class PersonController {
 
         model.addAttribute("editPersonForm", new PersonToEditPersonFormConverter().convertToEditPersonForm(person));
         model.addAttribute("addQualificationForm", new AddQualificationForm());
+        model.addAttribute("isNabuMember", person.getNabuMembership().isNabuMember());
 
         model.addAttribute("person", person);
 

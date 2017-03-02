@@ -17,12 +17,14 @@ public class EditPersonForm {
     private String street;
     private String zip;
     private String city;
+    private boolean nabuMember;
+    private String nabuNumber;
 
 
     public EditPersonForm() {}
 
     public EditPersonForm(String firstName, String lastName, String email, String gender, String dateOfBirth, String eatingHabit,
-                          String healthImpairments, String street, String zip, String city) {
+                          String healthImpairments, String street, String zip, String city, boolean nabuMember, String nabuNumber) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -33,6 +35,8 @@ public class EditPersonForm {
         this.street = street;
         this.zip = zip;
         this.city = city;
+        this.nabuMember = nabuMember;
+        this.nabuNumber = nabuNumber;
     }
 
     public String getFirstName() {
@@ -119,9 +123,25 @@ public class EditPersonForm {
         this.city = city;
     }
 
+    public boolean isNabuMember() {
+        return nabuMember;
+    }
+
+    public void setNabuMember(boolean nabuMember) {
+        this.nabuMember = nabuMember;
+    }
+
+    public String getNabuNumber() {
+        return nabuNumber;
+    }
+
+    public void setNabuNumber(String nabuNumber) {
+        this.nabuNumber = nabuNumber;
+    }
+
     @Override
     public String toString() {
-        return "CreatePersonForm{" +
+        return "EditPersonForm{" +
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
@@ -132,6 +152,8 @@ public class EditPersonForm {
                 ", street='" + street + '\'' +
                 ", zip='" + zip + '\'' +
                 ", city='" + city + '\'' +
+                ", nabuMember=" + nabuMember +
+                ", nabuNumber='" + nabuNumber + '\'' +
                 '}';
     }
 }

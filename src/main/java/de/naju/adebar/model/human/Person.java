@@ -4,10 +4,7 @@ import java.beans.Transient;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import org.springframework.util.Assert;
 
@@ -31,6 +28,7 @@ public class Person {
     private LocalDate dateOfBirth;
     private String eatingHabit;
     private String healthImpairments;
+    @Embedded private NabuMembership nabuMembership;
 
     private boolean active;
 
@@ -66,6 +64,7 @@ public class Person {
         this.eatingHabit = "";
         this.healthImpairments = "";
         this.active = true;
+        this.nabuMembership = new NabuMembership();
     }
 
     /**
@@ -80,7 +79,7 @@ public class Person {
      * @throws IllegalArgumentException if any of the parameters is {@code null}, the email is not valid, the
      * date of birth lies in the future or names are empty
      */
-    Person(PersonId id, String firstName, String lastName, String email, Gender gender, Address address, LocalDate dateOfBirth) {
+    Person(PersonId id, String firstName, String lastName, String email, Gender gender, Address address, LocalDate dateOfBirth, NabuMembership nabuMembership) {
         Object[] params = {id, firstName, lastName, email, gender};
         Assert.noNullElements(params, "Parameters may not be null!");
         Assert.hasText(firstName, "First name may not be empty, but was: " + firstName);
@@ -99,6 +98,7 @@ public class Person {
         this.dateOfBirth = dateOfBirth;
         this.eatingHabit = "";
         this.healthImpairments = "";
+        this.nabuMembership = nabuMembership;
         this.active = true;
     }
 
@@ -247,6 +247,14 @@ public class Person {
     public void setHealthImpairments(String healthImpairments) {
         Assert.notNull(healthImpairments, "Health impairments may not be null (but hopefully empty :-) )!");
         this.healthImpairments = healthImpairments;
+    }
+
+    public NabuMembership getNabuMembership() {
+        return nabuMembership;
+    }
+
+    public void setNabuMembership(NabuMembership nabuMembership) {
+        this.nabuMembership = nabuMembership;
     }
 
     /**
