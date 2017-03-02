@@ -71,6 +71,15 @@ public class PersistentHumanManager implements HumanManager {
     }
 
     @Override
+    public void deactivatePerson(Person person) {
+        if (activistManager.isActivist(person) || referentManager.isReferent(person)) {
+            throw new IllegalStateException("Person may not be deactivated as it is a referent or person: " + person);
+        }
+        person.deactivate();
+        personManager.updatePerson(person.getId(), person);
+    }
+
+    @Override
     public PersonManager personManager() {
         return personManager;
     }

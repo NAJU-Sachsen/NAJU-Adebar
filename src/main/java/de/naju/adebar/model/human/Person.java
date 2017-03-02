@@ -32,6 +32,8 @@ public class Person {
     private String eatingHabit;
     private String healthImpairments;
 
+    private boolean active;
+
     // constructors
 
     /**
@@ -63,6 +65,7 @@ public class Person {
         this.dateOfBirth = dateOfBirth;
         this.eatingHabit = "";
         this.healthImpairments = "";
+        this.active = true;
     }
 
     /**
@@ -96,6 +99,7 @@ public class Person {
         this.dateOfBirth = dateOfBirth;
         this.eatingHabit = "";
         this.healthImpairments = "";
+        this.active = true;
     }
 
     /**
@@ -246,6 +250,23 @@ public class Person {
     }
 
     /**
+     * To keep the integrity of statistics persons should not be physically deleted. Instead they should be deactivated.
+     * The current status of a person (deactivated or not) is saved through this field.
+     * @return whether the person is deactivated or not
+     */
+    public boolean isActive() {
+        return active;
+    }
+
+    /**
+     * Updates the person's status (deactivated or not)
+     * @param active the new status
+     */
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    /**
      * Updates the newsletter's id.
      * <p>
      * As the id will be used as primary key in the database, it should not be changed by the user by any means.
@@ -283,6 +304,14 @@ public class Person {
      */
     public boolean hasDateOfBirth() {
         return dateOfBirth != null;
+    }
+
+    // modification methods
+
+    public void deactivate() {
+        this.email = "";
+        this.address.setStreet("");
+        this.active = false;
     }
 
     // overridden from Object

@@ -1,5 +1,6 @@
 package de.naju.adebar.model.human;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.stream.Stream;
 
@@ -14,6 +15,18 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface PersonRepository extends CrudRepository<Person, PersonId> {
+
+    /**
+     * @return all non-disabled persons. Should be used for nearly all iterations
+     */
+    Iterable<Person> findAllByActiveIsTrue();
+
+    /**
+     * Equivalent of {@link CrudRepository#findOne(Serializable)}, just for non-disabled persons
+     * @param personId the person's id
+     * @return the person associated to the ID or {@code null} if there is no such person
+     */
+    Person findOneByIdAndActiveIsTrue(PersonId personId);
 
     /**
      * @param email the email address to query for
@@ -77,10 +90,22 @@ public interface PersonRepository extends CrudRepository<Person, PersonId> {
 	Iterable<Person> findFirst25ByOrderByLastName();
 
     /**
+     * @return the first 25 non-disabled persons
+     */
+	Iterable<Person> findFirst25ByActiveIsTrueOrderByLastName();
+
+    /**
      * @return all persisted persons as a stream. Nice for accessing them in a functional way
      * @see Stream
      * @see <a href="https://en.wikipedia.org/wiki/Functional_programming">Functional programming</a>
      */
 	@Query("select p from Person p")
 	Stream<Person> streamAll();
+
+    /**
+     * Equivalent of normal {@link #streamAll()}, just for non-disabled persons
+     * @return all persisted, non-disabled persons as a stream. Nice for accessing them in a functional way
+     */
+	@Query("select p from Person p where p.active=true")
+    Stream<Person> streamAllByActiveIsTrue();
 }

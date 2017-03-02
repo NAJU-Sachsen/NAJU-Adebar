@@ -60,7 +60,7 @@ public class PersonController {
     public String showPersonOverview(Model model) {
         model.addAttribute("addPersonForm", new CreatePersonForm());
         model.addAttribute("filterPersonsForm", new FilterPersonForm());
-        model.addAttribute("persons", humanManager.personManager().repository().findFirst25ByOrderByLastName());
+        model.addAttribute("persons", humanManager.personManager().repository().findFirst25ByActiveIsTrueOrderByLastName());
         model.addAttribute("qualifications", qualificationManager.repository().findAll());
         return "persons";
     }
@@ -74,7 +74,7 @@ public class PersonController {
     public String showAllPersons(Model model) {
         model.addAttribute("addPersonForm", new CreatePersonForm());
         model.addAttribute("filterPersonsForm", new FilterPersonForm());
-        model.addAttribute("persons", humanManager.personManager().repository().findAll());
+        model.addAttribute("persons", humanManager.personManager().repository().findAllByActiveIsTrue());
         model.addAttribute("qualifications", qualificationManager.repository().findAll());
         return "persons";
     }
@@ -113,7 +113,7 @@ public class PersonController {
      */
     @RequestMapping("/persons/filter")
     public String filterPersons(@ModelAttribute("filterPersonsForm") FilterPersonForm filterPersonForm, Model model) {
-        List<Person> persons = humanManager.personManager().repository().streamAll().collect(Collectors.toList());
+        List<Person> persons = humanManager.personManager().repository().streamAllByActiveIsTrue().collect(Collectors.toList());
         PersonFilterBuilder filterBuilder = new PersonFilterBuilder(persons.stream());
         filterPersonFormFilterExtractor.extractAllFilters(filterPersonForm).forEach(filterBuilder::applyFilter);
         model.addAttribute("persons", filterBuilder.filter());
@@ -154,6 +154,8 @@ public class PersonController {
             model.addAttribute("qualifications", humanManager.referentManager().findReferentByPerson(person).getQualifications());
         }
 
+        model.addAttribute("allQualifications", qualificationManager.repository().findAll());
+
         return "personDetails";
     }
 
@@ -173,6 +175,16 @@ public class PersonController {
 
         redirAttr.addFlashAttribute("personUpdated", true);
         return "redirect:/persons/" + personId;
+    }
+
+    @RequestMapping("/persons/{pid}/delete")
+    public String deletePerson(@PathVariable("pid") String personId, RedirectAttributes redirAttr) {
+        Person person = humanManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
+
+        humanManager.deactivatePerson(person);
+
+        redirAttr.addFlashAttribute("personDeleted", true);
+        return "redirect:/persons/";
     }
 
     @RequestMapping("/persons/{pid}/edit-activist")

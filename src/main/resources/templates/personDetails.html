@@ -158,6 +158,20 @@
               </section>
               <footer class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+                  <form method="post" class="btn-group" th:action="@{'/persons/' + ${person.id} + '/delete'}">
+                      <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspop="true" aria-expanded="false">
+                         <span class="glyphicon glyphicon-trash"></span> Löschen <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu dropdown-menu-lg confirm-delete">
+                         <li>
+                             Die Person wird nicht mehr als Auswahloption als Teilnehmer für Veranstaltungen gelistet.
+                             Die Daten verbleiben allerdings anonymisiert im System und werden für Auswertungen weiterhin hinzugezogen.
+                         </li>
+                         <li>
+                            <button type="submit" class="btn btn-link">Löschen</button>
+                         </li>
+                      </ul>
+                  </form>
                   <button type="submit" form="edit-person-form" class="btn btn-primary">Aktualisieren</button>
               </footer>
           </div>

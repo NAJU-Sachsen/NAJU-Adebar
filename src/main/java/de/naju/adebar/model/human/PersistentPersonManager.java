@@ -48,7 +48,7 @@ public class PersistentPersonManager implements PersonManager {
 
     @Override
     public Optional<Person> findPerson(String id) {
-        Person person = personRepo.findOne(new PersonId(id));
+        Person person = personRepo.findOneByIdAndActiveIsTrue(new PersonId(id));
         return person == null ? Optional.empty() : Optional.of(person);
     }
 

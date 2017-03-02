@@ -80,6 +80,13 @@ public interface HumanManager {
     Optional<Person> findPerson(Referent referent);
 
     /**
+     * Disables a person. It may/should not be available as a potential camp participant, etc. any more afterwards.
+     * To keep statistics correct, persons should not be deleted but instead only disabled (and anonymized)
+     * @param person the person to disable
+     */
+    void deactivatePerson(Person person);
+
+    /**
      * @return an instance of a person manager for more specific queries
      */
     PersonManager personManager();

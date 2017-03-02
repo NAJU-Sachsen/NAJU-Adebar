@@ -84,6 +84,14 @@ fieldset.inline-options label {
 	text-align: center;
 }
 
+.dropdown-menu-lg {
+    width: 30em;
+    left: 50%;
+    right: auto;
+    text-align: center;
+    transform: translate(-50%, 0);
+}
+
 .panel-title small {
     font-size: 0.9em;
 }
