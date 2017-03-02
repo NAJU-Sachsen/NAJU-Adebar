@@ -21,7 +21,7 @@ public class ActivistToEditActivistFormConverter {
      */
     public EditActivistForm convertToEditActivistForm(Activist activist) {
         String juleicaExpiryDate = activist.hasJuleica() ? activist.getJuleicaExpiryDate().format(DateTimeFormatter.ofPattern(EditActivistForm.DATE_FORMAT, Locale.GERMAN)) : "";
-        return new EditActivistForm(true, activist.hasJuleica(), juleicaExpiryDate);
+        return new EditActivistForm(activist.isActive(), activist.hasJuleica(), juleicaExpiryDate);
     }
 
 }
