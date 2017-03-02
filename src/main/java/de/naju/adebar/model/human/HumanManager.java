@@ -83,6 +83,7 @@ public interface HumanManager {
      * Disables a person. It may/should not be available as a potential camp participant, etc. any more afterwards.
      * To keep statistics correct, persons should not be deleted but instead only disabled (and anonymized)
      * @param person the person to disable
+     * @throws IllegalStateException if the person may not be deactivated (e.g. because it is an activist or referent)
      */
     void deactivatePerson(Person person);
 
