@@ -244,6 +244,22 @@ public class FilterPersonFormFilterExtractor {
         }
     }
 
+    public boolean hasNabuMembershipFilter(FilterPersonForm personForm) {
+        return !personForm.getNabuMembershipFilterType().equals(NO_FILTER);
+    }
+
+    public NabuMembershipFilter extractNabuMembershipFilter(FilterPersonForm personForm) {
+        if (!hasNabuMembershipFilter(personForm)) {
+            throw new IllegalStateException("No NABU membership filter was specified: " + personForm);
+        }
+        FilterType filterType = FilterType.valueOf(personForm.getNabuMembershipFilterType());
+        if (filterType == FilterType.ENFORCE && !personForm.getNabuMembershipNumber().isEmpty()) {
+            return new NabuMembershipFilter(personForm.getNabuMembershipNumber());
+        } else {
+            return new NabuMembershipFilter(filterType);
+        }
+    }
+
     /**
      * @param personForm the form to extract data from
      * @return all filters which are encoded by the form
@@ -259,6 +275,7 @@ public class FilterPersonFormFilterExtractor {
         if (hasHealthImpairmentsFilter(personForm)) filters.add(extractHealthImpairmentsFilter(personForm));
         if (hasNameFilter(personForm)) filters.add(extractNameFilter(personForm));
         if (hasReferentFilter(personForm)) filters.add(extractReferentFilter(personForm));
+        if (hasNabuMembershipFilter(personForm)) filters.add(extractNabuMembershipFilter(personForm));
         return filters;
     }
 

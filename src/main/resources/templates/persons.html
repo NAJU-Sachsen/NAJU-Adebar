@@ -357,6 +357,23 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label for="filter-person-nabu" class="col-sm-3 control-label">NABU-Mitgliedschaft</label>
+                                <div class="col-sm-9" id="filter-person-nabu">
+                                    <div>
+                                        <div class="margin-btm-sm">
+                                            <select id="filter-nabu-type" class="selectpicker" name="nabuMembershipFilterType" data-width="auto" th:field="*{nabuMembershipFilterType}">
+                                                <option value="none" selected="selected">egal</option>
+                                                <option value="ENFORCE">Nur NABU-Mitglieder</option>
+                                                <option value="IGNORE">Keine NABU-Mitglieder</option>
+                                            </select>
+                                        </div>
+                                        <div id="filter-nabu-membership-number" class="hidden">
+                                            <input type="text" class="form-control" name="nabuMembershipNumber" placeholder="Mitgliedsnummer" th:field="*{nabuMembershipNumber}" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <label for="filter-person-activist-container" class="col-sm-3 control-label">Aktive</label>
                                 <div id="filter-person-activist-container" class="col-sm-9">
                                     <div>

@@ -74,6 +74,15 @@ $('#filter-dob-type').on('change', function() {
     }
 });
 
+// show nabu membership number input only if only for nabu members should be filtered
+$('#filter-nabu-type').on('change', function() {
+    if ($('#filter-nabu-type option:selected').val() == 'ENFORCE') {
+        $('#filter-nabu-membership-number').removeClass('hidden');
+    } else {
+        $('#filter-nabu-membership-number').addClass('hidden');
+    }
+});
+
 $('#filter-activist-type').on('change', function() {
     if ($('#filter-activist-type option:selected').val() != 'ENFORCE') {
         $('#filter-activist-hasJuleica-container').slideUp();

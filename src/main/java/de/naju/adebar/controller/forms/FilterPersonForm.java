@@ -19,6 +19,7 @@ public class FilterPersonForm {
     private String activistJuleicaExpiryFilterType, juleicaExpiryDate;
     private String referentsFilterType;
     private List<String> referentQualifications;
+    private String nabuMembershipFilterType, nabuMembershipNumber;
 
     public FilterPersonForm() {
 
@@ -176,6 +177,22 @@ public class FilterPersonForm {
         this.referentQualifications = referentQualifications;
     }
 
+    public String getNabuMembershipFilterType() {
+        return nabuMembershipFilterType;
+    }
+
+    public void setNabuMembershipFilterType(String nabuMembershipFilterType) {
+        this.nabuMembershipFilterType = nabuMembershipFilterType;
+    }
+
+    public String getNabuMembershipNumber() {
+        return nabuMembershipNumber;
+    }
+
+    public void setNabuMembershipNumber(String nabuMembershipNumber) {
+        this.nabuMembershipNumber = nabuMembershipNumber;
+    }
+
     @Override
     public String toString() {
         return "FilterPersonForm{" +
@@ -197,6 +214,8 @@ public class FilterPersonForm {
                 ", juleicaExpiryDate='" + juleicaExpiryDate + '\'' +
                 ", referentsFilterType='" + referentsFilterType + '\'' +
                 ", referentQualifications=" + referentQualifications +
+                ", nabuMembershipFilterType='" + nabuMembershipFilterType + '\'' +
+                ", nabuMembershipNumber='" + nabuMembershipNumber + '\'' +
                 '}';
     }
 }
