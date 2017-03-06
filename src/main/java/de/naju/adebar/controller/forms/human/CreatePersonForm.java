@@ -1,4 +1,4 @@
-package de.naju.adebar.controller.forms;
+package de.naju.adebar.controller.forms.human;
 
 import java.util.List;
 

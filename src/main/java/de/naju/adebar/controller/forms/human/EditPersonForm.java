@@ -1,4 +1,4 @@
-package de.naju.adebar.controller.forms;
+package de.naju.adebar.controller.forms.human;
 
 /**
  * Model POJO for person data. The fields are set by Thymeleaf when the associated form is submitted.

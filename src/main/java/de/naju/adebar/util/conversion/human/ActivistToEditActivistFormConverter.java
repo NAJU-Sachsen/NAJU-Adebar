@@ -1,6 +1,6 @@
-package de.naju.adebar.util.conversion;
+package de.naju.adebar.util.conversion.human;
 
-import de.naju.adebar.controller.forms.EditActivistForm;
+import de.naju.adebar.controller.forms.human.EditActivistForm;
 import de.naju.adebar.model.human.Activist;
 import org.springframework.stereotype.Service;
 

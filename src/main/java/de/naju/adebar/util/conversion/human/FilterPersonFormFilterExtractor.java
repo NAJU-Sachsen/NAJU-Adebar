@@ -1,9 +1,10 @@
-package de.naju.adebar.util.conversion;
+package de.naju.adebar.util.conversion.human;
 
 import com.google.common.collect.Lists;
 import de.naju.adebar.app.human.filter.*;
-import de.naju.adebar.controller.forms.FilterPersonForm;
+import de.naju.adebar.controller.forms.human.FilterPersonForm;
 import de.naju.adebar.model.human.*;
+import de.naju.adebar.util.conversion.PersonStreamConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;

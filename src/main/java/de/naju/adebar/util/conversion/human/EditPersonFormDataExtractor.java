@@ -1,7 +1,7 @@
-package de.naju.adebar.util.conversion;
+package de.naju.adebar.util.conversion.human;
 
-import de.naju.adebar.controller.forms.CreatePersonForm;
-import de.naju.adebar.controller.forms.EditPersonForm;
+import de.naju.adebar.controller.forms.human.CreatePersonForm;
+import de.naju.adebar.controller.forms.human.EditPersonForm;
 import de.naju.adebar.model.human.Address;
 import de.naju.adebar.model.human.Gender;
 import de.naju.adebar.model.human.NabuMembership;

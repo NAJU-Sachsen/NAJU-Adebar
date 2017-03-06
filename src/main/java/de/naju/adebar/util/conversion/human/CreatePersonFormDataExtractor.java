@@ -1,6 +1,6 @@
-package de.naju.adebar.util.conversion;
+package de.naju.adebar.util.conversion.human;
 
-import de.naju.adebar.controller.forms.CreatePersonForm;
+import de.naju.adebar.controller.forms.human.CreatePersonForm;
 
 import de.naju.adebar.model.human.*;
 import org.springframework.stereotype.Service;
