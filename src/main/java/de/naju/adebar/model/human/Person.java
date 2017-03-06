@@ -3,6 +3,7 @@ package de.naju.adebar.model.human;
 import java.beans.Transient;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.Period;
 
 import javax.persistence.*;
 
@@ -275,7 +276,7 @@ public class Person {
     }
 
     /**
-     * Updates the newsletter's id.
+     * Updates the persons's id.
      * <p>
      * As the id will be used as primary key in the database, it should not be changed by the user by any means.
      * Only JPA should access this method, which is why {@code setId()} was made {@code protected}.
@@ -312,6 +313,14 @@ public class Person {
      */
     public boolean hasDateOfBirth() {
         return dateOfBirth != null;
+    }
+
+    public int calculateAge() {
+        if (!hasDateOfBirth()) {
+            throw new IllegalStateException("Person has no date of birth specified: " + this);
+        }
+        Period period = Period.between(dateOfBirth, LocalDate.now());
+        return period.getYears();
     }
 
     // modification methods
