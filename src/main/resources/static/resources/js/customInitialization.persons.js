@@ -74,12 +74,16 @@ $('#filter-dob-type').on('change', function() {
     }
 });
 
+var filterNabuMembershipType = ($('#filter-nabu-type option:selected').val() == 'ENFORCE');
+
 // show nabu membership number input only if only for nabu members should be filtered
 $('#filter-nabu-type').on('change', function() {
-    if ($('#filter-nabu-type option:selected').val() == 'ENFORCE') {
-        $('#filter-nabu-membership-number').removeClass('hidden');
-    } else {
-        $('#filter-nabu-membership-number').addClass('hidden');
+    if ($('#filter-nabu-type option:selected').val() == 'ENFORCE' && !filterNabuMembershipType) {
+        $('#filter-nabu-membership-number').slideToggle();
+        filterNabuMembershipType = !filterNabuMembershipType;
+    } else if (filterNabuMembershipType){
+        $('#filter-nabu-membership-number').slideToggle();
+        filterNabuMembershipType = !filterNabuMembershipType;
     }
 });
 
