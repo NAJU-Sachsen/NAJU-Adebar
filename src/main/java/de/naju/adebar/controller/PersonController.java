@@ -1,9 +1,9 @@
 package de.naju.adebar.controller;
 
 import de.naju.adebar.app.human.filter.PersonFilterBuilder;
-import de.naju.adebar.controller.forms.*;
+import de.naju.adebar.controller.forms.human.*;
 import de.naju.adebar.model.human.*;
-import de.naju.adebar.util.conversion.*;
+import de.naju.adebar.util.conversion.human.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
