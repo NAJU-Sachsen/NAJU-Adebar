@@ -23,7 +23,7 @@
 <body>
 
 <!-- central navigation -->
-<nav id="top-nav" class="navbar navbar-default navbar-static-top">
+<nav id="top-nav" class="navbar navbar-static-top navbar-inverse">
     <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-nav"
@@ -44,8 +44,8 @@
                 <li role="presentation" class="active">
                     <a href="persons.html" th:href="@{/persons}"><span class="glyphicon glyphicon-user nav-icon" aria-hidden="true"></span> Personen <span class="sr-only">(akutell)</span></a>
                 </li>
-                <li class="disabled" role="presentation">
-                    <a href="#" th:href="@{/events}"><span class="glyphicon glyphicon-tent nav-icon" aria-hidden="true"></span> Veranstaltungen</a>
+                <li role="presentation">
+                    <a href="events.html" th:href="@{/events}"><span class="glyphicon glyphicon-tent nav-icon" aria-hidden="true"></span> Veranstaltungen</a>
                 </li>
                 <li class="disabled" role="presentation">
                     <a href="#" th:href="@{/localGroups}"><span class="glyphicon glyphicon-map-marker nav-icon" aria-hidden="true"></span> Ortsgruppen</a>
@@ -320,7 +320,7 @@
             <h1>Personen Details</h1>
 
             <!-- status messages -->
-            <section>
+            <section id="status">
                 <h2 class="hidden">Status</h2>
 
                 <div class="alert alert-danger alert-dismissible" role="alert" th:if="${deletionError}">
