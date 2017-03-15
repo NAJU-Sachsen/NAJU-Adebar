@@ -117,6 +117,7 @@ public class PersonController {
         PersonFilterBuilder filterBuilder = new PersonFilterBuilder(persons.stream());
         filterPersonFormFilterExtractor.extractAllFilters(filterPersonForm).forEach(filterBuilder::applyFilter);
         model.addAttribute("persons", filterBuilder.filter());
+        model.addAttribute("qualifications", qualificationManager.repository().findAll());
         model.addAttribute("addPersonForm", new CreatePersonForm());
         model.addAttribute("filterPersonsForm", new FilterPersonForm());
         return "persons";
