@@ -5,7 +5,7 @@ package de.naju.adebar.controller.forms.human;
  * @author Rico Bergmann
  */
 public class EditPersonForm {
-    public static String DATE_FORMAT = "dd.MM.yyyy";
+    public final static String DATE_FORMAT = "dd.MM.yyyy";
 
     private String firstName;
     private String lastName;
