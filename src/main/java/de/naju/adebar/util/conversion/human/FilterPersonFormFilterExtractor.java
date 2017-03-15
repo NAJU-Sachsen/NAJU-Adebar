@@ -235,8 +235,9 @@ public class FilterPersonFormFilterExtractor {
             throw new IllegalStateException("No referent filter was specified: " + personForm);
         }
         if (personForm.getReferentQualifications().isEmpty()) {
-            Stream<Person> referents = streamConverter.convertReferentStream(humanManager.referentManager().repository().streamAll());
-            return new ReferentFilter(referents, FilterType.valueOf(personForm.getReferentsFilterType()));
+            List<Referent> referentList = humanManager.referentManager().repository().streamAll().collect(Collectors.toList());
+            Stream<Person> convertedReferents = streamConverter.convertReferentStream(referentList.stream());
+            return new ReferentFilter(convertedReferents, FilterType.valueOf(personForm.getReferentsFilterType()));
         } else {
             Stream<Person> referents = streamConverter.convertReferentStream(humanManager.referentManager().repository().streamAll());
             List<Qualification> qualifications = Lists.newLinkedList(qualificationRepo.findAll(personForm.getReferentQualifications()));
