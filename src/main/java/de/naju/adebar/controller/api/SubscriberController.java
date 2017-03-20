@@ -17,7 +17,7 @@ import de.naju.adebar.api.data.TechnicalSubscriberJSON;
  * @see <a href="https://en.wikipedia.org/wiki/Representational_State_Transfer">REST Services</a>
  */
 @RestController("api_subscriberController")
-@RequestMapping("/api")
+@RequestMapping("/api/newsletter")
 public class SubscriberController {
 	
 	private NewsletterRepository newsletterRepo;
