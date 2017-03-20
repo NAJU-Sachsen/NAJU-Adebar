@@ -2,7 +2,7 @@ package de.naju.adebar.app.human.filter;
 
 import de.naju.adebar.model.human.Person;
 import de.naju.adebar.model.human.Qualification;
-import de.naju.adebar.util.conversion.PersonStreamConverter;
+import de.naju.adebar.util.conversion.PersonConverter;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,7 +24,7 @@ import java.util.List;
 @Transactional
 @Component
 public class ReferentFilterUnitTest extends FilterTestBootstrapper {
-    @Autowired private PersonStreamConverter streamConverter;
+    @Autowired private PersonConverter streamConverter;
     private ReferentFilter referentFilter;
 
     @Test public void testEnforceReferent() {

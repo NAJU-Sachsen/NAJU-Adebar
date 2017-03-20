@@ -16,11 +16,11 @@ import java.util.stream.Stream;
  * @see Person
  */
 @Service
-public class PersonStreamConverter {
+public class PersonConverter {
     private PersonRepository personRepo;
 
     @Autowired
-    public PersonStreamConverter(PersonRepository personRepo) {
+    public PersonConverter(PersonRepository personRepo) {
         this.personRepo = personRepo;
     }
 

@@ -1,7 +1,7 @@
 package de.naju.adebar.app.human.filter;
 
 import de.naju.adebar.model.human.Person;
-import de.naju.adebar.util.conversion.PersonStreamConverter;
+import de.naju.adebar.util.conversion.PersonConverter;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +23,7 @@ import java.util.List;
 @Transactional
 @Component
 public class ActivistFilterUnitTest extends FilterTestBootstrapper {
-    @Autowired private PersonStreamConverter streamConverter;
+    @Autowired private PersonConverter streamConverter;
     private ActivistFilter activistFilter;
 
     @Test public void testEnforceActivists() {

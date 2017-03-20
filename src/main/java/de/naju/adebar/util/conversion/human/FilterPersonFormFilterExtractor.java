@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import de.naju.adebar.app.human.filter.*;
 import de.naju.adebar.controller.forms.human.FilterPersonForm;
 import de.naju.adebar.model.human.*;
-import de.naju.adebar.util.conversion.PersonStreamConverter;
+import de.naju.adebar.util.conversion.PersonConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -30,11 +30,11 @@ public class FilterPersonFormFilterExtractor {
 
     private HumanManager humanManager;
     private QualificationRepository qualificationRepo;
-    private PersonStreamConverter streamConverter;
+    private PersonConverter streamConverter;
 
     @Autowired
     public FilterPersonFormFilterExtractor(HumanManager humanManager, QualificationRepository qualificationRepo,
-                                           PersonStreamConverter streamConverter) {
+                                           PersonConverter streamConverter) {
         Object[] params = {humanManager, qualificationRepo, qualificationRepo};
         Assert.noNullElements(params, "No parameter may be null!");
         this.humanManager = humanManager;

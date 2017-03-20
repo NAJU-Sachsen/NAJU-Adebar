@@ -18,13 +18,13 @@ import java.util.List;
 /**
  * Basic testing of the person conversions
  * @author Rico Bergmann
- * @see PersonStreamConverter
+ * @see PersonConverter
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
 @Component
-public class PersonStreamConverterUnitTest {
+public class PersonConverterUnitTest {
     private Address hansAddress = new Address("zu Hause 3", "01234", "Nirgends");
     private Address clausAddress = new Address("Hinter der Boje 7", "55555", "Aufm Meer");
     private Address bertaAddress = new Address("Bei Mir 1", "98765", "Entenhausen");
@@ -40,7 +40,7 @@ public class PersonStreamConverterUnitTest {
     @Autowired private ReferentManager referentManager;
     @Autowired private PersonRepository personRepo;
 
-    private PersonStreamConverter streamConverter;
+    private PersonConverter streamConverter;
 
     @Before
     public void setUp() {
@@ -61,13 +61,13 @@ public class PersonStreamConverterUnitTest {
 
 
     @Test public void testConvertActivists() {
-        streamConverter = new PersonStreamConverter(personRepo);
+        streamConverter = new PersonConverter(personRepo);
         Assert.assertArrayEquals("Arrays should be equal", persons.toArray(),
                 streamConverter.convertActivistStream(activists.stream()).toArray());
     }
 
     @Test public void testConvertReferents() {
-        streamConverter = new PersonStreamConverter(personRepo);
+        streamConverter = new PersonConverter(personRepo);
         Assert.assertArrayEquals("Arrays should be equal", persons.toArray(),
                 streamConverter.convertReferentStream(referents.stream()).toArray());
     }
