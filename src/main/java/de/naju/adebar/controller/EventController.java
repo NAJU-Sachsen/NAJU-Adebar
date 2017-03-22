@@ -119,6 +119,8 @@ public class EventController {
         } catch (PersonIsTooYoungException e) {
             redirAttr.addFlashAttribute("participantTooYoung", true);
             redirAttr.addFlashAttribute("newParticipantId", personId);
+        } catch (BookedOutException e) {
+            redirAttr.addFlashAttribute("bookedOut", true);
         }
 
         return "redirect:/events/" + eventId;

@@ -350,7 +350,7 @@ public class Event {
      */
     @Transient
     public boolean isBookedOut() {
-        return hasParticipantsLimit() && getRemainingCapacity() == getParticipantsLimit();
+        return hasParticipantsLimit() && getParticipantsCount() == getParticipantsLimit();
     }
 
     /**
