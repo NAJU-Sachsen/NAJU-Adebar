@@ -101,6 +101,28 @@ fieldset.inline-options label {
     color: #777;
 }
 
+.panel .panel-menu:before {
+    display: table;
+    content: " ";
+}
+
+.panel .panel-menu:after {
+    display: table;
+    content: " ";
+    clear: both;
+}
+
+.panel .panel-menu .panel-title {
+    float: left !important;
+    margin-top: 7.5px;
+    margin-right: 2em;
+}
+
+.panel .panel-menu .panel-menu-container {
+    float: right !important;
+    margin-left: 1em;
+}
+
 #main-footer {
 	position: absolute;
 	bottom: 0;
