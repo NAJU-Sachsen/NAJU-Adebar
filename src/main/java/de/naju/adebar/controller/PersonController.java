@@ -1,5 +1,6 @@
 package de.naju.adebar.controller;
 
+import de.naju.adebar.app.human.DataProcessor;
 import de.naju.adebar.app.human.filter.PersonFilterBuilder;
 import de.naju.adebar.controller.forms.human.*;
 import de.naju.adebar.model.human.*;
@@ -32,23 +33,26 @@ import java.util.stream.Collectors;
  */
 @Controller
 public class PersonController {
+    private final static String EMAIL_DELIMITER = ";";
+
     private HumanManager humanManager;
     private QualificationManager qualificationManager;
     private CreatePersonFormDataExtractor createPersonFormDataExtractor;
     private EditPersonFormDataExtractor editPersonFormDataExtractor;
     private FilterPersonFormFilterExtractor filterPersonFormFilterExtractor;
-
+    private DataProcessor dataProcessor;
 
     @Autowired
     public PersonController(HumanManager humanManager, QualificationManager qualificationManager, CreatePersonFormDataExtractor createPersonFormDataExtractor,
-                            EditPersonFormDataExtractor editPersonFormDataExtractor, FilterPersonFormFilterExtractor filterPersonFormFilterExtractor) {
-        Object[] params = {humanManager, qualificationManager, createPersonFormDataExtractor, editPersonFormDataExtractor, filterPersonFormFilterExtractor};
+                            EditPersonFormDataExtractor editPersonFormDataExtractor, FilterPersonFormFilterExtractor filterPersonFormFilterExtractor, DataProcessor dataProcessor) {
+        Object[] params = {humanManager, qualificationManager, createPersonFormDataExtractor, editPersonFormDataExtractor, filterPersonFormFilterExtractor, dataProcessor};
         Assert.noNullElements(params, "At least one parameter was null: " + Arrays.toString(params));
         this.humanManager = humanManager;
         this.createPersonFormDataExtractor = createPersonFormDataExtractor;
         this.editPersonFormDataExtractor = editPersonFormDataExtractor;
         this.filterPersonFormFilterExtractor = filterPersonFormFilterExtractor;
         this.qualificationManager = qualificationManager;
+        this.dataProcessor = dataProcessor;
     }
 
     /**
@@ -116,7 +120,13 @@ public class PersonController {
         List<Person> persons = humanManager.personManager().repository().streamAllByActiveIsTrue().collect(Collectors.toList());
         PersonFilterBuilder filterBuilder = new PersonFilterBuilder(persons.stream());
         filterPersonFormFilterExtractor.extractAllFilters(filterPersonForm).forEach(filterBuilder::applyFilter);
-        model.addAttribute("persons", filterBuilder.filter());
+
+        Iterable<Person> matchingPersons = filterBuilder.filter();
+        String matchingPersonsEmail = dataProcessor.extractEmailAddressesAsString(matchingPersons, EMAIL_DELIMITER);
+
+        model.addAttribute("filtered", true);
+        model.addAttribute("persons", matchingPersons);
+        model.addAttribute("emails", matchingPersonsEmail);
         model.addAttribute("qualifications", qualificationManager.repository().findAll());
         model.addAttribute("addPersonForm", new CreatePersonForm());
         model.addAttribute("filterPersonsForm", new FilterPersonForm());
@@ -182,6 +192,12 @@ public class PersonController {
         return "redirect:/persons/" + personId;
     }
 
+    /**
+     * Deactivates a person. It will not be listed in selection dialogs any more
+     * @param personId the id of the person to remove
+     * @param redirAttr attributes for the view to display some result information
+     * @return the persons' overview view
+     */
     @RequestMapping("/persons/{pid}/delete")
     public String deletePerson(@PathVariable("pid") String personId, RedirectAttributes redirAttr) {
         Person person = humanManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
@@ -198,6 +214,13 @@ public class PersonController {
         return "redirect:/persons/";
     }
 
+    /**
+     * Edits the activist data of a person
+     * @param personId the id of the person/activist to edit
+     * @param activistForm the activists new data
+     * @param redirAttr attributes for the view to display some result information
+     * @return the person's detail view
+     */
     @RequestMapping("/persons/{pid}/edit-activist")
     public String editActivist(@PathVariable("pid") String personId, @ModelAttribute("editActivistForm") EditActivistForm activistForm,
                                RedirectAttributes redirAttr) {
