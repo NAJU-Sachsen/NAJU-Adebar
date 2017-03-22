@@ -18,13 +18,13 @@ import java.util.UUID;
  * @see <a href="https://en.wikipedia.org/wiki/Unique_key">Primary keys</a>
  */
 @Embeddable
-class PersonId implements Serializable {
+public class PersonId implements Serializable {
     @Column(unique=true) private final String id;
 
     /**
      * Just create a new identifier
      */
-    public PersonId() {
+    PersonId() {
         this.id = UUID.randomUUID().toString();
     }
 
@@ -32,15 +32,15 @@ class PersonId implements Serializable {
      * Create an identifier using an existing one
      * @param id the existing id to use
      */
-    public PersonId(String id) {
+    PersonId(String id) {
         Assert.notNull(id, "Id may not be null!");
         this.id = id;
     }
 
     /**
-     * @return the identifier. As it should not be modified under no circumstances, it is {@code final}
+     * @return the identifier. As it should not be modified under any circumstances, it is {@code final}
      */
-    public final String getId() {
+    final String getId() {
         return id;
     }
 
