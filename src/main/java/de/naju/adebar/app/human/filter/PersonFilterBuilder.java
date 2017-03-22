@@ -46,10 +46,18 @@ public class PersonFilterBuilder {
 
     /**
      * Executes the filters
-     * @return the persons that matched all of criteria
+     * @return the persons who matched all of the criteria
      */
     public Iterable<Person> filter() {
+        return resultingStream().collect(Collectors.toList());
+    }
+
+    /**
+     * Executes the filters but returns the result uncollected. The return type is the only difference to {@link #filter()}
+     * @return the persons who matched all of the criteria
+     */
+    public Stream<Person> resultingStream() {
         filters.forEach(filter -> personStream = filter.filter(personStream));
-        return personStream.collect(Collectors.toList());
+        return personStream;
     }
 }
