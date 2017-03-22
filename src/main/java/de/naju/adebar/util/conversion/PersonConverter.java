@@ -7,6 +7,8 @@ import de.naju.adebar.model.human.Referent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.stream.Stream;
 
 /**
@@ -42,5 +44,25 @@ public class PersonConverter {
         Stream.Builder<Person> personStreamBuilder = Stream.builder();
         referentStream.forEach(referent -> personStreamBuilder.accept(personRepo.findOne(referent.getAssociatedPerson())));
         return personStreamBuilder.build();
+    }
+
+    /**
+     * @param activists the activists to convert
+     * @return an {@link Iterable} of the persons associated to the activists
+     */
+    public Iterable<Person> convertActivists(Iterable<Activist> activists) {
+        List<Person> persons = new LinkedList<>();
+        activists.forEach(a -> persons.add(personRepo.findOne(a.getAssociatedPerson())));
+        return persons;
+    }
+
+    /**
+     * @param referents the referents to convert
+     * @return an {@link Iterable} of the persons associated to the referents
+     */
+    public Iterable<Person> convertReferents(Iterable<Referent> referents) {
+        List<Person> persons = new LinkedList<>();
+        referents.forEach(r -> persons.add(personRepo.findOne(r.getAssociatedPerson())));
+        return persons;
     }
 }
