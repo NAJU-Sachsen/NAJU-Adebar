@@ -19,7 +19,6 @@ import de.naju.adebar.api.data.TechnicalSubscriberJSON;
 @RestController("api_subscriberController")
 @RequestMapping("/api/newsletter")
 public class SubscriberController {
-	
 	private NewsletterRepository newsletterRepo;
 	private SubscriberRepository subscriberRepo;
 	
