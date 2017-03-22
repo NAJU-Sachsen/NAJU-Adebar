@@ -14,6 +14,11 @@ import java.util.Locale;
 @Service
 public class PersonToEditPersonFormConverter {
 
+    /**
+     * Performs the conversion
+     * @param person the person to convert
+     * @return the created form
+     */
     public EditPersonForm convertToEditPersonForm(Person person) {
         String dob = person.hasDateOfBirth() ? person.getDateOfBirth().format(DateTimeFormatter.ofPattern(EditPersonForm.DATE_FORMAT, Locale.GERMAN)) : "";
         return new EditPersonForm(person.getFirstName(), person.getLastName(), person.getEmail(), person.getGender().name(), dob, person.getEatingHabit(),person.getHealthImpairments(), person.getAddress().getStreet(), person.getAddress().getZip(), person.getAddress().getCity(), person.getNabuMembership().isNabuMember(), person.getNabuMembership().getMembershipNumber());
