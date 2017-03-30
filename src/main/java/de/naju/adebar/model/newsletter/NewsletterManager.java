@@ -13,6 +13,14 @@ import de.naju.adebar.model.human.Person;
 public interface NewsletterManager {
 
     /**
+     * Saves the given newsletter. It may or may not be saved already
+     * @param newsletter the newsletter to save
+     * @return the saved newsletter. As its internal state (especially concrete implementations of interfaces) may
+     * differ after the save, this instance should be used for future operations
+     */
+    Newsletter saveNewsletter(Newsletter newsletter);
+
+    /**
      * Creates a new newsletter
      * @param name the newsletter's name
      * @return the freshly created newsletter instance

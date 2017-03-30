@@ -26,7 +26,12 @@ public class PersistentNewsletterManager implements NewsletterManager {
 		this.newsletterRepo = newsletterRepo;
 		this.subscriberRepo = subscriberRepo;
 	}
-	
+
+	@Override
+	public Newsletter saveNewsletter(Newsletter newsletter) {
+		return newsletterRepo.save(newsletter);
+	}
+
 	@Override
 	public Newsletter createNewsletter(String name) {
 		Newsletter newsletter = new Newsletter(name);
