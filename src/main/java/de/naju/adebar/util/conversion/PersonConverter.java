@@ -27,6 +27,14 @@ public class PersonConverter {
     }
 
     /**
+     * @param activist the activist to convert
+     * @return the associated person
+     */
+    public Person convertActivist(Activist activist) {
+        return personRepo.findOneByIdAndActiveIsTrue(activist.getAssociatedPerson());
+    }
+
+    /**
      * @param activistStream the activists to convert
      * @return a stream consisting of the persons associated to the activists
      */
@@ -54,6 +62,14 @@ public class PersonConverter {
         List<Person> persons = new LinkedList<>();
         activists.forEach(a -> persons.add(personRepo.findOne(a.getAssociatedPerson())));
         return persons;
+    }
+
+    /**
+     * @param referent the referent to convert
+     * @return the associated person
+     */
+    public Person converReferent(Referent referent) {
+        return personRepo.findOneByIdAndActiveIsTrue(referent.getAssociatedPerson());
     }
 
     /**
