@@ -24,7 +24,10 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 
 /**
+ * Event related controller mappings
  * @author Rico Bergmann
+ * @see Event
+ *
  */
 @Controller
 public class EventController {
@@ -49,6 +52,11 @@ public class EventController {
         this.dataProcessor = dataProcessor;
     }
 
+    /**
+     * Displays the event overview
+     * @param model model containing the data to display
+     * @return the events' overview view
+     */
     @RequestMapping("/events")
     public String showEventOverview(Model model) {
 
@@ -63,6 +71,12 @@ public class EventController {
         return "events";
     }
 
+    /**
+     * Adds a new event to the database
+     * @param eventForm the submitted event data
+     * @param redirAttr attributes for the view to display some result information
+     * @return the event's detail view
+     */
     @RequestMapping("/events/add")
     public String addEvent(@ModelAttribute("addEventForm") EventForm eventForm, RedirectAttributes redirAttr) {
         Event event = eventManager.saveEvent(eventFormDataExtractor.extractEvent(eventForm));
@@ -70,6 +84,12 @@ public class EventController {
         return "redirect:/events/" + event.getId();
     }
 
+    /**
+     * Detail view for an event
+     * @param eventId the id of the event to display
+     * @param model model containing the data to display
+     * @return the event's detail view
+     */
     @RequestMapping("/events/{eid}")
     public String showEventDetails(@PathVariable("eid") Long eventId, Model model) {
         Event event = eventManager.findEvent(eventId).orElseThrow(IllegalArgumentException::new);
@@ -96,6 +116,13 @@ public class EventController {
         return "eventDetails";
     }
 
+    /**
+     * Adapts information about an event
+     * @param eventId the id of the event to update
+     * @param eventForm the submitted new event data
+     * @param redirAttr attributes for the view to display some result information
+     * @return the event's detail view
+     */
     @RequestMapping("/events/{eid}/update")
     public String updateEvent(@PathVariable("eid") Long eventId, @ModelAttribute("editEventForm") EventForm eventForm, RedirectAttributes redirAttr) {
 
@@ -105,6 +132,13 @@ public class EventController {
         return "redirect:/events/" + eventId;
     }
 
+    /**
+     * Adds a participant to an event. This may actually not be exectuted if the person to add is too young.
+     * @param eventId the id of the event to add the participant to
+     * @param personId the id of the person to add
+     * @param redirAttr attributes for the view to display some result information
+     * @return the event's detail view
+     */
     @RequestMapping("/events/{eid}/participants/add")
     public String addParticipant(@PathVariable("eid") Long eventId, @RequestParam("person-id") String personId, RedirectAttributes redirAttr) {
         Event event = eventManager.findEvent(eventId).orElseThrow(IllegalArgumentException::new);
@@ -126,6 +160,13 @@ public class EventController {
         return "redirect:/events/" + eventId;
     }
 
+    /**
+     * Adds a participant to an event regardless of his age
+     * @param eventId the id of the event to add the participant to
+     * @param personId the id of the person to add
+     * @param redirAttr attributes for the view to display some result information
+     * @return the event's detail view
+     */
     @RequestMapping("/events/{eid}/participants/force-add")
     public String addParticipantIgnoreAge(@PathVariable("eid") Long eventId, @RequestParam("person-id") String personId, RedirectAttributes redirAttr) {
         Event event = eventManager.findEvent(eventId).orElseThrow(IllegalArgumentException::new);
@@ -142,6 +183,14 @@ public class EventController {
         return "redirect:/events/" + eventId;
     }
 
+    /**
+     * Updates the participation information about an participant
+     * @param eventId the id of the event the person participates in
+     * @param personId the id of the person whose information should be updated
+     * @param feePayed whether the participation fee was payed
+     * @param formReceived whether the legally binding participation form was already sent from the person
+     * @return the event's detail view
+     */
     @RequestMapping("/events/{eid}/participants/update")
     public String updateParticipant(@PathVariable("eid") Long eventId, @RequestParam("person-id") String personId, @RequestParam(value = "fee-payed", required = false) boolean feePayed, @RequestParam(value = "form-received", required = false) boolean formReceived) {
         Event event = eventManager.findEvent(eventId).orElseThrow(IllegalArgumentException::new);
@@ -156,6 +205,13 @@ public class EventController {
         return "redirect:/events/" + eventId;
     }
 
+    /**
+     * Removes a participant from an event
+     * @param eventId the id of the event the person participated in
+     * @param personId the id of the person that participated
+     * @param redirAttr attributes for the view to display some result information
+     * @return the event's detail view
+     */
     @RequestMapping("/events/{eid}/participants/remove")
     public String removeParticipant(@PathVariable("eid") Long eventId, @RequestParam("person-id") String personId, RedirectAttributes redirAttr) {
         Event event = eventManager.findEvent(eventId).orElseThrow(IllegalArgumentException::new);
@@ -168,6 +224,13 @@ public class EventController {
         return "redirect:/events/" + eventId;
     }
 
+    /**
+     * Adds a counselor to an event
+     * @param eventId the event to which the counselor should be added
+     * @param personId the id of the person who should be added as counselor
+     * @param redirAttr attributes for the view to display some result information
+     * @return the event's detail view
+     */
     @RequestMapping("/events/{eid}/counselors/add")
     public String addCounselor(@PathVariable("eid") Long eventId, @RequestParam("person-id") String personId, RedirectAttributes redirAttr) {
         Event event = eventManager.findEvent(eventId).orElseThrow(IllegalArgumentException::new);
@@ -180,6 +243,13 @@ public class EventController {
         return "redirect:/events/" + eventId;
     }
 
+    /**
+     * Removes a counselor from an event
+     * @param eventId the event from which the counselor should be removed
+     * @param personId the id of the person to remove
+     * @param redirAttr attributes for the view to display some result information
+     * @return the event's detail view
+     */
     @RequestMapping("/events/{eid}/counselors/remove")
     public String removeCounselor(@PathVariable("eid") Long eventId, @RequestParam("person-id") String personId, RedirectAttributes redirAttr) {
         Event event = eventManager.findEvent(eventId).orElseThrow(IllegalArgumentException::new);
@@ -192,6 +262,13 @@ public class EventController {
         return "redirect:/events/" + eventId;
     }
 
+    /**
+     * Adds an organizer to an event
+     * @param eventId the id of the event to add the organizer to
+     * @param personId the id of the person to add as an organizer
+     * @param redirAttr attributes for the view to display some result information
+     * @return the event's detail view
+     */
     @RequestMapping("/events/{eid}/organizers/add")
     public String addOrganizer(@PathVariable("eid") Long eventId, @RequestParam("person-id") String personId, RedirectAttributes redirAttr) {
         Event event = eventManager.findEvent(eventId).orElseThrow(IllegalArgumentException::new);
@@ -204,6 +281,13 @@ public class EventController {
         return "redirect:/events/" + eventId;
     }
 
+    /**
+     * Removes an organizer from an event
+     * @param eventId the event to remove the organizer from
+     * @param personId the id of the person to remove
+     * @param redirAttr attributes for the view to display some result information
+     * @return the event's detail view
+     */
     @RequestMapping("/events/{eid}/organizers/remove")
     public String removeOrganizer(@PathVariable("eid") Long eventId, @RequestParam("person-id") String personId, RedirectAttributes redirAttr) {
         Event event = eventManager.findEvent(eventId).orElseThrow(IllegalArgumentException::new);
