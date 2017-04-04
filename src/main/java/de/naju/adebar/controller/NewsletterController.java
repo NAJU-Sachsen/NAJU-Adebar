@@ -1,6 +1,8 @@
 package de.naju.adebar.controller;
 
 import de.naju.adebar.app.newsletter.NewsletterDataProcessor;
+import de.naju.adebar.model.chapter.LocalGroup;
+import de.naju.adebar.model.chapter.LocalGroupManager;
 import de.naju.adebar.model.newsletter.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,6 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.Optional;
 
 /**
  * Newsletter related controller mappings
@@ -21,13 +25,15 @@ public class NewsletterController {
     private SubscriberRepository subscriberRepo;
     private NewsletterManager newsletterManager;
     private NewsletterDataProcessor dataProcessor;
+    private LocalGroupManager localGroupManager;
 
     @Autowired
-    public NewsletterController(NewsletterRepository newsletterRepo, SubscriberRepository subscriberRepo, NewsletterManager newsletterManager, NewsletterDataProcessor dataProcessor) {
+    public NewsletterController(NewsletterRepository newsletterRepo, SubscriberRepository subscriberRepo, NewsletterManager newsletterManager, NewsletterDataProcessor dataProcessor, LocalGroupManager localGroupManager) {
         this.newsletterRepo = newsletterRepo;
         this.subscriberRepo = subscriberRepo;
         this.newsletterManager = newsletterManager;
         this.dataProcessor = dataProcessor;
+        this.localGroupManager = localGroupManager;
     }
 
     /**
@@ -79,7 +85,11 @@ public class NewsletterController {
      */
     @RequestMapping("/newsletters/{nid}/delete")
     public String deleteNewsletter(@PathVariable("nid") Long newsletterId, RedirectAttributes redirAttr) {
+        Newsletter newsletter = newsletterRepo.findOne(newsletterId);
+
+        localGroupManager.repository().findByNewsletter(newsletter).ifPresent(l -> localGroupManager.removeNewsletter(l));
         newsletterManager.deleteNewsletter(newsletterId);
+
         redirAttr.addFlashAttribute("newsletterDeleted", true);
         return "redirect:/newsletters";
     }
