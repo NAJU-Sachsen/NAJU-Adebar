@@ -3,16 +3,13 @@ package de.naju.adebar.util.conversion.events;
 import de.naju.adebar.controller.forms.events.EventForm;
 import de.naju.adebar.model.events.Event;
 import de.naju.adebar.model.human.Address;
-import javafx.util.converter.BigDecimalStringConverter;
 import org.javamoney.moneta.Money;
 import org.springframework.stereotype.Service;
 
-import javax.money.CurrencyUnit;
 import javax.money.Monetary;
-import javax.money.MonetaryContext;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Currency;
 import java.util.Locale;
 
 /**
@@ -48,7 +45,7 @@ public class EventFormDataExtractor {
         }
 
         if (eventForm.hasParticipationFee()) {
-            event.setParticipationFee(Money.of(new BigDecimalStringConverter().fromString(eventForm.getParticipationFee()), Monetary.getCurrency("EUR")));
+            event.setParticipationFee(Money.of(new BigDecimal(eventForm.getParticipationFee()), Monetary.getCurrency("EUR")));
         }
 
         return event;
