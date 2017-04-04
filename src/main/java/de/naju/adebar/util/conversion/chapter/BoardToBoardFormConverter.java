@@ -8,6 +8,7 @@ import de.naju.adebar.model.human.Activist;
 import de.naju.adebar.model.human.PersonId;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -29,9 +30,11 @@ public class BoardToBoardFormConverter {
 
         PersonId chairman = board.getChairman().getAssociatedPerson();
         String email = board.getEmail();
-        Iterable<PersonId> memberIdIterable = Iterables.transform(board.getMembers(), Activist::getAssociatedPerson);
-        Iterable<String> memberIterable = Iterables.transform(memberIdIterable, PersonId::toString);
-        List<String> members = Lists.newArrayList(memberIterable);
+        List<String> members = new LinkedList<>();
+
+        board.getMembers().forEach(m -> members.add(m.getAssociatedPerson().toString()));
+
+
         return new BoardForm(chairman.toString(), email, members);
     }
 
