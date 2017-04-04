@@ -25,6 +25,7 @@ main {
 .item-title {
     display: inline-block;
     width: 15%;
+    min-width: 100px;
 }
 
 ul.dropdown-menu.confirm-delete {
@@ -121,6 +122,20 @@ fieldset.inline-options label {
 .panel .panel-menu .panel-menu-container {
     float: right !important;
     margin-left: 1em;
+}
+
+.list-group-hover .list-group-item {
+    color: #555;
+}
+
+.list-group-hover .list-group-item:hover {
+    color: #555;
+    text-decoration: none;
+    background-color: #f5f5f5;
+}
+
+.list-group-item-interactive {
+    cursor: pointer;
 }
 
 #main-footer {
