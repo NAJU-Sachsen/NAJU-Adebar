@@ -466,7 +466,7 @@
                             <span class="item-title">
                                 <span class="glyphicon glyphicon-map-marker"></span> Adresse:
                             </span>
-                            <a target="_blank" href="http://www.openstreetmap.org/search?query=Kamenzer%20Str.%207%2001099%20Dresden" th:href="@{http://www.openstreetmap.org/search(query=${localGroup.getAddress().completeAddress()})}" th:text="${localGroup.getAddress().completeAddress()}">Kamenzer Str. 7 01099 Dresden</a>
+                            <a target="_blank" href="http://www.openstreetmap.org/search?query=Kamenzer%20Str.%207%2001099%20Dresden" th:href="@{http://www.openstreetmap.org/search(query=|${localGroup.address.street} ${localGroup.address.zip} ${localGroup.address.city}|)}" th:text="|${localGroup.address.street} ${localGroup.address.zip} ${localGroup.address.city}|">Kamenzer Str. 7 01099 Dresden</a>
                         </li>
                         <li class="list-group-item">
                             <span class="item-title">
@@ -488,10 +488,13 @@
                 <div class="panel panel-default">
                     <header class="panel-heading panel-menu">
                         <h2 class="panel-title">Mitglieder</h2>
-                        <div class="input-group panel-menu-container">
+                        <div class="btn-group panel-menu-container">
                             <button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-member-modal">
                                 <span class="glyphicon glyphicon-plus"></span> Hinzufügen
                             </button>
+                            <a href="mailto:" class="btn btn-default" th:href="|mailto: ${memberEmails}|">
+                                <span class="glyphicon glyphicon-envelope"></span> E-Mail
+                            </a>
                         </div>
                     </header>
                     <ul class="list-group list-group-hover" th:remove="all-but-first">
@@ -524,10 +527,13 @@
                 <div class="panel panel-default">
                     <header class="panel-heading panel-menu">
                         <h2 class="panel-title">Vorstand</h2>
-                        <div class="input-group panel-menu-container">
+                        <div class="btn-group panel-menu-container">
                             <button type="button" class="btn btn-default" data-toggle="modal" data-target="#edit-board-modal">
                                 <span class="glyphicon glyphicon-pencil"></span> Anpassen
                             </button>
+                            <a href="mailto:" class="btn btn-default" th:href="|mailto: ${boardEmails}|">
+                                <span class="glyphicon glyphicon-envelope"></span> E-Mail
+                            </a>
                         </div>
                     </header>
                     <ul class="list-group">

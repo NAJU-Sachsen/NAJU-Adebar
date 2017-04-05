@@ -1,5 +1,6 @@
 package de.naju.adebar.controller;
 
+import de.naju.adebar.app.human.DataProcessor;
 import de.naju.adebar.controller.forms.chapter.AddLocalGroupForm;
 import de.naju.adebar.controller.forms.chapter.BoardForm;
 import de.naju.adebar.controller.forms.chapter.LocalGroupForm;
@@ -10,6 +11,7 @@ import de.naju.adebar.model.chapter.LocalGroup;
 import de.naju.adebar.model.chapter.LocalGroupManager;
 import de.naju.adebar.model.human.Activist;
 import de.naju.adebar.model.human.HumanManager;
+import de.naju.adebar.model.human.Person;
 import de.naju.adebar.model.newsletter.NewsletterManager;
 import de.naju.adebar.util.conversion.PersonConverter;
 import de.naju.adebar.util.conversion.chapter.*;
@@ -32,6 +34,8 @@ import java.util.Arrays;
  */
 @Controller
 public class LocalGroupController {
+    private final static String EMAIL_DELIMITER = ";";
+
     private LocalGroupManager localGroupManager;
     private HumanManager humanManager;
     private NewsletterManager newsletterManager;
@@ -41,10 +45,11 @@ public class LocalGroupController {
     private LocalGroupToLocalGroupFormConverter localGroupFormConverter;
     private BoardFormDataExtractor boardFormDataExtractor;
     private BoardToBoardFormConverter boardFormConverter;
+    private DataProcessor humanDataProcessor;
 
     @Autowired
-    public LocalGroupController(LocalGroupManager localGroupManager, HumanManager humanManager, NewsletterManager newsletterManager, PersonConverter personConverter, AddLocalGroupFormDataExtractor addLocalGroupFormDataExtractor, LocalGroupFormDataExtractor localGroupFormDataExtractor, LocalGroupToLocalGroupFormConverter localGroupFormConverter, BoardFormDataExtractor boardFormDataExtractor, BoardToBoardFormConverter boardFormConverter) {
-        Object[] params = {localGroupManager, humanManager, newsletterManager, personConverter, localGroupFormDataExtractor, addLocalGroupFormDataExtractor, localGroupFormConverter, boardFormDataExtractor, boardFormConverter};
+    public LocalGroupController(LocalGroupManager localGroupManager, HumanManager humanManager, NewsletterManager newsletterManager, PersonConverter personConverter, AddLocalGroupFormDataExtractor addLocalGroupFormDataExtractor, LocalGroupFormDataExtractor localGroupFormDataExtractor, LocalGroupToLocalGroupFormConverter localGroupFormConverter, BoardFormDataExtractor boardFormDataExtractor, BoardToBoardFormConverter boardFormConverter, DataProcessor humanDataProcessor) {
+        Object[] params = {localGroupManager, humanManager, newsletterManager, personConverter, localGroupFormDataExtractor, addLocalGroupFormDataExtractor, localGroupFormConverter, boardFormDataExtractor, boardFormConverter, humanDataProcessor};
         Assert.noNullElements(params, "No parameter may be null: " + Arrays.toString(params));
         this.localGroupManager = localGroupManager;
         this.humanManager = humanManager;
@@ -55,6 +60,7 @@ public class LocalGroupController {
         this.localGroupFormConverter = localGroupFormConverter;
         this.boardFormDataExtractor = boardFormDataExtractor;
         this.boardFormConverter = boardFormConverter;
+        this.humanDataProcessor = humanDataProcessor;
     }
 
     /**
@@ -91,11 +97,16 @@ public class LocalGroupController {
     public String showLocalGroupDetails(@PathVariable("gid") long groupId, Model model) {
         LocalGroup localGroup = localGroupManager.findLocalGroup(groupId).orElseThrow(IllegalArgumentException::new);
         Board board = localGroup.getBoard();
+        Iterable<Person> members = personConverter.convertActivists(localGroup.getMembers());
+        Iterable<Person> boardMembers = board != null ? personConverter.convertActivists(board.getMembers()) : null;
 
         model.addAttribute("localGroup", localGroup);
-        model.addAttribute("members", personConverter.convertActivists(localGroup.getMembers()));
+        model.addAttribute("members", members);
         model.addAttribute("chairman", board != null ? personConverter.convertActivist(board.getChairman()) : null);
-        model.addAttribute("board", board != null ? personConverter.convertActivists(board.getMembers()) : null);
+        model.addAttribute("board", boardMembers);
+
+        model.addAttribute("memberEmails", humanDataProcessor.extractEmailAddressesAsString(members, EMAIL_DELIMITER));
+        model.addAttribute("boardEmails", board != null ? humanDataProcessor.extractEmailAddressesAsString(boardMembers, EMAIL_DELIMITER) : "");
 
         model.addAttribute("localGroupForm", localGroupFormConverter.convertToLocalGroupForm(localGroup));
         model.addAttribute("boardForm", boardFormConverter.convertToBoardForm(board));
