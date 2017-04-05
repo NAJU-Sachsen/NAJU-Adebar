@@ -1,6 +1,7 @@
 package de.naju.adebar.controller.forms.chapter;
 
 import de.naju.adebar.model.human.PersonId;
+import de.naju.adebar.util.Validation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,5 +47,9 @@ public class BoardForm {
 
     public void setMemberIds(List<String> memberIds) {
         this.memberIds = memberIds;
+    }
+
+    public boolean hasEmail() {
+        return email != null && Validation.isEmail(email);
     }
 }

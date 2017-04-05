@@ -28,8 +28,13 @@ public class BoardFormDataExtractor {
      */
     public Board extractBoard(BoardForm boardForm) {
         Activist chairman = humanManager.findActivist(humanManager.findPerson(boardForm.getChairmanId()).orElseThrow(IllegalArgumentException::new));
-        Board board = new Board(chairman, boardForm.getEmail());
-
+        Board board;
+        if (boardForm.hasEmail()) {
+            board = new Board(chairman, boardForm.getEmail());
+        } else {
+            board = new Board(chairman);
+        }
+        
         for (String memberId : boardForm.getMemberIds()) {
             Activist member = humanManager.findActivist(humanManager.findPerson(memberId).orElseThrow(IllegalArgumentException::new));
             board.addBoardMember(member);
