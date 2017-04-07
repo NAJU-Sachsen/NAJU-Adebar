@@ -7,9 +7,7 @@ import de.naju.adebar.model.newsletter.Newsletter;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Abstraction of a local group. Each group has a (very likely) unique set of members, i. e. activist who contribute to
@@ -23,7 +21,7 @@ public class LocalGroup {
     @Embedded @Column(unique = true) private Address address;
     @OneToMany(cascade = CascadeType.ALL) private List<Activist> members;
     @OneToMany(cascade = CascadeType.ALL) private List<Event> events;
-    @OneToMany(cascade = CascadeType.ALL) private List<Project> projects;
+    @OneToMany(cascade = CascadeType.ALL) private Map<String, Project> projects;
     @OneToOne(cascade = CascadeType.ALL) private Board board;
     @OneToOne(cascade = CascadeType.ALL) private Newsletter newsletter;
 
@@ -42,7 +40,7 @@ public class LocalGroup {
         this.address = address;
         this.members = new LinkedList<>();
         this.events = new LinkedList<>();
-        this.projects = new LinkedList<>();
+        this.projects = new HashMap<>();
     }
 
     /**
@@ -108,8 +106,8 @@ public class LocalGroup {
     /**
      * @return the projects the local group organizes
      */
-    public Iterable<Project> getProjects() {
-        return projects;
+    public Map<String, Project> getProjects() {
+        return Collections.unmodifiableMap(projects);
     }
 
     /**
@@ -158,7 +156,7 @@ public class LocalGroup {
     /**
      * @param projects the projects the local group organizes
      */
-    protected void setProjects(List<Project> projects) {
+    protected void setProjects(Map<String, Project> projects) {
         this.projects = projects;
     }
 
@@ -183,6 +181,16 @@ public class LocalGroup {
      */
     @Transient public int getProjectCount() {
         return projects.size();
+    }
+
+
+    @Transient public Optional<Project> getProject(String name) {
+        for (String projectName : projects.keySet()) {
+            if (projectName.equals(name)) {
+                return Optional.of(projects.get(name));
+            }
+        }
+        return Optional.empty();
     }
 
     /**
@@ -243,12 +251,20 @@ public class LocalGroup {
      */
     public void addProject(Project project) {
         Assert.notNull(project, "Project may not be null");
-        if (projects.contains(project)) {
+        if (projects.containsKey(project.getName())) {
             throw new IllegalArgumentException("Local group does already organize project " + project);
         } else if (!this.equals(project.getLocalGroup())) {
             throw new IllegalStateException("Project is already hosted by another local group");
         }
-        projects.add(project);
+        projects.put(project.getName(), project);
+    }
+
+    public void updateProject(Project project) {
+        Assert.notNull(project, "Project may not be null");
+        if (!this.equals(project.getLocalGroup())) {
+            throw new IllegalStateException("Project is already hosted by another local group");
+        }
+        projects.put(project.getName(), project);
     }
 
     // overridden from Object
