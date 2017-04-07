@@ -541,7 +541,7 @@
                     <ul class="list-group">
                         <li class="list-group-item">
                             <span class="item-title">Vorsitzende(r):</span>
-                            <a href="personDetails.html" th:if="${chairman}" th:href="@{'/persons/' + ${chairman.id}}" th:text="${chairman.name}">Maxi Musterfrau</a>
+                            <a href="personDetails.html" th:if="${chairman}" th:href="|mailto: ${chairman.email}|" th:text="${chairman.name}">Maxi Musterfrau</a>
                             <span th:unless="${chairman}">---</span>
                         </li>
                         <li class="list-group-item">
