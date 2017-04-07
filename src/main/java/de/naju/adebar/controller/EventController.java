@@ -3,6 +3,10 @@ package de.naju.adebar.controller;
 import de.naju.adebar.app.human.DataProcessor;
 import de.naju.adebar.controller.forms.events.EventForm;
 import de.naju.adebar.controller.forms.events.FilterEventsForm;
+import de.naju.adebar.model.chapter.LocalGroup;
+import de.naju.adebar.model.chapter.LocalGroupManager;
+import de.naju.adebar.model.chapter.Project;
+import de.naju.adebar.model.chapter.ProjectManager;
 import de.naju.adebar.model.events.*;
 import de.naju.adebar.model.human.Activist;
 import de.naju.adebar.model.human.HumanManager;
@@ -35,17 +39,21 @@ public class EventController {
 
     private HumanManager humanManager;
     private EventManager eventManager;
+    private LocalGroupManager localGroupManager;
+    private ProjectManager projectManager;
     private EventFormDataExtractor eventFormDataExtractor;
     private EventToEventFormConverter eventToEventFormConverter;
     private PersonConverter personConverter;
     private DataProcessor dataProcessor;
 
     @Autowired
-    public EventController(HumanManager humanManager, EventManager eventManager, EventFormDataExtractor eventFormDataExtractor, EventToEventFormConverter eventToEventFormConverter, PersonConverter personConverter, DataProcessor dataProcessor) {
-        Object[] params = {humanManager, eventManager, eventFormDataExtractor, eventToEventFormConverter, personConverter, dataProcessor};
+    public EventController(HumanManager humanManager, EventManager eventManager, LocalGroupManager localGroupManager, ProjectManager projectManager, EventFormDataExtractor eventFormDataExtractor, EventToEventFormConverter eventToEventFormConverter, PersonConverter personConverter, DataProcessor dataProcessor) {
+        Object[] params = {humanManager, eventManager, localGroupManager, projectManager, eventFormDataExtractor, eventToEventFormConverter, personConverter, dataProcessor};
         Assert.noNullElements(params, "No parameter may be null: " + Arrays.toString(params));
         this.humanManager = humanManager;
         this.eventManager = eventManager;
+        this.localGroupManager = localGroupManager;
+        this.projectManager = projectManager;
         this.eventFormDataExtractor = eventFormDataExtractor;
         this.eventToEventFormConverter = eventToEventFormConverter;
         this.personConverter = personConverter;
@@ -67,6 +75,8 @@ public class EventController {
         model.addAttribute("futureEvents", futureEvents);
         model.addAttribute("addEventForm", new EventForm());
         model.addAttribute("filterEventsForm", new FilterEventsForm());
+        model.addAttribute("localGroups", localGroupManager.repository().findAll());
+        model.addAttribute("projects", projectManager.repository().findAll());
 
         return "events";
     }
@@ -80,6 +90,19 @@ public class EventController {
     @RequestMapping("/events/add")
     public String addEvent(@ModelAttribute("addEventForm") EventForm eventForm, RedirectAttributes redirAttr) {
         Event event = eventManager.saveEvent(eventFormDataExtractor.extractEvent(eventForm));
+
+        switch (eventFormDataExtractor.extractBelonging(eventForm)) {
+            case PROJECT:
+                Project project = projectManager.findProject(eventForm.getProjectId()).orElseThrow(IllegalArgumentException::new);
+                project.addEvent(event);
+                projectManager.updateProject(project.getId(), project);
+                break;
+            case LOCALGROUP:
+                LocalGroup localGroup = localGroupManager.findLocalGroup(eventForm.getLocalGroupId()).orElseThrow(IllegalArgumentException::new);
+                localGroup.addEvent(event);
+                eventManager.updateEvent(event.getId(), event);
+                break;
+        }
 
         return "redirect:/events/" + event.getId();
     }

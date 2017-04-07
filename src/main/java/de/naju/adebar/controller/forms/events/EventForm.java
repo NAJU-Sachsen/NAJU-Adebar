@@ -1,10 +1,14 @@
 package de.naju.adebar.controller.forms.events;
 
+import org.springframework.data.annotation.Transient;
+
 /**
  * Model POJO for events. The fields are set by Thymeleaf when the associated form is submitted.
  * @author Rico Bergmann
  */
 public class EventForm {
+    public enum Belonging {LOCALGROUP, PROJECT}
+
     public final static String DATE_TIME_FORMAT = "dd.MM.yyyy HH:mm";
 
     private String name;
@@ -13,6 +17,8 @@ public class EventForm {
     private String participantsAge;
     private String participationFee;
     private String street, zip, city;
+    private String belonging;
+    private long localGroupId, projectId;
 
     public EventForm() {
     }
@@ -101,6 +107,30 @@ public class EventForm {
         this.city = city;
     }
 
+    public String getBelonging() {
+        return belonging;
+    }
+
+    public void setBelonging(String belonging) {
+        this.belonging = belonging;
+    }
+
+    public long getLocalGroupId() {
+        return localGroupId;
+    }
+
+    public void setLocalGroupId(long localGroupId) {
+        this.localGroupId = localGroupId;
+    }
+
+    public long getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(long projectId) {
+        this.projectId = projectId;
+    }
+
     public boolean hasParticipantsLimit() {
         return participantsLimit != null && !participantsLimit.isEmpty();
     }
@@ -125,6 +155,9 @@ public class EventForm {
                 ", street='" + street + '\'' +
                 ", zip='" + zip + '\'' +
                 ", city='" + city + '\'' +
+                ", belonging=" + belonging +
+                ", localGroupId=" + localGroupId +
+                ", projectId=" + projectId +
                 '}';
     }
 }

@@ -154,6 +154,31 @@
                               <input type="text" class="form-control city" name="city" placeholder="Stadt" style="width: 67%; float: right;" th:field="*{city}"/>
                           </div>
                       </div>
+                      <div class="form-group">
+                          <label for="add-event-belonging" class="col-sm-3 control-label">Zugehörigkeit</label>
+                          <div class="col-sm-9" id="add-event-belonging">
+                                  <label class="radio-inline">
+                                      <input type="radio" id="add-event-belonging-localGroup" name="belonging" th:value="LOCALGROUP" checked="checked" /> Ortsgruppe
+                                  </label>
+                                  <label class="radio-inline">
+                                      <input type="radio" id="add-event-belonging-project" name="belonging" th:value="PROJECT" /> Projekt
+                                  </label>
+                                  <div id="add-event-belonging-chapter-select" class="margin-btm-sm margin-top-lg">
+                                      <select class="selectpicker" required="required" data-live-search="true" th:remove="all-but-first" th:field="*{localGroupId}">
+                                          <option th:each="localGroup : ${localGroups}" th:text="${localGroup.name}" th:value="${localGroup.id}">NAJU Sachsen</option>
+                                          <option>NAJU Dresden</option>
+                                          <option>NAJU Freiberg</option>
+                                      </select>
+                                  </div>
+                                  <div id="add-event-belonging-project-select"  class="margin-btm-sm margin-top-lg hide-initially">
+                                      <select class="selectpicker" data-live-search="true" th:remove="all-but-first" th:field="*{projectId}">
+                                          <option data-subtext="(NAJU Dresden)" th:each="project : ${projects}" th:text="${project.name}" th:attr="'data-subtext'=${project.localGroup.name}" th:value="${project.id}">Puppenstuben gesucht!</option>
+                                          <option data-subtext="(NAJU Dresden)">Brutvogelkartierung in der Dresdner Heide</option>
+                                          <option data-subtext="(NAJU Sachsen)">Überarbeitung der Webseite</option>
+                                      </select>
+                                  </div>
+                          </div>
+                      </div>
                   </form>
               </div>
               <div class="modal-footer">

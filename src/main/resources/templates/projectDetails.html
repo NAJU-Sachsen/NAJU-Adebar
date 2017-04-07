@@ -240,7 +240,7 @@
               </header>
               <section class="modal-body">
                   <form id="add-event" class="form-horizontal" method="post" th:object="${addEventForm}" th:action="@{/events/add}">
-                      <input type="hidden" value="PROJECT" name="belonging" />
+                      <input type="hidden" name="belonging" th:value="PROJECT" />
                       <input type="hidden" value="-1" name="projectId" th:value="${project.id}" />
 
                       <div class="form-group">

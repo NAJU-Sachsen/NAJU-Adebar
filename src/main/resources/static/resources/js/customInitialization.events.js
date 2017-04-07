@@ -58,3 +58,13 @@ $('#filter-fee-type').on('change', function() {
         $('#filter-fee-container').removeClass('hidden');
     }
 });
+
+$('#add-event-belonging-localGroup').on('change', function() {
+    $('#add-event-belonging-chapter-select').slideToggle();
+    $('#add-event-belonging-project-select').slideToggle();
+});
+
+$('#add-event-belonging-project').on('change', function() {
+    $('#add-event-belonging-chapter-select').slideToggle();
+    $('#add-event-belonging-project-select').slideToggle();
+});

@@ -612,12 +612,32 @@
                        </div>
                     </header>
                     <ul class="list-group">
-                        <li class="list-group-item"><span class="item-title"><span class="glyphicon glyphicon-tag"></span> Name:</span> <span th:text="${event.name}">HIFA</span></li>
-                        <li class="list-group-item"><span class="item-title"><span class="glyphicon glyphicon-calendar"></span> Zeit:</span> <span th:text="${{event.startTime}} + ' - ' + ${{event.endTime}}">24.05.-28.05.</span></li>
-                        <li class="list-group-item"><span class="item-title"><span class="glyphicon glyphicon-map-marker"></span> Ort:</span> <span th:text="${event.place.street} + ' ' + ${event.place.zip} + ' ' + ${event.place.city}">Bahnhofstraße 18 01994 Annahütte</span></li>
-                        <li class="list-group-item"><span class="item-title"><span class="glyphicon glyphicon-ice-lolly-tasted"></span> min. Alter:</span> <span th:text="${event.minimumParticipantAge}">12</span></li>
-                        <li class="list-group-item"><span class="item-title"><span class="glyphicon glyphicon-piggy-bank"></span> Preis:</span><span th:text="${event.participationFee}">35€</span></li>
-                        <li class="list-group-item"><span class="item-title"><span class="glyphicon glyphicon-user"></span> Teilnehmer:</span> <span th:text="${event.participantsCount} + (${event.hasParticipantsLimit()} ? ' (max. ' + ${event.participantsLimit} + ')' : '')">28 (max. 30)</span></li>
+                        <li class="list-group-item">
+                            <span class="item-title"><span class="glyphicon glyphicon-tag"></span> Name:</span>
+                            <span th:text="${event.name}">HIFA</span>
+                        </li>
+                        <li class="list-group-item">
+                            <span class="item-title"><span class="glyphicon glyphicon-calendar"></span> Zeit:</span>
+                            <span th:text="${{event.startTime}} + ' - ' + ${{event.endTime}}">24.05.-28.05.</span>
+                        </li>
+                        <li class="list-group-item">
+                            <span class="item-title"><span class="glyphicon glyphicon-map-marker"></span> Ort:</span>
+                            <span th:text="${event.place.street} + ' ' + ${event.place.zip} + ' ' + ${event.place.city}">Bahnhofstraße 18 01994 Annahütte</span>
+                        </li>
+                        <li class="list-group-item">
+                            <span class="item-title"><span class="glyphicon glyphicon-ice-lolly-tasted"></span> min. Alter:</span>
+                            <span th:text="${event.minimumParticipantAge}">12</span>
+                        </li>
+                        <li class="list-group-item">
+                            <span class="item-title"><span class="glyphicon glyphicon-piggy-bank"></span> Preis:</span>
+                            <span th:text="${event.participationFee}">35€</span>
+                        </li>
+                        <li class="list-group-item">
+                            <span class="item-title">
+                                <span class="glyphicon glyphicon-user"></span> Teilnehmer:
+                            </span>
+                            <span th:text="${event.participantsCount} + (${event.hasParticipantsLimit()} ? ' (max. ' + ${event.participantsLimit} + ')' : '')">28 (max. 30)</span>
+                        </li>
                     </ul>
                 </div>
             </div>

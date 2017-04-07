@@ -1,6 +1,7 @@
 package de.naju.adebar.util.conversion.events;
 
 import de.naju.adebar.controller.forms.events.EventForm;
+import de.naju.adebar.controller.forms.events.EventForm.*;
 import de.naju.adebar.model.events.Event;
 import de.naju.adebar.model.human.Address;
 import org.javamoney.moneta.Money;
@@ -49,5 +50,9 @@ public class EventFormDataExtractor {
         }
 
         return event;
+    }
+
+    public Belonging extractBelonging(EventForm eventForm) {
+        return Belonging.valueOf(eventForm.getBelonging());
     }
 }

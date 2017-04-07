@@ -339,7 +339,9 @@
               </header>
               <section class="modal-body">
                   <form id="add-event" class="form-horizontal" method="post" th:object="${addEventForm}" th:action="@{/events/add}">
-                      <input type="hidden" value="-1" name="localGroup-id" th:value="${localGroup.id}" />
+                      <input type="hidden" name="belonging" th:value="LOCALGROUP" />
+                      <input type="hidden" value="-1" name="localGroupId" th:value="${localGroup.id}" />
+
                       <div class="form-group">
                           <label for="name" class="col-sm-3 control-label">Name</label>
                           <div class="col-sm-9">
