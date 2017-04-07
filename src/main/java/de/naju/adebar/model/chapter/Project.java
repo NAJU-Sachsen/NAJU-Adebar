@@ -7,10 +7,7 @@ import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Abstraction of a project
@@ -23,7 +20,7 @@ public class Project {
     private LocalDate startTime;
     private LocalDate endTime;
     @ManyToOne private LocalGroup localGroup;
-    private Activist personInCharge;
+    @OneToOne private Activist personInCharge;
     @OneToMany private List<Activist> contributors;
     @OneToMany private List<Event> events;
 
@@ -60,6 +57,14 @@ public class Project {
         this.endTime = endTime;
         this.localGroup = localGroup;
         this.personInCharge = personInCharge;
+
+        this.contributors = new LinkedList<>();
+        this.events = new LinkedList<>();
+    }
+
+    private Project() {
+        this.contributors = new LinkedList<>();
+        this.events = new LinkedList<>();
     }
 
     // basic setter and getter
@@ -145,8 +150,12 @@ public class Project {
 
     /**
      * @param personInCharge the person in charge for the project
+     * @throws IllegalStateException if the person in charge does not contribute to the project
      */
     public void setPersonInCharge(Activist personInCharge) {
+        if (personInCharge != null && !isContributor(personInCharge)) {
+            throw new IllegalStateException("Person in charge must contribute to the project");
+        }
         this.personInCharge = personInCharge;
     }
 
@@ -188,6 +197,27 @@ public class Project {
     // query methods
 
     /**
+     * @return {@code true} if a start time was defined, {@code false} otherwise
+     */
+    public boolean hasStartTime() {
+        return startTime != null;
+    }
+
+    /**
+     * @return {@code true} if an end time was defined, {@code false} otherwise
+     */
+    public boolean hasEndTime() {
+        return endTime != null;
+    }
+
+    /**
+     * @return {@code true} if a person in charge was defined, {@code false} otherwise
+     */
+    public boolean hasPersonInCharge() {
+        return personInCharge != null;
+    }
+
+    /**
      * @return the number of persons that contribute to the project
      */
     @Transient
@@ -196,11 +226,65 @@ public class Project {
     }
 
     /**
-     * @return the event that is about to take place next
+     * @return the event that is about to take place next. If there is no next event {@code null} will be returned
      */
     @Transient
     public Event getNextEvent() {
+        if (events.isEmpty()) {
+            return null;
+        }
         return Collections.min(events, Comparator.comparing(Event::getStartTime));
+    }
+
+    // modification methods
+
+    /**
+     * @param activist the activist to add
+     * @throws IllegalArgumentException if the activist is {@code null}
+     * @throws ExistingContributorException if the activist does already contribute to the project
+     */
+    public void addContributor(Activist activist) {
+        Assert.notNull(activist, "Activist to add may not be null!");
+        if (isContributor(activist)) {
+            throw new ExistingContributorException(String.format("Activist %s does already contribute to project %s", activist, this));
+        }
+        contributors.add(activist);
+    }
+
+    /**
+     * @param activist the activist to check
+     * @return {@code true} if the activist contributes to the project or {@code false} otherwise
+     */
+    public boolean isContributor(Activist activist) {
+        return contributors.contains(activist);
+    }
+
+    /**
+     * @param contributor the contributor to remove
+     * @throws IllegalArgumentException if the activist is no contributor
+     */
+    public void removeContributor(Activist contributor) {
+        Assert.isTrue(isContributor(contributor), "Activist does not contribute to project: " + contributor + " " + this);
+        contributors.remove(contributor);
+    }
+
+    /**
+     * @param event the event to add
+     * @throws IllegalArgumentException if the event is already hosted by the project or if it is {@code null}
+     */
+    public void addEvent(Event event) {
+        Assert.notNull(event, "Event to add may not be null: " + event);
+        Assert.isTrue(!hasEvent(event), "Event is already hosted ");
+        events.add(event);
+    }
+
+    /**
+     * @param event the event to check
+     * @return {@code true} if the event is hosted by the project or {@code false} otherwise
+     */
+    @Transient
+    public boolean hasEvent(Event event) {
+        return events.contains(event);
     }
 
     // overridden from Object
