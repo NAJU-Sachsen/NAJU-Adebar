@@ -29,38 +29,63 @@ function displayMatchingPersons(table, result) {
 // display event popover
 function renderEvent(e) {
     if(e.events.length > 0) {
-                var content = '';
+        var content = '';
 
-                for(var i in e.events) {
-                    content += '<div class="event-tooltip-content">'
-                                    + '<div class="event-name" style="color:' + e.events[i].color + '">' + e.events[i].name + '</div>'
-                                    + '<div class="event-place">' + e.events[i].place + '</div>'
-                                + '</div>';
-                }
+        for(var i in e.events) {
+            content += '<div class="event-tooltip-content">'
+                            + '<div class="event-name" style="color:' + e.events[i].color + '">' + e.events[i].name + '</div>'
+                            + '<div class="event-location">' + e.events[i].place + '</div>'
+                        + '</div>';
+        }
 
-                $(e.element).popover({
-                    trigger: 'manual',
-                    container: 'body',
-                    html:true,
-                    content: content
-                });
+        $(e.element).popover({
+            trigger: 'manual',
+            container: 'body',
+            html:true,
+            content: content
+        });
 
-                $(e.element).popover('show');
-            }
+        $(e.element).popover('show');
+    }
 };
 
 // show the 'add event' modal
-function addEvent(e) {
+function createEvent(e) {
     $('#add-event-startTime').val(moment(e.startDate).format('DD.MM.YYYY HH:mm'));
     $('#add-event-endTime').val(moment(e.endDate).format('DD.MM.YYYY HH:mm'));
     $('#add-event-modal').modal('show');
 }
 
+// converts a java local date time to a similiar js instance
+function convertDate(d) {
+    var year = d.year;
+    var month = d.monthValue - 1;
+    var day = d.dayOfMonth;
+    var date = new Date(year, month, day);
+    return date;
+}
+
+// converts an event as provided by the Adebar-API to a similiar js object
+function convertEvent(e) {
+    return {
+        id: e.id,
+        name: e.name,
+        startDate: convertDate(e.startDate),
+        endDate: convertDate(e.endDate),
+        place: e.place,
+    }
+}
+
 // display all events
 function displayEvents(events) {
+
     for (var i = 0; i < events.length; ++i) {
-        var e = events[i];
-        $('#event-calendar').data('calendar').addEvent(e);
+        var e = convertEvent(events[i]);
+
+        var dataSource = $('#event-calendar').data('calendar').getDataSource();
+        dataSource.push(e);
+
+        $('#event-calendar').data('calendar').setDataSource(dataSource);
     }
 }
 
@@ -151,6 +176,7 @@ $(function(){
     });
 
     $('#event-calendar').calendar({
+        style: 'border',
         enableRangeSelection: true,
         mouseOnDay: renderEvent,
         mouseOutDay: function(e) {
@@ -159,8 +185,9 @@ $(function(){
             }
         },
         selectRange: function(e) {
-            addEvent({ startDate: e.startDate, endDate: e.endDate });
+            createEvent({ startDate: e.startDate, endDate: e.endDate });
         },
+        dataSource: [],
     });
 
     $('#event-startTime-picker').datetimepicker({
