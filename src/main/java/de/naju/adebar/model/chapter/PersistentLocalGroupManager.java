@@ -69,11 +69,19 @@ public class PersistentLocalGroupManager implements LocalGroupManager {
     }
 
     @Override
-    public Project addProjectToLocalGroup(LocalGroup localGroup, String projectName) {
+    public Project createProject(LocalGroup localGroup, String projectName) {
         Project project = new Project(projectName, localGroup);
         localGroup.addProject(project);
         project = projectRepo.save(project);
         localGroupRepo.save(localGroup);
         return project;
+    }
+
+    @Override
+    public Project addProjectToLocalGroup(LocalGroup localGroup, Project project) {
+        project.setLocalGroup(localGroup);
+        localGroup.addProject(project);
+        localGroup = updateLocalGroup(localGroup.getId(), localGroup);
+        return localGroup.getProject(project.getName()).orElseThrow(() -> new IllegalStateException("Project could not be saved"));
     }
 }

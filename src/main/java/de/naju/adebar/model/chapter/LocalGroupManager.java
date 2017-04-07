@@ -67,11 +67,19 @@ public interface LocalGroupManager {
     void removeNewsletter(LocalGroup localGroup);
 
     /**
-     * Chains a new project and a local group together.
+     * Creates a new project for a local group
      * @param localGroup the local group
      * @param projectName the project's name
      * @return the created project
      */
-    Project addProjectToLocalGroup(LocalGroup localGroup, String projectName);
+    Project createProject(LocalGroup localGroup, String projectName);
+
+    /**
+     * Chains a new project and a local group together.
+     * @param localGroup the local group
+     * @param project the project
+     * @return the persisted project
+     */
+    Project addProjectToLocalGroup(LocalGroup localGroup, Project project);
 
 }
