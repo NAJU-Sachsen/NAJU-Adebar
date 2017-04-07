@@ -288,6 +288,8 @@
               </header>
               <section class="modal-body">
                   <form id="add-project" class="form-horizontal" method="post" th:object="${projectForm}" th:action="@{/projects/add}">
+                      <input type="hidden" name="localGroupId" th:value="${localGroup.id}" />
+
                       <div class="form-group row">
                           <label class="control-label col-sm-3">Name</label>
                           <div class="col-sm-9">
@@ -583,18 +585,18 @@
                         </thead>
                         <tbody th:remove="all-but-first">
                             <tr th:each="project : ${localGroup.projects}">
-                                <td th:text="${project.name}">Puppenstuben gesucht!</td>
-                                <td th:text="|${project.startTime} ' - ' ${project.endTime}|">2016 - 2019</td>
-                                <td th:text="${project.contributorsCount}">7</td>
-                                <td><a href="#" th:href="@{'/events/' + {project.nextEvent.id}}" th:text="${project.nextEvent.name}">Mahdeinsatz auf dem Dachsenberg</a></td>
-                                <td><a href="#" th:href="@{'/projects/' + {project.id}}">Details</a></td>
+                                <td th:text="${project.value.name}">Puppenstuben gesucht!</td>
+                                <td th:text="|${{project.value.startTime}} - ${{project.value.endTime}}|">2016 - 2019</td>
+                                <td th:text="${project.value.contributorsCount}">7</td>
+                                <td><a href="#" th:if="${project.value.nextEvent}" th:href="@{'/events/' + {project.value.nextEvent.id}}" th:text="${project.value.nextEvent.name}">Mahdeinsatz auf dem Dachsenberg</a><span th:unless="${project.value.nextEvent}">---</span></td>
+                                <td><a href="projectDetails.html" th:href="@{'/projects/' + ${project.value.id}}">Details</a></td>
                             </tr>
                             <tr>
                                 <td>Brutvogelkartierung Dresdner Heide</td>
                                 <td>2016 - 2018</td>
                                 <td>3</td>
                                 <td><a href="#">Sperlingskauz Synchronzählung</a></td>
-                                <td><a href="#">Details</a></td>
+                                <td><a href="projectDetails.html">Details</a></td>
                             </tr>
                         </tbody>
                     </table>
