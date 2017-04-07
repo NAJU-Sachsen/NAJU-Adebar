@@ -1,14 +1,11 @@
 package de.naju.adebar.model.chapter;
 
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
+import de.naju.adebar.infrastructure.ReadOnlyRepository;
 
 /**
- * Repository to access {@link Project} instances
  * @author Rico Bergmann
  */
-@Repository
-public interface ProjectRepository extends CrudRepository<Project, Long> {
+public interface ReadOnlyProjectRepository extends ReadOnlyRepository<Project, Long> {
 
     /**
      * @param name the name to query for
@@ -28,5 +25,4 @@ public interface ProjectRepository extends CrudRepository<Project, Long> {
      * @return the project with the matching name/local group combination (which should be unique)
      */
     Project findByNameAndLocalGroup(String name, LocalGroup localGroup);
-
 }
