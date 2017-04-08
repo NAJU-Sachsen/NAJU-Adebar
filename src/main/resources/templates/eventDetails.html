@@ -857,6 +857,15 @@
     <!-- initialize search bar -->
     <script type="text/javascript">
          $(document).ready(function() {
+             var dateTimeOptions = {
+                 format: 'DD.MM.YYYY HH:mm',
+                 showTodayButton: true,
+                 extraFormats: [ 'DD.MM.YYYY' ],
+             }
+
+             $('#start-time-picker').datetimepicker(dateTimeOptions);
+             $('#end-time-picker').datetimepicker(dateTimeOptions);
+
              $('#participants').tablesorter();
          });
     </script>
