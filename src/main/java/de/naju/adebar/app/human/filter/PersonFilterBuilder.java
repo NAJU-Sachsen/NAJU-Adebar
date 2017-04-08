@@ -1,5 +1,7 @@
 package de.naju.adebar.app.human.filter;
 
+import de.naju.adebar.app.filter.AbstractFilter;
+import de.naju.adebar.app.filter.FilterBuilder;
 import de.naju.adebar.model.human.Person;
 import org.springframework.util.Assert;
 
@@ -15,17 +17,13 @@ import java.util.stream.Stream;
  * @author Rico Bergmann
  * @see <a href="https://en.wikipedia.org/wiki/Builder_pattern">Builder pattern</a>
  */
-public class PersonFilterBuilder {
-    private Stream<Person> personStream;
-    private Set<PersonFilter> filters;
+public class PersonFilterBuilder extends FilterBuilder<Person> {
 
     /**
      * @param personStream the persons to be filtered
      */
     public PersonFilterBuilder(Stream<Person> personStream) {
-        Assert.notNull(personStream, "Person stream may not be null!");
-        this.personStream = personStream;
-        this.filters = new HashSet<>();
+        super(personStream);
     }
 
     /**
@@ -35,29 +33,12 @@ public class PersonFilterBuilder {
      */
     public PersonFilterBuilder applyFilter(PersonFilter filter) {
         Assert.notNull(filter, "Filter may not be null!");
-        for (PersonFilter f : filters) {
+        for (AbstractFilter f : filters) {
             if (filter.getClass() == f.getClass()) {
                 throw new ConflictingFilterCriteriaException("Already containing a filter of class: " + f.getClass());
             }
         }
-        filters.add(filter);
+        super.applyFilter(filter);
         return this;
-    }
-
-    /**
-     * Executes the filters
-     * @return the persons who matched all of the criteria
-     */
-    public Iterable<Person> filter() {
-        return resultingStream().collect(Collectors.toList());
-    }
-
-    /**
-     * Executes the filters but returns the result uncollected. The return type is the only difference to {@link #filter()}
-     * @return the persons who matched all of the criteria
-     */
-    public Stream<Person> resultingStream() {
-        filters.forEach(filter -> personStream = filter.filter(personStream));
-        return personStream;
     }
 }
