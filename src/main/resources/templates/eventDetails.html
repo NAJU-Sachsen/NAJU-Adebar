@@ -649,7 +649,7 @@
                         </li>
                         <li class="list-group-item">
                             <span class="item-title"><span class="glyphicon glyphicon-map-marker"></span> Ort:</span>
-                            <span th:text="${event.place.street} + ' ' + ${event.place.zip} + ' ' + ${event.place.city}">Bahnhofstraße 18 01994 Annahütte</span>
+                            <a target="_blank" href="http://www.openstreetmap.org/search?query=Bahnhofstraße%2018%2001994%20Annahütte" th:href="@{http://www.openstreetmap.org/search(query=|${event.place.street} ${event.place.zip} ${event.place.city}|)}" th:text="|${event.place.street} ${event.place.zip} ${event.place.city}|">Bahnhofstraße 18 01994 Annahütte</a>
                         </li>
                         <li class="list-group-item">
                             <span class="item-title"><span class="glyphicon glyphicon-ice-lolly-tasted"></span> min. Alter:</span>
