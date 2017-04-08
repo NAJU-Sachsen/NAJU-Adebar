@@ -82,6 +82,25 @@ public class EventController {
     }
 
     /**
+     * Displays all past events
+     * @param model model from which the displayed data should be taken
+     * @return the overview of all past events
+     */
+    @RequestMapping("/events/past")
+    public String showPastEvents(Model model) {
+
+        Iterable<Event> pastEvents = eventManager.repository().findByEndTimeIsBefore(LocalDateTime.now());
+
+        model.addAttribute("pastEvents", pastEvents);
+        model.addAttribute("addEventForm", new EventForm());
+        model.addAttribute("filterEventsForm", new FilterEventsForm());
+        model.addAttribute("localGroups", localGroupManager.repository().findAll());
+        model.addAttribute("projects", projectManager.repository().findAll());
+
+        return "events";
+    }
+
+    /**
      * Adds a new event to the database
      * @param eventForm the submitted event data
      * @param redirAttr attributes for the view to display some result information

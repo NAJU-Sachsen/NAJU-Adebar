@@ -377,7 +377,8 @@
 
             </section>
 
-            <section class="row">
+            <!-- current events -->
+            <section class="row" th:unless="${pastEvents}">
                 <h2>Laufende Veranstaltungen</h2>
                 <table id="current-events" class="table table-striped table-hover tablesorter">
                     <thead>
@@ -408,7 +409,8 @@
                 </table>
             </section>
 
-            <section class="row">
+            <!-- future events -->
+            <section class="row" th:unless="${pastEvents}">
                 <h2>Kommende Veranstaltungen</h2>
                 <table id="prospective-events" class="table table-striped table-hover tablesorter">
                     <thead>
@@ -458,14 +460,46 @@
                 </table>
             </section>
 
-            <section class="row" style="margin-top: 3em;">
-                <p style="text-align: center;"><a href="#">Vergangene Veranstaltungen anzeigen</a></p>
+            <section class="row" style="margin-top: 3em;" th:unless="${pastEvents}">
+                <p style="text-align: center;"><a href="#" th:href="@{/events/past}">Vergangene Veranstaltungen anzeigen</a></p>
+            </section>
+
+            <!-- past events -->
+            <section class="row" th:if="${pastEvents}">
+                <h2>Vergangene Veranstaltungen</h2>
+                <table id="past-events" class="table table-striped table-hover tablesorter">
+                    <thead>
+                        <tr>
+                            <th>Name <span class="icon"></span></th>
+                            <th>Datum <span class="icon"></span></th>
+                            <th>Ort <span class="icon"></span></th>
+                            <th>Teilnehmer <span class="icon"></span></th>
+                            <th>Ortsgruppe <span class="icon"></span></th>
+                        </tr>
+                    </thead>
+                    <tbody class="event-list-past" th:remove="all-but-first">
+                        <tr th:each="event : ${pastEvents}">
+                            <td class="event-name"><a href="eventDetails.html" th:href="@{'/events/' + ${event.id}}" th:text="${event.name}">HIFA-Camp</a></td>
+                            <td class="event-time" th:text="${{event.startTime}} + ' - ' + ${{event.endTime}}">24.05.-28.05.</td>
+                            <td class="event-place" th:text="${event.place.city}">Niederlausitz</td>
+                            <td class="text-center" th:text="${event.participantsCount}">28</td>
+                            <td class="event-localgroup" th:text="---">Sachsen</td>
+                        </tr>
+                        <tr>
+                            <td class="event-name"> <a href="eventDetails.html">Nistkästen basteln</a></td>
+                            <td class="event-time">26.05.</td>
+                            <td class="event-place">Großdittmannsdorf</td>
+                            <td class="text-center">---</td>
+                            <td class="event-localgroup">Großdittmannsdorf</td>
+                        </tr>
+                    </tbody>
+                </table>
             </section>
 
     </section>
 
     <!-- initialize search bar -->
-    <script type="text/javascript">
+    <script type="text/javascript" th:unless="${pastEvents}">
         var fuzzyOptions = {
            searchClass: "fuzzy-search",
            location: 0,
@@ -495,6 +529,31 @@
              $('#prospective-events').tablesorter();
          })
 
+    </script>
+
+    <script type="text/javascript" th:if="${pastEvents}">
+        var fuzzyOptions = {
+           searchClass: "fuzzy-search",
+           location: 0,
+           distance: 150,
+           threshold: 0.4,
+           multiSearch: true,
+         }
+         var pastEventsOptions = {
+            listClass: "event-list-past",
+            valueNames: ['event-name', 'evemt-time', 'event-place', 'event-localgroup'],
+            plugins: [ListFuzzySearch(fuzzyOptions)],
+         }
+
+         var eventList_past = new List('main', pastEventsOptions);
+
+         var dateSpanExtractor = function(node) {
+             // TODO: extract dates function here
+         }
+
+         $(document).ready(function() {
+             $('#past-events').tablesorter();
+         })
     </script>
 
 </main>
