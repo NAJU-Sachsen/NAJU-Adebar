@@ -7,6 +7,7 @@ import de.naju.adebar.controller.forms.chapter.LocalGroupForm;
 import de.naju.adebar.controller.forms.chapter.ProjectForm;
 import de.naju.adebar.controller.forms.events.EventForm;
 import de.naju.adebar.model.chapter.Board;
+import de.naju.adebar.model.chapter.ExistingMemberException;
 import de.naju.adebar.model.chapter.LocalGroup;
 import de.naju.adebar.model.chapter.LocalGroupManager;
 import de.naju.adebar.model.human.Activist;
@@ -147,10 +148,14 @@ public class LocalGroupController {
         LocalGroup localGroup = localGroupManager.findLocalGroup(groupId).orElseThrow(IllegalArgumentException::new);
         Activist activist = humanManager.findActivist(humanManager.findPerson(personId).orElseThrow(IllegalArgumentException::new));
 
-        localGroup.addMember(activist);
-        localGroupManager.updateLocalGroup(groupId, localGroup);
+        try {
+            localGroup.addMember(activist);
+            localGroupManager.updateLocalGroup(groupId, localGroup);
+            redirAttr.addFlashAttribute("memberAdded", true);
+        } catch (ExistingMemberException e) {
+            redirAttr.addFlashAttribute("existingMember", true);
+        }
 
-        redirAttr.addFlashAttribute("memberAdded", true);
         return "redirect:/localGroups/" + groupId;
     }
 

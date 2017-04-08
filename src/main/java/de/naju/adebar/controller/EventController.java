@@ -215,7 +215,7 @@ public class EventController {
      * @return the event's detail view
      */
     @RequestMapping("/events/{eid}/participants/update")
-    public String updateParticipant(@PathVariable("eid") Long eventId, @RequestParam("person-id") String personId, @RequestParam(value = "fee-payed", required = false) boolean feePayed, @RequestParam(value = "form-received", required = false) boolean formReceived) {
+    public String updateParticipant(@PathVariable("eid") Long eventId, @RequestParam("person-id") String personId, @RequestParam(value = "fee-payed", required = false) boolean feePayed, @RequestParam(value = "form-received", required = false) boolean formReceived, RedirectAttributes redirAttr) {
         Event event = eventManager.findEvent(eventId).orElseThrow(IllegalArgumentException::new);
         Person person = humanManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
 
@@ -225,6 +225,7 @@ public class EventController {
         event.updateParticipationInfo(person, participationInfo);
         eventManager.updateEvent(eventId, event);
 
+        redirAttr.addFlashAttribute("participationInfoUpdated", true);
         return "redirect:/events/" + eventId;
     }
 
@@ -259,10 +260,14 @@ public class EventController {
         Event event = eventManager.findEvent(eventId).orElseThrow(IllegalArgumentException::new);
         Activist activist = humanManager.findActivist(humanManager.findPerson(personId).orElseThrow(IllegalArgumentException::new));
 
-        event.addCounselor(activist);
-        eventManager.updateEvent(eventId, event);
+        try {
+            event.addCounselor(activist);
+            eventManager.updateEvent(eventId, event);
+            redirAttr.addFlashAttribute("counselorAdded", true);
+        } catch (IllegalArgumentException e) {
+            redirAttr.addFlashAttribute("existingCounselor", true);
+        }
 
-        redirAttr.addFlashAttribute("counselorAdded", true);
         return "redirect:/events/" + eventId;
     }
 
@@ -297,10 +302,14 @@ public class EventController {
         Event event = eventManager.findEvent(eventId).orElseThrow(IllegalArgumentException::new);
         Activist activist = humanManager.findActivist(humanManager.findPerson(personId).orElseThrow(IllegalArgumentException::new));
 
-        event.addOrganizer(activist);
-        eventManager.updateEvent(eventId, event);
+        try {
+            event.addOrganizer(activist);
+            eventManager.updateEvent(eventId, event);
+            redirAttr.addFlashAttribute("organizerAdded", true);
+        } catch (IllegalArgumentException e) {
+            redirAttr.addFlashAttribute("existingOrganizer", true);
+        }
 
-        redirAttr.addFlashAttribute("organizerAdded", true);
         return "redirect:/events/" + eventId;
     }
 

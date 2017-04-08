@@ -72,7 +72,7 @@
 </nav>
 
 <!-- modal dialogs -->
-<section>
+<section id="dialogs">
   <h2 class="hidden">Dialoge</h2>
 
   <!-- 'edit event' modal -->
@@ -545,7 +545,7 @@
                </form>
             </div>
 
-            <div class="alert alert-success alert-dismissible" role="alert" th:if="${participantRemoved}">
+            <div class="alert alert-info alert-dismissible" role="alert" th:if="${participantRemoved}">
                <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
                   <span aria-hidden="true">&times;</span>
                </button>
@@ -563,7 +563,7 @@
                </p>
             </div>
 
-            <div class="alert alert-success alert-dismissible" role="alert" th:if="${counselorRemoved}">
+            <div class="alert alert-info alert-dismissible" role="alert" th:if="${counselorRemoved}">
                <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
                   <span aria-hidden="true">&times;</span>
                </button>
@@ -581,7 +581,7 @@
                </p>
             </div>
 
-            <div class="alert alert-success alert-dismissible" role="alert" th:if="${organizerRemoved}">
+            <div class="alert alert-info alert-dismissible" role="alert" th:if="${organizerRemoved}">
                <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
                   <span aria-hidden="true">&times;</span>
                </button>
@@ -596,6 +596,33 @@
                </button>
                <p>
                   Die Veranstaltung ist bereits ausgebucht
+               </p>
+            </div>
+
+            <div class="alert alert-info alert-dismissible" role="alert" th:if="${participationInfoUpdated}">
+               <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+               <p>
+                  Informationen aktualisiert
+               </p>
+            </div>
+
+            <div class="alert alert-warning alert-dismissible" role="alert" th:if="${existingCounselor}">
+               <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+               <p>
+                  Person ist bereits ein Betreuer
+               </p>
+            </div>
+
+            <div class="alert alert-warning alert-dismissible" role="alert" th:if="${existingOrganizer}">
+               <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+               <p>
+                  Person ist bereits ein Organisator
                </p>
             </div>
 
