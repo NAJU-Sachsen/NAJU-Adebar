@@ -70,7 +70,7 @@ $('#edit-subscriber-form').on('show.bs.modal', function(event) {
         success: function (response) {
            initEditSubscriberModal(modal, response);
         },
-        url: '/api/newsletters/subscriberDetails',
+        url: '/api/newsletter/subscriberDetails',
     };
     $.ajax(request);
 });
