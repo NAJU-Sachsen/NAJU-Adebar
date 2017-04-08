@@ -446,6 +446,51 @@
         <div id="status">
             <h2 class="hidden">Status</h2>
 
+            <div class="alert alert-success alert-dismissible" role="alert" th:if="${localGroupCreated}">
+               <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+               <p>
+                  Ortsgruppe erfolgreich erstellt
+               </p>
+            </div>
+
+            <div class="alert alert-info alert-dismissible" role="alert" th:if="${localGroupUpdated}">
+               <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+               <p>
+                  Ortsgruppe wurde aktualisiert
+               </p>
+            </div>
+
+            <div class="alert alert-success alert-dismissible" role="alert" th:if="${memberAdded}">
+               <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+               <p>
+                  Neues Mitglied hinzugefügt
+               </p>
+            </div>
+
+            <div class="alert alert-info alert-dismissible" role="alert" th:if="${memberRemoved}">
+               <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+               <p>
+                  Mitglied wurde entfernt
+               </p>
+            </div>
+
+            <div class="alert alert-info alert-dismissible" role="alert" th:if="${boardUpdated}">
+               <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+               <p>
+                  Vorstand wurde aktualisiert
+               </p>
+            </div>
+
         </div>
 
         <!-- general overview -->
@@ -492,35 +537,44 @@
                 <div class="panel panel-default">
                     <header class="panel-heading panel-menu">
                         <h2 class="panel-title">Mitglieder</h2>
-                        <div class="btn-group panel-menu-container">
-                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-member-modal">
-                                <span class="glyphicon glyphicon-plus"></span> Hinzufügen
-                            </button>
-                            <a href="mailto:" class="btn btn-default" th:href="|mailto: ${memberEmails}|">
-                                <span class="glyphicon glyphicon-envelope"></span> E-Mail
-                            </a>
+                        <div class="panel-menu-container">
+
+                            <div style="display:inline-block">
+                                <div class="input-group">
+                                    <input id="persons" type="text" class="form-control fuzzy-search" name="persons" placeholder="Name, Ort o.ä."/>
+                                    <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
+                                </div>
+                            </div>
+                            <div class="btn-group" style="vertical-align:initial">
+                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-member-modal">
+                                    <span class="glyphicon glyphicon-plus"></span> Hinzufügen
+                                </button>
+                                <a href="mailto:" class="btn btn-default" th:href="|mailto: ${memberEmails}|">
+                                    <span class="glyphicon glyphicon-envelope"></span> E-Mail
+                                </a>
+                            </div>
                         </div>
                     </header>
-                    <ul class="list-group list-group-hover" th:remove="all-but-first">
+                    <ul class="list-group list-group-hover member-list" th:remove="all-but-first">
                         <li class="list-group-item list-group-item-interactive" data-toggle="modal" data-target="#remove-member-modal" data-id="1" data-name="Maxi Musterfrau" th:each="member : ${members}" th:attr="'data-id'=${member.id}, 'data-name'=${member.name}">
                             <a href="personDetails.html" th:href="@{'/persons/' + ${member.id}}">
                                 <span class="glyphicon glyphicon-link"></span>
-                            </a> <span th:text="${member.name}">Maxi Musterfrau</span> (<a href="mailto:maxi.musterfrau@naju-sachsen.de" th:href="|mailto: ${member.email}|" th:text="${member.email}">maxi.musterfrau@naju-sachsen.de</a>)
+                            </a> <span th:text="${member.name}" class="member-name">Maxi Musterfrau</span> (<a class="member-email" href="mailto:maxi.musterfrau@naju-sachsen.de" th:href="|mailto: ${member.email}|" th:text="${member.email}">maxi.musterfrau@naju-sachsen.de</a>)
                         </li>
                         <li class="list-group-item list-group-item-interactive" data-toggle="modal" data-target="#remove-member-modal" data-id="2" data-name="Heinz Heimlich">
                             <a href="personDetails.html">
                                 <span class="glyphicon glyphicon-link"></span>
-                            </a> <span>Heinz Heimlich</span> (<a href="mailto:heinz.heimlich@naju-sachsen.de">heinz.heimlich@naju-sachsen.de</a>)
+                            </a> <span class="member-name">Heinz Heimlich</span> (<a class="member-email" href="mailto:heinz.heimlich@naju-sachsen.de">heinz.heimlich@naju-sachsen.de</a>)
                         </li>
                         <li class="list-group-item list-group-item-interactive" data-toggle="modal" data-target="#remove-member-modal" data-id="3" data-name="Dieter Lustig">
                             <a href="personDetails.html">
                                 <span class="glyphicon glyphicon-link"></span>
-                            </a> <span>Dieter Lustig</span> (<a href="mailto:dieter.lustig@naju-sachsen.de">dieter.lustig@naju-sachsen.de</a>)
+                            </a> <span class="member-name">Dieter Lustig</span> (<a class="member-email" href="mailto:dieter.lustig@naju-sachsen.de">dieter.lustig@naju-sachsen.de</a>)
                         </li>
                         <li class="list-group-item list-group-item-interactive" data-toggle="modal" data-target="#remove-member-modal" data-id="4" data-name="Klaus Klücklich">
                             <a href="personDetails.html">
                                 <span class="glyphicon glyphicon-link"></span>
-                            </a> <span>Klaus Klücklich</span> (<a href="mailto:klaus.kluecklich@naju-sachsen.de">klaus.kluecklich@naju-sachsen.de</a>)
+                            </a> <span class="member-name">Klaus Klücklich</span> (<a class="member-email" href="mailto:klaus.kluecklich@naju-sachsen.de">klaus.kluecklich@naju-sachsen.de</a>)
                         </li>
                     </ul>
                 </div>
@@ -622,7 +676,19 @@
 
     <!-- initialize search bar -->
     <script type="text/javascript">
-
+        var fuzzyOptions = {
+           searchClass: "fuzzy-search",
+           location: 0,
+           distance: 150,
+           threshold: 0.4,
+           multiSearch: true,
+         }
+         var memberOptions = {
+             listClass: 'member-list',
+             valueNames: ['member-name', 'member-email'],
+             plugins: [ListFuzzySearch(fuzzyOptions)],
+         }
+         var memberList = new List('main', memberOptions);
     </script>
     <input type="hidden" id="local-group-id" value="-1" th:value="${localGroup.id}" />
 

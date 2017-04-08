@@ -84,6 +84,8 @@ public class LocalGroupController {
     @RequestMapping("/localGroups/add")
     public String addLocalGroup(@ModelAttribute("localGroupForm") AddLocalGroupForm addLocalGroupForm, RedirectAttributes redirAttr) {
         LocalGroup localGroup = localGroupManager.saveLocalGroup(addLocalGroupFormDataExtractor.extractLocalGroup(addLocalGroupForm));
+
+        redirAttr.addFlashAttribute("localGroupCreated", true);
         return "redirect:/localGroups/" + localGroup.getId();
     }
 
@@ -129,6 +131,7 @@ public class LocalGroupController {
 
         localGroupManager.adoptLocalGroupData(groupId, localGroupFormDataExtractor.extractLocalGroup(localGroupForm));
 
+        redirAttr.addFlashAttribute("localGroupUpdated", true);
         return "redirect:/localGroups/" + groupId;
     }
 
@@ -147,6 +150,7 @@ public class LocalGroupController {
         localGroup.addMember(activist);
         localGroupManager.updateLocalGroup(groupId, localGroup);
 
+        redirAttr.addFlashAttribute("memberAdded", true);
         return "redirect:/localGroups/" + groupId;
     }
 
@@ -165,6 +169,7 @@ public class LocalGroupController {
         localGroup.removeMember(activist);
         localGroupManager.updateLocalGroup(groupId, localGroup);
 
+        redirAttr.addFlashAttribute("memberRemoved", true);
         return "redirect:/localGroups/" + groupId;
     }
 
@@ -182,6 +187,7 @@ public class LocalGroupController {
         localGroup.setBoard(boardFormDataExtractor.extractBoard(boardForm));
         localGroupManager.updateLocalGroup(groupId, localGroup);
 
+        redirAttr.addFlashAttribute("boardUpdated", true);
         return "redirect:/localGroups/" + groupId;
     }
 
