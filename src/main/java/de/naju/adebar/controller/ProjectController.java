@@ -87,6 +87,7 @@ public class ProjectController {
 
         Project project = localGroupManager.addProjectToLocalGroup(localGroup, dataExtractor.extractProject(projectForm));
 
+        redirAttr.addFlashAttribute("projectAdded", true);
         return "redirect:/projects/" + project.getId();
     }
 
@@ -103,6 +104,7 @@ public class ProjectController {
 
         projectManager.updateProject(projectId, project);
 
+        redirAttr.addFlashAttribute("projectUpdated", true);
         return "redirect:/projects/" + projectId;
     }
 
@@ -119,8 +121,13 @@ public class ProjectController {
         Person person = humanManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
         Activist activist = humanManager.findActivist(person);
 
-        project.addContributor(activist);
-        projectManager.updateProject(projectId, project);
+        try {
+            project.addContributor(activist);
+            projectManager.updateProject(projectId, project);
+            redirAttr.addFlashAttribute("contributorAdded", true);
+        } catch (ExistingContributorException e) {
+            redirAttr.addFlashAttribute("existingContributor", true);
+        }
 
         return "redirect:/projects/" + projectId;
     }
@@ -141,6 +148,7 @@ public class ProjectController {
         project.removeContributor(activist);
         projectManager.updateProject(projectId, project);
 
+        redirAttr.addFlashAttribute("contributorRemoved", true);
         return "redirect:/projects/" + projectId;
     }
 

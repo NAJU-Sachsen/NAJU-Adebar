@@ -355,6 +355,51 @@
         <div id="status">
             <h2 class="hidden">Status</h2>
 
+            <div class="alert alert-success alert-dismissible" role="alert" th:if="${projectAdded}">
+               <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+               <p>
+                  Projekt wurde erstellt
+               </p>
+            </div>
+
+            <div class="alert alert-success alert-dismissible" role="alert" th:if="${contributorAdded}">
+               <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+               <p>
+                  Aktive(r) wurde hinzugefügt
+               </p>
+            </div>
+
+            <div class="alert alert-info alert-dismissible" role="alert" th:if="${projectUpdated}">
+               <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+               <p>
+                  Projekt wurde aktualisiert
+               </p>
+            </div>
+
+            <div class="alert alert-info alert-dismissible" role="alert" th:if="${contributorRemoving}">
+               <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+               <p>
+                  Aktive(r) wurde entfernt
+               </p>
+            </div>
+
+            <div class="alert alert-warning alert-dismissible" role="alert" th:if="${existingContributor}">
+               <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+               <p>
+                  Person trägt bereits zum Projekt bei
+               </p>
+            </div>
+
         </div>
 
         <!-- general overview and members -->
