@@ -1,12 +1,17 @@
 package de.naju.adebar.controller;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import de.naju.adebar.model.human.HumanManager;
+import de.naju.adebar.model.human.Person;
 import de.naju.adebar.model.newsletter.*;
+import de.naju.adebar.util.conversion.newsletter.PersonToSubscriberConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,14 +32,19 @@ public class SubscriberController {
     private SubscriberRepository subscriberRepo;
     private NewsletterManager newsletterManager;
     private SubscriberManager subscriberManager;
+    private HumanManager humanManager;
+    private PersonToSubscriberConverter personToSubscriberConverter;
 
     @Autowired
-    public SubscriberController(NewsletterRepository newsletterRepo,
-                                SubscriberRepository newsletterSubscriberRepo, NewsletterManager newsletterManager, SubscriberManager subscriberManager) {
+    public SubscriberController(NewsletterRepository newsletterRepo, SubscriberRepository newsletterSubscriberRepo, NewsletterManager newsletterManager, SubscriberManager subscriberManager, HumanManager humanManager, PersonToSubscriberConverter personToSubscriberConverter) {
+        Object[] params = {newsletterRepo, newsletterSubscriberRepo, newsletterManager, subscriberManager, humanManager, personToSubscriberConverter};
+        Assert.notNull(params, "At least one parameter was null: " + Arrays.toString(params));
         this.newsletterRepo = newsletterRepo;
         this.subscriberRepo = newsletterSubscriberRepo;
         this.newsletterManager = newsletterManager;
         this.subscriberManager = subscriberManager;
+        this.humanManager = humanManager;
+        this.personToSubscriberConverter = personToSubscriberConverter;
     }
 
     /**
@@ -73,6 +83,24 @@ public class SubscriberController {
         	redirAttr.addAttribute("alreadySubscribed", true);
         }
         
+        return "redirect:/newsletters/" + newsletterId;
+    }
+
+    /**
+     * Adds an existing person to a newsletter
+     * @param newsletterId the id of the newsletter
+     * @param personId the id of the person
+     * @param redirAttr attributes for the view that should be used after redirection
+     * @return the newsletter's detail view
+     */
+    @RequestMapping(value = "/newsletters/{nid}/subscribe-person")
+    public String subscribePerson(@PathVariable("nid") Long newsletterId, @RequestParam("person-id") String personId, RedirectAttributes redirAttr) {
+        Newsletter newsletter = newsletterRepo.findOne(newsletterId);
+        Person person = humanManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
+
+        Subscriber subscriber = subscriberManager.saveSubscriber(personToSubscriberConverter.convertPerson(person));
+        newsletterManager.subscribe(subscriber, newsletter);
+
         return "redirect:/newsletters/" + newsletterId;
     }
 

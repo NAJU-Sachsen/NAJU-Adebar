@@ -60,6 +60,154 @@
       </div>
    </nav>
 
+   <!-- page specific dialogs -->
+   <section id="dialogs">
+
+      <!-- 'add subscriber' dialog -->
+      <div class="modal fade" id="add-subscriber-modal" tabindex="-1" role="dialog" aria-labelledby="add-subscriber-label">
+         <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+               <header class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Schließen">
+                     <span aria-hidden="true">&times;</span>
+                  </button>
+                  <h3 class="modal-title" id="add-subscriber-label">Abonnent hinzufügen</h3>
+               </header>
+               <div class="modal-body">
+                  <div class="row">
+                     <div class="col-md-3">
+                        <ul id="add-subscriber-tab-select" class="nav nav-pills nav-stacked" role="tablist">
+                           <li role="presentation">
+                              <a id="add-subscriber-person-tab" href="#add-subscriber-person" aria-controls="add-subscriber-person" role="tab" data-toggle="tab">Existierende Person</a>
+                           </li>
+                           <li role="presentation" class="active">
+                              <a id="add-subscriber-new-tab" href="#add-subscriber-new" aria-controls="add-subscriber-new" role="tab" data-toggle="tab">Neuer Eintrag</a>
+                           </li>
+                        </ul>
+                     </div>
+                     <div class="col-md-9">
+                        <div class="tab-content">
+                           <div id="add-subscriber-person" class="tab-pane fade" role="tabpanel">
+                              <div class="form-group clearfix">
+                                  <label class="col-sm-3 control-label">Person suchen</label>
+                                  <div class="col-sm-9">
+                                      <div class="clearfix" style="margin-bottom: 5px;">
+                                          <input type="text" id="add-subscriber-search-firstname" class="form-control pull-left" style="width: 48%;" placeholder="Vorname" />
+                                          <input type="text" id="add-subscriber-search-lastname" class="form-control pull-right" style="width: 48%;" placeholder="Nachname" />
+                                      </div>
+                                      <div class="clearfix">
+                                          <input type="text" id="add-subscriber-search-city" class="form-control pull-left" style="width: 68%;" placeholder="Ort"/>
+                                          <button type="button" id="add-subscriber-search-btn" class="btn btn-primary pull-right" style="padding-left: 20px; padding-right: 20px;">
+                                              Suchen
+                                          </button>
+                                      </div>
+                                  </div>
+                              </div>
+                              <hr style="width: 100%; margin-top:5px;"/>
+                              <form id="add-subscriber-person-select" class="form-horizontal" method="post" th:action="@{/newsletters/{id}/subscribe-person(id=${newsletter.id})}">
+                                  <table class="table">
+                                      <thead>
+                                          <tr>
+                                              <th>Name</th>
+                                              <th>Geburtsdatum</th>
+                                              <th>Adresse</th>
+                                              <th>Auswählen</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody id="add-subscriber-tablebody" th:remove="body">
+                                          <tr>
+                                              <td>Max Mustermann</td>
+                                              <td>31.02.1999</td>
+                                              <td>Bei Mir 7 01234 Noch ein Dorf</td>
+                                              <td class="text-center"><input type="radio" name="person-id" value="0" required="required" /></td>
+                                          </tr>
+                                          <tr>
+                                              <td>Claus Dieter</td>
+                                              <td>17.07.1993</td>
+                                              <td>Zu Hause 123 01478 Irgendein Dorf</td>
+                                              <td class="text-center"><input type="radio" name="person-id" value="0" required="required" /></td>
+                                          </tr>
+                                          <tr>
+                                              <td>Friedlinde Müller</td>
+                                              <td>11.11.1995</td>
+                                              <td>Um die Ecke 3c 01597 Großstadt</td>
+                                              <td class="text-center"><input type="radio" name="person-id" value="0" required="required" /></td>
+                                          </tr>
+                                      </tbody>
+                                  </table>
+                              </form>
+                           </div>
+                           <div id="add-subscriber-new" class="tab-pane fade in active" role="tabpanel">
+                              <form class="form-horizontal" id="add-subscriber-new-select" action="/newsletter/subscribe" th:action="@{'/newsletters/' + ${newsletter.id} + '/subscribe'}" method="post" th:object="${newSubscriber}">
+                                 <div class="form-group">
+                                       <label for="firstname" class="col-sm-3 control-label">Vorname</label>
+                                       <div class="col-sm-9">
+                                          <div class="input-group">
+                                             <input type="text" id="firstname" class="form-control" name="firstName" autofocus="" placeholder="Vorname" />
+                                             <span class="input-group-addon">(optional)</span>
+                                          </div>
+                                       </div>
+                                 </div>
+                                 <div class="form-group">
+                                    <label for="lastname"  class="col-sm-3 control-label">Nachname</label>
+                                    <div class="col-sm-9">
+                                       <div class="input-group">
+                                          <input type="text" id="lastname" class="form-control" name="lastName" placeholder="Nachname" />
+                                          <span class="input-group-addon">(optional)</span>
+                                       </div>
+                                    </div>
+                                 </div>
+                                 <div class="form-group">
+                                    <label for="email" class="col-sm-3 control-label">E-Mail</label>
+                                    <div class="col-sm-9">
+                                       <input type="email" id="email" class="form-control" name="email" placeholder="EMail" required="required" aria-describedby="email-label" />
+                                    </div>
+                                 </div>
+                              </form>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <footer class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+                  <button type="submit" id="add-subscriber-submit" class="btn btn-primary" form="add-subscriber-new-select">Hinzufügen</button>
+               </footer>
+            </div>
+         </div>
+      </div>
+
+      <!-- 'delete subscriber' dialog -->
+      <div class="modal fade" id="delete-subscriber-modal" tabindex="-1" role="dialog" aria-labelledby="delete-subscriber-label">
+         <div class="modal-dialog" role="document">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Abbrechen">
+                     <span aria-hidden="true">&times;</span>
+                  </button>
+                  <h3 class="modal-title" id="delete-subscriber-label">Abonnent entfernen</h3>
+               </div>
+               <div class="modal-body">
+                  <form id="delete-subscriber" action="/newsletters/subscribers/delete" th:action="@{'/newsletters/' + ${newsletter.id} + '/unsubscribe'}" method="post">
+                     <input type="text" class="form-control" name="email" readonly="readonly" value="max.muster@email.com" />
+                  </form>
+               </div>
+               <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+                  <div class="btn-group">
+                     <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="glyphicon glyphicon-trash"></span> Löschen <span class="caret"></span>
+                     </button>
+                     <ul class="dropdown-menu confirm-delete">
+                        <li><button type="submit" class="btn btn-link" form="delete-subscriber">Löschen</button></li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </section>
+
    <!-- page specific content-->
    <main>
 
@@ -119,86 +267,6 @@
             <p>
                Abonnent wurde entfernt.
             </p>
-         </div>
-      </section>
-
-      <!-- page specific dialogs -->
-      <section id="dialogs">
-
-         <!-- 'add subscriber' dialog -->
-         <div class="modal fade" id="add-subscriber-modal" tabindex="-1" role="dialog" aria-labelledby="add-subscriber-label">
-            <div class="modal-dialog" role="document">
-               <div class="modal-content">
-                  <div class="modal-header">
-                     <button type="button" class="close" data-dismiss="modal" aria-label="Schließen">
-                        <span aria-hidden="true">&times;</span>
-                     </button>
-                     <h3 class="modal-title" id="add-subscriber-label">Abonnent hinzufügen</h3>
-                  </div>
-                  <div class="modal-body">
-                     <form class="form-horizontal" id="add-subscriber" action="/newsletter/subscribe" th:action="@{'/newsletters/' + ${newsletter.id} + '/subscribe'}" method="post" th:object="${newSubscriber}">
-                        <div class="form-group">
-                              <label for="firstname" class="col-sm-2 control-label">Vorname</label>
-                              <div class="col-sm-10">
-                                 <div class="input-group">
-                                    <input type="text" id="firstname" class="form-control" name="firstName" autofocus="" placeholder="Vorname" />
-                                    <span class="input-group-addon">(optional)</span>
-                                 </div>
-                              </div>
-                        </div>
-                        <div class="form-group">
-                           <label for="lastname"  class="col-sm-2 control-label">Nachname</label>
-                           <div class="col-sm-10">
-                              <div class="input-group">
-                                 <input type="text" id="lastname" class="form-control" name="lastName" placeholder="Nachname" />
-                                 <span class="input-group-addon">(optional)</span>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="form-group">
-                           <label for="email" class="col-sm-2 control-label">E-Mail</label>
-                           <div class="col-sm-10">
-                              <input type="email" id="email" class="form-control" name="email" placeholder="EMail" required="required" aria-describedby="email-label" />
-                           </div>
-                        </div>
-                     </form>
-                  </div>
-                  <div class="modal-footer">
-                     <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
-                     <button type="submit" class="btn btn-primary" form="add-subscriber">Hinzufügen</button>
-                  </div>
-               </div>
-            </div>
-         </div>
-
-         <!-- 'delete subscriber' dialog -->
-         <div class="modal fade" id="delete-subscriber-modal" tabindex="-1" role="dialog" aria-labelledby="delete-subscriber-label">
-            <div class="modal-dialog" role="document">
-               <div class="modal-content">
-                  <div class="modal-header">
-                     <button type="button" class="close" data-dismiss="modal" aria-label="Abbrechen">
-                        <span aria-hidden="true">&times;</span>
-                     </button>
-                     <h3 class="modal-title" id="delete-subscriber-label">Abonnent entfernen</h3>
-                  </div>
-                  <div class="modal-body">
-                     <form id="delete-subscriber" action="/newsletters/subscribers/delete" th:action="@{'/newsletters/' + ${newsletter.id} + '/unsubscribe'}" method="post">
-                        <input type="text" class="form-control" name="email" readonly="readonly" value="max.muster@email.com" />
-                     </form>
-                  </div>
-                  <div class="modal-footer">
-                     <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
-                     <div class="btn-group">
-                        <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                           <span class="glyphicon glyphicon-trash"></span> Löschen <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu confirm-delete">
-                           <li><button type="submit" class="btn btn-link" form="delete-subscriber">Löschen</button></li>
-                        </ul>
-                     </div>
-                  </div>
-               </div>
-            </div>
          </div>
       </section>
 
@@ -266,14 +334,7 @@
 
       <!-- fetch content for 'delete subscriber' dialog -->
       <script type="text/javascript">
-      $('#delete-subscriber-modal').on('show.bs.modal', function (event) {
-         var button = $(event.relatedTarget); // Button that triggered the modal
-         var recipient = button.data('email'); // Extract info from data-* attributes
-         // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-         // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-         var modal = $(this);
-         modal.find('.modal-body input').val(recipient)
-         });
+
       </script>
 
       <!-- general non-important information -->
@@ -286,6 +347,7 @@
       </section>
    </main>
 
-   <script th:src="@{/resources/js/customInitialization.js}"></script>
+   <script src="../static/resources/js/customInitialization.js" th:src="@{/resources/js/customInitialization.js}"></script>
+   <script src="../static/resources/js/customInitialization.newsletterDetails.js" th:src="@{/resources/js/customInitialization.newsletterDetails.js}"></script>
 </body>
 </html>
