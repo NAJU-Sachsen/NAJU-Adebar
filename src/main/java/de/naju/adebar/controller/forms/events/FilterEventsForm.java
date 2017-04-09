@@ -1,16 +1,22 @@
 package de.naju.adebar.controller.forms.events;
 
+import javax.money.CurrencyUnit;
+import javax.money.Monetary;
+
 /**
  * Model POJO for filtering events. The fields are set by Thymeleaf when the associated form is submitted.
  * @author Rico Bergmann
  */
 public class FilterEventsForm {
+    public final static String DATE_TIME_FORMAT = "dd.MM.yyy HH:mm";
+    public static final CurrencyUnit CURRENCY_UNIT = Monetary.getCurrency("EUR");
+
     private String name;
     private String startFilterType, start;
     private String endFilterType, end;
     private String participantsLimitFilterType;
     private int participantsLimit;
-    private boolean participantsAgeFilterType;
+    private boolean participantsAgeFilter;
     private int participantsAge;
     private String feeFilterType, fee;
     private String street, zip, city;
@@ -73,12 +79,12 @@ public class FilterEventsForm {
         this.participantsLimit = participantsLimit;
     }
 
-    public boolean getParticipantsAgeFilterType() {
-        return participantsAgeFilterType;
+    public boolean getParticipantsAgeFilter() {
+        return participantsAgeFilter;
     }
 
-    public void setParticipantsAgeFilterType(boolean participantsAgeFilterType) {
-        this.participantsAgeFilterType = participantsAgeFilterType;
+    public void setParticipantsAgeFilter(boolean participantsAgeFilter) {
+        this.participantsAgeFilter = participantsAgeFilter;
     }
 
     public int getParticipantsAge() {
@@ -139,7 +145,7 @@ public class FilterEventsForm {
                 ", end='" + end + '\'' +
                 ", participantsLimitFilterType='" + participantsLimitFilterType + '\'' +
                 ", participantsLimit='" + participantsLimit + '\'' +
-                ", participantsAgeFilterType='" + participantsAgeFilterType + '\'' +
+                ", participantsAgeFilter='" + participantsAgeFilter + '\'' +
                 ", participantsAge='" + participantsAge + '\'' +
                 ", feeFilterType='" + feeFilterType + '\'' +
                 ", fee='" + fee + '\'' +
