@@ -1,6 +1,7 @@
 package de.naju.adebar.model.human;
 
 import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 import java.io.Serializable;
 
 /**
@@ -40,6 +41,14 @@ public class NabuMembership implements Serializable {
 
     public void setMembershipNumber(String membershipNumber) {
         this.membershipNumber = membershipNumber;
+    }
+
+    @Transient
+    public boolean hasMembershipNumber() {
+        if (!isNabuMember()) {
+            throw new IllegalStateException("Not a NABU member");
+        }
+        return membershipNumber != null && !membershipNumber.isEmpty();
     }
 
     @Override
