@@ -3,8 +3,10 @@ package de.naju.adebar.model.events;
 import de.naju.adebar.infrastructure.ReadOnlyRepository;
 import de.naju.adebar.model.human.Activist;
 import de.naju.adebar.model.human.Person;
+import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
+import java.util.stream.Stream;
 
 /**
  * A repository that provides read-only access to the saved events
@@ -49,4 +51,9 @@ public interface ReadOnlyEventRepository extends ReadOnlyRepository<Event, Long>
      */
     Iterable<Event> findByOrganizersContains(Activist activist);
 
+    /**
+     * @return all persisted events as a stream
+     */
+    @Query("select e from Event e")
+    Stream<Event> streamAll();
 }

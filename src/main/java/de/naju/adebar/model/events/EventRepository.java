@@ -2,10 +2,12 @@ package de.naju.adebar.model.events;
 
 import de.naju.adebar.model.human.Activist;
 import de.naju.adebar.model.human.Person;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.stream.Stream;
 
 /**
  * Repository to access {@link Event} instances
@@ -51,5 +53,11 @@ public interface EventRepository extends CrudRepository<Event, Long> {
      * @return all events in which the activist participated as organizer
      */
     Iterable<Event> findByOrganizersContains(Activist activist);
+
+    /**
+     * @return all persisted events as a stream
+     */
+    @Query("select e from Event e")
+    Stream<Event> streamAll();
 
 }
