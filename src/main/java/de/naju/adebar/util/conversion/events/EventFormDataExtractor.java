@@ -7,11 +7,14 @@ import de.naju.adebar.model.human.Address;
 import org.javamoney.moneta.Money;
 import org.springframework.stereotype.Service;
 
+import javax.money.CurrencyUnit;
 import javax.money.Monetary;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+
+import static de.naju.adebar.controller.forms.events.EventForm.CURRENCY_UNIT;
 
 /**
  * Service to extract the necessary data from a 'add event' or 'edit event' form
@@ -20,6 +23,7 @@ import java.util.Locale;
  */
 @Service
 public class EventFormDataExtractor {
+
     private DateTimeFormatter dateTimeFormatter;
 
     public EventFormDataExtractor() {
@@ -46,7 +50,7 @@ public class EventFormDataExtractor {
         }
 
         if (eventForm.hasParticipationFee()) {
-            event.setParticipationFee(Money.of(new BigDecimal(eventForm.getParticipationFee()), Monetary.getCurrency("EUR")));
+            event.setParticipationFee(Money.of(new BigDecimal(eventForm.getParticipationFee()), CURRENCY_UNIT));
         }
 
         return event;

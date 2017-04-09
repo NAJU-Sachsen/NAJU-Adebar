@@ -2,6 +2,9 @@ package de.naju.adebar.controller.forms.events;
 
 import org.springframework.data.annotation.Transient;
 
+import javax.money.CurrencyUnit;
+import javax.money.Monetary;
+
 /**
  * Model POJO for events. The fields are set by Thymeleaf when the associated form is submitted.
  * @author Rico Bergmann
@@ -10,6 +13,7 @@ public class EventForm {
     public enum Belonging {LOCALGROUP, PROJECT}
 
     public final static String DATE_TIME_FORMAT = "dd.MM.yyyy HH:mm";
+    public static final CurrencyUnit CURRENCY_UNIT = Monetary.getCurrency("EUR");
 
     private String name;
     private String startTime, endTime;
