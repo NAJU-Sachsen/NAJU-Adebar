@@ -1,8 +1,12 @@
 package de.naju.adebar.controller;
 
+import com.google.common.collect.Iterables;
 import de.naju.adebar.app.human.DataProcessor;
 import de.naju.adebar.app.human.filter.PersonFilterBuilder;
 import de.naju.adebar.controller.forms.human.*;
+import de.naju.adebar.model.chapter.Board;
+import de.naju.adebar.model.chapter.LocalGroup;
+import de.naju.adebar.model.chapter.LocalGroupManager;
 import de.naju.adebar.model.human.*;
 import de.naju.adebar.util.conversion.human.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,17 +41,19 @@ public class PersonController {
 
     private HumanManager humanManager;
     private QualificationManager qualificationManager;
+    private LocalGroupManager localGroupManager;
     private CreatePersonFormDataExtractor createPersonFormDataExtractor;
     private EditPersonFormDataExtractor editPersonFormDataExtractor;
     private FilterPersonFormFilterExtractor filterPersonFormFilterExtractor;
     private DataProcessor dataProcessor;
 
     @Autowired
-    public PersonController(HumanManager humanManager, QualificationManager qualificationManager, CreatePersonFormDataExtractor createPersonFormDataExtractor,
+    public PersonController(HumanManager humanManager, QualificationManager qualificationManager, LocalGroupManager localGroupManager, CreatePersonFormDataExtractor createPersonFormDataExtractor,
                             EditPersonFormDataExtractor editPersonFormDataExtractor, FilterPersonFormFilterExtractor filterPersonFormFilterExtractor, DataProcessor dataProcessor) {
-        Object[] params = {humanManager, qualificationManager, createPersonFormDataExtractor, editPersonFormDataExtractor, filterPersonFormFilterExtractor, dataProcessor};
+        Object[] params = {humanManager, qualificationManager, localGroupManager, localGroupManager, createPersonFormDataExtractor, editPersonFormDataExtractor, filterPersonFormFilterExtractor, dataProcessor};
         Assert.noNullElements(params, "At least one parameter was null: " + Arrays.toString(params));
         this.humanManager = humanManager;
+        this.localGroupManager = localGroupManager;
         this.createPersonFormDataExtractor = createPersonFormDataExtractor;
         this.editPersonFormDataExtractor = editPersonFormDataExtractor;
         this.filterPersonFormFilterExtractor = filterPersonFormFilterExtractor;
@@ -152,10 +158,15 @@ public class PersonController {
 
         if (humanManager.activistManager().isActivist(person)) {
             Activist activist = humanManager.activistManager().findActivistByPerson(person);
+            Iterable<LocalGroup> localGroups = localGroupManager.repository().findByMembersContains(activist);
+            Iterable<LocalGroup> boards = localGroupManager.findAllLocalGroupsForBoardMember(activist);
+
             model.addAttribute("isActivist", activist.isActive());
             model.addAttribute("activist", activist);
             model.addAttribute("hasJuleica", activist.hasJuleica());
             model.addAttribute("editActivistForm", new ActivistToEditActivistFormConverter().convertToEditActivistForm(activist));
+            model.addAttribute("localGroups", Iterables.isEmpty(localGroups) ? null : localGroups);
+            model.addAttribute("boards", Iterables.isEmpty(boards) ? null : boards);
         } else {
             model.addAttribute("isActivist", false);
             model.addAttribute("editActivistForm", new EditActivistForm());

@@ -342,16 +342,41 @@
                       <button type="button" class="btn btn-default" data-toggle="modal" data-target="#edit-person-modal"><span class="glyphicon glyphicon-pencil"></span> Anpassen</button>
                    </div>
                 </header>
-                <ul class="list-group">
-                    <li class="list-group-item"><span class="item-title"><span class="glyphicon glyphicon-user"></span> Name:</span> <span th:text="${person.name}">Max Mustermann</span></li>
-                    <li class="list-group-item"><span class="item-title"><span class="glyphicon glyphicon-calendar"></span> Geburtsdatum:</span> <span th:text="${{person.dateOfBirth}}">30.02.1999</span></li>
-                    <li class="list-group-item"><span class="item-title"><span class="glyphicon glyphicon-envelope"></span> E-Mail Adresse:</span> <a href="mailto:max_muster@aol.com" th:href="'mailto:' + ${person.email}" th:text="${person.email}">max_muster@aol.com</a></li>
-                    <li class="list-group-item"><span class="item-title"><span class="glyphicon glyphicon-home"></span> Adresse:</span> <span th:text="${person.address.street} + ' ' + ${person.address.zip} + ' ' + ${person.address.city}">Zu Hause 15, 01234 Entenhausen</span></li>
-                    <li class="list-group-item"><span class="item-title"><span class="glyphicon glyphicon-cutlery"></span> Vegetarier o.ä.:</span> <span th:text="${person.eatingHabit}">Veganer, Laktose-intolerant</span></li>
-                    <li class="list-group-item"><span class="item-title"><span class="glyphicon glyphicon-bed"></span> Allergien o.ä.:</span> <span th:text="${person.healthImpairments}">Heuschnupfen</span></li>
-                    <li class="list-group-item"><span class="item-title"><span class="glyphicon glyphicon-tree-deciduous"></span> NABU-Mitglied</span> <span th:if="${isNabuMember}" th:text="'Mitgliedsnummer: ' + ${person.nabuMembership.membershipNumber}">Mitgliedsnummer: 9874563</span><span th:unless="${isNabuMember}">kein Mitglied</span>
-                    </li>
-                </ul>
+                <table class="table">
+                    <tbody>
+                        <tr class="row">
+                            <th class="col-sm-2"><span class="glyphicon glyphicon-user"></span> Name:</th>
+                            <td class="col-sm-10" th:text="${person.name}">Max Mustermann</td>
+                        </tr>
+                        <tr class="row">
+                            <th class="col-sm-2"><span class="glyphicon glyphicon-calendar"></span> Geburtsdatum:</th>
+                            <td class="col-sm-10" th:text="${{person.dateOfBirth}}">30.02.1999</td>
+                        </tr>
+                        <tr class="row">
+                            <th class="col-sm-2"><span class="glyphicon glyphicon-envelope"></span> E-Mail Adresse:</th>
+                            <td class="col-sm-10">
+                                <a href="mailto:max_muster@aol.com" th:href="'mailto:' + ${person.email}" th:text="${person.email}">max_muster@aol.com</a>
+                            </td>
+                        </tr>
+                        <tr class="row">
+                            <th class="col-sm-2"><span class="glyphicon glyphicon-home"></span> Adresse:</th>
+                            <td class="col-sm-10" th:text="|${person.address.street} ${person.address.zip} ${person.address.city}|">Zu Hause 15, 01234 Entenhausen</td>
+                        </tr>
+                        <tr class="row">
+                            <th class="col-sm-2"><span class="glyphicon glyphicon-cutlery"></span> Vegetarier o.ä.:</th>
+                            <td class="col-sm-10" th:text="${person.eatingHabit}">Veganer, Laktose-intolerant</td>
+                        </tr>
+                        <tr class="row">
+                            <th class="col-sm-2"><span class="glyphicon glyphicon-bed"></span> Allergien o.ä.:</th>
+                            <td class="col-sm-10" th:text="${person.healthImpairments}">Heuschnupfen</td>
+                        </tr>
+                        <tr class="row">
+                            <th class="col-sm-2"><span class="glyphicon glyphicon-tree-deciduous"></span> NABU-Mitglied</th>
+                            <td class="col-sm-10" th:if="${isNabuMember}" th:text="|Mitgliedsnummer: ${person.nabuMembership.membershipNumber ?: 'unbekannt'}|">Mitgliedsnummer: 9874563</td>
+                            <td class="col-sm-9" th:unless="${isNabuMember}">kein Mitglied</td>
+                        </tr>
+                    </tbody>
+                </table>
             </section>
 
             <section class="panel panel-default">
@@ -363,11 +388,29 @@
                       <button type="button" class="btn btn-default" data-toggle="modal" data-target="#edit-activist-modal"><span class="glyphicon glyphicon-pencil"></span> Anpassen</button>
                    </div>
                 </header>
-                <ul class="list-group" th:if="${isActivist}">
-                    <li class="list-group-item"><span class="item-title"><span class="glyphicon glyphicon-map-marker"></span> Ortsgruppe:</span> <a href="#" th:unless="${true}">NAJU Freiberg</a></li>
-                    <li class="list-group-item"><span class="item-title"><span class="glyphicon glyphicon-credit-card"></span> Juleica:</span> <span th:if="${hasJuleica}" th:text="${{activist.juleicaExpiryDate}}">lief am <strong>07.03.2015</strong> aus</span><span th:unless="${hasJuleica}">keine</span></li>
-                    <li class="list-group-item"><span class="item-title"><span class="glyphicon glyphicon-briefcase"></span> Vorstand:</span> <span th:unless="${true}">nicht im Vorstand aktiv</span></li>
-                </ul>
+                <table class="table" th:if="${isActivist}">
+                    <tbody>
+                        <tr class="row">
+                            <th class="col-sm-2"><span class="glyphicon glyphicon-map-marker"></span> Ortsgruppe:</th>
+                            <td class="col-sm-10" th:if="${localGroups}">
+                                <a th:each="localGroup : ${localGroups}" href="localGroupDetails.html" th:href="@{/localGroups/{id}(id=${localGroup.id})}" th:text="|${localGroup.name} |">NAJU Freiberg</a>
+                            </td>
+                            <td class="col-sm-10" th:unless="${localGroups}">keine</td>
+                        </tr>
+                        <tr class="row">
+                            <th class="col-sm-2"><span class="glyphicon glyphicon-credit-card"></span> Juleica:</th>
+                            <td class="col-sm-10" th:if="${hasJuleica}" th:text="|Ablaufdatum: ${{activist.juleicaExpiryDate}}|">lief am <strong>07.03.2015</strong> aus</td>
+                            <td class="col-sm-10" th:unless="${hasJuleica}">keine</td>
+                        </tr>
+                        <tr class="row">
+                            <th class="col-sm-2"><span class="glyphicon glyphicon-briefcase"></span> Vorstand:</th>
+                            <td class="col-sm-10" th:if="${boards}">
+                                <a th:each="localGroup : ${boards}" href="localGroupDetails.html" th:href="@{/localGroups/{id}(id=${localGroup.id})}" th:text="|${localGroup.name} |">NAJU Freiberg</a>
+                            </td>
+                            <td class="col-sm-10" th:unless="${boards}">in keinem Vorstand aktiv</td>
+                        </tr>
+                    </tbody>
+                </table>
                 <section class="panel-body" th:unless="${isActivist}">
                     <p>
                         Die Person ist kein Aktiver
