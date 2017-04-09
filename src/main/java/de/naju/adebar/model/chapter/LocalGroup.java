@@ -19,7 +19,7 @@ public class LocalGroup {
     @Id @GeneratedValue private long id;
     @Column(unique = true) private String name;
     @Embedded @Column(unique = true) private Address address;
-    @OneToMany(cascade = CascadeType.ALL) private List<Activist> members;
+    @ManyToMany(cascade = CascadeType.ALL) private List<Activist> members;
     @OneToMany(cascade = CascadeType.ALL) private List<Event> events;
     @OneToMany(cascade = CascadeType.ALL) private Map<String, Project> projects;
     @OneToOne(cascade = CascadeType.ALL) private Board board;
