@@ -1,12 +1,14 @@
 package de.naju.adebar.model.chapter;
 
 import de.naju.adebar.model.events.EventManager;
+import de.naju.adebar.model.human.Activist;
 import de.naju.adebar.model.human.Address;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.Optional;
 
 /**
@@ -17,14 +19,16 @@ import java.util.Optional;
 public class PersistentLocalGroupManager implements LocalGroupManager {
     private LocalGroupRepository localGroupRepo;
     private ProjectRepository projectRepo;
+    private BoardRepository boardRepo;
     private ReadOnlyLocalGroupRepository roRepo;
 
     @Autowired
-    public PersistentLocalGroupManager(LocalGroupRepository localGroupRepo, ProjectRepository projectRepo, ReadOnlyLocalGroupRepository roRepo) {
-        Object[] params = {localGroupRepo, projectRepo, roRepo};
+    public PersistentLocalGroupManager(LocalGroupRepository localGroupRepo, ProjectRepository projectRepo, BoardRepository boardRepo, ReadOnlyLocalGroupRepository roRepo) {
+        Object[] params = {localGroupRepo, projectRepo, boardRepo, roRepo};
         Assert.noNullElements(params, "No parameter may be null: " + Arrays.toString(params));
         this.localGroupRepo = localGroupRepo;
         this.projectRepo = projectRepo;
+        this.boardRepo = boardRepo;
         this.roRepo = roRepo;
     }
 
@@ -83,5 +87,13 @@ public class PersistentLocalGroupManager implements LocalGroupManager {
         localGroup.addProject(project);
         localGroup = updateLocalGroup(localGroup.getId(), localGroup);
         return localGroup.getProject(project.getName()).orElseThrow(() -> new IllegalStateException("Project could not be saved"));
+    }
+
+    @Override
+    public Iterable<LocalGroup> findAllLocalGroupsForBoardMember(Activist activist) {
+        Iterable<Board> boards = boardRepo.findByMembersContains(activist);
+        LinkedList<LocalGroup> localGroups = new LinkedList<>();
+        boards.forEach(board -> localGroups.add(localGroupRepo.findByBoard(board)));
+        return localGroups;
     }
 }

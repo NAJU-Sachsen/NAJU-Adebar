@@ -1,5 +1,6 @@
 package de.naju.adebar.model.chapter;
 
+import de.naju.adebar.model.human.Activist;
 import de.naju.adebar.model.human.Address;
 import org.springframework.stereotype.Service;
 
@@ -82,5 +83,12 @@ public interface LocalGroupManager {
      * @throws IllegalStateException if the project is already hosted by another group
      */
     Project addProjectToLocalGroup(LocalGroup localGroup, Project project);
+
+    /**
+     * Provides access to all local groups where the given activist is member of the board
+     * @param activist the activist
+     * @return all local groups where the given activist is member of the board
+     */
+    Iterable<LocalGroup> findAllLocalGroupsForBoardMember(Activist activist);
 
 }

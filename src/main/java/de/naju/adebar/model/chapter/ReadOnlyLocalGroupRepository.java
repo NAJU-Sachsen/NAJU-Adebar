@@ -30,4 +30,10 @@ public interface ReadOnlyLocalGroupRepository extends ReadOnlyRepository<LocalGr
      */
     Optional<LocalGroup> findByNewsletter(Newsletter newsletter);
 
+    /**
+     * @param board the board to query for
+     * @return the local group with the given board
+     */
+    LocalGroup findByBoard(Board board);
+
 }
