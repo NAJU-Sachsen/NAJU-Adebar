@@ -1,5 +1,6 @@
 package de.naju.adebar.controller;
 
+import de.naju.adebar.app.events.filter.EventFilterBuilder;
 import de.naju.adebar.app.human.DataProcessor;
 import de.naju.adebar.controller.forms.events.EventForm;
 import de.naju.adebar.controller.forms.events.FilterEventsForm;
@@ -14,6 +15,7 @@ import de.naju.adebar.model.human.Person;
 import de.naju.adebar.util.conversion.PersonConverter;
 import de.naju.adebar.util.conversion.events.EventFormDataExtractor;
 import de.naju.adebar.util.conversion.events.EventToEventFormConverter;
+import de.naju.adebar.util.conversion.events.FilterEventsFormDataExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +28,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Event related controller mappings
@@ -43,12 +47,13 @@ public class EventController {
     private ProjectManager projectManager;
     private EventFormDataExtractor eventFormDataExtractor;
     private EventToEventFormConverter eventToEventFormConverter;
+    private FilterEventsFormDataExtractor filterEventsFormDataExtractor;
     private PersonConverter personConverter;
     private DataProcessor dataProcessor;
 
     @Autowired
-    public EventController(HumanManager humanManager, EventManager eventManager, LocalGroupManager localGroupManager, ProjectManager projectManager, EventFormDataExtractor eventFormDataExtractor, EventToEventFormConverter eventToEventFormConverter, PersonConverter personConverter, DataProcessor dataProcessor) {
-        Object[] params = {humanManager, eventManager, localGroupManager, projectManager, eventFormDataExtractor, eventToEventFormConverter, personConverter, dataProcessor};
+    public EventController(HumanManager humanManager, EventManager eventManager, LocalGroupManager localGroupManager, ProjectManager projectManager, EventFormDataExtractor eventFormDataExtractor, EventToEventFormConverter eventToEventFormConverter, FilterEventsFormDataExtractor filterEventsFormDataExtractor, PersonConverter personConverter, DataProcessor dataProcessor) {
+        Object[] params = {humanManager, eventManager, localGroupManager, projectManager, eventFormDataExtractor, eventToEventFormConverter, filterEventsFormDataExtractor, personConverter, dataProcessor};
         Assert.noNullElements(params, "No parameter may be null: " + Arrays.toString(params));
         this.humanManager = humanManager;
         this.eventManager = eventManager;
@@ -56,6 +61,7 @@ public class EventController {
         this.projectManager = projectManager;
         this.eventFormDataExtractor = eventFormDataExtractor;
         this.eventToEventFormConverter = eventToEventFormConverter;
+        this.filterEventsFormDataExtractor = filterEventsFormDataExtractor;
         this.personConverter = personConverter;
         this.dataProcessor = dataProcessor;
     }
@@ -77,6 +83,7 @@ public class EventController {
         model.addAttribute("filterEventsForm", new FilterEventsForm());
         model.addAttribute("localGroups", localGroupManager.repository().findAll());
         model.addAttribute("projects", projectManager.repository().findAll());
+        model.addAttribute("normalDisplay", true);
 
         return "events";
     }
@@ -97,6 +104,28 @@ public class EventController {
         model.addAttribute("localGroups", localGroupManager.repository().findAll());
         model.addAttribute("projects", projectManager.repository().findAll());
 
+        return "events";
+    }
+
+    /**
+     *
+     * @param eventsForm
+     * @param model
+     * @return
+     */
+    @RequestMapping("/events/filter")
+    public String filterEvents(@ModelAttribute("filterEventsForm") FilterEventsForm eventsForm, Model model) {
+        List<Event> events = eventManager.repository().streamAll().collect(Collectors.toList());
+        EventFilterBuilder filterBuilder = new EventFilterBuilder(events.stream());
+        filterEventsFormDataExtractor.extractAllFilters(eventsForm).forEach(filterBuilder::applyFilter);
+
+        Iterable<Event> matchingEvents = filterBuilder.filter();
+
+        model.addAttribute("filteredEvents", matchingEvents);
+        model.addAttribute("addEventForm", new EventForm());
+        model.addAttribute("filterEventsForm", new FilterEventsForm());
+        model.addAttribute("localGroups", localGroupManager.repository().findAll());
+        model.addAttribute("projects", projectManager.repository().findAll());
         return "events";
     }
 

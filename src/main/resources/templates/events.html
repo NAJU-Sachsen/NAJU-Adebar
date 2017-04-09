@@ -254,7 +254,7 @@
                                   <select id="filter-participants-limit-type" class="selectpicker" name="participantsLimitFilterType" data-width="auto" style="float:left;" th:field="*{participantsLimitFilterType}">
                                       <option value="none" selected="selected">egal</option>
                                       <option value="MAXIMUM">Max.</option>
-                                      <option value="EXACT">Exakt</option>
+                                      <option value="EQUAL">Exakt</option>
                                       <option value="MINIMUM">Min.</option>
                                   </select>
                               </div>
@@ -288,9 +288,9 @@
                               <div class="col-sm-3 no-padding-left">
                                   <select id="filter-fee-type" class="selectpicker" name="feeFilterType" data-width="auto" style="float:left;" th:field="*{feeFilterType}">
                                       <option value="none" selected="selected">egal</option>
-                                      <option value="BEFORE">Max.</option>
-                                      <option value="EXACT">Exakt</option>
-                                      <option value="AFTER">Min.</option>
+                                      <option value="MAXIMUM">Max.</option>
+                                      <option value="EQUAL">Exakt</option>
+                                      <option value="MINIMUM">Min.</option>
                                   </select>
                               </div>
                               <div id="filter-fee-container" class="input-group hidden">
@@ -313,7 +313,7 @@
               </div>
               <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
-                  <button type="submit" class="btn btn-primary" form="filter-events">Erstellen</button>
+                  <button type="submit" class="btn btn-primary" form="filter-events">Filtern</button>
               </div>
           </div>
       </div>
@@ -378,7 +378,7 @@
             </section>
 
             <!-- current events -->
-            <section class="row" th:unless="${pastEvents}">
+            <section class="row" th:if="${normalDisplay}">
                 <h2>Laufende Veranstaltungen</h2>
                 <table id="current-events" class="table table-striped table-hover tablesorter">
                     <thead>
@@ -410,7 +410,7 @@
             </section>
 
             <!-- future events -->
-            <section class="row" th:unless="${pastEvents}">
+            <section class="row" th:if="${normalDisplay}">
                 <h2>Kommende Veranstaltungen</h2>
                 <table id="prospective-events" class="table table-striped table-hover tablesorter">
                     <thead>
@@ -460,7 +460,7 @@
                 </table>
             </section>
 
-            <section class="row" style="margin-top: 3em;" th:unless="${pastEvents}">
+            <section class="row" style="margin-top: 3em;" th:if="${normalDisplay}">
                 <p style="text-align: center;"><a href="#" th:href="@{/events/past}">Vergangene Veranstaltungen anzeigen</a></p>
             </section>
 
@@ -496,10 +496,42 @@
                 </table>
             </section>
 
+            <!-- filtered events -->
+            <section class="row" th:if="${filteredEvents}">
+                <h2>Übereinstimmende Veranstaltungen</h2>
+                <table id="past-events" class="table table-striped table-hover tablesorter">
+                    <thead>
+                        <tr>
+                            <th>Name <span class="icon"></span></th>
+                            <th>Datum <span class="icon"></span></th>
+                            <th>Ort <span class="icon"></span></th>
+                            <th>Teilnehmer <span class="icon"></span></th>
+                            <th>Ortsgruppe <span class="icon"></span></th>
+                        </tr>
+                    </thead>
+                    <tbody class="event-list-past" th:remove="all-but-first">
+                        <tr th:each="event : ${filteredEvents}">
+                            <td class="event-name"><a href="eventDetails.html" th:href="@{'/events/' + ${event.id}}" th:text="${event.name}">HIFA-Camp</a></td>
+                            <td class="event-time" th:text="${{event.startTime}} + ' - ' + ${{event.endTime}}">24.05.-28.05.</td>
+                            <td class="event-place" th:text="${event.place.city}">Niederlausitz</td>
+                            <td class="text-center" th:text="${event.participantsCount}">28</td>
+                            <td class="event-localgroup" th:text="---">Sachsen</td>
+                        </tr>
+                        <tr>
+                            <td class="event-name"> <a href="eventDetails.html">Nistkästen basteln</a></td>
+                            <td class="event-time">26.05.</td>
+                            <td class="event-place">Großdittmannsdorf</td>
+                            <td class="text-center">---</td>
+                            <td class="event-localgroup">Großdittmannsdorf</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
     </section>
 
     <!-- initialize search bar -->
-    <script type="text/javascript" th:unless="${pastEvents}">
+    <script type="text/javascript" th:if="${pastEvents}">
         var fuzzyOptions = {
            searchClass: "fuzzy-search",
            location: 0,
