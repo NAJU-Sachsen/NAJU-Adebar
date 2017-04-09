@@ -1,6 +1,8 @@
 package de.naju.adebar.controller.api;
 
 import de.naju.adebar.api.data.SimplePersonJSON;
+import de.naju.adebar.app.filter.FilterType;
+import de.naju.adebar.app.filter.MatchType;
 import de.naju.adebar.app.human.filter.*;
 import de.naju.adebar.model.human.Activist;
 import de.naju.adebar.model.human.Address;

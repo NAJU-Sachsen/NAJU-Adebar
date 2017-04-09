@@ -1,5 +1,7 @@
 package de.naju.adebar.app.human.filter;
 
+import de.naju.adebar.app.filter.DateFilterType;
+import de.naju.adebar.app.filter.FilterType;
 import de.naju.adebar.model.human.Activist;
 import de.naju.adebar.model.human.Person;
 import de.naju.adebar.util.Streams;

@@ -1,4 +1,4 @@
-package de.naju.adebar.app.human.filter;
+package de.naju.adebar.app.filter;
 
 /**
  * Enumeration to specify how to treat possibly incomplete data

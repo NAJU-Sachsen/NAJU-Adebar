@@ -1,4 +1,4 @@
-package de.naju.adebar.app.human.filter;
+package de.naju.adebar.app.filter;
 
 import java.time.LocalDate;
 
