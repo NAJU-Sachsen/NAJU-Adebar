@@ -79,6 +79,7 @@ public interface LocalGroupManager {
      * @param localGroup the local group
      * @param project the project
      * @return the persisted project
+     * @throws IllegalStateException if the project is already hosted by another group
      */
     Project addProjectToLocalGroup(LocalGroup localGroup, Project project);
 
