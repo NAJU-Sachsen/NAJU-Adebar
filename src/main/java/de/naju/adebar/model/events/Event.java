@@ -179,7 +179,7 @@ public class Event {
     }
 
     /**
-     * @return the fee to pay in order to participate
+     * @return the fee to pay in order to participate. May be {@code null}.
      */
     public Money getParticipationFee() {
         return participationFee;
@@ -197,7 +197,7 @@ public class Event {
     }
 
     /**
-     * @return the address where the event takes place
+     * @return the address where the event takes place. May be {@code null}
      */
     public Address getPlace() {
         return place;
