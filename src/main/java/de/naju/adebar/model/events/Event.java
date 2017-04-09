@@ -368,6 +368,14 @@ public class Event {
 
     // modification methods
 
+    public void updateTimePeriod(LocalDateTime startTime, LocalDateTime endTime) {
+        Assert.notNull(startTime, "Start time may not be null!");
+        Assert.notNull(endTime, "End time may not be null!");
+        Assert.isTrue(!endTime.isBefore(startTime), "Start time may not be after end time");
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+
     /**
      * Adds a new participant
      * @param person the person to participate in the event

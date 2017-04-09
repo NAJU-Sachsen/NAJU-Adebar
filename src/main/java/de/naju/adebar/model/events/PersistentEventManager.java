@@ -45,8 +45,7 @@ public class PersistentEventManager implements EventManager {
     public Event adoptEventData(long eventId, Event eventData) {
         Event event = findEvent(eventId).orElseThrow(() -> new IllegalArgumentException("No event with ID " + eventId));
         event.setName(eventData.getName());
-        event.setStartTime(eventData.getStartTime());
-        event.setEndTime(eventData.getEndTime());
+        event.updateTimePeriod(event.getStartTime(), event.getEndTime());
         event.setParticipantsLimit(eventData.getParticipantsLimit());
         event.setMinimumParticipantAge(eventData.getMinimumParticipantAge());
         event.setParticipationFee(eventData.getParticipationFee());
