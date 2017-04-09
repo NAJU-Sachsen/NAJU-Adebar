@@ -393,7 +393,7 @@
                         <tr class="row">
                             <th class="col-sm-2"><span class="glyphicon glyphicon-map-marker"></span> Ortsgruppe:</th>
                             <td class="col-sm-10" th:if="${localGroups}">
-                                <a th:each="localGroup : ${localGroups}" href="localGroupDetails.html" th:href="@{/localGroups/{id}(id=${localGroup.id})}" th:text="|${localGroup.name} |">NAJU Freiberg</a>
+                                <a class="label label-primary" th:each="localGroup : ${localGroups}" href="localGroupDetails.html" th:href="@{/localGroups/{id}(id=${localGroup.id})}" th:text="|${localGroup.name}|">NAJU Freiberg</a>
                             </td>
                             <td class="col-sm-10" th:unless="${localGroups}">keine</td>
                         </tr>
@@ -405,7 +405,7 @@
                         <tr class="row">
                             <th class="col-sm-2"><span class="glyphicon glyphicon-briefcase"></span> Vorstand:</th>
                             <td class="col-sm-10" th:if="${boards}">
-                                <a th:each="localGroup : ${boards}" href="localGroupDetails.html" th:href="@{/localGroups/{id}(id=${localGroup.id})}" th:text="|${localGroup.name} |">NAJU Freiberg</a>
+                                <a class="label label-primary" th:each="localGroup : ${boards}" href="localGroupDetails.html" th:href="@{/localGroups/{id}(id=${localGroup.id})}" th:text="|${localGroup.name}|">NAJU Freiberg</a>
                             </td>
                             <td class="col-sm-10" th:unless="${boards}">in keinem Vorstand aktiv</td>
                         </tr>
