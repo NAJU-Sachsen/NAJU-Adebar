@@ -75,7 +75,7 @@
 </nav>
 
 <!-- modal dialogs -->
-<section>
+<section id="dialogs">
   <h2 class="hidden">Dialoge</h2>
 
   <!-- 'edit local group' modal -->
@@ -537,22 +537,28 @@
                 <div class="panel panel-default">
                     <header class="panel-heading panel-menu">
                         <h2 class="panel-title">Mitglieder</h2>
-                        <div class="panel-menu-container">
 
-                            <div style="display:inline-block">
-                                <div class="input-group">
+                        <div class="panel-menu-container">
+                           <div class="form-inline">
+                              <div class="form-group">
+                                 <div class="input-group">
                                     <input id="persons" type="text" class="form-control fuzzy-search" name="persons" placeholder="Name, Ort o.ä."/>
                                     <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
                                 </div>
-                            </div>
-                            <div class="btn-group" style="vertical-align:initial">
-                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-member-modal">
-                                    <span class="glyphicon glyphicon-plus"></span> Hinzufügen
-                                </button>
-                                <a href="mailto:" class="btn btn-default" th:href="|mailto: ${memberEmails}|">
-                                    <span class="glyphicon glyphicon-envelope"></span> E-Mail
-                                </a>
-                            </div>
+                              </div>
+                              <div class="form-group">
+                                 <div class="input-group">
+                                    <div class="btn-group">
+                                       <button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-member-modal">
+                                          <span class="glyphicon glyphicon-plus"></span> Hinzufügen
+                                       </button>
+                                       <a href="mailto:" class="btn btn-default" th:href="|mailto: ${memberEmails}|">
+                                          <span class="glyphicon glyphicon-envelope"></span> E-Mail
+                                       </a>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
                         </div>
                     </header>
                     <ul class="list-group list-group-hover member-list" th:remove="all-but-first">
