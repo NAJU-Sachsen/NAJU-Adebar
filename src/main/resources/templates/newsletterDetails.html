@@ -274,43 +274,66 @@
       <section id="content">
          <h1>Newsletter</h1>
 
-         <!-- newsletter overview -->
-         <div class="panel panel-default">
-            <div class="panel-heading">
-               <h2 class="panel-title">Details</h2>
-            </div>
 
-            <ul class="list-group">
-               <li class="list-group-item"><span class="item-title"><span class="glyphicon glyphicon-tag"></span> Name:</span><span th:text="${newsletter.name}">HIFA</span></li>
-               <li class="list-group-item"><span class="item-title"><span class="glyphicon glyphicon-map-marker"></span> Ortsgruppe:</span><span th:text="---">NAJU Sachsen</span></li>
-               <li class="list-group-item"><span class="item-title"><span class="glyphicon glyphicon-tent"></span> Veranstaltung:</span><span th:text="---">Himmelfahrtscamp</span></li>
-               <li class="list-group-item"><span class="item-title"><span class="glyphicon glyphicon-heart"></span> Abonnenten:</span><span th:text="${newsletter.subscribersCount}">150</span></li>
-            </ul>
-         </div>
+         <div class="row">
 
-         <!-- subscribers overview -->
-         <div id="subscribers-list" class="panel panel-default">
-            <div class="panel-heading clearfix">
-               <h2 class="panel-title pull-left" style="margin-top: 7.5px; margin-right: 2em;">Abonnenten</h2>
-               <div class="input-group pull-right" style="margin-left: 1em;">
-                  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-subscriber-modal"><span class="glyphicon glyphicon-plus"></span> Hinzufügen</button>
-               </div>
-               <form class="form-inline pull-right">
-                  <div class="form-group">
-                     <label class="sr-only" for="subscriber">Name, E-Mail o.ä.</label>
-                     <div class="input-group">
-                        <input type="text" class="form-control fuzzy-search" id="subscriber" name="subscriber" placeholder="Name, E-Mail o.ä."/>
-                        <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
-                     </div>
+            <!-- newsletter overview -->
+            <div class="col-md-4">
+               <div class="panel panel-primary">
+                  <div class="panel-heading">
+                     <h2 class="panel-title">Details</h2>
                   </div>
-               </form>
+
+                  <table class="table">
+                     <tbody>
+                        <tr class="row">
+                           <th class="col-sm-5"><span class="glyphicon glyphicon-tag"></span> Name</th>
+                           <td class="col-sm-7" th:text="${newsletter.name}">HIFA</td>
+                        </tr>
+                        <tr class="row">
+                           <th class="col-sm-5"><span class="glyphicon glyphicon-tree-deciduous"></span> Zugehörig</th>
+                           <td class="col-sm-7">
+                              <a href="localGroupDetails.html" th:if="${localGroup}" th:href="@{/localGroups/{id}(id=${localGroup.id})}" th:text="${localGroup.name}">NAJU Sachsen</a>
+                              <a href="eventDetails.html" th:if="${event}" th:href="@{/events/{id}(id=${event.id})}" th:text="${event.name}">Himmelfahrtscamp</a>
+                              <a href="projectDetails.html" th:if="${project}" th:href="@{/project/{id}(id=${project.id})}" th:text="${project.name}">Puppenstuben gesucht!</a>
+                              <span th:if="${noBelonging}">---</span>
+                           </td>
+                        </tr>
+                        <tr class="row">
+                           <th class="col-sm-5"><span class="glyphicon glyphicon-heart"></span> Abonnenten</th>
+                           <td class="col-sm-7" th:text="${newsletter.subscribersCount}">150</td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
             </div>
-            <div class="panel-body list-group subscriber-list" th:remove="all-but-first">
-               <button type="button" class="list-group-item" data-toggle="modal" data-target="#delete-subscriber-modal" data-email="max.muster@email.com" th:each="subscriber : ${newsletter.subscribers}" th:attr="data-email=${subscriber.email}">
-               	<span class="subscriber-item"><span th:text="${subscriber.email}">max.muster@email.com</span> <span th:if="${subscriber.hasName()}" th:text="'(' + ${subscriber.name} + ')'">(Max Muster)</span></span>
-               </button>
-               <button type="button" class="list-group-item" data-toggle="modal" data-target="#delete-subscriber-modal" data-email="hans.wurst@email.com"><span class="subscriber-item">hans.wurst@email.com (Hans Wurst)</span></button>
-               <button type="button" class="list-group-item" data-toggle="modal" data-target="#delete-subscriber-modal" data-email="anon@ymous.org">      <span class="subscriber-item">anon@ymous.org                   </span></button>
+
+            <!-- subscribers overview -->
+            <div class="col-md-8">
+               <div id="subscribers-list" class="panel panel-default">
+                  <div class="panel-heading clearfix">
+                     <h2 class="panel-title pull-left" style="margin-top: 7.5px; margin-right: 2em;">Abonnenten</h2>
+                     <div class="input-group pull-right" style="margin-left: 1em;">
+                        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-subscriber-modal"><span class="glyphicon glyphicon-plus"></span> Hinzufügen</button>
+                     </div>
+                     <form class="form-inline pull-right">
+                        <div class="form-group">
+                           <label class="sr-only" for="subscriber">Name, E-Mail o.ä.</label>
+                           <div class="input-group">
+                              <input type="text" class="form-control fuzzy-search" id="subscriber" name="subscriber" placeholder="Name, E-Mail o.ä."/>
+                              <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
+                           </div>
+                        </div>
+                     </form>
+                  </div>
+                  <div class="list-group subscriber-list" th:remove="all-but-first">
+                     <button type="button" class="list-group-item" data-toggle="modal" data-target="#delete-subscriber-modal" data-email="max.muster@email.com" th:each="subscriber : ${newsletter.subscribers}" th:attr="data-email=${subscriber.email}">
+                     	<span class="subscriber-item"><span th:text="${subscriber.email}">max.muster@email.com</span> <span th:if="${subscriber.hasName()}" th:text="'(' + ${subscriber.name} + ')'">(Max Muster)</span></span>
+                     </button>
+                     <button type="button" class="list-group-item" data-toggle="modal" data-target="#delete-subscriber-modal" data-email="hans.wurst@email.com"><span class="subscriber-item">hans.wurst@email.com (Hans Wurst)</span></button>
+                     <button type="button" class="list-group-item" data-toggle="modal" data-target="#delete-subscriber-modal" data-email="anon@ymous.org">      <span class="subscriber-item">anon@ymous.org                   </span></button>
+                  </div>
+               </div>
             </div>
          </div>
       </section>
