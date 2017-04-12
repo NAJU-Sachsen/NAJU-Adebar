@@ -42,6 +42,11 @@ public class NewsletterController {
     public String showNewsletters(Model model) {
         model.addAttribute("newsletters", newsletterRepo.findAll());
         model.addAttribute("subscribers", subscriberRepo.findFirst10ByOrderByEmail());
+        model.addAttribute("localGroups", dataProcessor.getLocalGroupBelonging());
+        model.addAttribute("events", dataProcessor.getEventBelonging());
+        model.addAttribute("projects", dataProcessor.getProjectBelonging());
+        model.addAttribute("noBelonging", dataProcessor.getNewslettersWithoutBelonging());
+
         return "newsletters";
     }
 
