@@ -3,11 +3,7 @@ package de.naju.adebar.model.newsletter;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 
 import org.springframework.util.Assert;
 
@@ -121,7 +117,8 @@ public class Newsletter {
 	}
 	
 	// "advanced" getter
-	
+
+	@Transient
 	public int getSubscribersCount() {
 		return subscribers.size();
 	}
@@ -162,6 +159,6 @@ public class Newsletter {
 	// overridden from Object
 
 	@Override public String toString() {
-		return String.format("Newsletter [id=%d, %name=%s, subscribers=%d]", id, name, subscribers.size());
+		return String.format("Newsletter [id=%d, name=%s, subscribers=%d]", id, name, subscribers.size());
 	}
 }
