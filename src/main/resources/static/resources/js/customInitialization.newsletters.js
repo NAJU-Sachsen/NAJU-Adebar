@@ -32,6 +32,12 @@ function initEditSubscriberModal(modal, data) {
 
 }
 
+function hideAllSelects() {
+    $('#belonging-chapter').addClass('hidden');
+    $('#belonging-project').addClass('hidden');
+    $('#belonging-event').addClass('hidden');
+}
+
 /*
  * if the newsletter tabs are switched, we would like to make the 'add'-button
  * react to this
@@ -51,6 +57,17 @@ if (lastSessionTab == 'subscribers') {
 } else if (lastSessionTab == 'newsletters') {
     $('#tabs a[href="#newsletters"]').tab('show');
 }
+
+$('#belonging-type-select input[type=radio]').change(function() {
+    hideAllSelects();
+    if (this.value == 'CHAPTER') {
+        $('#belonging-chapter').removeClass('hidden');
+    } else if (this.value == 'EVENT') {
+        $('#belonging-event').removeClass('hidden');
+    } else if (this.value == 'PROJECT') {
+        $('#belonging-project').removeClass('hidden');
+    }
+})
 
 /*
  * if a subscriber's edit form is displayed, fetch the corresponding data

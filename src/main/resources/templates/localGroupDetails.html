@@ -521,8 +521,8 @@
                             <span class="item-title">
                                 <span class="glyphicon glyphicon-envelope"></span> Newsletter:
                             </span>
-                            <a href="newsletterDetails.html" th:if="${localGroup.newsletter}" th:href="@{'/newsletters/' + ${localGroup.newsletter.id}}" th:text="${localGroup.newsletter.name}">NAJU Sachsen</a>
-                            <span th:unless="${localGroup.newsletter}">---</span>
+                            <a href="newsletterDetails.html" class="label label-primary" th:each="newsletter : ${localGroup.newsletters}" th:href="@{'/newsletters/' + ${newsletter.id}}" th:text="${newsletter.name}">NAJU Sachsen</a>
+                            <span th:unless="${localGroup.hasNewsletters()}">---</span>
                         </li>
                     </ul>
                 </div>

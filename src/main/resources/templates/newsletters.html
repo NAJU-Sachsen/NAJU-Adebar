@@ -15,8 +15,12 @@
 
     <script type="text/javascript" src="../static/resources/js/list.min.js" th:src="@{/resources/js/list.min.js}"></script>
     <script type="text/javascript" src="../static/resources/js/list.fuzzysearch.min.js" th:src="@{/resources/js/list.fuzzysearch.min.js}"></script>
+
+    <link rel="stylesheet" href="../static/resources/css/bootstrap-select.min.css" th:href="@{/resources/css/bootstrap-select.min.css}"/>
+    <script src="../static/resources/js/bootstrap-select.min.js" th:src="@{/resources/js/bootstrap-select.min.js}"></script>
 </head>
 <body>
+
 <!-- central navigation -->
 <nav id="top-nav" class="navbar navbar-static-top navbar-inverse">
     <div class="container-fluid">
@@ -68,6 +72,7 @@
 <!-- page specific dialogs -->
 <section id="dialogs">
     <h2 class="hidden">Formulare</h2>
+
     <!-- 'create newsletter' dialog -->
     <div class="modal fade" id="add-newsletter-form" tabindex="-1" role="dialog" aria-labelled-by="add-newsletter-label">
         <div class="modal-dialog" role="document">
@@ -79,10 +84,39 @@
                     <h3 class="modal-title" id="add-newsletter-label">Newsletter erstellen</h3>
                 </header>
                 <div class="modal-body">
-                    <form id="add-newsletter" th:action="@{/newsletters/add}" method="post">
-                        <div class="input-group">
-                            <label class="input-group-addon" for="name" id="name-label">Newsletter Name</label>
-                            <input id="name" name="name" type="text" required="required" autofocus="autofocus" placeholder="Name" class="form-control" aria-describedby="name-label"/>
+                    <form id="add-newsletter" class="form-horizontal" method="post" th:action="@{/newsletters/add}" th:object="${addNewsletterForm}">
+                        <div class="form-group row">
+                            <label class="control-label col-sm-3" for="name" id="name-label">Name</label>
+                            <div class="col-sm-9">
+                                <input id="name" name="name" type="text" required="required" autofocus="autofocus" placeholder="Name" class="form-control" aria-describedby="name-label" th:field="*{name}"/>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-sm-3" for="belonging-container">Zugehörigkeit
+                                <span data-toggle="tooltip" data-placement="top" data-title="Einige Funktionen sind zur Zeit noch nicht unterstützt"><span class="glyphicon glyphicon-info-sign"></span></span>
+                            </label>
+                            <div class="col-sm-9" id="belonging-container">
+                                <div class="radio" id="belonging-type-select">
+                                    <label class="radio-inline"><input type="radio" name="belonging" value="NONE" checked="checked" />keine</label>
+                                    <label class="radio-inline"><input type="radio" name="belonging" value="CHAPTER" />Ortsgruppe</label>
+                                    <label class="radio-inline disabled"><input type="radio" name="belonging" value="EVENT" disabled="disabled" />Veranstaltung</label>
+                                    <label class="radio-inline disabled"><input type="radio" name="belonging" value="PROJECT" disabled="disabled" />Projekt</label>
+                                </div>
+
+                                <div id="belonging-chapter" class="margin-top-lg hidden">
+                                    <select class="selectpicker" data-title="Ortsgruppe auswählen" th:remove="all-but-first" th:field="*{localGroup}">
+                                        <option th:each="localGroup : ${allChapters}" th:value="${localGroup.id}" th:text="${localGroup.name}">NAJU Sachsen</option>
+                                        <option>NAJU Dresden</option>
+                                        <option>NAJU Freiberg</option>
+                                    </select>
+                                </div>
+                                <div id="belonging-event" class="margin-top-lg hidden">
+                                    <select class="selectpicker" data-title="Veranstaltung auswählen"></select>
+                                </div>
+                                <div id="belonging-project" class="margin-top-lg hidden">
+                                    <select class="selectpicker" data-title="Projekt auswählen"></select>
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>

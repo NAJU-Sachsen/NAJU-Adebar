@@ -70,6 +70,10 @@ fieldset.inline-options label {
     margin-top: 15px;
 }
 
+.margin-top {
+    margin-top: 8px;
+}
+
 .hide-initially {
     display: none;
 }

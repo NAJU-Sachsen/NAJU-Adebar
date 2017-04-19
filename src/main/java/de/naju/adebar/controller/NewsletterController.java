@@ -1,15 +1,20 @@
 package de.naju.adebar.controller;
 
 import de.naju.adebar.app.newsletter.NewsletterDataProcessor;
+import de.naju.adebar.controller.forms.newsletter.AddNewsletterForm;
+import de.naju.adebar.model.chapter.LocalGroup;
 import de.naju.adebar.model.chapter.LocalGroupManager;
 import de.naju.adebar.model.newsletter.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.Optional;
 
 /**
  * Newsletter related controller mappings
@@ -47,18 +52,27 @@ public class NewsletterController {
         model.addAttribute("projects", dataProcessor.getProjectBelonging());
         model.addAttribute("noBelonging", dataProcessor.getNewslettersWithoutBelonging());
 
+        model.addAttribute("allChapters", localGroupManager.repository().findAll());
+        model.addAttribute("addNewsletterForm", new AddNewsletterForm());
+
         return "newsletters";
     }
 
     /**
      * Creates a new newsletter
-     * @param name the newsletter's name
+     * @param form the posted newsletter data
      * @param redirAttr attributes for the view to display some result information
      * @return the newsletter overview view
      */
     @RequestMapping("/newsletters/add")
-    public String addNewsletter(@RequestParam("name") String name, RedirectAttributes redirAttr) {
-        newsletterManager.createNewsletter(name);
+    public String addNewsletter(@ModelAttribute("addNewsletterForm") AddNewsletterForm form, RedirectAttributes redirAttr) {
+        Newsletter newsletter = newsletterManager.createNewsletter(form.getName());
+
+        if (form.belongsToChapter()) {
+            LocalGroup chapter = localGroupManager.findLocalGroup(form.getLocalGroup()).orElseThrow(IllegalArgumentException::new);
+            localGroupManager.addNewsletterToLocalGroup(chapter, newsletter);
+        }
+
         redirAttr.addFlashAttribute("newsletterAdded", true);
         return "redirect:/newsletters";
     }
@@ -77,8 +91,9 @@ public class NewsletterController {
         model.addAttribute("recipients", dataProcessor.getSubscriberEmails(newsletter));
         model.addAttribute("sender", dataProcessor.getNewsletterEmail());
 
-        if (localGroupManager.repository().findByNewsletter(newsletter).isPresent()) {
-            model.addAttribute("localGroup", localGroupManager.repository().findByNewsletter(newsletter).get());
+        Optional<LocalGroup> localGroup = localGroupManager.repository().findByNewslettersContains(newsletter);
+        if (localGroup.isPresent()) {
+            model.addAttribute("localGroup", localGroup.get());
         } else {
             model.addAttribute("noBelonging", true);
         }
@@ -97,7 +112,7 @@ public class NewsletterController {
     public String deleteNewsletter(@PathVariable("nid") Long newsletterId, RedirectAttributes redirAttr) {
         Newsletter newsletter = newsletterRepo.findOne(newsletterId);
 
-        localGroupManager.repository().findByNewsletter(newsletter).ifPresent(l -> localGroupManager.removeNewsletter(l));
+        localGroupManager.repository().findByNewslettersContains(newsletter).ifPresent(l -> localGroupManager.removeNewsletter(l, newsletter));
         newsletterManager.deleteNewsletter(newsletterId);
 
         redirAttr.addFlashAttribute("newsletterDeleted", true);
