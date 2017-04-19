@@ -28,7 +28,7 @@ public interface LocalGroupRepository extends CrudRepository<LocalGroup, Long> {
      * @param newsletter the newsletter to query for
      * @return an optional containing the local group with that newsletter, otherwise the optional is empty
      */
-    Optional<LocalGroup> findByNewsletter(Newsletter newsletter);
+    Optional<LocalGroup> findByNewslettersContains(Newsletter newsletter);
 
     /**
      * @param board the board to query for

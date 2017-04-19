@@ -9,6 +9,8 @@ import org.springframework.util.Assert;
 import javax.persistence.*;
 import java.util.*;
 
+// TODO a local group should be able to contain multiple newsletters
+
 /**
  * Abstraction of a local group. Each group has a (very likely) unique set of members, i. e. activist who contribute to
  * this certain group. Furthermore a chapter may have a board of directors if it is a more professional one.
@@ -23,7 +25,7 @@ public class LocalGroup {
     @OneToMany(cascade = CascadeType.ALL) private List<Event> events;
     @OneToMany(cascade = CascadeType.ALL) private Map<String, Project> projects;
     @OneToOne(cascade = CascadeType.ALL) private Board board;
-    @OneToOne(cascade = CascadeType.ALL) private Newsletter newsletter;
+    @OneToMany(cascade = CascadeType.ALL) private Set<Newsletter> newsletters;
 
     // constructors
 
@@ -41,6 +43,7 @@ public class LocalGroup {
         this.members = new LinkedList<>();
         this.events = new LinkedList<>();
         this.projects = new HashMap<>();
+        this.newsletters = new HashSet<>();
     }
 
     /**
@@ -124,12 +127,8 @@ public class LocalGroup {
         this.board = board;
     }
 
-    public Newsletter getNewsletter() {
-        return newsletter;
-    }
-
-    public void setNewsletter(Newsletter newsletter) {
-        this.newsletter = newsletter;
+    public Iterable<Newsletter> getNewsletters() {
+        return newsletters;
     }
 
     /**
@@ -160,6 +159,10 @@ public class LocalGroup {
         this.projects = projects;
     }
 
+    public void setNewsletters(Set<Newsletter> newsletters) {
+        this.newsletters = newsletters;
+    }
+
     // query methods
 
     /**
@@ -183,7 +186,10 @@ public class LocalGroup {
         return projects.size();
     }
 
-
+    /**
+     * @param name the project's name
+     * @return an optional if the local group organizes a project with that name. Otherwise the optional is empty
+     */
     @Transient public Optional<Project> getProject(String name) {
         for (String projectName : projects.keySet()) {
             if (projectName.equals(name)) {
@@ -198,6 +204,13 @@ public class LocalGroup {
      */
     public boolean hasBoard() {
         return board != null;
+    }
+
+    /**
+     * @return {@code true} if the local group has at least one newsletter, {@code false} otherwise
+     */
+    public boolean hasNewsletters() {
+        return !newsletters.isEmpty();
     }
 
     // modification operations
@@ -259,12 +272,33 @@ public class LocalGroup {
         projects.put(project.getName(), project);
     }
 
+    /**
+     * @param project the project to update
+     * @throws IllegalArgumentException if the project is {@code null}
+     * @throws IllegalStateException if the project is already hosted by another chapter (according to project.localGroup)
+     */
     public void updateProject(Project project) {
         Assert.notNull(project, "Project may not be null");
         if (!this.equals(project.getLocalGroup())) {
             throw new IllegalStateException("Project is already hosted by another local group");
         }
         projects.put(project.getName(), project);
+    }
+
+    /**
+     * @param newsletter the newsletter to add
+     * @throws IllegalArgumentException if the newsletter is {@code null}
+     */
+    public void addNewsletter(Newsletter newsletter) {
+        Assert.notNull(newsletter, "Newsletter to add may not be null!");
+        newsletters.add(newsletter);
+    }
+
+    /**
+     * @param newsletter the newsletter to remove from the chapter, if the local group actually has such a newsletter
+     */
+    public void removeNewsletter(Newsletter newsletter) {
+        newsletters.remove(newsletter);
     }
 
     // overridden from Object

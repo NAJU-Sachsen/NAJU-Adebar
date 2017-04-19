@@ -2,6 +2,7 @@ package de.naju.adebar.model.chapter;
 
 import de.naju.adebar.model.human.Activist;
 import de.naju.adebar.model.human.Address;
+import de.naju.adebar.model.newsletter.Newsletter;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -62,10 +63,18 @@ public interface LocalGroupManager {
     ReadOnlyLocalGroupRepository repository();
 
     /**
+     * Adds a newsletter to a local group.. Surprise surprise
+     * @param localGroup the local group to add the newsletter to
+     * @param newsletter the newsletter to add
+     */
+    void addNewsletterToLocalGroup(LocalGroup localGroup, Newsletter newsletter);
+
+    /**
      * Deletes the newsletter from a local group
      * @param localGroup the chapter to remove the newsletter from
+     * @param newsletter the newsletter to remove
      */
-    void removeNewsletter(LocalGroup localGroup);
+    void removeNewsletter(LocalGroup localGroup, Newsletter newsletter);
 
     /**
      * Creates a new project for a local group

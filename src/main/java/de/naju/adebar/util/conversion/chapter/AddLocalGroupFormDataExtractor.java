@@ -20,7 +20,7 @@ public class AddLocalGroupFormDataExtractor extends LocalGroupFormDataExtractor 
     public LocalGroup extractLocalGroup(AddLocalGroupForm addLocalGroupForm) {
         LocalGroup localGroup = super.extractLocalGroup(addLocalGroupForm);
         if (addLocalGroupForm.isCreateNewsletter()) {
-            localGroup.setNewsletter(extractNewsletter(addLocalGroupForm));
+            localGroup.addNewsletter(extractNewsletter(addLocalGroupForm));
         }
         return localGroup;
     }

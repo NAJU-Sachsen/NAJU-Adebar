@@ -3,6 +3,7 @@ package de.naju.adebar.model.chapter;
 import de.naju.adebar.model.events.EventManager;
 import de.naju.adebar.model.human.Activist;
 import de.naju.adebar.model.human.Address;
+import de.naju.adebar.model.newsletter.Newsletter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -67,8 +68,14 @@ public class PersistentLocalGroupManager implements LocalGroupManager {
     }
 
     @Override
-    public void removeNewsletter(LocalGroup localGroup) {
-        localGroup.setNewsletter(null);
+    public void addNewsletterToLocalGroup(LocalGroup localGroup, Newsletter newsletter) {
+        localGroup.addNewsletter(newsletter);
+        updateLocalGroup(localGroup.getId(), localGroup);
+    }
+
+    @Override
+    public void removeNewsletter(LocalGroup localGroup, Newsletter newsletter) {
+        localGroup.removeNewsletter(newsletter);
         updateLocalGroup(localGroup.getId(), localGroup);
     }
 

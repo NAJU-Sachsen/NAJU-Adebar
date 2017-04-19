@@ -88,7 +88,7 @@ public class NewsletterDataProcessor {
 
 	    for (Newsletter newsletter : newsletterRepo.findAll()) {
 	        if (belongsToLocalGroup(newsletter)) {
-	            belonging.put(newsletter, localGroupManager.repository().findByNewsletter(newsletter).orElse(null));
+	            belonging.put(newsletter, localGroupManager.repository().findByNewslettersContains(newsletter).orElse(null));
             }
         }
 
@@ -127,7 +127,7 @@ public class NewsletterDataProcessor {
      * @return {@code true} if the newsletter belongs to a local group, or {@code false} otherwise
      */
     private boolean belongsToLocalGroup(Newsletter newsletter) {
-	    return localGroupManager.repository().findByNewsletter(newsletter).isPresent();
+	    return localGroupManager.repository().findByNewslettersContains(newsletter).isPresent();
     }
 
     /**
