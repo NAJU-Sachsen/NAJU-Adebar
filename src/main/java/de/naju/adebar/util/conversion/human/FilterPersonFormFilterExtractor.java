@@ -242,10 +242,11 @@ public class FilterPersonFormFilterExtractor {
             Stream<Person> convertedReferents = streamConverter.convertReferentStream(referentList.stream());
             return new ReferentFilter(convertedReferents, FilterType.valueOf(personForm.getReferentsFilterType()));
         } else {
-            Stream<Person> referents = streamConverter.convertReferentStream(humanManager.referentManager().repository().streamAll());
+            List<Referent> referentList = humanManager.referentManager().repository().streamAll().collect(Collectors.toList());
+            Stream<Person> convertedReferents = streamConverter.convertReferentStream(referentList.stream());
             List<Qualification> qualifications = Lists.newLinkedList(qualificationRepo.findAll(personForm.getReferentQualifications()));
             Map<Person, Iterable<Qualification>> referentQualifications = humanManager.referentManager().getQualifications();
-            return new ReferentFilter(referents, qualifications, referentQualifications);
+            return new ReferentFilter(convertedReferents, qualifications, referentQualifications);
         }
     }
 
