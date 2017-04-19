@@ -334,117 +334,136 @@
 
             </section>
 
-            <section class="panel panel-default">
-                <input type="hidden" id="person-is-nabu-member" value="true" th:value="${isNabuMember}" />
-                <header class="panel-heading clearfix">
-                    <h2 class="panel-title pull-left" style="margin-top: 7.5px; margin-right: 2em;">Allgemeines</h2>
-                    <div class="input-group pull-right" style="margin-left: 1em;">
-                      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#edit-person-modal"><span class="glyphicon glyphicon-pencil"></span> Anpassen</button>
-                   </div>
-                </header>
-                <table class="table">
-                    <tbody>
-                        <tr class="row">
-                            <th class="col-sm-2"><span class="glyphicon glyphicon-user"></span> Name:</th>
-                            <td class="col-sm-10" th:text="${person.name}">Max Mustermann</td>
-                        </tr>
-                        <tr class="row">
-                            <th class="col-sm-2"><span class="glyphicon glyphicon-calendar"></span> Geburtsdatum:</th>
-                            <td class="col-sm-10" th:text="${{person.dateOfBirth}}">30.02.1999</td>
-                        </tr>
-                        <tr class="row">
-                            <th class="col-sm-2"><span class="glyphicon glyphicon-envelope"></span> E-Mail Adresse:</th>
-                            <td class="col-sm-10">
-                                <a href="mailto:max_muster@aol.com" th:href="'mailto:' + ${person.email}" th:text="${person.email}">max_muster@aol.com</a>
-                            </td>
-                        </tr>
-                        <tr class="row">
-                            <th class="col-sm-2"><span class="glyphicon glyphicon-home"></span> Adresse:</th>
-                            <td class="col-sm-10" th:text="|${person.address.street} ${person.address.zip} ${person.address.city}|">Zu Hause 15, 01234 Entenhausen</td>
-                        </tr>
-                        <tr class="row">
-                            <th class="col-sm-2"><span class="glyphicon glyphicon-cutlery"></span> Vegetarier o.ä.:</th>
-                            <td class="col-sm-10" th:text="${person.eatingHabit}">Veganer, Laktose-intolerant</td>
-                        </tr>
-                        <tr class="row">
-                            <th class="col-sm-2"><span class="glyphicon glyphicon-bed"></span> Allergien o.ä.:</th>
-                            <td class="col-sm-10" th:text="${person.healthImpairments}">Heuschnupfen</td>
-                        </tr>
-                        <tr class="row">
-                            <th class="col-sm-2"><span class="glyphicon glyphicon-tree-deciduous"></span> NABU-Mitglied</th>
-                            <td class="col-sm-10" th:if="${isNabuMember}" th:text="|Mitgliedsnummer: ${person.nabuMembership.membershipNumber ?: 'unbekannt'}|">Mitgliedsnummer: 9874563</td>
-                            <td class="col-sm-9" th:unless="${isNabuMember}">kein Mitglied</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </section>
+            <!-- person and activist overview -->
+            <div class="row">
 
-            <section class="panel panel-default">
-                <input type="hidden" id="person-is-activist" value="false" th:value="${isActivist}" />
-                <input type="hidden" id="activist-has-juleica" value="false" th:value="${hasJuleica}" />
-                <header class="panel-heading clearfix">
-                    <h2 class="panel-title pull-left" style="margin-top: 7.5px; margin-right: 2em;">Aktiven-Details</h2>
-                    <div class="input-group pull-right" style="margin-left: 1em;">
-                      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#edit-activist-modal"><span class="glyphicon glyphicon-pencil"></span> Anpassen</button>
-                   </div>
-                </header>
-                <table class="table" th:if="${isActivist}">
-                    <tbody>
-                        <tr class="row">
-                            <th class="col-sm-2"><span class="glyphicon glyphicon-map-marker"></span> Ortsgruppe:</th>
-                            <td class="col-sm-10" th:if="${localGroups}">
-                                <a class="label label-primary" th:each="localGroup : ${localGroups}" href="localGroupDetails.html" th:href="@{/localGroups/{id}(id=${localGroup.id})}" th:text="|${localGroup.name}|">NAJU Freiberg</a>
-                            </td>
-                            <td class="col-sm-10" th:unless="${localGroups}">keine</td>
-                        </tr>
-                        <tr class="row">
-                            <th class="col-sm-2"><span class="glyphicon glyphicon-credit-card"></span> Juleica:</th>
-                            <td class="col-sm-10" th:if="${hasJuleica}" th:text="|Ablaufdatum: ${{activist.juleicaExpiryDate}}|">lief am <strong>07.03.2015</strong> aus</td>
-                            <td class="col-sm-10" th:unless="${hasJuleica}">keine</td>
-                        </tr>
-                        <tr class="row">
-                            <th class="col-sm-2"><span class="glyphicon glyphicon-briefcase"></span> Vorstand:</th>
-                            <td class="col-sm-10" th:if="${boards}">
-                                <a class="label label-primary" th:each="localGroup : ${boards}" href="localGroupDetails.html" th:href="@{/localGroups/{id}(id=${localGroup.id})}" th:text="|${localGroup.name}|">NAJU Freiberg</a>
-                            </td>
-                            <td class="col-sm-10" th:unless="${boards}">in keinem Vorstand aktiv</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <section class="panel-body" th:unless="${isActivist}">
-                    <p>
-                        Die Person ist kein Aktiver
-                    </p>
-                </section>
-            </section>
-
-            <section class="panel panel-default" id="qualifications">
-                <header class="panel-heading clearfix">
-                    <h2 class="panel-title pull-left" style="margin-top: 7.5px; margin-right: 2em;">Referenten-Details - <small>Qualifikationen</small></h2>
-                    <div class="input-group pull-right" style="margin-left: 1em;">
-                      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-qualification-modal"><span class="glyphicon glyphicon-plus"></span> Hinzufügen</button>
-                   </div>
-                   <form class="form-inline pull-right">
-                      <div class="form-group">
-                         <label class="sr-only" for="qualifications">Name oder Beschreibung</label>
-                         <div class="input-group">
-                            <input type="text" class="form-control fuzzy-search" id="qualifications" name="qualifications" placeholder="Name oder Beschreibung"/>
-                            <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
-                         </div>
-                      </div>
-                   </form>
-                </header>
-                <div class="list-group qualification-list" th:if="${isReferent}" th:remove="all-but-first">
-                    <button type="button" class="list-group-item" data-toggle="modal" data-target="#delete-qualification-modal" data-qualification="Erste-Hilfe-Kurs" th:each="qualification : ${qualifications}" th:attr="data-qualification=${qualification.name}"><span class="qualification-title" th:text="${qualification.name}">Erste-Hilfe-Kurs</span> <small class="qualification-description" th:text="${qualification.description}">der Referent darf grundlegende Ersthilfe-Kurse leiten</small></button>
-                    <button type="button" class="list-group-item" data-toggle="modal" data-target="#delete-qualification-modal" data-qualification="Storchenkoffer"><span class="qualification-title">Storchenkoffer</span> <small class="qualification-description">der Referent wurde für das "Ein Storch auf Reisen" Projekt weitergebildet</small></button>
-                    <button type="button" class="list-group-item" data-toggle="modal" data-target="#delete-qualification-modal" data-qualification="Öffentlichkeitsarbeit"><span class="qualification-title">Öffentlichkeitsarbeit</span> <small class="qualification-description">der Referent kann Workshops zum Thema Öffentlichkeitsarbeit leiten</small></button>
+                <!-- person overview -->
+                <div class="col-sm-7">
+                    <section class="panel panel-primary">
+                        <input type="hidden" id="person-is-nabu-member" value="true" th:value="${isNabuMember}" />
+                        <header class="panel-heading clearfix">
+                            <h2 class="panel-title pull-left" style="margin-top: 7.5px; margin-right: 2em;">Allgemeines</h2>
+                            <div class="input-group pull-right" style="margin-left: 1em;">
+                              <button type="button" class="btn btn-default" data-toggle="modal" data-target="#edit-person-modal"><span class="glyphicon glyphicon-pencil"></span> Anpassen</button>
+                           </div>
+                        </header>
+                        <table class="table">
+                            <tbody>
+                                <tr class="row">
+                                    <th class="col-sm-4"><span class="glyphicon glyphicon-user"></span> Name:</th>
+                                    <td class="col-sm-8" th:text="${person.name}">Max Mustermann</td>
+                                </tr>
+                                <tr class="row">
+                                    <th class="col-sm-4"><span class="glyphicon glyphicon-calendar"></span> Geburtsdatum:</th>
+                                    <td class="col-sm-8" th:text="${{person.dateOfBirth}}">30.02.1999</td>
+                                </tr>
+                                <tr class="row">
+                                    <th class="col-sm-4"><span class="glyphicon glyphicon-envelope"></span> E-Mail Adresse:</th>
+                                    <td class="col-sm-8">
+                                        <a href="mailto:max_muster@aol.com" th:href="'mailto:' + ${person.email}" th:text="${person.email}">max_muster@aol.com</a>
+                                    </td>
+                                </tr>
+                                <tr class="row">
+                                    <th class="col-sm-4"><span class="glyphicon glyphicon-home"></span> Adresse:</th>
+                                    <td class="col-sm-8" th:text="|${person.address.street} ${person.address.zip} ${person.address.city}|">Zu Hause 15, 01234 Entenhausen</td>
+                                </tr>
+                                <tr class="row">
+                                    <th class="col-sm-4"><span class="glyphicon glyphicon-cutlery"></span> Vegetarier o.ä.:</th>
+                                    <td class="col-sm-8" th:text="${person.eatingHabit}">Veganer, Laktose-intolerant</td>
+                                </tr>
+                                <tr class="row">
+                                    <th class="col-sm-4"><span class="glyphicon glyphicon-bed"></span> Allergien o.ä.:</th>
+                                    <td class="col-sm-8" th:text="${person.healthImpairments}">Heuschnupfen</td>
+                                </tr>
+                                <tr class="row">
+                                    <th class="col-sm-4"><span class="glyphicon glyphicon-tree-deciduous"></span> NABU-Mitglied</th>
+                                    <td class="col-sm-8" th:if="${isNabuMember}" th:text="|Mitgliedsnummer: ${person.nabuMembership.membershipNumber ?: 'unbekannt'}|">Mitgliedsnummer: 9874563</td>
+                                    <td class="col-sm-8" th:unless="${isNabuMember}">kein Mitglied</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
                 </div>
-                <section class="panel-body" th:unless="${isReferent}">
-                    <p>
-                        Die Person ist kein Referent
-                    </p>
-                </section>
-            </section>
+
+                <!-- activist overview -->
+                <div class="col-sm-5">
+                    <section class="panel panel-default">
+                        <input type="hidden" id="person-is-activist" value="false" th:value="${isActivist}" />
+                        <input type="hidden" id="activist-has-juleica" value="false" th:value="${hasJuleica}" />
+                        <header class="panel-heading clearfix">
+                            <h2 class="panel-title pull-left" style="margin-top: 7.5px; margin-right: 2em;">Aktiven-Details</h2>
+                            <div class="input-group pull-right" style="margin-left: 1em;">
+                              <button type="button" class="btn btn-default" data-toggle="modal" data-target="#edit-activist-modal"><span class="glyphicon glyphicon-pencil"></span> Anpassen</button>
+                           </div>
+                        </header>
+                        <table class="table" th:if="${isActivist}">
+                            <tbody>
+                                <tr class="row">
+                                    <th class="col-sm-4"><span class="glyphicon glyphicon-map-marker"></span> Ortsgruppe:</th>
+                                    <td class="col-sm-8" th:if="${localGroups}">
+                                        <a class="label label-primary" th:each="localGroup : ${localGroups}" href="localGroupDetails.html" th:href="@{/localGroups/{id}(id=${localGroup.id})}" th:text="|${localGroup.name}|">NAJU Freiberg</a>
+                                    </td>
+                                    <td class="col-sm-8" th:unless="${localGroups}">keine</td>
+                                </tr>
+                                <tr class="row">
+                                    <th class="col-sm-4"><span class="glyphicon glyphicon-credit-card"></span> Juleica:</th>
+                                    <td class="col-sm-8" th:if="${hasJuleica}" th:text="|Ablaufdatum: ${{activist.juleicaExpiryDate}}|">lief am <strong>07.03.2015</strong> aus</td>
+                                    <td class="col-sm-8" th:unless="${hasJuleica}">keine</td>
+                                </tr>
+                                <tr class="row">
+                                    <th class="col-sm-4"><span class="glyphicon glyphicon-briefcase"></span> Vorstand:</th>
+                                    <td class="col-sm-8" th:if="${boards}">
+                                        <a class="label label-primary" th:each="localGroup : ${boards}" href="localGroupDetails.html" th:href="@{/localGroups/{id}(id=${localGroup.id})}" th:text="|${localGroup.name}|">NAJU Freiberg</a>
+                                    </td>
+                                    <td class="col-sm-8" th:unless="${boards}">in keinem Vorstand aktiv</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <section class="panel-body" th:unless="${isActivist}">
+                            <p>
+                                Die Person ist kein Aktiver
+                            </p>
+                        </section>
+                    </section>
+                </div>
+
+            </div>
+
+            <!-- referent overview -->
+            <div class="row">
+
+                <!-- referent overview -->
+                <div class="col-sm-12">
+                    <section class="panel panel-default" id="qualifications">
+                        <header class="panel-heading clearfix">
+                            <h2 class="panel-title pull-left" style="margin-top: 7.5px; margin-right: 2em;">Referenten-Details - <small>Qualifikationen</small></h2>
+                            <div class="input-group pull-right" style="margin-left: 1em;">
+                              <button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-qualification-modal"><span class="glyphicon glyphicon-plus"></span> Hinzufügen</button>
+                           </div>
+                           <form class="form-inline pull-right">
+                              <div class="form-group">
+                                 <label class="sr-only" for="qualifications">Name oder Beschreibung</label>
+                                 <div class="input-group">
+                                    <input type="text" class="form-control fuzzy-search" id="qualifications" name="qualifications" placeholder="Name oder Beschreibung"/>
+                                    <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
+                                 </div>
+                              </div>
+                           </form>
+                        </header>
+                        <div class="list-group qualification-list" th:if="${isReferent}" th:remove="all-but-first">
+                            <button type="button" class="list-group-item" data-toggle="modal" data-target="#delete-qualification-modal" data-qualification="Erste-Hilfe-Kurs" th:each="qualification : ${qualifications}" th:attr="data-qualification=${qualification.name}"><span class="qualification-title" th:text="${qualification.name}">Erste-Hilfe-Kurs</span> <small class="qualification-description" th:text="${qualification.description}">der Referent darf grundlegende Ersthilfe-Kurse leiten</small></button>
+                            <button type="button" class="list-group-item" data-toggle="modal" data-target="#delete-qualification-modal" data-qualification="Storchenkoffer"><span class="qualification-title">Storchenkoffer</span> <small class="qualification-description">der Referent wurde für das "Ein Storch auf Reisen" Projekt weitergebildet</small></button>
+                            <button type="button" class="list-group-item" data-toggle="modal" data-target="#delete-qualification-modal" data-qualification="Öffentlichkeitsarbeit"><span class="qualification-title">Öffentlichkeitsarbeit</span> <small class="qualification-description">der Referent kann Workshops zum Thema Öffentlichkeitsarbeit leiten</small></button>
+                        </div>
+                        <section class="panel-body" th:unless="${isReferent}">
+                            <p>
+                                Die Person ist kein Referent
+                            </p>
+                        </section>
+                    </section>
+                </div>
+
+            </div>
 
     </section>
 
