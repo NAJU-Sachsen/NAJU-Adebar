@@ -138,10 +138,14 @@
                           </div>
                       </div>
                       <div class="form-group">
-                          <label for="fee" class="col-sm-3 control-label">Preis</label>
-                          <div class="col-sm-9">
+                          <label for="add-event-fees" class="col-sm-3 control-label">Preis</label>
+                          <div class="col-sm-9" id="add-event-fees">
+                              <div class="input-group margin-btm">
+                                  <input type="number" step="0.1" class="form-control" name="internalFee" id="internalFee" placeholder="NAJU-Mitglieder" th:field="*{internalParticipationFee}" />
+                                  <span class="input-group-addon"><span class="glyphicon glyphicon-eur"></span></span>
+                              </div>
                               <div class="input-group">
-                                  <input type="number" step="0.1" class="form-control" name="fee" id="fee" placeholder="Kosten" th:field="*{participationFee}" />
+                                  <input type="number" step="0.1" class="form-control" name="externalFee" id="externalFee" placeholder="nicht-Mitglieder" th:field="*{externalParticipationFee}" />
                                   <span class="input-group-addon"><span class="glyphicon glyphicon-eur"></span></span>
                               </div>
                           </div>
@@ -283,7 +287,7 @@
                           </div>
                       </div>
                       <div class="form-group">
-                          <label for="filter-fee" class="col-sm-3 control-label">Preis</label>
+                          <label for="filter-start" class="col-sm-3 control-label">Preis</label>
                           <div class="col-sm-9" id="filter-start">
                               <div class="col-sm-3 no-padding-left">
                                   <select id="filter-fee-type" class="selectpicker" name="feeFilterType" data-width="auto" style="float:left;" th:field="*{feeFilterType}">
@@ -293,11 +297,15 @@
                                       <option value="MINIMUM">Min.</option>
                                   </select>
                               </div>
-                              <div id="filter-fee-container" class="input-group hidden">
-                                  <input type="number" step="0.1" class="form-control" name="filter-fee" placeholder="Betrag" th:field="*{fee}" />
-                                  <span class="input-group-addon">
-                                      <span class="glyphicon glyphicon-eur"></span>
-                                  </span>
+                              <div id="filter-fee-container" class="col-sm-9 hidden">
+                                  <div class="input-group margin-btm">
+                                      <input type="number" step="0.1" class="form-control" name="internalFee" id="internalFee" placeholder="NAJU-Mitglieder" th:field="*{internalFee}" />
+                                      <span class="input-group-addon"><span class="glyphicon glyphicon-eur"></span></span>
+                                  </div>
+                                  <div class="input-group">
+                                      <input type="number" step="0.1" class="form-control" name="externalFee" id="externalFee" placeholder="nicht-Mitglieder" th:field="*{externalFee}" />
+                                      <span class="input-group-addon"><span class="glyphicon glyphicon-eur"></span></span>
+                                  </div>
                               </div>
                           </div>
                       </div>

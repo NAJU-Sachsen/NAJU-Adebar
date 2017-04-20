@@ -35,9 +35,10 @@ public class EventToEventFormConverter {
         }
 
         String participantsLimit = event.getParticipantsLimit() == Integer.MAX_VALUE ? null : Integer.toString(event.getParticipantsLimit());
-        String fee = event.getParticipationFee() == null ? null : event.getParticipationFee().getNumberStripped().toPlainString();
+        String internalFee = event.getInternalParticipationFee() == null ? null : event.getInternalParticipationFee().getNumberStripped().toPlainString();
+        String externalFee = event.getExternalParticipationFee() == null ? null : event.getExternalParticipationFee().getNumberStripped().toPlainString();
 
-        return new EventForm(event.getName(), dateTimeFormatter.format(event.getStartTime()), dateTimeFormatter.format(event.getEndTime()), participantsLimit, Integer.toString(event.getMinimumParticipantAge()), fee, street, zip, city);
+        return new EventForm(event.getName(), dateTimeFormatter.format(event.getStartTime()), dateTimeFormatter.format(event.getEndTime()), participantsLimit, Integer.toString(event.getMinimumParticipantAge()), internalFee, externalFee, street, zip, city);
     }
 
 }

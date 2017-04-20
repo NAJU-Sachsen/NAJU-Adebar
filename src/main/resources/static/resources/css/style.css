@@ -61,17 +61,24 @@ fieldset.inline-options label {
     margin-top: 3px;
 }
 
-.margin-btm-sm {
-    margin-bottom: 3px;
+.margin-top {
+    margin-top: 8px;
 }
-
 
 .margin-top-lg {
     margin-top: 15px;
 }
 
-.margin-top {
-    margin-top: 8px;
+.margin-btm-sm {
+    margin-bottom: 3px;
+}
+
+.margin-btm {
+    margin-bottom: 8px;
+}
+
+.margin-btm-lg {
+    margin-bottom: 15px;
 }
 
 .hide-initially {
@@ -140,6 +147,15 @@ fieldset.inline-options label {
 
 .list-group-item-interactive {
     cursor: pointer;
+}
+
+.collapse-label:after {
+    font-family: "Glyphicons Halflings";
+    content: " \e114";
+}
+
+.collapse-label.collapsed:after {
+    content: " \e080";
 }
 
 #main-footer {

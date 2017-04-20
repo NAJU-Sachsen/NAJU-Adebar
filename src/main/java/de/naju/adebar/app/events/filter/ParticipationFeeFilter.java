@@ -11,21 +11,32 @@ import java.util.stream.Stream;
  * @author Rico Bergmann
  */
 public class ParticipationFeeFilter implements EventFilter {
-    private Money participationFee;
+    private Money internalParticipationFee;
+    private Money externalParticipationFee;
     private ComparableFilterType filterType;
 
     /**
-     * @param participationFee the participation fee to base the filter on
+     * @param internalParticipationFee the participation fee to base the filter on
      * @param filterType how to treat the fee
      */
-    public ParticipationFeeFilter(Money participationFee, ComparableFilterType filterType) {
-        this.participationFee = participationFee;
+    public ParticipationFeeFilter(Money internalParticipationFee, Money externalParticipationFee, ComparableFilterType filterType) {
+        this.internalParticipationFee = internalParticipationFee;
+        this.externalParticipationFee = externalParticipationFee;
         this.filterType = filterType;
     }
 
     @Override
     public Stream<Event> filter(Stream<Event> input) {
-        input = input.filter(event -> event.getParticipationFee() != null);
-        return input.filter(event -> filterType.matching(participationFee, event.getParticipationFee()));
+        if (internalParticipationFee != null) {
+            input = input.filter(event -> event.getInternalParticipationFee() != null);
+            input = input.filter(event -> filterType.matching(internalParticipationFee, event.getInternalParticipationFee()));
+        }
+
+        if (externalParticipationFee != null) {
+            input = input.filter(event -> event.getExternalParticipationFee() != null);
+            input = input.filter(event -> filterType.matching(externalParticipationFee, event.getExternalParticipationFee()));
+        }
+
+        return input;
     }
 }

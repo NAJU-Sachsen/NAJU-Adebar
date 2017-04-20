@@ -22,7 +22,8 @@ public class Event {
     private LocalDateTime startTime, endTime;
     private int participantsLimit;
     private int minimumParticipantAge;
-    @Column(length = 2048) private Money participationFee;
+    @Column(length = 2048) private Money internalParticipationFee;
+    @Column(length = 2048) private Money externalParticipationFee;
     @Embedded private Address place;
     @ManyToMany(cascade = CascadeType.ALL) private List<Person> participants;
     @ManyToMany(cascade = CascadeType.ALL) private List<Activist> counselors;
@@ -37,7 +38,7 @@ public class Event {
      * @param endTime the event's end time
      */
     public Event(String name, LocalDateTime startTime, LocalDateTime endTime) {
-        this(name, startTime, endTime, Integer.MAX_VALUE, 0, null, new Address("", "", ""));
+        this(name, startTime, endTime, Integer.MAX_VALUE, 0, null, null, new Address("", "", ""));
     }
 
     /**
@@ -47,23 +48,32 @@ public class Event {
      * @param endTime the event's end time, may not be {@code null}
      * @param participantsLimit the number of persons that may at most participate
      * @param minimumParticipantAge the age which new participants must be at least
-     * @param participationFee the fee to pay in order to participate
+     * @param internalParticipationFee the fee to pay in order to participate
      * @param place the address where the event takes place
      * @throws IllegalArgumentException if any of the fields' contracts is violated. Refer to the setter methods for further information about those contracts.
      */
-    public Event(String name, LocalDateTime startTime, LocalDateTime endTime, int participantsLimit, int minimumParticipantAge, Money participationFee, Address place) {
+    public Event(String name, LocalDateTime startTime, LocalDateTime endTime, int participantsLimit, int minimumParticipantAge, Money internalParticipationFee, Money externalParticipationFee, Address place) {
         Assert.hasText(name, "Name must contain text but was: " + name);
         Assert.notNull(startTime, "Start time must not be null!");
         Assert.notNull(endTime, "End time must not be null!");
         Assert.isTrue(!startTime.isAfter(endTime), "Start time must be before end time");
         Assert.isTrue(participantsLimit > 0, "Participants limit must be positive, but was: " + participantsLimit);
         Assert.isTrue(minimumParticipantAge >= 0, "Minimum participant age must not be negative but was: " + minimumParticipantAge);
+
+        if (internalParticipationFee != null) {
+            Assert.isTrue(internalParticipationFee.isPositiveOrZero(), "Internal participation fee may not be negative, but was: " + internalParticipationFee);
+        }
+        if (externalParticipationFee != null) {
+            Assert.isTrue(externalParticipationFee.isPositiveOrZero(), "External participation fee may not be negative, but was: " + externalParticipationFee);
+        }
+
         this.name = name;
         this.startTime = startTime;
         this.endTime = endTime;
         this.participantsLimit = participantsLimit;
         this.minimumParticipantAge = minimumParticipantAge;
-        this.participationFee = participationFee;
+        this.internalParticipationFee = internalParticipationFee;
+        this.externalParticipationFee = externalParticipationFee;
         this.place = place;
         this.participants = new LinkedList<>();
         this.counselors = new LinkedList<>();
@@ -179,21 +189,41 @@ public class Event {
     }
 
     /**
+     * The internal participation fee is used for NABU members.
      * @return the fee to pay in order to participate. May be {@code null}.
      */
-    public Money getParticipationFee() {
-        return participationFee;
+    public Money getInternalParticipationFee() {
+        return internalParticipationFee;
     }
 
     /**
-     * @param participationFee the fee to pay in order to participate
+     * @param internalParticipationFee the fee to pay in order to participate
      * @throws IllegalArgumentException if the participation fee is negative
      */
-    public void setParticipationFee(Money participationFee) {
-        if (participationFee != null) {
-            Assert.isTrue(participationFee.isPositiveOrZero(), "Participation fee may not be negative, but was: " + participationFee);
+    public void setInternalParticipationFee(Money internalParticipationFee) {
+        if (internalParticipationFee != null) {
+            Assert.isTrue(internalParticipationFee.isPositiveOrZero(), "Participation fee may not be negative, but was: " + internalParticipationFee);
         }
-        this.participationFee = participationFee;
+        this.internalParticipationFee = internalParticipationFee;
+    }
+
+    /**
+     * The external participation fee is used for all participants who are not members of the NABU.
+     * @return the fee to pay in order to participate. May be {@code null}.
+     */
+    public Money getExternalParticipationFee() {
+        return externalParticipationFee;
+    }
+
+    /**
+     * @param externalParticipationFee the fee to pay in order to participate
+     * @throws IllegalArgumentException if the participation fee is negative
+     */
+    public void setExternalParticipationFee(Money externalParticipationFee) {
+        if (externalParticipationFee != null) {
+            Assert.isTrue(externalParticipationFee.isPositiveOrZero(), "Participation fee may not be negative, but was: " + externalParticipationFee);
+        }
+        this.externalParticipationFee = externalParticipationFee;
     }
 
     /**
@@ -569,7 +599,7 @@ public class Event {
         if (!name.equals(event.name)) return false;
         if (!startTime.equals(event.startTime)) return false;
         if (!endTime.equals(event.endTime)) return false;
-        if (participationFee != null ? !participationFee.equals(event.participationFee) : event.participationFee != null)
+        if (internalParticipationFee != null ? !internalParticipationFee.equals(event.internalParticipationFee) : event.internalParticipationFee != null)
             return false;
         if (place != null ? !place.equals(event.place) : event.place != null) return false;
         if (!participants.equals(event.participants)) return false;
@@ -586,7 +616,7 @@ public class Event {
         result = 31 * result + endTime.hashCode();
         result = 31 * result + participantsLimit;
         result = 31 * result + minimumParticipantAge;
-        result = 31 * result + (participationFee != null ? participationFee.hashCode() : 0);
+        result = 31 * result + (internalParticipationFee != null ? internalParticipationFee.hashCode() : 0);
         result = 31 * result + (place != null ? place.hashCode() : 0);
         result = 31 * result + participants.hashCode();
         result = 31 * result + counselors.hashCode();

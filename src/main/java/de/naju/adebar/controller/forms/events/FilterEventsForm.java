@@ -18,7 +18,7 @@ public class FilterEventsForm {
     private int participantsLimit;
     private boolean participantsAgeFilter;
     private int participantsAge;
-    private String feeFilterType, fee;
+    private String feeFilterType, internalFee, externalFee;
     private String street, zip, city;
 
     public FilterEventsForm() {}
@@ -103,12 +103,20 @@ public class FilterEventsForm {
         this.feeFilterType = feeFilterType;
     }
 
-    public String getFee() {
-        return fee;
+    public String getInternalFee() {
+        return internalFee;
     }
 
-    public void setFee(String fee) {
-        this.fee = fee;
+    public void setInternalFee(String internalFee) {
+        this.internalFee = internalFee;
+    }
+
+    public String getExternalFee() {
+        return externalFee;
+    }
+
+    public void setExternalFee(String externalFee) {
+        this.externalFee = externalFee;
     }
 
     public String getStreet() {
@@ -135,6 +143,14 @@ public class FilterEventsForm {
         this.city = city;
     }
 
+    public boolean hasInternalFee() {
+        return internalFee != null && !internalFee.isEmpty();
+    }
+
+    public boolean hasExternalFee() {
+        return externalFee != null && !externalFee.isEmpty();
+    }
+
     @Override
     public String toString() {
         return "FilterEventsForm{" +
@@ -144,11 +160,12 @@ public class FilterEventsForm {
                 ", endFilterType='" + endFilterType + '\'' +
                 ", end='" + end + '\'' +
                 ", participantsLimitFilterType='" + participantsLimitFilterType + '\'' +
-                ", participantsLimit='" + participantsLimit + '\'' +
-                ", participantsAgeFilter='" + participantsAgeFilter + '\'' +
-                ", participantsAge='" + participantsAge + '\'' +
+                ", participantsLimit=" + participantsLimit +
+                ", participantsAgeFilter=" + participantsAgeFilter +
+                ", participantsAge=" + participantsAge +
                 ", feeFilterType='" + feeFilterType + '\'' +
-                ", fee='" + fee + '\'' +
+                ", internalFee='" + internalFee + '\'' +
+                ", externalFee='" + externalFee + '\'' +
                 ", street='" + street + '\'' +
                 ", zip='" + zip + '\'' +
                 ", city='" + city + '\'' +

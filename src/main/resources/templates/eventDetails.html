@@ -138,10 +138,14 @@
                           </div>
                       </div>
                       <div class="form-group">
-                          <label for="fee" class="col-sm-3 control-label">Preis</label>
-                          <div class="col-sm-9">
+                          <label for="add-event-fees" class="col-sm-3 control-label">Preis</label>
+                          <div class="col-sm-9" id="add-event-fees">
+                              <div class="input-group margin-btm">
+                                  <input type="number" step="0.1" class="form-control" name="internalFee" id="internalFee" placeholder="NAJU-Mitglieder" th:field="*{internalParticipationFee}" />
+                                  <span class="input-group-addon"><span class="glyphicon glyphicon-eur"></span></span>
+                              </div>
                               <div class="input-group">
-                                  <input type="number" step="0.1" class="form-control" name="fee" id="fee" placeholder="Kosten" th:field="*{participationFee}" />
+                                  <input type="number" step="0.1" class="form-control" name="externalFee" id="externalFee" placeholder="nicht-Mitglieder" th:field="*{externalParticipationFee}" />
                                   <span class="input-group-addon"><span class="glyphicon glyphicon-eur"></span></span>
                               </div>
                           </div>
@@ -386,7 +390,7 @@
                           <div class="col-sm-9">
                               <div class="checkbox">
                                   <label>
-                                      <input id="edit-participant-fee-payed" type="checkbox" name="fee-payed" />Teilnahmebetrag bezahlt
+                                      <input id="edit-participant-internalFee-payed" type="checkbox" name="internalFee-payed" />Teilnahmebetrag bezahlt
                                   </label>
                               </div>
                           </div>
@@ -657,7 +661,8 @@
                         </li>
                         <li class="list-group-item">
                             <span class="item-title"><span class="glyphicon glyphicon-piggy-bank"></span> Preis:</span>
-                            <span th:text="${event.participationFee}">35€</span>
+                            <span th:if="${event.internalParticipationFee}" th:text="|${{event.internalParticipationFee}} (NAJU-Mitglieder) |">35€ (NAJU-Mitlgieder)</span>
+                            <span th:if="${event.externalParticipationFee}" th:text="|${{event.externalParticipationFee}} (nicht-Mitglieder)|">35€ (nicht-Mitglieder)</span>
                         </li>
                         <li class="list-group-item">
                             <span class="item-title">
@@ -757,7 +762,7 @@
                             </tr>
                         </thead>
                         <tbody th:remove="all-but-first">
-                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="0" data-fee-payed="true" data-form-received="false" th:each="participant : ${event.participants}" th:attr="'data-id'=${participant.id}, 'data-fee-payed'=${event.getParticipationInfo(participant).isParticipationFeePayed()}, 'data-form-received'=${event.getParticipationInfo(participant).isRegistrationFormReceived()}">
+                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="0" data-internalFee-payed="true" data-form-received="false" th:each="participant : ${event.participants}" th:attr="'data-id'=${participant.id}, 'data-internalFee-payed'=${event.getParticipationInfo(participant).isParticipationFeePayed()}, 'data-form-received'=${event.getParticipationInfo(participant).isRegistrationFormReceived()}">
                                 <td><a href="mailto:" data-toggle="" data-target="" th:href="'mailto:' + ${participant.email}" th:text="${participant.name}">Max-Hannes Mustermann</a></td>
                                 <td th:text="${{participant.dateOfBirth}}">31.02.1999</td>
                                 <td th:text="${participant.eatingHabit}">Veganer</td>
@@ -772,7 +777,7 @@
                                     <span th:unless="${event.getParticipationInfo(participant).isRegistrationFormReceived()}"><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span>
                                 </td>
                             </tr>
-                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="1" data-fee-payed="true" data-form-received="false">
+                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="1" data-internalFee-payed="true" data-form-received="false">
                                 <td><a href="mailto:">Max-Hannes Mustermann</a></td>
                                 <td>31.02.1999</td>
                                 <td>Veganer</td>
@@ -781,7 +786,7 @@
                                 <td class="text-center"><span><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span></td>
                                 <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
                             </tr>
-                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="2" data-fee-payed="false" data-form-received="false">
+                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="2" data-internalFee-payed="false" data-form-received="false">
                                 <td><a href="mailto:">Max-Hannes Mustermann</a></td>
                                 <td>31.02.1999</td>
                                 <td>Veganer</td>
@@ -790,43 +795,43 @@
                                 <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
                                 <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
                             </tr>
-                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="3" data-fee-payed="true" data-form-received="false">
-                                <td><a href="mailto:">Max-Hannes Mustermann</a></td>
-                                <td>31.02.1999</td>
-                                <td>Veganer</td>
-                                <td>Heuschnupfen</td>
-                                <td>Freital</td>
-                                <td class="text-center"><span><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span></td>
-                                <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
-                            </tr>
-                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="4" data-fee-payed="false" data-form-received="false">
-                                <td><a href="mailto:">Max-Hannes Mustermann</a></td>
-                                <td>31.02.1999</td>
-                                <td>Veganer</td>
-                                <td>Heuschnupfen</td>
-                                <td>Freital</td>
-                                <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
-                                <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
-                            </tr>
-                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="5" data-fee-payed="false" data-form-received="true">
-                                <td><a href="mailto:">Max-Hannes Mustermann</a></td>
-                                <td>31.02.1999</td>
-                                <td>Veganer</td>
-                                <td>Heuschnupfen</td>
-                                <td>Freital</td>
-                                <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
-                                <td class="text-center"><span><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span></td>
-                            </tr>
-                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="6" data-fee-payed="true" data-form-received="true">
+                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="3" data-internalFee-payed="true" data-form-received="false">
                                 <td><a href="mailto:">Max-Hannes Mustermann</a></td>
                                 <td>31.02.1999</td>
                                 <td>Veganer</td>
                                 <td>Heuschnupfen</td>
                                 <td>Freital</td>
                                 <td class="text-center"><span><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span></td>
+                                <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
+                            </tr>
+                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="4" data-internalFee-payed="false" data-form-received="false">
+                                <td><a href="mailto:">Max-Hannes Mustermann</a></td>
+                                <td>31.02.1999</td>
+                                <td>Veganer</td>
+                                <td>Heuschnupfen</td>
+                                <td>Freital</td>
+                                <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
+                                <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
+                            </tr>
+                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="5" data-internalFee-payed="false" data-form-received="true">
+                                <td><a href="mailto:">Max-Hannes Mustermann</a></td>
+                                <td>31.02.1999</td>
+                                <td>Veganer</td>
+                                <td>Heuschnupfen</td>
+                                <td>Freital</td>
+                                <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
                                 <td class="text-center"><span><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span></td>
                             </tr>
-                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="7" data-fee-payed="true" data-form-received="false">
+                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="6" data-internalFee-payed="true" data-form-received="true">
+                                <td><a href="mailto:">Max-Hannes Mustermann</a></td>
+                                <td>31.02.1999</td>
+                                <td>Veganer</td>
+                                <td>Heuschnupfen</td>
+                                <td>Freital</td>
+                                <td class="text-center"><span><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span></td>
+                                <td class="text-center"><span><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span></td>
+                            </tr>
+                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="7" data-internalFee-payed="true" data-form-received="false">
                                 <td><a href="mailto:">Max-Hannes Mustermann</a></td>
                                 <td>31.02.1999</td>
                                 <td>Veganer</td>

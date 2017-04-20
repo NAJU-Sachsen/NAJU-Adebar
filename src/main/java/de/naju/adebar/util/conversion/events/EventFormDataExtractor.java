@@ -7,8 +7,6 @@ import de.naju.adebar.model.human.Address;
 import org.javamoney.moneta.Money;
 import org.springframework.stereotype.Service;
 
-import javax.money.CurrencyUnit;
-import javax.money.Monetary;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -49,8 +47,12 @@ public class EventFormDataExtractor {
             event.setParticipantsLimit(Integer.parseInt(eventForm.getParticipantsLimit()));
         }
 
-        if (eventForm.hasParticipationFee()) {
-            event.setParticipationFee(Money.of(new BigDecimal(eventForm.getParticipationFee()), CURRENCY_UNIT));
+        if (eventForm.hasInternalParticipationFee()) {
+            event.setInternalParticipationFee(Money.of(new BigDecimal(eventForm.getInternalParticipationFee()), CURRENCY_UNIT));
+        }
+
+        if (eventForm.hasExternalParticipationFee()) {
+            event.setExternalParticipationFee(Money.of(new BigDecimal(eventForm.getExternalParticipationFee()), CURRENCY_UNIT));
         }
 
         return event;

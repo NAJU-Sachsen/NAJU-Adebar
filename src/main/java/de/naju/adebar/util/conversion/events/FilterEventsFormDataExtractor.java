@@ -151,8 +151,16 @@ public class FilterEventsFormDataExtractor {
         if (!hasParticipationFeeFilter(eventsForm)) {
             throw new IllegalStateException("No participation fee filter specified");
         }
-        Money participationFee = Money.of(new BigDecimal(eventsForm.getFee()), FilterEventsForm.CURRENCY_UNIT);
-        return new ParticipationFeeFilter(participationFee, ComparableFilterType.valueOf(eventsForm.getFeeFilterType()));
+
+        Money internalFee = null, externalFee = null;
+        if (eventsForm.hasInternalFee()) {
+            internalFee = Money.of(new BigDecimal(eventsForm.getInternalFee()), FilterEventsForm.CURRENCY_UNIT);
+        }
+        if (eventsForm.hasExternalFee()) {
+            externalFee = Money.of(new BigDecimal(eventsForm.getExternalFee()), FilterEventsForm.CURRENCY_UNIT);
+        }
+
+        return new ParticipationFeeFilter(internalFee, externalFee, ComparableFilterType.valueOf(eventsForm.getFeeFilterType()));
     }
 
     /**

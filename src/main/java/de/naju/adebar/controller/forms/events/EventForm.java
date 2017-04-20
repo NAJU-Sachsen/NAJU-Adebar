@@ -1,7 +1,5 @@
 package de.naju.adebar.controller.forms.events;
 
-import org.springframework.data.annotation.Transient;
-
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
 
@@ -19,7 +17,7 @@ public class EventForm {
     private String startTime, endTime;
     private String participantsLimit;
     private String participantsAge;
-    private String participationFee;
+    private String internalParticipationFee, externalParticipationFee;
     private String street, zip, city;
     private String belonging;
     private long localGroupId, projectId;
@@ -27,13 +25,14 @@ public class EventForm {
     public EventForm() {
     }
 
-    public EventForm(String name, String startTime, String endTime, String participantsLimit, String participantsAge, String participationFee, String street, String zip, String city) {
+    public EventForm(String name, String startTime, String endTime, String participantsLimit, String participantsAge, String internalParticipationFee, String externalParticipationFee, String street, String zip, String city) {
         this.name = name;
         this.startTime = startTime;
         this.endTime = endTime;
         this.participantsLimit = participantsLimit;
         this.participantsAge = participantsAge;
-        this.participationFee = participationFee;
+        this.internalParticipationFee = internalParticipationFee;
+        this.externalParticipationFee = externalParticipationFee;
         this.street = street;
         this.zip = zip;
         this.city = city;
@@ -79,12 +78,20 @@ public class EventForm {
         this.participantsAge = participantsAge;
     }
 
-    public String getParticipationFee() {
-        return participationFee;
+    public String getInternalParticipationFee() {
+        return internalParticipationFee;
     }
 
-    public void setParticipationFee(String participationFee) {
-        this.participationFee = participationFee;
+    public void setInternalParticipationFee(String internalParticipationFee) {
+        this.internalParticipationFee = internalParticipationFee;
+    }
+
+    public String getExternalParticipationFee() {
+        return externalParticipationFee;
+    }
+
+    public void setExternalParticipationFee(String externalParticipationFee) {
+        this.externalParticipationFee = externalParticipationFee;
     }
 
     public String getStreet() {
@@ -143,8 +150,12 @@ public class EventForm {
         return participantsAge != null && !participantsAge.isEmpty();
     }
 
-    public boolean hasParticipationFee() {
-        return participationFee != null && !participationFee.isEmpty();
+    public boolean hasInternalParticipationFee() {
+        return internalParticipationFee != null && !internalParticipationFee.isEmpty();
+    }
+
+    public boolean hasExternalParticipationFee() {
+        return externalParticipationFee != null && !externalParticipationFee.isEmpty();
     }
 
     @Override
@@ -155,11 +166,12 @@ public class EventForm {
                 ", endTime='" + endTime + '\'' +
                 ", participantsLimit='" + participantsLimit + '\'' +
                 ", participantsAge='" + participantsAge + '\'' +
-                ", participationFee='" + participationFee + '\'' +
+                ", internalParticipationFee='" + internalParticipationFee + '\'' +
+                ", externalParticipationFee='" + externalParticipationFee + '\'' +
                 ", street='" + street + '\'' +
                 ", zip='" + zip + '\'' +
                 ", city='" + city + '\'' +
-                ", belonging=" + belonging +
+                ", belonging='" + belonging + '\'' +
                 ", localGroupId=" + localGroupId +
                 ", projectId=" + projectId +
                 '}';

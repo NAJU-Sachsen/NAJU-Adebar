@@ -48,7 +48,8 @@ public class PersistentEventManager implements EventManager {
         event.updateTimePeriod(event.getStartTime(), event.getEndTime());
         event.setParticipantsLimit(eventData.getParticipantsLimit());
         event.setMinimumParticipantAge(eventData.getMinimumParticipantAge());
-        event.setParticipationFee(eventData.getParticipationFee());
+        event.setInternalParticipationFee(eventData.getInternalParticipationFee());
+        event.setExternalParticipationFee(eventData.getExternalParticipationFee());
         event.setPlace(eventData.getPlace());
 
         return updateEvent(eventId, event);
