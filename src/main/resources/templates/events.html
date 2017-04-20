@@ -437,7 +437,7 @@
                             <td class="event-time" th:text="${{event.startTime}} + ' - ' + ${{event.endTime}}">02.06.</td>
                             <td class="event-place" th:text="${event.place.city}">Großdittmannsdorf</td>
                             <td class="text-center" th:text="${event.participantsCount}">---</td>
-                            <td class="text-center" th:text="${event.remainingCapacity}">---</td>
+                            <td class="text-center" th:text="${event.remainingCapacity} == ${T(java.lang.Integer).MAX_VALUE} ? 'unbegrenzt' : ${event.remainingCapacity}">---</td>
                             <td class="event-localgroup" th:text="---">Großdittmannsdorf</td>
                         </tr>
                         <tr>
