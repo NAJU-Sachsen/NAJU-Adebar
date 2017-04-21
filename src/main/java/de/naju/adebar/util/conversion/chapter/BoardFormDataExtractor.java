@@ -35,10 +35,13 @@ public class BoardFormDataExtractor {
             board = new Board(chairman);
         }
 
-        board.addBoardMember(chairman);
         for (String memberId : boardForm.getMemberIds()) {
             Activist member = humanManager.findActivist(humanManager.findPerson(memberId).orElseThrow(IllegalArgumentException::new));
             board.addBoardMember(member);
+        }
+
+        if (!boardForm.getMemberIds().contains(boardForm.getChairmanId())) {
+            board.addBoardMember(chairman);
         }
 
         return board;
