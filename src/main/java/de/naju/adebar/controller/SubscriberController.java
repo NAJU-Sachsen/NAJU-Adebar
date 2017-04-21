@@ -98,8 +98,13 @@ public class SubscriberController {
         Newsletter newsletter = newsletterRepo.findOne(newsletterId);
         Person person = humanManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
 
-        Subscriber subscriber = subscriberManager.saveSubscriber(personToSubscriberConverter.convertPerson(person));
-        newsletterManager.subscribe(subscriber, newsletter);
+        try {
+            Subscriber subscriber = subscriberManager.saveSubscriber(personToSubscriberConverter.convertPerson(person));
+            newsletterManager.subscribe(subscriber, newsletter);
+        } catch (AlreadySubscribedException e) {
+            redirAttr.addFlashAttribute("alreadySubscribed", true);
+        }
+
 
         return "redirect:/newsletters/" + newsletterId;
     }
