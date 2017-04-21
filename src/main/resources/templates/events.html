@@ -395,7 +395,7 @@
                             <th>Datum <span class="icon"></span></th>
                             <th>Ort <span class="icon"></span></th>
                             <th>Teilnehmer <span class="icon"></span></th>
-                            <th>Ortsgruppe <span class="icon"></span></th>
+                            <th>Zugehörig <span class="icon"></span></th>
                         </tr>
                     </thead>
                     <tbody class="event-list-current" th:remove="all-but-first">
@@ -404,7 +404,14 @@
                             <td class="event-time" th:text="${{event.startTime}} + ' - ' + ${{event.endTime}}">24.05.-28.05.</td>
                             <td class="event-place" th:text="${event.place.city}">Niederlausitz</td>
                             <td class="text-center" th:text="${event.participantsCount}">28</td>
-                            <td class="event-localgroup" th:text="---">Sachsen</td>
+                            <td class="event-localgroup">
+                                <a href="localGroupDetails.html" th:if="${currentEventsLocalGroups.containsKey(event)}" th:href="@{/localGroups/{id}(id=${currentEventsLocalGroups.get(event).getId()})}" th:text="${currentEventsLocalGroups.get(event).getName()}">
+                                    NAJU Sachsen
+                                </a>
+                                <a href="localGroupDetails.html" th:if="${currentEventsProjects.containsKey(event)}" th:href="@{/projects/{id}(id=${currentEventsProjects.get(event).getId()})}" th:text="${currentEventsProjects.get(event).getName()}">
+                                    Puppenstuben gesucht!
+                                </a>
+                            </td>
                         </tr>
                         <tr>
                             <td class="event-name"> <a href="eventDetails.html">Nistkästen basteln</a></td>
@@ -428,7 +435,7 @@
                             <th>Ort <span class="icon"></span></th>
                             <th>Anmeldungen <span class="icon"></span></th>
                             <th>Restplätze <span class="icon"></span></th>
-                            <th>Ortsgruppe <span class="icon"></span></th>
+                            <th>Zugehörig <span class="icon"></span></th>
                         </tr>
                     </thead>
                     <tbody class="event-list-prospective" th:remove="all-but-first">
@@ -438,7 +445,14 @@
                             <td class="event-place" th:text="${event.place.city}">Großdittmannsdorf</td>
                             <td class="text-center" th:text="${event.participantsCount}">---</td>
                             <td class="text-center" th:text="${event.remainingCapacity} == ${T(java.lang.Integer).MAX_VALUE} ? 'unbegrenzt' : ${event.remainingCapacity}">---</td>
-                            <td class="event-localgroup" th:text="---">Großdittmannsdorf</td>
+                            <td class="event-localgroup">
+                                <a href="localGroupDetails.html" th:if="${futureEventsLocalGroups.containsKey(event)}" th:href="@{/localGroups/{id}(id=${futureEventsLocalGroups.get(event).getId()})}" th:text="${futureEventsLocalGroups.get(event).getName()}">
+                                    Großdittmannsdorf
+                                </a>
+                                <a href="localGroupDetails.html" th:if="${futureEventsProjects.containsKey(event)}" th:href="@{/projects/{id}(id=${futureEventsProjects.get(event).getId()})}" th:text="${futureEventsProjects.get(event).getName()}">
+                                    Brutvogelkartierung NAJU DD
+                                </a>
+                            </td>
                         </tr>
                         <tr>
                             <td class="event-name"><a href="eventDetails.html">Sommerferielager "Nachhaltiges Leben"</a></td>
@@ -482,7 +496,7 @@
                             <th>Datum <span class="icon"></span></th>
                             <th>Ort <span class="icon"></span></th>
                             <th>Teilnehmer <span class="icon"></span></th>
-                            <th>Ortsgruppe <span class="icon"></span></th>
+                            <th>Zugehörig <span class="icon"></span></th>
                         </tr>
                     </thead>
                     <tbody class="event-list-past" th:remove="all-but-first">
@@ -491,7 +505,14 @@
                             <td class="event-time" th:text="${{event.startTime}} + ' - ' + ${{event.endTime}}">24.05.-28.05.</td>
                             <td class="event-place" th:text="${event.place.city}">Niederlausitz</td>
                             <td class="text-center" th:text="${event.participantsCount}">28</td>
-                            <td class="event-localgroup" th:text="---">Sachsen</td>
+                            <td class="event-localgroup">
+                                <a href="localGroupDetails.html" th:if="${pastEventsLocalGroups.containsKey(event)}" th:href="@{/localGroups/{id}(id=${pastEventsLocalGroups.get(event).getId()})}" th:text="${pastEventsLocalGroups.get(event).getName()}">
+                                    NAJU Sachsen
+                                </a>
+                                <a href="localGroupDetails.html" th:if="${pastEventsProjects.containsKey(event)}" th:href="@{/projects/{id}(id=${pastEventsProjects.get(event).getId()})}" th:text="${pastEventsProjects.get(event).getName()}">
+                                    NAJU Sachsen
+                                </a>
+                            </td>
                         </tr>
                         <tr>
                             <td class="event-name"> <a href="eventDetails.html">Nistkästen basteln</a></td>

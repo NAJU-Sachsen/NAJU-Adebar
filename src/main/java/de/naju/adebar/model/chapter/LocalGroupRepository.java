@@ -1,5 +1,6 @@
 package de.naju.adebar.model.chapter;
 
+import de.naju.adebar.model.events.Event;
 import de.naju.adebar.model.human.Activist;
 import de.naju.adebar.model.newsletter.Newsletter;
 import org.springframework.data.repository.CrudRepository;
@@ -36,4 +37,9 @@ public interface LocalGroupRepository extends CrudRepository<LocalGroup, Long> {
      */
     LocalGroup findByBoard(Board board);
 
+    /**
+     * @param event the event to query for
+     * @return an optional containing the local group which hosts the event, if such a group exists
+     */
+    Optional<LocalGroup> findByEventsContains(Event event);
 }

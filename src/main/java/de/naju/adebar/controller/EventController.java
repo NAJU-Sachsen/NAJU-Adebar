@@ -1,5 +1,7 @@
 package de.naju.adebar.controller;
 
+import de.naju.adebar.app.events.EventDataProcessor;
+import de.naju.adebar.app.events.EventDataProcessor.EventType;
 import de.naju.adebar.app.events.filter.EventFilterBuilder;
 import de.naju.adebar.app.human.DataProcessor;
 import de.naju.adebar.controller.forms.events.EventForm;
@@ -49,11 +51,12 @@ public class EventController {
     private EventToEventFormConverter eventToEventFormConverter;
     private FilterEventsFormDataExtractor filterEventsFormDataExtractor;
     private PersonConverter personConverter;
-    private DataProcessor dataProcessor;
+    private DataProcessor humanDataProcessor;
+    private EventDataProcessor eventDataProcessor;
 
     @Autowired
-    public EventController(HumanManager humanManager, EventManager eventManager, LocalGroupManager localGroupManager, ProjectManager projectManager, EventFormDataExtractor eventFormDataExtractor, EventToEventFormConverter eventToEventFormConverter, FilterEventsFormDataExtractor filterEventsFormDataExtractor, PersonConverter personConverter, DataProcessor dataProcessor) {
-        Object[] params = {humanManager, eventManager, localGroupManager, projectManager, eventFormDataExtractor, eventToEventFormConverter, filterEventsFormDataExtractor, personConverter, dataProcessor};
+    public EventController(HumanManager humanManager, EventManager eventManager, LocalGroupManager localGroupManager, ProjectManager projectManager, EventFormDataExtractor eventFormDataExtractor, EventToEventFormConverter eventToEventFormConverter, FilterEventsFormDataExtractor filterEventsFormDataExtractor, PersonConverter personConverter, DataProcessor humanDataProcessor, EventDataProcessor eventDataProcessor) {
+        Object[] params = {humanManager, eventManager, localGroupManager, projectManager, eventFormDataExtractor, eventToEventFormConverter, filterEventsFormDataExtractor, personConverter, humanDataProcessor, eventDataProcessor};
         Assert.noNullElements(params, "No parameter may be null: " + Arrays.toString(params));
         this.humanManager = humanManager;
         this.eventManager = eventManager;
@@ -63,7 +66,8 @@ public class EventController {
         this.eventToEventFormConverter = eventToEventFormConverter;
         this.filterEventsFormDataExtractor = filterEventsFormDataExtractor;
         this.personConverter = personConverter;
-        this.dataProcessor = dataProcessor;
+        this.humanDataProcessor = humanDataProcessor;
+        this.eventDataProcessor = eventDataProcessor;
     }
 
     /**
@@ -78,7 +82,13 @@ public class EventController {
         Iterable<Event> futureEvents = eventManager.repository().findByStartTimeIsAfter(LocalDateTime.now());
 
         model.addAttribute("currentEvents", currentEvents);
+        model.addAttribute("currentEventsLocalGroups", eventDataProcessor.getLocalGroupBelonging(EventType.RUNNING));
+        model.addAttribute("currentEventsProjects", eventDataProcessor.getProjectBelonging(EventType.RUNNING));
+
         model.addAttribute("futureEvents", futureEvents);
+        model.addAttribute("futureEventsLocalGroups", eventDataProcessor.getLocalGroupBelonging(EventType.FUTURE));
+        model.addAttribute("futureEventsProjects", eventDataProcessor.getProjectBelonging(EventType.FUTURE));
+
         model.addAttribute("addEventForm", new EventForm());
         model.addAttribute("filterEventsForm", new FilterEventsForm());
         model.addAttribute("localGroups", localGroupManager.repository().findAll());
@@ -99,6 +109,9 @@ public class EventController {
         Iterable<Event> pastEvents = eventManager.repository().findByEndTimeIsBefore(LocalDateTime.now());
 
         model.addAttribute("pastEvents", pastEvents);
+        model.addAttribute("pastEventsLocalGroups", eventDataProcessor.getLocalGroupBelonging(EventType.PAST));
+        model.addAttribute("pastEventsProjects", eventDataProcessor.getProjectBelonging(EventType.PAST));
+
         model.addAttribute("addEventForm", new EventForm());
         model.addAttribute("filterEventsForm", new FilterEventsForm());
         model.addAttribute("localGroups", localGroupManager.repository().findAll());
@@ -170,14 +183,14 @@ public class EventController {
 
         model.addAttribute("event", event);
         model.addAttribute("organizers", organizers);
-        model.addAttribute("organizerEmails", dataProcessor.extractEmailAddressesAsString(organizers, EMAIL_DELIMITER));
+        model.addAttribute("organizerEmails", humanDataProcessor.extractEmailAddressesAsString(organizers, EMAIL_DELIMITER));
 
         model.addAttribute("counselors", counselors);
-        model.addAttribute("counselorEmails", dataProcessor.extractEmailAddressesAsString(counselors, EMAIL_DELIMITER));
+        model.addAttribute("counselorEmails", humanDataProcessor.extractEmailAddressesAsString(counselors, EMAIL_DELIMITER));
 
-        model.addAttribute("participantEmails", dataProcessor.extractEmailAddressesAsString(participants, EMAIL_DELIMITER));
-        model.addAttribute("participantEmailsNoFee", dataProcessor.extractEmailAddressesAsString(event.getParticipantsWithFeeNotPayed(), EMAIL_DELIMITER));
-        model.addAttribute("participantEmailsNoForm", dataProcessor.extractEmailAddressesAsString(event.getParticipantsWithFormNotReceived(), EMAIL_DELIMITER));
+        model.addAttribute("participantEmails", humanDataProcessor.extractEmailAddressesAsString(participants, EMAIL_DELIMITER));
+        model.addAttribute("participantEmailsNoFee", humanDataProcessor.extractEmailAddressesAsString(event.getParticipantsWithFeeNotPayed(), EMAIL_DELIMITER));
+        model.addAttribute("participantEmailsNoForm", humanDataProcessor.extractEmailAddressesAsString(event.getParticipantsWithFormNotReceived(), EMAIL_DELIMITER));
 
         model.addAttribute("noOrganizers", !organizers.iterator().hasNext());
         model.addAttribute("noCounselors", !counselors.iterator().hasNext());
