@@ -189,8 +189,7 @@ public class LocalGroupController {
     public String updateBoard(@PathVariable("gid") long groupId, @ModelAttribute("boardForm") BoardForm boardForm, RedirectAttributes redirAttr) {
         LocalGroup localGroup = localGroupManager.findLocalGroup(groupId).orElseThrow(IllegalArgumentException::new);
 
-        localGroup.setBoard(boardFormDataExtractor.extractBoard(boardForm));
-        localGroupManager.updateLocalGroup(groupId, localGroup);
+        localGroupManager.updateBoard(groupId, boardFormDataExtractor.extractBoard(boardForm));
 
         redirAttr.addFlashAttribute("boardUpdated", true);
         return "redirect:/localGroups/" + groupId;

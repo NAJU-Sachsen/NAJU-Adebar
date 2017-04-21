@@ -50,6 +50,14 @@ public interface LocalGroupManager {
     LocalGroup adoptLocalGroupData(long id, LocalGroup localGroupData);
 
     /**
+     * Updates the board of a local group
+     * @param groupId the identifier of the local group to update
+     * @param boardData the board's data
+     * @return the updated chapter
+     */
+    LocalGroup updateBoard(long groupId, Board boardData);
+
+    /**
      * Queries for a specific local group
      * @param id the local group's id
      * @return an optional containing the chapter if it exists, otherwise the optional is empty

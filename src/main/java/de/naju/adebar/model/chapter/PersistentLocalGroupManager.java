@@ -1,5 +1,6 @@
 package de.naju.adebar.model.chapter;
 
+import com.google.common.collect.Lists;
 import de.naju.adebar.model.events.EventManager;
 import de.naju.adebar.model.human.Activist;
 import de.naju.adebar.model.human.Address;
@@ -55,6 +56,25 @@ public class PersistentLocalGroupManager implements LocalGroupManager {
         localGroup.setName(localGroupData.getName());
         localGroup.setAddress(localGroupData.getAddress());
         return localGroupRepo.save(localGroup);
+    }
+
+    @Override
+    public LocalGroup updateBoard(long groupId, Board boardData) {
+        LocalGroup localGroup = findLocalGroup(groupId).orElseThrow(() -> new IllegalArgumentException("No local group with id " + groupId));
+        Board board = localGroup.getBoard();
+
+        if (board == null) {
+            board = boardData;
+        } else {
+            board.setChairman(boardData.getChairman());
+            board.setEmail(boardData.getEmail());
+            board.setMembers(Lists.newLinkedList(boardData.getMembers()));
+        }
+
+        boardRepo.save(board);
+        localGroup.setBoard(board);
+
+        return updateLocalGroup(groupId, localGroup);
     }
 
     @Override
