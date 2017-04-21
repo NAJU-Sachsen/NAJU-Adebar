@@ -29,8 +29,9 @@ public class SimplePersonJSON {
     public SimplePersonJSON(Person person) {
         this.id = person.getId().toString();
         this.name = person.getName();
-        this.dob = person.getDateOfBirth().format(DateTimeFormatter.ofPattern(DATE_FORMAT, Locale.GERMAN));
         this.address = formatAddress(person.getAddress());
+
+        this.dob = person.getDateOfBirth() != null ? person.getDateOfBirth().format(DateTimeFormatter.ofPattern(DATE_FORMAT, Locale.GERMAN)) : "";
     }
 
     /**
