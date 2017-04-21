@@ -175,6 +175,9 @@ $(function(){
         showTodayButton: true,
     });
 
+    $('select#edit-board-select-newMember').val($('#edit-board-members').val());
+    $('select#edit-board-select-newMember').selectpicker('refresh');
+
     $('#event-calendar').calendar({
         style: 'border',
         enableRangeSelection: true,
