@@ -1,5 +1,8 @@
 *.class
 
+# database
+db/
+
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
