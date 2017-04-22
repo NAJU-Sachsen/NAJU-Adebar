@@ -4,6 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import de.naju.adebar.app.newsletter.NewsletterDataProcessor;
+import de.naju.adebar.controller.forms.newsletter.AddNewsletterForm;
+import de.naju.adebar.model.chapter.LocalGroupManager;
 import de.naju.adebar.model.human.HumanManager;
 import de.naju.adebar.model.human.Person;
 import de.naju.adebar.model.newsletter.*;
@@ -34,10 +37,12 @@ public class SubscriberController {
     private SubscriberManager subscriberManager;
     private HumanManager humanManager;
     private PersonToSubscriberConverter personToSubscriberConverter;
+    private NewsletterDataProcessor dataProcessor;
+    private LocalGroupManager localGroupManager;
 
     @Autowired
-    public SubscriberController(NewsletterRepository newsletterRepo, SubscriberRepository newsletterSubscriberRepo, NewsletterManager newsletterManager, SubscriberManager subscriberManager, HumanManager humanManager, PersonToSubscriberConverter personToSubscriberConverter) {
-        Object[] params = {newsletterRepo, newsletterSubscriberRepo, newsletterManager, subscriberManager, humanManager, personToSubscriberConverter};
+    public SubscriberController(NewsletterRepository newsletterRepo, SubscriberRepository newsletterSubscriberRepo, NewsletterManager newsletterManager, SubscriberManager subscriberManager, HumanManager humanManager, PersonToSubscriberConverter personToSubscriberConverter, NewsletterDataProcessor dataProcessor, LocalGroupManager localGroupManager) {
+        Object[] params = {newsletterRepo, newsletterSubscriberRepo, newsletterManager, subscriberManager, humanManager, personToSubscriberConverter, dataProcessor, localGroupManager};
         Assert.notNull(params, "At least one parameter was null: " + Arrays.toString(params));
         this.newsletterRepo = newsletterRepo;
         this.subscriberRepo = newsletterSubscriberRepo;
@@ -45,6 +50,8 @@ public class SubscriberController {
         this.subscriberManager = subscriberManager;
         this.humanManager = humanManager;
         this.personToSubscriberConverter = personToSubscriberConverter;
+        this.dataProcessor = dataProcessor;
+        this.localGroupManager = localGroupManager;
     }
 
     /**
@@ -56,8 +63,16 @@ public class SubscriberController {
     public String showAllNewsletterSubscribers(Model model) {
         model.addAttribute("newsletters", newsletterRepo.findAll());
         model.addAttribute("subscribers", subscriberRepo.findAll());
+        model.addAttribute("localGroups", dataProcessor.getLocalGroupBelonging());
+        model.addAttribute("events", dataProcessor.getEventBelonging());
+        model.addAttribute("projects", dataProcessor.getProjectBelonging());
+        model.addAttribute("noBelonging", dataProcessor.getNewslettersWithoutBelonging());
+
+        model.addAttribute("allChapters", localGroupManager.repository().findAll());
+        model.addAttribute("addNewsletterForm", new AddNewsletterForm());
         model.addAttribute("tab", "subscribers");
         model.addAttribute("subscriberDisplay", "all");
+
         return "newsletters";
     }
 
