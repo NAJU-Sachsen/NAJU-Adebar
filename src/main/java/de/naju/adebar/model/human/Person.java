@@ -1,7 +1,6 @@
 package de.naju.adebar.model.human;
 
 import java.beans.Transient;
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Period;
 
@@ -24,6 +23,7 @@ public class Person {
 
     private String firstName, lastName;
     private String email;
+    private String phoneNumber;
     private Gender gender;
     private Address address;
     private LocalDate dateOfBirth;
@@ -40,13 +40,14 @@ public class Person {
      * @param firstName the person's first name
      * @param lastName the person's last name
      * @param email the person's email
+     * @param phoneNumber the person's phone number
      * @param gender the person's gender
      * @param address the person's address, may be {@code null}
      * @param dateOfBirth the person's date of birth, may be {@code null}
      * @throws IllegalArgumentException if any of the parameters is {@code null}, the email is not valid, the
      * date of birth lies in the future or names are empty
      */
-    public Person(String firstName, String lastName, String email, Gender gender, Address address, LocalDate dateOfBirth) {
+    public Person(String firstName, String lastName, String email, String phoneNumber, Gender gender, Address address, LocalDate dateOfBirth) {
         Object[] params = {firstName, lastName, email, gender};
         Assert.noNullElements(params, "Parameters may not be null!");
         Assert.hasText(firstName, "First name may not be empty, but was: " + firstName);
@@ -59,6 +60,7 @@ public class Person {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.phoneNumber = phoneNumber;
         this.gender = gender;
         this.address = address;
         this.dateOfBirth = dateOfBirth;
@@ -141,6 +143,13 @@ public class Person {
     }
 
     /**
+     * @return the person's phone number
+     */
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    /**
      * @return the person's gender
      */
     public Gender getGender() {
@@ -202,6 +211,13 @@ public class Person {
             throw new IllegalArgumentException("Must provide a valid email address, but was: " + email);
         }
         this.email = email;
+    }
+
+    /**
+     * @param phoneNumber the phone number to set
+     */
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     /**
@@ -327,24 +343,13 @@ public class Person {
 
     public void deactivate() {
         this.email = "";
+        this.phoneNumber = "";
         this.address.setStreet("");
         this.active = false;
     }
 
     // overridden from Object
 
-    @Override
-    public int hashCode() {
-        int result = firstName.hashCode();
-        result = 31 * result + lastName.hashCode();
-        result = 31 * result + email.hashCode();
-        result = 31 * result + gender.hashCode();
-        result = 31 * result + (address != null ? address.hashCode() : 0);
-        result = 31 * result + (dateOfBirth != null ? dateOfBirth.hashCode() : 0);
-        result = 31 * result + (eatingHabit != null ? eatingHabit.hashCode() : 0);
-        result = 31 * result + (healthImpairments != null ? healthImpairments.hashCode() : 0);
-        return result;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -353,14 +358,34 @@ public class Person {
 
         Person person = (Person) o;
 
+        if (active != person.active) return false;
         if (!firstName.equals(person.firstName)) return false;
         if (!lastName.equals(person.lastName)) return false;
         if (!email.equals(person.email)) return false;
+        if (phoneNumber != null ? !phoneNumber.equals(person.phoneNumber) : person.phoneNumber != null) return false;
         if (gender != person.gender) return false;
         if (address != null ? !address.equals(person.address) : person.address != null) return false;
         if (dateOfBirth != null ? !dateOfBirth.equals(person.dateOfBirth) : person.dateOfBirth != null) return false;
         if (eatingHabit != null ? !eatingHabit.equals(person.eatingHabit) : person.eatingHabit != null) return false;
-        return healthImpairments != null ? healthImpairments.equals(person.healthImpairments) : person.healthImpairments == null;
+        if (healthImpairments != null ? !healthImpairments.equals(person.healthImpairments) : person.healthImpairments != null)
+            return false;
+        return nabuMembership != null ? nabuMembership.equals(person.nabuMembership) : person.nabuMembership == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = firstName.hashCode();
+        result = 31 * result + lastName.hashCode();
+        result = 31 * result + email.hashCode();
+        result = 31 * result + (phoneNumber != null ? phoneNumber.hashCode() : 0);
+        result = 31 * result + (gender != null ? gender.hashCode() : 0);
+        result = 31 * result + (address != null ? address.hashCode() : 0);
+        result = 31 * result + (dateOfBirth != null ? dateOfBirth.hashCode() : 0);
+        result = 31 * result + (eatingHabit != null ? eatingHabit.hashCode() : 0);
+        result = 31 * result + (healthImpairments != null ? healthImpairments.hashCode() : 0);
+        result = 31 * result + (nabuMembership != null ? nabuMembership.hashCode() : 0);
+        result = 31 * result + (active ? 1 : 0);
+        return result;
     }
 
     @Override

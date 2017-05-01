@@ -21,7 +21,7 @@ public class PersonToEditPersonFormConverter {
      */
     public EditPersonForm convertToEditPersonForm(Person person) {
         String dob = person.hasDateOfBirth() ? person.getDateOfBirth().format(DateTimeFormatter.ofPattern(EditPersonForm.DATE_FORMAT, Locale.GERMAN)) : "";
-        return new EditPersonForm(person.getFirstName(), person.getLastName(), person.getEmail(), person.getGender().name(), dob, person.getEatingHabit(),person.getHealthImpairments(), person.getAddress().getStreet(), person.getAddress().getZip(), person.getAddress().getCity(), person.getNabuMembership().isNabuMember(), person.getNabuMembership().getMembershipNumber());
+        return new EditPersonForm(person.getFirstName(), person.getLastName(), person.getEmail(), person.getPhoneNumber(), person.getGender().name(), dob, person.getEatingHabit(),person.getHealthImpairments(), person.getAddress().getStreet(), person.getAddress().getZip(), person.getAddress().getCity(), person.getNabuMembership().isNabuMember(), person.getNabuMembership().getMembershipNumber());
     }
 
 }

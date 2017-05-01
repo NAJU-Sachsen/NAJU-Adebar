@@ -32,8 +32,7 @@ public class EditPersonFormDataExtractor {
      */
     public Person extractPerson(EditPersonForm personForm) {
         LocalDate dob = personForm.hasDateOfBirth() ? LocalDate.parse(personForm.getDateOfBirth(), dateFormatter) : null;
-        Person person = new Person(personForm.getFirstName(), personForm.getLastName(), personForm.getEmail(), Gender.valueOf(personForm.getGender()),
-                new Address(personForm.getStreet(), personForm.getZip(), personForm.getCity()), dob);
+        Person person = new Person(personForm.getFirstName(), personForm.getLastName(), personForm.getEmail(), personForm.getPhoneNumber(), Gender.valueOf(personForm.getGender()), new Address(personForm.getStreet(), personForm.getZip(), personForm.getCity()), dob);
         person.setEatingHabit(personForm.getEatingHabit());
         person.setHealthImpairments(personForm.getHealthImpairments());
         person.setNabuMembership(personForm.isNabuMember() ? new NabuMembership(personForm.getNabuNumber()) : new NabuMembership());

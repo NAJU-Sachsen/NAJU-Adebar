@@ -10,6 +10,7 @@ public class EditPersonForm {
     private String firstName;
     private String lastName;
     private String email;
+    private String phoneNumber;
     private String gender;
     private String dateOfBirth;
     private String eatingHabit;
@@ -23,11 +24,11 @@ public class EditPersonForm {
 
     public EditPersonForm() {}
 
-    public EditPersonForm(String firstName, String lastName, String email, String gender, String dateOfBirth, String eatingHabit,
-                          String healthImpairments, String street, String zip, String city, boolean nabuMember, String nabuNumber) {
+    public EditPersonForm(String firstName, String lastName, String email, String phoneNumber, String gender, String dateOfBirth, String eatingHabit, String healthImpairments, String street, String zip, String city, boolean nabuMember, String nabuNumber) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.phoneNumber = phoneNumber;
         this.gender = gender;
         this.dateOfBirth = dateOfBirth;
         this.eatingHabit = eatingHabit;
@@ -61,6 +62,14 @@ public class EditPersonForm {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getGender() {
@@ -145,6 +154,7 @@ public class EditPersonForm {
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
                 ", gender='" + gender + '\'' +
                 ", dateOfBirth='" + dateOfBirth + '\'' +
                 ", eatingHabit='" + eatingHabit + '\'' +

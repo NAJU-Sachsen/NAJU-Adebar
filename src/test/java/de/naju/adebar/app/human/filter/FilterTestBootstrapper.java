@@ -34,19 +34,19 @@ public class FilterTestBootstrapper {
     Qualification bertaQualification2 = new Qualification("Erste-Hilfe Kurs", "");
 
     // activist
-    Person hans = new Person("Hans", "Wurst", "hans.wurst@web.de", Gender.MALE, hansAddress, hansDob);
+    Person hans = new Person("Hans", "Wurst", "hans.wurst@web.de", "", Gender.MALE, hansAddress, hansDob);
 
     // activist
-    Person claus = new Person("Claus", "Störtebecker", "derkaeptn@meermensch.de", Gender.MALE, clausAddress, clausDob);
+    Person claus = new Person("Claus", "Störtebecker", "derkaeptn@meermensch.de", "", Gender.MALE, clausAddress, clausDob);
 
     // referent and activist
-    Person berta = new Person("Berta", "Beate", "bb@gmx.net", Gender.FEMALE, bertaAddress, bertaDob);
+    Person berta = new Person("Berta", "Beate", "bb@gmx.net", "", Gender.FEMALE, bertaAddress, bertaDob);
 
     // referent
-    Person fritz = new Person("Fritz", "Käse", "fritz_kaese@googlemail.com", Gender.OTHER, fritzAddress, fritzDob);
+    Person fritz = new Person("Fritz", "Käse", "fritz_kaese@googlemail.com", "", Gender.OTHER, fritzAddress, fritzDob);
 
     // only a camp participant
-    Person heinz = new Person("Heinz", "Meinz", "misterheinz@aol.com", Gender.MALE, heinzAddress, heinzDob);
+    Person heinz = new Person("Heinz", "Meinz", "misterheinz@aol.com", "", Gender.MALE, heinzAddress, heinzDob);
 
     Activist hansActivist, clausActivist, bertaActivist;
 

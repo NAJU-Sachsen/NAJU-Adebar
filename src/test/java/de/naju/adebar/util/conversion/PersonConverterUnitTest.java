@@ -28,9 +28,9 @@ public class PersonConverterUnitTest {
     private Address hansAddress = new Address("zu Hause 3", "01234", "Nirgends");
     private Address clausAddress = new Address("Hinter der Boje 7", "55555", "Aufm Meer");
     private Address bertaAddress = new Address("Bei Mir 1", "98765", "Entenhausen");
-    private Person hans = new Person("Hans", "Wurst", "hans.wurst@web.de", Gender.MALE, hansAddress, LocalDate.now().minusDays(3));
-    private Person claus = new Person("Claus", "Störtebecker", "derkaeptn@meermensch.de", Gender.MALE, clausAddress, LocalDate.of(1635, 3, 5));
-    private Person berta = new Person("Berta", "Beate", "bb@gmx.net", Gender.FEMALE, bertaAddress, LocalDate.now().minusYears(23));
+    private Person hans = new Person("Hans", "Wurst", "hans.wurst@web.de", "", Gender.MALE, hansAddress, LocalDate.now().minusDays(3));
+    private Person claus = new Person("Claus", "Störtebecker", "derkaeptn@meermensch.de", "", Gender.MALE, clausAddress, LocalDate.of(1635, 3, 5));
+    private Person berta = new Person("Berta", "Beate", "bb@gmx.net", "", Gender.FEMALE, bertaAddress, LocalDate.now().minusYears(23));
     private List<Person> persons = Arrays.asList(hans, claus, berta);
     private List<Activist> activists;
     private List<Referent> referents;
