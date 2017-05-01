@@ -52,6 +52,24 @@ public class NabuMembership implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        NabuMembership that = (NabuMembership) o;
+
+        if (nabuMember != that.nabuMember) return false;
+        return membershipNumber != null ? membershipNumber.equals(that.membershipNumber) : that.membershipNumber == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (nabuMember ? 1 : 0);
+        result = 31 * result + (membershipNumber != null ? membershipNumber.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "NabuMembership{" +
                 "nabuMember=" + nabuMember +
