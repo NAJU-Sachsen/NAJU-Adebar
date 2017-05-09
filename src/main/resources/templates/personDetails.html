@@ -320,6 +320,22 @@
 <!-- page specific content-->
 <main id="main">
 
+    <!-- page specific menu items -->
+    <header id="action-bar" class="form-inline clearfix">
+        <h2 class="hidden">Menü</h2>
+
+        <div class="pull-left" style="margin-top: 5px;">
+            <a href="localGroupDetails.html" th:href="@{/persons}">
+                <span class="glyphicon glyphicon-chevron-left"></span> Zurück zur Übersicht
+            </a>
+        </div>
+
+        <!-- the actions at last -->
+        <div id="actions" class="pull-right">
+
+        </div>
+    </header>
+
     <!-- the 'real' content finally -->
     <section id="content" class="tab-content" style="margin-top: 2em;">
 
