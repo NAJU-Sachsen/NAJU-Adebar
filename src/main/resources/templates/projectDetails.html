@@ -503,7 +503,7 @@
                         <tbody th:remove="all-but-first">
                             <tr th:each="event : ${project.events}">
                                 <td th:text="${event.name}">Mahdeinsatz auf dem Dachsenberg</td>
-                                <td th:text="|${event.startTime} - ${event.endTime}|">24.04.17</td>
+                                <td th:text="|${{event.startTime}} - ${{event.endTime}}|">24.04.17</td>
                                 <td th:text="${event.place} ? ${event.place.city} : '---'">Dachsenberg</td>
                                 <td class="text-center" th:text="${event.participantsCount}">7</td>
                                 <td><a href="eventDetails.html" th:href="@{/events/{id}(id=${event.id})}">Details</a></td>
