@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 
 /**
- * Basic behavior testing of the {@link PersistentReferentManager}
+ * Basic behavior testing of the {@link PersonManager} regarding {@link ReferentProfile}
  * @author Rico Bergmann
  */
 @RunWith(SpringRunner.class)
@@ -25,81 +25,43 @@ import java.time.LocalDate;
 @Rollback
 @Component
 public class ReferentManagerIntegrationTest {
-
+    @Autowired private PersonFactory personFactory;
     @Autowired private PersonManager personManager;
-    @Autowired private PersistentReferentManager referentManager;
-    @Autowired private ReferentRepository referentRepo;
+    @Autowired private ReferentProfileRepository referentRepo;
     @Autowired private QualificationRepository qualificationRepo;
     private PersonId clausId;
-    private Person clausPerson;
-    private Referent clausReferent;
+    private Person claus;
     private Qualification qualification;
 
     @Before public void setUp() {
-        this.clausId = new PersonId();
         Address clausAddress = new Address("Hinner der Boje 7", "24103", "Auf'm Meer");
         LocalDate clausDob = LocalDate.now().minusYears(42L);
-        this.clausPerson = new Person(clausId, "Claus", "Störtebecker", "der_kaeptn@web.de",
-                Gender.MALE, clausAddress, clausDob, new NabuMembership());
-        this.clausReferent = new Referent(clausId);
-        this.qualification = new Qualification("Erste Hilfe Kurs",
-                "Hat die Qualifikation, einen Erste-Hilfe Kurs zu leiten");
+        this.claus = personFactory.buildNew("Claus", "Störtebecker", "der_kaeptn@web.de").makeReferent().create();
+        this.claus.setAddress(clausAddress);
+        this.qualification = new Qualification("Erste Hilfe Kurs", "Hat die Qualifikation, einen Erste-Hilfe Kurs zu leiten");
 
-        personManager.savePerson(clausPerson);
-        qualificationRepo.save(qualification);
+        this.clausId = claus.getId();
     }
 
     @Test public void testSaveReferent() {
-        referentManager.saveReferent(clausReferent);
-        Assert.assertTrue(clausReferent.toString() + " should have been saved!", referentRepo.exists(clausId));
+        personManager.savePerson(claus);
+        Assert.assertTrue(claus.toString() + " should have been saved!", referentRepo.exists(clausId));
     }
 
-    @Test public void testCreateReferent() {
-        referentManager.createReferentForPerson(clausPerson);
-        Assert.assertTrue(clausPerson.toString() + " should have been saved!", referentRepo.exists(clausId));
-    }
 
     @Test public void testUpdateReferent() {
-        referentManager.createReferentForPerson(clausPerson);
-        clausReferent = referentRepo.findOne(clausId);
-        clausReferent.addQualification(qualification);
-        clausReferent = referentManager.updateReferent(clausId, clausReferent);
-        Assert.assertTrue(clausReferent.toString() + " should have been updated!",
-                clausReferent.hasQualification(qualification));
-    }
-
-    @Test public void testFindReferent() {
-        referentManager.saveReferent(clausReferent);
-        Assert.assertEquals(clausReferent.toString() + " should have been returned!", clausReferent,
-                referentManager.findReferentByPerson(clausPerson));
-    }
-
-    @Test(expected = NoReferentException.class) public void testFindNoReferent() {
-        referentManager.findReferentByPerson(clausPerson);
+        claus = personManager.savePerson(claus);
+        claus.getReferentProfile().addQualification(qualification);
+        claus = personManager.updatePerson(clausId, claus);
+        Assert.assertTrue(claus.toString() + " should have been updated!",
+                claus.getReferentProfile().hasQualification(qualification));
     }
 
     @Test public void testIsReferent() {
-        referentManager.saveReferent(clausReferent);
-        Assert.assertTrue(clausPerson.toString() + " is an referent!", referentManager.isReferent(clausPerson));
+        personManager.savePerson(claus);
+        Person berta = personFactory.buildNew("Berta", "Beate", "berta@gmx.net").create();
+        personManager.savePerson(berta);
 
-        PersonId bertaId = new PersonId();
-        Address bertaAddress = new Address("An der Schiefen Ebene 2", "01234", "Entenhausen", "Zimmer 13");
-        LocalDate bertaDob = LocalDate.now().minusYears(27L);
-        Person berta = new Person(bertaId, "Berta", "Beate", "berta@gmx.net",
-                Gender.FEMALE, bertaAddress, bertaDob, new NabuMembership());
-
-        Assert.assertFalse(berta.toString() + " is not an activist", referentManager.isReferent(berta));
-    }
-
-    @Test public void testGetQualifications() {
-        clausReferent.addQualification(qualification);
-        Qualification[] qualifications = Iterables.toArray(clausReferent.getQualifications(), Qualification.class);
-        referentManager.saveReferent(clausReferent);
-        Assert.assertArrayEquals("Should return the qualifications", qualifications,
-                Iterables.toArray(referentManager.getQualificationsForPerson(clausPerson), Qualification.class));
-    }
-
-    @Test(expected = NoReferentException.class) public void testGetQualificationsNoReferent() {
-        referentManager.getQualificationsForPerson(clausPerson);
+        Assert.assertFalse(berta.toString() + " is not an activist", referentRepo.exists(berta.getId()));
     }
 }
