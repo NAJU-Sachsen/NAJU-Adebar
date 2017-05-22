@@ -1,13 +1,14 @@
 package de.naju.adebar.util.conversion.human;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Streams;
 import de.naju.adebar.app.filter.DateFilterType;
 import de.naju.adebar.app.filter.FilterType;
 import de.naju.adebar.app.filter.MatchType;
+import de.naju.adebar.app.human.PersonManager;
 import de.naju.adebar.app.human.filter.*;
 import de.naju.adebar.controller.forms.human.FilterPersonForm;
 import de.naju.adebar.model.human.*;
-import de.naju.adebar.util.conversion.PersonConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -20,6 +21,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * Service to convert {@link FilterPersonForm} data to the corresponding objects
@@ -31,18 +33,15 @@ public class FilterPersonFormFilterExtractor {
 
     private DateTimeFormatter dateFormatter;
 
-    private HumanManager humanManager;
+    private PersonManager personManager;
     private QualificationRepository qualificationRepo;
-    private PersonConverter streamConverter;
 
     @Autowired
-    public FilterPersonFormFilterExtractor(HumanManager humanManager, QualificationRepository qualificationRepo,
-                                           PersonConverter streamConverter) {
-        Object[] params = {humanManager, qualificationRepo, qualificationRepo};
+    public FilterPersonFormFilterExtractor(PersonManager personManager, QualificationRepository qualificationRepo) {
+        Object[] params = {personManager, qualificationRepo};
         Assert.noNullElements(params, "No parameter may be null!");
-        this.humanManager = humanManager;
+        this.personManager = personManager;
         this.qualificationRepo = qualificationRepo;
-        this.streamConverter = streamConverter;
         this.dateFormatter = DateTimeFormatter.ofPattern(FilterPersonForm.DATE_FORMAT, Locale.GERMAN);
     }
 
@@ -64,15 +63,11 @@ public class FilterPersonFormFilterExtractor {
             throw new IllegalStateException("Form did not specify an activist filter: " + personForm);
         }
         if (personForm.getActivistJuleicaFilterType().equals(NO_FILTER)) {
-            List<Activist> activists = humanManager.activistManager().repository().streamAll().collect(Collectors.toList());
-            Stream<Person> convertedActivists = streamConverter.convertActivistStream(activists.stream());
-            return new ActivistFilter(convertedActivists, FilterType.valueOf(personForm.getActivistFilterType()));
+            return new ActivistFilter(FilterType.valueOf(personForm.getActivistFilterType()));
         } else {
-            Stream<Person> personStream = streamConverter.convertActivistStream(humanManager.activistManager().repository().streamAll());
             LocalDate juleicaExpiryDate = LocalDate.parse(personForm.getJuleicaExpiryDate(), dateFormatter);
             DateFilterType dateFilterType = DateFilterType.valueOf(personForm.getActivistJuleicaExpiryFilterType());
-            Map<Person, LocalDate> expiryDates = humanManager.activistManager().getJuleicaExpiryDates();
-            return new ActivistFilter(personStream, juleicaExpiryDate, dateFilterType, expiryDates);
+            return new ActivistFilter(juleicaExpiryDate, dateFilterType);
         }
     }
 
@@ -238,15 +233,10 @@ public class FilterPersonFormFilterExtractor {
             throw new IllegalStateException("No referent filter was specified: " + personForm);
         }
         if (personForm.getReferentQualifications().isEmpty()) {
-            List<Referent> referentList = humanManager.referentManager().repository().streamAll().collect(Collectors.toList());
-            Stream<Person> convertedReferents = streamConverter.convertReferentStream(referentList.stream());
-            return new ReferentFilter(convertedReferents, FilterType.valueOf(personForm.getReferentsFilterType()));
+            return new ReferentFilter(FilterType.valueOf(personForm.getReferentsFilterType()));
         } else {
-            List<Referent> referentList = humanManager.referentManager().repository().streamAll().collect(Collectors.toList());
-            Stream<Person> convertedReferents = streamConverter.convertReferentStream(referentList.stream());
             List<Qualification> qualifications = Lists.newLinkedList(qualificationRepo.findAll(personForm.getReferentQualifications()));
-            Map<Person, Iterable<Qualification>> referentQualifications = humanManager.referentManager().getQualifications();
-            return new ReferentFilter(convertedReferents, qualifications, referentQualifications);
+            return new ReferentFilter(qualifications);
         }
     }
 

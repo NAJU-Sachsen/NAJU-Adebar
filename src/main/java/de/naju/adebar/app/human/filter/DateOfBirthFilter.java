@@ -28,6 +28,8 @@ public class DateOfBirthFilter implements PersonFilter {
 
     @Override
     public Stream<Person> filter(Stream<Person> personStream) {
-        return personStream.filter(p -> matchType.matching(dob, p.getDateOfBirth()));
+        personStream = personStream.filter(Person::isParticipant);
+        personStream = personStream.filter(p -> p.getParticipantProfile().hasDateOfBirth());
+        return personStream.filter(p -> matchType.matching(dob, p.getParticipantProfile().getDateOfBirth()));
     }
 }

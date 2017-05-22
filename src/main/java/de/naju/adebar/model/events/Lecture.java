@@ -1,9 +1,11 @@
 package de.naju.adebar.model.events;
 
-import de.naju.adebar.model.human.Referent;
+import de.naju.adebar.model.human.Person;
 import org.springframework.util.Assert;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.OneToOne;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
@@ -13,27 +15,27 @@ import java.util.Arrays;
  */
 @Embeddable
 public class Lecture {
-    private String title;
-    private Referent referent;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
-    private String description;
-    private double educationalUnits;
+    @Column(name = "title") private String title;
+    @OneToOne private Person referent;
+    @Column(name = "startTime") private LocalDateTime startTime;
+    @Column(name = "endTime") private LocalDateTime endTime;
+    @Column(name = "description") private String description;
+    @Column(name = "educationalUnits") private double educationalUnits;
 
     /**
      * Simplified constructor initializing only the most important data
-     * @param referent the referent who gives the lecture
+     * @param person the referent who gives the lecture
      * @param title the lecture's title
      * @param startTime the time the lecture starts
      * @param endTime the time the lecture ends
      */
-    public Lecture(Referent referent, String title, LocalDateTime startTime, LocalDateTime endTime) {
-        this(referent, title, startTime, endTime, "", 0);
+    public Lecture(Person person, String title, LocalDateTime startTime, LocalDateTime endTime) {
+        this(person, title, startTime, endTime, "", 0);
     }
 
     /**
      * Full constructor
-     * @param referent the referent who gives the lecture
+     * @param person the referent who gives the lecture
      * @param title the lecture's title
      * @param startTime the time the lecture starts
      * @param endTime the time the lecture ends
@@ -42,12 +44,14 @@ public class Lecture {
      * @throws IllegalArgumentException if any of the parameters was {@code null} or a contract of a field is violated.
      * See the documentation of the setter methods for details about those contracts
      */
-    public Lecture(Referent referent, String title, LocalDateTime startTime, LocalDateTime endTime, String description, double educationalUnits) {
-        Object[] params = {referent, title, startTime, endTime, description};
+    public Lecture(Person person, String title, LocalDateTime startTime, LocalDateTime endTime, String description, double educationalUnits) {
+        Object[] params = {person, title, startTime, endTime, description};
         Assert.noNullElements(params, "No parameter may be null, but at least one was: " + Arrays.toString(params));
+        Assert.isTrue(person.isReferent(), "Person is no referent: " + person);
         Assert.isTrue(timesAreValid(startTime, endTime), "Start time may not be after end time!");
         Assert.isTrue(educationalUnits >= 0d, "Educational units may not be negative");
-        this.referent = referent;
+
+        this.referent = person;
         this.title = title;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -63,17 +67,18 @@ public class Lecture {
     /**
      * @return the referent responsible for the lecture
      */
-    public Referent getReferent() {
+    public Person getReferent() {
         return referent;
     }
 
     /**
-     * @param referent the referent responsible for the lecture
-     * @throws IllegalArgumentException if the referent was {@code null}
+     * @param person the referent responsible for the lecture
+     * @throws IllegalArgumentException if the person is no referent or {@code null}
      */
-    public void setReferent(Referent referent) {
-        Assert.notNull(referent, "Referent may not be null!");
-        this.referent = referent;
+    public void setReferent(Person person) {
+        Assert.notNull(person, "Referent may not be null!");
+        Assert.isTrue(person.isReferent(), "Person is no referent: " + person);
+        this.referent = person;
     }
 
     /**

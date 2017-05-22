@@ -6,7 +6,7 @@ package de.naju.adebar.controller.forms.human;
  */
 public class AddQualificationForm {
 
-    public enum AddType {NEW, EXISTING};
+    public enum AddType {NEW, EXISTING}
 
     private String addType;
     private String qualification;

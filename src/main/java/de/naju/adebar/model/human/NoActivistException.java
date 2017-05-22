@@ -4,7 +4,7 @@ package de.naju.adebar.model.human;
  * Exception to indicate that a person is not an activist but was treated as one
  * @author Rico Bergmann
  * @see Person
- * @see Activist
+ * @see ActivistProfile
  * @see PersonId
  */
 public class NoActivistException extends RuntimeException {

@@ -22,11 +22,12 @@ public class NabuMembershipFilter implements PersonFilter {
 
     @Override
     public Stream<Person> filter(Stream<Person> personStream) {
+        personStream = personStream.filter(Person::isParticipant);
         if (membershipNumber != null) {
-            Stream<Person> nabuMembers = personStream.filter(p -> p.getNabuMembership().isNabuMember());
-            return nabuMembers.filter(p -> p.getNabuMembership().getMembershipNumber().equals(membershipNumber));
+            Stream<Person> nabuMembers = personStream.filter(p -> p.getParticipantProfile().isNabuMember());
+            return nabuMembers.filter(p -> p.getParticipantProfile().getNabuMembership().getMembershipNumber().equals(membershipNumber));
         } else {
-            return personStream.filter(p -> filterType.matching(p.getNabuMembership().isNabuMember(), true));
+            return personStream.filter(p -> filterType.matching(p.getParticipantProfile().isNabuMember(), true));
         }
     }
 }

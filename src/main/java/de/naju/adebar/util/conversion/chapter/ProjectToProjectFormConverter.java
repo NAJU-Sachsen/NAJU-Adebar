@@ -27,7 +27,7 @@ public class ProjectToProjectFormConverter {
     public ProjectForm convertToProjectForm(Project project) {
         String start = project.hasStartTime() ? project.getStartTime().format(dateTimeFormatter) : null;
         String end = project.hasEndTime() ? project.getEndTime().format(dateTimeFormatter) : null;
-        String personInCharge = project.hasPersonInCharge() ? project.getPersonInCharge().getAssociatedPerson().toString() : null;
+        String personInCharge = project.hasPersonInCharge() ? project.getPersonInCharge().getId().toString() : null;
 
         return new ProjectForm(project.getName(), start, end, personInCharge, project.getId());
     }

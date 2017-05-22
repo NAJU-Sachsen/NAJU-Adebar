@@ -3,12 +3,10 @@ package de.naju.adebar.controller.api;
 import de.naju.adebar.api.data.SimplePersonJSON;
 import de.naju.adebar.app.filter.FilterType;
 import de.naju.adebar.app.filter.MatchType;
+import de.naju.adebar.app.human.PersonManager;
 import de.naju.adebar.app.human.filter.*;
-import de.naju.adebar.model.human.Activist;
 import de.naju.adebar.model.human.Address;
-import de.naju.adebar.model.human.HumanManager;
 import de.naju.adebar.model.human.Person;
-import de.naju.adebar.util.conversion.PersonConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,15 +26,12 @@ import java.util.stream.Stream;
 @RestController("api_personController")
 @RequestMapping("/api/persons")
 public class PersonController {
-    private HumanManager humanManager;
-    private PersonConverter personConverter;
+    private PersonManager personManager;
 
     @Autowired
-    public PersonController(HumanManager humanManager, PersonConverter personConverter) {
-        Object[] params = {humanManager, personConverter};
-        Assert.noNullElements(params, "At least one parameter was null: " + Arrays.toString(params));
-        this.humanManager = humanManager;
-        this.personConverter = personConverter;
+    public PersonController(PersonManager personManager) {
+        Assert.notNull(personManager, "Person manager may not be null");
+        this.personManager = personManager;
     }
 
     /**
@@ -49,7 +44,7 @@ public class PersonController {
     @RequestMapping("/simpleSearch")
     public Iterable<SimplePersonJSON> sendMatchingPersons(@RequestParam("firstname") String firstName, @RequestParam("lastname") String lastName, @RequestParam("city") String city) {
         Address address = new Address("", "", city);
-        List<Person> persons = humanManager.personManager().repository().streamAllByActiveIsTrue().collect(Collectors.toList());
+        List<Person> persons = personManager.repository().streamAll().collect(Collectors.toList());
         PersonFilterBuilder filterBuilder = new PersonFilterBuilder(persons.stream());
         filterBuilder
                 .applyFilter(new NameFilter(firstName, lastName))
@@ -68,11 +63,10 @@ public class PersonController {
     @RequestMapping("/activists/simpleSearch")
     public Iterable<SimplePersonJSON> sendMatchingActivists(@RequestParam("firstname") String firstName, @RequestParam("lastname") String lastName, @RequestParam("city") String city) {
         Address address = new Address("", "", city);
-        List<Activist> activists = humanManager.activistManager().repository().streamAll().collect(Collectors.toList());
-        Stream<Person> activistStream = personConverter.convertActivistStream(activists.stream());
-        PersonFilterBuilder filterBuilder = new PersonFilterBuilder(humanManager.personManager().repository().streamAllByActiveIsTrue());
+        List<Person> activists = personManager.repository().streamAll().collect(Collectors.toList());
+        PersonFilterBuilder filterBuilder = new PersonFilterBuilder(activists.stream());
         filterBuilder
-                .applyFilter(new ActivistFilter(activistStream, FilterType.ENFORCE))
+                .applyFilter(new ActivistFilter(FilterType.ENFORCE))
                 .applyFilter(new NameFilter(firstName, lastName))
                 .applyFilter(new AddressFilter(address, MatchType.IF_DEFINED));
         Stream<SimplePersonJSON> jsonObjects = filterBuilder.resultingStream().map(SimplePersonJSON::new);

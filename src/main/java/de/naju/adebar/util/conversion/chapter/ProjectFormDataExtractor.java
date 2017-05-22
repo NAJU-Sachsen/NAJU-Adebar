@@ -1,11 +1,10 @@
 package de.naju.adebar.util.conversion.chapter;
 
+import de.naju.adebar.app.human.PersonManager;
 import de.naju.adebar.controller.forms.chapter.ProjectForm;
 import de.naju.adebar.model.chapter.LocalGroup;
 import de.naju.adebar.model.chapter.Project;
 import de.naju.adebar.model.chapter.ReadOnlyLocalGroupRepository;
-import de.naju.adebar.model.human.Activist;
-import de.naju.adebar.model.human.HumanManager;
 import de.naju.adebar.model.human.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,16 +22,16 @@ import java.util.Locale;
 @Service
 public class ProjectFormDataExtractor {
     private DateTimeFormatter dateTimeFormatter;
-    private HumanManager humanManager;
+    private PersonManager personManager;
     private ReadOnlyLocalGroupRepository localGroupRepo;
 
     @Autowired
-    public ProjectFormDataExtractor(HumanManager humanManager, ReadOnlyLocalGroupRepository localGroupRepo) {
-        Object[] params = {humanManager, localGroupRepo};
+    public ProjectFormDataExtractor(PersonManager personManager, ReadOnlyLocalGroupRepository localGroupRepo) {
+        Object[] params = {personManager, localGroupRepo};
         Assert.noNullElements(params, "At least one parameter was null: " + Arrays.toString(params));
 
         this.dateTimeFormatter = DateTimeFormatter.ofPattern(ProjectForm.DATE_FORMAT, Locale.GERMAN);
-        this.humanManager = humanManager;
+        this.personManager = personManager;
         this.localGroupRepo = localGroupRepo;
     }
 
@@ -46,8 +45,7 @@ public class ProjectFormDataExtractor {
         Project project = new Project(projectForm.getName(), localGroup);
 
         if (projectForm.hasPersonInCharge()) {
-            Person person = humanManager.findPerson(projectForm.getPersonInCharge()).orElseThrow(() -> new IllegalStateException("Project form does not specify a valid ID for the person in charge"));
-            Activist personInCharge = humanManager.findActivist(person);
+            Person personInCharge = personManager.findPerson(projectForm.getPersonInCharge()).orElseThrow(() -> new IllegalStateException("Project form does not specify a valid ID for the person in charge"));
             project.addContributor(personInCharge);
             project.setPersonInCharge(personInCharge);
         }

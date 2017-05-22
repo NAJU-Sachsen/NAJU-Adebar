@@ -9,6 +9,7 @@ import java.util.List;
 public class CreatePersonForm extends EditPersonForm {
 
     private boolean activist, referent;
+    private boolean hasJuleica;
     private String juleicaExpiryDate;
     private List<String> qualifications;
 
@@ -29,6 +30,14 @@ public class CreatePersonForm extends EditPersonForm {
 
     public void setReferent(boolean referent) {
         this.referent = referent;
+    }
+
+    public boolean getHasJuleica() {
+        return hasJuleica;
+    }
+
+    public void setHasJuleica(boolean hasJuleica) {
+        this.hasJuleica = hasJuleica;
     }
 
     public boolean hasJuleicaExpiryDate() {
@@ -54,9 +63,9 @@ public class CreatePersonForm extends EditPersonForm {
     @Override
     public String toString() {
         return "CreatePersonForm{" +
-                super.toString() +
-                " activist=" + activist +
+                "activist=" + activist +
                 ", referent=" + referent +
+                ", juleicaCard=" + hasJuleica +
                 ", juleicaExpiryDate='" + juleicaExpiryDate + '\'' +
                 ", qualifications=" + qualifications +
                 '}';

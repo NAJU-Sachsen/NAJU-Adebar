@@ -1,9 +1,10 @@
 package de.naju.adebar.controller;
 
 import de.naju.adebar.app.newsletter.NewsletterDataProcessor;
+import de.naju.adebar.app.newsletter.NewsletterManager;
 import de.naju.adebar.controller.forms.newsletter.AddNewsletterForm;
 import de.naju.adebar.model.chapter.LocalGroup;
-import de.naju.adebar.model.chapter.LocalGroupManager;
+import de.naju.adebar.app.chapter.LocalGroupManager;
 import de.naju.adebar.model.newsletter.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Optional;

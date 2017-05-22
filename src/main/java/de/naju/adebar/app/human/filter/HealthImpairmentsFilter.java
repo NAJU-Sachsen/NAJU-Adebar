@@ -18,6 +18,7 @@ public class HealthImpairmentsFilter implements PersonFilter {
 
     @Override
     public Stream<Person> filter(Stream<Person> personStream) {
-        return personStream.filter(p -> p.getHealthImpairments().contains(healthImpairments));
+        personStream = personStream.filter(Person::isParticipant);
+        return personStream.filter(p -> p.getParticipantProfile().getHealthImpairments().contains(healthImpairments));
     }
 }

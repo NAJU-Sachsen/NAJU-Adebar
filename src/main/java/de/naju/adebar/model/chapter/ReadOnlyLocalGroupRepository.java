@@ -2,8 +2,9 @@ package de.naju.adebar.model.chapter;
 
 import de.naju.adebar.infrastructure.ReadOnlyRepository;
 import de.naju.adebar.model.events.Event;
-import de.naju.adebar.model.human.Activist;
+import de.naju.adebar.model.human.Person;
 import de.naju.adebar.model.newsletter.Newsletter;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
@@ -11,6 +12,7 @@ import java.util.Optional;
  * A repository that provides read-only access to the saved local groups
  * @author Rico Bergmann
  */
+@Repository("ro_localGroupRepo")
 public interface ReadOnlyLocalGroupRepository extends ReadOnlyRepository<LocalGroup, Long> {
 
     /**
@@ -23,7 +25,7 @@ public interface ReadOnlyLocalGroupRepository extends ReadOnlyRepository<LocalGr
      * @param activist the activist to query for
      * @return all local groups with the specified person as member
      */
-    Iterable<LocalGroup> findByMembersContains(Activist activist);
+    Iterable<LocalGroup> findByMembersContains(Person activist);
 
     /**
      * @param newsletter the newsletter to query for

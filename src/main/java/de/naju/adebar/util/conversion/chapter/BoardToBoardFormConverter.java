@@ -1,10 +1,7 @@
 package de.naju.adebar.util.conversion.chapter;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import de.naju.adebar.controller.forms.chapter.BoardForm;
 import de.naju.adebar.model.chapter.Board;
-import de.naju.adebar.model.human.Activist;
 import de.naju.adebar.model.human.PersonId;
 import org.springframework.stereotype.Service;
 
@@ -28,12 +25,11 @@ public class BoardToBoardFormConverter {
             return new BoardForm();
         }
 
-        PersonId chairman = board.getChairman().getAssociatedPerson();
+        PersonId chairman = board.getChairman().getId();
         String email = board.getEmail();
         List<String> members = new LinkedList<>();
 
-        board.getMembers().forEach(m -> members.add(m.getAssociatedPerson().toString()));
-
+        board.getMembers().forEach(m -> members.add(m.getId().toString()));
 
         return new BoardForm(chairman.toString(), email, members);
     }

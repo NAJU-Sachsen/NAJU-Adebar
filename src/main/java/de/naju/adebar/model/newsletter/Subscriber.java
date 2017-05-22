@@ -24,7 +24,7 @@ import de.naju.adebar.util.Validation;
  * @author Rico Bergmann
  *
  */
-@Entity
+@Entity(name = "subscriber")
 public class Subscriber implements Serializable {
 	
 	/**
@@ -32,9 +32,10 @@ public class Subscriber implements Serializable {
 	 */
 	private final static long serialVersionUID = 7082774853885904589L;
 	
-	@Id @GeneratedValue private long id;
-	private String firstName, lastName;
-	@Column(unique=true) private String email;
+	@Id @GeneratedValue @Column(name = "id") private long id;
+	@Column(name = "firstName") private String firstName;
+    @Column(name = "lastName") private String lastName;
+	@Column(name = "email", unique=true) private String email;
 	
 	// constructors
 	
@@ -207,6 +208,13 @@ public class Subscriber implements Serializable {
 			return false;
 		}
 		Subscriber other = (Subscriber) obj;
+
+        // if both ID's are set, only compare them
+		if (other.id != 0 && this.id != 0) {
+		    return other.id == this.id;
+        }
+
+        // at least one subscriber was not persisted yet => compare attributes
 		if (email == null) {
 			if (other.email != null) {
 				return false;

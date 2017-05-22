@@ -1,6 +1,7 @@
 package de.naju.adebar.controller;
 
 import de.naju.adebar.app.human.DataProcessor;
+import de.naju.adebar.app.human.PersonManager;
 import de.naju.adebar.controller.forms.chapter.AddLocalGroupForm;
 import de.naju.adebar.controller.forms.chapter.BoardForm;
 import de.naju.adebar.controller.forms.chapter.LocalGroupForm;
@@ -9,12 +10,9 @@ import de.naju.adebar.controller.forms.events.EventForm;
 import de.naju.adebar.model.chapter.Board;
 import de.naju.adebar.model.chapter.ExistingMemberException;
 import de.naju.adebar.model.chapter.LocalGroup;
-import de.naju.adebar.model.chapter.LocalGroupManager;
-import de.naju.adebar.model.human.Activist;
-import de.naju.adebar.model.human.HumanManager;
+import de.naju.adebar.app.chapter.LocalGroupManager;
 import de.naju.adebar.model.human.Person;
-import de.naju.adebar.model.newsletter.NewsletterManager;
-import de.naju.adebar.util.conversion.PersonConverter;
+import de.naju.adebar.app.newsletter.NewsletterManager;
 import de.naju.adebar.util.conversion.chapter.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,9 +36,8 @@ public class LocalGroupController {
     private final static String EMAIL_DELIMITER = ";";
 
     private LocalGroupManager localGroupManager;
-    private HumanManager humanManager;
+    private PersonManager personManager;
     private NewsletterManager newsletterManager;
-    private PersonConverter personConverter;
     private LocalGroupFormDataExtractor localGroupFormDataExtractor;
     private AddLocalGroupFormDataExtractor addLocalGroupFormDataExtractor;
     private LocalGroupToLocalGroupFormConverter localGroupFormConverter;
@@ -49,13 +46,12 @@ public class LocalGroupController {
     private DataProcessor humanDataProcessor;
 
     @Autowired
-    public LocalGroupController(LocalGroupManager localGroupManager, HumanManager humanManager, NewsletterManager newsletterManager, PersonConverter personConverter, AddLocalGroupFormDataExtractor addLocalGroupFormDataExtractor, LocalGroupFormDataExtractor localGroupFormDataExtractor, LocalGroupToLocalGroupFormConverter localGroupFormConverter, BoardFormDataExtractor boardFormDataExtractor, BoardToBoardFormConverter boardFormConverter, DataProcessor humanDataProcessor) {
-        Object[] params = {localGroupManager, humanManager, newsletterManager, personConverter, localGroupFormDataExtractor, addLocalGroupFormDataExtractor, localGroupFormConverter, boardFormDataExtractor, boardFormConverter, humanDataProcessor};
+    public LocalGroupController(LocalGroupManager localGroupManager, PersonManager personManager, NewsletterManager newsletterManager, AddLocalGroupFormDataExtractor addLocalGroupFormDataExtractor, LocalGroupFormDataExtractor localGroupFormDataExtractor, LocalGroupToLocalGroupFormConverter localGroupFormConverter, BoardFormDataExtractor boardFormDataExtractor, BoardToBoardFormConverter boardFormConverter, DataProcessor humanDataProcessor) {
+        Object[] params = {localGroupManager, personManager, newsletterManager, localGroupFormDataExtractor, addLocalGroupFormDataExtractor, localGroupFormConverter, boardFormDataExtractor, boardFormConverter, humanDataProcessor};
         Assert.noNullElements(params, "No parameter may be null: " + Arrays.toString(params));
         this.localGroupManager = localGroupManager;
-        this.humanManager = humanManager;
+        this.personManager = personManager;
         this.newsletterManager = newsletterManager;
-        this.personConverter = personConverter;
         this.localGroupFormDataExtractor = localGroupFormDataExtractor;
         this.addLocalGroupFormDataExtractor = addLocalGroupFormDataExtractor;
         this.localGroupFormConverter = localGroupFormConverter;
@@ -100,12 +96,12 @@ public class LocalGroupController {
     public String showLocalGroupDetails(@PathVariable("gid") long groupId, Model model) {
         LocalGroup localGroup = localGroupManager.findLocalGroup(groupId).orElseThrow(IllegalArgumentException::new);
         Board board = localGroup.getBoard();
-        Iterable<Person> members = personConverter.convertActivists(localGroup.getMembers());
-        Iterable<Person> boardMembers = board != null ? personConverter.convertActivists(board.getMembers()) : null;
+        Iterable<Person> members = localGroup.getMembers();
+        Iterable<Person> boardMembers = board != null ? board.getMembers() : null;
 
         model.addAttribute("localGroup", localGroup);
         model.addAttribute("members", members);
-        model.addAttribute("chairman", board != null ? personConverter.convertActivist(board.getChairman()) : null);
+        model.addAttribute("chairman", board != null ? board.getChairman() : null);
         model.addAttribute("board", boardMembers);
 
         model.addAttribute("memberEmails", humanDataProcessor.extractEmailAddressesAsString(members, EMAIL_DELIMITER));
@@ -146,7 +142,7 @@ public class LocalGroupController {
     @RequestMapping("/localGroups/{gid}/members/add")
     public String addMember(@PathVariable("gid") long groupId, @RequestParam("person-id") String personId, RedirectAttributes redirAttr) {
         LocalGroup localGroup = localGroupManager.findLocalGroup(groupId).orElseThrow(IllegalArgumentException::new);
-        Activist activist = humanManager.findActivist(humanManager.findPerson(personId).orElseThrow(IllegalArgumentException::new));
+        Person activist = personManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
 
         try {
             localGroup.addMember(activist);
@@ -169,7 +165,7 @@ public class LocalGroupController {
     @RequestMapping("/localGroups/{gid}/members/remove")
     public String removeMember(@PathVariable("gid") long groupId, @RequestParam("member-id") String memberId, RedirectAttributes redirAttr) {
         LocalGroup localGroup = localGroupManager.findLocalGroup(groupId).orElseThrow(IllegalArgumentException::new);
-        Activist activist = humanManager.findActivist(humanManager.findPerson(memberId).orElseThrow(IllegalArgumentException::new));
+        Person activist = personManager.findPerson(memberId).orElseThrow(IllegalArgumentException::new);
 
         localGroup.removeMember(activist);
         localGroupManager.updateLocalGroup(groupId, localGroup);

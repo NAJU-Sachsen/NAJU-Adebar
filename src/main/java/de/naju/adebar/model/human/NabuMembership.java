@@ -5,50 +5,42 @@ import javax.persistence.Transient;
 import java.io.Serializable;
 
 /**
+ * A person may be a club member of the NABU. For now we are just interested in its membership number.
  * @author Rico Bergmann
  */
 @Embeddable
 public class NabuMembership implements Serializable {
-    private boolean nabuMember;
     private String membershipNumber;
 
-    public NabuMembership() {
-        this.nabuMember = false;
-        this.membershipNumber = new String();
-    }
+    // constructors
 
+    /**
+     * Full constructor
+     * @param membershipNumber the membership number
+     */
     public NabuMembership(String membershipNumber) {
-        this.nabuMember = true;
         this.membershipNumber = membershipNumber;
     }
 
-    public boolean isNabuMember() {
-        return nabuMember;
-    }
+    /**
+     * Default constructor
+     */
+    public NabuMembership() {}
 
-    public void setNabuMember(boolean nabuMember) {
-        if (!nabuMember) {
-            membershipNumber = null;
-        } else if (nabuMember && !this.nabuMember) {
-            membershipNumber = new String();
-        }
-        this.nabuMember = nabuMember;
-    }
+    // getter and setter
 
+    /**
+     * @return the membership number
+     */
     public String getMembershipNumber() {
         return membershipNumber;
     }
 
+    /**
+     * @param membershipNumber the membership number
+     */
     public void setMembershipNumber(String membershipNumber) {
         this.membershipNumber = membershipNumber;
-    }
-
-    @Transient
-    public boolean hasMembershipNumber() {
-        if (!isNabuMember()) {
-            throw new IllegalStateException("Not a NABU member");
-        }
-        return membershipNumber != null && !membershipNumber.isEmpty();
     }
 
     @Override
@@ -58,22 +50,18 @@ public class NabuMembership implements Serializable {
 
         NabuMembership that = (NabuMembership) o;
 
-        if (nabuMember != that.nabuMember) return false;
         return membershipNumber != null ? membershipNumber.equals(that.membershipNumber) : that.membershipNumber == null;
     }
 
     @Override
     public int hashCode() {
-        int result = (nabuMember ? 1 : 0);
-        result = 31 * result + (membershipNumber != null ? membershipNumber.hashCode() : 0);
-        return result;
+        return membershipNumber != null ? membershipNumber.hashCode() : 0;
     }
 
     @Override
     public String toString() {
         return "NabuMembership{" +
-                "nabuMember=" + nabuMember +
-                ", membershipNumber='" + membershipNumber + '\'' +
+                "membershipNumber='" + membershipNumber + '\'' +
                 '}';
     }
 }

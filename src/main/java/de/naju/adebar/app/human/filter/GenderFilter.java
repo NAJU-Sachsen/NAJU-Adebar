@@ -21,6 +21,7 @@ public class GenderFilter implements PersonFilter {
 
     @Override
     public Stream<Person> filter(Stream<Person> personStream) {
-        return personStream.filter(p -> filterType.matching(p.getGender(), gender));
+        personStream = personStream.filter(Person::isParticipant);
+        return personStream.filter(p -> filterType.matching(p.getParticipantProfile().getGender(), gender));
     }
 }

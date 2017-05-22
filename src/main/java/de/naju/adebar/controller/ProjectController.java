@@ -1,13 +1,13 @@
 package de.naju.adebar.controller;
 
+import de.naju.adebar.app.chapter.LocalGroupManager;
+import de.naju.adebar.app.chapter.ProjectManager;
 import de.naju.adebar.app.human.DataProcessor;
+import de.naju.adebar.app.human.PersonManager;
 import de.naju.adebar.controller.forms.chapter.ProjectForm;
 import de.naju.adebar.controller.forms.events.EventForm;
 import de.naju.adebar.model.chapter.*;
-import de.naju.adebar.model.human.Activist;
-import de.naju.adebar.model.human.HumanManager;
 import de.naju.adebar.model.human.Person;
-import de.naju.adebar.util.conversion.PersonConverter;
 import de.naju.adebar.util.conversion.chapter.ProjectFormDataExtractor;
 import de.naju.adebar.util.conversion.chapter.ProjectToProjectFormConverter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,21 +32,19 @@ public class ProjectController {
     private final static String EMAIL_DELIMITER = ";";
 
     private ProjectManager projectManager;
-    private HumanManager humanManager;
+    private PersonManager personManager;
     private LocalGroupManager localGroupManager;
-    private PersonConverter personConverter;
     private DataProcessor humanDataProcessor;
     private ProjectFormDataExtractor dataExtractor;
     private ProjectToProjectFormConverter formConverter;
 
     @Autowired
-    public ProjectController(ProjectManager projectManager, HumanManager humanManager, LocalGroupManager localGroupManager, PersonConverter personConverter, DataProcessor humanDataProcessor, ProjectFormDataExtractor dataExtractor, ProjectToProjectFormConverter formConverter) {
-        Object[] params = {projectManager, humanManager, localGroupManager, personConverter, dataExtractor, formConverter};
+    public ProjectController(ProjectManager projectManager, PersonManager personManager, LocalGroupManager localGroupManager, DataProcessor humanDataProcessor, ProjectFormDataExtractor dataExtractor, ProjectToProjectFormConverter formConverter) {
+        Object[] params = {projectManager, personManager, localGroupManager, dataExtractor, formConverter};
         Assert.noNullElements(params, "At least one parameter was null: " + Arrays.toString(params));
         this.projectManager = projectManager;
-        this.humanManager = humanManager;
+        this.personManager = personManager;
         this.localGroupManager = localGroupManager;
-        this.personConverter = personConverter;
         this.humanDataProcessor = humanDataProcessor;
         this.dataExtractor = dataExtractor;
         this.formConverter = formConverter;
@@ -61,12 +59,9 @@ public class ProjectController {
     @RequestMapping("/projects/{pid}")
     public String showProjectDetails(@PathVariable("pid") long projectId, Model model) {
         Project project = projectManager.findProject(projectId).orElseThrow(IllegalArgumentException::new);
-        Person personInCharge =  project.getPersonInCharge() != null ? personConverter.convertActivist(project.getPersonInCharge()) : null;
-        Iterable<Person> contributors = personConverter.convertActivists(project.getContributors());
+        Iterable<Person> contributors = project.getContributors();
 
         model.addAttribute("project", project);
-        model.addAttribute("personInCharge", personInCharge);
-        model.addAttribute("contributors", contributors);
         model.addAttribute("contributorEmails", humanDataProcessor.extractEmailAddressesAsString(contributors, EMAIL_DELIMITER));
 
         model.addAttribute("addEventForm", new EventForm());
@@ -118,8 +113,7 @@ public class ProjectController {
     @RequestMapping("/projects/{pid}/contributors/add")
     public String addContributor(@PathVariable("pid") long projectId, @RequestParam("person-id") String personId, RedirectAttributes redirAttr) {
         Project project = projectManager.findProject(projectId).orElseThrow(IllegalArgumentException::new);
-        Person person = humanManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
-        Activist activist = humanManager.findActivist(person);
+        Person activist = personManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
 
         try {
             project.addContributor(activist);
@@ -142,8 +136,7 @@ public class ProjectController {
     @RequestMapping("/projects/{pid}/contributors/remove")
     public String removeContributor(@PathVariable("pid") long projectId, @RequestParam("person-id") String personId, RedirectAttributes redirAttr) {
         Project project = projectManager.findProject(projectId).orElseThrow(IllegalArgumentException::new);
-        Person person = humanManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
-        Activist activist = humanManager.findActivist(person);
+        Person activist = personManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
 
         project.removeContributor(activist);
         projectManager.updateProject(projectId, project);

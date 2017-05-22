@@ -13,17 +13,17 @@ import org.springframework.util.Assert;
  * @author Rico Bergmann
  *
  */
-@Entity
+@Entity(name = "newsletter")
 public class Newsletter {
 	
-	@Id @GeneratedValue private long id;
+	@Id @GeneratedValue @Column(name = "id") private long id;
 	
 	/**
 	 * The name of the newsletter. It does not have to be unique among all newsletters but should describe what the
 	 * newsletter is about. Therefore different local chapters may have different newsletters with similar names, e.g.
 	 * one that deals with general announcements.
 	 */
-	private String name;
+	@Column(name = "name") private String name;
 	
 	/**
 	 * 
@@ -158,7 +158,32 @@ public class Newsletter {
 	
 	// overridden from Object
 
-	@Override public String toString() {
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Newsletter that = (Newsletter) o;
+
+        // if both ID's are set, only compare them
+        if (that.id != 0 && this.id != 0) {
+            return that.id == this.id;
+        }
+
+        // at least one newsletter was not persisted yet => compare attributes
+        if (!name.equals(that.name)) return false;
+        return subscribers.equals(that.subscribers);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name.hashCode();
+        result = 31 * result + subscribers.hashCode();
+        return result;
+    }
+
+    @Override public String toString() {
 		return String.format("Newsletter [id=%d, name=%s, subscribers=%d]", id, name, subscribers.size());
 	}
 }

@@ -6,39 +6,40 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Basic testing of the {@link Referent} class
+ * Basic testing of the {@link ReferentProfile} class
  * @author Rico Bergmann
  */
 public class ReferentUnitTest {
-    private Referent referent;
+    private Person referent;
     private Qualification qualification;
 
     @Before public void setUp() {
-        this.referent = new Referent(new PersonId());
+        referent = new Person(new PersonId(),"Hans", "Wurst", "hw@web.de");
+        referent.makeReferent();
         this.qualification = new Qualification("Erste Hilfe Kurs",
                 "Hat die Qualifikation, einen Erste-Hilfe Kurs zu leiten");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testAddNullQualification() {
-        referent.addQualification(null);
+        referent.getReferentProfile().addQualification(null);
     }
 
     @Test
     public void testAddQualification() {
-        referent.addQualification(qualification);
+        referent.getReferentProfile().addQualification(qualification);
         Assert.assertTrue(String.format("%s should have qualification %s", referent, qualification),
-                referent.hasQualification(qualification));
+                referent.getReferentProfile().hasQualification(qualification));
     }
 
     @Test
     public void testRemoveQualification() {
-        referent.addQualification(qualification);
-        referent.removeQualification(qualification);
+        referent.getReferentProfile().addQualification(qualification);
+        referent.getReferentProfile().removeQualification(qualification);
         Assert.assertFalse(String.format("%s should not have qualification %s any more", referent, qualification),
-                referent.hasQualification(qualification));
+                referent.getReferentProfile().hasQualification(qualification));
         Assert.assertFalse(String.format("%s should not have qualification %s any more", referent, qualification),
-                Iterables.contains(referent.getQualifications(), qualification));
+                Iterables.contains(referent.getReferentProfile().getQualifications(), qualification));
     }
 
 

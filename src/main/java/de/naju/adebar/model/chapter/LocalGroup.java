@@ -1,8 +1,9 @@
 package de.naju.adebar.model.chapter;
 
 import de.naju.adebar.model.events.Event;
-import de.naju.adebar.model.human.Activist;
 import de.naju.adebar.model.human.Address;
+import de.naju.adebar.model.human.NoActivistException;
+import de.naju.adebar.model.human.Person;
 import de.naju.adebar.model.newsletter.Newsletter;
 import org.springframework.util.Assert;
 
@@ -10,18 +11,20 @@ import javax.persistence.*;
 import java.util.*;
 
 // TODO a local group should be able to contain multiple newsletters
+// TODO adjust relation of board, contact persons and NABU-board
 
 /**
  * Abstraction of a local group. Each group has a (very likely) unique set of members, i. e. activist who contribute to
  * this certain group. Furthermore a chapter may have a board of directors if it is a more professional one.
  * @author Rico Bergmann
  */
-@Entity
+@Entity(name = "localGroup")
 public class LocalGroup {
     @Id @GeneratedValue private long id;
     @Column(unique = true) private String name;
     @Embedded @Column(unique = true) private Address address;
-    @ManyToMany(cascade = CascadeType.ALL) private List<Activist> members;
+    @ManyToMany(cascade = CascadeType.ALL) private List<Person> members;
+    @ManyToMany(cascade = CascadeType.ALL) private List<Person> contactPersons;
     @OneToMany(cascade = CascadeType.ALL) private List<Event> events;
     @OneToMany(cascade = CascadeType.ALL) private Map<String, Project> projects;
     @OneToOne(cascade = CascadeType.ALL) private Board board;
@@ -95,7 +98,7 @@ public class LocalGroup {
     /**
      * @return the activist who contribute to the chapter
      */
-    public Iterable<Activist> getMembers() {
+    public Iterable<Person> getMembers() {
         return members;
     }
 
@@ -141,7 +144,7 @@ public class LocalGroup {
     /**
      * @param members the local group's members
      */
-    protected void setMembers(List<Activist> members) {
+    protected void setMembers(List<Person> members) {
         this.members = members;
     }
 
@@ -216,23 +219,26 @@ public class LocalGroup {
     // modification operations
 
     /**
-     * @param activist the activist to add to the local group
+     * @param person the activist to add to the local group
      * @throws IllegalArgumentException if the activist is {@code null}
+     * @throws NoActivistException if the person is no activist
      * @throws ExistingMemberException if the activist is already registered as contributor
      */
-    public void addMember(Activist activist) {
-        Assert.notNull(activist, "Activist to add may not be null!");
-        if (isMember(activist)) {
-            throw new ExistingMemberException(String.format("Activist %s is already part of local group %s", activist.toString(), this.toString()));
+    public void addMember(Person person) {
+        Assert.notNull(person, "Activist to add may not be null!");
+        if (!person.isActivist()) {
+            throw new NoActivistException("Person is no activist: " + person);
+        } else if (isMember(person)) {
+            throw new ExistingMemberException(String.format("Activist %s is already part of local group %s", person.toString(), this.toString()));
         }
-        members.add(activist);
+        members.add(person);
     }
 
     /**
      * @param activist the activist to check
      * @return {@code true} if the activist is registered as contributor to the chapter or {@code false} otherwise
      */
-    public boolean isMember(Activist activist) {
+    public boolean isMember(Person activist) {
         return members.contains(activist);
     }
 
@@ -240,7 +246,7 @@ public class LocalGroup {
      * @param activist the activist to remove
      * @throws IllegalArgumentException if the activist does not contribute to the local group
      */
-    public void removeMember(Activist activist) {
+    public void removeMember(Person activist) {
         Assert.isTrue(isMember(activist), "Not a member of the local group: " + activist);
         members.remove(activist);
     }
@@ -309,6 +315,10 @@ public class LocalGroup {
         if (o == null || getClass() != o.getClass()) return false;
 
         LocalGroup that = (LocalGroup) o;
+
+        if (that.id != 0 && this.id != 0) {
+            return that.id == this.id;
+        }
 
         if (!name.equals(that.name)) return false;
         if (!address.equals(that.address)) return false;

@@ -2,11 +2,11 @@ package de.naju.adebar.controller;
 
 import com.google.common.collect.Iterables;
 import de.naju.adebar.app.human.DataProcessor;
+import de.naju.adebar.app.human.PersonManager;
 import de.naju.adebar.app.human.filter.PersonFilterBuilder;
 import de.naju.adebar.controller.forms.human.*;
-import de.naju.adebar.model.chapter.Board;
 import de.naju.adebar.model.chapter.LocalGroup;
-import de.naju.adebar.model.chapter.LocalGroupManager;
+import de.naju.adebar.app.chapter.LocalGroupManager;
 import de.naju.adebar.model.human.*;
 import de.naju.adebar.util.conversion.human.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,32 +32,33 @@ import java.util.stream.Collectors;
  *
  * @author Rico Bergmann
  * @see Person
- * @see Activist
- * @see Referent
  */
 @Controller
 public class PersonController {
     private final static String EMAIL_DELIMITER = ";";
 
-    private HumanManager humanManager;
+    private PersonManager personManager;
     private QualificationManager qualificationManager;
     private LocalGroupManager localGroupManager;
     private CreatePersonFormDataExtractor createPersonFormDataExtractor;
     private EditPersonFormDataExtractor editPersonFormDataExtractor;
+    private EditActivistFormDataExtractor editActivistFormDataExtractor;
     private FilterPersonFormFilterExtractor filterPersonFormFilterExtractor;
+    private AddQualificationFormDataExtractor addQualificationFormDataExtractor;
     private DataProcessor dataProcessor;
 
     @Autowired
-    public PersonController(HumanManager humanManager, QualificationManager qualificationManager, LocalGroupManager localGroupManager, CreatePersonFormDataExtractor createPersonFormDataExtractor,
-                            EditPersonFormDataExtractor editPersonFormDataExtractor, FilterPersonFormFilterExtractor filterPersonFormFilterExtractor, DataProcessor dataProcessor) {
-        Object[] params = {humanManager, qualificationManager, localGroupManager, localGroupManager, createPersonFormDataExtractor, editPersonFormDataExtractor, filterPersonFormFilterExtractor, dataProcessor};
+    public PersonController(PersonManager personManager, QualificationManager qualificationManager, LocalGroupManager localGroupManager, CreatePersonFormDataExtractor createPersonFormDataExtractor, EditPersonFormDataExtractor editPersonFormDataExtractor, EditActivistFormDataExtractor editActivistFormDataExtractor, FilterPersonFormFilterExtractor filterPersonFormFilterExtractor, AddQualificationFormDataExtractor addQualificationFormDataExtractor, DataProcessor dataProcessor) {
+        Object[] params = {personManager, qualificationManager, localGroupManager, localGroupManager, createPersonFormDataExtractor, editPersonFormDataExtractor, editActivistFormDataExtractor, filterPersonFormFilterExtractor, addQualificationFormDataExtractor, dataProcessor};
         Assert.noNullElements(params, "At least one parameter was null: " + Arrays.toString(params));
-        this.humanManager = humanManager;
+        this.personManager = personManager;
         this.localGroupManager = localGroupManager;
         this.createPersonFormDataExtractor = createPersonFormDataExtractor;
         this.editPersonFormDataExtractor = editPersonFormDataExtractor;
+        this.editActivistFormDataExtractor = editActivistFormDataExtractor;
         this.filterPersonFormFilterExtractor = filterPersonFormFilterExtractor;
         this.qualificationManager = qualificationManager;
+        this.addQualificationFormDataExtractor = addQualificationFormDataExtractor;
         this.dataProcessor = dataProcessor;
     }
 
@@ -70,7 +71,7 @@ public class PersonController {
     public String showPersonOverview(Model model) {
         model.addAttribute("addPersonForm", new CreatePersonForm());
         model.addAttribute("filterPersonsForm", new FilterPersonForm());
-        model.addAttribute("persons", humanManager.personManager().repository().findFirst25ByActiveIsTrueOrderByLastName());
+        model.addAttribute("persons", personManager.repository().findFirst25());
         model.addAttribute("qualifications", qualificationManager.repository().findAll());
         return "persons";
     }
@@ -84,7 +85,7 @@ public class PersonController {
     public String showAllPersons(Model model) {
         model.addAttribute("addPersonForm", new CreatePersonForm());
         model.addAttribute("filterPersonsForm", new FilterPersonForm());
-        model.addAttribute("persons", humanManager.personManager().repository().findAllByActiveIsTrue());
+        model.addAttribute("persons", personManager.repository().findAll());
         model.addAttribute("qualifications", qualificationManager.repository().findAll());
         return "persons";
     }
@@ -96,21 +97,8 @@ public class PersonController {
      */
     @RequestMapping("/persons/add")
     public String addPerson(@ModelAttribute("addPersonFrom") CreatePersonForm createPersonForm) {
-        Person person = humanManager.savePerson(createPersonFormDataExtractor.extractPerson(createPersonForm));
-        if (createPersonForm.isActivist()) {
-            Activist activist = humanManager.createActivist(person);
-            createPersonFormDataExtractor.extractJuleicaExpiryDate(createPersonForm).ifPresent(d -> {
-                activist.setJuleicaExpiryDate(d);
-                humanManager.activistManager().saveActivist(activist);
-            });
-        }
-        if (createPersonForm.isReferent()) {
-            Referent referent = humanManager.createReferent(person);
-            createPersonFormDataExtractor.extractQualifications(createPersonForm, qualificationManager.repository()).ifPresent(q -> {
-                    referent.addAllQualifications(q);
-                    humanManager.referentManager().saveReferent(referent);
-            });
-        }
+        Person person = createPersonFormDataExtractor.extractPerson(createPersonForm);
+        personManager.savePerson(person);
 
         return "redirect:/persons/" + person.getId();
     }
@@ -123,7 +111,7 @@ public class PersonController {
      */
     @RequestMapping("/persons/filter")
     public String filterPersons(@ModelAttribute("filterPersonsForm") FilterPersonForm filterPersonForm, Model model) {
-        List<Person> persons = humanManager.personManager().repository().streamAllByActiveIsTrue().collect(Collectors.toList());
+        List<Person> persons = personManager.repository().streamAll().collect(Collectors.toList());
         PersonFilterBuilder filterBuilder = new PersonFilterBuilder(persons.stream());
         filterPersonFormFilterExtractor.extractAllFilters(filterPersonForm).forEach(filterBuilder::applyFilter);
 
@@ -148,23 +136,19 @@ public class PersonController {
     @RequestMapping("/persons/{pid}")
     public String showPersonDetails(@PathVariable("pid") String personId, Model model) {
 
-        Person person = humanManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
+        Person person = personManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
 
         model.addAttribute("editPersonForm", new PersonToEditPersonFormConverter().convertToEditPersonForm(person));
         model.addAttribute("addQualificationForm", new AddQualificationForm());
-        model.addAttribute("isNabuMember", person.getNabuMembership().isNabuMember());
 
         model.addAttribute("person", person);
 
-        if (humanManager.activistManager().isActivist(person)) {
-            Activist activist = humanManager.activistManager().findActivistByPerson(person);
-            Iterable<LocalGroup> localGroups = localGroupManager.repository().findByMembersContains(activist);
-            Iterable<LocalGroup> boards = localGroupManager.findAllLocalGroupsForBoardMember(activist);
+        if (person.isActivist()) {
+            Iterable<LocalGroup> localGroups = localGroupManager.repository().findByMembersContains(person);
+            Iterable<LocalGroup> boards = localGroupManager.findAllLocalGroupsForBoardMember(person);
 
-            model.addAttribute("isActivist", activist.isActive());
-            model.addAttribute("activist", activist);
-            model.addAttribute("hasJuleica", activist.hasJuleica());
-            model.addAttribute("editActivistForm", new ActivistToEditActivistFormConverter().convertToEditActivistForm(activist));
+            model.addAttribute("isActivist", !person.isArchived());
+            model.addAttribute("editActivistForm", new ActivistToEditActivistFormConverter().convertToEditActivistForm(person));
             model.addAttribute("localGroups", Iterables.isEmpty(localGroups) ? null : localGroups);
             model.addAttribute("boards", Iterables.isEmpty(boards) ? null : boards);
         } else {
@@ -172,13 +156,7 @@ public class PersonController {
             model.addAttribute("editActivistForm", new EditActivistForm());
         }
 
-        if (humanManager.referentManager().isReferent(person)) {
-            model.addAttribute("isReferent", true);
-            model.addAttribute("referent", humanManager.referentManager().findReferentByPerson(person));
-            model.addAttribute("qualifications", humanManager.referentManager().findReferentByPerson(person).getQualifications());
-        } else {
-            model.addAttribute("isReferent", false);
-        }
+        model.addAttribute("isReferent", person.isReferent());
 
         model.addAttribute("allQualifications", qualificationManager.repository().findAll());
 
@@ -195,9 +173,9 @@ public class PersonController {
     @RequestMapping("/persons/{pid}/edit")
     public String editPerson(@PathVariable("pid") String personId, @ModelAttribute("editPersonForm") EditPersonForm personForm, RedirectAttributes redirAttr) {
 
-        Person person = humanManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
+        Person person = personManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
 
-        humanManager.personManager().updatePerson(person.getId(), editPersonFormDataExtractor.extractPerson(personForm));
+        personManager.updatePerson(person.getId(), editPersonFormDataExtractor.extractPerson(person.getId(), personForm));
 
         redirAttr.addFlashAttribute("personUpdated", true);
         return "redirect:/persons/" + personId;
@@ -211,10 +189,10 @@ public class PersonController {
      */
     @RequestMapping("/persons/{pid}/delete")
     public String deletePerson(@PathVariable("pid") String personId, RedirectAttributes redirAttr) {
-        Person person = humanManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
+        Person person = personManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
 
         try {
-            humanManager.deactivatePerson(person);
+            personManager.deactivatePerson(person);
         } catch (IllegalStateException e) {
             redirAttr.addFlashAttribute("deletionError", true);
             return "redirect:/persons/" + personId;
@@ -233,23 +211,16 @@ public class PersonController {
      * @return the person's detail view
      */
     @RequestMapping("/persons/{pid}/edit-activist")
-    public String editActivist(@PathVariable("pid") String personId, @ModelAttribute("editActivistForm") EditActivistForm activistForm,
-                               RedirectAttributes redirAttr) {
+    public String editActivist(@PathVariable("pid") String personId, @ModelAttribute("editActivistForm") EditActivistForm activistForm, RedirectAttributes redirAttr) {
 
-        Person person = humanManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
+        Person person = personManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
 
-        if (activistForm.isActivist()) {
-            Activist activist = humanManager.activistManager().createActivistIfNotExists(person);
-            if (activistForm.isOwningJuleica()) {
-                activist.setJuleicaExpiryDate(LocalDate.parse(activistForm.getJuleicaExpiryDate(),
-                        DateTimeFormatter.ofPattern(EditActivistForm.DATE_FORMAT, Locale.GERMAN)));
-            } else {
-                activist.setJuleicaExpiryDate(null);
-            }
-            humanManager.activistManager().updateActivist(person.getId(), activist);
-        } else {
-            humanManager.activistManager().deactivateActivistIfExists(person);
+        if (!person.isActivist()) {
+            person.makeActivist();
         }
+
+        person.setActivistProfile(editActivistFormDataExtractor.extractActivistForm(person, activistForm));
+        personManager.updatePerson(person.getId(), person);
 
         return "redirect:/persons/" + personId;
     }
@@ -262,25 +233,15 @@ public class PersonController {
      * @return the person's detail view
      */
     @RequestMapping("/persons/{pid}/add-qualification")
-    public String addQualification(@PathVariable("pid") String personId, @ModelAttribute("addQualificationForm") AddQualificationForm qualificationForm,
-                                   RedirectAttributes redirAttr) {
+    public String addQualification(@PathVariable("pid") String personId, @ModelAttribute("addQualificationForm") AddQualificationForm qualificationForm, RedirectAttributes redirAttr) {
 
-        Person person = humanManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
-        Referent referent = humanManager.referentManager().createReferentIfNotExists(person);
+        Person person = personManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
 
-        Qualification qualification;
-        if (AddQualificationForm.AddType.valueOf(qualificationForm.getAddType()) == AddQualificationForm.AddType.NEW) {
-            qualification = qualificationManager.createQualification(qualificationForm.getName(), qualificationForm.getDescription());
-        } else {
-            Optional<Qualification> qualificationWrapper = qualificationManager.findQualification(qualificationForm.getQualification());
-            if (qualificationWrapper.isPresent()) {
-                qualification = qualificationWrapper.get();
-            } else {
-                throw new IllegalArgumentException("No qualification exists for name: " + qualificationForm.getQualification());
-            }
+        if (!person.isReferent()) {
+            person.makeReferent();
         }
-        referent.addQualification(qualification);
-        humanManager.referentManager().saveReferent(referent);
+
+        personManager.addQualificationToPerson(person,addQualificationFormDataExtractor.extractQualification(qualificationForm));
 
         redirAttr.addFlashAttribute("qualificationAdded", true);
         return "redirect:/persons/" + personId;
@@ -296,13 +257,12 @@ public class PersonController {
     @RequestMapping("/persons/{pid}/qualifications/remove")
     public String removeQualification(@PathVariable("pid") String personId, @RequestParam("name") String qualificationName, RedirectAttributes redirAttr) {
 
-        Person person = humanManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
-        Referent referent = humanManager.findReferent(person);
+        Person person = personManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
 
         Qualification qualification = qualificationManager.findQualification(qualificationName).orElseThrow(IllegalArgumentException::new);
 
-        referent.removeQualification(qualification);
-        humanManager.referentManager().updateReferent(person.getId(), referent);
+        person.getReferentProfile().removeQualification(qualification);
+        personManager.updatePerson(person.getId(), person);
 
         return "redirect:/persons/" + personId;
     }

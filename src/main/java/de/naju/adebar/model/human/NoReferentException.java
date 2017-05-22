@@ -4,7 +4,7 @@ package de.naju.adebar.model.human;
  * Exception to indicate that a person is not a referent but was treated as one.
  * @author Rico Bergmann
  * @see Person
- * @see Referent
+ * @see ReferentProfile
  * @see PersonId
  */
 public class NoReferentException extends  RuntimeException {

@@ -18,6 +18,7 @@ public class EatingHabitFilter implements PersonFilter {
 
     @Override
     public Stream<Person> filter(Stream<Person> personStream) {
-        return personStream.filter(p -> p.getEatingHabit().contains(eatingHabit));
+        personStream = personStream.filter(Person::isParticipant);
+        return personStream.filter(p -> p.getParticipantProfile().getEatingHabits().contains(eatingHabit));
     }
 }

@@ -3,10 +3,13 @@ package de.naju.adebar.util.conversion.human;
 import de.naju.adebar.controller.forms.human.CreatePersonForm;
 
 import de.naju.adebar.model.human.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -17,10 +20,16 @@ import java.util.Optional;
  */
 @Service
 public class CreatePersonFormDataExtractor {
-
+    private PersonFactory personFactory;
+    private QualificationRepository qualificationRepo;
     private DateTimeFormatter dateFormatter;
 
-    public CreatePersonFormDataExtractor() {
+    @Autowired
+    public CreatePersonFormDataExtractor(PersonFactory personFactory, QualificationRepository qualificationRepo) {
+        Object[] params = {personFactory, qualificationRepo};
+        Assert.noNullElements(params, "At least one parameter was null: " + Arrays.toString(params));
+        this.personFactory = personFactory;
+        this.qualificationRepo = qualificationRepo;
         this.dateFormatter = DateTimeFormatter.ofPattern(CreatePersonForm.DATE_FORMAT, Locale.GERMAN);
     }
 
@@ -29,14 +38,62 @@ public class CreatePersonFormDataExtractor {
      * @return the {@link Person} object encoded by the form
      */
     public Person extractPerson(CreatePersonForm personForm) {
-        Gender gender = Gender.valueOf(personForm.getGender());
-        LocalDate dob = personForm.hasDateOfBirth() ? LocalDate.parse(personForm.getDateOfBirth(), dateFormatter) : null;
-        NabuMembership nabu = personForm.isNabuMember() ? new NabuMembership(personForm.getNabuNumber()) : new NabuMembership();
-        Person person = new Person(personForm.getFirstName(), personForm.getLastName(), personForm.getEmail(), personForm.getPhoneNumber(), gender, extractAddress(personForm), dob);
-        person.setNabuMembership(nabu);
-        person.setEatingHabit(personForm.getEatingHabit());
-        person.setHealthImpairments(personForm.getHealthImpairments());
+        Person person = personFactory.buildNew(personForm.getFirstName(), personForm.getLastName(), personForm.getEmail()).create();
+        person.setAddress(extractAddress(personForm));
+
+        if (personForm.isParticipant()) {
+            person.makeParticipant();
+            fillParticipantProfile(person.getParticipantProfile(), personForm);
+        }
+
+        if (personForm.isActivist()) {
+            person.makeActivist();
+            fillActivistProfile(person.getActivistProfile(), personForm);
+        }
+
+        if (personForm.isReferent()) {
+            person.makeReferent();
+            fillReferentProfile(person.getReferentProfile(), personForm);
+        }
+
+
         return person;
+    }
+
+    /**
+     * @param profile the profile to complete
+     * @param personForm the data to use
+     */
+    public void fillParticipantProfile(ParticipantProfile profile, CreatePersonForm personForm) {
+        Gender gender = Gender.valueOf(personForm.getGender());
+        profile.setGender(gender);
+        LocalDate dob = personForm.hasDateOfBirth() ? LocalDate.parse(personForm.getDateOfBirth(), dateFormatter) : null;
+        profile.setDateOfBirth(dob);
+        NabuMembership nabu = personForm.isNabuMember() ? new NabuMembership(personForm.getNabuNumber()) : new NabuMembership();
+        profile.setNabuMembership(nabu);
+        profile.setEatingHabits(personForm.getEatingHabit());
+        profile.setHealthImpairments(personForm.getHealthImpairments());
+    }
+
+    /**
+     * @param profile the profile to complete
+     * @param personForm the data to use
+     */
+    public void fillActivistProfile(ActivistProfile profile, CreatePersonForm personForm) {
+        if (!personForm.getHasJuleica()) {
+            return;
+        }
+        JuleicaCard juleicaCard = new JuleicaCard();
+        extractJuleicaExpiryDate(personForm).ifPresent(juleicaCard::setExpiryDate);
+        profile.setJuleicaCard(juleicaCard);
+    }
+
+    /**
+     * @param profile the profile to complete
+     * @param personForm the data to use
+     */
+    public void fillReferentProfile(ReferentProfile profile, CreatePersonForm personForm) {
+        extractQualifications(personForm, qualificationRepo).ifPresent(qs -> qs.forEach(q -> profile.addQualification(q)));
     }
 
     /**

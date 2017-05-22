@@ -2,7 +2,7 @@ package de.naju.adebar.controller.api;
 
 import de.naju.adebar.api.data.SimpleEventJSON;
 import de.naju.adebar.model.chapter.LocalGroup;
-import de.naju.adebar.model.chapter.LocalGroupManager;
+import de.naju.adebar.app.chapter.LocalGroupManager;
 import de.naju.adebar.model.events.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;

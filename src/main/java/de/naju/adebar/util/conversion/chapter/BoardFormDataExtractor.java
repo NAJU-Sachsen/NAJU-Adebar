@@ -1,9 +1,9 @@
 package de.naju.adebar.util.conversion.chapter;
 
+import de.naju.adebar.app.human.PersonManager;
 import de.naju.adebar.controller.forms.chapter.BoardForm;
 import de.naju.adebar.model.chapter.Board;
-import de.naju.adebar.model.human.Activist;
-import de.naju.adebar.model.human.HumanManager;
+import de.naju.adebar.model.human.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -14,12 +14,12 @@ import org.springframework.util.Assert;
  */
 @Service
 public class BoardFormDataExtractor {
-    private HumanManager humanManager;
+    private PersonManager personManager;
 
     @Autowired
-    public BoardFormDataExtractor(HumanManager humanManager) {
-        Assert.notNull(humanManager, "Human manager may not be null");
-        this.humanManager = humanManager;
+    public BoardFormDataExtractor(PersonManager personManager) {
+        Assert.notNull(personManager, "Human manager may not be null");
+        this.personManager = personManager;
     }
 
     /**
@@ -27,7 +27,7 @@ public class BoardFormDataExtractor {
      * @return the {@link Board} object encoded by the form
      */
     public Board extractBoard(BoardForm boardForm) {
-        Activist chairman = humanManager.findActivist(humanManager.findPerson(boardForm.getChairmanId()).orElseThrow(IllegalArgumentException::new));
+        Person chairman = personManager.findPerson(boardForm.getChairmanId()).orElseThrow(IllegalStateException::new);
         Board board;
         if (boardForm.hasEmail()) {
             board = new Board(chairman, boardForm.getEmail());
@@ -36,7 +36,7 @@ public class BoardFormDataExtractor {
         }
 
         for (String memberId : boardForm.getMemberIds()) {
-            Activist member = humanManager.findActivist(humanManager.findPerson(memberId).orElseThrow(IllegalArgumentException::new));
+            Person member = personManager.findPerson(memberId).orElseThrow(IllegalStateException::new);
             board.addBoardMember(member);
         }
 

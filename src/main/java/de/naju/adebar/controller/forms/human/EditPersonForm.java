@@ -7,38 +7,26 @@ package de.naju.adebar.controller.forms.human;
 public class EditPersonForm {
     public final static String DATE_FORMAT = "dd.MM.yyyy";
 
+    // general data
     private String firstName;
     private String lastName;
     private String email;
     private String phoneNumber;
+    private String street;
+    private String zip;
+    private String city;
+
+    // participant data
+    private boolean participant;
     private String gender;
     private String dateOfBirth;
     private String eatingHabit;
     private String healthImpairments;
-    private String street;
-    private String zip;
-    private String city;
+    private String remarks;
     private boolean nabuMember;
     private String nabuNumber;
 
-
     public EditPersonForm() {}
-
-    public EditPersonForm(String firstName, String lastName, String email, String phoneNumber, String gender, String dateOfBirth, String eatingHabit, String healthImpairments, String street, String zip, String city, boolean nabuMember, String nabuNumber) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.gender = gender;
-        this.dateOfBirth = dateOfBirth;
-        this.eatingHabit = eatingHabit;
-        this.healthImpairments = healthImpairments;
-        this.street = street;
-        this.zip = zip;
-        this.city = city;
-        this.nabuMember = nabuMember;
-        this.nabuNumber = nabuNumber;
-    }
 
     public String getFirstName() {
         return firstName;
@@ -72,42 +60,6 @@ public class EditPersonForm {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public boolean hasDateOfBirth() {
-        return dateOfBirth != null && !dateOfBirth.isEmpty();
-    }
-
-    public void setDateOfBirth(String dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public String getEatingHabit() {
-        return eatingHabit;
-    }
-
-    public void setEatingHabit(String eatingHabit) {
-        this.eatingHabit = eatingHabit;
-    }
-
-    public String getHealthImpairments() {
-        return healthImpairments;
-    }
-
-    public void setHealthImpairments(String healthImpairments) {
-        this.healthImpairments = healthImpairments;
-    }
-
     public String getStreet() {
         return street;
     }
@@ -132,6 +84,54 @@ public class EditPersonForm {
         this.city = city;
     }
 
+    public boolean isParticipant() {
+        return participant;
+    }
+
+    public void setParticipant(boolean participant) {
+        this.participant = participant;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getEatingHabit() {
+        return eatingHabit;
+    }
+
+    public void setEatingHabit(String eatingHabit) {
+        this.eatingHabit = eatingHabit;
+    }
+
+    public String getHealthImpairments() {
+        return healthImpairments;
+    }
+
+    public void setHealthImpairments(String healthImpairments) {
+        this.healthImpairments = healthImpairments;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
     public boolean isNabuMember() {
         return nabuMember;
     }
@@ -148,6 +148,10 @@ public class EditPersonForm {
         this.nabuNumber = nabuNumber;
     }
 
+    public boolean hasDateOfBirth() {
+        return dateOfBirth != null && !dateOfBirth.isEmpty();
+    }
+
     @Override
     public String toString() {
         return "EditPersonForm{" +
@@ -155,13 +159,14 @@ public class EditPersonForm {
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
+                ", street='" + street + '\'' +
+                ", zip='" + zip + '\'' +
+                ", city='" + city + '\'' +
+                ", participant=" + participant +
                 ", gender='" + gender + '\'' +
                 ", dateOfBirth='" + dateOfBirth + '\'' +
                 ", eatingHabit='" + eatingHabit + '\'' +
                 ", healthImpairments='" + healthImpairments + '\'' +
-                ", street='" + street + '\'' +
-                ", zip='" + zip + '\'' +
-                ", city='" + city + '\'' +
                 ", nabuMember=" + nabuMember +
                 ", nabuNumber='" + nabuNumber + '\'' +
                 '}';

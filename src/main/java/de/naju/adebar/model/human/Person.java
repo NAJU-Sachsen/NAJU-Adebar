@@ -1,121 +1,71 @@
 package de.naju.adebar.model.human;
 
-import java.beans.Transient;
-import java.time.LocalDate;
-import java.time.Period;
-
-import javax.persistence.*;
-
+import de.naju.adebar.util.Validation;
+import org.hibernate.validator.constraints.Email;
 import org.springframework.util.Assert;
 
-import de.naju.adebar.util.Validation;
+import javax.persistence.*;
+import java.util.Arrays;
 
 /**
- * Abstraction of a normal camp participant or a person that is otherwise of interest for our database.
- * As this class is primarily targeted at camp participants, it features things such as eating habits (e.g. vegetarian)
- * and health impairments (e.g. asthma, hay fever...)
+ * Abstraction of a person. No matter of its concrete role (camp participant, activist, ...) some data always
+ * needs to be tracked. This will be handled here.
  * @author Rico Bergmann
+ * @see de.naju.adebar.model.human
  */
-@Entity
+@Entity(name = "person")
 public class Person {
 
-    @EmbeddedId private PersonId id;
+    @EmbeddedId @Column(name = "id") private PersonId id;
 
-    private String firstName, lastName;
-    private String email;
-    private String phoneNumber;
-    private Gender gender;
-    private Address address;
-    private LocalDate dateOfBirth;
-    private String eatingHabit;
-    private String healthImpairments;
-    @Embedded private NabuMembership nabuMembership;
+    @Column(name = "firstName") private String firstName;
+    @Column(name = "lastName") private String lastName;
+    @Column(name = "email") @Email private String email;
+    @Column(name = "phone") private String phoneNumber;
+    @Embedded private Address address;
 
-    private boolean active;
+    @OneToOne(cascade = CascadeType.ALL) @PrimaryKeyJoinColumn private ParticipantProfile participantProfile;
+    @OneToOne(cascade = CascadeType.ALL) @PrimaryKeyJoinColumn private ActivistProfile activistProfile;
+    @OneToOne(cascade = CascadeType.ALL) @PrimaryKeyJoinColumn private ReferentProfile referentProfile;
+
+    @Column(name = "archived") private boolean archived;
 
     // constructors
 
     /**
-     * Full constructor to be used from outside
-     * @param firstName the person's first name
-     * @param lastName the person's last name
-     * @param email the person's email
-     * @param phoneNumber the person's phone number
-     * @param gender the person's gender
-     * @param address the person's address, may be {@code null}
-     * @param dateOfBirth the person's date of birth, may be {@code null}
-     * @throws IllegalArgumentException if any of the parameters is {@code null}, the email is not valid, the
-     * date of birth lies in the future or names are empty
+     * Full constructor to create new Person instances. However to create a new object from outside the package,
+     * the {@link PersonFactory} should be used.
+     * @param id the person's unique ID. Used as PK within the database
+     * @param firstName the person's first name. May not be empty.
+     * @param lastName the person's last name. May not be empty.
+     * @param email the person's email address. Must be a valid email address.
+     * @throws IllegalArgumentException if any of the parameters constraints are violated.
+     * @see PersonFactory
      */
-    public Person(String firstName, String lastName, String email, String phoneNumber, Gender gender, Address address, LocalDate dateOfBirth) {
-        Object[] params = {firstName, lastName, email, gender};
-        Assert.noNullElements(params, "Parameters may not be null!");
-        Assert.hasText(firstName, "First name may not be empty, but was: " + firstName);
-        Assert.hasText(lastName, "Last name may not be empty, but was: " + lastName);
-        Assert.isTrue(Validation.isEmail(email), "Must provide a valid email address, but was: " + email);
-        if (dateOfBirth != null) {
-            Assert.isTrue(dateOfBirth.isBefore(LocalDate.now()), "A date of birth must be in the past, but was " + dateOfBirth);
-        }
-        this.id = null;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.gender = gender;
-        this.address = address;
-        this.dateOfBirth = dateOfBirth;
-        this.eatingHabit = "";
-        this.healthImpairments = "";
-        this.active = true;
-        this.nabuMembership = new NabuMembership();
-    }
+    Person(PersonId id, String firstName, String lastName, String email) {
+        Object[] params = {id, firstName, lastName, email};
+        Assert.noNullElements(params, "No argument may be null: " + Arrays.toString(params));
+        Assert.hasText(firstName, "First name may not be null nor empty, but was: " + firstName);
+        Assert.hasText(lastName, "Last name may not be null nor empty, but was: " + lastName);
+        Assert.isTrue(Validation.isEmail(email), "Not a valid email address: " + email);
 
-    /**
-     * Full constructor to be used within the package. Therefore package-local..
-     * @param id the id (=primary key) of the person
-     * @param firstName the person's first name
-     * @param lastName the person's last name
-     * @param email the person's email
-     * @param gender the person's gender
-     * @param address the person's address, may be {@code null}
-     * @param dateOfBirth the person's date of birth, may be {@code null}
-     * @throws IllegalArgumentException if any of the parameters is {@code null}, the email is not valid, the
-     * date of birth lies in the future or names are empty
-     */
-    Person(PersonId id, String firstName, String lastName, String email, Gender gender, Address address, LocalDate dateOfBirth, NabuMembership nabuMembership) {
-        Object[] params = {id, firstName, lastName, email, gender};
-        Assert.noNullElements(params, "Parameters may not be null!");
-        Assert.hasText(firstName, "First name may not be empty, but was: " + firstName);
-        Assert.hasText(lastName, "Last name may not be empty, but was: " + lastName);
-        Assert.isTrue(Validation.isEmail(email), "Must provide a valid email address, but was: " + email);
-        if (dateOfBirth != null) {
-            Assert.isTrue(dateOfBirth.isBefore(LocalDate.now()),
-                    "A date of birth must be in the past, but was " + dateOfBirth);
-        }
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.gender = gender;
-        this.address = address;
-        this.dateOfBirth = dateOfBirth;
-        this.eatingHabit = "";
-        this.healthImpairments = "";
-        this.nabuMembership = nabuMembership;
-        this.active = true;
+
+        this.archived = false;
     }
 
     /**
-     * default constructor for JPA's sake
+     * Default constructor for JPA's sake
      */
-    protected Person() {
+    private Person() {}
 
-    }
-
-    // getter
+    // getter and setter
 
     /**
-     * @return the person's id (=primary key)
+     * @return the person's unique ID.
      */
     public PersonId getId() {
         return id;
@@ -129,6 +79,15 @@ public class Person {
     }
 
     /**
+     * @param firstName the person's first name
+     * @throws IllegalArgumentException if the new name is empty or {@code null}
+     */
+    public void setFirstName(String firstName) {
+        Assert.hasText(firstName, "First name may not be null nor empty, but was: " + firstName);
+        this.firstName = firstName;
+    }
+
+    /**
      * @return the person's last name
      */
     public String getLastName() {
@@ -136,177 +95,115 @@ public class Person {
     }
 
     /**
-     * @return the person's email
+     * @param lastName the person's last name
+     * @throws IllegalArgumentException if the new name is empty or {@code null}
+     */
+    public void setLastName(String lastName) {
+        Assert.hasText(lastName, "Last name may not be null nor empty, but was: " + lastName);
+        this.lastName = lastName;
+    }
+
+    /**
+     * @return the person's email address
      */
     public String getEmail() {
         return email;
     }
 
     /**
-     * @return the person's phone number
+     * @param email the person's email address
+     * @throws IllegalArgumentException if the email is not valid, i.e. does not match the email regex (Existence
+     * of the address is not checked)
+     */
+    public void setEmail(String email) {
+        Assert.isTrue(Validation.isEmail(email), "Not a valid email address: " + email);
+        this.email = email;
+    }
+
+    /**
+     * @return the person's phone number. May be {@code null}.
      */
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
     /**
-     * @return the person's gender
-     */
-    public Gender getGender() {
-        return gender;
-    }
-
-    /**
-     * @return the person's address, may be {@code null}
-     */
-    public Address getAddress() {
-        return address;
-    }
-
-    /**
-     * @return the person's date of birth, may be {@code null}
-     */
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    /**
-     * @return the person's eating habit
-     */
-    public String getEatingHabit() {
-        return eatingHabit;
-    }
-
-    public String getHealthImpairments() {
-        return healthImpairments;
-    }
-
-    // setter
-
-    /**
-     * @param firstName the first name to set
-     * @throws IllegalArgumentException if the first name is {@code null} or empty
-     */
-    public void setFirstName(String firstName) {
-        Assert.hasText(firstName, "First name may not be empty but was: " + firstName);
-        this.firstName = firstName;
-    }
-
-    /**
-     * @param lastName the last name to set
-     * @throws IllegalArgumentException if the last name is {@code null} or empty
-     */
-    public void setLastName(String lastName) {
-        Assert.hasText(lastName, "Last name may not be empty but was: " + lastName);
-        this.lastName = lastName;
-    }
-
-    /**
-     * @param email the email to set
-     * @throws IllegalArgumentException if the email address is not valid or {@code null}
-     */
-    public void setEmail(String email) {
-        Assert.notNull(email, "Email may not be null!");
-        if (!Validation.isEmail(email)) {
-            throw new IllegalArgumentException("Must provide a valid email address, but was: " + email);
-        }
-        this.email = email;
-    }
-
-    /**
-     * @param phoneNumber the phone number to set
+     * @param phoneNumber the person's phone number. May be {@code null}.
      */
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
     /**
-     * @param gender the gender to set
-     * @throws IllegalArgumentException if the gender is {@code null}
+     * @return the person's address. May be {@code null}.
      */
-    public void setGender(Gender gender) {
-        Assert.notNull(gender, "Gender may not be null!");
-        this.gender = gender;
+    public Address getAddress() {
+        return address;
     }
 
     /**
-     * @param address the address to set, may be {@code null}
+     * @param address the person's address. May be {@code null}.
      */
     public void setAddress(Address address) {
         this.address = address;
     }
 
     /**
-     * @param dateOfBirth the date of birth to set, may be {@code null}
-     * @throws IllegalArgumentException if the date of birth lies in the future
+     * @return the participant profile of the person. If it is not a camp participant, this will return {@code null}.
      */
-    public void setDateOfBirth(LocalDate dateOfBirth) {
-        if (dateOfBirth != null) {
-            Assert.isTrue(dateOfBirth.isBefore(LocalDate.now()),
-                    "Date of birth must be in the past, but was: " + dateOfBirth);
-        }
-        this.dateOfBirth = dateOfBirth;
+    public ParticipantProfile getParticipantProfile() {
+        return participantProfile;
     }
 
     /**
-     * @param eatingHabit the eating habit (e.g. vegetarian, lactose intolerance, ...) to set, may be empty
-     * @throws IllegalArgumentException if the eating habit is {@code null}
+     * @param participantProfile the participant profile of the person. May be {@code null} if the person is not a
+     * camp participant.
      */
-    public void setEatingHabit(String eatingHabit) {
-        Assert.notNull(eatingHabit, "Eating habit may not be null!");
-        this.eatingHabit = eatingHabit;
+    public void setParticipantProfile(ParticipantProfile participantProfile) {
+        this.participantProfile = participantProfile;
     }
 
     /**
-     * @param healthImpairments the health impairments to set (e.g. asthma, hay fever...), may be empty
-     * @throws IllegalArgumentException if the health impairments is {@code null}
+     * @return activist-related information about the person. If it is not an activist, this will return {@code null}.
      */
-    public void setHealthImpairments(String healthImpairments) {
-        Assert.notNull(healthImpairments, "Health impairments may not be null (but hopefully empty :-) )!");
-        this.healthImpairments = healthImpairments;
-    }
-
-    public NabuMembership getNabuMembership() {
-        return nabuMembership;
-    }
-
-    public void setNabuMembership(NabuMembership nabuMembership) {
-        this.nabuMembership = nabuMembership;
+    public ActivistProfile getActivistProfile() {
+        return activistProfile;
     }
 
     /**
-     * To keep the integrity of statistics persons should not be physically deleted. Instead they should be deactivated.
-     * The current status of a person (deactivated or not) is saved through this field.
-     * @return whether the person is deactivated or not
+     * @param activistProfile the activist profile of the person. May be {@code null} if the person is not an activist.
      */
-    public boolean isActive() {
-        return active;
+    public void setActivistProfile(ActivistProfile activistProfile) {
+        this.activistProfile = activistProfile;
     }
 
     /**
-     * Updates the person's status (deactivated or not)
-     * @param active the new status
+     * @return referent-related information about the person. If it is not a referent, this will return {@code null}.
      */
-    public void setActive(boolean active) {
-        this.active = active;
+    public ReferentProfile getReferentProfile() {
+        return referentProfile;
     }
 
     /**
-     * Updates the persons's id.
-     * <p>
-     * As the id will be used as primary key in the database, it should not be changed by the user by any means.
-     * Only JPA should access this method, which is why {@code setId()} was made {@code protected}.
-     * </p>
-     *
-     * @param id the newsletter's new id
-     * @throws IllegalArgumentException if the id is {@code null}
+     * @param referentProfile the referent profile of the person. May be {@code null} if the person is not a referent.
      */
-    void setId(PersonId id) {
-        Assert.notNull(id, "PersonID may not be null!");
-        this.id = id;
+    public void setReferentProfile(ReferentProfile referentProfile) {
+        this.referentProfile = referentProfile;
     }
 
-    // "advanced" getter
+    /**
+     * @return whether the person is still to be used
+     */
+    public boolean isArchived() {
+        return archived;
+    }
+
+    /**
+     * @param archived whether the person is still to be used
+     */
+    public void setArchived(boolean archived) {
+        this.archived = archived;
+    }
 
     /**
      * @return the subscriber's name, which basically is {@code firstName + " " + lastName}
@@ -317,35 +214,69 @@ public class Person {
     }
 
     /**
-     * @return {@code true} if the person has an id set. Important, as instances of the classes may be created from
-     * outside the package and will therefore not have the id set
+     * @param id the person's unique ID
      */
-    public boolean hasId() {
-        return id != null;
+    private void setId(PersonId id) {
+        this.id = id;
+    }
+
+    // normal methods
+
+    /**
+     * Turns the person into a camp participant.
+     * @return the person's new participant profile
+     */
+    public ParticipantProfile makeParticipant() {
+        if (isParticipant()) {
+            throw new IllegalStateException("Person already is a participant");
+        }
+        this.participantProfile = new ParticipantProfile(this);
+        return participantProfile;
     }
 
     /**
-     * @return {@code true} if the person's date of birth is set
+     * @return {@code true} if the person is a camp participant, or {@code false} otherwise
      */
-    public boolean hasDateOfBirth() {
-        return dateOfBirth != null;
+    public boolean isParticipant() {
+        return participantProfile != null;
     }
 
-    public int calculateAge() {
-        if (!hasDateOfBirth()) {
-            throw new IllegalStateException("Person has no date of birth specified: " + this);
+    /**
+     * Turns the person into an activist.
+     * @return the new activist profile, containing all activist related data
+     */
+    public ActivistProfile makeActivist() {
+        if (isActivist()) {
+            throw new IllegalStateException("Person already is an activist");
         }
-        Period period = Period.between(dateOfBirth, LocalDate.now());
-        return period.getYears();
+        this.activistProfile = new ActivistProfile(this);
+        return activistProfile;
     }
 
-    // modification methods
+    /**
+     * @return {@code true} if the person is an activist, or {@code false} otherwise
+     */
+    public boolean isActivist() {
+        return activistProfile != null;
+    }
 
-    public void deactivate() {
-        this.email = "";
-        this.phoneNumber = "";
-        this.address.setStreet("");
-        this.active = false;
+    /**
+     * Turns the person into a referent.
+     * @return the new referent profile, containing all referent related data.
+     */
+    public ReferentProfile makeReferent() {
+        if (isReferent()) {
+            throw new IllegalStateException("Person already is a referent");
+        }
+        this.referentProfile = new ReferentProfile(this);
+        return referentProfile;
+    }
+
+    /**
+     * @return {@code true} if the person is a referent, or {@code false} otherwise
+     */
+    public boolean isReferent() {
+        return referentProfile != null;
     }
 
     // overridden from Object
@@ -358,38 +289,21 @@ public class Person {
 
         Person person = (Person) o;
 
-        if (active != person.active) return false;
-        if (!firstName.equals(person.firstName)) return false;
-        if (!lastName.equals(person.lastName)) return false;
-        if (!email.equals(person.email)) return false;
-        if (phoneNumber != null ? !phoneNumber.equals(person.phoneNumber) : person.phoneNumber != null) return false;
-        if (gender != person.gender) return false;
-        if (address != null ? !address.equals(person.address) : person.address != null) return false;
-        if (dateOfBirth != null ? !dateOfBirth.equals(person.dateOfBirth) : person.dateOfBirth != null) return false;
-        if (eatingHabit != null ? !eatingHabit.equals(person.eatingHabit) : person.eatingHabit != null) return false;
-        if (healthImpairments != null ? !healthImpairments.equals(person.healthImpairments) : person.healthImpairments != null)
-            return false;
-        return nabuMembership != null ? nabuMembership.equals(person.nabuMembership) : person.nabuMembership == null;
+        return id.equals(person.id);
     }
 
     @Override
     public int hashCode() {
-        int result = firstName.hashCode();
-        result = 31 * result + lastName.hashCode();
-        result = 31 * result + email.hashCode();
-        result = 31 * result + (phoneNumber != null ? phoneNumber.hashCode() : 0);
-        result = 31 * result + (gender != null ? gender.hashCode() : 0);
-        result = 31 * result + (address != null ? address.hashCode() : 0);
-        result = 31 * result + (dateOfBirth != null ? dateOfBirth.hashCode() : 0);
-        result = 31 * result + (eatingHabit != null ? eatingHabit.hashCode() : 0);
-        result = 31 * result + (healthImpairments != null ? healthImpairments.hashCode() : 0);
-        result = 31 * result + (nabuMembership != null ? nabuMembership.hashCode() : 0);
-        result = 31 * result + (active ? 1 : 0);
-        return result;
+        return id.hashCode();
     }
 
     @Override
     public String toString() {
-        return String.format("Person [firstName=%s, lastName=%s, email=%s, dob=%s]", firstName, lastName, email, dateOfBirth);
+        return "Person{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 }

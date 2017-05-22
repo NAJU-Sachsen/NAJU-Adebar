@@ -8,7 +8,10 @@ import javax.persistence.Id;
 import org.springframework.util.Assert;
 
 /**
- * Just a qualification, consisting of a name and a description
+ * Just a qualification, consisting of a name and a description.
+ * <p>
+ * For the model it is guaranteed that a qualification's name is unique and many other objects will rely on the
+ * correctness of that constraint. Therefore qualifications should be created with great caution.
  */
 @Entity
 public class Qualification implements Serializable {

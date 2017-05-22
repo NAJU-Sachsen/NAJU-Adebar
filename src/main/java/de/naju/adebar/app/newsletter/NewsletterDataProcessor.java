@@ -1,10 +1,9 @@
 package de.naju.adebar.app.newsletter;
 
 import de.naju.adebar.model.chapter.LocalGroup;
-import de.naju.adebar.model.chapter.LocalGroupManager;
+import de.naju.adebar.app.chapter.LocalGroupManager;
 import de.naju.adebar.model.chapter.Project;
 import de.naju.adebar.model.newsletter.Newsletter;
-import de.naju.adebar.model.newsletter.NewsletterManager;
 import de.naju.adebar.model.newsletter.NewsletterRepository;
 import de.naju.adebar.model.newsletter.Subscriber;
 import org.springframework.beans.factory.annotation.Autowired;

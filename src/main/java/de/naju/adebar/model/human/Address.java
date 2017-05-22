@@ -48,9 +48,9 @@ public class Address implements Serializable {
 	}
 	
 	/**
-	 * Default constructor for JPA's sake
+	 * Default constructor
 	 */
-	Address() {
+	public Address() {
 		
 	}
 	

@@ -3,6 +3,7 @@ package de.naju.adebar.api.data;
 import de.naju.adebar.model.human.Address;
 import de.naju.adebar.model.human.Person;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
@@ -31,7 +32,10 @@ public class SimplePersonJSON {
         this.name = person.getName();
         this.address = formatAddress(person.getAddress());
 
-        this.dob = person.getDateOfBirth() != null ? person.getDateOfBirth().format(DateTimeFormatter.ofPattern(DATE_FORMAT, Locale.GERMAN)) : "";
+        if (person.isParticipant()) {
+            LocalDate d = person.getParticipantProfile().getDateOfBirth();
+            this.dob = d != null ? d.format(DateTimeFormatter.ofPattern(DATE_FORMAT, Locale.GERMAN)) : "";
+        }
     }
 
     /**

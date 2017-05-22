@@ -2,51 +2,55 @@ package de.naju.adebar.model.human;
 
 import de.naju.adebar.infrastructure.ReadOnlyRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-import java.io.Serializable;
 import java.util.stream.Stream;
 
 /**
- * A repository that provides read only access to the saved persons
+ * Repository to provide read-only access to {@link Person} instances
  * @author Rico Bergmann
  */
+@Repository("ro_personRepo")
 public interface ReadOnlyPersonRepository extends ReadOnlyRepository<Person, PersonId> {
 
     /**
-     * @return all non-disabled persons. Should be used for nearly all iterations
+     * @return all non-archived persons
      */
-    Iterable<Person> findAllByActiveIsTrue();
+    @Query("SELECT p FROM person p WHERE p.archived=false")
+    Iterable<Person> findAll();
 
     /**
-     * Equivalent of {@link CrudRepository#findOne(Serializable)}, just for non-disabled persons
-     * @param personId the person's id
-     * @return the person associated to the ID or {@code null} if there is no such person
+     * @return all activists
      */
-    Person findOneByIdAndActiveIsTrue(PersonId personId);
+    @Query("SELECT p FROM person p WHERE p.id IN (SELECT personId FROM activist)")
+    Iterable<Person> findAllActivists();
 
     /**
-     * @return the first 25 persons
+     * @param id must not be {@code null}.
+     * @return the person with that ID. This person is not archived
      */
-    Iterable<Person> findFirst25ByOrderByLastName();
+    @Query("SELECT p FROM person p WHERE p.id=?1 AND p.archived=false")
+    Person findOne(PersonId id);
 
     /**
-     * @return the first 25 non-disabled persons
+     * @return the first 25 non-archived persons, ordered by their last name
      */
-    Iterable<Person> findFirst25ByActiveIsTrueOrderByLastName();
+    @Query(nativeQuery = true, value = "SELECT p.* FROM person p WHERE p.archived=false ORDER BY p.last_name LIMIT 25")
+    Iterable<Person> findFirst25();
 
     /**
-     * @return all persisted persons as a stream. Nice for accessing them in a functional way
-     * @see Stream
-     * @see <a href="https://en.wikipedia.org/wiki/Functional_programming">Functional programming</a>
+     * @return all persons
      */
-    @Query("select p from Person p")
+    @Query("SELECT p FROM person p")
+    Iterable<Person> allEntries();
+
+    /**
+     * @param id must not be {@code null}.
+     * @return the person with that ID
+     */
+    @Query("SELECT p FROM person p WHERE p.id=?1")
+    Person findEntry(PersonId id);
+
+    @Query("SELECT p FROM person p WHERE p.archived=false")
     Stream<Person> streamAll();
-
-    /**
-     * Equivalent of normal {@link #streamAll()}, just for non-disabled persons
-     * @return all persisted, non-disabled persons as a stream. Nice for accessing them in a functional way
-     */
-    @Query("select p from Person p where p.active=true")
-    Stream<Person> streamAllByActiveIsTrue();
 }

@@ -2,12 +2,13 @@ package de.naju.adebar.controller;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
+import de.naju.adebar.app.human.PersonManager;
 import de.naju.adebar.app.newsletter.NewsletterDataProcessor;
+import de.naju.adebar.app.newsletter.NewsletterManager;
+import de.naju.adebar.app.newsletter.SubscriberManager;
 import de.naju.adebar.controller.forms.newsletter.AddNewsletterForm;
-import de.naju.adebar.model.chapter.LocalGroupManager;
-import de.naju.adebar.model.human.HumanManager;
+import de.naju.adebar.app.chapter.LocalGroupManager;
 import de.naju.adebar.model.human.Person;
 import de.naju.adebar.model.newsletter.*;
 import de.naju.adebar.util.conversion.newsletter.PersonToSubscriberConverter;
@@ -35,20 +36,20 @@ public class SubscriberController {
     private SubscriberRepository subscriberRepo;
     private NewsletterManager newsletterManager;
     private SubscriberManager subscriberManager;
-    private HumanManager humanManager;
+    private PersonManager personManager;
     private PersonToSubscriberConverter personToSubscriberConverter;
     private NewsletterDataProcessor dataProcessor;
     private LocalGroupManager localGroupManager;
 
     @Autowired
-    public SubscriberController(NewsletterRepository newsletterRepo, SubscriberRepository newsletterSubscriberRepo, NewsletterManager newsletterManager, SubscriberManager subscriberManager, HumanManager humanManager, PersonToSubscriberConverter personToSubscriberConverter, NewsletterDataProcessor dataProcessor, LocalGroupManager localGroupManager) {
-        Object[] params = {newsletterRepo, newsletterSubscriberRepo, newsletterManager, subscriberManager, humanManager, personToSubscriberConverter, dataProcessor, localGroupManager};
+    public SubscriberController(NewsletterRepository newsletterRepo, SubscriberRepository newsletterSubscriberRepo, NewsletterManager newsletterManager, SubscriberManager subscriberManager, PersonManager personManager, PersonToSubscriberConverter personToSubscriberConverter, NewsletterDataProcessor dataProcessor, LocalGroupManager localGroupManager) {
+        Object[] params = {newsletterRepo, newsletterSubscriberRepo, newsletterManager, subscriberManager, personManager, personToSubscriberConverter, dataProcessor, localGroupManager};
         Assert.notNull(params, "At least one parameter was null: " + Arrays.toString(params));
         this.newsletterRepo = newsletterRepo;
         this.subscriberRepo = newsletterSubscriberRepo;
         this.newsletterManager = newsletterManager;
         this.subscriberManager = subscriberManager;
-        this.humanManager = humanManager;
+        this.personManager = personManager;
         this.personToSubscriberConverter = personToSubscriberConverter;
         this.dataProcessor = dataProcessor;
         this.localGroupManager = localGroupManager;
@@ -111,7 +112,7 @@ public class SubscriberController {
     @RequestMapping(value = "/newsletters/{nid}/subscribe-person")
     public String subscribePerson(@PathVariable("nid") Long newsletterId, @RequestParam("person-id") String personId, RedirectAttributes redirAttr) {
         Newsletter newsletter = newsletterRepo.findOne(newsletterId);
-        Person person = humanManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
+        Person person = personManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
 
         try {
             Subscriber subscriber = subscriberManager.saveSubscriber(personToSubscriberConverter.convertPerson(person));

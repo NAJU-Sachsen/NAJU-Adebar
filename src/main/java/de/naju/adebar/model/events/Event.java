@@ -1,9 +1,9 @@
 package de.naju.adebar.model.events;
 
-import de.naju.adebar.model.human.Activist;
 import de.naju.adebar.model.human.Address;
+import de.naju.adebar.model.human.NoActivistException;
+import de.naju.adebar.model.human.NoParticipantException;
 import de.naju.adebar.model.human.Person;
-import de.naju.adebar.model.human.Referent;
 import org.javamoney.moneta.Money;
 import org.springframework.util.Assert;
 
@@ -15,19 +15,22 @@ import java.util.*;
  * Abstraction of an event. It may be a regular camp or any other kind of event such as workshops or presentations.
  * @author Rico Bergmann
  */
-@Entity
+@Entity(name = "event")
 public class Event {
-    @Id @GeneratedValue private long id;
-    private String name;
-    private LocalDateTime startTime, endTime;
-    private int participantsLimit;
-    private int minimumParticipantAge;
-    @Column(length = 2048) private Money internalParticipationFee;
-    @Column(length = 2048) private Money externalParticipationFee;
+    public enum EventStatus {PLANNED, RUNNING, PAST, CANCELLED}
+
+    @Id @GeneratedValue @Column(name = "id") private long id;
+    @Column(name = "name") private String name;
+    @Column(name = "startTime") private LocalDateTime startTime;
+    @Column(name = "endTime") private LocalDateTime endTime;
+    @Column(name = "participantsLimit") private int participantsLimit;
+    @Column(name = "minParticipantAge") private int minimumParticipantAge;
+    @Column(name = "intParticipationFee", length = 2048) private Money internalParticipationFee;
+    @Column(name = "extParticipationFee", length = 2048) private Money externalParticipationFee;
     @Embedded private Address place;
     @ManyToMany(cascade = CascadeType.ALL) private List<Person> participants;
-    @ManyToMany(cascade = CascadeType.ALL) private List<Activist> counselors;
-    @ManyToMany(cascade = CascadeType.ALL) private List<Activist> organizers;
+    @ManyToMany(cascade = CascadeType.ALL) private List<Person> counselors;
+    @ManyToMany(cascade = CascadeType.ALL) private List<Person> organizers;
     @OneToMany(cascade = CascadeType.ALL) private Map<Person, ParticipationInfo> participationInfo;
     @ElementCollection private List<Lecture> lectures;
 
@@ -278,14 +281,14 @@ public class Event {
     /**
      * @return the activists who take care of the event - i. e. are in attendance when the event takes place
      */
-    public Iterable<Activist> getCounselors() {
+    public Iterable<Person> getCounselors() {
         return counselors;
     }
 
     /**
      * @return the activists who organize the event
      */
-    public Iterable<Activist> getOrganizers() {
+    public Iterable<Person> getOrganizers() {
         return organizers;
     }
 
@@ -330,14 +333,14 @@ public class Event {
     /**
      * @param counselors the counselors of the event
      */
-    protected void setCounselors(List<Activist> counselors) {
+    protected void setCounselors(List<Person> counselors) {
         this.counselors = counselors;
     }
 
     /**
      * @param organizers the event's organizers
      */
-    protected void setOrganizers(List<Activist> organizers) {
+    protected void setOrganizers(List<Person> organizers) {
         this.organizers = organizers;
     }
 
@@ -390,7 +393,7 @@ public class Event {
     @Transient
     public boolean isOldEnough(Person person) {
         try {
-            return person.calculateAge() > minimumParticipantAge;
+            return person.getParticipantProfile().calculateAge() > minimumParticipantAge;
         } catch (IllegalStateException e) {
             return false;
         }
@@ -409,16 +412,20 @@ public class Event {
     /**
      * Adds a new participant
      * @param person the person to participate in the event
+     * @throws NoParticipantException if the person is no participant
      * @throws ExistingParticipantException if the person already participates
      * @throws PersonIsTooYoungException if the person does not have the required age
      * @throws BookedOutException if no more persons may participate
      */
     public void addParticipant(Person person) {
         Assert.notNull(person, "Participant to add may not be null!");
-        if (isParticipant(person)) {
+        if (!person.isParticipant()) {
+            throw new NoParticipantException("Person is no camp participant: " + person);
+        }
+        else if (isParticipant(person)) {
             throw new ExistingParticipantException("Person does already participate: " + person);
         } else if (!isOldEnough(person)) {
-            throw new PersonIsTooYoungException(String.format("Person is too young: must be %d years old but was born on %s", minimumParticipantAge, person.getDateOfBirth()));
+            throw new PersonIsTooYoungException(String.format("Person is too young: must be %d years old but was born on %s", minimumParticipantAge, person.getParticipantProfile().getDateOfBirth()));
         } else if (isBookedOut()) {
             throw new BookedOutException("The event is booked out: " + getParticipantsCount() + " participants");
         }
@@ -429,12 +436,15 @@ public class Event {
     /**
      * Adds a new participant to the event, regardless of eventual violations of the minimum participation age
      * @param person the person to participate in the event
+     * @throws NoParticipantException if the person is no participant
      * @throws ExistingParticipantException if the person already participates
      * @throws BookedOutException if no more persons may participate
      */
     public void addParticipantIgnoreAge(Person person) {
         Assert.notNull(person, "Participant to add may not be null!");
-        if (isParticipant(person)) {
+        if (!person.isParticipant()) {
+            throw new NoParticipantException("Person is no camp participant: " + person);
+        } else if (isParticipant(person)) {
             throw new ExistingParticipantException("Person does already participate: " + person);
         } else if (isBookedOut()) {
             throw new BookedOutException("The event is booked out: " + getParticipantsCount() + " participants");
@@ -457,7 +467,7 @@ public class Event {
 
     /**
      * @param person the person to check
-     * @return {@code true} if the person is a participant, {@code false} otherwise
+     * @return {@code true} if the person participates in the event, {@code false} otherwise
      */
     public boolean isParticipant(Person person) {
         return participants.contains(person);
@@ -487,22 +497,25 @@ public class Event {
     }
 
     /**
-     * @param activist the activist to make counselor
+     * @param person the activist to make counselor
      * @throws IllegalArgumentException if the activist is already a counselor
+     * @throws NoActivistException if the person is no activist
      */
-    public void addCounselor(Activist activist) {
-        Assert.notNull(activist, "Counselor to add may not be null!");
-        if (isCounselor(activist)) {
-            throw new IllegalArgumentException("Activist is already counselor: " + activist);
+    public void addCounselor(Person person) {
+        Assert.notNull(person, "Counselor to add may not be null!");
+        if (!person.isActivist()) {
+            throw new NoActivistException("Person is no activist: " + person);
+        } else if (isCounselor(person)) {
+            throw new IllegalArgumentException("Activist is already counselor: " + person);
         }
-        counselors.add(activist);
+        counselors.add(person);
     }
 
     /**
      * @param activist the activist to remove as counselor
      * @throws IllegalArgumentException if the activist is currently no counselor
      */
-    public void removeCounselor(Activist activist) {
+    public void removeCounselor(Person activist) {
         if (!isCounselor(activist)) {
             throw new IllegalArgumentException("Activist is no counselor: " + activist);
         }
@@ -513,27 +526,30 @@ public class Event {
      * @param activist the activist to check
      * @return {@code true} if the activist is a counselor or {@code false} otherwise
      */
-    public boolean isCounselor(Activist activist) {
+    public boolean isCounselor(Person activist) {
         return counselors.contains(activist);
     }
 
     /**
-     * @param activist the activist to make organizer
+     * @param person the activist to make organizer
      * @throws IllegalArgumentException if the activist already is an organizer
+     * @throws NoActivistException if the person is no activist
      */
-    public void addOrganizer(Activist activist) {
-        Assert.notNull(activist, "Organizer to add may not be null!");
-        if (isOrganizer(activist)) {
-            throw new IllegalArgumentException("Activist is already organizer: " + activist);
+    public void addOrganizer(Person person) {
+        Assert.notNull(person, "Organizer to add may not be null!");
+        if (!person.isActivist()) {
+            throw new NoActivistException("Person is no activist: " + person);
+        } else if (isOrganizer(person)) {
+            throw new IllegalArgumentException("Activist is already organizer: " + person);
         }
-        organizers.add(activist);
+        organizers.add(person);
     }
 
     /**
      * @param activist the organizer to remove as organizer
      * @throws IllegalArgumentException if the activist was no organizer
      */
-    public void removeOrganizer(Activist activist) {
+    public void removeOrganizer(Person activist) {
         if (!isOrganizer(activist)) {
             throw new IllegalArgumentException("Activist is no organizer: " + activist);
         }
@@ -544,7 +560,7 @@ public class Event {
      * @param activist the activist to check
      * @return {@code true} if the activist is organizer or {@code false} otherwise
      */
-    public boolean isOrganizer(Activist activist) {
+    public boolean isOrganizer(Person activist) {
         return organizers.contains(activist);
     }
 
@@ -564,7 +580,7 @@ public class Event {
      * @param referent the referent to search for
      * @return all lectures which the referent holds within the event
      */
-    public Iterable<Lecture> getLecturesForReferent(Referent referent) {
+    public Iterable<Lecture> getLecturesForReferent(Person referent) {
         LinkedList<Lecture> referentsLectures = new LinkedList<>();
         for (Lecture lecture : lectures) {
             if (lecture.getReferent().equals(referent)) {

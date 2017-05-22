@@ -1,6 +1,6 @@
 package de.naju.adebar.model.chapter;
 
-import de.naju.adebar.model.human.Activist;
+import de.naju.adebar.model.human.Person;
 import de.naju.adebar.util.Validation;
 import org.springframework.util.Assert;
 
@@ -12,18 +12,18 @@ import java.util.List;
  * Abstraction of a board of directors
  * @author Rico Bergmann
  */
-@Entity
+@Entity(name = "board")
 public class Board {
-    @Id @GeneratedValue private long id;
-    @OneToOne private Activist chairman;
-    private String email;
-    @ManyToMany private List<Activist> members;
+    @Id @GeneratedValue @Column(name = "id") private long id;
+    @OneToOne private Person chairman;
+    @Column(name = "email") private String email;
+    @ManyToMany private List<Person> members;
 
     /**
      * Minimalistic constructor. The only thing each board needs is a chairman
      * @param chairman the board's chairman
      */
-    public Board(Activist chairman) {
+    public Board(Person chairman) {
         this(chairman, null);
     }
 
@@ -31,19 +31,25 @@ public class Board {
      * Full constructor
      * @param chairman the board's chairman
      * @param email central email address for the whole board, may be {@code null}
-     * @throws IllegalArgumentException if chairman is {@code null}
+     * @throws IllegalArgumentException if the chairman is no activist or {@code null}
      * @throws IllegalArgumentException if the email was given (i.e. not {@code null}) but invalid (i.e. not a valid email address)
      */
-    public Board(Activist chairman, String email) {
+    public Board(Person chairman, String email) {
         Assert.notNull(chairman, "Chairman may not be null");
+        Assert.isTrue(chairman.isActivist(), "Chairman has to be an activist");
         if (email != null && !Validation.isEmail(email)) {
             throw new IllegalArgumentException("Not a valid email: " + email);
         }
+
         this.chairman = chairman;
         this.email = email;
         this.members = new LinkedList<>();
+        members.add(chairman);
     }
 
+    /**
+     * Default constructor just for JPA's sake
+     */
     private Board() {}
 
     // basic getter and setter
@@ -58,16 +64,17 @@ public class Board {
     /**
      * @return the board's chairman
      */
-    public Activist getChairman() {
+    public Person getChairman() {
         return chairman;
     }
 
     /**
      * @param chairman the board's chairman
-     * @throws IllegalArgumentException if the chairman is {@code null}
+     * @throws IllegalArgumentException if the chairman is no activist or {@code null}
      */
-    public void setChairman(Activist chairman) {
+    public void setChairman(Person chairman) {
         Assert.notNull(chairman, "Chairman may not be null");
+        Assert.isTrue(chairman.isActivist(), "Chairman has to be an activist");
         this.chairman = chairman;
 
         if (!isBoardMember(chairman)) {
@@ -96,7 +103,7 @@ public class Board {
     /**
      * @return the boards' members
      */
-    public Iterable<Activist> getMembers() {
+    public Iterable<Person> getMembers() {
         return members;
     }
 
@@ -110,7 +117,7 @@ public class Board {
     /**
      * @param members the boards' members
      */
-    protected void setMembers(List<Activist> members) {
+    protected void setMembers(List<Person> members) {
         this.members = members;
     }
 
@@ -120,29 +127,30 @@ public class Board {
      * @param activist the activist to check
      * @return {@code true} if the activist is the board's current chairman, or {@code false} otherwise
      */
-    private boolean isChairman(Activist activist) {
+    private boolean isChairman(Person activist) {
         return chairman.equals(activist);
     }
 
     // modification operations
 
     /**
-     * @param activist the activist to add to the board
-     * @throws IllegalArgumentException if the activist is {@code null} or already a member of the board
+     * @param person the activist to add to the board
+     * @throws IllegalArgumentException if the person is no activist, {@code null} or already a member of the board
      */
-    public void addBoardMember(Activist activist) {
-        Assert.notNull(activist, "Activist to add may not be null");
-        if (isBoardMember(activist)) {
-            throw new IllegalArgumentException("Activist is already board member: " + activist);
+    public void addBoardMember(Person person) {
+        Assert.notNull(person, "Activist to add may not be null");
+        Assert.isTrue(person.isActivist(), "New board member has to be an activist");
+        if (isBoardMember(person)) {
+            throw new IllegalArgumentException("Activist is already board member: " + person);
         }
-        members.add(activist);
+        members.add(person);
     }
 
     /**
      * @param activist the activist to check
      * @return {@code true} if the activist is a board-member or {@code false} otherwise
      */
-    public boolean isBoardMember(Activist activist) {
+    public boolean isBoardMember(Person activist) {
         return members.contains(activist);
     }
 
@@ -151,7 +159,7 @@ public class Board {
      * @throws IllegalArgumentException if the activist was not a member of the board
      * @throws IllegalStateException if the activist is the board's chairman
      */
-    public void removeBoardMember(Activist activist) {
+    public void removeBoardMember(Person activist) {
         if (isChairman(activist)) {
             throw new IllegalStateException("Chairman may not be removed!");
         } else if (!isBoardMember(activist)) {
@@ -168,6 +176,10 @@ public class Board {
         if (o == null || getClass() != o.getClass()) return false;
 
         Board board = (Board) o;
+
+        if (board.id != 0 && this.id != 0) {
+            return board.id == this.id;
+        }
 
         if (!chairman.equals(board.chairman)) return false;
         if (email != null ? !email.equals(board.email) : board.email != null) return false;

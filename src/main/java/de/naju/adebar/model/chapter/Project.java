@@ -1,8 +1,8 @@
 package de.naju.adebar.model.chapter;
 
-import com.google.common.collect.Lists;
 import de.naju.adebar.model.events.Event;
-import de.naju.adebar.model.human.Activist;
+import de.naju.adebar.model.human.NoActivistException;
+import de.naju.adebar.model.human.Person;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
@@ -13,15 +13,15 @@ import java.util.*;
  * Abstraction of a project
  * @author Rico Bergmann
  */
-@Entity
+@Entity(name = "project")
 public class Project {
-    @Id @GeneratedValue private long id;
-    private String name;
-    private LocalDate startTime;
-    private LocalDate endTime;
+    @Id @GeneratedValue @Column(name = "id") private long id;
+    @Column(name = "name") private String name;
+    @Column(name = "startTime") private LocalDate startTime;
+    @Column(name = "endTime") private LocalDate endTime;
     @ManyToOne private LocalGroup localGroup;
-    @OneToOne private Activist personInCharge;
-    @OneToMany private List<Activist> contributors;
+    @OneToOne private Person personInCharge;
+    @OneToMany private List<Person> contributors;
     @OneToMany private List<Event> events;
 
     // constructors
@@ -43,13 +43,17 @@ public class Project {
      * @param localGroup the local group that host's the project
      * @param personInCharge the person responsible for the project, may be {@code null}
      * @throws IllegalArgumentException if name or local group were {@code null}
+     * @throws NoActivistException if the person in charge is specified but not an activist
      */
-    public Project(String name, LocalDate startTime, LocalDate endTime, LocalGroup localGroup, Activist personInCharge) {
+    public Project(String name, LocalDate startTime, LocalDate endTime, LocalGroup localGroup, Person personInCharge) {
         Object[] params = {name, localGroup};
         Assert.noNullElements(params, "No parameter may be null: " + Arrays.toString(params));
         Assert.hasText(name, "Name may not be empty: " + name);
         if (startTime != null && endTime != null) {
             Assert.isTrue(!endTime.isBefore(startTime), String.format("Illegal combination of start time (%s) and end time (%s)", startTime, endTime));
+        }
+        if (personInCharge != null && !personInCharge.isActivist()) {
+            throw new NoActivistException("Person in charge must be an activist: " + personInCharge);
         }
 
         this.name = name;
@@ -144,17 +148,23 @@ public class Project {
     /**
      * @return the person who is in charge the project
      */
-    public Activist getPersonInCharge() {
+    public Person getPersonInCharge() {
         return personInCharge;
     }
 
     /**
      * @param personInCharge the person in charge for the project
+     * @throws NoActivistException if the person in charge is not an activist
      * @throws IllegalStateException if the person in charge does not contribute to the project
      */
-    public void setPersonInCharge(Activist personInCharge) {
-        if (personInCharge != null && !isContributor(personInCharge)) {
-            throw new IllegalStateException("Person in charge must contribute to the project");
+    public void setPersonInCharge(Person personInCharge) {
+        if (personInCharge != null) {
+            if (!personInCharge.isActivist()) {
+              throw new NoActivistException("Person in charge must be an activist: " + personInCharge);
+            } else if (!isContributor(personInCharge)) {
+                throw new IllegalStateException("Person in charge must contribute to the project");
+            }
+
         }
         this.personInCharge = personInCharge;
     }
@@ -162,7 +172,7 @@ public class Project {
     /**
      * @return the activists who contribute to the project
      */
-    public Iterable<Activist> getContributors() {
+    public Iterable<Person> getContributors() {
         return contributors;
     }
 
@@ -190,7 +200,7 @@ public class Project {
     /**
      * @param contributors the activists who contribute to the project
      */
-    protected void setContributors(List<Activist> contributors) {
+    protected void setContributors(List<Person> contributors) {
         this.contributors = contributors;
     }
 
@@ -239,23 +249,26 @@ public class Project {
     // modification methods
 
     /**
-     * @param activist the activist to add
+     * @param person the activist to add
      * @throws IllegalArgumentException if the activist is {@code null}
+     * @throws NoActivistException if the person is no activist
      * @throws ExistingContributorException if the activist does already contribute to the project
      */
-    public void addContributor(Activist activist) {
-        Assert.notNull(activist, "Activist to add may not be null!");
-        if (isContributor(activist)) {
-            throw new ExistingContributorException(String.format("Activist %s does already contribute to project %s", activist, this));
+    public void addContributor(Person person) {
+        Assert.notNull(person, "Activist to add may not be null!");
+        if (!person.isActivist()) {
+            throw new NoActivistException("Person to add must be an activist: " + person);
+        } else if (isContributor(person)) {
+            throw new ExistingContributorException(String.format("Activist %s does already contribute to project %s", person, this));
         }
-        contributors.add(activist);
+        contributors.add(person);
     }
 
     /**
      * @param activist the activist to check
      * @return {@code true} if the activist contributes to the project or {@code false} otherwise
      */
-    public boolean isContributor(Activist activist) {
+    public boolean isContributor(Person activist) {
         return contributors.contains(activist);
     }
 
@@ -263,7 +276,7 @@ public class Project {
      * @param contributor the contributor to remove
      * @throws IllegalArgumentException if the activist is no contributor
      */
-    public void removeContributor(Activist contributor) {
+    public void removeContributor(Person contributor) {
         Assert.isTrue(isContributor(contributor), "Activist does not contribute to project: " + contributor + " " + this);
         contributors.remove(contributor);
     }

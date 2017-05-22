@@ -6,13 +6,13 @@ import javax.persistence.*;
  * Meta-data needed for the participating persons
  * @author Rico Bergmann
  */
-@Entity
+@Entity(name = "participationInfo")
 public class ParticipationInfo {
 
-    @Id @GeneratedValue private long id;
-    private boolean acknowledged;
-    private boolean participationFeePayed;
-    private boolean registrationFormReceived;
+    @Id @GeneratedValue @Column(name = "id") private long id;
+    @Column(name = "acknowledged") private boolean acknowledged;
+    @Column(name = "feePayed") private boolean participationFeePayed;
+    @Column(name = "formReceived") private boolean registrationFormReceived;
 
     /**
      * Only a default constructor is needed. All participation info looks the same at the beginning.

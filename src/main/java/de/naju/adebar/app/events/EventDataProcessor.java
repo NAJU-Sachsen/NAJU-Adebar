@@ -1,11 +1,10 @@
 package de.naju.adebar.app.events;
 
 import de.naju.adebar.model.chapter.LocalGroup;
-import de.naju.adebar.model.chapter.LocalGroupManager;
+import de.naju.adebar.app.chapter.LocalGroupManager;
 import de.naju.adebar.model.chapter.Project;
-import de.naju.adebar.model.chapter.ProjectManager;
+import de.naju.adebar.app.chapter.ProjectManager;
 import de.naju.adebar.model.events.Event;
-import de.naju.adebar.model.events.EventManager;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
