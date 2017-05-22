@@ -82,6 +82,7 @@
               </header>
               <section class="modal-body">
                   <form id="edit-person-form" class="form-horizontal" method="post" th:object="${editPersonForm}" th:action="@{'/persons/' + ${person.id} + '/edit'}">
+                      <input type="hidden" name="participant" value="true" />
                       <div class="form-group">
                           <label for="edit-firstname" class="col-sm-3 control-label">Vorname</label>
                           <div class="col-sm-9">
@@ -142,7 +143,7 @@
                           <label for="eatingHabit" class="col-sm-3 control-label">Ernährung</label>
                           <div class="col-sm-9">
                               <textarea class="form-control" name="eatingHabit" id="eatingHabit"
-                                  placeholder="Essgewohnheiten (Vegetarier, Unverträglichkeiten...)" th:field="*{eatingHabit}"></textarea>
+                                  placeholder="Essgewohnheiten (vegetarisch, Unverträglichkeiten...)" th:field="*{eatingHabit}"></textarea>
                           </div>
                       </div>
                       <div class="form-group">
@@ -158,6 +159,14 @@
                               <input type="text" class="form-control street" name="street" placeholder="Straße, HNr." th:field="*{street}"/>
                               <input type="text" class="form-control zip" name="zip" placeholder="Plz" style="width: 30%; float: left;" th:field="*{zip}"/>
                               <input type="text" class="form-control city" name="city" placeholder="Stadt" style="width: 67%; float: right;" th:field="*{city}"/>
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <label for="add-person-remarks" class="col-sm-3 control-label">Bemerkungen
+                              <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" data-title="Schwimmerlaubnis o.ä."></span>
+                          </label>
+                          <div class="col-sm-9">
+                              <textarea class="form-control" name="remarks" id="remarks" placeholder="Bemerkungen (Schwimmerlaubnis ...)" th:field="*{remarks}"></textarea>
                           </div>
                       </div>
                       <div class="form-group">
@@ -376,10 +385,6 @@
                                     <td class="col-sm-8" th:text="${person.name}">Max Mustermann</td>
                                 </tr>
                                 <tr class="row">
-                                    <th class="col-sm-4"><span class="glyphicon glyphicon-calendar"></span> Geburtsdatum:</th>
-                                    <td class="col-sm-8" th:text="${{person.dateOfBirth}}">30.02.1999</td>
-                                </tr>
-                                <tr class="row">
                                     <th class="col-sm-4"><span class="glyphicon glyphicon-envelope"></span> E-Mail Adresse:</th>
                                     <td class="col-sm-8">
                                         <a href="mailto:max_muster@aol.com" th:href="'mailto:' + ${person.email}" th:text="${person.email}">max_muster@aol.com</a>
@@ -395,18 +400,25 @@
                                     <th class="col-sm-4"><span class="glyphicon glyphicon-home"></span> Adresse:</th>
                                     <td class="col-sm-8" th:text="|${person.address.street} ${person.address.zip} ${person.address.city}|">Zu Hause 15, 01234 Entenhausen</td>
                                 </tr>
-                                <tr class="row">
-                                    <th class="col-sm-4"><span class="glyphicon glyphicon-cutlery"></span> Vegetarier o.ä.:</th>
-                                    <td class="col-sm-8" th:text="${person.eatingHabit}">Veganer, Laktose-intolerant</td>
+                                <tr class="row" th:if="${person.participant}">
+                                    <th class="col-sm-4"><span class="glyphicon glyphicon-calendar"></span> Geburtsdatum:</th>
+                                    <td class="col-sm-8" th:text="${person.participantProfile.dateOfBirth} ? ${{person.participantProfile.dateOfBirth}} : '---'">30.02.1999</td>
                                 </tr>
-                                <tr class="row">
+                                <tr class="row" th:if="${person.participant}">
+                                    <th class="col-sm-4"><span class="glyphicon glyphicon-cutlery"></span> Ernährung:</th>
+                                    <td class="col-sm-8" th:text="${person.participantProfile.eatingHabits}">Veganer, Laktose-intolerant</td>
+                                </tr>
+                                <tr class="row" th:if="${person.participant}">
                                     <th class="col-sm-4"><span class="glyphicon glyphicon-bed"></span> Allergien o.ä.:</th>
-                                    <td class="col-sm-8" th:text="${person.healthImpairments}">Heuschnupfen</td>
+                                    <td class="col-sm-8" th:text="${person.participantProfile.healthImpairments}">Heuschnupfen</td>
                                 </tr>
-                                <tr class="row">
+                                <tr class="row" th:if="${person.participant}">
                                     <th class="col-sm-4"><span class="glyphicon glyphicon-tree-deciduous"></span> NABU-Mitglied</th>
-                                    <td class="col-sm-8" th:if="${isNabuMember}" th:text="|Mitgliedsnummer: ${person.nabuMembership.membershipNumber ?: 'unbekannt'}|">Mitgliedsnummer: 9874563</td>
-                                    <td class="col-sm-8" th:unless="${isNabuMember}">kein Mitglied</td>
+                                    <td class="col-sm-8" th:if="${person.getParticipantProfile().isNabuMember()}" th:text="|Mitgliedsnummer: ${person.participantProfile.nabuMembership.membershipNumber ?: 'unbekannt'}|">Mitgliedsnummer: 9874563</td>
+                                    <td class="col-sm-8" th:unless="${person.getParticipantProfile().isNabuMember()}">kein Mitglied</td>
+                                </tr>
+                                <tr class="row" th:unless="${person.participant}">
+                                    <td colspan="2" class="col-sm-12 text-center bold">die Person nimmt an keinen Camps teil</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -416,27 +428,27 @@
                 <!-- activist overview -->
                 <div class="col-sm-5">
                     <section class="panel panel-default">
-                        <input type="hidden" id="person-is-activist" value="false" th:value="${isActivist}" />
-                        <input type="hidden" id="activist-has-juleica" value="false" th:value="${hasJuleica}" />
+                        <input type="hidden" id="person-is-activist" value="false" th:value="${person.activist}" />
+                        <input type="hidden" id="activist-has-juleica" value="false" th:value="${person.activist} ? ${person.getActivistProfile().hasJuleica()} : 'false'" />
                         <header class="panel-heading clearfix">
                             <h2 class="panel-title pull-left" style="margin-top: 7.5px; margin-right: 2em;">Aktiven-Details</h2>
                             <div class="input-group pull-right" style="margin-left: 1em;">
                               <button type="button" class="btn btn-default" data-toggle="modal" data-target="#edit-activist-modal"><span class="glyphicon glyphicon-pencil"></span> Anpassen</button>
                            </div>
                         </header>
-                        <table class="table" th:if="${isActivist}">
+                        <table class="table" th:if="${person.activist}">
                             <tbody>
                                 <tr class="row">
                                     <th class="col-sm-4"><span class="glyphicon glyphicon-map-marker"></span> Ortsgruppe:</th>
                                     <td class="col-sm-8" th:if="${localGroups}">
-                                        <a class="label label-primary" th:each="localGroup : ${localGroups}" href="localGroupDetails.html" th:href="@{/localGroups/{id}(id=${localGroup.id})}" th:text="|${localGroup.name}|">NAJU Freiberg</a>
+                                        <a class="label label-primary" th:each="localGroup : ${localGroups}" href="localGroupDetails.html" th:href="@{/localGroups/{id}(id=${localGroup.id})}" th:text="${localGroup.name}">NAJU Freiberg</a>
                                     </td>
                                     <td class="col-sm-8" th:unless="${localGroups}">keine</td>
                                 </tr>
                                 <tr class="row">
                                     <th class="col-sm-4"><span class="glyphicon glyphicon-credit-card"></span> Juleica:</th>
-                                    <td class="col-sm-8" th:if="${hasJuleica}" th:text="|Ablaufdatum: ${{activist.juleicaExpiryDate}}|">lief am <strong>07.03.2015</strong> aus</td>
-                                    <td class="col-sm-8" th:unless="${hasJuleica}">keine</td>
+                                    <td class="col-sm-8" th:if="${person.getActivistProfile().hasJuleica()}">Ablaufdatum: <span th:text=" ${person.activistProfile.juleicaCard.expiryDate} ? ${{person.activistProfile.juleicaCard.expiryDate}} : 'unbekannt'">01.02.2011</span></td>
+                                    <td class="col-sm-8" th:unless="${person.getActivistProfile().hasJuleica()}">keine</td>
                                 </tr>
                                 <tr class="row">
                                     <th class="col-sm-4"><span class="glyphicon glyphicon-briefcase"></span> Vorstand:</th>
@@ -447,7 +459,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <section class="panel-body" th:unless="${isActivist}">
+                        <section class="panel-body" th:unless="${person.activist}">
                             <p>
                                 Die Person ist kein Aktiver
                             </p>
@@ -478,12 +490,15 @@
                               </div>
                            </form>
                         </header>
-                        <div class="list-group qualification-list" th:if="${isReferent}" th:remove="all-but-first">
-                            <button type="button" class="list-group-item" data-toggle="modal" data-target="#delete-qualification-modal" data-qualification="Erste-Hilfe-Kurs" th:each="qualification : ${qualifications}" th:attr="data-qualification=${qualification.name}"><span class="qualification-title" th:text="${qualification.name}">Erste-Hilfe-Kurs</span> <small class="qualification-description" th:text="${qualification.description}">der Referent darf grundlegende Ersthilfe-Kurse leiten</small></button>
+                        <div class="list-group qualification-list" th:if="${person.referent}" th:remove="all-but-first">
+                            <button type="button" class="list-group-item" data-toggle="modal" data-target="#delete-qualification-modal" data-qualification="Erste-Hilfe-Kurs" th:each="qualification : ${person.referentProfile.qualifications}" th:attr="data-qualification=${qualification.name}"><span class="qualification-title" th:text="${qualification.name}">Erste-Hilfe-Kurs</span> <small class="qualification-description" th:text="${qualification.description}">der Referent darf grundlegende Ersthilfe-Kurse leiten</small></button>
                             <button type="button" class="list-group-item" data-toggle="modal" data-target="#delete-qualification-modal" data-qualification="Storchenkoffer"><span class="qualification-title">Storchenkoffer</span> <small class="qualification-description">der Referent wurde für das "Ein Storch auf Reisen" Projekt weitergebildet</small></button>
                             <button type="button" class="list-group-item" data-toggle="modal" data-target="#delete-qualification-modal" data-qualification="Öffentlichkeitsarbeit"><span class="qualification-title">Öffentlichkeitsarbeit</span> <small class="qualification-description">der Referent kann Workshops zum Thema Öffentlichkeitsarbeit leiten</small></button>
                         </div>
-                        <section class="panel-body" th:unless="${isReferent}">
+                        <section class="panel-body" th:if="${person.referent} AND ${!person.getReferentProfile().getQualifications().iterator().hasNext()}">
+                            Die Person hat noch keine Qualifikationen
+                        </section>
+                        <section class="panel-body" th:unless="${person.referent}">
                             <p>
                                 Die Person ist kein Referent
                             </p>

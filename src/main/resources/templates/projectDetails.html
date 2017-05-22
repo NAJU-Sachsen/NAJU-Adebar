@@ -428,8 +428,8 @@
                             <tr>
                                 <th><span class="glyphicon glyphicon-king"></span> Verantwortlicher</th>
                                 <td>
-                                    <a href="mailto:" th:if="${personInCharge}" th:href="|mailto: ${personInCharge.email}|" th:text="${personInCharge.name}">Hans Meier</a>
-                                    <span th:unless="${personInCharge}">---</span>
+                                    <a href="mailto:" th:if="${project.getPersonInCharge() != null}" th:href="|mailto: ${project.personInCharge.email}|" th:text="${project.personInCharge.name}">Hans Meier</a>
+                                    <span th:unless="${project.getPersonInCharge() != null}">---</span>
                                 </td>
                             </tr>
                         </tbody>
@@ -452,7 +452,7 @@
                         </div>
                     </header>
                     <ul id="contributors" class="list-group list-group-hover" th:remove="all-but-first">
-                        <li class="list-group-item list-group-item-interactive" data-toggle="modal" data-target="#remove-contributor-modal" data-id="1" data-name="Maxi Musterfrau" th:each="contributor : ${contributors}" th:attr="'data-id'=${contributor.id}, 'data-name'=${contributor.name}">
+                        <li class="list-group-item list-group-item-interactive" data-toggle="modal" data-target="#remove-contributor-modal" data-id="1" data-name="Maxi Musterfrau" th:each="contributor : ${project.contributors}" th:attr="'data-id'=${contributor.id}, 'data-name'=${contributor.name}">
                             <a href="personDetails.html" th:href="@{/persons/{id}(id=${contributor.id})}">
                                 <span class="glyphicon glyphicon-link"></span>
                             </a> <span th:text="${contributor.name}">Maxi Musterfrau</span> (<a href="mailto:maxi.musterfrau@naju-sachsen.de" th:href="|mailto: ${contributor.email}|" th:text="${contributor.email}">maxi.musterfrau@naju-sachsen.de</a>)
@@ -530,6 +530,8 @@
 
 
 </main>
+
+<script src="../static/resources/js/displayMatchingPersons.js" th:src="@{/resources/js/displayMatchingPersons.js}"></script>
 <script src="../static/resources/js/customInitialization.js" th:src="@{/resources/js/customInitialization.js}"></script>
 <script src="../static/resources/js/customInitialization.projectDetails.js" th:src="@{/resources/js/customInitialization.projectDetails.js}"></script>
 

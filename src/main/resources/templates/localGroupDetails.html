@@ -250,7 +250,7 @@
                           <div class="col-sm-9">
                               <div style="margin-bottom: 10px;">
                                   <select id="edit-board-select-newMember" multiple="multiple" title="Neues Mitglied auswählen" class="selectpicker" data-live-search="true" data-selected-text-format="static" data-actions-box="true" th:remove="all-but-first">
-                                      <option data-subtext="(* 31.02.1234)" value="1" th:each="member : ${members}" th:value="${member.id}" th:text="${member.name}" th:attr="'data-subtext'=|(* ${member.dateOfBirth} )|">Maxi Musterfrau</option>
+                                      <option data-subtext="(* 31.02.1234)" value="1" th:each="member : ${members}" th:value="${member.id}" th:text="${member.name}" th:attr="'data-subtext'=|(* ${member.participant ? member.participantProfile.dateOfBirth != null ? {member.participanProfile.dateOfBirth} : 'unbekannt' : 'unbekannt'} )|">Maxi Musterfrau</option>
                                       <option data-subtext="(* 01.01.1111)" value="2">Heinz Heimlich</option>
                                       <option data-subtext="(* 12.11.1009)" value="3">Dieter Lustig</option>
                                       <option data-subtext="(* 03.07.1999)" value="4">Klaus Klücklich</option>
@@ -508,6 +508,7 @@
 
         <!-- general overview -->
         <div class="row">
+
             <div class="col-md-12">
                 <div class="panel panel-default">
                     <header class="panel-heading panel-menu">
@@ -713,6 +714,8 @@
 
 
 </main>
+
+<script src="../static/resources/js/displayMatchingPersons.js" th:src="@{/resources/js/displayMatchingPersons.js}"></script>
 <script src="../static/resources/js/customInitialization.js" th:src="@{/resources/js/customInitialization.js}"></script>
 <script src="../static/resources/js/customInitialization.localGroupDetails.js" th:src="@{/resources/js/customInitialization.localGroupDetails.js}"></script>
 </body>

@@ -746,6 +746,7 @@
                                         <li><a href="mailto:" th:href="'mailto:event@naju-sachsen.de?bcc=' + ${participantEmailsNoForm}">Teilnahmeformular noch nicht gesendet</a></li>
                                     </ul>
                                 </div>
+                                <a class="btn btn-default" href="eventExport.html" th:href="@{/events/{id}/print(id=${event.id})}"><span class="glyphicon glyphicon-print"></span> Exportieren</a>
                             </div>
                         </div>
                     </header>
@@ -762,11 +763,11 @@
                             </tr>
                         </thead>
                         <tbody th:remove="all-but-first">
-                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="0" data-internalFee-payed="true" data-form-received="false" th:each="participant : ${event.participants}" th:attr="'data-id'=${participant.id}, 'data-internalFee-payed'=${event.getParticipationInfo(participant).isParticipationFeePayed()}, 'data-form-received'=${event.getParticipationInfo(participant).isRegistrationFormReceived()}">
+                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="0" data-internalFee-payed="true" data-form-received="false" th:each="participant : ${event.participants}" th:attr="'data-id'=${participant.id}, 'data-fee-payed'=${event.getParticipationInfo(participant).isParticipationFeePayed()}, 'data-form-received'=${event.getParticipationInfo(participant).isRegistrationFormReceived()}">
                                 <td><a href="mailto:" data-toggle="" data-target="" th:href="'mailto:' + ${participant.email}" th:text="${participant.name}">Max-Hannes Mustermann</a></td>
-                                <td th:text="${{participant.dateOfBirth}}">31.02.1999</td>
-                                <td th:text="${participant.eatingHabit}">Veganer</td>
-                                <td th:text="${participant.healthImpairments}">Heuschnupfen</td>
+                                <td th:text="${{participant.participantProfile.dateOfBirth}}">31.02.1999</td>
+                                <td th:text="${participant.participantProfile.eatingHabits}">Veganer</td>
+                                <td th:text="${participant.participantProfile.healthImpairments}">Heuschnupfen</td>
                                 <td th:text="${participant.address.city}">Freital</td>
                                 <td class="text-center">
                                     <span th:if="${event.getParticipationInfo(participant).isParticipationFeePayed()}"><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span>
@@ -876,6 +877,7 @@
     </script>
 
 </main>
+<script src="../static/resources/js/displayMatchingPersons.js" th:src="@{/resources/js/displayMatchingPersons.js}"></script>
 <script src="../static/resources/js/customInitialization.js" th:src="@{/resources/js/customInitialization.js}"></script>
 <script src="../static/resources/js/customInitialization.eventDetails.js" th:src="@{/resources/js/customInitialization.eventDetails.js}"></script>
 </body>

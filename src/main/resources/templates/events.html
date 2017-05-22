@@ -105,7 +105,7 @@
                           </div>
                       </div>
                       <div class="form-group">
-                          <label for="end-time" class="col-sm-3 control-label">Bis  <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" data-title="Format: DD.MM.YYYY. Wenn die Uhrzeit unwichtig ist, einfach auf 00:00 setzen"></span></label>
+                          <label for="end-time" class="col-sm-3 control-label">Bis <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" data-title="Format: DD.MM.YYYY. Wenn die Uhrzeit unwichtig ist, einfach auf 00:00 setzen"></span></label>
                           <div class="col-sm-9">
                               <div class="input-group date" id="end-time-picker">
                                   <input type="text" class="form-control" name="end-time" id="end-time" placeholder="Endzeit" required="required" th:field="*{endTime}"/>
@@ -444,7 +444,7 @@
                             <td class="event-time" th:text="${{event.startTime}} + ' - ' + ${{event.endTime}}">02.06.</td>
                             <td class="event-place" th:text="${event.place.city}">Großdittmannsdorf</td>
                             <td class="text-center" th:text="${event.participantsCount}">---</td>
-                            <td class="text-center" th:text="${event.remainingCapacity} == ${T(java.lang.Integer).MAX_VALUE} ? 'unbegrenzt' : ${event.remainingCapacity}">---</td>
+                            <td class="text-center" th:text="${event.remainingCapacity} > 1000000 ? 'unbegrenzt' : ${event.remainingCapacity}">---</td>
                             <td class="event-localgroup">
                                 <a href="localGroupDetails.html" th:if="${futureEventsLocalGroups.containsKey(event)}" th:href="@{/localGroups/{id}(id=${futureEventsLocalGroups.get(event).getId()})}" th:text="${futureEventsLocalGroups.get(event).getName()}">
                                     Großdittmannsdorf

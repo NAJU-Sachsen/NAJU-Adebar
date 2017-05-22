@@ -1,31 +1,4 @@
 
-// create an html node consisting of the given subelements
-// no sanity checks are performed
-function createHtmlNode(type, text) {
-    var opening = '<' + type + '>';
-    var closing = '</' + type + '>';
-    return opening + text + closing;
-}
-
-// create a table row for persons
-function createPersonRow(id, name, dob, address) {
-    var selectColumn = '<td class="text-center"><input type="radio" name="person-id" value="' + id + '" required="required" /></td>';
-    return '<tr>' + createHtmlNode('td', name) + createHtmlNode('td', dob) + createHtmlNode('td', address) + selectColumn + '</tr>';
-}
-
-// displays the matching persons in the 'add contributor' modal
-function displayMatchingPersons(table, result) {
-    $(table).empty();
-
-    for (var i = 0; i < result.length; i++) {
-        var person = result[i];
-
-        var row = createPersonRow(person.id, person.name, person.dob, person.address);
-
-        $(table).append(row);
-    }
-}
-
 // display the activists matching the given query
 $('#add-contributor-search-btn').on('click', function() {
     var table = '#add-contributor-tablebody';
