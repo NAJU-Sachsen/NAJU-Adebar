@@ -88,28 +88,34 @@
               <section class="modal-body">
                   <form id="add-localGroup" class="form-horizontal" method="post" th:action="@{/localGroups/add}" th:object="${localGroupForm}">
                       <div class="form-group row">
-                          <label class="control-label col-sm-2" for="add-localGroup-name">Name</label>
-                          <div class="col-sm-10">
+                          <label class="control-label col-sm-3" for="add-localGroup-name">Name</label>
+                          <div class="col-sm-9">
                               <input type="text" id="add-localGroup-name" class="form-control" placeholder="Name" required="required" autofocus="autofocus" th:field="*{name}"/>
                           </div>
                       </div>
                       <div class="form-group row">
-                          <label for="add-localGroup-address" class="col-sm-2 control-label">Adresse</label>
-                          <div class="col-sm-10 address" id="add-localGroup-address">
+                          <label for="add-localGroup-address" class="col-sm-3 control-label">Adresse</label>
+                          <div class="col-sm-9 address" id="add-localGroup-address">
                               <input type="text" class="form-control street" name="street" placeholder="Straße, HNr." th:field="*{street}"/>
                               <input type="text" class="form-control zip" name="zip" placeholder="Plz" style="width: 30%; float: left;" th:field="*{zip}"/>
                               <input type="text" class="form-control city" name="city" placeholder="Stadt" style="width: 67%; float: right;" th:field="*{city}"/>
                           </div>
                       </div>
                       <div class="form-group row">
-                          <label for="add-event-newsletter" class="col-sm-2 control-label">Newsletter</label>
-                          <div class="col-sm-10" id="add-event-newsletter">
+                          <label for="add-localGroup-newsletter" class="col-sm-3 control-label">Newsletter</label>
+                          <div class="col-sm-9" id="add-localGroup-newsletter">
                               <div class="input-group">
                                   <label class="input-group-addon">
                                       <input type="checkbox" th:field="*{createNewsletter}"/> Newsletter erstellen
                                   </label>
                                   <input type="text" class="form-control" disabled="disabled" placeholder="Name" th:field="*{newsletterName}"/>
                               </div>
+                          </div>
+                      </div>
+                      <div class="form-group row">
+                          <label for="add-localGroup-nabuGroupLink" class="col-sm-3 control-label">Link zur NABU Gruppe</label>
+                          <div class="col-sm-9">
+                              <input type="url" class="form-control" placeholder="Webseite" th:field="*{nabuGroup}" />
                           </div>
                       </div>
                   </form>

@@ -9,15 +9,21 @@ public class LocalGroupForm {
     private String street;
     private String zip;
     private String city;
+    private String nabuGroup;
 
-    public LocalGroupForm(String name, String street, String zip, String city) {
+    // constructor
+
+    public LocalGroupForm(String name, String street, String zip, String city, String nabuGroup) {
         this.name = name;
         this.street = street;
         this.zip = zip;
         this.city = city;
+        this.nabuGroup = nabuGroup;
     }
 
     public LocalGroupForm() {}
+
+    // getter and setter
 
     public String getName() {
         return name;
@@ -49,5 +55,19 @@ public class LocalGroupForm {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public String getNabuGroup() {
+        return nabuGroup;
+    }
+
+    public void setNabuGroup(String nabuGroup) {
+        this.nabuGroup = nabuGroup;
+    }
+
+    // query methods
+
+    public boolean hasNabuGroup() {
+        return nabuGroup != null && !nabuGroup.isEmpty();
     }
 }

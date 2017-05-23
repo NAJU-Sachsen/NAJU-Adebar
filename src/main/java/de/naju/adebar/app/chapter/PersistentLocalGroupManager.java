@@ -59,6 +59,7 @@ public class PersistentLocalGroupManager implements LocalGroupManager {
         LocalGroup localGroup = findLocalGroup(id).orElseThrow(() -> new IllegalArgumentException("No local group with id " + id));
         localGroup.setName(localGroupData.getName());
         localGroup.setAddress(localGroupData.getAddress());
+        localGroup.setNabuGroupLink(localGroupData.getNabuGroupLink());
         return localGroupRepo.save(localGroup);
     }
 

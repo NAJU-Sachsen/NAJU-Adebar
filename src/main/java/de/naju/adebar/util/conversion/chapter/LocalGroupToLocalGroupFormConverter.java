@@ -17,6 +17,19 @@ public class LocalGroupToLocalGroupFormConverter {
      * @return the created form
      */
     public LocalGroupForm convertToLocalGroupForm(LocalGroup localGroup) {
-        return new LocalGroupForm(localGroup.getName(), localGroup.getAddress().getStreet(), localGroup.getAddress().getZip(), localGroup.getAddress().getCity());
+        LocalGroupForm groupForm = new LocalGroupForm();
+        groupForm.setName(localGroup.getName());
+
+        if (localGroup.getAddress() != null) {
+            groupForm.setStreet(localGroup.getAddress().getStreet());
+            groupForm.setZip(localGroup.getAddress().getZip());
+            groupForm.setCity(localGroup.getAddress().getCity());
+        }
+
+        if (localGroup.getNabuGroupLink() != null) {
+            groupForm.setNabuGroup(localGroup.getNabuGroupLink().toString());
+        }
+
+        return groupForm;
     }
 }

@@ -4,6 +4,9 @@ import de.naju.adebar.controller.forms.chapter.LocalGroupForm;
 import de.naju.adebar.model.chapter.LocalGroup;
 import de.naju.adebar.model.human.Address;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 /**
  * Service to extract the necessary data from a local group form
  * @author Rico Bergmann
@@ -17,6 +20,15 @@ public class LocalGroupFormDataExtractor {
     public LocalGroup extractLocalGroup(LocalGroupForm localGroupForm) {
         Address address = new Address(localGroupForm.getStreet(), localGroupForm.getZip(), localGroupForm.getCity());
         LocalGroup localGroup = new LocalGroup(localGroupForm.getName(), address);
+
+        if (localGroupForm.hasNabuGroup()) {
+            try {
+                localGroup.setNabuGroupLink(new URL(localGroupForm.getNabuGroup()));
+            } catch (MalformedURLException e) {
+                // URL does not work, but we are fine with that
+            }
+        }
+
         return localGroup;
     }
 

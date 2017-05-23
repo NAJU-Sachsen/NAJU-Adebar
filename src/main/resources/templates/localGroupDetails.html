@@ -91,17 +91,23 @@
               <section class="modal-body">
                   <form id="edit-localgroup" class="form-horizontal" method="post" th:action="@{/localGroups/{id}/edit(id=${localGroup.id})}" th:object="${localGroupForm}">
                       <div class="form-group row">
-                          <label class="control-label col-sm-2" for="edit-name">Name</label>
+                          <label class="control-label col-sm-3" for="edit-name">Name</label>
                           <div class="col-sm-9">
                               <input type="text" id="edit-name" class="form-control" placeholder="Name" required="required" th:field="*{name}"/>
                           </div>
                       </div>
                       <div class="form-group row">
-                          <label for="edit-address" class="col-sm-2 control-label">Adresse</label>
-                          <div class="col-sm-10 address" id="edit-address">
+                          <label for="edit-address" class="col-sm-3 control-label">Adresse</label>
+                          <div class="col-sm-9 address" id="edit-address">
                               <input type="text" class="form-control street" name="street" placeholder="Straße, HNr." th:field="*{street}"/>
                               <input type="text" class="form-control zip" name="zip" placeholder="Plz" style="width: 30%; float: left;" th:field="*{zip}"/>
                               <input type="text" class="form-control city" name="city" placeholder="Stadt" style="width: 67%; float: right;" th:field="*{city}"/>
+                          </div>
+                      </div>
+                      <div class="form-group row">
+                          <label for="add-localGroup-nabuGroup" class="col-sm-3 control-label">Link zur NABU Gruppe</label>
+                          <div class="col-sm-9">
+                              <input type="url" class="form-control" placeholder="Webseite" th:field="*{nabuGroup}" />
                           </div>
                       </div>
                   </form>
@@ -519,26 +525,33 @@
                             </button>
                         </div>
                     </header>
-                    <ul class="list-group">
-                        <li class="list-group-item">
-                            <span class="item-title">
-                                <span class="glyphicon glyphicon-tag"></span> Name:
-                            </span> <span th:text="${localGroup.name}">NAJU Sachsen</span>
-                        </li>
-                        <li class="list-group-item">
-                            <span class="item-title">
-                                <span class="glyphicon glyphicon-map-marker"></span> Adresse:
-                            </span>
-                            <a target="_blank" href="http://www.openstreetmap.org/search?query=Kamenzer%20Str.%207%2001099%20Dresden" th:href="@{http://www.openstreetmap.org/search(query=|${localGroup.address.street} ${localGroup.address.zip} ${localGroup.address.city}|)}" th:text="|${localGroup.address.street} ${localGroup.address.zip} ${localGroup.address.city}|">Kamenzer Str. 7 01099 Dresden</a>
-                        </li>
-                        <li class="list-group-item">
-                            <span class="item-title">
-                                <span class="glyphicon glyphicon-envelope"></span> Newsletter:
-                            </span>
-                            <a href="newsletterDetails.html" class="label label-primary" th:each="newsletter : ${localGroup.newsletters}" th:href="@{'/newsletters/' + ${newsletter.id}}" th:text="${newsletter.name}">NAJU Sachsen</a>
-                            <span th:unless="${localGroup.hasNewsletters()}">---</span>
-                        </li>
-                    </ul>
+                    <table class="table">
+                        <tbody>
+                            <tr class="row">
+                                <th class="col-sm-2"><span class="glyphicon glyphicon-tag"></span> Name:</th>
+                                <td class="col-sm-10" th:text="${localGroup.name}">NAJU Sachsen</td>
+                            </tr>
+                            <tr class="row">
+                                <th class="col-sm-2"><span class="glyphicon glyphicon-map-marker"></span> Adresse:</th>
+                                <td class="col-sm-10">
+                                    <a target="_blank" href="http://www.openstreetmap.org/search?query=Kamenzer%20Str.%207%2001099%20Dresden" th:href="@{http://www.openstreetmap.org/search(query=|${localGroup.address.street} ${localGroup.address.zip} ${localGroup.address.city}|)}" th:text="|${localGroup.address.street} ${localGroup.address.zip} ${localGroup.address.city}|">Kamenzer Str. 7 01099 Dresden</a>
+                                </td>
+                            </tr>
+                            <tr class="row">
+                                <th class="col-sm-2"><span class="glyphicon glyphicon-envelope"></span> Newsletter:</th>
+                                <td class="col-sm-10">
+                                    <a href="newsletterDetails.html" class="label label-primary" th:each="newsletter : ${localGroup.newsletters}" th:href="@{'/newsletters/' + ${newsletter.id}}" th:text="${newsletter.name}">NAJU Sachsen</a>
+                                    <span th:unless="${localGroup.hasNewsletters()}">---</span>
+                                </td>
+                            </tr>
+                            <tr class="row" th:if="${localGroup.hasNabuGroupLink()}">
+                                <th class="col-sm-2"><span class="glyphicon glyphicon-home"></span> NABU-Gruppe:</th>
+                                <td class="col-sm-10">
+                                    <a href="http://sachsen.nabu.de" target="_blank" th:href="${localGroup.nabuGroupLink}" th:text="${localGroup.nabuGroupLink}">http://sachsen.nabu.de</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -550,7 +563,7 @@
             <div class="col-md-8">
                 <div class="panel panel-default">
                     <header class="panel-heading panel-menu">
-                        <h2 class="panel-title">Mitglieder</h2>
+                        <h2 class="panel-title">Aktive</h2>
 
                         <div class="panel-menu-container">
                            <div class="form-inline">
@@ -604,7 +617,7 @@
             <div class="col-md-4">
                 <div class="panel panel-primary">
                     <header class="panel-heading panel-menu">
-                        <h2 class="panel-title">Vorstand</h2>
+                        <h2 class="panel-title">Jugendvorstand</h2>
                         <div class="btn-group panel-menu-container">
                             <button type="button" class="btn btn-default" data-toggle="modal" data-target="#edit-board-modal">
                                 <span class="glyphicon glyphicon-pencil"></span> Anpassen

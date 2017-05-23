@@ -8,6 +8,7 @@ import de.naju.adebar.model.newsletter.Newsletter;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
+import java.net.URL;
 import java.util.*;
 
 // TODO a local group should be able to contain multiple newsletters
@@ -20,8 +21,8 @@ import java.util.*;
  */
 @Entity(name = "localGroup")
 public class LocalGroup {
-    @Id @GeneratedValue private long id;
-    @Column(unique = true) private String name;
+    @Id @GeneratedValue @Column(name = "id") private long id;
+    @Column(name = "name", unique = true) private String name;
     @Embedded @Column(unique = true) private Address address;
     @ManyToMany(cascade = CascadeType.ALL) private List<Person> members;
     @ManyToMany(cascade = CascadeType.ALL) private List<Person> contactPersons;
@@ -29,6 +30,7 @@ public class LocalGroup {
     @OneToMany(cascade = CascadeType.ALL) private Map<String, Project> projects;
     @OneToOne(cascade = CascadeType.ALL) private Board board;
     @OneToMany(cascade = CascadeType.ALL) private Set<Newsletter> newsletters;
+    @Column(name = "nabuGroup") private URL nabuGroupLink;
 
     // constructors
 
@@ -44,6 +46,7 @@ public class LocalGroup {
         this.name = name;
         this.address = address;
         this.members = new LinkedList<>();
+        this.contactPersons = new LinkedList<>();
         this.events = new LinkedList<>();
         this.projects = new HashMap<>();
         this.newsletters = new HashSet<>();
@@ -103,6 +106,13 @@ public class LocalGroup {
     }
 
     /**
+     * @return the local group's contact persons
+     */
+    public Iterable<Person> getContactPersons() {
+        return contactPersons;
+    }
+
+    /**
      * @return the events the local group hosts
      */
     public Iterable<Event> getEvents() {
@@ -135,6 +145,20 @@ public class LocalGroup {
     }
 
     /**
+     * @return the website of the NABU group this NAJU belongs to
+     */
+    public URL getNabuGroupLink() {
+        return nabuGroupLink;
+    }
+
+    /**
+     * @param nabuGroupLink the website of the NABU group this NAJU belongs to
+     */
+    public void setNabuGroupLink(URL nabuGroupLink) {
+        this.nabuGroupLink = nabuGroupLink;
+    }
+
+    /**
      * @param id the primary key of the local group
      */
     protected void setId(long id) {
@@ -146,6 +170,13 @@ public class LocalGroup {
      */
     protected void setMembers(List<Person> members) {
         this.members = members;
+    }
+
+    /**
+     * @param contactPersons the contact persons for the local group
+     */
+    protected void setContactPersons(List<Person> contactPersons) {
+        this.contactPersons = contactPersons;
     }
 
     /**
@@ -214,6 +245,13 @@ public class LocalGroup {
      */
     public boolean hasNewsletters() {
         return !newsletters.isEmpty();
+    }
+
+    /**
+     * @return {@code true} if a link to the related NABU group was specified, {@code false} otherwise
+     */
+    public boolean hasNabuGroupLink() {
+        return nabuGroupLink != null;
     }
 
     // modification operations
