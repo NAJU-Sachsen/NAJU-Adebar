@@ -9,6 +9,8 @@ import java.time.LocalDate;
 import java.util.Map;
 import java.util.stream.Stream;
 
+// TODO refactor class for a cleaner design (state pattern?)
+
 /**
  * Filter for persons depending on their activist status. It features two constructors depending on what one
  * actually wants to filter. Keep in mind that it is generally filtered for persons. That's why actually
@@ -21,6 +23,8 @@ public class ActivistFilter implements PersonFilter {
     private FilterType filterType;
     private LocalDate juleicaExpiryDate;
     private DateFilterType dateFilterType;
+    private boolean filterJuleica;
+    private boolean hasJuleica;
 
     /**
      * This constructor should be used if just a filter on general activist status is needed. That is, whether
@@ -31,6 +35,11 @@ public class ActivistFilter implements PersonFilter {
         this.filterType = filterType;
         this.juleicaExpiryDate = null;
         this.dateFilterType = null;
+    }
+
+    public ActivistFilter(boolean hasJuleica) {
+        this.filterJuleica = true;
+        this.hasJuleica = hasJuleica;
     }
 
     /**
@@ -57,6 +66,11 @@ public class ActivistFilter implements PersonFilter {
                 case IGNORE:
                     return personStream.filter(p -> !p.isActivist());
             }
+        } else if (filterJuleica) {
+            // if we filter for activists with a specific kind of juleica expiry date, we should only consider activists
+            Stream<Person> activists = personStream.filter(Person::isActivist);
+            activists = activists.filter(a -> a.getActivistProfile().hasJuleica() == hasJuleica);
+            return activists;
         } else {
             // if we filter for activists with a specific kind of juleica expiry date, we should only consider activists
             Stream<Person> activists = personStream.filter(Person::isActivist);

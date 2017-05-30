@@ -25,14 +25,6 @@ public class FilterPersonForm {
 
     }
 
-    public static String getDateFormat() {
-        return DATE_FORMAT;
-    }
-
-    public static void setDateFormat(String dateFormat) {
-        DATE_FORMAT = dateFormat;
-    }
-
     public String getFirstName() {
         return firstName;
     }

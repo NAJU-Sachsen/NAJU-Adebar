@@ -30,6 +30,7 @@ import java.util.stream.StreamSupport;
 @Service
 public class FilterPersonFormFilterExtractor {
     private final static String NO_FILTER = "none";
+    private final static String ENFORCE_PROPERTY = "ENFORCE";
 
     private DateTimeFormatter dateFormatter;
 
@@ -53,6 +54,13 @@ public class FilterPersonFormFilterExtractor {
         return !personForm.getActivistFilterType().equals(NO_FILTER);
     }
 
+    public boolean hasJuleicaExpiryDate(FilterPersonForm personForm) {
+        if (!hasActivistFilter(personForm)) {
+            throw new IllegalStateException("Form did not specify an activist filter: " + personForm);
+        }
+        return !personForm.getActivistJuleicaExpiryFilterType().equals(NO_FILTER);
+    }
+
     /**
      * @param personForm form containing the data to extract
      * @return the {@link ActivistFilter} encoded by the form
@@ -64,6 +72,8 @@ public class FilterPersonFormFilterExtractor {
         }
         if (personForm.getActivistJuleicaFilterType().equals(NO_FILTER)) {
             return new ActivistFilter(FilterType.valueOf(personForm.getActivistFilterType()));
+        } else if (!hasJuleicaExpiryDate(personForm)) {
+            return new ActivistFilter(personForm.getActivistJuleicaFilterType().equals(ENFORCE_PROPERTY));
         } else {
             LocalDate juleicaExpiryDate = LocalDate.parse(personForm.getJuleicaExpiryDate(), dateFormatter);
             DateFilterType dateFilterType = DateFilterType.valueOf(personForm.getActivistJuleicaExpiryFilterType());
