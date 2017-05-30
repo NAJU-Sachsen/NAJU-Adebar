@@ -397,7 +397,7 @@ public class EventController {
      * @param model model which will contain the data to display
      * @return the print view
      */
-    @RequestMapping("/events/{eid}/export")
+    @RequestMapping("/events/{eid}/print")
     public String displayPrintView(@PathVariable("eid") Long eventId, Model model) {
         Event event = eventManager.findEvent(eventId).orElseThrow(IllegalArgumentException::new);
         model.addAttribute("event", event);
