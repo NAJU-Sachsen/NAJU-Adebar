@@ -13,6 +13,8 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.Optional;
 
+// TODO make CreatePersonFormDataExtractor subclass of EditPersonFormDataExtractor
+
 /**
  * Service to extract the necessary data from a 'create person' form
  * @author Rico Bergmann
@@ -39,6 +41,7 @@ public class CreatePersonFormDataExtractor {
      */
     public Person extractPerson(CreatePersonForm personForm) {
         Person person = personFactory.buildNew(personForm.getFirstName(), personForm.getLastName(), personForm.getEmail()).create();
+        person.setPhoneNumber(personForm.getPhoneNumber());
         person.setAddress(extractAddress(personForm));
 
         if (personForm.isParticipant()) {
