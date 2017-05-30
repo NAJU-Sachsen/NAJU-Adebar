@@ -16,7 +16,7 @@
     <main class="container-fluid">
         <div class="row" style="margin-bottom: 1em;">
             <header>
-                <h1 th:text="${event.name}">HIFA <small><span th:text="${{event.startTime}} + ' - ' + ${{event.endTime}}">24.05.17 - 28.05.17</span>, <span th:text="|${event.place.street} ${event.place.zip} ${event.place.city}|">Annahütte</span></small></h1>
+                <h1><span th:text="${event.name}">HIFA</span> <small><span th:text="${{event.startTime}} + ' - ' + ${{event.endTime}}">24.05.17 - 28.05.17</span>, <span th:text="|${event.place.street} ${event.place.zip} ${event.place.city}|">Annahütte</span></small></h1>
             </header>
         </div>
         <div class="row">
