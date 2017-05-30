@@ -76,6 +76,7 @@ public class CreatePersonFormDataExtractor {
         profile.setNabuMembership(nabu);
         profile.setEatingHabits(personForm.getEatingHabit());
         profile.setHealthImpairments(personForm.getHealthImpairments());
+        profile.setRemarks(personForm.getRemarks());
     }
 
     /**
