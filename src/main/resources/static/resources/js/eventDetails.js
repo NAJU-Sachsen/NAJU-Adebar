@@ -1,7 +1,7 @@
 
-$('#participants a').on('click', function(e){
+$('#participants').find('a').on('click', function(e){
     e.stopPropagation();
-})
+});
 
 $('#add-participant-search-btn').on('click', function() {
     var table = '#add-participant-tablebody';
@@ -14,7 +14,7 @@ $('#add-participant-search-btn').on('click', function() {
         data: {
             firstname: firstname,
             lastname: lastname,
-            city: city,
+            city: city
         },
         dataType: 'json',
         method: 'POST',
@@ -38,7 +38,7 @@ $('#add-counselor-search-btn').on('click', function() {
         data: {
             firstname: firstname,
             lastname: lastname,
-            city: city,
+            city: city
         },
         dataType: 'json',
         method: 'POST',
@@ -62,7 +62,7 @@ $('#add-organizer-search-btn').on('click', function() {
         data: {
             firstname: firstname,
             lastname: lastname,
-            city: city,
+            city: city
         },
         dataType: 'json',
         method: 'POST',

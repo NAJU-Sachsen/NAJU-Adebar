@@ -210,19 +210,25 @@
                                   <td>Max Mustermann</td>
                                   <td>31.02.1999</td>
                                   <td>Bei Mir 7 01234 Noch ein Dorf</td>
-                                  <td class="text-center"><input type="radio" name="person-id" value="0" required="required" /></td>
+                                  <td class="text-center">
+                                      <label><input type="radio" name="person-id" value="0" required="required" /></label>
+                                  </td>
                               </tr>
                               <tr>
                                   <td>Claus Dieter</td>
                                   <td>17.07.1993</td>
                                   <td>Zu Hause 123 01478 Irgendein Dorf</td>
-                                  <td class="text-center"><input type="radio" name="person-id" value="0" required="required" /></td>
+                                  <td class="text-center">
+                                      <label><input type="radio" name="person-id" value="0" required="required" /></label>
+                                  </td>
                               </tr>
                               <tr>
                                   <td>Friedlinde Müller</td>
                                   <td>11.11.1995</td>
                                   <td>Um die Ecke 3c 01597 Großstadt</td>
-                                  <td class="text-center"><input type="radio" name="person-id" value="0" required="required" /></td>
+                                  <td class="text-center">
+                                      <label><input type="radio" name="person-id" value="0" required="required" /></label>
+                                  </td>
                               </tr>
                           </tbody>
                       </table>
@@ -278,19 +284,25 @@
                                   <td>Max Mustermann</td>
                                   <td>31.02.1999</td>
                                   <td>Bei Mir 7 01234 Noch ein Dorf</td>
-                                  <td class="text-center"><input type="radio" name="person-id" value="0" required="required" /></td>
+                                  <td class="text-center">
+                                      <label><input type="radio" name="person-id" value="0" required="required" /></label>
+                                  </td>
                               </tr>
                               <tr>
                                   <td>Claus Dieter</td>
                                   <td>17.07.1993</td>
                                   <td>Zu Hause 123 01478 Irgendein Dorf</td>
-                                  <td class="text-center"><input type="radio" name="person-id" value="0" required="required" /></td>
+                                  <td class="text-center">
+                                      <label><input type="radio" name="person-id" value="0" required="required" /></label>
+                                  </td>
                               </tr>
                               <tr>
                                   <td>Friedlinde Müller</td>
                                   <td>11.11.1995</td>
                                   <td>Um die Ecke 3c 01597 Großstadt</td>
-                                  <td class="text-center"><input type="radio" name="person-id" value="0" required="required" /></td>
+                                  <td class="text-center">
+                                      <label><input type="radio" name="person-id" value="0" required="required" /></label>
+                                  </td>
                               </tr>
                           </tbody>
                       </table>
@@ -346,19 +358,25 @@
                                   <td>Max Mustermann</td>
                                   <td>31.02.1999</td>
                                   <td>Bei Mir 7 01234 Noch ein Dorf</td>
-                                  <td class="text-center"><input type="radio" name="person-id" value="0" required="required" /></td>
+                                  <td class="text-center">
+                                      <label><input type="radio" name="person-id" value="0" required="required" /></label>
+                                  </td>
                               </tr>
                               <tr>
                                   <td>Claus Dieter</td>
                                   <td>17.07.1993</td>
                                   <td>Zu Hause 123 01478 Irgendein Dorf</td>
-                                  <td class="text-center"><input type="radio" name="person-id" value="0" required="required" /></td>
+                                  <td class="text-center">
+                                      <label><input type="radio" name="person-id" value="0" required="required" /></label>
+                                  </td>
                               </tr>
                               <tr>
                                   <td>Friedlinde Müller</td>
                                   <td>11.11.1995</td>
                                   <td>Um die Ecke 3c 01597 Großstadt</td>
-                                  <td class="text-center"><input type="radio" name="person-id" value="0" required="required" /></td>
+                                  <td class="text-center">
+                                      <label><input type="radio" name="person-id" value="0" required="required" /></label>
+                                  </td>
                               </tr>
                           </tbody>
                       </table>
@@ -441,7 +459,8 @@
               <section class="modal-body">
                   <form id="remove-organizer" class="form-horizontal" method="post" th:action="@{'/events/' + ${event.id} + '/organizers/remove'}">
                       <input type="hidden" name="person-id" value="-1" />
-                      <input type="text" class="form-control" value="Max Mustermann" readonly="readonly" disabled="disabled"/>
+                      <label for="remove-organizer-name" class="sr-only">Name</label>
+                      <input type="text" id="remove-organizer-name" class="form-control" value="Max Mustermann" readonly="readonly" disabled="disabled"/>
                   </form>
               </section>
               <footer class="modal-footer">
@@ -472,7 +491,8 @@
               <section class="modal-body">
                   <form id="remove-counselor" class="form-horizontal" th:action="@{'/events/' + ${event.id} + '/counselors/remove'}">
                       <input type="hidden" name="person-id" value="-1" />
-                      <input type="text" class="form-control" value="Max Mustermann" readonly="readonly" disabled="disabled"/>
+                      <label for="remove-counselor-name" class="sr-only">Name</label>
+                      <input type="text" id="remove-counselor-name" class="form-control" value="Max Mustermann" readonly="readonly" disabled="disabled"/>
                   </form>
               </section>
               <footer class="modal-footer">
@@ -682,7 +702,7 @@
             <div class="col-md-6">
                 <div class="panel panel-default">
                     <header class="panel-heading panel-menu">
-                        <h2 class="panel-title">Organisatoren</h2>
+                        <h2 class="panel-title">Organisation</h2>
                         <div class="input-group panel-menu-container">
                             <div class="btn-group">
                                 <button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-organizer-modal"><span class="glyphicon glyphicon-plus"></span> Hinzufügen</button>
@@ -704,7 +724,7 @@
             <div class="col-md-6">
                 <div class="panel panel-default">
                     <header class="panel-heading panel-menu">
-                        <h2 class="panel-title">Betreuer</h2>
+                        <h2 class="panel-title">Betreuung</h2>
                         <div class="input-group panel-menu-container">
                             <div class="btn-group">
                                 <button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-counselor-modal"><span class="glyphicon glyphicon-plus"></span> Hinzufügen</button>
@@ -730,7 +750,7 @@
             <div class="col-md-12">
                 <div class="panel panel-default">
                     <header class="panel-heading panel-menu">
-                        <h2 class="panel-title">Teilnehmer <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="right" data-title="Für Details auf die entsprechende Zeile klicken"></span></h2>
+                        <h2 class="panel-title">Teilnehmende <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="right" data-title="Für Details auf die entsprechende Zeile klicken"></span></h2>
                         <div class="input-group panel-menu-container">
                             <div class="btn-group">
                                 <button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-participant-modal" th:disabled="${event.bookedOut}"><span class="glyphicon glyphicon-plus"></span> Hinzufügen</button>
@@ -746,7 +766,7 @@
                                         <li><a href="mailto:" th:href="'mailto:event@naju-sachsen.de?bcc=' + ${participantEmailsNoForm}">Teilnahmeformular noch nicht gesendet</a></li>
                                     </ul>
                                 </div>
-                                <a class="btn btn-default" href="eventExport.html" th:href="@{/events/{id}/print(id=${event.id})}"><span class="glyphicon glyphicon-print"></span> Exportieren</a>
+                                <a target="_blank" class="btn btn-default" href="eventPrint.html" th:href="@{/events/{id}/print(id=${event.id})}"><span class="glyphicon glyphicon-print"></span> Drucken</a>
                             </div>
                         </div>
                     </header>
@@ -866,8 +886,8 @@
              var dateTimeOptions = {
                  format: 'DD.MM.YYYY HH:mm',
                  showTodayButton: true,
-                 extraFormats: [ 'DD.MM.YYYY' ],
-             }
+                 extraFormats: [ 'DD.MM.YYYY' ]
+             };
 
              $('#start-time-picker').datetimepicker(dateTimeOptions);
              $('#end-time-picker').datetimepicker(dateTimeOptions);
@@ -878,7 +898,7 @@
 
 </main>
 <script src="../static/resources/js/displayMatchingPersons.js" th:src="@{/resources/js/displayMatchingPersons.js}"></script>
-<script src="../static/resources/js/customInitialization.js" th:src="@{/resources/js/customInitialization.js}"></script>
-<script src="../static/resources/js/customInitialization.eventDetails.js" th:src="@{/resources/js/customInitialization.eventDetails.js}"></script>
+<script src="../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
+<script src="../static/resources/js/eventDetails.js" th:src="@{/resources/js/eventDetails.js}"></script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 $('#dob-picker').datetimepicker({
     format: 'DD.MM.YYYY',
-    showTodayButton: true,
+    showTodayButton: true
 });
 
 // disable nabu membership number if checkbox is not selected
@@ -10,7 +10,7 @@ $('#add-person-isNabuMember').click(function() {
 
 $('#edit-activist-juleica-picker').datetimepicker({
     format: 'DD.MM.YYYY',
-    showTodayButton: true,
+    showTodayButton: true
 });
 
 $('#delete-qualification-modal').on('show.bs.modal', function (event) {
@@ -29,13 +29,14 @@ $('#edit-activist-isActivist').click(function() {
 
 $('#edit-activist-hasJuleica').click(function() {
     $('#edit-activist-juleica').slideToggle();
-    $('#edit-activist-juleica-picker input').prop('required', function(i,v) {return !v;});
+    $('#edit-activist-juleica-picker').find('input').prop('required', function(i,v) {return !v;});
 });
 
 $(function() {
-    var isActivist = ($('#person-is-activist').val() == 'true');
-    var hasJuleica = ($('#activist-has-juleica').val() == 'true');
-    var isNabuMember = ($('#person-is-nabu-member').val() == 'true');
+    var isActivist = ($('#person-is-activist').val().toString() === 'true');
+    var hasJuleica = ($('#activist-has-juleica').val().toString() === 'true');
+    var isNabuMember = ($('#person-is-nabu-member').val().toString() === 'true');
+
     if (!isActivist) {
         $('#edit-activist-juleica-container').addClass('hide-initially');
     }
@@ -44,6 +45,6 @@ $(function() {
         $('#edit-activist-juleica').addClass('hide-initially');
     }
 
-    $('#edit-activist-juleica-picker input').prop('required', hasJuleica);
+    $('#edit-activist-juleica-picker').find('input').prop('required', hasJuleica);
     $('#add-person-nabuNr').prop('disabled', !isNabuMember);
 });

@@ -168,14 +168,16 @@
                                       <input type="radio" id="add-event-belonging-project" name="belonging" th:value="PROJECT" /> Projekt
                                   </label>
                                   <div id="add-event-belonging-chapter-select" class="margin-btm-sm margin-top-lg">
-                                      <select class="selectpicker" required="required" data-live-search="true" th:remove="all-but-first" th:field="*{localGroupId}">
+                                      <label for="add-event-localgroup" class="sr-only">Ortsgruppe</label>
+                                      <select class="selectpicker" id="add-event-localgroup" required="required" data-live-search="true" th:remove="all-but-first" th:field="*{localGroupId}">
                                           <option th:each="localGroup : ${localGroups}" th:text="${localGroup.name}" th:value="${localGroup.id}">NAJU Sachsen</option>
                                           <option>NAJU Dresden</option>
                                           <option>NAJU Freiberg</option>
                                       </select>
                                   </div>
                                   <div id="add-event-belonging-project-select"  class="margin-btm-sm margin-top-lg hide-initially">
-                                      <select class="selectpicker" data-live-search="true" th:remove="all-but-first" th:field="*{projectId}">
+                                      <label for="add-event-project" class="sr-only">Projekt</label>
+                                      <select class="selectpicker" id="add-event-project" data-live-search="true" th:remove="all-but-first" th:field="*{projectId}">
                                           <option data-subtext="(NAJU Dresden)" th:each="project : ${projects}" th:text="${project.name}" th:attr="'data-subtext'=${project.localGroup.name}" th:value="${project.id}">Puppenstuben gesucht!</option>
                                           <option data-subtext="(NAJU Dresden)">Brutvogelkartierung in der Dresdner Heide</option>
                                           <option data-subtext="(NAJU Sachsen)">Überarbeitung der Webseite</option>
@@ -213,8 +215,9 @@
                       </div>
                       <div class="form-group">
                           <label for="filter-start" class="col-sm-3 control-label">Startzeit</label>
-                          <div class="col-sm-9" id="filter-start">
+                          <div class="col-sm-9">
                               <div class="col-sm-3 no-padding-left">
+                                  <label for="filter-start-type" class="sr-only">Startzeit-Filter</label>
                                   <select id="filter-start-type" class="selectpicker" name="startFilterType" data-width="auto" style="float:left;" th:field="*{startFilterType}">
                                       <option value="none" selected="selected">egal</option>
                                       <option value="BEFORE">Vor</option>
@@ -223,7 +226,7 @@
                                   </select>
                               </div>
                               <div id="filter-start-container" class="input-group hidden">
-                                  <input type="text" class="form-control" name="filter-start" placeholder="Start"
+                                  <input type="text" id="filter-start" class="form-control" name="filter-start" placeholder="Start"
                                       data-toggle="tooltip" data-placement="left" data-title="Format: DD.MM.YYYY. Wenn die Uhrzeit unwichtig ist, einfach auf 00:00 setzen" th:field="*{start}"/>
                                   <span class="input-group-addon">
                                       <span class="glyphicon glyphicon-calendar"></span>
@@ -233,8 +236,9 @@
                       </div>
                       <div class="form-group">
                           <label for="filter-end" class="col-sm-3 control-label">Endzeit</label>
-                          <div class="col-sm-9" id="filter-end">
+                          <div class="col-sm-9">
                               <div class="col-sm-3 no-padding-left">
+                                  <label for="filter-end-type" class="sr-only">Endzeit-Filter</label>
                                   <select id="filter-end-type" class="selectpicker" name="endFilterType" data-width="auto" style="float:left;" th:field="*{endFilterType}">
                                       <option value="none" selected="selected">egal</option>
                                       <option value="BEFORE">Vor</option>
@@ -243,7 +247,7 @@
                                   </select>
                               </div>
                               <div id="filter-end-container" class="input-group hidden">
-                                  <input type="text" class="form-control" name="filter-start" placeholder="Ende"
+                                  <input type="text" id="filter-end" class="form-control" name="filter-start" placeholder="Ende"
                                       data-toggle="tooltip" data-placement="left" data-title="Format: DD.MM.YYYY. Wenn die Uhrzeit unwichtig ist, einfach auf 00:00 setzen" th:field="*{end}"/>
                                   <span class="input-group-addon">
                                       <span class="glyphicon glyphicon-calendar"></span>
@@ -253,8 +257,9 @@
                       </div>
                       <div class="form-group">
                           <label for="filter-participants-limit" class="col-sm-3 control-label">Teilnehmerlimit</label>
-                          <div class="col-sm-9" id="filter-participants-limit">
+                          <div class="col-sm-9">
                               <div class="col-sm-3 no-padding-left">
+                                  <label for="filter-participants-limit-type" class="sr-only">Teilnehmerlimit-Filter</label>
                                   <select id="filter-participants-limit-type" class="selectpicker" name="participantsLimitFilterType" data-width="auto" style="float:left;" th:field="*{participantsLimitFilterType}">
                                       <option value="none" selected="selected">egal</option>
                                       <option value="MAXIMUM">Max.</option>
@@ -263,7 +268,7 @@
                                   </select>
                               </div>
                               <div id="filter-participants-limit-container" class="input-group hidden">
-                                  <input type="number" class="form-control" name="participants-limit" placeholder="Limit" th:field="*{participantsLimit}"/>
+                                  <input type="number" id="filter-participants-limit" class="form-control" name="participants-limit" placeholder="Limit" th:field="*{participantsLimit}"/>
                                   <span class="input-group-addon">
                                       Teilnehmer
                                   </span>
@@ -287,9 +292,10 @@
                           </div>
                       </div>
                       <div class="form-group">
-                          <label for="filter-start" class="col-sm-3 control-label">Preis</label>
-                          <div class="col-sm-9" id="filter-start">
+                          <label class="col-sm-3 control-label">Preis</label>
+                          <div class="col-sm-9">
                               <div class="col-sm-3 no-padding-left">
+                                  <label for="filter-fee-type" class="sr-only">Teilnahmepreis-Filter</label>
                                   <select id="filter-fee-type" class="selectpicker" name="feeFilterType" data-width="auto" style="float:left;" th:field="*{feeFilterType}">
                                       <option value="none" selected="selected">egal</option>
                                       <option value="MAXIMUM">Max.</option>
@@ -299,11 +305,13 @@
                               </div>
                               <div id="filter-fee-container" class="col-sm-9 hidden">
                                   <div class="input-group margin-btm">
-                                      <input type="number" step="0.1" class="form-control" name="internalFee" id="internalFee" placeholder="NAJU-Mitglieder" th:field="*{internalFee}" />
+                                      <label for="filter-internalFee" class="sr-only">TNB für NAJU-Mitglieder</label>
+                                      <input type="number" step="0.1" class="form-control" name="internalFee" id="filter-internalFee" placeholder="NAJU-Mitglieder" th:field="*{internalFee}" />
                                       <span class="input-group-addon"><span class="glyphicon glyphicon-eur"></span></span>
                                   </div>
                                   <div class="input-group">
-                                      <input type="number" step="0.1" class="form-control" name="externalFee" id="externalFee" placeholder="nicht-Mitglieder" th:field="*{externalFee}" />
+                                      <label for="filter-externalFee" class="sr-only">TNB für nicht-Mitglieder</label>
+                                      <input type="number" step="0.1" class="form-control" name="externalFee" id="filter-externalFee" placeholder="nicht-Mitglieder" th:field="*{externalFee}" />
                                       <span class="input-group-addon"><span class="glyphicon glyphicon-eur"></span></span>
                                   </div>
                               </div>
@@ -560,30 +568,30 @@
     </section>
 
     <!-- initialize search bar -->
-    <script type="text/javascript" th:if="${pastEvents}">
+    <script type="text/javascript" th:unless="${pastEvents}">
         var fuzzyOptions = {
            searchClass: "fuzzy-search",
            location: 0,
            distance: 150,
            threshold: 0.4,
-           multiSearch: true,
-         }
+           multiSearch: true
+         };
          var currentEventsOptions = {
             listClass: "event-list-current",
             valueNames: ['event-name', 'evemt-time', 'event-place', 'event-localgroup'],
-            plugins: [ListFuzzySearch(fuzzyOptions)],
-         }
+            plugins: [ListFuzzySearch(fuzzyOptions)]
+         };
          var prospectiveEventsOptions = {
              listClass: "event-list-prospective",
              valueNames: ['event-name', 'evemt-time', 'event-place', 'event-localgroup'],
-             plugins: [ListFuzzySearch(fuzzyOptions)],
-         }
-         var eventList_current = new List('main', currentEventsOptions);
-         var eventList_prospective = new List('main', prospectiveEventsOptions);
+             plugins: [ListFuzzySearch(fuzzyOptions)]
+         };
+         new List('main', currentEventsOptions);
+         new List('main', prospectiveEventsOptions);
 
          var dateSpanExtractor = function(node) {
              // TODO: extract dates function here
-         }
+         };
 
          $(document).ready(function() {
              $('#current-events').tablesorter();
@@ -598,19 +606,19 @@
            location: 0,
            distance: 150,
            threshold: 0.4,
-           multiSearch: true,
-         }
+           multiSearch: true
+         };
          var pastEventsOptions = {
             listClass: "event-list-past",
             valueNames: ['event-name', 'evemt-time', 'event-place', 'event-localgroup'],
-            plugins: [ListFuzzySearch(fuzzyOptions)],
-         }
+            plugins: [ListFuzzySearch(fuzzyOptions)]
+         };
 
-         var eventList_past = new List('main', pastEventsOptions);
+         new List('main', pastEventsOptions);
 
          var dateSpanExtractor = function(node) {
              // TODO: extract dates function here
-         }
+         };
 
          $(document).ready(function() {
              $('#past-events').tablesorter();
@@ -618,7 +626,7 @@
     </script>
 
 </main>
-<script src="../static/resources/js/customInitialization.js" th:src="@{/resources/js/customInitialization.js}"></script>
-<script src="../static/resources/js/customInitialization.events.js" th:src="@{/resources/js/customInitialization.events.js}"></script>
+<script src="../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
+<script src="../static/resources/js/events.js" th:src="@{/resources/js/events.js}"></script>
 </body>
 </html>

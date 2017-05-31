@@ -109,9 +109,9 @@
                           </div>
                       </div>
                       <div class="form-group row">
-                          <label class="control-label col-sm-4">Hauptverantwortliche(r)</label>
+                          <label for="edit-project-personInCharge" class="control-label col-sm-4">Hauptverantwortliche(r)</label>
                           <div class="col-sm-8">
-                              <select class="selectpicker" data-live-search="true" data-width="auto" th:remove="all-but-first" th:field="*{personInCharge}">
+                              <select id="edit-project-personInCharge" class="selectpicker" data-live-search="true" data-width="auto" th:remove="all-but-first" th:field="*{personInCharge}">
                                   <option value="1" th:each="contributor : ${contributors}" th:value="${contributor.id}" th:text="${contributor.name}">Maike Musterfrau</option>
                                   <option value="2">Heinz Meier</option>
                                   <option value="3">Frank von und zu Ährensteig</option>
@@ -171,19 +171,25 @@
                                   <td>Max Mustermann</td>
                                   <td>31.02.1999</td>
                                   <td>Bei Mir 7 01234 Noch ein Dorf</td>
-                                  <td class="text-center"><input type="radio" name="person-id" value="0" required="required" /></td>
+                                  <td class="text-center">
+                                      <label><input type="radio" name="person-id" value="0" required="required" /></label>
+                                  </td>
                               </tr>
                               <tr>
                                   <td>Claus Dieter</td>
                                   <td>17.07.1993</td>
                                   <td>Zu Hause 123 01478 Irgendein Dorf</td>
-                                  <td class="text-center"><input type="radio" name="person-id" value="0" required="required" /></td>
+                                  <td class="text-center">
+                                      <label><input type="radio" name="person-id" value="0" required="required" /></label>
+                                  </td>
                               </tr>
                               <tr>
                                   <td>Friedlinde Müller</td>
                                   <td>11.11.1995</td>
                                   <td>Um die Ecke 3c 01597 Großstadt</td>
-                                  <td class="text-center"><input type="radio" name="person-id" value="0" required="required" /></td>
+                                  <td class="text-center">
+                                      <label><input type="radio" name="person-id" value="0" required="required" /></label>
+                                  </td>
                               </tr>
                           </tbody>
                       </table>
@@ -210,7 +216,8 @@
               <section class="modal-body">
                   <form id="remove-contributor" class="form-horizontal" method="post" th:action="@{/projects/{id}/contributors/remove(id=${project.id})}">
                       <input type="hidden" name="person-id" value="-1" />
-                      <input type="text" class="form-control" value="Max Mustermann" readonly="readonly" disabled="disabled" />
+                      <label for="remove-contributor-name" class="sr-only">Name</label>
+                      <input type="text" id="remove-contributor-name" class="form-control" value="Max Mustermann" readonly="readonly" disabled="disabled" />
                   </form>
               </section>
               <footer class="modal-footer">
@@ -532,8 +539,8 @@
 </main>
 
 <script src="../static/resources/js/displayMatchingPersons.js" th:src="@{/resources/js/displayMatchingPersons.js}"></script>
-<script src="../static/resources/js/customInitialization.js" th:src="@{/resources/js/customInitialization.js}"></script>
-<script src="../static/resources/js/customInitialization.projectDetails.js" th:src="@{/resources/js/customInitialization.projectDetails.js}"></script>
+<script src="../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
+<script src="../static/resources/js/projectDetails.js" th:src="@{/resources/js/projectDetails.js}"></script>
 
 </body>
 </html>

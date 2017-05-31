@@ -3,33 +3,33 @@ $('#filter-referent-qualifications').selectpicker({
     width: 'auto',
     liveSearch: true,
     deselectAllText: 'Keins',
-    selectAllText: 'Alle',
+    selectAllText: 'Alle'
 });
 
 
 // initialize the date of birth datepicker
 $('#dob-picker').datetimepicker({
     format: 'DD.MM.YYYY',
-    showTodayButton: true,
+    showTodayButton: true
 
 });
 
 // initialize the juleica expiry date picker
 $('#add-person-juleica').datetimepicker({
     format: 'DD.MM.YYYY',
-    showTodayButton: true,
+    showTodayButton: true
 });
 
 // initialize the date of birth datepicker for filters
 $('#filter-dob-container').datetimepicker({
     format: 'DD.MM.YYYY',
-    showTodayButton: true,
+    showTodayButton: true
 });
 
 // initialize the juleica expiry date picker for filters
 $('#filter-juleica-expiry-container').datetimepicker({
     format: 'DD.MM.YYYY',
-    showTodayButton: true,
+    showTodayButton: true
 });
 
 // toggle juleica-checkbox depending on whether the person is an activist or not
@@ -43,7 +43,7 @@ $('#add-person-hasJuleica').click(function() {
     $('#add-person-juleica-container').slideToggle();
 
     // toggle the required property of the expiry date
-    $('#add-person-juleica input').prop('required', function(i,v) {return !v;});
+    $('#add-person-juleica').find('input').prop('required', function(i,v) {return !v;});
 });
 
 
@@ -58,7 +58,7 @@ $('#add-person-isNabuMember').click(function() {
 
 // show gender select only if gender should be filtered
 $('#filter-gender-type').on('change', function() {
-    if ($('#filter-gender-type option:selected').val() == 'none') {
+    if ($('#filter-gender-type').find('option:selected').val().toString() === 'none') {
         $('#filter-gender-selection').addClass('hidden');
     } else {
         $('#filter-gender-selection').removeClass('hidden');
@@ -67,18 +67,19 @@ $('#filter-gender-type').on('change', function() {
 
 // show dob select only if dob should be filtered
 $('#filter-dob-type').on('change', function() {
-    if ($('#filter-dob-type option:selected').val() == 'none') {
+    if ($('#filter-dob-type').find('option:selected').val().toString() === 'none') {
         $('#filter-dob-container').addClass('hidden');
     } else {
         $('#filter-dob-container').removeClass('hidden');
     }
 });
 
-var filterNabuMembershipType = ($('#filter-nabu-type option:selected').val() == 'ENFORCE');
+var filterNabuType = $('#filter-nabu-type');
+var filterNabuMembershipType = (filterNabuType.find('option:selected').val().toString() === 'ENFORCE');
 
 // show nabu membership number input only if only for nabu members should be filtered
-$('#filter-nabu-type').on('change', function() {
-    if ($('#filter-nabu-type option:selected').val() == 'ENFORCE' && !filterNabuMembershipType) {
+filterNabuType.on('change', function() {
+    if ($(this).find('option:selected').val().toString() === 'ENFORCE' && !filterNabuMembershipType) {
         $('#filter-nabu-membership-number').slideToggle();
         filterNabuMembershipType = !filterNabuMembershipType;
     } else if (filterNabuMembershipType){
@@ -88,7 +89,7 @@ $('#filter-nabu-type').on('change', function() {
 });
 
 $('#filter-activist-type').on('change', function() {
-    if ($('#filter-activist-type option:selected').val() != 'ENFORCE') {
+    if ($('#filter-activist-type').find('option:selected').val().toString() !== 'ENFORCE') {
         $('#filter-activist-hasJuleica-container').slideUp();
     } else {
         $('#filter-activist-hasJuleica-container').slideDown();
@@ -96,7 +97,7 @@ $('#filter-activist-type').on('change', function() {
 });
 
 $('#filter-activist-juleica-type').on('change', function() {
-    if ($('#filter-activist-juleica-type option:selected').val() != 'ENFORCE') {
+    if ($('#filter-activist-juleica-type').find('option:selected').val().toString() !== 'ENFORCE') {
         $('#filter-activist-juleicaDate-container').slideUp();
     } else {
         $('#filter-activist-juleicaDate-container').slideDown();
@@ -104,15 +105,15 @@ $('#filter-activist-juleica-type').on('change', function() {
 });
 
 $('#filter-activist-juleicaDate-type').on('change', function() {
-    if ($('#filter-activist-juleicaDate-type option:selected').val() == 'none') {
+    if ($('#filter-activist-juleicaDate-type').find('option:selected').val().toString() === 'none') {
         $('#filter-juleica-expiry-container').slideUp();
     } else {
         $('#filter-juleica-expiry-container').slideDown()
     }
 });
 
-$('#filter-referent-type').on('changed.bs.select', function (e) {
-    if ($('#filter-referent-type').val() != 'ENFORCE') {
+$('#filter-referent-type').on('changed.bs.select', function () {
+    if ($('#filter-referent-type').val().toString() !== 'ENFORCE') {
         $('#filter-referents-qualification-container').slideUp();
     } else {
         $('#filter-referents-qualification-container').slideDown();

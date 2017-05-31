@@ -11,7 +11,7 @@ $('#add-contributor-search-btn').on('click', function() {
         data: {
             firstname: firstname,
             lastname: lastname,
-            city: city,
+            city: city
         },
         dataType: 'json',
         method: 'POST',
@@ -25,9 +25,9 @@ $('#add-contributor-search-btn').on('click', function() {
 });
 
 // dont show modals when clicking on links
-$('#contributors a').on('click', function(e) {
+$('#contributors').find('a').on('click', function(e) {
     e.stopPropagation();
-})
+});
 
 // init the 'contributor member' modal
 $('#remove-contributor-modal').on('show.bs.modal', function(e) {
@@ -37,20 +37,20 @@ $('#remove-contributor-modal').on('show.bs.modal', function(e) {
 
     $(this).find('input[disabled]').val(name);
     $(this).find('input[type=hidden]').val(id);
-})
+});
 
 $(function() {
-    $('#edit-project-period input').datetimepicker({
+    $('#edit-project-period').find('input').datetimepicker({
         format: 'DD.MM.YYYY',
-        showTodayButton: true,
+        showTodayButton: true
     });
 
     $('#event-startTime-picker').datetimepicker({
         format: 'DD.MM.YYYY HH:mm',
-        showTodayButton: true,
+        showTodayButton: true
     });
     $('#event-endTime-picker').datetimepicker({
         format: 'DD.MM.YYYY HH:mm',
-        showTodayButton: true,
+        showTodayButton: true
     });
-})
+});

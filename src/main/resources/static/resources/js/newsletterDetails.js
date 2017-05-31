@@ -10,7 +10,6 @@ function createRow(id, name, dob, address) {
 }
 
 function displayResult(table, result) {
-    console.log(result)
 
     $(table).empty();
 
@@ -23,11 +22,11 @@ function displayResult(table, result) {
     }
 }
 
-$('#add-subscriber-person-tab').on('shown.bs.tab', function(e) {
+$('#add-subscriber-person-tab').on('shown.bs.tab', function() {
    $('#add-subscriber-submit').attr('form', 'add-subscriber-person-select');
 });
 
-$('#add-subscriber-new-tab').on('shown.bs.tab', function(e) {
+$('#add-subscriber-new-tab').on('shown.bs.tab', function() {
    $('#add-subscriber-submit').attr('form', 'add-subscriber-new-select');
 });
 
@@ -50,7 +49,7 @@ $('#add-subscriber-search-btn').on('click', function() {
         data: {
             firstname: firstname,
             lastname: lastname,
-            city: city,
+            city: city
         },
         dataType: 'json',
         method: 'POST',

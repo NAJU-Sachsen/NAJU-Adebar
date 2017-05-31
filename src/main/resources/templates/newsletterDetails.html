@@ -119,26 +119,32 @@
                                               <td>Max Mustermann</td>
                                               <td>31.02.1999</td>
                                               <td>Bei Mir 7 01234 Noch ein Dorf</td>
-                                              <td class="text-center"><input type="radio" name="person-id" value="0" required="required" /></td>
+                                              <td class="text-center">
+                                                 <label><input type="radio" name="person-id" value="0" required="required" /></label>
+                                              </td>
                                           </tr>
                                           <tr>
                                               <td>Claus Dieter</td>
                                               <td>17.07.1993</td>
                                               <td>Zu Hause 123 01478 Irgendein Dorf</td>
-                                              <td class="text-center"><input type="radio" name="person-id" value="0" required="required" /></td>
+                                              <td class="text-center">
+                                                  <label><input type="radio" name="person-id" value="0" required="required" /></label>
+                                              </td>
                                           </tr>
                                           <tr>
                                               <td>Friedlinde Müller</td>
                                               <td>11.11.1995</td>
                                               <td>Um die Ecke 3c 01597 Großstadt</td>
-                                              <td class="text-center"><input type="radio" name="person-id" value="0" required="required" /></td>
+                                              <td class="text-center">
+                                                  <label><input type="radio" name="person-id" value="0" required="required" /></label>
+                                              </td>
                                           </tr>
                                       </tbody>
                                   </table>
                               </form>
                            </div>
                            <div id="add-subscriber-new" class="tab-pane fade in active" role="tabpanel">
-                              <form class="form-horizontal" id="add-subscriber-new-select" action="/newsletter/subscribe" th:action="@{'/newsletters/' + ${newsletter.id} + '/subscribe'}" method="post" th:object="${newSubscriber}">
+                              <form class="form-horizontal" id="add-subscriber-new-select" th:action="@{'/newsletters/' + ${newsletter.id} + '/subscribe'}" method="post" th:object="${newSubscriber}">
                                  <div class="form-group">
                                        <label for="firstname" class="col-sm-3 control-label">Vorname</label>
                                        <div class="col-sm-9">
@@ -188,8 +194,9 @@
                   <h3 class="modal-title" id="delete-subscriber-label">Abonnent entfernen</h3>
                </div>
                <div class="modal-body">
-                  <form id="delete-subscriber" action="/newsletters/subscribers/delete" th:action="@{'/newsletters/' + ${newsletter.id} + '/unsubscribe'}" method="post">
-                     <input type="text" class="form-control" name="email" readonly="readonly" value="max.muster@email.com" />
+                  <form id="delete-subscriber" th:action="@{'/newsletters/' + ${newsletter.id} + '/unsubscribe'}" method="post">
+                     <label for="delete-subscriber-name" class="sr-only"></label>
+                      <input type="text" id="delete-subscriber-name" class="form-control" name="email" readonly="readonly" value="max.muster@email.com" />
                   </form>
                </div>
                <div class="modal-footer">
@@ -219,8 +226,8 @@
                <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-send"></span> E-Mail senden</button>
             </form>
             <div class="btn-group">
-            	 <form id="delete-newsletter" class="form-group" action="/newsletter/delete" th:action="@{'/newsletters/' + ${newsletter.id} + '/delete'}">
-                     <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspop="true" aria-expanded="false">
+            	 <form id="delete-newsletter" class="form-group" th:action="@{'/newsletters/' + ${newsletter.id} + '/delete'}">
+                     <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                         <span class="glyphicon glyphicon-trash"></span> Newsletter löschen <span class="caret"></span>
                      </button>
                      <ul class="dropdown-menu confirm-delete">
@@ -345,14 +352,14 @@
            location: 0,
            distance: 100,
            threshold: 0.4,
-           multiSearch: true,
+           multiSearch: true
          };
          var options = {
             listClass: "subscriber-list",
             valueNames: ['subscriber-item'],
-            plugins: [ListFuzzySearch(fuzzyOptions)],
+            plugins: [ListFuzzySearch(fuzzyOptions)]
          };
-         var subscriberList = new List('subscribers-list', options)
+         new List('subscribers-list', options)
       </script>
 
       <!-- fetch content for 'delete subscriber' dialog -->
@@ -370,7 +377,7 @@
       </section>
    </main>
 
-   <script src="../static/resources/js/customInitialization.js" th:src="@{/resources/js/customInitialization.js}"></script>
-   <script src="../static/resources/js/customInitialization.newsletterDetails.js" th:src="@{/resources/js/customInitialization.newsletterDetails.js}"></script>
+   <script src="../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
+   <script src="../static/resources/js/newsletterDetails.js" th:src="@{/resources/js/newsletterDetails.js}"></script>
 </body>
 </html>

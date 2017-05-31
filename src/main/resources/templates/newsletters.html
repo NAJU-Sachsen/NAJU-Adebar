@@ -74,7 +74,7 @@
     <h2 class="hidden">Formulare</h2>
 
     <!-- 'create newsletter' dialog -->
-    <div class="modal fade" id="add-newsletter-form" tabindex="-1" role="dialog" aria-labelled-by="add-newsletter-label">
+    <div class="modal fade" id="add-newsletter-form" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <header class="modal-header">
@@ -104,17 +104,20 @@
                                 </div>
 
                                 <div id="belonging-chapter" class="margin-top-lg hidden">
-                                    <select class="selectpicker" data-title="Ortsgruppe auswählen" th:remove="all-but-first" th:field="*{localGroup}">
+                                    <label for="add-newsletter-chapter" class="sr-only">Ortsgruppe</label>
+                                    <select id="add-newsletter-chapter" class="selectpicker" data-title="Ortsgruppe auswählen" th:remove="all-but-first" th:field="*{localGroup}">
                                         <option th:each="localGroup : ${allChapters}" th:value="${localGroup.id}" th:text="${localGroup.name}">NAJU Sachsen</option>
                                         <option>NAJU Dresden</option>
                                         <option>NAJU Freiberg</option>
                                     </select>
                                 </div>
                                 <div id="belonging-event" class="margin-top-lg hidden">
-                                    <select class="selectpicker" data-title="Veranstaltung auswählen"></select>
+                                    <label for="add-newsletter-event" class="sr-only">Veranstaltung</label>
+                                    <select id="add-newsletter-event" class="selectpicker" data-title="Veranstaltung auswählen"></select>
                                 </div>
                                 <div id="belonging-project" class="margin-top-lg hidden">
-                                    <select class="selectpicker" data-title="Projekt auswählen"></select>
+                                    <label for="add-newsletter-project" class="sr-only">Projekt</label>
+                                    <select id="add-newsletter-project" class="selectpicker" data-title="Projekt auswählen"></select>
                                 </div>
                             </div>
                         </div>
@@ -129,8 +132,7 @@
     </div>
 
     <!-- 'create subscriber' dialog -->
-    <div class="modal fade" id="add-subscriber-form" tabindex="-1" role="dialog"
-         aria-labelled-by="add-subscriber-label">
+    <div class="modal fade" id="add-subscriber-form" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <header class="modal-header">
@@ -453,25 +455,25 @@
             distance: 100,
             threshold: 0.4,
             multiSearch: true
-        }
+        };
         var newsletterOptions = {
             listClass: "newsletter-list",
             valueNames: ['newsletter-name', 'newsletter-belonging'],
-            plugins: [ListFuzzySearch(fuzzyOptions)],
-        }
+            plugins: [ListFuzzySearch(fuzzyOptions)]
+        };
         var subscriberOptions = {
             listClass: "subscriber-list",
             valueNames: ['subscriber-email', 'subscriber-name'],
-            plugins: [ListFuzzySearch(fuzzyOptions)],
-        }
-        var newsletterList = new List('main', newsletterOptions)
-        var subscriberList = new List('main', subscriberOptions)
+            plugins: [ListFuzzySearch(fuzzyOptions)]
+        };
+        new List('main', newsletterOptions);
+        new List('main', subscriberOptions)
     </script>
 
     <!-- storing the last session's tab here to restore it later-->
     <input type="hidden" id="session-tab" value="" th:value="${tab}"/>
 </main>
-<script src="../static/resources/js/customInitialization.js" th:src="@{/resources/js/customInitialization.js}"></script>
-<script src="../static/resources/js/customInitialization.newsletters.js" th:src="@{/resources/js/customInitialization.newsletters.js}"></script>
+<script src="../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
+<script src="../static/resources/js/newsletters.js" th:src="@{/resources/js/newsletters.js}"></script>
 </body>
 </html>

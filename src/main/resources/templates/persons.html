@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!--suppress ThymeleafVariablesResolveInspection -->
+
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
@@ -273,6 +273,7 @@
                         <div class="form-group">
                             <label for="filter-gender" class="col-sm-3 control-label">Geschlecht</label>
                             <div id="filter-gender" class="col-sm-9">
+                                <label for="filter-gender-type" class="sr-only">Geschlecht-Filter</label>
                                 <select id="filter-gender-type" class="selectpicker" name="genderFilterType" data-width="auto" th:field="*{genderFilterType}">
                                     <option value="none" selected="selected">egal</option>
                                     <option value="ENFORCE">Ausschließlich</option>
@@ -298,6 +299,7 @@
                             <label for="filter-dob" class="col-sm-3 control-label">Geburtsdatum</label>
                             <div id="filter-dob" class="col-sm-9">
                                 <div class="col-sm-3 no-padding-left">
+                                    <label for="filter-dob-type" class="sr-only">Geburtsdatum-Filter</label>
                                     <select id="filter-dob-type" class="selectpicker" name="dobFilterType" data-width="auto" style="float: left;" th:field="*{dobFilterType}">
                                         <option value="none" selected="selected">egal</option>
                                         <option value="BEFORE">Vor</option>
@@ -339,6 +341,7 @@
                             <div class="col-sm-9" id="filter-person-nabu">
                                 <div>
                                     <div class="margin-btm-sm">
+                                        <label for="filter-nabu-type" class="sr-only">NABU-Mitgliedschaft Filter</label>
                                         <select id="filter-nabu-type" class="selectpicker" name="nabuMembershipFilterType" data-width="auto" th:field="*{nabuMembershipFilterType}">
                                             <option value="none" selected="selected">egal</option>
                                             <option value="ENFORCE">Nur NABU-Mitglieder</option>
@@ -356,6 +359,7 @@
                             <div id="filter-person-activist-container" class="col-sm-9">
                                 <div>
                                     <div class="margin-btm-sm">
+                                        <label for="filter-activist-type" class="sr-only">Aktiven-Filter</label>
                                         <select id="filter-activist-type" class="selectpicker" name="activistsFilterType"
                                                 data-width="auto" th:field="*{activistFilterType}">
                                             <option value="none" selected="selected">egal</option>
@@ -365,6 +369,7 @@
                                     </div>
                                     <div id="filter-activist-hasJuleica-container" class="hide-initially">
                                         <div class="margin-btm-sm">
+                                            <label for="filter-activist-juleica-type" class="sr-only">Juleica-Filter</label>
                                             <select id="filter-activist-juleica-type" class="selectpicker" name="activistsJuleicaFilterType"
                                                     data-width="auto" th:field="*{activistJuleicaFilterType}">
                                                 <option value="none" selected="selected">JuLeiCa egal</option>
@@ -374,8 +379,8 @@
                                         </div>
                                         <div id="filter-activist-juleicaDate-container" class="hide-initially">
                                             <div class="margin-btm-sm">
-                                                <select id="filter-activist-juleicaDate-type" class="selectpicker" name="activistsJuleicaExpiryFilterType"
-                                                        data-width="auto" th:field="*{activistJuleicaExpiryFilterType}">
+                                                <label for="filter-activist-juleicaDate-type" class="sr-only">Juleica-Ablaufdatum-Filter</label>
+                                                <select id="filter-activist-juleicaDate-type" class="selectpicker" name="activistsJuleicaExpiryFilterType" data-width="auto" th:field="*{activistJuleicaExpiryFilterType}">
                                                     <option value="none" selected="selected">Ablaufdatum egal</option>
                                                     <option value="BEFORE">Ablaufdatum vor</option>
                                                     <option value="EXACT">Ablaufdatum exakt</option>
@@ -400,6 +405,7 @@
                             <label for="filter-persons-referent-container" class="col-sm-3 control-label">Referenten</label>
                             <div class="col-sm-9">
                                 <div class="margin-btm-sm" id="filter-persons-referent-container">
+                                    <label for="filter-referent-type" class="sr-only">Referenten-Filter</label>
                                     <select id="filter-referent-type" class="selectpicker" name="referentsFilterType" data-width="auto" th:field="*{referentsFilterType}">
                                         <option value="none" selected="selected">egal</option>
                                         <option value="ENFORCE">Nur Referenten</option>
@@ -564,17 +570,17 @@
             distance: 100,
             threshold: 0.4,
             multiSearch: true
-        }
+        };
         var personOptions = {
             listClass: "person-list",
             valueNames: ['person-name', 'person-city', 'person-email', 'person-dob'],
-            plugins: [ListFuzzySearch(fuzzyOptions)],
-        }
-        var personList = new List('main', personOptions)
+            plugins: [ListFuzzySearch(fuzzyOptions)]
+        };
+        new List('main', personOptions)
     </script>
 
 </main>
-<script src="../static/resources/js/customInitialization.js" th:src="@{/resources/js/customInitialization.js}"></script>
-<script src="../static/resources/js/customInitialization.persons.js" th:src="@{/resources/js/customInitialization.persons.js}"></script>
+<script src="../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
+<script src="../static/resources/js/persons.js" th:src="@{/resources/js/persons.js}"></script>
 </body>
 </html>

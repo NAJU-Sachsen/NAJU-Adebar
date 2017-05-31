@@ -2,9 +2,9 @@
  * Switch the modal displayed when the button is pressed
  */
 function toggleModal(btn) {
-    if (btn.getAttribute('data-target') == '#add-newsletter-form') {
+    if (btn.getAttribute('data-target').toString() === '#add-newsletter-form') {
         btn.setAttribute('data-target', '#add-subscriber-form');
-    } else if (btn.getAttribute('data-target') == '#add-subscriber-form') {
+    } else if (btn.getAttribute('data-target').toString() === '#add-subscriber-form') {
         btn.setAttribute('data-target', '#add-newsletter-form');
     }
 }
@@ -16,19 +16,20 @@ function initEditSubscriberModal(modal, data) {
     console.log(data);
     modal.find('#edit-id').val(data.subscriber.email);
     if (data.subscriber.firstName) {
-       modal.find('#edit-firstName').val(data.subscriber.firstName);
+        modal.find('#edit-firstName').val(data.subscriber.firstName);
     }
     if (data.subscriber.lastName) {
-       modal.find('#edit-lastName').val(data.subscriber.lastName);
+        modal.find('#edit-lastName').val(data.subscriber.lastName);
     }
 
     modal.find('#edit-email').val(data.subscriber.email);
 
-    for (var nid in data.subscribedNewsletters) {
-      var id = '#nid-' + data.subscribedNewsletters[nid];
-      console.log(id);
-      modal.find(id).attr('selected', 'selected');
-   }
+    for (var nid = 0; nid <  data.subscribedNewsletters.length; nid++) {
+        if (!data.hasOwnProperty('subscribedNewsletters')) {
+            var id = '#nid-' + data.subscribedNewsletters[nid];
+            modal.find(id).attr('selected', 'selected');
+        }
+    }
 
 }
 
@@ -42,32 +43,30 @@ function hideAllSelects() {
  * if the newsletter tabs are switched, we would like to make the 'add'-button
  * react to this
  */
-$('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
-    e.target; // newly activated tab
-    e.relatedTarget; // previous active tab
+$('a[data-toggle="tab"]').on('shown.bs.tab', function() {
     toggleModal($i('add-button'));
 });
 
 /*
  * display the last active tab on data update
  */
-var lastSessionTab = $i('session-tab').value;
-if (lastSessionTab == 'subscribers') {
-    $('#tabs a[href="#subscribers"]').tab('show');
-} else if (lastSessionTab == 'newsletters') {
-    $('#tabs a[href="#newsletters"]').tab('show');
+var lastSessionTab = $i('session-tab').value.toString();
+if (lastSessionTab === 'subscribers') {
+    $('#tabs').find('a[href="#subscribers"]').tab('show');
+} else if (lastSessionTab === 'newsletters') {
+    $('#tabs').find('a[href="#newsletters"]').tab('show');
 }
 
-$('#belonging-type-select input[type=radio]').change(function() {
+$('#belonging-type-select').find('input[type=radio]').change(function() {
     hideAllSelects();
-    if (this.value == 'CHAPTER') {
+    if (this.value.toString() === 'CHAPTER') {
         $('#belonging-chapter').removeClass('hidden');
-    } else if (this.value == 'EVENT') {
+    } else if (this.value.toString() === 'EVENT') {
         $('#belonging-event').removeClass('hidden');
-    } else if (this.value == 'PROJECT') {
+    } else if (this.value.toString() === 'PROJECT') {
         $('#belonging-project').removeClass('hidden');
     }
-})
+});
 
 /*
  * if a subscriber's edit form is displayed, fetch the corresponding data
@@ -80,14 +79,14 @@ $('#edit-subscriber-form').on('show.bs.modal', function(event) {
     var request = {
         async: true,
         data: {
-            email: recipient,
+            email: recipient
         },
         dataType: 'json',
         method: 'GET',
-        success: function (response) {
-           initEditSubscriberModal(modal, response);
+        success: function(response) {
+            initEditSubscriberModal(modal, response);
         },
-        url: '/api/newsletter/subscriberDetails',
+        url: '/api/newsletter/subscriberDetails'
     };
     $.ajax(request);
 });

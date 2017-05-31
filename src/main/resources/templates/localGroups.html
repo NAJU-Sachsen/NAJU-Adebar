@@ -220,17 +220,15 @@
 
     </section>
 
-    <!-- initialize search bar -->
     <script type="text/javascript">
         $(function() {
-            $('#add-event-newsletter input[type=checkbox]').on('click', function() {
-                $('#add-event-newsletter input[type=text]').prop('disabled', function(i,v){return !v})
+            $('#add-event-newsletter').find('input[type=checkbox]').on('click', function() {
+                $('#add-event-newsletter').find('input[type=text]').prop('disabled', function(i,v){return !v})
             })
         })
     </script>
 
 </main>
-<script src="../static/resources/js/customInitialization.js" th:src="@{/resources/js/customInitialization.js}"></script>
-<script src="../static/resources/js/customInitialization.eventDetails.js" th:src="@{/resources/js/customInitialization.eventDetails.js}"></script>
+<script src="../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
 </body>
 </html>

@@ -162,19 +162,25 @@
                                   <td>Max Mustermann</td>
                                   <td>31.02.1999</td>
                                   <td>Bei Mir 7 01234 Noch ein Dorf</td>
-                                  <td class="text-center"><input type="radio" name="person-id" value="0" required="required" /></td>
+                                  <td class="text-center">
+                                      <label><input type="radio" name="person-id" value="0" required="required" /></label>
+                                  </td>
                               </tr>
                               <tr>
                                   <td>Claus Dieter</td>
                                   <td>17.07.1993</td>
                                   <td>Zu Hause 123 01478 Irgendein Dorf</td>
-                                  <td class="text-center"><input type="radio" name="person-id" value="0" required="required" /></td>
+                                  <td class="text-center">
+                                      <label><input type="radio" name="person-id" value="0" required="required" /></label>
+                                  </td>
                               </tr>
                               <tr>
                                   <td>Friedlinde Müller</td>
                                   <td>11.11.1995</td>
                                   <td>Um die Ecke 3c 01597 Großstadt</td>
-                                  <td class="text-center"><input type="radio" name="person-id" value="0" required="required" /></td>
+                                  <td class="text-center">
+                                      <label><input type="radio" name="person-id" value="0" required="required" /></label>
+                                  </td>
                               </tr>
                           </tbody>
                       </table>
@@ -201,7 +207,8 @@
               <section class="modal-body">
                   <form id="remove-member" class="form-horizontal" method="post" th:action="@{/localGroups/{id}/members/remove(id=${localGroup.id})}">
                       <input type="hidden" name="member-id" value="-1" />
-                      <input type="text" class="form-control" value="Max Mustermann" readonly="readonly" disabled="disabled" />
+                      <label for="remove-member-name" class="sr-only">Name</label>
+                      <input type="text" id="remove-member-name" class="form-control" value="Max Mustermann" readonly="readonly" disabled="disabled" />
                   </form>
               </section>
               <footer class="modal-footer">
@@ -232,9 +239,9 @@
               <section class="modal-body">
                   <form id="edit-board" class="form-horizontal" method="post" th:object="${boardForm}" th:action="@{/localGroups/{id}/board(id=${localGroup.id})}">
                       <div class="form-group row">
-                          <label class="control-label col-sm-3">Vorsitzender:</label>
+                          <label for="edit-board-chairman" class="control-label col-sm-3">Vorsitzender:</label>
                           <div class="col-sm-9">
-                              <select class="selectpicker" data-live-search="true" required="required" th:remove="all-but-first" th:field="*{chairmanId}">
+                              <select id="edit-board-chairman" class="selectpicker" data-live-search="true" required="required" th:remove="all-but-first" th:field="*{chairmanId}">
                                   <option value="-1" th:each="member : ${members}" th:value="${member.id}" th:text="${member.name}">Maxi Musterfrau</option>
                                   <option value="-1">Heinz Heimlich</option>
                                   <option value="-1">Dieter Lustig</option>
@@ -252,11 +259,12 @@
                           </div>
                       </div>
                       <div class="form-group row">
-                          <label class="control-label col-sm-3">Mitglieder</label>
+                          <label for="edit-board-members" class="control-label col-sm-3">Mitglieder</label>
                           <div class="col-sm-9">
                               <div style="margin-bottom: 10px;">
+                                  <label for="edit-board-select-newMember" class="sr-only">Neues Mitglied</label>
                                   <select id="edit-board-select-newMember" multiple="multiple" title="Neues Mitglied auswählen" class="selectpicker" data-live-search="true" data-selected-text-format="static" data-actions-box="true" th:remove="all-but-first">
-                                      <option data-subtext="(* 31.02.1234)" value="1" th:each="member : ${members}" th:value="${member.id}" th:text="${member.name}" th:attr="'data-subtext'=|(* ${member.participant ? member.participantProfile.dateOfBirth != null ? {member.participanProfile.dateOfBirth} : 'unbekannt' : 'unbekannt'} )|">Maxi Musterfrau</option>
+                                      <option data-subtext="(* 31.02.1234)" value="1" th:each="member : ${members}" th:value="${member.id}" th:text="${member.name}" th:attr="'data-subtext'=|(* ${member.participant ? member.participantProfile.dateOfBirth != null ? {member.participantProfile.dateOfBirth} : 'unbekannt' : 'unbekannt'} )|">Maxi Musterfrau</option>
                                       <option data-subtext="(* 01.01.1111)" value="2">Heinz Heimlich</option>
                                       <option data-subtext="(* 12.11.1009)" value="3">Dieter Lustig</option>
                                       <option data-subtext="(* 03.07.1999)" value="4">Klaus Klücklich</option>
@@ -313,9 +321,9 @@
                           </div>
                       </div>
                       <div class="form-group row">
-                          <label class="control-label col-sm-3">Verantwortlicher</label>
+                          <label for="add-project-personInCharge" class="control-label col-sm-3">Verantwortlicher</label>
                           <div class="col-sm-9">
-                              <select class="selectpicker" data-live-search="true" required="required" th:remove="all-but-first" th:field="*{personInCharge}">
+                              <select id="add-project-personInCharge" class="selectpicker" data-live-search="true" required="required" th:remove="all-but-first" th:field="*{personInCharge}">
                                   <option value="-1" th:each="member : ${members}" th:value="${member.id}" th:text="${member.name}">Maxi Musterfrau</option>
                                   <option value="-1">Heinz Heimlich</option>
                                   <option value="-1">Dieter Lustig</option>
@@ -714,14 +722,14 @@
            location: 0,
            distance: 150,
            threshold: 0.4,
-           multiSearch: true,
-         }
+           multiSearch: true
+         };
          var memberOptions = {
              listClass: 'member-list',
              valueNames: ['member-name', 'member-email'],
-             plugins: [ListFuzzySearch(fuzzyOptions)],
-         }
-         var memberList = new List('main', memberOptions);
+             plugins: [ListFuzzySearch(fuzzyOptions)]
+         };
+         new List('main', memberOptions);
     </script>
     <input type="hidden" id="local-group-id" value="-1" th:value="${localGroup.id}" />
 
@@ -729,7 +737,7 @@
 </main>
 
 <script src="../static/resources/js/displayMatchingPersons.js" th:src="@{/resources/js/displayMatchingPersons.js}"></script>
-<script src="../static/resources/js/customInitialization.js" th:src="@{/resources/js/customInitialization.js}"></script>
-<script src="../static/resources/js/customInitialization.localGroupDetails.js" th:src="@{/resources/js/customInitialization.localGroupDetails.js}"></script>
+<script src="../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
+<script src="../static/resources/js/localGroupDetails.js" th:src="@{/resources/js/localGroupDetails.js}"></script>
 </body>
 </html>

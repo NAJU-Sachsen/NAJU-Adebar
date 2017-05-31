@@ -185,7 +185,7 @@
               <footer class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
                   <form method="post" class="btn-group" th:action="@{'/persons/' + ${person.id} + '/delete'}">
-                      <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspop="true" aria-expanded="false" th:attrappend="disabled=${isActivist || isReferent}?'disabled'">
+                      <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-expanded="false" th:attrappend="disabled=${isActivist || isReferent}?'disabled'">
                          <span class="glyphicon glyphicon-trash"></span> Löschen <span class="caret"></span>
                       </button>
                       <ul class="dropdown-menu dropdown-menu-lg confirm-delete">
@@ -267,6 +267,7 @@
             <div class="col-md-8">
               <form id="add-qualification-form" class="form-horizontal tab-content" method="post" th:object="${addQualificationForm}" th:action="@{'/persons/' + ${person.id} + '/add-qualification'}">
                 <div role="tabpanel" class="tab-pane fade in active" id="add-qualification-tab-existing">
+                  <label for="add-qualification-existing" class="sr-only">Qualifikation</label>
                   <select id="add-qualification-existing" class="selectpicker" data-live-search="true" th:field="*{qualification}" th:remove="all-but-first">
                     <option th:each="qualification : ${allQualifications}" th:text="${qualification.name}" th:value="${{qualification.name}}" th:field="*{qualification}">Erste-Hilfe-Kurs</option>
                     <option>Storchenkoffer</option>
@@ -288,7 +289,7 @@
       </div>
     </div>
     <script>
-      $('#add-qualification-modal  a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+      $('#add-qualification-modal').find('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
         $('#add-qualification-type').val(e.target.dataset.tab)
       })
     </script>
@@ -306,7 +307,8 @@
             </header>
             <section class="modal-body">
                <form id="delete-qualification" method="post" th:action="@{'/persons/' + ${person.id} + '/qualifications/remove'}">
-                  <input type="text" class="form-control" name="name" readonly="readonly" value="Erste-Hilfe-Kurs" />
+                  <label for="remove-qualifikation-name" class="sr-only">Qualifikation</label>
+                  <input type="text" id="remove-qualifikation-name" class="form-control" name="name" readonly="readonly" value="Erste-Hilfe-Kurs" />
                </form>
            </section>
            <footer class="modal-footer">
@@ -413,9 +415,13 @@
                                     <td class="col-sm-8" th:text="${person.participantProfile.healthImpairments}">Heuschnupfen</td>
                                 </tr>
                                 <tr class="row" th:if="${person.participant}">
-                                    <th class="col-sm-4"><span class="glyphicon glyphicon-tree-deciduous"></span> NABU-Mitglied</th>
+                                    <th class="col-sm-4"><span class="glyphicon glyphicon-tree-deciduous"></span> NABU-Mitglied:</th>
                                     <td class="col-sm-8" th:if="${person.getParticipantProfile().isNabuMember()}" th:text="|Mitgliedsnummer: ${person.participantProfile.nabuMembership.membershipNumber ?: 'unbekannt'}|">Mitgliedsnummer: 9874563</td>
                                     <td class="col-sm-8" th:unless="${person.getParticipantProfile().isNabuMember()}">kein Mitglied</td>
+                                </tr>
+                                <tr class="row" th:if="${person.participant}">
+                                    <th class="col-sm-4"><span class="glyphicon glyphicon-grain"></span> Bemerkungen:</th>
+                                    <td class="col-sm-8" th:text="${person.participantProfile.remarks}">Schwimmerlaubnis</td>
                                 </tr>
                                 <tr class="row" th:unless="${person.participant}">
                                     <td colspan="2" class="col-sm-12 text-center bold">die Person nimmt an keinen Camps teil</td>
@@ -517,18 +523,18 @@
            location: 0,
            distance: 150,
            threshold: 0.4,
-           multiSearch: true,
-         }
+           multiSearch: true
+         };
          var options = {
             listClass: "qualification-list",
             valueNames: ['qualification-title', 'qualification-description'],
-            plugins: [ListFuzzySearch(fuzzyOptions)],
-         }
-         var qualificationList = new List('qualifications', options)
+            plugins: [ListFuzzySearch(fuzzyOptions)]
+         };
+         new List('qualifications', options)
     </script>
 
 </main>
-<script src="../static/resources/js/customInitialization.js" th:src="@{/resources/js/customInitialization.js}"></script>
-<script src="../static/resources/js/customInitialization.personDetails.js" th:src="@{/resources/js/customInitialization.personDetails.js}"></script>
+<script src="../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
+<script src="../static/resources/js/personDetails.js" th:src="@{/resources/js/personDetails.js}"></script>
 </body>
 </html>

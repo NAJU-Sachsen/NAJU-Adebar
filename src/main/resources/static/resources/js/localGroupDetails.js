@@ -4,11 +4,13 @@ function renderEvent(e) {
     if(e.events.length > 0) {
         var content = '';
 
-        for(var i in e.events) {
-            content += '<div class="event-tooltip-content">'
-                            + '<div class="event-name" style="color:' + e.events[i].color + '">' + e.events[i].name + '</div>'
-                            + '<div class="event-location">' + e.events[i].place + '</div>'
-                        + '</div>';
+        for(var i = 0; i < e.events.length; i++) {
+            if (e.hasOwnProperty('events')) {
+                content += '<div class="event-tooltip-content">'
+                    + '<div class="event-name" style="color:' + e.events[i].color + '">' + e.events[i].name + '</div>'
+                    + '<div class="event-location">' + e.events[i].place + '</div>'
+                    + '</div>';
+            }
         }
 
         $(e.element).popover({
@@ -20,7 +22,7 @@ function renderEvent(e) {
 
         $(e.element).popover('show');
     }
-};
+}
 
 // show the 'add event' modal
 function createEvent(e) {
@@ -34,8 +36,7 @@ function convertDate(d) {
     var year = d.year;
     var month = d.monthValue - 1;
     var day = d.dayOfMonth;
-    var date = new Date(year, month, day);
-    return date;
+    return new Date(year, month, day);
 }
 
 // converts an event as provided by the Adebar-API to a similiar js object
@@ -45,7 +46,7 @@ function convertEvent(e) {
         name: e.name,
         startDate: convertDate(e.startDate),
         endDate: convertDate(e.endDate),
-        place: e.place,
+        place: e.place
     }
 }
 
@@ -55,10 +56,11 @@ function displayEvents(events) {
     for (var i = 0; i < events.length; ++i) {
         var e = convertEvent(events[i]);
 
-        var dataSource = $('#event-calendar').data('calendar').getDataSource();
+        var calendar = $('#event-calendar').data('calendar');
+        var dataSource = calendar.getDataSource();
         dataSource.push(e);
 
-        $('#event-calendar').data('calendar').setDataSource(dataSource);
+        calendar.setDataSource(dataSource);
     }
 }
 
@@ -69,12 +71,12 @@ function initEvents() {
     var request = {
         async: true,
         data: {
-            groupId: groupId,
+            groupId: groupId
         },
         dataType: 'json',
         success: displayEvents,
-        url: '/api/events/localGroup',
-    }
+        url: '/api/events/localGroup'
+    };
 
     $.ajax(request);
 }
@@ -82,16 +84,16 @@ function initEvents() {
 // display the activists matching the given query
 $('#add-member-search-btn').on('click', function() {
     var table = '#add-member-tablebody';
-    var firstname = $('#add-member-search-firstname').val();
-    var lastname = $('#add-member-search-lastname').val();
+    var firstName = $('#add-member-search-firstname').val();
+    var lastName = $('#add-member-search-lastname').val();
     var city = $('#add-member-search-city').val();
 
     var request = {
         async: true,
         data: {
-            firstname: firstname,
-            lastname: lastname,
-            city: city,
+            firstname: firstName,
+            lastname: lastName,
+            city: city
         },
         dataType: 'json',
         method: 'POST',
@@ -105,15 +107,16 @@ $('#add-member-search-btn').on('click', function() {
 });
 
 // sync selected board members
-$('select#edit-board-select-newMember').on('changed.bs.select', function(e) {
-    $('select#edit-board-select-newMember').selectpicker('toggle');
-    $('#edit-board-members').val($('select#edit-board-select-newMember').val());
+$('select#edit-board-select-newMember').on('changed.bs.select', function() {
+    $(this).selectpicker('toggle');
+    $('#edit-board-members').val($(this).val());
 });
 
 // sync select board members
-$('#edit-board-members').on('change', function(e) {
-    $('select#edit-board-select-newMember').val($('#edit-board-members').val());
-    $('select#edit-board-select-newMember').selectpicker('refresh');
+$('#edit-board-members').on('change', function() {
+    var selectPicker = $('select#edit-board-select-newMember');
+    selectPicker.val($('#edit-board-members').val());
+    selectPicker.selectpicker('refresh');
 });
 
 // redirect to clicked events
@@ -127,9 +130,9 @@ $('#event-calendar').on('clickDay', function(e) {
 });
 
 // dont show modals when clicking on links
-$('#members a').on('click', function(e) {
+$('#members').find('a').on('click', function(e) {
     e.stopPropagation();
-})
+});
 
 // init the 'remove member' modal
 $('#remove-member-modal').on('show.bs.modal', function(e) {
@@ -139,17 +142,18 @@ $('#remove-member-modal').on('show.bs.modal', function(e) {
 
     $(this).find('input[disabled]').val(name);
     $(this).find('input[type=hidden]').val(id);
-})
+});
 
 // init all js components
 $(function(){
-    $('#add-project-period input').datetimepicker({
+    $('#add-project-period').find('input').datetimepicker({
         format: 'DD.MM.YYYY',
-        showTodayButton: true,
+        showTodayButton: true
     });
 
-    $('select#edit-board-select-newMember').val($('#edit-board-members').val());
-    $('select#edit-board-select-newMember').selectpicker('refresh');
+    var boardSelectPicker = $('select#edit-board-select-newMember');
+    boardSelectPicker.val($('#edit-board-members').val());
+    boardSelectPicker.selectpicker('refresh');
 
     $('#event-calendar').calendar({
         style: 'border',
@@ -163,16 +167,16 @@ $(function(){
         selectRange: function(e) {
             createEvent({ startDate: e.startDate, endDate: e.endDate });
         },
-        dataSource: [],
+        dataSource: []
     });
 
     $('#event-startTime-picker').datetimepicker({
         format: 'DD.MM.YYYY HH:mm',
-        showTodayButton: true,
+        showTodayButton: true
     });
     $('#event-endTime-picker').datetimepicker({
         format: 'DD.MM.YYYY HH:mm',
-        showTodayButton: true,
+        showTodayButton: true
     });
 
     initEvents();
