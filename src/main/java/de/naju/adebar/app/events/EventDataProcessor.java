@@ -21,7 +21,7 @@ public class EventDataProcessor {
     /**
      * Simple classification of the dates events take place
      */
-    public enum EventType {RUNNING, FUTURE, PAST}
+    public enum EventType {ALL, RUNNING, FUTURE, PAST}
 
     private final static int FIRST_TIME_SLICE = 0;
     private final static long ONE_DAY = 1;
@@ -55,6 +55,32 @@ public class EventDataProcessor {
     }
 
     /**
+     * @param events the events to find the corresponding local groups for
+     * @return all of the events that belong to a local group
+     */
+    public Map<Event, LocalGroup> getLocalGroupBelonging(Iterable<Event> events) {
+        Map<Event, LocalGroup> belonging = new HashMap<>();
+        for (Event event : events) {
+            Optional<LocalGroup> localGroup = localGroupManager.repository().findByEventsContains(event);
+            localGroup.ifPresent(l -> belonging.put(event, l));
+        }
+        return belonging;
+    }
+
+    /**
+     * @param events the events to find the corresponding projects for
+     * @return all of the events that belong to a project
+     */
+    public Map<Event, Project> getProjectBelonging(Iterable<Event> events) {
+        Map<Event, Project> belonging = new HashMap<>();
+        for (Event event : events) {
+            Optional<Project> project = projectManager.repository().findByEventsContains(event);
+            project.ifPresent(p -> belonging.put(event, p));
+        }
+        return belonging;
+    }
+
+    /**
      * @param eventType the type of events to search for
      * @return all events that do belong to a project
      */
@@ -78,6 +104,9 @@ public class EventDataProcessor {
         LocalDateTime now = LocalDateTime.now();
         Iterable<Event> events = null;
         switch (eventType) {
+            case ALL:
+                events = eventManager.repository().findAll();
+                break;
             case RUNNING:
                 events = eventManager.repository().findByStartTimeIsBeforeAndEndTimeIsAfter(now, now);
                 break;
