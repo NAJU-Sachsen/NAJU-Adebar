@@ -561,7 +561,7 @@
                   <span aria-hidden="true">&times;</span>
                </button>
                <p>
-                  Die Person ist noch zu jung.
+                  Der/die Teilnehmende ist noch zu jung.
                </p>
                <form th:action="@{'/events/' + ${event.id} + '/participants/force-add'}">
                    <input type="hidden" name="person-id" th:value="${newParticipantId}" />
@@ -662,35 +662,37 @@
                           <button type="button" class="btn btn-default" data-toggle="modal" data-target="#edit-event-modal"><span class="glyphicon glyphicon-pencil"></span> Anpassen</button>
                        </div>
                     </header>
-                    <ul class="list-group">
-                        <li class="list-group-item">
-                            <span class="item-title"><span class="glyphicon glyphicon-tag"></span> Name:</span>
-                            <span th:text="${event.name}">HIFA</span>
-                        </li>
-                        <li class="list-group-item">
-                            <span class="item-title"><span class="glyphicon glyphicon-calendar"></span> Zeit:</span>
-                            <span th:text="${{event.startTime}} + ' - ' + ${{event.endTime}}">24.05.-28.05.</span>
-                        </li>
-                        <li class="list-group-item">
-                            <span class="item-title"><span class="glyphicon glyphicon-map-marker"></span> Ort:</span>
-                            <a target="_blank" href="http://www.openstreetmap.org/search?query=Bahnhofstraße%2018%2001994%20Annahütte" th:href="@{http://www.openstreetmap.org/search(query=|${event.place.street} ${event.place.zip} ${event.place.city}|)}" th:text="|${event.place.street} ${event.place.zip} ${event.place.city}|">Bahnhofstraße 18 01994 Annahütte</a>
-                        </li>
-                        <li class="list-group-item">
-                            <span class="item-title"><span class="glyphicon glyphicon-ice-lolly-tasted"></span> min. Alter:</span>
-                            <span th:text="${event.minimumParticipantAge}">12</span>
-                        </li>
-                        <li class="list-group-item">
-                            <span class="item-title"><span class="glyphicon glyphicon-piggy-bank"></span> Preis:</span>
-                            <span th:if="${event.internalParticipationFee}" th:text="|${{event.internalParticipationFee}} (NAJU-Mitglieder) |">35€ (NAJU-Mitlgieder)</span>
-                            <span th:if="${event.externalParticipationFee}" th:text="|${{event.externalParticipationFee}} (nicht-Mitglieder)|">35€ (nicht-Mitglieder)</span>
-                        </li>
-                        <li class="list-group-item">
-                            <span class="item-title">
-                                <span class="glyphicon glyphicon-user"></span> Teilnehmer:
-                            </span>
-                            <span th:text="${event.participantsCount} + (${event.hasParticipantsLimit()} ? ' (max. ' + ${event.participantsLimit} + ')' : '')">28 (max. 30)</span>
-                        </li>
-                    </ul>
+                    <table class="table">
+                        <tr class="row">
+                            <th class="col-sm-2"><span class="glyphicon glyphicon-tag"></span> Name:</th>
+                            <td class="col-sm-10" th:text="${event.name}">HIFA</td>
+                        </tr>
+                        <tr class="row">
+                            <th class="col-sm-2"><span class="glyphicon glyphicon-calendar"></span> Zeit:</th>
+                            <td class="col-sm-10" th:text="${{event.startTime}} + ' - ' + ${{event.endTime}}">24.05.-28.05.</td>
+                        </tr>
+                        <tr class="row">
+                            <th class="col-sm-2"><span class="glyphicon glyphicon-map-marker"></span> Ort:</th>
+                            <td class="col-sm-10">
+                                <a target="_blank" href="http://www.openstreetmap.org/search?query=Bahnhofstraße%2018%2001994%20Annahütte" th:href="@{http://www.openstreetmap.org/search(query=|${event.place.street} ${event.place.zip} ${event.place.city}|)}" th:text="|${event.place.street} ${event.place.zip} ${event.place.city}|">Bahnhofstraße 18 01994 Annahütte</a>
+                            </td>
+                        </tr>
+                        <tr class="row">
+                            <th class="col-sm-2"><span class="glyphicon glyphicon-ice-lolly-tasted"></span> min. Alter:</th>
+                            <td class="col-sm-10" th:text="${event.minimumParticipantAge}">12</td>
+                        </tr>
+                        <tr class="row">
+                            <th class="col-sm-2"><span class="glyphicon glyphicon-piggy-bank"></span> Preis:</th>
+                            <td class="col-sm-10">
+                                <span th:if="${event.internalParticipationFee}" th:text="|${{event.internalParticipationFee}} (NAJU-Mitglieder) |">35€ (NAJU-Mitlgieder)</span>
+                                <span th:if="${event.externalParticipationFee}" th:text="|${{event.externalParticipationFee}} (nicht-Mitglieder)|">35€ (nicht-Mitglieder)</span>
+                            </td>
+                        </tr>
+                        <tr class="row">
+                            <th class="col-sm-2"><span class="glyphicon glyphicon-user"></span> Teilnehmer:</th>
+                            <td class="col-sm-10" th:text="${event.participantsCount} + (${event.hasParticipantsLimit()} ? ' (max. ' + ${event.participantsLimit} + ')' : '')">28 (max. 30)</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </section>
@@ -783,7 +785,7 @@
                             </tr>
                         </thead>
                         <tbody th:remove="all-but-first">
-                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="0" data-internalFee-payed="true" data-form-received="false" th:each="participant : ${event.participants}" th:attr="'data-id'=${participant.id}, 'data-fee-payed'=${event.getParticipationInfo(participant).isParticipationFeePayed()}, 'data-form-received'=${event.getParticipationInfo(participant).isRegistrationFormReceived()}">
+                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="0" data-fee-payed="true" data-form-received="false" th:each="participant : ${event.participants}" th:attr="'data-id'=${participant.id}, 'data-fee-payed'=${event.getParticipationInfo(participant).isParticipationFeePayed()}, 'data-form-received'=${event.getParticipationInfo(participant).isRegistrationFormReceived()}">
                                 <td><a href="mailto:" data-toggle="" data-target="" th:href="'mailto:' + ${participant.email}" th:text="${participant.name}">Max-Hannes Mustermann</a></td>
                                 <td th:text="${{participant.participantProfile.dateOfBirth}}">31.02.1999</td>
                                 <td th:text="${participant.participantProfile.eatingHabits}">Veganer</td>
@@ -798,7 +800,7 @@
                                     <span th:unless="${event.getParticipationInfo(participant).isRegistrationFormReceived()}"><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span>
                                 </td>
                             </tr>
-                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="1" data-internalFee-payed="true" data-form-received="false">
+                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="1" data-fee-payed="true" data-form-received="false">
                                 <td><a href="mailto:">Max-Hannes Mustermann</a></td>
                                 <td>31.02.1999</td>
                                 <td>Veganer</td>
@@ -807,7 +809,7 @@
                                 <td class="text-center"><span><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span></td>
                                 <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
                             </tr>
-                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="2" data-internalFee-payed="false" data-form-received="false">
+                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="2" data-fee-payed="false" data-form-received="false">
                                 <td><a href="mailto:">Max-Hannes Mustermann</a></td>
                                 <td>31.02.1999</td>
                                 <td>Veganer</td>
@@ -816,43 +818,43 @@
                                 <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
                                 <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
                             </tr>
-                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="3" data-internalFee-payed="true" data-form-received="false">
-                                <td><a href="mailto:">Max-Hannes Mustermann</a></td>
-                                <td>31.02.1999</td>
-                                <td>Veganer</td>
-                                <td>Heuschnupfen</td>
-                                <td>Freital</td>
-                                <td class="text-center"><span><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span></td>
-                                <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
-                            </tr>
-                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="4" data-internalFee-payed="false" data-form-received="false">
-                                <td><a href="mailto:">Max-Hannes Mustermann</a></td>
-                                <td>31.02.1999</td>
-                                <td>Veganer</td>
-                                <td>Heuschnupfen</td>
-                                <td>Freital</td>
-                                <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
-                                <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
-                            </tr>
-                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="5" data-internalFee-payed="false" data-form-received="true">
-                                <td><a href="mailto:">Max-Hannes Mustermann</a></td>
-                                <td>31.02.1999</td>
-                                <td>Veganer</td>
-                                <td>Heuschnupfen</td>
-                                <td>Freital</td>
-                                <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
-                                <td class="text-center"><span><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span></td>
-                            </tr>
-                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="6" data-internalFee-payed="true" data-form-received="true">
+                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="3" data-fee-payed="true" data-form-received="false">
                                 <td><a href="mailto:">Max-Hannes Mustermann</a></td>
                                 <td>31.02.1999</td>
                                 <td>Veganer</td>
                                 <td>Heuschnupfen</td>
                                 <td>Freital</td>
                                 <td class="text-center"><span><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span></td>
+                                <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
+                            </tr>
+                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="4" data-fee-payed="false" data-form-received="false">
+                                <td><a href="mailto:">Max-Hannes Mustermann</a></td>
+                                <td>31.02.1999</td>
+                                <td>Veganer</td>
+                                <td>Heuschnupfen</td>
+                                <td>Freital</td>
+                                <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
+                                <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
+                            </tr>
+                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="5" data-fee-payed="false" data-form-received="true">
+                                <td><a href="mailto:">Max-Hannes Mustermann</a></td>
+                                <td>31.02.1999</td>
+                                <td>Veganer</td>
+                                <td>Heuschnupfen</td>
+                                <td>Freital</td>
+                                <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
                                 <td class="text-center"><span><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span></td>
                             </tr>
-                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="7" data-internalFee-payed="true" data-form-received="false">
+                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="6" data-fee-payed="true" data-form-received="true">
+                                <td><a href="mailto:">Max-Hannes Mustermann</a></td>
+                                <td>31.02.1999</td>
+                                <td>Veganer</td>
+                                <td>Heuschnupfen</td>
+                                <td>Freital</td>
+                                <td class="text-center"><span><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span></td>
+                                <td class="text-center"><span><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span></td>
+                            </tr>
+                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="7" data-fee-payed="true" data-form-received="false">
                                 <td><a href="mailto:">Max-Hannes Mustermann</a></td>
                                 <td>31.02.1999</td>
                                 <td>Veganer</td>
