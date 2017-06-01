@@ -168,8 +168,8 @@
                                       <input type="radio" id="add-event-belonging-project" name="belonging" th:value="PROJECT" /> Projekt
                                   </label>
                                   <div id="add-event-belonging-chapter-select" class="margin-btm-sm margin-top-lg">
-                                      <label for="add-event-localgroup" class="sr-only">Ortsgruppe</label>
-                                      <select class="selectpicker" id="add-event-localgroup" required="required" data-live-search="true" th:remove="all-but-first" th:field="*{localGroupId}">
+                                      <label for="add-event-belonging" class="sr-only">Ortsgruppe</label>
+                                      <select class="selectpicker" id="add-event-belonging" required="required" data-live-search="true" th:remove="all-but-first" th:field="*{localGroupId}">
                                           <option th:each="localGroup : ${localGroups}" th:text="${localGroup.name}" th:value="${localGroup.id}">NAJU Sachsen</option>
                                           <option>NAJU Dresden</option>
                                           <option>NAJU Freiberg</option>
@@ -408,25 +408,25 @@
                     </thead>
                     <tbody class="event-list-current" th:remove="all-but-first">
                         <tr th:each="event : ${currentEvents}">
-                            <td class="event-name"><a href="eventDetails.html" th:href="@{'/events/' + ${event.id}}" th:text="${event.name}">HIFA-Camp</a></td>
+                            <td><a class="event-name" href="eventDetails.html" th:href="@{'/events/' + ${event.id}}" th:text="${event.name}">HIFA-Camp</a></td>
                             <td class="event-time" th:text="${{event.startTime}} + ' - ' + ${{event.endTime}}">24.05.-28.05.</td>
                             <td class="event-place" th:text="${event.place.city}">Niederlausitz</td>
                             <td class="text-center" th:text="${event.participantsCount}">28</td>
-                            <td class="event-localgroup">
-                                <a href="localGroupDetails.html" th:if="${currentEventsLocalGroups.containsKey(event)}" th:href="@{/localGroups/{id}(id=${currentEventsLocalGroups.get(event).getId()})}" th:text="${currentEventsLocalGroups.get(event).getName()}">
+                            <td>
+                                <a class="event-belonging" href="localGroupDetails.html" th:if="${currentEventsLocalGroups.containsKey(event)}" th:href="@{/localGroups/{id}(id=${currentEventsLocalGroups.get(event).getId()})}" th:text="${currentEventsLocalGroups.get(event).getName()}">
                                     NAJU Sachsen
                                 </a>
-                                <a href="localGroupDetails.html" th:if="${currentEventsProjects.containsKey(event)}" th:href="@{/projects/{id}(id=${currentEventsProjects.get(event).getId()})}" th:text="${currentEventsProjects.get(event).getName()}">
+                                <a class="event-belonging" href="projectDetails.html" th:if="${currentEventsProjects.containsKey(event)}" th:href="@{/projects/{id}(id=${currentEventsProjects.get(event).getId()})}" th:text="${currentEventsProjects.get(event).getName()}">
                                     Puppenstuben gesucht!
                                 </a>
                             </td>
                         </tr>
                         <tr>
-                            <td class="event-name"> <a href="eventDetails.html">Nistkästen basteln</a></td>
+                            <td><a class="event-name" href="eventDetails.html">Nistkästen basteln</a></td>
                             <td class="event-time">26.05.</td>
                             <td class="event-place">Großdittmannsdorf</td>
                             <td class="text-center">---</td>
-                            <td class="event-localgroup">Großdittmannsdorf</td>
+                            <td><a class="event-belonging" href="localGroupDetails.html">Großdittmannsdorf</a></td>
                         </tr>
                     </tbody>
                 </table>
@@ -448,50 +448,50 @@
                     </thead>
                     <tbody class="event-list-prospective" th:remove="all-but-first">
                         <tr th:each="event : ${futureEvents}">
-                            <td class="event-name"><a href="eventDetails.html" th:href="@{'/events/' + ${event.id}}" th:text="${event.name}">Nistkästen basteln</a></td>
+                            <td><a class="event-name" href="eventDetails.html" th:href="@{'/events/' + ${event.id}}" th:text="${event.name}">Nistkästen basteln</a></td>
                             <td class="event-time" th:text="${{event.startTime}} + ' - ' + ${{event.endTime}}">02.06.</td>
                             <td class="event-place" th:text="${event.place.city}">Großdittmannsdorf</td>
                             <td class="text-center" th:text="${event.participantsCount}">---</td>
                             <td class="text-center" th:text="${event.remainingCapacity} > 1000000 ? 'unbegrenzt' : ${event.remainingCapacity}">---</td>
-                            <td class="event-localgroup">
-                                <a href="localGroupDetails.html" th:if="${futureEventsLocalGroups.containsKey(event)}" th:href="@{/localGroups/{id}(id=${futureEventsLocalGroups.get(event).getId()})}" th:text="${futureEventsLocalGroups.get(event).getName()}">
+                            <td>
+                                <a class="event-belonging" href="localGroupDetails.html" th:if="${futureEventsLocalGroups.containsKey(event)}" th:href="@{/localGroups/{id}(id=${futureEventsLocalGroups.get(event).getId()})}" th:text="${futureEventsLocalGroups.get(event).getName()}">
                                     Großdittmannsdorf
                                 </a>
-                                <a href="localGroupDetails.html" th:if="${futureEventsProjects.containsKey(event)}" th:href="@{/projects/{id}(id=${futureEventsProjects.get(event).getId()})}" th:text="${futureEventsProjects.get(event).getName()}">
+                                <a class="event-belonging" href="projectDetails.html" th:if="${futureEventsProjects.containsKey(event)}" th:href="@{/projects/{id}(id=${futureEventsProjects.get(event).getId()})}" th:text="${futureEventsProjects.get(event).getName()}">
                                     Brutvogelkartierung NAJU DD
                                 </a>
                             </td>
                         </tr>
                         <tr>
-                            <td class="event-name"><a href="eventDetails.html">Sommerferielager "Nachhaltiges Leben"</a></td>
+                            <td><a class="event-name" href="eventDetails.html">Sommerferielager "Nachhaltiges Leben"</a></td>
                             <td class="event-time">24.06.-30.06.</td>
                             <td class="event-place">Dachsenberg</td>
                             <td class="text-center">12</td>
                             <td class="text-center">8</td>
-                            <td class="event-localgroup">Dresden</td>
+                            <td><a class="event-belonging" href="localGroupDetails.html">Dresden</a></td>
                         </tr>
                         <tr>
-                            <td class="event-name"> <a href="eventDetails.html">Sommerfest</a></td>
+                            <td><a class="event-name" href="eventDetails.html">Sommerfest</a></td>
                             <td class="event-time">08./09.07.</td>
                             <td class="event-place">Dachsenberg</td>
                             <td class="text-center">---</td>
                             <td class="text-center">---</td>
-                            <td class="event-localgroup">Dresden</td>
+                            <td><a class="event-belonging" href="localGroupDetails.html">Dresden</a></td>
                         </tr>
                         <tr>
-                            <td class="event-name"> <a href="eventDetails.html">Paddelcamp</a></td>
+                            <td><a class="event-name" href="eventDetails.html">Paddelcamp</a></td>
                             <td class="event-time">16.07.-23.07.</td>
                             <td class="event-place">Berounka</td>
                             <td class="text-center">10</td>
                             <td class="text-center">0</td>
-                            <td class="event-localgroup">Sachsen</td>
+                            <td><a class="event-belonging" href="localGroupDetails.html">Sachsen</a></td>
                         </tr>
                     </tbody>
                 </table>
             </section>
 
             <section class="row" style="margin-top: 3em;" th:if="${normalDisplay}">
-                <p style="text-align: center;"><a href="#" th:href="@{/events/past}">Vergangene Veranstaltungen anzeigen</a></p>
+                <p class="text-center"><a href="#" th:href="@{/events/past}">Vergangene Veranstaltungen anzeigen</a></p>
             </section>
 
             <!-- past events -->
@@ -509,25 +509,25 @@
                     </thead>
                     <tbody class="event-list-past" th:remove="all-but-first">
                         <tr th:each="event : ${pastEvents}">
-                            <td class="event-name"><a href="eventDetails.html" th:href="@{'/events/' + ${event.id}}" th:text="${event.name}">HIFA-Camp</a></td>
+                            <td><a class="event-name" href="eventDetails.html" th:href="@{'/events/' + ${event.id}}" th:text="${event.name}">HIFA-Camp</a></td>
                             <td class="event-time" th:text="${{event.startTime}} + ' - ' + ${{event.endTime}}">24.05.-28.05.</td>
                             <td class="event-place" th:text="${event.place.city}">Niederlausitz</td>
                             <td class="text-center" th:text="${event.participantsCount}">28</td>
-                            <td class="event-localgroup">
-                                <a href="localGroupDetails.html" th:if="${pastEventsLocalGroups.containsKey(event)}" th:href="@{/localGroups/{id}(id=${pastEventsLocalGroups.get(event).getId()})}" th:text="${pastEventsLocalGroups.get(event).getName()}">
+                            <td>
+                                <a class="event-belonging" href="localGroupDetails.html" th:if="${pastEventsLocalGroups.containsKey(event)}" th:href="@{/localGroups/{id}(id=${pastEventsLocalGroups.get(event).getId()})}" th:text="${pastEventsLocalGroups.get(event).getName()}">
                                     NAJU Sachsen
                                 </a>
-                                <a href="localGroupDetails.html" th:if="${pastEventsProjects.containsKey(event)}" th:href="@{/projects/{id}(id=${pastEventsProjects.get(event).getId()})}" th:text="${pastEventsProjects.get(event).getName()}">
+                                <a class="event-belonging" href="projectDetails.html" th:if="${pastEventsProjects.containsKey(event)}" th:href="@{/projects/{id}(id=${pastEventsProjects.get(event).getId()})}" th:text="${pastEventsProjects.get(event).getName()}">
                                     NAJU Sachsen
                                 </a>
                             </td>
                         </tr>
                         <tr>
-                            <td class="event-name"> <a href="eventDetails.html">Nistkästen basteln</a></td>
+                            <td><a class="event-name" href="eventDetails.html">Nistkästen basteln</a></td>
                             <td class="event-time">26.05.</td>
                             <td class="event-place">Großdittmannsdorf</td>
                             <td class="text-center">---</td>
-                            <td class="event-localgroup">Großdittmannsdorf</td>
+                            <td><a class="event-belonging" href="localGroupDetails.html">Großdittmannsdorf</a></td>
                         </tr>
                     </tbody>
                 </table>
@@ -543,23 +543,26 @@
                             <th>Datum <span class="icon"></span></th>
                             <th>Ort <span class="icon"></span></th>
                             <th>Teilnehmer <span class="icon"></span></th>
-                            <th>Ortsgruppe <span class="icon"></span></th>
+                            <th>Zugehörig <span class="icon"></span></th>
                         </tr>
                     </thead>
                     <tbody class="event-list-past" th:remove="all-but-first">
                         <tr th:each="event : ${filteredEvents}">
-                            <td class="event-name"><a href="eventDetails.html" th:href="@{'/events/' + ${event.id}}" th:text="${event.name}">HIFA-Camp</a></td>
+                            <td><a class="event-name" href="eventDetails.html" th:href="@{'/events/' + ${event.id}}" th:text="${event.name}">HIFA-Camp</a></td>
                             <td class="event-time" th:text="${{event.startTime}} + ' - ' + ${{event.endTime}}">24.05.-28.05.</td>
                             <td class="event-place" th:text="${event.place.city}">Niederlausitz</td>
                             <td class="text-center" th:text="${event.participantsCount}">28</td>
-                            <td class="event-localgroup" th:text="---">Sachsen</td>
+                            <td>
+                                <a class="event-belonging" href="localGroupDetails.html" th:if="${filteredEventsLocalGroups.containsKey(event)}" th:href="@{/localGroups/{id}(id=${filteredEventsLocalGroups.get(event).getId()})}" th:text="${filteredEventsLocalGroups.get(event).getName()}">Sachsen</a>
+                                <a class="event-belonging" href="projectDetails.html" th:if="${filteredEventsProjects.containsKey(event)}" th:href="@{/projects/{id}(id=${filteredEventsProjects.get(event).getId()})}" th:text="${filteredEventsProjects.get(event).getName()}">NAJU Sachsen</a>
+                            </td>
                         </tr>
                         <tr>
-                            <td class="event-name"> <a href="eventDetails.html">Nistkästen basteln</a></td>
+                            <td><a class="event-name" href="eventDetails.html">Nistkästen basteln</a></td>
                             <td class="event-time">26.05.</td>
                             <td class="event-place">Großdittmannsdorf</td>
                             <td class="text-center">---</td>
-                            <td class="event-localgroup">Großdittmannsdorf</td>
+                            <td><a class="event-belonging" href="localGroupDetails.html">Großdittmannsdorf</a></td>
                         </tr>
                     </tbody>
                 </table>
@@ -578,12 +581,12 @@
          };
          var currentEventsOptions = {
             listClass: "event-list-current",
-            valueNames: ['event-name', 'evemt-time', 'event-place', 'event-localgroup'],
+            valueNames: ['event-name', 'event-time', 'event-place', 'event-belonging'],
             plugins: [ListFuzzySearch(fuzzyOptions)]
          };
          var prospectiveEventsOptions = {
              listClass: "event-list-prospective",
-             valueNames: ['event-name', 'evemt-time', 'event-place', 'event-localgroup'],
+             valueNames: ['event-name', 'event-time', 'event-place', 'event-belonging'],
              plugins: [ListFuzzySearch(fuzzyOptions)]
          };
          new List('main', currentEventsOptions);
@@ -610,7 +613,7 @@
          };
          var pastEventsOptions = {
             listClass: "event-list-past",
-            valueNames: ['event-name', 'evemt-time', 'event-place', 'event-localgroup'],
+            valueNames: ['event-name', 'event-time', 'event-place', 'event-belonging'],
             plugins: [ListFuzzySearch(fuzzyOptions)]
          };
 
