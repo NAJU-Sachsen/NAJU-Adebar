@@ -162,7 +162,7 @@
 
         <h1 style="margin-bottom: 25px;">Ortsgruppen</h1>
 
-        <div class="row" th:remove="all-but-first">
+        <div class="localgroups row" th:remove="all-but-first">
 
             <div class="col-md-4" th:each="localGroup : ${localGroups}">
                 <article class="panel panel-default">
@@ -221,11 +221,25 @@
     </section>
 
     <script type="text/javascript">
-        $(function() {
-            $('#add-event-newsletter').find('input[type=checkbox]').on('click', function() {
-                $('#add-event-newsletter').find('input[type=text]').prop('disabled', function(i,v){return !v})
-            })
-        })
+        var fuzzyOptions = {
+           searchClass: "fuzzy-search",
+           location: 0,
+           distance: 150,
+           threshold: 0.4,
+           multiSearch: true
+         };
+         var localGroupsOptions = {
+            listClass: "localgroups",
+            valueNames: ['panel-title'],
+            plugins: [ListFuzzySearch(fuzzyOptions)]
+         };
+         new List('main', localGroupsOptions);
+
+         $(function() {
+             $('#add-localGroup-newsletter').find('input[type=checkbox]').on('click', function() {
+                 $('#add-localGroup-newsletter').find('input[type=text]').prop('disabled', function(i,v){return !v})
+             });
+         });
     </script>
 
 </main>
