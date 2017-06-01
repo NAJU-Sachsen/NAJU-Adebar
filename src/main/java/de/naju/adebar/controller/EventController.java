@@ -118,10 +118,10 @@ public class EventController {
     }
 
     /**
-     *
-     * @param eventsForm
-     * @param model
-     * @return
+     * Displays all events which matched certain criteria
+     * @param eventsForm form specifying the criteria to filter for
+     * @param model model containing the data to display
+     * @return the overview of all matching events
      */
     @RequestMapping("/events/filter")
     public String filterEvents(@ModelAttribute("filterEventsForm") FilterEventsForm eventsForm, Model model) {
@@ -132,6 +132,10 @@ public class EventController {
         Iterable<Event> matchingEvents = filterBuilder.filter();
 
         model.addAttribute("filteredEvents", matchingEvents);
+        model.addAttribute("filteredEventsLocalGroups", eventDataProcessor.getLocalGroupBelonging(matchingEvents));
+        model.addAttribute("filteredEventsProjects", eventDataProcessor.getProjectBelonging(matchingEvents));
+
+
         model.addAttribute("addEventForm", new EventForm());
         model.addAttribute("filterEventsForm", new FilterEventsForm());
         model.addAttribute("localGroups", localGroupManager.repository().findAll());
