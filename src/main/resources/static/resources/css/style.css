@@ -163,3 +163,7 @@ fieldset.inline-options label {
 	bottom: 0;
 	width: 100%;
 }
+
+label.no-decoration {
+    font-weight: 100;
+}
