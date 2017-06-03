@@ -119,3 +119,29 @@ $('#filter-referent-type').on('changed.bs.select', function () {
         $('#filter-referents-qualification-container').slideDown();
     }
 });
+
+// add predefined eating habits upon selection
+$('select#eatingHabit-quick').on('changed.bs.select', function() {
+    var option = $(this).val();
+    console.log(option);
+    if (!option) {
+        return;
+    }
+
+    var eatingHabit = $('#eatingHabit').val();
+    if (eatingHabit) {
+        // if a special eating habit was selected, append the one from the quick-select
+        eatingHabit += ', ' + option;
+    } else {
+        // else just use the quick select
+        eatingHabit = option;
+    }
+
+    // update the eating habit
+    $('#eatingHabit').val(eatingHabit);
+
+    $('#eatingHabit').addClass('input-pulse');
+    setTimeout(function() {
+        $('#eatingHabit').removeClass('input-pulse');
+    }, 2000);
+});

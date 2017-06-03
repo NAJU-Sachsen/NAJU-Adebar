@@ -11,7 +11,7 @@
 
     <link rel="stylesheet" type="text/css" href="../static/resources/css/style.css" th:href="@{/resources/css/style.css}"/>
 
-    <link rel="stylesheet" type="text/css" href="../static/resources/css/loading.css" th:href="@{/resources/css/loading.css}"/>
+    <link rel="stylesheet" type="text/css" href="../static/resources/css/animation.css" th:href="@{/resources/css/animation.css}"/>
 
     <script type="text/javascript" src="../static/resources/js/list.min.js" th:src="@{/resources/js/list.min.js}"></script>
     <script type="text/javascript" src="../static/resources/js/list.fuzzysearch.min.js" th:src="@{/resources/js/list.fuzzysearch.min.js}"></script>
@@ -146,7 +146,18 @@
                         <div class="form-group">
                             <label for="eatingHabit" class="col-sm-3 control-label">Ernährung</label>
                             <div class="col-sm-9">
-                                <textarea class="form-control" name="eatingHabit" id="eatingHabit" placeholder="Essgewohnheiten (vegetarisch, Unverträglichkeiten...)" th:field="*{eatingHabit}"></textarea>
+                                <div class="margin-btm">
+                                    <label class="no-decoration">Schnellauswahl:</label>
+                                    <select id="eatingHabit-quick" class="selectpicker" data-width="auto">
+                                        <option value="" selected="selected">keine</option>
+                                        <option value="vegetarisch">vegetarisch</option>
+                                        <option value="vegan">vegan</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="no-decoration">Weitere Ernährungsarten/-hinweise:</label>
+                                    <textarea class="form-control" name="eatingHabit" id="eatingHabit" placeholder="Essgewohnheiten (vegetarisch, Unverträglichkeiten...)" th:field="*{eatingHabit}"></textarea>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">
