@@ -154,8 +154,8 @@
                                         <option value="vegan">vegan</option>
                                     </select>
                                 </div>
-                                <div>
-                                    <label class="no-decoration">Weitere Ernährungsarten/-hinweise:</label>
+                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#eatingHabit-container" aria-expanded="false" aria-controls="eatingHabit-container">Weitere Ernährungsarten/-hinweise</button>
+                                <div class="collapse" id="eatingHabit-container">
                                     <textarea class="form-control" name="eatingHabit" id="eatingHabit" placeholder="Essgewohnheiten (vegetarisch, Unverträglichkeiten...)" th:field="*{eatingHabit}"></textarea>
                                 </div>
                             </div>
