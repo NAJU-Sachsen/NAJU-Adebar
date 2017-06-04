@@ -559,13 +559,11 @@
             <div class="alert alert-warning alert-dismissible" role="alert" th:if="${participantTooYoung}">
                <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
                   <span aria-hidden="true">&times;</span>
-               </button>
-               <p>
-                  Der/die Teilnehmende ist noch zu jung.
-               </p>
+              </button>
                <form th:action="@{'/events/' + ${event.id} + '/participants/force-add'}">
+                   Der/die Teilnehmende ist noch zu jung.
                    <input type="hidden" name="person-id" th:value="${newParticipantId}" />
-                   <button type="submit" class="btn btn-link">Trotzdem hinzufügen</button>
+                   <button type="submit" class="btn btn-link alert-link">Trotzdem hinzufügen</button>
                </form>
             </div>
 
