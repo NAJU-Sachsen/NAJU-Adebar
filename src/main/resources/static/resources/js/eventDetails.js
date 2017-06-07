@@ -43,7 +43,7 @@ $('#add-counselor-search-btn').on('click', function() {
         dataType: 'json',
         method: 'POST',
         success: function(response) {
-            displayResult(table, response);
+            displayMatchingPersons(table, response);
         },
         url: '/api/persons/activists/simpleSearch'
     };
@@ -67,7 +67,7 @@ $('#add-organizer-search-btn').on('click', function() {
         dataType: 'json',
         method: 'POST',
         success: function(response) {
-            displayResult(table, response);
+            displayMatchingPersons(table, response);
         },
         url: '/api/persons/activists/simpleSearch'
     };
