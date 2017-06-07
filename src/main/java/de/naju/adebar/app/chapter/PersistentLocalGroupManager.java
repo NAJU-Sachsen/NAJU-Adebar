@@ -1,5 +1,6 @@
 package de.naju.adebar.app.chapter;
 
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import de.naju.adebar.model.chapter.*;
 import de.naju.adebar.model.human.Address;
@@ -60,6 +61,7 @@ public class PersistentLocalGroupManager implements LocalGroupManager {
         localGroup.setName(localGroupData.getName());
         localGroup.setAddress(localGroupData.getAddress());
         localGroup.setNabuGroupLink(localGroupData.getNabuGroupLink());
+        localGroup.setContactPersons(Lists.newLinkedList(localGroupData.getContactPersons()));
         return localGroupRepo.save(localGroup);
     }
 

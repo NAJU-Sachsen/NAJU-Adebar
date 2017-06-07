@@ -4,6 +4,9 @@ import de.naju.adebar.controller.forms.chapter.LocalGroupForm;
 import de.naju.adebar.model.chapter.LocalGroup;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Service to convert a {@link LocalGroup} to corresponding {@link LocalGroupForm} objects
  * @author Rico Bergmann
@@ -30,6 +33,19 @@ public class LocalGroupToLocalGroupFormConverter {
             groupForm.setNabuGroup(localGroup.getNabuGroupLink().toString());
         }
 
+        groupForm.setContactPersons(extractContactPersonsFrom(localGroup));
+
         return groupForm;
+    }
+
+    /**
+     * Extracts all contact persons from a local group
+     * @param localGroup the group to take the contact persons from
+     * @return the contact persons' IDs
+     */
+    private List<String> extractContactPersonsFrom(LocalGroup localGroup) {
+        List<String> contactPersons = new LinkedList<>();
+        localGroup.getContactPersons().forEach(p -> contactPersons.add(p.getId().toString()));
+        return contactPersons;
     }
 }

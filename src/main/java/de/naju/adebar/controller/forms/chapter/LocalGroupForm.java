@@ -1,5 +1,7 @@
 package de.naju.adebar.controller.forms.chapter;
 
+import java.util.List;
+
 /**
  * Model POJO for local groups. The fields are set by Thymeleaf when the associated form is submitted.
  * @author Rico Bergmann
@@ -10,15 +12,17 @@ public class LocalGroupForm {
     private String zip;
     private String city;
     private String nabuGroup;
+    private List<String> contactPersons;
 
     // constructor
 
-    public LocalGroupForm(String name, String street, String zip, String city, String nabuGroup) {
+    public LocalGroupForm(String name, String street, String zip, String city, String nabuGroup, List<String> contactPersons) {
         this.name = name;
         this.street = street;
         this.zip = zip;
         this.city = city;
         this.nabuGroup = nabuGroup;
+        this.contactPersons = contactPersons;
     }
 
     public LocalGroupForm() {}
@@ -65,9 +69,21 @@ public class LocalGroupForm {
         this.nabuGroup = nabuGroup;
     }
 
+    public List<String> getContactPersons() {
+        return contactPersons;
+    }
+
+    public void setContactPersons(List<String> contactPersons) {
+        this.contactPersons = contactPersons;
+    }
+
     // query methods
 
     public boolean hasNabuGroup() {
         return nabuGroup != null && !nabuGroup.isEmpty();
+    }
+
+    public boolean hasContactPersons() {
+        return contactPersons != null;
     }
 }

@@ -97,15 +97,18 @@ public class LocalGroupController {
         LocalGroup localGroup = localGroupManager.findLocalGroup(groupId).orElseThrow(IllegalArgumentException::new);
         Board board = localGroup.getBoard();
         Iterable<Person> members = localGroup.getMembers();
+        Iterable<Person> contactPersons = localGroup.getContactPersons();
         Iterable<Person> boardMembers = board != null ? board.getMembers() : null;
 
         model.addAttribute("localGroup", localGroup);
         model.addAttribute("members", members);
+        model.addAttribute("contactPersons", contactPersons);
         model.addAttribute("chairman", board != null ? board.getChairman() : null);
         model.addAttribute("board", boardMembers);
 
         model.addAttribute("memberEmails", humanDataProcessor.extractEmailAddressesAsString(members, EMAIL_DELIMITER));
         model.addAttribute("boardEmails", board != null ? humanDataProcessor.extractEmailAddressesAsString(boardMembers, EMAIL_DELIMITER) : "");
+        model.addAttribute("contactPersonsEmails", humanDataProcessor.extractEmailAddressesAsString(contactPersons, EMAIL_DELIMITER));
 
         model.addAttribute("localGroupForm", localGroupFormConverter.convertToLocalGroupForm(localGroup));
         model.addAttribute("boardForm", boardFormConverter.convertToBoardForm(board));

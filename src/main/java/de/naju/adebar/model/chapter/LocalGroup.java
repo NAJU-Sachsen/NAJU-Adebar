@@ -113,6 +113,13 @@ public class LocalGroup {
     }
 
     /**
+     * @param contactPersons the contact persons for the local group
+     */
+    public void setContactPersons(List<Person> contactPersons) {
+        this.contactPersons = contactPersons;
+    }
+
+    /**
      * @return the events the local group hosts
      */
     public Iterable<Event> getEvents() {
@@ -170,13 +177,6 @@ public class LocalGroup {
      */
     protected void setMembers(List<Person> members) {
         this.members = members;
-    }
-
-    /**
-     * @param contactPersons the contact persons for the local group
-     */
-    protected void setContactPersons(List<Person> contactPersons) {
-        this.contactPersons = contactPersons;
     }
 
     /**
@@ -245,6 +245,13 @@ public class LocalGroup {
      */
     public boolean hasNewsletters() {
         return !newsletters.isEmpty();
+    }
+
+    /**
+     * @return {@code true} if the local group has at least one contact person, {@code false} otherwise
+     */
+    public boolean hasContactPersons() {
+        return !contactPersons.isEmpty();
     }
 
     /**
