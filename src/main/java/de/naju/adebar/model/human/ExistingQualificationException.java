@@ -5,8 +5,9 @@ package de.naju.adebar.model.human;
  * @author Rico Bergmann
  */
 public class ExistingQualificationException extends RuntimeException {
+	private static final long serialVersionUID = -139865441896785332L;
 
-    public ExistingQualificationException() {
+	public ExistingQualificationException() {
     }
 
     public ExistingQualificationException(String message) {

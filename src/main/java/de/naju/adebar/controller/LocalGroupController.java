@@ -12,7 +12,6 @@ import de.naju.adebar.model.chapter.ExistingMemberException;
 import de.naju.adebar.model.chapter.LocalGroup;
 import de.naju.adebar.app.chapter.LocalGroupManager;
 import de.naju.adebar.model.human.Person;
-import de.naju.adebar.app.newsletter.NewsletterManager;
 import de.naju.adebar.util.conversion.chapter.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,7 +36,6 @@ public class LocalGroupController {
 
     private LocalGroupManager localGroupManager;
     private PersonManager personManager;
-    private NewsletterManager newsletterManager;
     private LocalGroupFormDataExtractor localGroupFormDataExtractor;
     private AddLocalGroupFormDataExtractor addLocalGroupFormDataExtractor;
     private LocalGroupToLocalGroupFormConverter localGroupFormConverter;
@@ -46,12 +44,11 @@ public class LocalGroupController {
     private DataProcessor humanDataProcessor;
 
     @Autowired
-    public LocalGroupController(LocalGroupManager localGroupManager, PersonManager personManager, NewsletterManager newsletterManager, AddLocalGroupFormDataExtractor addLocalGroupFormDataExtractor, LocalGroupFormDataExtractor localGroupFormDataExtractor, LocalGroupToLocalGroupFormConverter localGroupFormConverter, BoardFormDataExtractor boardFormDataExtractor, BoardToBoardFormConverter boardFormConverter, DataProcessor humanDataProcessor) {
-        Object[] params = {localGroupManager, personManager, newsletterManager, localGroupFormDataExtractor, addLocalGroupFormDataExtractor, localGroupFormConverter, boardFormDataExtractor, boardFormConverter, humanDataProcessor};
+    public LocalGroupController(LocalGroupManager localGroupManager, PersonManager personManager, AddLocalGroupFormDataExtractor addLocalGroupFormDataExtractor, LocalGroupFormDataExtractor localGroupFormDataExtractor, LocalGroupToLocalGroupFormConverter localGroupFormConverter, BoardFormDataExtractor boardFormDataExtractor, BoardToBoardFormConverter boardFormConverter, DataProcessor humanDataProcessor) {
+        Object[] params = {localGroupManager, personManager, localGroupFormDataExtractor, addLocalGroupFormDataExtractor, localGroupFormConverter, boardFormDataExtractor, boardFormConverter, humanDataProcessor};
         Assert.noNullElements(params, "No parameter may be null: " + Arrays.toString(params));
         this.localGroupManager = localGroupManager;
         this.personManager = personManager;
-        this.newsletterManager = newsletterManager;
         this.localGroupFormDataExtractor = localGroupFormDataExtractor;
         this.addLocalGroupFormDataExtractor = addLocalGroupFormDataExtractor;
         this.localGroupFormConverter = localGroupFormConverter;
@@ -127,7 +124,7 @@ public class LocalGroupController {
      */
     @RequestMapping("/localGroups/{gid}/edit")
     public String editLocalGroup(@PathVariable("gid") long groupId, @ModelAttribute("localGroupForm") LocalGroupForm localGroupForm, RedirectAttributes redirAttr) {
-        LocalGroup localGroup = localGroupManager.findLocalGroup(groupId).orElseThrow(IllegalArgumentException::new);
+        localGroupManager.findLocalGroup(groupId).orElseThrow(IllegalArgumentException::new);
 
         localGroupManager.adoptLocalGroupData(groupId, localGroupFormDataExtractor.extractLocalGroup(localGroupForm));
 
@@ -186,7 +183,7 @@ public class LocalGroupController {
      */
     @RequestMapping("/localGroups/{gid}/board")
     public String updateBoard(@PathVariable("gid") long groupId, @ModelAttribute("boardForm") BoardForm boardForm, RedirectAttributes redirAttr) {
-        LocalGroup localGroup = localGroupManager.findLocalGroup(groupId).orElseThrow(IllegalArgumentException::new);
+        localGroupManager.findLocalGroup(groupId).orElseThrow(IllegalArgumentException::new);
 
         localGroupManager.updateBoard(groupId, boardFormDataExtractor.extractBoard(boardForm));
 

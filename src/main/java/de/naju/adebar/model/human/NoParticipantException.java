@@ -5,8 +5,9 @@ package de.naju.adebar.model.human;
  * @author Rico Bergmann
  */
 public class NoParticipantException extends RuntimeException {
+	private static final long serialVersionUID = 3777085513175599784L;
 
-    public NoParticipantException() {
+	public NoParticipantException() {
     }
 
     public NoParticipantException(String message) {

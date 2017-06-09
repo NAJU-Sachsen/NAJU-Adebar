@@ -1,6 +1,5 @@
 package de.naju.adebar.controller.forms.chapter;
 
-import de.naju.adebar.model.human.PersonId;
 import de.naju.adebar.util.Validation;
 
 import java.util.ArrayList;

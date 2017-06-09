@@ -37,6 +37,7 @@ public class ActivistProfile implements Cloneable {
     /**
      * Default constructor just for JPA's sake
      */
+    @SuppressWarnings("unused")
     private ActivistProfile() {}
 
     // getter and setter
@@ -65,6 +66,7 @@ public class ActivistProfile implements Cloneable {
     /**
      * @param personId the ID of the person to whom this profile belongs.
      */
+    @SuppressWarnings("unused")
     private void setPersonId(PersonId personId) {
         this.personId = personId;
     }

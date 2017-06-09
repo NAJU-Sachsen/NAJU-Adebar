@@ -60,6 +60,7 @@ public class Person {
     /**
      * Default constructor for JPA's sake
      */
+    @SuppressWarnings("unused")
     private Person() {}
 
     // getter and setter
@@ -216,6 +217,7 @@ public class Person {
     /**
      * @param id the person's unique ID
      */
+    @SuppressWarnings("unused")
     private void setId(PersonId id) {
         this.id = id;
     }

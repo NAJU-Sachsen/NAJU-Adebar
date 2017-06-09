@@ -50,6 +50,7 @@ public class Board {
     /**
      * Default constructor just for JPA's sake
      */
+    @SuppressWarnings("unused")
     private Board() {}
 
     // basic getter and setter

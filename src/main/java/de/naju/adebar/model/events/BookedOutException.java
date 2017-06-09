@@ -5,8 +5,9 @@ package de.naju.adebar.model.events;
  * @author Rico Bergmann
  */
 public class BookedOutException extends RuntimeException {
+	private static final long serialVersionUID = 1129424221360681755L;
 
-    public BookedOutException() {
+	public BookedOutException() {
     }
 
     public BookedOutException(String message) {

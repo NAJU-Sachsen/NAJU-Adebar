@@ -1,11 +1,9 @@
 package de.naju.adebar.util.conversion.human;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Streams;
 import de.naju.adebar.app.filter.DateFilterType;
 import de.naju.adebar.app.filter.FilterType;
 import de.naju.adebar.app.filter.MatchType;
-import de.naju.adebar.app.human.PersonManager;
 import de.naju.adebar.app.human.filter.*;
 import de.naju.adebar.controller.forms.human.FilterPersonForm;
 import de.naju.adebar.model.human.*;
@@ -18,10 +16,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 /**
  * Service to convert {@link FilterPersonForm} data to the corresponding objects
@@ -34,14 +28,12 @@ public class FilterPersonFormFilterExtractor {
 
     private DateTimeFormatter dateFormatter;
 
-    private PersonManager personManager;
     private QualificationRepository qualificationRepo;
 
     @Autowired
-    public FilterPersonFormFilterExtractor(PersonManager personManager, QualificationRepository qualificationRepo) {
-        Object[] params = {personManager, qualificationRepo};
+    public FilterPersonFormFilterExtractor(QualificationRepository qualificationRepo) {
+        Object[] params = {qualificationRepo};
         Assert.noNullElements(params, "No parameter may be null!");
-        this.personManager = personManager;
         this.qualificationRepo = qualificationRepo;
         this.dateFormatter = DateTimeFormatter.ofPattern(FilterPersonForm.DATE_FORMAT, Locale.GERMAN);
     }

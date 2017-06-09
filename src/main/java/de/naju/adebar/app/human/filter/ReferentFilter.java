@@ -4,10 +4,8 @@ import com.google.common.collect.Lists;
 import de.naju.adebar.app.filter.FilterType;
 import de.naju.adebar.model.human.Person;
 import de.naju.adebar.model.human.Qualification;
-import de.naju.adebar.util.Streams;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Stream;
 
 /**

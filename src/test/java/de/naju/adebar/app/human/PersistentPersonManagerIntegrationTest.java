@@ -29,7 +29,7 @@ public class PersistentPersonManagerIntegrationTest {
     @Autowired private PersistentPersonManager personManager;
     private PersonId bertaId;
     private Person claus, berta;
-    private Address bertaAddress, heinzAddress;
+    private Address bertaAddress;
     private LocalDate heinzDob;
 
     @Before public void setUp() {
@@ -49,7 +49,7 @@ public class PersistentPersonManagerIntegrationTest {
 
         this.bertaId = berta.getId();
 
-        this.heinzAddress = new Address("Zu Hause", "98765", "Teudschland");
+        new Address("Zu Hause", "98765", "Teudschland");
         this.heinzDob = LocalDate.now().minusYears(3);
     }
 

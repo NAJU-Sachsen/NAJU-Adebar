@@ -5,8 +5,9 @@ package de.naju.adebar.model.newsletter;
  * @author Rico Bergmann
  */
 public class NoSuchSubscriberException extends RuntimeException {
+	private static final long serialVersionUID = -7455697221282134967L;
 
-    public NoSuchSubscriberException() {
+	public NoSuchSubscriberException() {
     }
 
     public NoSuchSubscriberException(String message) {

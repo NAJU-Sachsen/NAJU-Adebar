@@ -3,7 +3,6 @@ package de.naju.adebar.util.conversion.chapter;
 import de.naju.adebar.app.human.PersonManager;
 import de.naju.adebar.controller.forms.chapter.AddLocalGroupForm;
 import de.naju.adebar.model.chapter.LocalGroup;
-import de.naju.adebar.model.human.Address;
 import de.naju.adebar.model.newsletter.Newsletter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

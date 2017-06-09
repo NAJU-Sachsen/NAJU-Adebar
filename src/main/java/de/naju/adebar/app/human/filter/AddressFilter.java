@@ -48,6 +48,9 @@ public class AddressFilter implements PersonFilter {
                             .equals(address.getAdditionalInfo()));
                 }
                 return personStream;
+            default:
+            	assert false : "Should not have match type: " + matchType;
+                	
         }
         return null;
     }

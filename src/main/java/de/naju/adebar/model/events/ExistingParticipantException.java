@@ -5,8 +5,9 @@ package de.naju.adebar.model.events;
  * @author Rico Bergmann
  */
 public class ExistingParticipantException extends RuntimeException {
+	private static final long serialVersionUID = 1370585756956834005L;
 
-    public ExistingParticipantException() {
+	public ExistingParticipantException() {
     }
 
     public ExistingParticipantException(String message) {

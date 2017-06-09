@@ -1,6 +1,5 @@
 package de.naju.adebar.app.human;
 
-import com.google.common.collect.Iterables;
 import de.naju.adebar.model.human.*;
 import org.junit.Assert;
 import org.junit.Before;
@@ -12,8 +11,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
 
 /**
  * Basic behavior testing of the {@link PersonManager} regarding {@link ReferentProfile}
@@ -28,14 +25,12 @@ public class ReferentManagerIntegrationTest {
     @Autowired private PersonFactory personFactory;
     @Autowired private PersonManager personManager;
     @Autowired private ReferentProfileRepository referentRepo;
-    @Autowired private QualificationRepository qualificationRepo;
     private PersonId clausId;
     private Person claus;
     private Qualification qualification;
 
     @Before public void setUp() {
         Address clausAddress = new Address("Hinner der Boje 7", "24103", "Auf'm Meer");
-        LocalDate clausDob = LocalDate.now().minusYears(42L);
         this.claus = personFactory.buildNew("Claus", "Störtebecker", "der_kaeptn@web.de").makeReferent().create();
         this.claus.setAddress(clausAddress);
         this.qualification = new Qualification("Erste Hilfe Kurs", "Hat die Qualifikation, einen Erste-Hilfe Kurs zu leiten");

@@ -5,7 +5,6 @@ import de.naju.adebar.model.human.*;
 import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.test.annotation.Rollback;
 
 import java.time.LocalDate;
 import java.util.Arrays;

@@ -1,7 +1,6 @@
 package de.naju.adebar.util.conversion.human;
 
 import de.naju.adebar.controller.forms.human.CreatePersonForm;
-import de.naju.adebar.controller.forms.human.EditActivistForm;
 import de.naju.adebar.controller.forms.human.EditPersonForm;
 import de.naju.adebar.model.human.*;
 import org.springframework.beans.factory.annotation.Autowired;

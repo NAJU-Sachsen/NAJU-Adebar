@@ -5,8 +5,9 @@ package de.naju.adebar.model.events;
  * @author Rico Bergmann
  */
 public class PersonIsTooYoungException extends RuntimeException {
+	private static final long serialVersionUID = 130980750559664858L;
 
-    public PersonIsTooYoungException() {
+	public PersonIsTooYoungException() {
     }
 
     public PersonIsTooYoungException(String message) {

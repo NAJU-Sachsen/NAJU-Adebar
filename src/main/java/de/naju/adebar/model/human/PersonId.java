@@ -19,7 +19,9 @@ import java.util.UUID;
  */
 @Embeddable
 public class PersonId implements Serializable, Iterator<PersonId> {
-    @Column(unique=true) private final String id;
+	private static final long serialVersionUID = -6223486850240404100L;
+	
+	@Column(unique=true) private final String id;
 
     /**
      * Just create a new identifier

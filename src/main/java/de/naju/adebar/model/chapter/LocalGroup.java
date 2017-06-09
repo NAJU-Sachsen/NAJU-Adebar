@@ -55,6 +55,7 @@ public class LocalGroup {
     /**
      * Default constructor for JPA
      */
+    @SuppressWarnings("unused")
     private LocalGroup() {}
 
     // basic getter and setter

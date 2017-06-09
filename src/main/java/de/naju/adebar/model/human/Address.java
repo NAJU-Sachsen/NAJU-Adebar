@@ -14,6 +14,7 @@ import java.io.Serializable;
 @Embeddable
 public class Address implements Serializable {
 	public final static int ZIP_LENGTH = 5;
+	private static final long serialVersionUID = -3788598615103628404L;
 	
 	private String street;
 	private String zip;

@@ -5,11 +5,6 @@ import de.naju.adebar.app.filter.FilterBuilder;
 import de.naju.adebar.model.human.Person;
 import org.springframework.util.Assert;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -33,7 +28,7 @@ public class PersonFilterBuilder extends FilterBuilder<Person> {
      */
     public PersonFilterBuilder applyFilter(PersonFilter filter) {
         Assert.notNull(filter, "Filter may not be null!");
-        for (AbstractFilter f : filters) {
+        for (AbstractFilter<Person> f : filters) {
             if (filter.getClass() == f.getClass()) {
                 throw new ConflictingFilterCriteriaException("Already containing a filter of class: " + f.getClass());
             }

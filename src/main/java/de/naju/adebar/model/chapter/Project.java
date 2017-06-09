@@ -65,7 +65,11 @@ public class Project {
         this.contributors = new LinkedList<>();
         this.events = new LinkedList<>();
     }
-
+    
+    /**
+     * Default constructor just for JPA's sake
+     */
+    @SuppressWarnings("unused")
     private Project() {
         this.contributors = new LinkedList<>();
         this.events = new LinkedList<>();

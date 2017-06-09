@@ -37,15 +37,13 @@ public class NewsletterDataProcessor {
 	 */
 	private final static String NEWSLETTER_EMAIL = "newsletter@naju-sachsen.de";
 
-	private NewsletterManager newsletterManager;
 	private NewsletterRepository newsletterRepo;
     private LocalGroupManager localGroupManager;
 
     @Autowired
-    public NewsletterDataProcessor(NewsletterManager newsletterManager, NewsletterRepository newsletterRepo, LocalGroupManager localGroupManager) {
-        Object[] params = {newsletterManager, newsletterRepo, localGroupManager};
+    public NewsletterDataProcessor(NewsletterRepository newsletterRepo, LocalGroupManager localGroupManager) {
+        Object[] params = {newsletterRepo, localGroupManager};
         Assert.noNullElements(params, "At least one parameter was null: " + Arrays.toString(params));
-        this.newsletterManager = newsletterManager;
         this.newsletterRepo = newsletterRepo;
         this.localGroupManager = localGroupManager;
     }

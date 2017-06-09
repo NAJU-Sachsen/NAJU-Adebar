@@ -31,6 +31,7 @@ public class ReferentProfile {
     /**
      * Private constructor just for JPA's sake
      */
+    @SuppressWarnings("unused")
     private ReferentProfile() {}
 
     // getter and setter
@@ -59,6 +60,7 @@ public class ReferentProfile {
     /**
      * @param personId the ID of the person to whom this profile belongs.
      */
+    @SuppressWarnings("unused")
     private void setPersonId(PersonId personId) {
         this.personId = personId;
     }

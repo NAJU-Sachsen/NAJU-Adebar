@@ -88,6 +88,7 @@ public class Event {
     /**
      * Default constructor just for JPA's sake. Not to be used from outside, hence {@code private}.
      */
+    @SuppressWarnings("unused")
     private Event() {}
 
     // getter and setter

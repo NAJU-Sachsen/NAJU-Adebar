@@ -14,7 +14,7 @@ public class Database {
      * Plots the content of a database
      * @param db database to print
      */
-    public static void dumpDatabase(CrudRepository db) {
+    public static void dumpDatabase(CrudRepository<?, ?> db) {
         for (Object entity : db.findAll()) {
             System.out.println(entity.toString());
         }
@@ -24,7 +24,7 @@ public class Database {
      * Plots the content of a database
      * @param db database to print
      */
-    public static void dumpDatabase(ReadOnlyRepository db) {
+    public static void dumpDatabase(ReadOnlyRepository<?, ?> db) {
         for (Object entity : db.findAll()) {
             System.out.println(entity.toString());
         }

@@ -3,8 +3,6 @@ package de.naju.adebar.app.events;
 import de.naju.adebar.model.events.Event;
 import de.naju.adebar.model.events.EventRepository;
 import de.naju.adebar.model.events.ReadOnlyEventRepository;
-import de.naju.adebar.model.human.Address;
-import org.javamoney.moneta.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;

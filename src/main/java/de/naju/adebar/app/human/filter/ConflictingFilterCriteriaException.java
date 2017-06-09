@@ -6,8 +6,9 @@ package de.naju.adebar.app.human.filter;
  * @author Rico Bergmann
  */
 public class ConflictingFilterCriteriaException extends RuntimeException {
+	private static final long serialVersionUID = -8483028886172543998L;
 
-    public ConflictingFilterCriteriaException() {
+	public ConflictingFilterCriteriaException() {
     }
 
     public ConflictingFilterCriteriaException(String message) {

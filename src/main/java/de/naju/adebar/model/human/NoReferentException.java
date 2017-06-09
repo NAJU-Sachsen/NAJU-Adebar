@@ -8,8 +8,9 @@ package de.naju.adebar.model.human;
  * @see PersonId
  */
 public class NoReferentException extends  RuntimeException {
+	private static final long serialVersionUID = 3205712344614424639L;
 
-    public NoReferentException() {
+	public NoReferentException() {
     }
 
     public NoReferentException(String message) {

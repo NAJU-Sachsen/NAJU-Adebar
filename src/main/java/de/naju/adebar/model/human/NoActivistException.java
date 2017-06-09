@@ -8,8 +8,9 @@ package de.naju.adebar.model.human;
  * @see PersonId
  */
 public class NoActivistException extends RuntimeException {
+	private static final long serialVersionUID = -2975195863515282271L;
 
-    public NoActivistException() {
+	public NoActivistException() {
     }
 
     public NoActivistException(String message) {

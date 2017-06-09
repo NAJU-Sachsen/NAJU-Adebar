@@ -5,8 +5,9 @@ package de.naju.adebar.model.chapter;
  * @author Rico Bergmann
  */
 public class ExistingMemberException extends RuntimeException {
+	private static final long serialVersionUID = 6311553628832999669L;
 
-    public ExistingMemberException() {
+	public ExistingMemberException() {
     }
 
     public ExistingMemberException(String message) {

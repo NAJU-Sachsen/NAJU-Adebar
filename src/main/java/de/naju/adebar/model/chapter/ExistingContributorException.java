@@ -5,7 +5,9 @@ package de.naju.adebar.model.chapter;
  * @author Rico Bergmann
  */
 public class ExistingContributorException extends RuntimeException {
-    public ExistingContributorException() {
+	private static final long serialVersionUID = -2196435583324697128L;
+
+	public ExistingContributorException() {
     }
 
     public ExistingContributorException(String message) {

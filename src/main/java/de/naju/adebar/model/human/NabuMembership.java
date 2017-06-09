@@ -1,7 +1,6 @@
 package de.naju.adebar.model.human;
 
 import javax.persistence.Embeddable;
-import javax.persistence.Transient;
 import java.io.Serializable;
 
 /**
@@ -10,7 +9,9 @@ import java.io.Serializable;
  */
 @Embeddable
 public class NabuMembership implements Serializable {
-    private String membershipNumber;
+	private static final long serialVersionUID = 8877089173523167494L;
+	
+	private String membershipNumber;
 
     // constructors
 

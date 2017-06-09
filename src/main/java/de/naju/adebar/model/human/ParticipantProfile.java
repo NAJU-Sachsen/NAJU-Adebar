@@ -36,6 +36,7 @@ public class ParticipantProfile {
     /**
      * Default constructor for JPA's sake
      */
+    @SuppressWarnings("unused")
     private ParticipantProfile() {}
 
     // getter and setter
@@ -144,6 +145,7 @@ public class ParticipantProfile {
     /**
      * @param personId the ID of the person to whom this profile belongs.
      */
+    @SuppressWarnings("unused")
     private void setPersonId(PersonId personId) {
         this.personId = personId;
     }

@@ -46,6 +46,8 @@ public class AddressFilter implements EventFilter{
                     input = input.filter(event -> event.getPlace().getAdditionalInfo().equals(address.getAdditionalInfo()));
                 }
                 return input;
+            default:
+            	assert false : "Should not have match type: " + matchType;
         }
         return null;
     }
