@@ -22,7 +22,7 @@ public class ActivistToEditActivistFormConverter {
      */
     public EditActivistForm convertToEditActivistForm(Person person) {
         if (!person.isActivist()) {
-            return new EditActivistForm(person.isArchived(), false, null);
+            return new EditActivistForm(false, false, null);
         }
 
         ActivistProfile activistProfile = person.getActivistProfile();
@@ -32,7 +32,7 @@ public class ActivistToEditActivistFormConverter {
             juleicaExpiryDate = activistProfile.getJuleicaCard().getExpiryDate() != null ? activistProfile.getJuleicaCard().getExpiryDate().format(DateTimeFormatter.ofPattern(EditActivistForm.DATE_FORMAT, Locale.GERMAN)) : "";
         }
 
-        return new EditActivistForm(person.isArchived(), activistProfile.hasJuleica(), juleicaExpiryDate);
+        return new EditActivistForm(true, activistProfile.hasJuleica(), juleicaExpiryDate);
     }
 
 }
