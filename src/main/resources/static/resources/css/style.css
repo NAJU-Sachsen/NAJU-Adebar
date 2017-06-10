@@ -158,6 +158,11 @@ fieldset.inline-options label {
     content: " \e080";
 }
 
+.no-decoration {
+    text-decoration: none;
+    font-weight: normal;
+}
+
 #main-footer {
 	position: absolute;
 	bottom: 0;
