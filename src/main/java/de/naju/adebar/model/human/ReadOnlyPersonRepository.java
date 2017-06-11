@@ -16,7 +16,7 @@ public interface ReadOnlyPersonRepository extends ReadOnlyRepository<Person, Per
     /**
      * @return all non-archived persons
      */
-    @Query("SELECT p FROM person p WHERE p.archived=false")
+    @Query("SELECT p FROM person p WHERE p.archived=0")
     Iterable<Person> findAll();
 
     /**
@@ -29,13 +29,13 @@ public interface ReadOnlyPersonRepository extends ReadOnlyRepository<Person, Per
      * @param id must not be {@code null}.
      * @return the person with that ID. This person is not archived
      */
-    @Query("SELECT p FROM person p WHERE p.id=?1 AND p.archived=false")
+    @Query("SELECT p FROM person p WHERE p.id=?1 AND p.archived=0")
     Person findOne(PersonId id);
 
     /**
      * @return the first 25 non-archived persons, ordered by their last name
      */
-    @Query(nativeQuery = true, value = "SELECT p.* FROM person p WHERE p.archived=false ORDER BY p.last_name LIMIT 25")
+    @Query(nativeQuery = true, value = "SELECT TOP 25 p.* FROM person p WHERE p.archived=0 ORDER BY p.last_name")
     Iterable<Person> findFirst25();
 
     /**
@@ -51,6 +51,6 @@ public interface ReadOnlyPersonRepository extends ReadOnlyRepository<Person, Per
     @Query("SELECT p FROM person p WHERE p.id=?1")
     Person findEntry(PersonId id);
 
-    @Query("SELECT p FROM person p WHERE p.archived=false")
+    @Query("SELECT p FROM person p WHERE p.archived=0")
     Stream<Person> streamAll();
 }
