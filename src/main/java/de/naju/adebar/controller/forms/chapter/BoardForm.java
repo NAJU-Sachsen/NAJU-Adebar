@@ -2,6 +2,7 @@ package de.naju.adebar.controller.forms.chapter;
 
 import de.naju.adebar.util.Validation;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
  * @author Rico Bergmann
  */
 public class BoardForm {
-    private String chairmanId;
+    @NotNull private String chairmanId;
     private String email;
     private List<String> memberIds;
 

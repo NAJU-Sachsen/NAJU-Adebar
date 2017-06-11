@@ -1,13 +1,15 @@
 package de.naju.adebar.controller.forms.newsletter;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * @author Rico Bergmann
  */
 public class AddNewsletterForm {
     public enum Belonging {NONE, CHAPTER, EVENT, PROJECT}
 
-    private String name;
-    private Belonging belonging;
+    @NotNull private String name;
+    @NotNull private Belonging belonging;
     private long localGroup;
 
     public AddNewsletterForm() {}

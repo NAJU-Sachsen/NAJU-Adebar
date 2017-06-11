@@ -2,6 +2,7 @@ package de.naju.adebar.controller.forms.events;
 
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
+import javax.validation.constraints.NotNull;
 
 /**
  * Model POJO for events. The fields are set by Thymeleaf when the associated form is submitted.
@@ -13,8 +14,9 @@ public class EventForm {
     public final static String DATE_TIME_FORMAT = "dd.MM.yyyy HH:mm";
     public static final CurrencyUnit CURRENCY_UNIT = Monetary.getCurrency("EUR");
 
-    private String name;
-    private String startTime, endTime;
+    @NotNull private String name;
+    @NotNull private String startTime;
+    @NotNull private String endTime;
     private String participantsLimit;
     private String participantsAge;
     private String internalParticipationFee, externalParticipationFee;
@@ -22,8 +24,7 @@ public class EventForm {
     private String belonging;
     private long localGroupId, projectId;
 
-    public EventForm() {
-    }
+    public EventForm() {}
 
     public EventForm(String name, String startTime, String endTime, String participantsLimit, String participantsAge, String internalParticipationFee, String externalParticipationFee, String street, String zip, String city) {
         this.name = name;

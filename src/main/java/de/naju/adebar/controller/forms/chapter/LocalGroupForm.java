@@ -1,5 +1,6 @@
 package de.naju.adebar.controller.forms.chapter;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -7,7 +8,7 @@ import java.util.List;
  * @author Rico Bergmann
  */
 public class LocalGroupForm {
-    private String name;
+    @NotNull private String name;
     private String street;
     private String zip;
     private String city;

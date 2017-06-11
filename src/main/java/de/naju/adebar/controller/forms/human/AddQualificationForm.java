@@ -1,5 +1,7 @@
 package de.naju.adebar.controller.forms.human;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Model POJO for adding qualifications. The fields are set by Thymeleaf when the associated form is submitted.
  * @author Rico Bergmann
@@ -8,7 +10,7 @@ public class AddQualificationForm {
 
     public enum AddType {NEW, EXISTING}
 
-    private String addType;
+    @NotNull private String addType;
     private String qualification;
     private String name;
     private String description;

@@ -1,5 +1,7 @@
 package de.naju.adebar.controller.forms.human;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Model POJO for person data. The fields are set by Thymeleaf when the associated form is submitted.
  * @author Rico Bergmann
@@ -8,9 +10,9 @@ public class EditPersonForm {
     public final static String DATE_FORMAT = "dd.MM.yyyy";
 
     // general data
-    private String firstName;
-    private String lastName;
-    private String email;
+    @NotNull private String firstName;
+    @NotNull private String lastName;
+    @NotNull private String email;
     private String phoneNumber;
     private String street;
     private String zip;

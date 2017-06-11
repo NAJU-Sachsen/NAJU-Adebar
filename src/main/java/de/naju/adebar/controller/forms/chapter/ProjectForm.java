@@ -1,5 +1,7 @@
 package de.naju.adebar.controller.forms.chapter;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Model POJO for projects. The fields are set by Thymeleaf when the associated form is submitted.
  * @author Rico Bergmann
@@ -7,9 +9,9 @@ package de.naju.adebar.controller.forms.chapter;
 public class ProjectForm {
     public final static String DATE_FORMAT = "dd.MM.yyyy";
 
-    private String name;
+    @NotNull private String name;
     private String start, end;
-    private String personInCharge;
+    @NotNull private String personInCharge;
     private long localGroupId;
 
     public ProjectForm(String name, String start, String end, String personInCharge, long localGroupId) {
