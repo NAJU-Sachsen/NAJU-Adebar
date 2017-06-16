@@ -2,18 +2,20 @@ package de.naju.adebar.util;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
  * Utility functions on streams. Mostly of mathematical nature.
+ * Beware that all of these functions (unless stated otherwise) will waste the streams given!
  * @author Rico Bergmann
  * @see Stream
  */
 public class Streams {
 
     /**
-     * Calculates a stream c, such that {@code c := a \u2229 b}
+     * Calculates a stream c, such that {@code c := a ∩ b}
      * @param a the first stream
      * @param b the second stream
      * @return c
@@ -28,6 +30,19 @@ public class Streams {
             }
         });
         return result.stream();
+    }
+
+    /**
+     * Calculates a stream c, such that {@code c := a ∪ b}
+     * @param a the first stream
+     * @param b the second stream
+     * @return c
+     */
+    public static <T> Stream<T> union(Stream<T> a, Stream<T> b) {
+        Set<T> setA = a.collect(Collectors.toSet());
+        Set<T> setB = b.collect(Collectors.toSet());
+        setA.addAll(setB);
+        return setA.stream();
     }
 
     /**
@@ -47,7 +62,7 @@ public class Streams {
      * Checks, if a stream contains a certain element. This will waste the stream!
      * @param s the stream to check
      * @param e the element to check for
-     * @return {@code true \u21D4  elem \u2208 stream}
+     * @return {@code true ⇔  elem ∈ stream}
      */
     public static <T> boolean contains(Stream<T> s, T e) {
         return s.collect(Collectors.toList()).contains(e);
