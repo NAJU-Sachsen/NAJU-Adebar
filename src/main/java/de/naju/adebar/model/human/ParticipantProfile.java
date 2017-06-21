@@ -20,7 +20,7 @@ public class ParticipantProfile {
     @Column(name = "eatingHabit") private String eatingHabits;
     @Column(name = "healthImpairment") private String healthImpairments;
     @Embedded private NabuMembership nabuMembership;
-    @Column(name = "remarks") private String remarks;
+    @Column(name = "remarks", length=512) private String remarks;
 
     // constructors
 

@@ -62,6 +62,9 @@ public class PersistentNewsletterManager implements NewsletterManager {
 	
 	@Override
 	public void subscribePersonToNewsletter(Person person, Newsletter newsletter) {
+		if (!person.hasEmail()) {
+			throw new IllegalStateException("The person has no email-address: " + person);
+		}
 		Subscriber subscriber = new Subscriber(person.getFirstName(), person.getLastName(), person.getEmail());
 		if (!subscriberRepo.findByEmail(person.getEmail()).isPresent()) {
 			subscriber = subscriberRepo.save(subscriber);

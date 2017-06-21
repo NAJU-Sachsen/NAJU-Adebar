@@ -12,7 +12,7 @@ public class EditPersonForm {
     // general data
     @NotNull private String firstName;
     @NotNull private String lastName;
-    @NotNull private String email;
+    private String email;
     private String phoneNumber;
     private String street;
     private String zip;
@@ -47,7 +47,10 @@ public class EditPersonForm {
     }
 
     public String getEmail() {
-        return email;
+    	if (email != null && !email.isEmpty()) {
+    		return email;
+    	}
+    	return null;
     }
 
     public void setEmail(String email) {

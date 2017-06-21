@@ -38,16 +38,19 @@ public class Person {
      * @param id the person's unique ID. Used as PK within the database
      * @param firstName the person's first name. May not be empty.
      * @param lastName the person's last name. May not be empty.
-     * @param email the person's email address. Must be a valid email address.
+     * @param email the person's email address. Must be a valid email address or {@code null}
      * @throws IllegalArgumentException if any of the parameters constraints are violated.
      * @see PersonFactory
      */
     Person(PersonId id, String firstName, String lastName, String email) {
-        Object[] params = {id, firstName, lastName, email};
+        Object[] params = {id, firstName, lastName};
         Assert.noNullElements(params, "No argument may be null: " + Arrays.toString(params));
         Assert.hasText(firstName, "First name may not be null nor empty, but was: " + firstName);
         Assert.hasText(lastName, "Last name may not be null nor empty, but was: " + lastName);
-        Assert.isTrue(Validation.isEmail(email), "Not a valid email address: " + email);
+
+        if (email != null && !email.isEmpty()) {
+        	Assert.isTrue(Validation.isEmail(email), "Not a valid email address: " + email);
+        }
 
         this.id = id;
         this.firstName = firstName;
@@ -112,12 +115,14 @@ public class Person {
     }
 
     /**
-     * @param email the person's email address
+     * @param email the person's email address, may be {@code null
      * @throws IllegalArgumentException if the email is not valid, i.e. does not match the email regex (Existence
      * of the address is not checked)
      */
     public void setEmail(String email) {
-        Assert.isTrue(Validation.isEmail(email), "Not a valid email address: " + email);
+    	if (email != null) {
+    		Assert.isTrue(Validation.isEmail(email), "Not a valid email address: " + email);
+    	}
         this.email = email;
     }
 
@@ -220,6 +225,13 @@ public class Person {
     @SuppressWarnings("unused")
     private void setId(PersonId id) {
         this.id = id;
+    }
+
+    /**
+     * @return {@code true} if an email address is set, {@code false} otherwise
+     */
+    public boolean hasEmail() {
+    	return email != null;
     }
 
     // normal methods

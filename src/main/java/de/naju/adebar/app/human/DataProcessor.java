@@ -21,7 +21,9 @@ public class DataProcessor {
      */
     public Iterable<String> extractEmailAddresses(Iterable<Person> persons) {
         List<String> emailAddresses = new LinkedList<>();
-        persons.forEach(p -> emailAddresses.add(p.getEmail()));
+        persons.forEach(p -> {
+        	if (p.hasEmail()) emailAddresses.add(p.getEmail());
+        });
         return emailAddresses;
     }
 
@@ -30,7 +32,7 @@ public class DataProcessor {
      * @return a {@link Stream} of all email-addresses
      */
     public Stream<String> extractEmailAddressesAsStream(Stream<Person> persons) {
-        return persons.map(Person::getEmail);
+        return persons.filter(Person::hasEmail).map(Person::getEmail);
     }
 
     /**
