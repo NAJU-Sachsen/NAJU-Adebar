@@ -162,19 +162,22 @@
                             </span>
                         </td>
                         <td th:text="${counselor.phoneNumber}">0987 65432109</td>
-                        <td></td>
+                        <td>
+                            <span th:if="${counselor.activist} AND ${counselor.getActivistProfile().hasJuleica()}" class="glyphicon glyphicon-ok text-success"></span>
+                            <span th:unless="${counselor.activist} AND ${counselor.getActivistProfile().hasJuleica()}" class="glyphicon glyphicon-remove text-danger"></span>
+                        </td>
                     </tr>
                     <tr>
                         <td>Berta Beate</td>
                         <td>01.02.3456</td>
                         <td>0987 65432109</td>
-                        <td></td>
+                        <td><span class="glyphicon glyphicon-remove text-danger"></span></td>
                     </tr>
                     <tr>
                         <td>Berta Beate</td>
                         <td>01.02.3456</td>
                         <td>0987 65432109</td>
-                        <td></td>
+                        <td><span class="glyphicon glyphicon-ok text-success"></span></td>
                     </tr>
                 </tbody>
             </table>
