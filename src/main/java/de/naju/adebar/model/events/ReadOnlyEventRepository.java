@@ -13,7 +13,7 @@ import java.util.stream.Stream;
  * @author Rico Bergmann
  */
 @Repository("ro_eventRepo")
-public interface ReadOnlyEventRepository extends ReadOnlyRepository<Event, Long> {
+public interface ReadOnlyEventRepository extends ReadOnlyRepository<Event, EventId> {
 
     /**
      * @param time the time to query for
@@ -38,7 +38,7 @@ public interface ReadOnlyEventRepository extends ReadOnlyRepository<Event, Long>
      * @param person the participant to query for
      * @return all events in which the person participates
      */
-    Iterable<Event> findByParticipantsContains(Person person);
+    Iterable<Event> findByParticipantsListParticipantsContains(Person person);
 
     /**
      * @param activist the activist to query for

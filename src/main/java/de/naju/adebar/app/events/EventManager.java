@@ -38,7 +38,7 @@ public interface EventManager {
      * @param newEvent the new event data
      * @return the updated (and saved) event
      */
-    Event updateEvent(long id, Event newEvent);
+    Event updateEvent(String id, Event newEvent);
 
     /**
      * Changes the state of a saved event. In difference to {@link #updateEvent(long, Event)} this does only modify
@@ -48,14 +48,14 @@ public interface EventManager {
      * @param eventData the event's "static" data to adopt
      * @return the updated (and saved) event
      */
-    Event adoptEventData(long eventId, Event eventData);
+    Event adoptEventData(String id, Event eventData);
 
     /**
      * Queries for a specific event
      * @param id the event's ID
      * @return an optional containing the event if it exists, otherwise the optional is empty
      */
-    Optional<Event> findEvent(long id);
+    Optional<Event> findEvent(String id);
 
     /**
      * Provides access to the underlying data

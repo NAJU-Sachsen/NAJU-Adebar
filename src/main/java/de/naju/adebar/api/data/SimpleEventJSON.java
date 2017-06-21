@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
  * @author Rico Bergmann
  */
 public class SimpleEventJSON {
-    private long id;
+    private String id;
     private String name;
     private LocalDateTime startDate, endDate;
     private String place;
@@ -21,7 +21,7 @@ public class SimpleEventJSON {
      * @param event the event to simplify
      */
     public SimpleEventJSON(Event event) {
-        this.id = event.getId();
+        this.id = event.getId().toString();
         this.name = event.getName();
         this.startDate = event.getStartTime();
         this.endDate = event.getEndTime();
@@ -31,7 +31,7 @@ public class SimpleEventJSON {
     /**
      * @return the event's id
      */
-    public long getId() {
+    public String getId() {
         return id;
     }
 

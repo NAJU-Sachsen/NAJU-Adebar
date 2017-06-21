@@ -3,9 +3,12 @@ package de.naju.adebar.util.conversion.events;
 import de.naju.adebar.controller.forms.events.EventForm;
 import de.naju.adebar.controller.forms.events.EventForm.*;
 import de.naju.adebar.model.events.Event;
+import de.naju.adebar.model.events.EventFactory;
 import de.naju.adebar.model.human.Address;
 import org.javamoney.moneta.Money;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -21,10 +24,13 @@ import static de.naju.adebar.controller.forms.events.EventForm.CURRENCY_UNIT;
  */
 @Service
 public class EventFormDataExtractor {
-
+	private EventFactory eventFactory;
     private DateTimeFormatter dateTimeFormatter;
 
-    public EventFormDataExtractor() {
+    @Autowired
+    public EventFormDataExtractor(EventFactory eventFactory) {
+    	Assert.notNull(eventFactory, "Event factory may not be null!");
+    	this.eventFactory = eventFactory;
         this.dateTimeFormatter = DateTimeFormatter.ofPattern(EventForm.DATE_TIME_FORMAT, Locale.GERMAN);
     }
 
@@ -35,7 +41,7 @@ public class EventFormDataExtractor {
     public Event extractEvent(EventForm eventForm) {
         Address address = new Address(eventForm.getStreet(), eventForm.getZip(), eventForm.getCity());
 
-        Event event = new Event(eventForm.getName(), LocalDateTime.parse(eventForm.getStartTime(), dateTimeFormatter), LocalDateTime.parse(eventForm.getEndTime(), dateTimeFormatter));
+        Event event = eventFactory.build(eventForm.getName(), LocalDateTime.parse(eventForm.getStartTime(), dateTimeFormatter), LocalDateTime.parse(eventForm.getEndTime(), dateTimeFormatter));
 
         event.setPlace(address);
 

@@ -1,11 +1,12 @@
 package de.naju.adebar.app.events;
 
 import de.naju.adebar.model.events.Event;
+import de.naju.adebar.model.events.EventFactory;
+import de.naju.adebar.model.events.EventId;
 import de.naju.adebar.model.events.EventRepository;
 import de.naju.adebar.model.events.ReadOnlyEventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -21,13 +22,15 @@ import java.util.Optional;
  */
 @Service
 public class PersistentEventManager implements EventManager {
+	private EventFactory eventFactory;
     private EventRepository eventRepo;
     private ReadOnlyEventRepository roRepo;
 
     @Autowired
-    public PersistentEventManager(EventRepository eventRepo, @Qualifier("ro_eventRepo") ReadOnlyEventRepository roRepo) {
-        Object[] params = {eventRepo, roRepo};
+    public PersistentEventManager(EventFactory eventFactory, EventRepository eventRepo, @Qualifier("ro_eventRepo") ReadOnlyEventRepository roRepo) {
+        Object[] params = {eventFactory, eventRepo, roRepo};
         Assert.noNullElements(params, "No parameter may be null, but at least one was: " + Arrays.toString(params));
+        this.eventFactory = eventFactory;
         this.eventRepo = eventRepo;
         this.roRepo = roRepo;
     }
@@ -39,15 +42,16 @@ public class PersistentEventManager implements EventManager {
 
     @Override
     public Event createEvent(String name, LocalDateTime startTime, LocalDateTime endTime) {
-        return eventRepo.save(new Event(name, startTime, endTime));
+    	Event e = eventFactory.build(name, startTime, endTime);
+        return eventRepo.save(e);
     }
 
     @Override
-    public Event updateEvent(long id, Event newEvent) {
+    public Event updateEvent(String id, Event newEvent) {
         try {
-            Method changeId = Event.class.getDeclaredMethod("setId", long.class);
+            Method changeId = Event.class.getDeclaredMethod("setId", EventId.class);
             changeId.setAccessible(true);
-            changeId.invoke(newEvent, id);
+            changeId.invoke(newEvent, new EventId(id));
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException("Error during invocation of reflection", e);
         }
@@ -56,8 +60,8 @@ public class PersistentEventManager implements EventManager {
     }
 
     @Override
-    public Event adoptEventData(long eventId, Event eventData) {
-        Event event = findEvent(eventId).orElseThrow(() -> new IllegalArgumentException("No event with ID " + eventId));
+    public Event adoptEventData(String eventId, Event eventData) {
+    	Event event = findEvent(eventId).orElseThrow(() -> new IllegalArgumentException("No event with ID " + eventId));
         event.setName(eventData.getName());
         event.updateTimePeriod(eventData.getStartTime(), eventData.getEndTime());
         event.setParticipantsLimit(eventData.getParticipantsLimit());
@@ -70,17 +74,13 @@ public class PersistentEventManager implements EventManager {
     }
 
     @Override
-    public Optional<Event> findEvent(long id) {
-        return eventRepo.exists(id) ? Optional.of(eventRepo.findOne(id)) : Optional.empty();
+    public Optional<Event> findEvent(String id) {
+    	EventId eventId = new EventId(id);
+        return eventRepo.exists(eventId) ? Optional.of(eventRepo.findOne(eventId)) : Optional.empty();
     }
 
     @Override
     public ReadOnlyEventRepository repository() {
         return roRepo;
-    }
-
-    @Scheduled(cron = "* * 0 * * *")
-    private void updateEventStatus() {
-
     }
 }

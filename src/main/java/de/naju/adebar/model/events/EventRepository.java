@@ -9,4 +9,4 @@ import org.springframework.stereotype.Repository;
  * @see Event
  */
 @Repository("eventRepo")
-public interface EventRepository extends ReadOnlyEventRepository, CrudRepository<Event, Long> {}
+public interface EventRepository extends ReadOnlyEventRepository, CrudRepository<Event, EventId> {}

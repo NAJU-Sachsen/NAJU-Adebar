@@ -1,6 +1,8 @@
 package de.naju.adebar.app.events;
 
 import de.naju.adebar.model.events.Event;
+import de.naju.adebar.model.events.EventFactory;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,12 +24,13 @@ import java.time.LocalDateTime;
 @Component
 public class PersistentEventManagerIntegrationTest {
     @Autowired private PersistentEventManager eventManager;
+    @Autowired private EventFactory eventFactory;
 
     private Event hifa;
 
     @Before
     public void setUp() {
-        hifa = new Event("HIFA", LocalDateTime.now().minusDays(1), LocalDateTime.now().plusDays(1));
+        hifa = eventFactory.build("HIFA", LocalDateTime.now().minusDays(1), LocalDateTime.now().plusDays(1));
     }
 
     @Test
@@ -40,7 +43,7 @@ public class PersistentEventManagerIntegrationTest {
         String newName = "afih";
         hifa = eventManager.saveEvent(hifa);
         hifa.setName(newName);
-        hifa = eventManager.updateEvent(hifa.getId(), hifa);
+        hifa = eventManager.updateEvent(hifa.getId().toString(), hifa);
         Assert.assertEquals("Not updated correctly", newName, hifa.getName());
     }
 

@@ -172,3 +172,21 @@ fieldset.inline-options label {
 .panel-menu .panel-title .badge {
     margin-top: -3px;
 }
+
+.hover-primary:hover {
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+}
+
+.hover-success:hover {
+    color: #fff;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+}
+
+.hover-danger:hover {
+    color: #fff;
+    background-color: #d9534f;
+    border-color: #d43f3a;
+}

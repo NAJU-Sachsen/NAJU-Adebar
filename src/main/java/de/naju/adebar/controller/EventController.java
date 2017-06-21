@@ -162,7 +162,7 @@ public class EventController {
             case LOCALGROUP:
                 LocalGroup localGroup = localGroupManager.findLocalGroup(eventForm.getLocalGroupId()).orElseThrow(IllegalArgumentException::new);
                 localGroup.addEvent(event);
-                eventManager.updateEvent(event.getId(), event);
+                localGroupManager.updateLocalGroup(localGroup.getId(), localGroup);
                 break;
         }
 
@@ -176,7 +176,7 @@ public class EventController {
      * @return the event's detail view
      */
     @RequestMapping("/events/{eid}")
-    public String showEventDetails(@PathVariable("eid") Long eventId, Model model) {
+    public String showEventDetails(@PathVariable("eid") String eventId, Model model) {
         Event event = eventManager.findEvent(eventId).orElseThrow(IllegalArgumentException::new);
         Iterable<Person> organizers = event.getOrganizers();
         Iterable<Person> counselors = event.getCounselors();
@@ -209,7 +209,7 @@ public class EventController {
      * @return the event's detail view
      */
     @RequestMapping("/events/{eid}/update")
-    public String updateEvent(@PathVariable("eid") Long eventId, @ModelAttribute("editEventForm") EventForm eventForm, RedirectAttributes redirAttr) {
+    public String updateEvent(@PathVariable("eid") String eventId, @ModelAttribute("editEventForm") EventForm eventForm, RedirectAttributes redirAttr) {
 
         eventManager.adoptEventData(eventId, eventFormDataExtractor.extractEvent(eventForm));
 
@@ -225,7 +225,7 @@ public class EventController {
      * @return the event's detail view
      */
     @RequestMapping("/events/{eid}/participants/add")
-    public String addParticipant(@PathVariable("eid") Long eventId, @RequestParam("person-id") String personId, RedirectAttributes redirAttr) {
+    public String addParticipant(@PathVariable("eid") String eventId, @RequestParam("person-id") String personId, RedirectAttributes redirAttr) {
         Event event = eventManager.findEvent(eventId).orElseThrow(IllegalArgumentException::new);
         Person person = personManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
 
@@ -253,7 +253,7 @@ public class EventController {
      * @return the event's detail view
      */
     @RequestMapping("/events/{eid}/participants/force-add")
-    public String addParticipantIgnoreAge(@PathVariable("eid") Long eventId, @RequestParam("person-id") String personId, RedirectAttributes redirAttr) {
+    public String addParticipantIgnoreAge(@PathVariable("eid") String eventId, @RequestParam("person-id") String personId, RedirectAttributes redirAttr) {
         Event event = eventManager.findEvent(eventId).orElseThrow(IllegalArgumentException::new);
         Person person = personManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
 
@@ -278,7 +278,7 @@ public class EventController {
      * @return the event's detail view
      */
     @RequestMapping("/events/{eid}/participants/update")
-    public String updateParticipant(@PathVariable("eid") Long eventId, @RequestParam("person-id") String personId, @RequestParam(value = "fee-payed", required = false) boolean feePayed, @RequestParam(value = "form-received", required = false) boolean formReceived, RedirectAttributes redirAttr) {
+    public String updateParticipant(@PathVariable("eid") String eventId, @RequestParam("person-id") String personId, @RequestParam(value = "fee-payed", required = false) boolean feePayed, @RequestParam(value = "form-received", required = false) boolean formReceived, RedirectAttributes redirAttr) {
         Event event = eventManager.findEvent(eventId).orElseThrow(IllegalArgumentException::new);
         Person person = personManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
 
@@ -300,7 +300,7 @@ public class EventController {
      * @return the event's detail view
      */
     @RequestMapping("/events/{eid}/participants/remove")
-    public String removeParticipant(@PathVariable("eid") Long eventId, @RequestParam("person-id") String personId, RedirectAttributes redirAttr) {
+    public String removeParticipant(@PathVariable("eid") String eventId, @RequestParam("person-id") String personId, RedirectAttributes redirAttr) {
         Event event = eventManager.findEvent(eventId).orElseThrow(IllegalArgumentException::new);
         Person person = personManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
 
@@ -319,7 +319,7 @@ public class EventController {
      * @return the event's detail view
      */
     @RequestMapping("/events/{eid}/counselors/add")
-    public String addCounselor(@PathVariable("eid") Long eventId, @RequestParam("person-id") String personId, RedirectAttributes redirAttr) {
+    public String addCounselor(@PathVariable("eid") String eventId, @RequestParam("person-id") String personId, RedirectAttributes redirAttr) {
         Event event = eventManager.findEvent(eventId).orElseThrow(IllegalArgumentException::new);
         Person activist = personManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
 
@@ -342,7 +342,7 @@ public class EventController {
      * @return the event's detail view
      */
     @RequestMapping("/events/{eid}/counselors/remove")
-    public String removeCounselor(@PathVariable("eid") Long eventId, @RequestParam("person-id") String personId, RedirectAttributes redirAttr) {
+    public String removeCounselor(@PathVariable("eid") String eventId, @RequestParam("person-id") String personId, RedirectAttributes redirAttr) {
         Event event = eventManager.findEvent(eventId).orElseThrow(IllegalArgumentException::new);
         Person activist = personManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
 
@@ -361,7 +361,7 @@ public class EventController {
      * @return the event's detail view
      */
     @RequestMapping("/events/{eid}/organizers/add")
-    public String addOrganizer(@PathVariable("eid") Long eventId, @RequestParam("person-id") String personId, RedirectAttributes redirAttr) {
+    public String addOrganizer(@PathVariable("eid") String eventId, @RequestParam("person-id") String personId, RedirectAttributes redirAttr) {
         Event event = eventManager.findEvent(eventId).orElseThrow(IllegalArgumentException::new);
         Person activist = personManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
 
@@ -384,7 +384,7 @@ public class EventController {
      * @return the event's detail view
      */
     @RequestMapping("/events/{eid}/organizers/remove")
-    public String removeOrganizer(@PathVariable("eid") Long eventId, @RequestParam("person-id") String personId, RedirectAttributes redirAttr) {
+    public String removeOrganizer(@PathVariable("eid") String eventId, @RequestParam("person-id") String personId, RedirectAttributes redirAttr) {
         Event event = eventManager.findEvent(eventId).orElseThrow(IllegalArgumentException::new);
         Person activist = personManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
 
@@ -402,7 +402,7 @@ public class EventController {
      * @return the print view
      */
     @RequestMapping("/events/{eid}/print")
-    public String displayPrintView(@PathVariable("eid") Long eventId, Model model) {
+    public String displayPrintView(@PathVariable("eid") String eventId, Model model) {
         Event event = eventManager.findEvent(eventId).orElseThrow(IllegalArgumentException::new);
         model.addAttribute("event", event);
         return "eventPrint";

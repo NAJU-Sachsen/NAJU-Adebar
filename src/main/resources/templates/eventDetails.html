@@ -863,6 +863,59 @@
                             </tr>
                         </tbody>
                     </table>
+                    <div id="reservations">
+                        <hr />
+                        <div class="panel-body">
+                            <h3>Reservierungen</h3>
+                        </div>
+                        <table class="table table-striped table-hover reservations">
+                            <thead>
+                                <tr class="row">
+                                    <th class="col-md-6">Beschreibung</th>
+                                    <th class="col-md-2">Plätze</th>
+                                    <th class="col-md-3">Kontakt</th>
+                                    <th class="col-md-1">Bearbeiten</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="row reservation" th:each="reservation : ${event.reservations}">
+                                    <td class="col-md-6 description" th:text="${reservation.description}">NAJU Bundesvorstand</td>
+                                    <td class="col-md-2 slots" th:text="${reservation.numberOfSlots}">9</td>
+                                    <td class="col-md-3 email"><a href="mailto:" th:href="|mailto:${reservation.contactEmail}|" th:text="${reservation.contactEmail}">vorstand@naju.de</a></td>
+                                    <td class="col-md-1 controls">
+                                        <div class="btn-group btn-group-xs" role="group">
+                                            <button type="button" class="btn btn-default hover-primary edit-reservation"><span class="glyphicon glyphicon-pencil"></span></button>
+                                            <button type="button" class="btn btn-default hover-danger remove-reservation" th:attr="data-description=${reservation.description}"><span class="glyphicon glyphicon-trash"></span></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="row new-reservation">
+                                    <td class="col-md-6"><input type="text" class="form-control input-sm reservation-description" placeholder="Beschreibung" required="required" /></td>
+                                    <td class="col-md-2"><input type="number" class="form-control text-right input-sm reservation-slots" value="1" min="1" th:max="${event.remainingCapacity}" /></td>
+                                    <td class="col-md-3"><input type="email" class="form-control input-sm reservation-email" placeholder="Kontakt E-Mail" /></td>
+                                    <td class="col-md-1" style="vertical-align:middle;">
+                                        <div class="btn-group btn-group-xs reservation-controls" role="group">
+                                            <button type="button" class="btn btn-default hover-success add"><span class="glyphicon glyphicon-ok"></span></button>
+                                            <button type="button" class="btn btn-default  hover-danger cancel"><span class="glyphicon glyphicon-remove"></span></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="panel-body">
+                            <div class="container">
+                                <div id="reservation-transmission-error" class="alert alert-danger" role="alert">
+                                   <p>
+                                      Die Daten konnten nicht aktualisiert werden
+                                   </p>
+                                </div>
+                            </div>
+
+                            <div class="pull-right">
+                                <button type="button" class="btn btn-default add-reservation" data-toggle="modal" data-target="#add-reservation-modal" th:disabled="${event.bookedOut}"><span class="glyphicon glyphicon-plus"></span> Hinzufügen</button>
+                            </div>
+                        </div>
+                    </div>
                     <footer class="panel-footer text-success" th:if="${false}">
                         Die Veranstaltung ist (fast) ausgebucht
                     </footer>
@@ -895,6 +948,9 @@
              $('#participants').tablesorter();
          });
     </script>
+
+    <input type="hidden" id="event-id" value="-1" th:value="${event.id}" />
+    <input type="hidden" id="event-remaining-capactiy" value="-1" th:value="${event.remainingCapacity}" />
 
 </main>
 <script src="../static/resources/js/displayMatchingPersons.js" th:src="@{/resources/js/displayMatchingPersons.js}"></script>

@@ -13,26 +13,27 @@ import java.util.*;
 
 /**
  * Abstraction of an event. It may be a regular camp or any other kind of event such as workshops or presentations.
+ * Maybe there will be more precise classes for the different event-types one day..
  * @author Rico Bergmann
  */
 @Entity(name = "event")
 public class Event {
     public enum EventStatus {PLANNED, RUNNING, PAST, CANCELLED}
 
-    @Id @GeneratedValue @Column(name = "id") private long id;
+    @EmbeddedId @Column(name = "id") private EventId id;
     @Column(name = "name") private String name;
     @Column(name = "startTime") private LocalDateTime startTime;
     @Column(name = "endTime") private LocalDateTime endTime;
-    @Column(name = "participantsLimit") private int participantsLimit;
+
     @Column(name = "minParticipantAge") private int minimumParticipantAge;
     @Column(name = "intParticipationFee", length = 2048) private Money internalParticipationFee;
     @Column(name = "extParticipationFee", length = 2048) private Money externalParticipationFee;
     @Embedded private Address place;
-    @ManyToMany(cascade = CascadeType.ALL) private List<Person> participants;
     @ManyToMany(cascade = CascadeType.ALL) private List<Person> counselors;
     @ManyToMany(cascade = CascadeType.ALL) private List<Person> organizers;
-    @OneToMany(cascade = CascadeType.ALL) private Map<Person, ParticipationInfo> participationInfo;
     @ElementCollection private List<Lecture> lectures;
+
+    @OneToOne(cascade = CascadeType.ALL) @PrimaryKeyJoinColumn private ParticipantsList participantsList;
 
     /**
      * Simplified constructor initializing the most important data
@@ -40,8 +41,8 @@ public class Event {
      * @param startTime the event's start time
      * @param endTime the event's end time
      */
-    public Event(String name, LocalDateTime startTime, LocalDateTime endTime) {
-        this(name, startTime, endTime, Integer.MAX_VALUE, 0, null, null, new Address("", "", ""));
+    Event(EventId id, String name, LocalDateTime startTime, LocalDateTime endTime) {
+        this(id, name, startTime, endTime, Integer.MAX_VALUE, 0, null, null, new Address("", "", ""));
     }
 
     /**
@@ -55,8 +56,9 @@ public class Event {
      * @param place the address where the event takes place
      * @throws IllegalArgumentException if any of the fields' contracts is violated. Refer to the setter methods for further information about those contracts.
      */
-    public Event(String name, LocalDateTime startTime, LocalDateTime endTime, int participantsLimit, int minimumParticipantAge, Money internalParticipationFee, Money externalParticipationFee, Address place) {
-        Assert.hasText(name, "Name must contain text but was: " + name);
+    Event(EventId id, String name, LocalDateTime startTime, LocalDateTime endTime, int participantsLimit, int minimumParticipantAge, Money internalParticipationFee, Money externalParticipationFee, Address place) {
+        Assert.notNull(id, "Event id may not be null!");
+    	Assert.hasText(name, "Name must contain text but was: " + name);
         Assert.notNull(startTime, "Start time must not be null!");
         Assert.notNull(endTime, "End time must not be null!");
         Assert.isTrue(!startTime.isAfter(endTime), "Start time must be before end time");
@@ -70,19 +72,18 @@ public class Event {
             Assert.isTrue(externalParticipationFee.isPositiveOrZero(), "External participation fee may not be negative, but was: " + externalParticipationFee);
         }
 
+        this.id = id;
         this.name = name;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.participantsLimit = participantsLimit;
         this.minimumParticipantAge = minimumParticipantAge;
         this.internalParticipationFee = internalParticipationFee;
         this.externalParticipationFee = externalParticipationFee;
         this.place = place;
-        this.participants = new LinkedList<>();
         this.counselors = new LinkedList<>();
         this.organizers = new LinkedList<>();
-        this.participationInfo = new HashMap<>();
         this.lectures = new LinkedList<>();
+        this.participantsList = new ParticipantsList(this, participantsLimit);
     }
 
     /**
@@ -96,7 +97,7 @@ public class Event {
     /**
      * @return the event's ID (= primary key)
      */
-    public long getId() {
+    public EventId getId() {
         return id;
     }
 
@@ -163,8 +164,8 @@ public class Event {
     /**
      * @return the number of persons that may at most participate
      */
-    public int getParticipantsLimit() {
-        return participantsLimit;
+    @Transient public int getParticipantsLimit() {
+        return participantsList.getParticipantsLimit();
     }
 
     /**
@@ -173,7 +174,7 @@ public class Event {
      */
     public void setParticipantsLimit(int participantsLimit) {
         Assert.isTrue(participantsLimit > 0, "Participants limit must be positive, but was: " + participantsLimit);
-        this.participantsLimit = participantsLimit;
+        this.participantsList.setParticipantsLimit(participantsLimit);
     }
 
     /**
@@ -247,8 +248,8 @@ public class Event {
     /**
      * @return the persons who participate in the event
      */
-    public Iterable<Person> getParticipants() {
-        return participants;
+    @Transient public Iterable<Person> getParticipants() {
+        return participantsList.getParticipants().keySet();
     }
 
     /**
@@ -256,13 +257,7 @@ public class Event {
      */
     @Transient
     public Iterable<Person> getParticipantsWithFeeNotPayed() {
-        List<Person> persons = new LinkedList<>();
-        participants.forEach(p -> {
-            if (!participationInfo.get(p).isParticipationFeePayed()) {
-                persons.add(p);
-            }
-        });
-        return persons;
+        return participantsList.getParticipantsWithFeeNotPayed();
     }
 
     /**
@@ -270,13 +265,14 @@ public class Event {
      */
     @Transient
     public Iterable<Person> getParticipantsWithFormNotReceived() {
-        List<Person> persons = new LinkedList<>();
-        participants.forEach(p -> {
-            if (!participationInfo.get(p).isRegistrationFormReceived()) {
-                persons.add(p);
-            }
-        });
-        return persons;
+        return participantsList.getParticipantsWithFormNotReceived();
+    }
+
+    /**
+     * @return all reservations for the event
+     */
+    public Iterable<Reservation> getReservations() {
+    	return participantsList.getReservations();
     }
 
     /**
@@ -306,14 +302,14 @@ public class Event {
      * @return information about each participant
      * @see ParticipationInfo
      */
-    public Map<Person, ParticipationInfo> getParticipationInfo() {
-        return Collections.unmodifiableMap(participationInfo);
+    @Transient public Map<Person, ParticipationInfo> getParticipationInfo() {
+        return participantsList.getParticipants();
     }
 
     /**
      * @param id the event's id
      */
-    protected void setId(long id) {
+    protected void setId(EventId id) {
         this.id = id;
     }
 
@@ -322,13 +318,6 @@ public class Event {
      */
     protected void setLectures(List<Lecture> lectures) {
         this.lectures = lectures;
-    }
-
-    /**
-     * @param participants the event's participants
-     */
-    protected void setParticipants(List<Person> participants) {
-        this.participants = participants;
     }
 
     /**
@@ -344,12 +333,16 @@ public class Event {
     protected void setOrganizers(List<Person> organizers) {
         this.organizers = organizers;
     }
-
-    /**
-     * @param participationInfo information about each participant
-     */
-    protected void setParticipationInfo(Map<Person, ParticipationInfo> participationInfo) {
-        this.participationInfo = participationInfo;
+    
+    protected ParticipantsList getParticipantsList() {
+    	return participantsList;
+    }
+    
+    protected void setParticipantsList(ParticipantsList participantsList) {
+    	if (participantsList.getEvent() != this.id) {
+    		throw new IllegalArgumentException();
+    	}
+    	this.participantsList = participantsList;
     }
 
     // "advanced" getter
@@ -358,50 +351,69 @@ public class Event {
      * @return the number of participants
      */
     @Transient public int getParticipantsCount() {
-        return participants.size();
+        return participantsList.getParticipantsCount();
     }
 
     /**
      * @return {@code true} if an participant limit was specified, {@code false} otherwise
      */
     public boolean hasParticipantsLimit() {
-        return participantsLimit > 0 && participantsLimit != Integer.MAX_VALUE;
+        return participantsList.hasParticipantsLimit();
     }
 
     /**
      * @return the number of spare participation slots
      */
-    @Transient
-    public int getRemainingCapacity() {
-        if (hasParticipantsLimit()) {
-            return Integer.MAX_VALUE;
-        }
-        return participantsLimit - getParticipantsCount();
+    @Transient public int getRemainingCapacity() {
+        return participantsList.getRemainingCapacity();
     }
 
     /**
      * @return {@code true} if no more persons may participate
      */
-    @Transient
-    public boolean isBookedOut() {
-        return hasParticipantsLimit() && getParticipantsCount() == getParticipantsLimit();
+    @Transient public boolean isBookedOut() {
+        return participantsList.isBookedOut();
+    }
+    
+    /**
+     * @return {@code true} if there are reservations for this event, or {@code false} otherwise
+     */
+    @Transient public boolean hasReservations() {
+        return participantsList.hasReservations();
     }
 
     /**
      * @param person the person to check
      * @return {@code true} if the person may participate in the event regarding to age-restrictions, {@code false} otherwise
+     * @throws IllegalArgumentException if the person is no camp participant
      */
-    @Transient
-    public boolean isOldEnough(Person person) {
-        try {
-            return person.getParticipantProfile().calculateAge() > minimumParticipantAge;
-        } catch (IllegalStateException e) {
-            return false;
+    @Transient public boolean satisfiesAgeRestrictions(Person person) {
+        if (!person.isParticipant()) {
+        	throw new IllegalArgumentException("Person is not a camp participant: " + person);
+        } else if (!person.getParticipantProfile().hasDateOfBirth()) {
+        	return true;
         }
+        return person.getParticipantProfile().calculateAge() >= minimumParticipantAge;
+    }
+    
+    /**
+     * Queries for specific reservation data
+     * @param description the description (= ID) of the reservation to query for
+     * @return the reservation
+     */
+    @Transient public Reservation getReservationFor(String description) {
+    	return participantsList.getReservationFor(description);
     }
 
     // modification methods
-
+    
+    /**
+     * Updates start and end time simultaneously. Useful to prevent contract violations that would occur when doing the
+     * same through a sequential call to the related setters
+     * @param startTime
+     * @param endTime
+     * @throws IllegalArgumentException if {@code startTime < endTime} or one of the parameters is {@code null}
+     */
     public void updateTimePeriod(LocalDateTime startTime, LocalDateTime endTime) {
         Assert.notNull(startTime, "Start time may not be null!");
         Assert.notNull(endTime, "End time may not be null!");
@@ -413,7 +425,7 @@ public class Event {
     /**
      * Adds a new participant
      * @param person the person to participate in the event
-     * @throws NoParticipantException if the person is no participant
+     * @throws NoParticipantException if the person is not registered as a possible participant
      * @throws ExistingParticipantException if the person already participates
      * @throws PersonIsTooYoungException if the person does not have the required age
      * @throws BookedOutException if no more persons may participate
@@ -425,13 +437,10 @@ public class Event {
         }
         else if (isParticipant(person)) {
             throw new ExistingParticipantException("Person does already participate: " + person);
-        } else if (!isOldEnough(person)) {
+        } else if (!satisfiesAgeRestrictions(person)) {
             throw new PersonIsTooYoungException(String.format("Person is too young: must be %d years old but was born on %s", minimumParticipantAge, person.getParticipantProfile().getDateOfBirth()));
-        } else if (isBookedOut()) {
-            throw new BookedOutException("The event is booked out: " + getParticipantsCount() + " participants");
         }
-        participants.add(person);
-        participationInfo.put(person, new ParticipationInfo());
+        participantsList.addParticipant(person);
     }
 
     /**
@@ -445,13 +454,8 @@ public class Event {
         Assert.notNull(person, "Participant to add may not be null!");
         if (!person.isParticipant()) {
             throw new NoParticipantException("Person is no camp participant: " + person);
-        } else if (isParticipant(person)) {
-            throw new ExistingParticipantException("Person does already participate: " + person);
-        } else if (isBookedOut()) {
-            throw new BookedOutException("The event is booked out: " + getParticipantsCount() + " participants");
         }
-        participants.add(person);
-        participationInfo.put(person, new ParticipationInfo());
+        participantsList.addParticipant(person);
     }
 
     /**
@@ -459,11 +463,7 @@ public class Event {
      * @throws IllegalArgumentException if the person did not participate
      */
     public void removeParticipant(Person person) {
-        if (!isParticipant(person)) {
-            throw new IllegalArgumentException("Person does not participate: " + person);
-        }
-        participants.remove(person);
-        participationInfo.remove(person);
+        participantsList.removeParticipant(person);
     }
 
     /**
@@ -471,7 +471,7 @@ public class Event {
      * @return {@code true} if the person participates in the event, {@code false} otherwise
      */
     public boolean isParticipant(Person person) {
-        return participants.contains(person);
+        return participantsList.isParticipant(person);
     }
 
     /**
@@ -479,10 +479,7 @@ public class Event {
      * @return the participation info
      */
     public ParticipationInfo getParticipationInfo(Person person) {
-        if (!isParticipant(person)) {
-            throw new IllegalArgumentException("Person does not participate: " + person);
-        }
-        return participationInfo.get(person);
+        return participantsList.getParticipationInfoFor(person);
     }
 
     /**
@@ -494,9 +491,62 @@ public class Event {
             throw new IllegalArgumentException("Person does not participate: " + person);
         }
         Assert.notNull(newInfo, "New participation info may not be null!");
-        participationInfo.put(person, newInfo);
+        participantsList.updateParticipationInfoFor(person, newInfo);
     }
-
+    
+    /**
+     * Creates a new reservation
+     * @param description the description of the reservation
+     * @return the new reservation
+     */
+    public Reservation addReservationFor(String description) {
+    	Reservation reservation = new Reservation(description);
+    	participantsList.addReservation(reservation);
+    	return reservation;
+    }
+    
+    /**
+     * Creates a new reservation
+     * @param description the description of the reservation
+     * @param numberOfSlots the capacity that should be reserved
+     * @return the new reservation
+     */
+    public Reservation addReservationFor(String description, int numberOfSlots) {
+    	Reservation reservation = new Reservation(description, numberOfSlots);
+    	participantsList.addReservation(reservation);
+    	return reservation;
+    }
+    
+    /**
+     * Creates a new reservation
+     * @param description the description of the reservation
+     * @param numberOfSlots the capacity that should be reserved
+     * @param email an email to contact for the reservation
+     * @return the new reservation
+     */
+    public Reservation addReservationFor(String description, int numberOfSlots, String email) {
+    	Reservation reservation = new Reservation(description, numberOfSlots, email);
+    	participantsList.addReservation(reservation);
+    	return reservation;
+    }
+    
+    /**
+     * Deletes a reservation
+     * @param description the description (= ID) of the reservation
+     */
+    public void removeReservation(String description) {
+    	participantsList.removeReservation(description);
+    }
+    
+    /**
+     * Updates a reservation
+     * @param description the description (= ID) of the reservation
+     * @param newData the new data to use
+     */
+    public void updateReservation(String description, Reservation newData) {
+    	participantsList.updateReservation(description, newData);
+    }
+    
     /**
      * @param person the activist to make counselor
      * @throws IllegalArgumentException if the activist is already a counselor
@@ -601,57 +651,37 @@ public class Event {
         }
         lectures.remove(lecture);
     }
-
+    
     // overridden from Object
+    
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Event event = (Event) o;
-
-        if (participantsLimit != event.participantsLimit) return false;
-        if (minimumParticipantAge != event.minimumParticipantAge) return false;
-        if (!name.equals(event.name)) return false;
-        if (!startTime.equals(event.startTime)) return false;
-        if (!endTime.equals(event.endTime)) return false;
-        if (internalParticipationFee != null ? !internalParticipationFee.equals(event.internalParticipationFee) : event.internalParticipationFee != null)
-            return false;
-        if (place != null ? !place.equals(event.place) : event.place != null) return false;
-        if (!participants.equals(event.participants)) return false;
-        if (!counselors.equals(event.counselors)) return false;
-        if (!organizers.equals(event.organizers)) return false;
-        if (!participationInfo.equals(event.participationInfo)) return false;
-        return lectures.equals(event.lectures);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = name.hashCode();
-        result = 31 * result + startTime.hashCode();
-        result = 31 * result + endTime.hashCode();
-        result = 31 * result + participantsLimit;
-        result = 31 * result + minimumParticipantAge;
-        result = 31 * result + (internalParticipationFee != null ? internalParticipationFee.hashCode() : 0);
-        result = 31 * result + (place != null ? place.hashCode() : 0);
-        result = 31 * result + participants.hashCode();
-        result = 31 * result + counselors.hashCode();
-        result = 31 * result + organizers.hashCode();
-        result = 31 * result + participationInfo.hashCode();
-        result = 31 * result + lectures.hashCode();
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        return "Event{" +
-                "name='" + name + '\'' +
-                ", startTime=" + startTime +
-                ", endTime=" + endTime +
-                ", place=" + place +
-                ", participants=" + participants +
-                ", counselors=" + counselors +
-                '}';
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof Event))
+			return false;
+		Event other = (Event) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
+	
+	@Override
+	public String toString() {
+		return "Event [id=" + id + ", name=" + name + ", startTime=" + startTime + ", endTime=" + endTime
+				+ ", participantsCount=" + getParticipantsCount() + ", bookedOut=" + isBookedOut() + "]";
+	}
 }
