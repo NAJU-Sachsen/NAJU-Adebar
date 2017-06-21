@@ -80,10 +80,12 @@ $('#edit-participant-modal').on('show.bs.modal', function(event) {
     var id = button.data('id');
     var feePayed = button.data('fee-payed');
     var formReceived = button.data('form-received');
+    var remarks = button.data('remarks');
 
     $('#edit-participant-id').val(id);
     $('#edit-participant-fee-payed').prop('checked', feePayed);
     $('#edit-participant-form-received').prop('checked', formReceived);
+    $('#edit-participant-remarks').val(remarks);
 
     $('#remove-participant-id').val(id);
 });
@@ -106,6 +108,46 @@ $('#remove-organizer-modal').on('show.bs.modal', function(event) {
     $(this).find('input[disabled]').val(name);
     $(this).find('input[type=hidden]').val(id);
 
+});
+
+$('#add-personToContact-search-btn').on('click', function() {
+    var table = '#add-personToContact-tablebody';
+    var firstname = $('#add-personToContact-search-firstname').val();
+    var lastname = $('#add-personToContact-search-lastname').val();
+    var city = $('#add-personToContact-search-city').val();
+
+    var request = {
+        async: true,
+        data: {
+            firstname: firstname,
+            lastname: lastname,
+            city: city
+        },
+        dataType: 'json',
+        method: 'POST',
+        success: function(response) {
+            displayMatchingPersons(table, response);
+        },
+        url: '/api/persons/simpleSearch'
+    };
+
+    $.ajax(request);
+});
+
+$('#edit-personToContact-modal').on('show.bs.modal', function(event) {
+    var row = $(event.relatedTarget);
+    var id = row.data('id');
+    var name = row.find('a.name').text();
+    var remarks = row.find('td.remarks').text();
+
+    console.log('name ' + name);
+    console.log('remarks ' + remarks);
+
+    $('#edit-personToContact-id').val(id);
+    $('#edit-personToContact').find('input.name').val(name);
+    $('#edit-personToContact').find('input.remarks').val(remarks);
+
+    $('#remove-personToContact-id').val(id);
 });
 
 // dynamic reservation table

@@ -1,15 +1,30 @@
 package de.naju.adebar.model.events;
 
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Transient;
+
+import org.javamoney.moneta.Money;
+import org.springframework.util.Assert;
+
 import de.naju.adebar.model.human.Address;
 import de.naju.adebar.model.human.NoActivistException;
 import de.naju.adebar.model.human.NoParticipantException;
 import de.naju.adebar.model.human.Person;
-import org.javamoney.moneta.Money;
-import org.springframework.util.Assert;
-
-import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.*;
 
 /**
  * Abstraction of an event. It may be a regular camp or any other kind of event such as workshops or presentations.
@@ -31,6 +46,7 @@ public class Event {
     @Embedded private Address place;
     @ManyToMany(cascade = CascadeType.ALL) private List<Person> counselors;
     @ManyToMany(cascade = CascadeType.ALL) private List<Person> organizers;
+    @ElementCollection private Map<Person, String> personsToContact;
     @ElementCollection private List<Lecture> lectures;
 
     @OneToOne(cascade = CascadeType.ALL) @PrimaryKeyJoinColumn private ParticipantsList participantsList;
@@ -82,6 +98,7 @@ public class Event {
         this.place = place;
         this.counselors = new LinkedList<>();
         this.organizers = new LinkedList<>();
+        this.personsToContact = new HashMap<>();
         this.lectures = new LinkedList<>();
         this.participantsList = new ParticipantsList(this, participantsLimit);
     }
@@ -290,6 +307,13 @@ public class Event {
     }
 
     /**
+     * @return all persons that should be contacted for the event, in a map as {@code person -> remark}
+     */
+    public Map<Person, String> getPersonsToContact() {
+    	return Collections.unmodifiableMap(personsToContact);
+    }
+
+    /**
      * @return the lectures held during the event
      */
     public Iterable<Lecture> getLectures() {
@@ -333,11 +357,18 @@ public class Event {
     protected void setOrganizers(List<Person> organizers) {
         this.organizers = organizers;
     }
-    
+
+    /**
+     * @param personsToContact all persons that should be contacted for the event, in a map as {@code person -> remark}
+     */
+    protected void setPersonsToContact(Map<Person, String> personsToContact) {
+    	this.personsToContact = personsToContact;
+    }
+
     protected ParticipantsList getParticipantsList() {
     	return participantsList;
     }
-    
+
     protected void setParticipantsList(ParticipantsList participantsList) {
     	if (participantsList.getEvent() != this.id) {
     		throw new IllegalArgumentException();
@@ -374,7 +405,7 @@ public class Event {
     @Transient public boolean isBookedOut() {
         return participantsList.isBookedOut();
     }
-    
+
     /**
      * @return {@code true} if there are reservations for this event, or {@code false} otherwise
      */
@@ -395,7 +426,7 @@ public class Event {
         }
         return person.getParticipantProfile().calculateAge() >= minimumParticipantAge;
     }
-    
+
     /**
      * Queries for specific reservation data
      * @param description the description (= ID) of the reservation to query for
@@ -406,7 +437,7 @@ public class Event {
     }
 
     // modification methods
-    
+
     /**
      * Updates start and end time simultaneously. Useful to prevent contract violations that would occur when doing the
      * same through a sequential call to the related setters
@@ -493,7 +524,7 @@ public class Event {
         Assert.notNull(newInfo, "New participation info may not be null!");
         participantsList.updateParticipationInfoFor(person, newInfo);
     }
-    
+
     /**
      * Creates a new reservation
      * @param description the description of the reservation
@@ -504,7 +535,7 @@ public class Event {
     	participantsList.addReservation(reservation);
     	return reservation;
     }
-    
+
     /**
      * Creates a new reservation
      * @param description the description of the reservation
@@ -516,7 +547,7 @@ public class Event {
     	participantsList.addReservation(reservation);
     	return reservation;
     }
-    
+
     /**
      * Creates a new reservation
      * @param description the description of the reservation
@@ -529,7 +560,7 @@ public class Event {
     	participantsList.addReservation(reservation);
     	return reservation;
     }
-    
+
     /**
      * Deletes a reservation
      * @param description the description (= ID) of the reservation
@@ -537,7 +568,7 @@ public class Event {
     public void removeReservation(String description) {
     	participantsList.removeReservation(description);
     }
-    
+
     /**
      * Updates a reservation
      * @param description the description (= ID) of the reservation
@@ -546,7 +577,7 @@ public class Event {
     public void updateReservation(String description, Reservation newData) {
     	participantsList.updateReservation(description, newData);
     }
-    
+
     /**
      * @param person the activist to make counselor
      * @throws IllegalArgumentException if the activist is already a counselor
@@ -616,6 +647,59 @@ public class Event {
     }
 
     /**
+     * Adds a new person to contact for the event
+     * @param person the person
+     * @param remark remarks regarding the reason of contact
+     */
+    public void addPersonToContact(Person person, String remark) {
+    	if (shouldBeContacted(person)) {
+    		throw new IllegalStateException("Person should already be contacted: " + person);
+    	}
+    	personsToContact.put(person, remark);
+    }
+
+    /**
+     * Removes a person from the list of persons to be contacted for the event
+     * @param person the person
+     */
+    public void removePersonToContact(Person person) {
+    	if (!shouldBeContacted(person)) {
+    		throw new IllegalArgumentException("Person is not registered as 'should be contacted': " + person);
+    	}
+    	personsToContact.remove(person);
+    }
+
+    /**
+     * @param person the person to check
+     * @return {@code true} if the person is in the list of persons to be contacted for the event
+     */
+    public boolean shouldBeContacted(Person person) {
+    	return personsToContact.containsKey(person);
+    }
+
+    /**
+     * @param person the person to query for
+     * @return the remarks for the person to be contacted for the event
+     */
+    @Transient public String getContactRemarkFor(Person person) {
+    	if (!shouldBeContacted(person)) {
+    		throw new IllegalArgumentException("Person is not registered as 'should be contacted': " + person);
+    	}
+    	return personsToContact.get(person);
+    }
+
+    /**
+     * @param person the person to update
+     * @param remark the new remarks
+     */
+    public void updatePersonToContact(Person person, String remark) {
+    	if (!shouldBeContacted(person)) {
+    		throw new IllegalArgumentException("Person is not registered as 'should be contacted': " + person);
+    	}
+    	personsToContact.replace(person, remark);
+    }
+
+    /**
      * @param lecture the lecture to add
      * @throws IllegalArgumentException if <strong>exactly</strong> this lecture is already being held
      * @see Lecture
@@ -651,9 +735,9 @@ public class Event {
         }
         lectures.remove(lecture);
     }
-    
+
     // overridden from Object
-    
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -678,7 +762,7 @@ public class Event {
 			return false;
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Event [id=" + id + ", name=" + name + ", startTime=" + startTime + ", endTime=" + endTime

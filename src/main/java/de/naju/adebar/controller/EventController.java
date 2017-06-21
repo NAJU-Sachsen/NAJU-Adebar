@@ -1,22 +1,10 @@
 package de.naju.adebar.controller;
 
-import de.naju.adebar.app.events.EventDataProcessor;
-import de.naju.adebar.app.events.EventDataProcessor.EventType;
-import de.naju.adebar.app.events.EventManager;
-import de.naju.adebar.app.events.filter.EventFilterBuilder;
-import de.naju.adebar.app.human.DataProcessor;
-import de.naju.adebar.app.human.PersonManager;
-import de.naju.adebar.controller.forms.events.EventForm;
-import de.naju.adebar.controller.forms.events.FilterEventsForm;
-import de.naju.adebar.model.chapter.LocalGroup;
-import de.naju.adebar.app.chapter.LocalGroupManager;
-import de.naju.adebar.model.chapter.Project;
-import de.naju.adebar.app.chapter.ProjectManager;
-import de.naju.adebar.model.events.*;
-import de.naju.adebar.model.human.Person;
-import de.naju.adebar.util.conversion.events.EventFormDataExtractor;
-import de.naju.adebar.util.conversion.events.EventToEventFormConverter;
-import de.naju.adebar.util.conversion.events.FilterEventsFormDataExtractor;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,10 +15,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import de.naju.adebar.app.chapter.LocalGroupManager;
+import de.naju.adebar.app.chapter.ProjectManager;
+import de.naju.adebar.app.events.EventDataProcessor;
+import de.naju.adebar.app.events.EventDataProcessor.EventType;
+import de.naju.adebar.app.events.EventManager;
+import de.naju.adebar.app.events.filter.EventFilterBuilder;
+import de.naju.adebar.app.human.DataProcessor;
+import de.naju.adebar.app.human.PersonManager;
+import de.naju.adebar.controller.forms.events.EventForm;
+import de.naju.adebar.controller.forms.events.FilterEventsForm;
+import de.naju.adebar.model.chapter.LocalGroup;
+import de.naju.adebar.model.chapter.Project;
+import de.naju.adebar.model.events.BookedOutException;
+import de.naju.adebar.model.events.Event;
+import de.naju.adebar.model.events.ExistingParticipantException;
+import de.naju.adebar.model.events.ParticipationInfo;
+import de.naju.adebar.model.events.PersonIsTooYoungException;
+import de.naju.adebar.model.human.Person;
+import de.naju.adebar.util.conversion.events.EventFormDataExtractor;
+import de.naju.adebar.util.conversion.events.EventToEventFormConverter;
+import de.naju.adebar.util.conversion.events.FilterEventsFormDataExtractor;
 
 /**
  * Event related controller mappings
@@ -274,17 +279,25 @@ public class EventController {
      * @param personId the id of the person whose information should be updated
      * @param feePayed whether the participation fee was payed
      * @param formReceived whether the legally binding participation form was already sent from the person
+     * @param remarks remarks regarding the participation
      * @param redirAttr attributes for the view to display some result information
      * @return the event's detail view
      */
     @RequestMapping("/events/{eid}/participants/update")
-    public String updateParticipant(@PathVariable("eid") String eventId, @RequestParam("person-id") String personId, @RequestParam(value = "fee-payed", required = false) boolean feePayed, @RequestParam(value = "form-received", required = false) boolean formReceived, RedirectAttributes redirAttr) {
+    public String updateParticipant(
+    		@PathVariable("eid") String eventId,
+    		@RequestParam("person-id") String personId,
+    		@RequestParam(value = "fee-payed", required = false) boolean feePayed,
+    		@RequestParam(value = "form-received", required = false) boolean formReceived,
+    		@RequestParam(value = "remarks") String remarks,
+    		RedirectAttributes redirAttr) {
         Event event = eventManager.findEvent(eventId).orElseThrow(IllegalArgumentException::new);
         Person person = personManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
 
         ParticipationInfo participationInfo = event.getParticipationInfo(person);
         participationInfo.setParticipationFeePayed(feePayed);
         participationInfo.setRegistrationFormReceived(formReceived);
+        participationInfo.setRemarks(remarks);
         event.updateParticipationInfo(person, participationInfo);
         eventManager.updateEvent(eventId, event);
 
@@ -393,6 +406,71 @@ public class EventController {
 
         redirAttr.addFlashAttribute("organizerRemoved", true);
         return "redirect:/events/" + eventId;
+    }
+
+    /**
+     * Adds a new person to contact to an event
+     * @param eventId the event to edit
+     * @param personId the person to add
+     * @param remarks remarks regarding the necessity of the contact
+     * @param redirAttr attributes for the view to display some result information
+     * @return the event's detail view
+     */
+    @RequestMapping("/events/{eid}/personsToContact/add")
+    public String addPersonToContact(
+    		@PathVariable("eid") String eventId,
+    		@RequestParam("person-id") String personId,
+    		@RequestParam("remarks") String remarks, RedirectAttributes redirAttr) {
+    	Event event = eventManager.findEvent(eventId).orElseThrow(IllegalArgumentException::new);
+        Person person = personManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
+
+        event.addPersonToContact(person, remarks);
+        eventManager.updateEvent(eventId, event);
+
+        redirAttr.addFlashAttribute("personToContactAdded", true);
+    	return "redirect:/events/" + eventId;
+    }
+
+    /**
+     * Updates the remarks of a person to contact
+     * @param eventId the event to edit
+     * @param personId the person to edit
+     * @param remarks the new remarks
+     * @param redirAttr attributes for the view to display some result information
+     * @return the event's detail view
+     */
+    @RequestMapping("/events/{eid}/personsToContact/update")
+    public String editPersonToContact(
+    		@PathVariable("eid") String eventId,
+    		@RequestParam("person-id") String personId,
+    		@RequestParam("remarks") String remarks, RedirectAttributes redirAttr) {
+    	Event event = eventManager.findEvent(eventId).orElseThrow(IllegalArgumentException::new);
+        Person person = personManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
+
+        event.updatePersonToContact(person, remarks);
+        eventManager.updateEvent(eventId, event);
+
+        redirAttr.addFlashAttribute("personToContactUpdated", true);
+    	return "redirect:/events/" + eventId;
+    }
+
+    /**
+     * Removes a person to contact from an event
+     * @param eventId the event to update
+     * @param personId the person to remove
+     * @param redirAttr attributes for the view to display some result information
+     * @return the event's detail view
+     */
+    @RequestMapping("/events/{eid}/personsToContact/remove")
+    public String removePersonToContact(@PathVariable("eid") String eventId, @RequestParam("person-id") String personId, RedirectAttributes redirAttr) {
+    	Event event = eventManager.findEvent(eventId).orElseThrow(IllegalArgumentException::new);
+        Person person = personManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
+
+        event.removePersonToContact(person);
+        eventManager.updateEvent(eventId, event);
+
+        redirAttr.addFlashAttribute("personToContactRemoved", true);
+    	return "redirect:/events/" + eventId;
     }
 
     /**
