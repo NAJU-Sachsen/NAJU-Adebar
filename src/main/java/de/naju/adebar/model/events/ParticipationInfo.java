@@ -1,6 +1,9 @@
 package de.naju.adebar.model.events;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 /**
  * Meta-data needed for the participating persons
@@ -13,6 +16,7 @@ public class ParticipationInfo {
     @Column(name = "acknowledged") private boolean acknowledged;
     @Column(name = "feePayed") private boolean participationFeePayed;
     @Column(name = "formReceived") private boolean registrationFormReceived;
+    @Column(name = "remarks") private String remarks;
 
     /**
      * Only a default constructor is needed. All participation info looks the same at the beginning.
@@ -69,6 +73,20 @@ public class ParticipationInfo {
     }
 
     /**
+     * @return special remarks for the participation
+     */
+    public String getRemarks() {
+		return remarks;
+	}
+
+    /**
+     * @param remarks special remarks for the participation
+     */
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+
+	/**
      * @param id the ID (= primary key) of the dataset
      */
     protected void setId(long id) {
