@@ -383,7 +383,7 @@
                 <!-- person overview -->
                 <div class="col-sm-7">
                     <section class="panel panel-primary">
-                        <input type="hidden" id="person-is-nabu-member" value="true" th:value="${isNabuMember}" />
+                        <input type="hidden" id="person-is-nabu-member" value="true" th:value="${person.participant} AND ${person.participantProfile.nabuMember}" />
                         <header class="panel-heading clearfix">
                             <h2 class="panel-title pull-left" style="margin-top: 7.5px; margin-right: 2em;">Allgemeines</h2>
                             <div class="input-group pull-right" style="margin-left: 1em;">
