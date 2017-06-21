@@ -409,7 +409,7 @@
                     <tbody class="event-list-current" th:remove="all-but-first">
                         <tr th:each="event : ${currentEvents}">
                             <td><a class="event-name" href="eventDetails.html" th:href="@{'/events/' + ${event.id}}" th:text="${event.name}">HIFA-Camp</a></td>
-                            <td class="event-time" th:text="${{event.startTime}} + ' - ' + ${{event.endTime}}">24.05.-28.05.</td>
+                            <td class="event-time" th:text="${{#time.formatTimeSpan(event.getStartTime(), event.getEndTime())}}">24.05.-28.05.</td>
                             <td class="event-place" th:text="${event.place.city}">Niederlausitz</td>
                             <td class="text-center" th:text="${event.participantsCount}">28</td>
                             <td>
@@ -449,7 +449,7 @@
                     <tbody class="event-list-prospective" th:remove="all-but-first">
                         <tr th:each="event : ${futureEvents}">
                             <td><a class="event-name" href="eventDetails.html" th:href="@{'/events/' + ${event.id}}" th:text="${event.name}">Nistkästen basteln</a></td>
-                            <td class="event-time" th:text="${{event.startTime}} + ' - ' + ${{event.endTime}}">02.06.</td>
+                            <td class="event-time" th:text="${{#time.formatTimeSpan(event.getStartTime(), event.getEndTime())}}">02.06.</td>
                             <td class="event-place" th:text="${event.place.city}">Großdittmannsdorf</td>
                             <td class="text-center" th:text="${event.participantsCount}">---</td>
                             <td class="text-center" th:text="${event.remainingCapacity} > 1000000 ? 'unbegrenzt' : ${event.remainingCapacity}">---</td>
@@ -510,7 +510,7 @@
                     <tbody class="event-list-past" th:remove="all-but-first">
                         <tr th:each="event : ${pastEvents}">
                             <td><a class="event-name" href="eventDetails.html" th:href="@{'/events/' + ${event.id}}" th:text="${event.name}">HIFA-Camp</a></td>
-                            <td class="event-time" th:text="${{event.startTime}} + ' - ' + ${{event.endTime}}">24.05.-28.05.</td>
+                            <td class="event-time" th:text="${{#time.formatTimeSpan(event.getStartTime(), event.getEndTime())}}">24.05.-28.05.</td>
                             <td class="event-place" th:text="${event.place.city}">Niederlausitz</td>
                             <td class="text-center" th:text="${event.participantsCount}">28</td>
                             <td>
@@ -549,7 +549,7 @@
                     <tbody class="event-list-past" th:remove="all-but-first">
                         <tr th:each="event : ${filteredEvents}">
                             <td><a class="event-name" href="eventDetails.html" th:href="@{'/events/' + ${event.id}}" th:text="${event.name}">HIFA-Camp</a></td>
-                            <td class="event-time" th:text="${{event.startTime}} + ' - ' + ${{event.endTime}}">24.05.-28.05.</td>
+                            <td class="event-time" th:text="${{#time.formatTimeSpan(event.getStartTime(), event.getEndTime())}}">24.05.-28.05.</td>
                             <td class="event-place" th:text="${event.place.city}">Niederlausitz</td>
                             <td class="text-center" th:text="${event.participantsCount}">28</td>
                             <td>

@@ -827,7 +827,7 @@
                         </tr>
                         <tr class="row">
                             <th class="col-sm-2"><span class="glyphicon glyphicon-calendar"></span> Zeit:</th>
-                            <td class="col-sm-10" th:text="${{event.startTime}} + ' - ' + ${{event.endTime}}">24.05.-28.05.</td>
+                            <td class="col-sm-10" th:text="${{#time.formatTimeSpan(event.getStartTime(), event.getEndTime())}}">24.05.-28.05.</td>
                         </tr>
                         <tr class="row">
                             <th class="col-sm-2"><span class="glyphicon glyphicon-map-marker"></span> Ort:</th>
@@ -842,8 +842,8 @@
                         <tr class="row">
                             <th class="col-sm-2"><span class="glyphicon glyphicon-piggy-bank"></span> Preis:</th>
                             <td class="col-sm-10">
-                                <span th:if="${event.internalParticipationFee}" th:text="|${{event.internalParticipationFee}} (NAJU-Mitglieder) |">35€ (NAJU-Mitlgieder)</span>
-                                <span th:if="${event.externalParticipationFee}" th:text="|${{event.externalParticipationFee}} (nicht-Mitglieder)|">35€ (nicht-Mitglieder)</span>
+                                <span th:if="${event.internalParticipationFee}" th:text="|${#money.format(event.getInternalParticipationFee())} (NAJU-Mitglieder) |">35€ (NAJU-Mitlgieder)</span>
+                                <span th:if="${event.externalParticipationFee}" th:text="|${#money.format(event.getExternalParticipationFee())} (nicht-Mitglieder)|">35€ (nicht-Mitglieder)</span>
                             </td>
                         </tr>
                         <tr class="row">

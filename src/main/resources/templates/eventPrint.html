@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width,initial-scale=1" name="viewport"/>
-    <title th:text="|${event.name} (${{event.startTime}} - ${{event.endTime}})|">HIFA (24.05.17 - 28.05.17)</title>
+    <title th:text="|${event.name} (${{#time.formatTimeSpan(event.getStartTime(), event.getEndTime())}})|">HIFA (24.05.17 - 28.05.17)</title>
 
     <script type="text/javascript" src="../static/resources/js/jquery.min.js" th:src="@{/webjars/jquery/jquery.min.js}"></script>
     <script type="text/javascript" src="../static/resources/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
