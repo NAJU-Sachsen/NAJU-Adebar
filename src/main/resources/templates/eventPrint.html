@@ -16,10 +16,11 @@
     <main class="container-fluid">
         <div class="row" style="margin-bottom: 1em;">
             <header>
-                <h1><span th:text="${event.name}">HIFA</span> <small><span th:text="${{event.startTime}} + ' - ' + ${{event.endTime}}">24.05.17 - 28.05.17</span>, <span th:text="|${event.place.street} ${event.place.zip} ${event.place.city}|">Annahütte</span></small></h1>
+                <h1><span th:text="${event.name}">HIFA</span> <small><span th:text="${{#time.formatTimeSpan(event.getStartTime(), event.getEndTime())}}">24.05.17 - 28.05.17</span>, <span th:text="|${event.place.street} ${event.place.zip} ${event.place.city}|">Annahütte</span></small></h1>
             </header>
         </div>
         <div class="row">
+            <h2>Teilnehmende</h2>
             <table id="participants" class="table tablesorter">
                 <thead>
                     <tr>
@@ -27,9 +28,11 @@
                         <th>Geburtsdatum <span class="icon"></span></th>
                         <th>Ernährung <span class="icon"></span></th>
                         <th>Allergien o.ä. <span class="icon"></span></th>
+                        <th>Telefon <span class="icon"></span></th>
                         <th>Wohnort <span class="icon"></span></th>
                         <th>TNB bezahlt? <span class="icon"></span></th>
                         <th>Formular erhalten? <span class="icon"></span></th>
+                        <th>Bermerkungen <span class="icon"></span></th>
                     </tr>
                 </thead>
                 <tbody th:remove="all-but-first">
@@ -38,8 +41,9 @@
                         <td th:text="${{participant.participantProfile.dateOfBirth}}">31.02.1999</td>
                         <td th:text="${participant.participantProfile.eatingHabits}">Veganer</td>
                         <td th:text="${participant.participantProfile.healthImpairments}">Heuschnupfen</td>
+                        <td th:text="${participant.phoneNumber}">0123 4567890</td>
                         <td th:text="${participant.address.city}">Freital</td>
-                        <td class="text-center">
+                        <td class="text-center">dd.MM.yyyy HH:mm
                             <span th:if="${event.getParticipationInfo(participant).isParticipationFeePayed()}"><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span>
                             <span th:unless="${event.getParticipationInfo(participant).isParticipationFeePayed()}"><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span>
                         </td>
@@ -47,69 +51,130 @@
                             <span th:if="${event.getParticipationInfo(participant).isRegistrationFormReceived()}"><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span>
                             <span th:unless="${event.getParticipationInfo(participant).isRegistrationFormReceived()}"><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span>
                         </td>
+                        <td th:text="${event.getParticipationInfo(participant).getRemarks()}">
+                            Teilnahme nur bis Donnerstag
+                        </td>
                     </tr>
                     <tr>
                         <td>Max-Hannes Mustermann</td>
                         <td>31.02.1999</td>
                         <td>Veganer</td>
                         <td>Heuschnupfen</td>
+                        <td>0123 4567890</td>
                         <td>Freital</td>
                         <td class="text-center"><span><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span></td>
                         <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
+                        <td>
+                            Teilnahme nur bis Donnerstag, Anreise gemeinsam mit dem Zug von Dresden
+                        </td>
                     </tr>
                     <tr>
                         <td>Max-Hannes Mustermann</td>
                         <td>31.02.1999</td>
                         <td>Veganer</td>
                         <td>Heuschnupfen</td>
+                        <td>0123 4567890</td>
                         <td>Freital</td>
                         <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
                         <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
+                        <td>
+                            Anreise gemeinsam mit dem Zug von Dresden
+                        </td>
                     </tr>
                     <tr>
                         <td>Max-Hannes Mustermann</td>
                         <td>31.02.1999</td>
                         <td>Veganer</td>
                         <td>Heuschnupfen</td>
-                        <td>Freital</td>
-                        <td class="text-center"><span><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span></td>
-                        <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
-                    </tr>
-                    <tr>
-                        <td>Max-Hannes Mustermann</td>
-                        <td>31.02.1999</td>
-                        <td>Veganer</td>
-                        <td>Heuschnupfen</td>
-                        <td>Freital</td>
-                        <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
-                        <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
-                    </tr>
-                    <tr>
-                        <td>Max-Hannes Mustermann</td>
-                        <td>31.02.1999</td>
-                        <td>Veganer</td>
-                        <td>Heuschnupfen</td>
-                        <td>Freital</td>
-                        <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
-                        <td class="text-center"><span><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span></td>
-                    </tr>
-                    <tr>
-                        <td>Max-Hannes Mustermann</td>
-                        <td>31.02.1999</td>
-                        <td>Veganer</td>
-                        <td>Heuschnupfen</td>
-                        <td>Freital</td>
-                        <td class="text-center"><span><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span></td>
-                        <td class="text-center"><span><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span></td>
-                    </tr>
-                    <tr>
-                        <td>Max-Hannes Mustermann</td>
-                        <td>31.02.1999</td>
-                        <td>Veganer</td>
-                        <td>Heuschnupfen</td>
+                        <td>0123 4567890</td>
                         <td>Freital</td>
                         <td class="text-center"><span><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span></td>
                         <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Max-Hannes Mustermann</td>
+                        <td>31.02.1999</td>
+                        <td>Veganer</td>
+                        <td>Heuschnupfen</td>
+                        <td>0123 4567890</td>
+                        <td>Freital</td>
+                        <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
+                        <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
+                        <td>
+                            Anreise gemeinsam mit dem Zug von Chemnitz
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Max-Hannes Mustermann</td>
+                        <td>31.02.1999</td>
+                        <td>Veganer</td>
+                        <td>Heuschnupfen</td>
+                        <td>0123 4567890</td>
+                        <td>Freital</td>
+                        <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
+                        <td class="text-center"><span><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Max-Hannes Mustermann</td>
+                        <td>31.02.1999</td>
+                        <td>Veganer</td>
+                        <td>Heuschnupfen</td>
+                        <td>0123 4567890</td>
+                        <td>Freital</td>
+                        <td class="text-center"><span><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span></td>
+                        <td class="text-center"><span><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Max-Hannes Mustermann</td>
+                        <td>31.02.1999</td>
+                        <td>Veganer</td>
+                        <td>Heuschnupfen</td>
+                        <td>0123 4567890</td>
+                        <td>Freital</td>
+                        <td class="text-center"><span><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span></td>
+                        <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row">
+            <h2>Betreuende</h2>
+            <table id="counselors" class="table tablesorter">
+                <thead>
+                    <th>Name</th>
+                    <th>Geburtsdatum</th>
+                    <th>Telefonnummer</th>
+                    <th>Juleica?</th>
+                </thead>
+                <tbody th:remove="all-but-first">
+                    <tr th:each="counselor : ${event.counselors}">
+                        <td th:text="${counselor.name}">Berta Beate</td>
+                        <td>
+                            <span th:if="${counselor.participant} AND ${counselor.getParticipantProfile().hasDateOfBirth()}" th:text="${counselor.participantProfile.dateOfBirth}">
+                                01.02.3456
+                            </span>
+                            <span th:if="!${counselor.participant} OR !${counselor.getParticipantProfile().hasDateOfBirth()}">
+                                ---
+                            </span>
+                        </td>
+                        <td th:text="${counselor.phoneNumber}">0987 65432109</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Berta Beate</td>
+                        <td>01.02.3456</td>
+                        <td>0987 65432109</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Berta Beate</td>
+                        <td>01.02.3456</td>
+                        <td>0987 65432109</td>
+                        <td></td>
                     </tr>
                 </tbody>
             </table>
@@ -117,6 +182,7 @@
     </main>
     <script type="text/javascript">
         $('#participants').tablesorter();
+        $('#counselors').tablesorter();
         alert('Diese Seite einfach ausdrucken (z.B. über die Strg+P Tastenkombination)');
     </script>
 </body>
