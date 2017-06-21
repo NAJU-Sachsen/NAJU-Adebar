@@ -1,8 +1,10 @@
 package de.naju.adebar.model.human;
 
+import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import java.time.LocalDate;
+import javax.persistence.Transient;
 
 /**
  * A Juleica card qualifies an activist to host events with teenagers and assures a basic education regarding
@@ -72,6 +74,16 @@ public class JuleicaCard implements Cloneable {
      */
     public void setLevel(String level) {
         this.level = level;
+    }
+
+    /**
+     * @return {@code true} if the Juleica card is valid (i.e. not expired), or {@code false} otherwise
+     */
+    @Transient public boolean isValid() {
+    	if (expiryDate == null) {
+    		return false;
+    	}
+    	return expiryDate.isAfter(LocalDate.now());
     }
 
     // "implementation" of Cloneable

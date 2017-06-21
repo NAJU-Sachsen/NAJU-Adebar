@@ -1,11 +1,11 @@
 package de.naju.adebar.model.human;
 
-import org.springframework.util.Assert;
-
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+
+import org.springframework.util.Assert;
 
 /**
  * Activists are persons who contribute to events, e.g. organize them or work as counselors or 'work' for our
@@ -78,6 +78,16 @@ public class ActivistProfile implements Cloneable {
      */
     public boolean hasJuleica() {
         return juleicaCard != null;
+    }
+
+    /**
+     * @return {@code true} if the activist's Juleica card is valid (i.e. not expired), {@code false} otherwise
+     */
+    public boolean hasValidJuleica() {
+    	if (!hasJuleica()) {
+    		return false;
+    	}
+    	return juleicaCard.isValid();
     }
 
     // "implementation" of Cloneable
