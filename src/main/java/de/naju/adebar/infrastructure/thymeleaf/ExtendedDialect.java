@@ -14,7 +14,7 @@ import org.thymeleaf.dialect.IExpressionEnhancingDialect;
  * @see <a href="https://stackoverflow.com/questions/37905520/thymeleaf-how-to-add-a-custom-util">On writing custom dialects</a>
  * @see TimeFormatter
  */
-public class TimeExtendedDialect extends AbstractDialect implements IExpressionEnhancingDialect {
+public class ExtendedDialect extends AbstractDialect implements IExpressionEnhancingDialect {
 
 	@Override
 	public String getPrefix() {
@@ -25,6 +25,7 @@ public class TimeExtendedDialect extends AbstractDialect implements IExpressionE
 	public Map<String, Object> getAdditionalExpressionObjects(IProcessingContext processingContext) {
 		Map<String, Object> expressions = new HashMap<>();
 		expressions.put("time", new TimeFormatter());
+		expressions.put("money", new CurrencyFormatter());
 		return expressions;
 	}
 

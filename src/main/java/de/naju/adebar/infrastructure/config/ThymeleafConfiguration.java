@@ -3,7 +3,7 @@ package de.naju.adebar.infrastructure.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import de.naju.adebar.infrastructure.thymeleaf.TimeExtendedDialect;
+import de.naju.adebar.infrastructure.thymeleaf.ExtendedDialect;
 
 /**
  * Thymeleaf specific configuration
@@ -18,8 +18,8 @@ public class ThymeleafConfiguration {
 	 * @return the dialect
 	 */
 	@Bean
-	public TimeExtendedDialect timeSpanExtendedDialect() {
-		return new TimeExtendedDialect();
+	public ExtendedDialect extendedDialect() {
+		return new ExtendedDialect();
 	}
 
 }
