@@ -220,7 +220,7 @@ class ParticipantsList {
      */
     @Transient
     public int getRemainingCapacity() {
-        if (hasParticipantsLimit()) {
+        if (!hasParticipantsLimit()) {
             return Integer.MAX_VALUE;
         }
         return participantsLimit - getOccupiedSlotsCount();
