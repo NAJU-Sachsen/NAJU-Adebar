@@ -1,13 +1,13 @@
 package de.naju.adebar.util;
 
-import org.junit.Assert;
-import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Basic testing of the {@link Streams} functions
@@ -29,6 +29,14 @@ public class StreamsUnitTest {
                 Streams.intersect(oddNumbers.stream(), evenNumbers.stream()).count());
         Assert.assertEquals("Should not contain any elements", EMPTY,
                 Streams.intersect(allNumbers.stream(), emptyList.stream()).collect(Collectors.toList()).size());
+    }
+
+    @Test
+    public void testUnion() {
+    	Assert.assertArrayEquals("Should contain all numbers", allNumbers.toArray(),
+    			Streams.union(oddNumbers.stream(), evenNumbers.stream()).toArray());
+    	Assert.assertArrayEquals("Should contain all odd numbers", oddNumbers.toArray(),
+    			Streams.union(emptyList.stream(), oddNumbers.stream()).toArray());
     }
 
     @Test
