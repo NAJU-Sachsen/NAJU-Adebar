@@ -425,10 +425,8 @@
                                 <div id="filter-referents-qualification-container" class="margin-top-lg hide-initially">
                                     <label for="filter-referent-qualifications" class="">Qualifikationen</label>
                                     <div class="margin-top-sm">
-                                        <select class="selectpicker" name="referentQualifications" id="filter-referent-qualifications"
-                                                multiple="multiple" title="Auswählen" th:field="*{referentQualifications}"
-                                                th:remove="all-but-first" th:each="qualification : ${qualifications}">
-                                            <option th:text="${qualification.name}" th:value="${qualification.name}">Erste-Hilfe Kurs</option>
+                                        <select class="selectpicker" name="referentQualifications" id="filter-referent-qualifications" data-width="fit" multiple="multiple" title="Auswählen" th:field="*{referentQualifications}" th:remove="all-but-first">
+                                            <option th:each="qualification : ${qualifications}" th:text="${qualification.name}" th:value="${qualification.name}">Erste-Hilfe Kurs</option>
                                             <option>Wildlife-Workshop</option>
                                             <option>Ornithologie</option>
                                             <option>Ehrenamtsmanagement</option>
