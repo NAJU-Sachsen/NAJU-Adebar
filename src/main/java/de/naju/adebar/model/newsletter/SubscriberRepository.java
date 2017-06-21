@@ -1,5 +1,6 @@
 package de.naju.adebar.model.newsletter;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -40,5 +41,6 @@ public interface SubscriberRepository extends CrudRepository<Subscriber, Long> {
     /**
      * @return the first ten subscribers ordered by their email addresses
      */
+	@Query(nativeQuery = true, value = "SELECT TOP 10 s.* FROM subscriber s ORDER BY email")
 	Iterable<Subscriber> findFirst10ByOrderByEmail();
 }
