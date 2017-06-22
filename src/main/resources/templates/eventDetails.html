@@ -946,7 +946,7 @@
                         <tbody th:remove="all-but-first">
                             <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="0" data-fee-payed="true" data-form-received="false" data-remarks="Teilnahme nur bis Donnerstag" th:each="participant : ${event.participants}" th:attr="'data-id'=${participant.id}, 'data-fee-payed'=${event.getParticipationInfo(participant).isParticipationFeePayed()}, 'data-form-received'=${event.getParticipationInfo(participant).isRegistrationFormReceived()},
                             'data-remarks'=${event.getParticipationInfo(participant).getRemarks()}">
-                                <td><a href="mailto:" data-toggle="" data-target="" th:href="'mailto:' + ${participant.email}" th:text="${participant.name}">Max-Hannes Mustermann</a></td>
+                                <td><a href="mailto:" data-toggle="" data-target="" th:href="@{/persons/{id}(id=${participant.id})}" th:text="${participant.name}">Max-Hannes Mustermann</a></td>
                                 <td th:text="${{participant.participantProfile.dateOfBirth}}">31.02.1999</td>
                                 <td th:text="${participant.participantProfile.eatingHabits}">Veganer</td>
                                 <td th:text="${participant.participantProfile.healthImpairments}">Heuschnupfen</td>
