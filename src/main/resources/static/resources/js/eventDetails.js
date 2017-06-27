@@ -195,7 +195,6 @@ function hideNewReservation() {
 function fetchAddReservationResponse(response, row) {
     var reservationSlots = $('tr.new-reservation').find('input.reservation-slots');
     if (response.status === 'ok') {
-        console.log('Add successfull');
         $('table.reservations').find('tr.reservation').last().after(row);
 
         $('input.reservation-description').parent().hide();
@@ -387,6 +386,11 @@ $('tr.new-reservation').find('button.cancel').click(function() {
 });
 
 $(function() {
+    $('#add-participant-modal').find('.no-results').hide();
+    $('#add-organizer-modal').find('.no-results').hide();
+    $('#add-counselor-modal').find('.no-results').hide();
+    $('#add-personToContact-modal').find('.no-results').hide();
+
     $('input.reservation-description').parent().hide();
     $('input.reservation-slots').parent().hide();
     $('input.reservation-email').parent().hide();

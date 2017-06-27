@@ -146,6 +146,8 @@ $('#remove-member-modal').on('show.bs.modal', function(e) {
 
 // init all js components
 $(function(){
+    $('#add-member-modal').find('.no-results').hide();
+
     $('#add-project-period').find('input').datetimepicker({
         format: 'DD.MM.YYYY',
         showTodayButton: true

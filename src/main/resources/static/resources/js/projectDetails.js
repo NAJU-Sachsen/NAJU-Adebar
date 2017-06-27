@@ -54,3 +54,7 @@ $(function() {
         showTodayButton: true
     });
 });
+
+$(function() {
+    $('#edit-project-modal').find('.no-results').hide();
+});

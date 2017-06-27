@@ -14,6 +14,12 @@ function createPersonRow(id, name, dob, address) {
 
 // displays the matching persons in the 'add member' modal
 function displayMatchingPersons(table, result) {
+    if (!result.length) {
+        $(table).parent().parent().parent().find('.no-results').show();
+    } else {
+        $(table).parent().parent().parent().find('.no-results').hide();
+    }
+
     $(table).empty();
 
     for (var i = 0; i < result.length; i++) {
@@ -39,5 +45,5 @@ function findMatchingActivists(firstName, lastName, city) {
 }
 
 function findMatches(url, firstName, lastName, city) {
-    
+
 }
