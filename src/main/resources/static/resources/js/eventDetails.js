@@ -19,11 +19,13 @@ $('#add-participant-search-btn').on('click', function() {
         dataType: 'json',
         method: 'POST',
         success: function(response) {
+            $('#add-participant-modal').find('.searching').hide();
             displayMatchingPersons(table, response);
         },
         url: '/api/persons/simpleSearch'
     };
 
+    $('#add-participant-modal').find('.searching').show();
     $.ajax(request);
 });
 
@@ -43,11 +45,13 @@ $('#add-counselor-search-btn').on('click', function() {
         dataType: 'json',
         method: 'POST',
         success: function(response) {
+            $('#add-counselor-modal').find('searching').hide();
             displayMatchingPersons(table, response);
         },
         url: '/api/persons/activists/simpleSearch'
     };
 
+    $('#add-counselor-modal').find('searching').show();
     $.ajax(request);
 });
 
@@ -67,11 +71,13 @@ $('#add-organizer-search-btn').on('click', function() {
         dataType: 'json',
         method: 'POST',
         success: function(response) {
+            $('#add-organizer-modal').find('searching').hide();
             displayMatchingPersons(table, response);
         },
         url: '/api/persons/activists/simpleSearch'
     };
 
+    $('#add-organizer-modal').find('searching').show();
     $.ajax(request);
 });
 
@@ -126,11 +132,13 @@ $('#add-personToContact-search-btn').on('click', function() {
         dataType: 'json',
         method: 'POST',
         success: function(response) {
+            $('#add-personToContact-modal').find('searching').hide();
             displayMatchingPersons(table, response);
         },
         url: '/api/persons/simpleSearch'
     };
 
+    $('#add-personToContact-modal').find('searching').show();
     $.ajax(request);
 });
 
@@ -386,10 +394,8 @@ $('tr.new-reservation').find('button.cancel').click(function() {
 });
 
 $(function() {
-    $('#add-participant-modal').find('.no-results').hide();
-    $('#add-organizer-modal').find('.no-results').hide();
-    $('#add-counselor-modal').find('.no-results').hide();
-    $('#add-personToContact-modal').find('.no-results').hide();
+    $('.no-results').hide();
+    $('.searching').hide();
 
     $('input.reservation-description').parent().hide();
     $('input.reservation-slots').parent().hide();

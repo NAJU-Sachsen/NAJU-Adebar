@@ -26,6 +26,7 @@ public class ExtendedDialect extends AbstractDialect implements IExpressionEnhan
 		Map<String, Object> expressions = new HashMap<>();
 		expressions.put("time", new TimeFormatter());
 		expressions.put("money", new CurrencyFormatter());
+		expressions.put("cstStrings", new StringsFormatter());
 		return expressions;
 	}
 

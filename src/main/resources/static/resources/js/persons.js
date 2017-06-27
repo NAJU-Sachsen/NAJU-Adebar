@@ -41,9 +41,6 @@ $('#add-person-isActivist').click(function() {
 // juleica or not
 $('#add-person-hasJuleica').click(function() {
     $('#add-person-juleica-container').slideToggle();
-
-    // toggle the required property of the expiry date
-    $('#add-person-juleica').find('input').prop('required', function(i,v) {return !v;});
 });
 
 

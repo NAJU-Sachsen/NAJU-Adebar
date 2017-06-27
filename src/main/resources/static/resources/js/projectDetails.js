@@ -16,11 +16,13 @@ $('#add-contributor-search-btn').on('click', function() {
         dataType: 'json',
         method: 'POST',
         success: function(response) {
+            $('#add-contributor-modal').find('.searching').hide();
             displayMatchingPersons(table, response);
         },
         url: '/api/persons/activists/simpleSearch'
     };
 
+    $('#add-contributor-modal').find('.searching').show();
     $.ajax(request);
 });
 
@@ -56,5 +58,6 @@ $(function() {
 });
 
 $(function() {
-    $('#edit-project-modal').find('.no-results').hide();
+    $('.searching').hide();
+    $('.no-results').hide();
 });
