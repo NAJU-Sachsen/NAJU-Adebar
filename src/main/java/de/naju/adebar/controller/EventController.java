@@ -486,4 +486,82 @@ public class EventController {
         return "eventPrint";
     }
 
+    /**
+     * Puts a person on the waiting list
+     * @param eventId the event to edit
+     * @param personId the person to put on the waiting list
+     * @param redirAttr model attributes for the view
+     * @return the event's detail view
+     */
+    @RequestMapping("/events/{eid}/waitingList/add")
+    public String addWaitingListEntry(@PathVariable("eid") String eventId, @RequestParam("person-id") String personId, RedirectAttributes redirAttr) {
+    	Event event = eventManager.findEvent(eventId).orElseThrow(IllegalArgumentException::new);
+        Person person = personManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
+
+        try {
+        	event.putOnWaitingList(person);
+            eventManager.updateEvent(eventId, event);
+            redirAttr.addFlashAttribute("waitingListEntryAdded", true);
+        } catch (ExistingParticipantException e) {
+        	redirAttr.addFlashAttribute("waitingListEntryParticipates", true);
+        } catch (IllegalStateException e) {
+        	redirAttr.addFlashAttribute("waitingListEntryExists", true);
+        }
+
+
+
+    	return "redirect:/events/" + eventId;
+    }
+
+    /**
+     * Moves a person from the waiting list to the participants list
+     * @param eventId the event to edit
+     * @param applyFirst whether to move the first person on the waiting list
+     * @param personId the ID of the person to move, if it is not the first
+     * @param redirAttr model attributes for the view
+     * @return the event's detail view
+     */
+    @RequestMapping("/events/{eid}/waitingList/apply")
+    public String applyWaitingListEntry(
+    		@PathVariable("eid") String eventId,
+    		@RequestParam(name="apply-first", defaultValue="false") boolean applyFirst,
+    		@RequestParam(name="person-id", required=false) String personId,
+    		RedirectAttributes redirAttr) {
+    	Event event = eventManager.findEvent(eventId).orElseThrow(IllegalArgumentException::new);
+
+    	try {
+    		if (applyFirst) {
+        		event.applyTopWaitingListSpot();
+        	} else {
+        		Person person = personManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
+        		event.applyWaitingListEntryFor(person);
+        	}
+        	eventManager.updateEvent(eventId, event);
+        	redirAttr.addFlashAttribute("waitingListEntryApplied", true);
+    	} catch (BookedOutException e) {
+    		redirAttr.addFlashAttribute("bookedOut", true);
+    	}
+
+    	return "redirect:/events/" + eventId;
+    }
+
+    /**
+     * Removes a person from the waiting list
+     * @param eventId the event to edit
+     * @param personId the ID of the person to remove
+     * @param redirAttr model attributes for the view
+     * @return the event's detail view
+     */
+    @RequestMapping("/events/{eid}/waitingList/remove")
+    public String removeWaitingListEntry(@PathVariable("eid") String eventId, @RequestParam("person-id") String personId, RedirectAttributes redirAttr) {
+    	Event event = eventManager.findEvent(eventId).orElseThrow(IllegalArgumentException::new);
+        Person person = personManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
+
+        event.removeFromWaitingList(person);
+        eventManager.updateEvent(eventId, event);
+
+    	redirAttr.addFlashAttribute("waitingListEntryRemoved", true);
+    	return "redirect:/events/" + eventId;
+    }
+
 }

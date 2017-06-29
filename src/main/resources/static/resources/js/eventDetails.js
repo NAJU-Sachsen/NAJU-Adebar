@@ -148,9 +148,6 @@ $('#edit-personToContact-modal').on('show.bs.modal', function(event) {
     var name = row.find('a.name').text();
     var remarks = row.find('td.remarks').text();
 
-    console.log('name ' + name);
-    console.log('remarks ' + remarks);
-
     $('#edit-personToContact-id').val(id);
     $('#edit-personToContact').find('input.name').val(name);
     $('#edit-personToContact').find('input.remarks').val(remarks);
@@ -392,6 +389,65 @@ $('tr.new-reservation').find('button.cancel').click(function() {
     hideNewReservation();
     hideReservationErrorMsg();
 });
+
+$('#add-waitingList-search-btn').on('click', function() {
+    var table = '#add-waitingList-tablebody';
+    var firstname = $('#add-waitingList-search-firstname').val();
+    var lastname = $('#add-waitingList-search-lastname').val();
+    var city = $('#add-waitingList-search-city').val();
+
+    var request = {
+        async: true,
+        data: {
+            firstname: firstname,
+            lastname: lastname,
+            city: city
+        },
+        dataType: 'json',
+        method: 'POST',
+        success: function(response) {
+            $('#add-waitingList-modal').find('searching').hide();
+            displayMatchingPersons(table, response);
+        },
+        url: '/api/persons/simpleSearch'
+    };
+
+    $('#add-waitingList-modal').find('searching').show();
+    $.ajax(request);
+});
+
+$('#waiting-list').find('.apply-entry').click(function() {
+    var row = $(this).closest('tr');
+    var id = row.data('id');
+    var name = row.find('.name').text();
+
+    var modal = $('#apply-waitingListEntry-modal');
+    var form = $('#apply-waitingListEntry');
+    form.find('input[name="apply-first"]').val('false');
+    form.find('input[name="person-id"]').val(id);
+    $('#apply-waitingListEntry-name').val(name);
+
+    modal.modal('show');
+});
+
+$('#apply-waitingListTop').click(function() {
+    var name = $(this).data('person');
+    $('#apply-waitingListEntry').find('input[name="apply-first"]').val('true');
+    $('#apply-waitingListEntry-name').val(name);
+    $('#apply-waitingListEntry-modal').modal('show');
+});
+
+$('#waiting-list').find('.remove-entry').click(function() {
+    var row = $(this).closest('tr');
+    var id = row.data('id');
+    var name = row.find('.name').text();
+
+    var modal = $('#remove-waitingListEntry-modal');
+    var form = $('#remove-waitingListEntry');
+    form.find('input[name="person-id"]').val(id);
+    $('#remove-waitingListEntry-name').val(name);
+    modal.modal('show');
+})
 
 $(function() {
     $('.no-results').hide();

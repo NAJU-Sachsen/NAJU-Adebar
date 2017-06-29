@@ -622,7 +622,7 @@
   </section>
 
   <!-- 'edit person to contact' modal -->
-  <section class="modal fade" id="edit-personToContact-modal" tabindex="-1" role="dialog" aria-lablledby="edit-personToContact-label">
+  <section class="modal fade" id="edit-personToContact-modal" tabindex="-1" role="dialog" aria-labelledby="edit-personToContact-label">
       <div class="modal-dialog" role="document">
           <div class="modal-content">
               <header class="modal-header">
@@ -664,6 +664,150 @@
                       </ul>
                   </div>
                   <button type="submit" class="btn btn-primary" form="edit-personToContact">Aktualisieren</button>
+              </footer>
+          </div>
+      </div>
+  </section>
+
+  <!-- 'add waiting list entry' modal -->
+  <section class="modal fade" id="add-waitingList-modal" tabindex="-1" role="dialog" aria-labelledby="add-waitingList-label">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <header class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h3 class="modal-title" id="add-waitingList-label">Person zur Warteliste hinzufügen</h3>
+                </header>
+                <section class="modal-body">
+                    <div class="form-group clearfix">
+                        <label class="col-sm-3 control-label">Personen suchen</label>
+                        <div class="col-sm-9">
+                            <div class="clearfix" style="margin-bottom: 5px;">
+                                <input type="text" id="add-waitingList-search-firstname" class="form-control pull-left" style="width: 48%;" placeholder="Vorname" />
+                                <input type="text" id="add-waitingList-search-lastname" class="form-control pull-right" style="width: 48%;" placeholder="Nachname" />
+                            </div>
+                            <div class="clearfix">
+                                <input type="text" id="add-waitingList-search-city" class="form-control pull-left" style="width: 68%;" placeholder="Ort"/>
+                                <button type="button" id="add-waitingList-search-btn" class="btn btn-primary pull-right" style="padding-left: 20px; padding-right: 20px;">
+                                    Suchen
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="width: 100%; margin-top:5px;"/>
+                    <form id="add-waitingList" class="form-horizontal" method="post" th:action="@{'/events/' + ${event.id} + '/waitingList/add'}">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Geburtsdatum</th>
+                                    <th>Adresse</th>
+                                    <th>Auswählen</th>
+                                </tr>
+                            </thead>
+                            <tbody id="add-waitingList-tablebody" th:remove="body">
+                                <tr>
+                                    <td>Max Mustermann</td>
+                                    <td>31.02.1999</td>
+                                    <td>Bei Mir 7 01234 Noch ein Dorf</td>
+                                    <td class="text-center">
+                                        <label><input type="radio" name="person-id" value="0" required="required" /></label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Claus Dieter</td>
+                                    <td>17.07.1993</td>
+                                    <td>Zu Hause 123 01478 Irgendein Dorf</td>
+                                    <td class="text-center">
+                                        <label><input type="radio" name="person-id" value="0" required="required" /></label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Friedlinde Müller</td>
+                                    <td>11.11.1995</td>
+                                    <td>Um die Ecke 3c 01597 Großstadt</td>
+                                    <td class="text-center">
+                                        <label><input type="radio" name="person-id" value="0" required="required" /></label>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                    <div class="text-center searching">
+                        Suche läuft... <span class="glyphicon glyphicon-refresh glyphicon-load-animate"></span>
+                    </div>
+                    <div class="alert alert-info no-results">
+                        Keine Übereinstimmung
+                    </div>
+                </section>
+                <footer class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+                    <button type="submit" class="btn btn-primary" form="add-waitingList">Hinzufügen</button>
+                </footer>
+            </div>
+        </div>
+  </section>
+
+  <!-- 'apply waiting list entry' modal -->
+  <section class="modal fade" id="apply-waitingListEntry-modal" tabindex="-1" role="dialog" aria-labelledby="apply-waitingListEntry-label">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <header class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+                  <h3 class="modal-title" id="apply-waitingListEntry-label">Teilnehmer hinzufügen</h3>
+              </header>
+              <section class="modal-body">
+                  <form id="apply-waitingListEntry" class="form-horizontal" th:action="@{'/events/' + ${event.id} + '/waitingList/apply'}">
+                      <input type="hidden" name="apply-first" value="false" />
+                      <input type="hidden" name="person-id" value="-1" />
+                      <label for="apply-waitingListEntry-name" class="sr-only">Name</label>
+                      <input type="text" id="apply-waitingListEntry-name" class="form-control" value="Max Mustermann" readonly="readonly" disabled="disabled"/>
+                      <p class="help-block">
+                          Die ausgewählte Person wird aus der Warteliste entfernt und als Teilnehmer hinzugefügt.
+                      </p>
+                  </form>
+              </section>
+              <footer class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+                  <button type="submit" class="btn btn-primary" form="apply-waitingListEntry">Hinzufügen</button>
+              </footer>
+          </div>
+      </div>
+  </section>
+
+  <!-- 'remove waiting list entry' modal -->
+  <section class="modal fade" id="remove-waitingListEntry-modal" tabindex="-1" role="dialog" aria-labelledby="remove-waitingListEntry-modal">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <header class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+                  <h3 class="modal-title" id="remove-waitingListEntry-label">Eintrag entfernen</h3>
+              </header>
+              <section class="modal-body">
+                  <form id="remove-waitingListEntry" class="form-horizontal" th:action="@{'/events/' + ${event.id} + '/waitingList/remove'}">
+                      <input type="hidden" name="person-id" value="-1" />
+                      <label for="remove-waitingListEntry-name" class="sr-only">Name</label>
+                      <input type="text" id="remove-waitingListEntry-name" class="form-control" value="Max Mustermann" readonly="readonly" disabled="disabled"/>
+                      <p class="help-block">
+                          Die ausgewählte Person wird aus der Warteliste entfernt.
+                      </p>
+                  </form>
+              </section>
+              <footer class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+                  <div class="btn-group">
+                     <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="glyphicon glyphicon-trash"></span> Löschen <span class="caret"></span>
+                     </button>
+                     <ul class="dropdown-menu confirm-delete">
+                        <li><button type="submit" class="btn btn-link" form="remove-waitingListEntry">Löschen</button></li>
+                     </ul>
+                  </div>
               </footer>
           </div>
       </div>
@@ -834,6 +978,51 @@
                </p>
             </div>
 
+            <div class="alert alert-success alert-dismissible" role="alert" th:if="${waitingListEntryAdded}">
+               <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+               <p>
+                  Eintrag hinzugefügt
+               </p>
+            </div>
+
+            <div class="alert alert-warning alert-dismissible" role="alert" th:if="${waitingListEntryParticipates}">
+               <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+               <p>
+                  Die Person ist bereits als TeilnehmerIn registriert.
+               </p>
+            </div>
+
+            <div class="alert alert-success alert-dismissible" role="alert" th:if="${waitingListEntryApplied}">
+               <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+               <p>
+                  Die Person wurde von der Warteliste entfernt und als TeilnehmerIn hinzugefügt.
+               </p>
+            </div>
+
+            <div class="alert alert-success alert-dismissible" role="alert" th:if="${waitingListEntryRemoved}">
+               <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+               <p>
+                  Die Person wurde von der Warteliste entfernt.
+               </p>
+            </div>
+
+            <div class="alert alert-warning alert-dismissible" role="alert" th:if="${waitingListEntryExists}">
+               <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+               <p>
+                  Die Person ist bereits auf der Warteliste.
+               </p>
+            </div>
+
         </section>
 
         <!-- event overview -->
@@ -931,7 +1120,7 @@
             </div>
         </section>
 
-        <!-- participants -->
+        <!-- participants, reservations, etc. -->
         <section class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
@@ -956,6 +1145,8 @@
                             </div>
                         </div>
                     </header>
+
+                    <!-- participants -->
                     <table id="participants" class="table table-striped table-hover tablesorter">
                         <thead>
                             <tr>
@@ -1067,99 +1258,179 @@
                             </tr>
                         </tbody>
                     </table>
-                    <div id="reservations">
-                        <hr />
-                        <div class="panel-body">
-                            <h3>Reservierungen</h3>
-                        </div>
-                        <table class="table table-striped table-hover reservations">
-                            <thead>
-                                <tr class="row">
-                                    <th class="col-md-6">Beschreibung</th>
-                                    <th class="col-md-2">Plätze</th>
-                                    <th class="col-md-3">Kontakt</th>
-                                    <th class="col-md-1">Bearbeiten</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="row reservation" th:each="reservation : ${event.reservations}">
-                                    <td class="col-md-6 description" th:text="${reservation.description}">NAJU Bundesvorstand</td>
-                                    <td class="col-md-2 slots" th:text="${reservation.numberOfSlots}">9</td>
-                                    <td class="col-md-3 email"><a href="mailto:" th:href="|mailto:${reservation.contactEmail}|" th:text="${reservation.contactEmail}">vorstand@naju.de</a></td>
-                                    <td class="col-md-1 controls">
-                                        <div class="btn-group btn-group-xs" role="group">
-                                            <button type="button" class="btn btn-default hover-primary edit-reservation"><span class="glyphicon glyphicon-pencil"></span></button>
-                                            <button type="button" class="btn btn-default hover-danger remove-reservation" th:attr="data-description=${reservation.description}"><span class="glyphicon glyphicon-trash"></span></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="row new-reservation">
-                                    <td class="col-md-6"><input type="text" class="form-control input-sm reservation-description" placeholder="Beschreibung" required="required" /></td>
-                                    <td class="col-md-2"><input type="number" class="form-control text-right input-sm reservation-slots" value="1" min="1" th:max="${event.remainingCapacity}" /></td>
-                                    <td class="col-md-3"><input type="email" class="form-control input-sm reservation-email" placeholder="Kontakt E-Mail" /></td>
-                                    <td class="col-md-1" style="vertical-align:middle;">
-                                        <div class="btn-group btn-group-xs reservation-controls" role="group">
-                                            <button type="button" class="btn btn-default hover-success add"><span class="glyphicon glyphicon-ok"></span></button>
-                                            <button type="button" class="btn btn-default  hover-danger cancel"><span class="glyphicon glyphicon-remove"></span></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="panel-body">
-                            <div class="container">
-                                <div id="reservation-transmission-error" class="alert alert-danger" role="alert">
-                                   <p>
-                                      Die Daten konnten nicht aktualisiert werden
-                                   </p>
-                                </div>
-                            </div>
 
-                            <div class="pull-right">
-                                <button type="button" class="btn btn-default add-reservation" data-toggle="modal" data-target="#add-reservation-modal" th:disabled="${event.bookedOut}"><span class="glyphicon glyphicon-plus"></span> Hinzufügen</button>
+                    <hr />
+
+                    <!-- reservations, waiting list and persons to contact -->
+                    <div class="container-fluid margin-btm">
+                        <div class="row">
+                            <div class="col-md-2">
+
+                                <!-- navigation -->
+                                <ul class="nav nav-pills nav-stacked" role="tablist">
+                                    <li role="presentation" class="active">
+                                        <a href="#reservations" aria-controls="reservations" role="tab" data-toggle="tab">Reservierungen</a>
+                                    </li>
+                                    <li role="presentation">
+                                        <a href="#waiting-list" aria-controls="waiting-list" role="tab" data-toggle="tab">Warteliste</a>
+                                    </li>
+                                    <li role="presentation">
+                                        <a href="#persons-to-contact" aria-controls="persons-to-contact" role="tab" data-toggle="tab">Zu kontaktieren</a>
+                                    </li>
+                                </ul>
                             </div>
-                        </div>
-                    </div>
-                    <div id="persons-to-contact">
-                        <div class="panel-body">
-                            <hr />
-                            <h3>Zu kontaktieren</h3>
-                        </div>
-                        <table class="table table-striped table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>E-Mail</th>
-                                    <th>Bemerkung</th>
-                                </tr>
-                            </thead>
-                            <tbody th:remove="all-but-first">
-                                <tr data-toggle="modal" data-target="#edit-personToContact-modal" data-id="1" th:each="personToContact : ${event.personsToContact}" th:attr="data-id=${personToContact.key.id}">
-                                    <td>
-                                        <a href="personDetails.html" class="name" th:href="@{/persons/{pid}(pid=${personToContact.key.id})}" th:text="${personToContact.key.name}">Siglinde Superfrau</a>
-                                    </td>
-                                    <td>
-                                        <a href="mailto:siglinde@web.de" th:href="|mailto:${personToContact.key.email}|" th:text="${personToContact.key.email}">
-                                            siglinde@web.de
-                                        </a>
-                                    </td>
-                                    <td class="remarks" th:text="${personToContact.value}">hat letztes Jahr teilgenommen</td>
-                                </tr>
-                                <tr data-toggle="modal" data-target="#edit-personToContact-modal" data-id="2">
-                                    <td><a  class="name" href="personDetails.html">Klaus Komisch</a></td>
-                                    <td><a href="mailto:kkomisch@email.com">kkomisch@email.com</a></td>
-                                    <td class="remarks">möchte eventuell Teilnehmen</td>
-                                </tr>
-                                <tr data-toggle="modal" data-target="#edit-personToContact-modal" data-id="3">
-                                    <td><a  class="name" href="personDetails.html">Erika Ehrlich</a></td>
-                                    <td><a href="mailto:emai123@gmail.com">emai123@gmail.com</a></td>
-                                    <td class="remarks">Referentin für Wildlife Workshop?</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="panel-body">
-                            <div class="pull-right">
-                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-personToContact-modal"><span class="glyphicon glyphicon-plus"></span> Hinzufügen</button>
+                            <div class="col-md-10">
+                                <div class="tab-content">
+
+                                    <!-- reservations -->
+                                    <div id="reservations" class="tab-pane fade in active">
+                                        <table class="table table-striped table-hover reservations">
+                                            <thead>
+                                                <tr class="row">
+                                                    <th class="col-md-6">Beschreibung</th>
+                                                    <th class="col-md-2">Plätze</th>
+                                                    <th class="col-md-3">Kontakt</th>
+                                                    <th class="col-md-1">Bearbeiten</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="row reservation" th:each="reservation : ${event.reservations}">
+                                                    <td class="col-md-6 description" th:text="${reservation.description}">NAJU Bundesvorstand</td>
+                                                    <td class="col-md-2 slots" th:text="${reservation.numberOfSlots}">9</td>
+                                                    <td class="col-md-3 email"><a href="mailto:" th:href="|mailto:${reservation.contactEmail}|" th:text="${reservation.contactEmail}">vorstand@naju.de</a></td>
+                                                    <td class="col-md-1 controls">
+                                                        <div class="btn-group btn-group-xs" role="group">
+                                                            <button type="button" class="btn btn-default hover-primary edit-reservation"><span class="glyphicon glyphicon-pencil"></span></button>
+                                                            <button type="button" class="btn btn-default hover-danger remove-reservation" th:attr="data-description=${reservation.description}"><span class="glyphicon glyphicon-trash"></span></button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr class="row new-reservation">
+                                                    <td class="col-md-6"><input type="text" class="form-control input-sm reservation-description" placeholder="Beschreibung" required="required" /></td>
+                                                    <td class="col-md-2"><input type="number" class="form-control text-right input-sm reservation-slots" value="1" min="1" th:max="${event.remainingCapacity}" /></td>
+                                                    <td class="col-md-3"><input type="email" class="form-control input-sm reservation-email" placeholder="Kontakt E-Mail" /></td>
+                                                    <td class="col-md-1" style="vertical-align:middle;">
+                                                        <div class="btn-group btn-group-xs reservation-controls" role="group">
+                                                            <button type="button" class="btn btn-default hover-success add"><span class="glyphicon glyphicon-ok"></span></button>
+                                                            <button type="button" class="btn btn-default  hover-danger cancel"><span class="glyphicon glyphicon-remove"></span></button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="panel-body">
+                                            <div class="container">
+                                                <div id="reservation-transmission-error" class="alert alert-danger" role="alert">
+                                                   <p>
+                                                      Die Daten konnten nicht aktualisiert werden
+                                                   </p>
+                                                </div>
+                                            </div>
+
+                                            <div class="pull-right">
+                                                <button type="button" class="btn btn-default add-reservation" data-toggle="modal" data-target="#add-reservation-modal" th:disabled="${event.bookedOut}"><span class="glyphicon glyphicon-plus"></span> Hinzufügen</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- waiting list -->
+                                    <div id="waiting-list" class="tab-pane fade">
+                                        <table class="table table-striped table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Name</th>
+                                                    <th>E-Mail</th>
+                                                    <th>Bearbeiten</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody th:remove="all-but-first">
+                                                <tr data-id="-1" th:each="person : ${event.waitingList}" th:attr="data-id=${person.id}">
+                                                    <td th:text="${event.getWaitingListSpotFor(person)}">1</td>
+                                                    <td class="name" th:text="${person.name}">Fritz Fröhlich</td>
+                                                    <td>
+                                                        <a href="mailto:fritz75@gmail.com" th:href="|mailto:${person.email}|" th:text="${person.email}">fritz75@gmail.com</a>
+                                                    </td>
+                                                    <td>
+                                                        <form class="btn-group btn-group-xs" role="group">
+                                                            <button type="button" class="btn btn-default hover-primary apply-entry"><span class="glyphicon glyphicon-chevron-up"></span></button>
+                                                            <button type="button" class="btn btn-default hover-danger remove-entry"><span class="glyphicon glyphicon-trash"></span></button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                                <tr data-id="-2">
+                                                    <td>2</td>
+                                                    <td class="name">Samantha Sander</td>
+                                                    <td><a href="mailto:sander@gmx.net">sander@gmx.net</a></td>
+                                                    <td>
+                                                        <form class="btn-group btn-group-xs" role="group">
+                                                            <button type="button" class="btn btn-default hover-primary apply-entry"><span class="glyphicon glyphicon-chevron-up"></span></button>
+                                                            <button type="button" class="btn btn-default hover-danger remove-entry"><span class="glyphicon glyphicon-trash"></span></button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                                <tr data-id="-3">
+                                                    <td>3</td>
+                                                    <td class="name">Hans Mustermann</td>
+                                                    <td><a href="mailto:hm@web.de">hm@web.de</a></td>
+                                                    <td>
+                                                        <form class="btn-group btn-group-xs" role="group">
+                                                            <button type="button" class="btn btn-default hover-primary apply-entry"><span class="glyphicon glyphicon-chevron-up"></span></button>
+                                                            <button type="button" class="btn btn-default hover-danger remove-entry"><span class="glyphicon glyphicon-trash"></span></button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="panel-body">
+                                            <div class="pull-right">
+                                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-waitingList-modal"><span class="glyphicon glyphicon-plus"></span> Hinzufügen</button>
+                                                <button type="button" id="apply-waitingListTop" class="btn btn-default" data-person="Fritz Fröhlich" th:attr="data-person=(${event.hasWaitingList()} ? ${event.topWaitingListSpot.name} : '')" th:disabled="!${event.hasWaitingList()}"><span class="glyphicon glyphicon-chevron-up"></span> Ersten Eintrag übernehmen</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- persons to contact-->
+                                    <div id="persons-to-contact" class="tab-pane fade">
+                                        <table class="table table-striped table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>E-Mail</th>
+                                                    <th>Bemerkung</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody th:remove="all-but-first">
+                                                <tr data-toggle="modal" data-target="#edit-personToContact-modal" data-id="1" th:each="personToContact : ${event.personsToContact}" th:attr="data-id=${personToContact.key.id}">
+                                                    <td>
+                                                        <a href="personDetails.html" class="name" th:href="@{/persons/{pid}(pid=${personToContact.key.id})}" th:text="${personToContact.key.name}">Siglinde Superfrau</a>
+                                                    </td>
+                                                    <td>
+                                                        <a href="mailto:siglinde@web.de" th:href="|mailto:${personToContact.key.email}|" th:text="${personToContact.key.email}">
+                                                            siglinde@web.de
+                                                        </a>
+                                                    </td>
+                                                    <td class="remarks" th:text="${personToContact.value}">hat letztes Jahr teilgenommen</td>
+                                                </tr>
+                                                <tr data-toggle="modal" data-target="#edit-personToContact-modal" data-id="2">
+                                                    <td><a  class="name" href="personDetails.html">Klaus Komisch</a></td>
+                                                    <td><a href="mailto:kkomisch@email.com">kkomisch@email.com</a></td>
+                                                    <td class="remarks">möchte eventuell Teilnehmen</td>
+                                                </tr>
+                                                <tr data-toggle="modal" data-target="#edit-personToContact-modal" data-id="3">
+                                                    <td><a  class="name" href="personDetails.html">Erika Ehrlich</a></td>
+                                                    <td><a href="mailto:emai123@gmail.com">emai123@gmail.com</a></td>
+                                                    <td class="remarks">Referentin für Wildlife Workshop?</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="panel-body">
+                                            <div class="pull-right">
+                                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-personToContact-modal"><span class="glyphicon glyphicon-plus"></span> Hinzufügen</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

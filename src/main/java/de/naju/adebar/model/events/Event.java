@@ -331,6 +331,13 @@ public class Event {
     }
 
     /**
+     * @return the waiting list
+     */
+    @Transient public Iterable<Person> getWaitingList() {
+    	return participantsList.getWaitingList();
+    }
+
+    /**
      * @param id the event's id
      */
     protected void setId(EventId id) {
@@ -434,6 +441,39 @@ public class Event {
      */
     @Transient public Reservation getReservationFor(String description) {
     	return participantsList.getReservationFor(description);
+    }
+
+    /**
+     * @return {@code true} if the waiting list is used, {@code false} otherwise
+     */
+    public boolean hasWaitingList() {
+    	return participantsList.hasWaitingList();
+    }
+
+    /**
+     * @param person the person to check
+     * @return {@code true} if the person is wait-listed, {@code false} otherwise
+     */
+    @Transient
+    public boolean isOnWaitingList(Person person) {
+    	return participantsList.isOnWaitingList(person);
+    }
+
+    /**
+     * @return the head of the waiting list
+     */
+    @Transient
+    public Person getTopWaitingListSpot() {
+    	return participantsList.getTopWaitingListSpot();
+    }
+
+    /**
+     * @param person the person to query for
+     * @return the person's position on the waiting list
+     */
+    @Transient
+    public int getWaitingListSpotFor(Person person) {
+    	return participantsList.getWaitingListSpotFor(person);
     }
 
     // modification methods
@@ -644,6 +684,43 @@ public class Event {
      */
     public boolean isOrganizer(Person activist) {
         return organizers.contains(activist);
+    }
+
+    /**
+     * Enqueues a person at the end of the waiting list
+     * @param person the person to add
+     */
+    public void putOnWaitingList(Person person) {
+    	participantsList.putOnWaitingList(person);
+    }
+
+    /**
+     * Removes a person from the waiting list
+     * @param person the person to remove
+     */
+    public void removeFromWaitingList(Person person) {
+    	participantsList.removeFromWaitingList(person);
+    }
+
+    /**
+     * Moves the head of the waiting list to the participants list
+     */
+    public void applyTopWaitingListSpot() {
+    	participantsList.applyTopWaitingListSpot();
+    }
+
+    /**
+     * Moves a person from the waiting list to the participants list
+     * @param person the person to move
+     */
+    public void applyWaitingListEntryFor(Person person) {
+    	if (!isOnWaitingList(person)) {
+    		throw new IllegalArgumentException("Person is not wait-listed: " + person);
+    	}
+    	// we have to add the participant prior to adjusting the waiting list
+    	// if the addition fails, the person should still be wait-listed
+    	addParticipant(person);
+    	removeFromWaitingList(person);
     }
 
     /**

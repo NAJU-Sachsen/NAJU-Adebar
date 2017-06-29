@@ -12,7 +12,10 @@ import javax.persistence.ElementCollection;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import javax.persistence.OrderColumn;
 import javax.persistence.Transient;
+
+import org.springframework.util.Assert;
 
 import de.naju.adebar.model.human.Person;
 
@@ -23,20 +26,20 @@ import de.naju.adebar.model.human.Person;
  */
 @Entity(name = "participantsList")
 class ParticipantsList {
+	private final static int WAITING_LIST_HEAD = 0;
+
 	@EmbeddedId @Column(name = "event") private EventId event;
 	@Column(name = "participantsLimit") private int participantsLimit;
 	@ManyToMany(cascade = CascadeType.ALL) private Map<Person, ParticipationInfo> participants;
 	@ElementCollection private Map<String, Reservation> reservations;
+	@ManyToMany @OrderColumn private List<Person> waitingList;
 
 	/**
 	 * Creates a new participants list with an unlimited number of possible participants and reservations
 	 * @param event the event to create the list for
 	 */
 	public ParticipantsList(Event event) {
-		this.event = event.getId();
-		this.participantsLimit = Integer.MAX_VALUE;
-		this.participants = new HashMap<>();
-		this.reservations = new HashMap<>();
+		this(event, Integer.MAX_VALUE);
 	}
 
 	/**
@@ -49,6 +52,7 @@ class ParticipantsList {
 		this.participantsLimit = participantsLimit;
 		this.participants = new HashMap<>();
 		this.reservations = new HashMap<>();
+		this.waitingList = new LinkedList<>();
 	}
 
 	/**
@@ -95,6 +99,20 @@ class ParticipantsList {
 	}
 
 	/**
+	 * @return the waiting list
+	 */
+	public Iterable<Person> getWaitingList() {
+		return waitingList;
+	}
+
+	/**
+	 * @param waitingList the waiting list
+	 */
+	public void setWaitingList(List<Person> waitingList) {
+		this.waitingList = waitingList;
+	}
+
+	/**
 	 * @param event the event this list was created for
 	 */
 	protected void setEvent(EventId event) {
@@ -115,6 +133,7 @@ class ParticipantsList {
 	protected void setReservations(Iterable<Reservation> reservations) {
 		reservations.forEach(r -> this.reservations.put(r.getDescription(), r));
 	}
+
 	// query methods
 
 	/**
@@ -252,6 +271,39 @@ class ParticipantsList {
     	return getRemainingCapacity() >= participants;
     }
 
+    /**
+     * @return {@code true} if the waiting list is used, {@code false} otherwise
+     */
+    public boolean hasWaitingList() {
+    	return !waitingList.isEmpty();
+    }
+
+    /**
+     * @param person the person to check
+     * @return {@code true} if the person is wait-listed, {@code false} otherwise
+     */
+    @Transient
+    public boolean isOnWaitingList(Person person) {
+    	return waitingList.contains(person);
+    }
+
+    /**
+     * @return the head of the waiting list
+     */
+    @Transient
+    public Person getTopWaitingListSpot() {
+    	return waitingList.get(WAITING_LIST_HEAD);
+    }
+
+    /**
+     * @param person the person to query for
+     * @return the person's position on the waiting list
+     */
+    @Transient
+    public int getWaitingListSpotFor(Person person) {
+    	return normalizeIndex(waitingList.indexOf(person));
+    }
+
     // modification methods
 
     /**
@@ -331,6 +383,53 @@ class ParticipantsList {
     	} else {
     		reservations.replace(description, newReservation);
     	}
+    }
+
+    /**
+     * Enqueues a person at the end of the waiting list
+     * @param person the person to add
+     * @throws IllegalArgumentException if the person was {@code null}
+     * @throws ExistingParticipantException if the person is already registered as a participant
+     * @throws IllegalStateException if the person is already on the waiting list
+     */
+    public void putOnWaitingList(Person person) {
+    	Assert.notNull(person, "Person to wait-list may not be null!");
+    	if (isParticipant(person)) {
+    		throw new ExistingParticipantException("Person does already participate: " + person);
+    	} else if (isOnWaitingList(person)) {
+    		throw new IllegalStateException("Person is already on the waiting list: " + person);
+    	}
+    	waitingList.add(person);
+    }
+
+    /**
+     * Removes a person from the waiting list
+     * @param person the person to remove
+     * @throws IllegalArgumentException if the person is not wait-listed
+     */
+    public void removeFromWaitingList(Person person) {
+    	if (!isOnWaitingList(person)) {
+    		throw new IllegalArgumentException("Person is not wait-listed: " + person);
+    	}
+    	waitingList.remove(person);
+    }
+
+    /**
+     * Moves the head of the waiting list to the participants list
+     */
+    public void applyTopWaitingListSpot() {
+    	addParticipant(waitingList.remove(WAITING_LIST_HEAD));
+    }
+
+    // helper methods
+
+    /**
+     * Maps an internal list index (which is ≥0) to a 'real world' index (which is ≥1)
+     * @param idx the index to normalize
+     * @return the normalized index
+     */
+    private int normalizeIndex(int idx) {
+    	return idx + 1;
     }
 
     // overridden from Object
