@@ -1,4 +1,52 @@
 
+function createPersonListEntry(url, personId, name, dob, address) {
+    var btn =
+    `<div class="clearfix">
+        <form class="form-inline pull-right" method="POST" action="${url}">
+            <input type="hidden" name="person-id" value="${personId}" />
+            <button type="submit" class="btn btn-default btn-sm">Als Aktive(n) markieren und hinzufügen</button>
+        </form>
+     </div>`;
+     address = address.trim();
+     var description = '';
+     if (dob || address) {
+         description += '<div class="list-group-item-text">';
+         if (dob) {
+             description += `<span class="pers-dob">* ${dob}</span>`;
+         }
+         if (address) {
+             description += `<span class="pers-address">${address}</span>`;
+         }
+         description += '</div>';
+     }
+
+     var person =
+     `<div class="pull-left">
+         <h5 class="list-group-item-heading">${name}</h5>
+         ${description}
+     </div>`;
+     return '<li class="list-group-item">' + person + btn + '</li>';
+}
+
+function displayMatchingNonActivists(modal, result, eventId) {
+    var panel = modal.find('.new-activists');
+    var list = panel.find('ul');
+    list.empty();
+
+    if (!result.length) {
+        panel.hide();
+        return;
+    }
+
+    for (var i = 0; i < result.length; i++) {
+        var person = result[i];
+        var entry = createPersonListEntry(eventId, person.id, person.name, person.dob, person.address);
+        list.append(entry);
+    }
+
+    panel.show();
+}
+
 $('#participants').find('a').on('click', function(e){
     e.stopPropagation();
 });
@@ -34,8 +82,10 @@ $('#add-counselor-search-btn').on('click', function() {
     var firstname = $('#add-counselor-search-firstname').val();
     var lastname = $('#add-counselor-search-lastname').val();
     var city = $('#add-counselor-search-city').val();
+    var eventId = $('#event-id').val();
+    var url = `/events/${eventId}/counselors/add-new`;
 
-    var request = {
+    var activistsRequest = {
         async: true,
         data: {
             firstname: firstname,
@@ -45,14 +95,34 @@ $('#add-counselor-search-btn').on('click', function() {
         dataType: 'json',
         method: 'POST',
         success: function(response) {
-            $('#add-counselor-modal').find('searching').hide();
+            $('#add-counselor-modal').find('.searching').hide();
             displayMatchingPersons(table, response);
         },
         url: '/api/persons/activists/simpleSearch'
     };
 
-    $('#add-counselor-modal').find('searching').show();
-    $.ajax(request);
+    $('#add-counselor-modal').find('.searching').show();
+    $.ajax(activistsRequest);
+
+    var personsRequest = {
+        async: true,
+        data: {
+            firstname: firstname,
+            lastname: lastname,
+            city: city,
+            activist: false
+        },
+        dataType: 'json',
+        method: 'POST',
+        success: function(response) {
+            $('#add-counselor-modal').find('.searching-new-activists').hide();
+            displayMatchingNonActivists($('#add-counselor-modal'), response, url);
+        },
+        url: '/api/persons/search'
+    };
+
+    $('#add-counselor-modal').find('.searching-new-activists').show();
+    $.ajax(personsRequest);
 });
 
 $('#add-organizer-search-btn').on('click', function() {
@@ -60,8 +130,10 @@ $('#add-organizer-search-btn').on('click', function() {
     var firstname = $('#add-organizer-search-firstname').val();
     var lastname = $('#add-organizer-search-lastname').val();
     var city = $('#add-organizer-search-city').val();
+    var eventId = $('#event-id').val();
+    var url = `/events/${eventId}/organizers/add-new`;
 
-    var request = {
+    var activistsRequest = {
         async: true,
         data: {
             firstname: firstname,
@@ -71,14 +143,34 @@ $('#add-organizer-search-btn').on('click', function() {
         dataType: 'json',
         method: 'POST',
         success: function(response) {
-            $('#add-organizer-modal').find('searching').hide();
+            $('#add-organizer-modal').find('.searching').hide();
             displayMatchingPersons(table, response);
         },
         url: '/api/persons/activists/simpleSearch'
     };
 
-    $('#add-organizer-modal').find('searching').show();
-    $.ajax(request);
+    $('#add-organizer-modal').find('.searching').show();
+    $.ajax(activistsRequest);
+
+    var personsRequest = {
+        async: true,
+        data: {
+            firstname: firstname,
+            lastname: lastname,
+            city: city,
+            activist: false
+        },
+        dataType: 'json',
+        method: 'POST',
+        success: function(response) {
+            $('#add-organizer-modal').find('.searching-new-activists').hide();
+            displayMatchingNonActivists($('#add-organizer-modal'), response, url);
+        },
+        url: '/api/persons/search'
+    };
+
+    $('#add-organizer-modal').find('.searching-new-activists').show();
+    $.ajax(personsRequest);
 });
 
 $('#edit-participant-modal').on('show.bs.modal', function(event) {
@@ -132,13 +224,13 @@ $('#add-personToContact-search-btn').on('click', function() {
         dataType: 'json',
         method: 'POST',
         success: function(response) {
-            $('#add-personToContact-modal').find('searching').hide();
+            $('#add-personToContact-modal').find('.searching').hide();
             displayMatchingPersons(table, response);
         },
         url: '/api/persons/simpleSearch'
     };
 
-    $('#add-personToContact-modal').find('searching').show();
+    $('#add-personToContact-modal').find('.searching').show();
     $.ajax(request);
 });
 
@@ -161,7 +253,7 @@ function createReservationRow(description, slots, email) {
     var descriptionColumn = '<td class="col-md-6 description">' + description + '</td>';
     var slotsColumn = '<td class="col-md-2 slots">' + slots + '</td>';
     var emailColumn = '<td class="col-md-3 email"><a href="mailto:' + email + '">' + email + '</a></td>';
-    var controlsColumn = '<td class="col-md-1 controls"><div class="btn-group btn-group-xs" role="group"><button type="button" class="btn btn-default hover-primary edit-reservation"><span class="glyphicon glyphicon-pencil"></span></button><button type="button" class="btn btn-default hover-danger remove-reservation"><span class="glyphicon glyphicon-trash"></span></button></div></td>';
+    var controlsColumn = '<td class="col-md-1 controls"><div class="btn-group btn-group-xs" role="group"><button type="button" class="btn btn-default hover-primary edit-reservation"><span class="glyphicon glyphicon-pencil"></span></button><button type="button" class="btn btn-default hover-danger remove-reservation" data-description="' + description + '"><span class="glyphicon glyphicon-trash"></span></button></div></td>';
     var row = '<tr class="row reservation">' + descriptionColumn + slotsColumn + emailColumn + controlsColumn + '</tr>';
     return row;
 }
@@ -200,7 +292,13 @@ function hideNewReservation() {
 function fetchAddReservationResponse(response, row) {
     var reservationSlots = $('tr.new-reservation').find('input.reservation-slots');
     if (response.status === 'ok') {
-        $('table.reservations').find('tr.reservation').last().after(row);
+        var lastRow = $('table.reservations').find('tr.reservation').last();
+
+        if (lastRow.length) {
+            lastRow.after(row);
+        } else {
+            $('table.reservations').prepend(row);
+        }
 
         $('input.reservation-description').parent().hide();
         $('input.reservation-slots').parent().hide();
@@ -406,13 +504,13 @@ $('#add-waitingList-search-btn').on('click', function() {
         dataType: 'json',
         method: 'POST',
         success: function(response) {
-            $('#add-waitingList-modal').find('searching').hide();
+            $('#add-waitingList-modal').find('.searching').hide();
             displayMatchingPersons(table, response);
         },
         url: '/api/persons/simpleSearch'
     };
 
-    $('#add-waitingList-modal').find('searching').show();
+    $('#add-waitingList-modal').find('.searching').show();
     $.ajax(request);
 });
 
@@ -452,6 +550,8 @@ $('#waiting-list').find('.remove-entry').click(function() {
 $(function() {
     $('.no-results').hide();
     $('.searching').hide();
+    $('.searching-new-activists').hide();
+    $('.new-activists').hide();
 
     $('input.reservation-description').parent().hide();
     $('input.reservation-slots').parent().hide();

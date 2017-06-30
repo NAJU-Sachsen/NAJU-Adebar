@@ -190,3 +190,22 @@ fieldset.inline-options label {
     background-color: #d9534f;
     border-color: #d43f3a;
 }
+
+.list-group-minimalistic .list-group-item:first-child,
+.list-group-minimalistic .list-group-item:last-child {
+    border-radius: 0;
+}
+
+.list-group-minimalistic .list-group-item {
+    margin-bottom: 0;
+    border: 0;
+    border-bottom: 1px solid #DDD;
+}
+
+.list-group-minimalistic .list-group-item:nth-of-type(2n) {
+    background-color: #f9f9f9;
+}
+
+.inline {
+    display: inline;
+}

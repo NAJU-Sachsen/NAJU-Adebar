@@ -33,6 +33,7 @@ import de.naju.adebar.model.events.ExistingParticipantException;
 import de.naju.adebar.model.events.ParticipationInfo;
 import de.naju.adebar.model.events.PersonIsTooYoungException;
 import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.human.PersonId;
 import de.naju.adebar.util.conversion.events.EventFormDataExtractor;
 import de.naju.adebar.util.conversion.events.EventToEventFormConverter;
 import de.naju.adebar.util.conversion.events.FilterEventsFormDataExtractor;
@@ -367,6 +368,35 @@ public class EventController {
     }
 
     /**
+     * Adds a non-activist as counselor to the event. This will make the person an activist.
+     * @param eventId the event to which the counselor should be added
+     * @param personId the id of the person who should be added as counselor
+     * @param redirAttr attributes for the view to display some result information
+     * @return the event's detail view
+     */
+    @RequestMapping("/events/{eid}/counselors/add-new")
+    public String addNewCounselor(@PathVariable("eid") String eventId, @RequestParam("person-id") String personId, RedirectAttributes redirAttr) {
+    	Event event = eventManager.findEvent(eventId).orElseThrow(IllegalArgumentException::new);
+        Person person = personManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
+
+        try {
+        	person.makeActivist();
+            event.addCounselor(person);
+            personManager.updatePerson(new PersonId(personId), person);
+            eventManager.updateEvent(eventId, event);
+            redirAttr.addFlashAttribute("counselorAdded", true);
+        } catch (IllegalStateException e) {
+        	// the person is already an activist
+        	redirAttr.addFlashAttribute("existingActivist", true);
+
+        } catch (IllegalArgumentException e) {
+        	// the person is already an organizer
+        	redirAttr.addFlashAttribute("existingCounselor", true);
+        }
+    	return "redirect:/events/" + eventId;
+    }
+
+    /**
      * Adds an organizer to an event
      * @param eventId the id of the event to add the organizer to
      * @param personId the id of the person to add as an organizer
@@ -406,6 +436,35 @@ public class EventController {
 
         redirAttr.addFlashAttribute("organizerRemoved", true);
         return "redirect:/events/" + eventId;
+    }
+
+    /**
+     * Adds a non-activist as organizer to the event. This will make the person an activist.
+     * @param eventId the event to which the organizer should be added
+     * @param personId the id of the person who should be added as organizer
+     * @param redirAttr attributes for the view to display some result information
+     * @return the event's detail view
+     */
+    @RequestMapping("/events/{eid}/organizers/add-new")
+    public String addNewOrganizer(@PathVariable("eid") String eventId, @RequestParam("person-id") String personId, RedirectAttributes redirAttr) {
+    	Event event = eventManager.findEvent(eventId).orElseThrow(IllegalArgumentException::new);
+        Person person = personManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
+
+        try {
+        	person.makeActivist();
+            event.addOrganizer(person);
+            personManager.updatePerson(new PersonId(personId), person);
+            eventManager.updateEvent(eventId, event);
+            redirAttr.addFlashAttribute("organizerAdded", true);
+        } catch (IllegalStateException e) {
+        	// the person is already an activist
+        	redirAttr.addFlashAttribute("existingActivist", true);
+
+        } catch (IllegalArgumentException e) {
+        	// the person is already an organizer
+        	redirAttr.addFlashAttribute("existingOrganizer", true);
+        }
+    	return "redirect:/events/" + eventId;
     }
 
     /**

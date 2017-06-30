@@ -1,16 +1,21 @@
 package de.naju.adebar.controller.api;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.naju.adebar.api.data.SimplePersonJSON;
+import de.naju.adebar.api.forms.FilterPersonForm;
+import de.naju.adebar.api.util.DataFormatter;
+import de.naju.adebar.api.util.PersonFilterDataExtractor;
 import de.naju.adebar.app.filter.FilterType;
 import de.naju.adebar.app.filter.MatchType;
 import de.naju.adebar.app.human.PersonManager;
@@ -30,11 +35,16 @@ import de.naju.adebar.model.human.Person;
 @RequestMapping("/api/persons")
 public class PersonController {
     private PersonManager personManager;
+    private DataFormatter dataFormatter;
+    private PersonFilterDataExtractor filterExtractor;
 
     @Autowired
-    public PersonController(PersonManager personManager) {
-        Assert.notNull(personManager, "Person manager may not be null");
+    public PersonController(PersonManager personManager, DataFormatter dataFormatter, PersonFilterDataExtractor filterExtractor) {
+        Object[] params = {personManager, dataFormatter, filterExtractor};
+        Assert.noNullElements(params, "No parameter may be null, but at least one was: " + Arrays.toString(params));
         this.personManager = personManager;
+        this.dataFormatter = dataFormatter;
+        this.filterExtractor = filterExtractor;
     }
 
     /**
@@ -46,9 +56,9 @@ public class PersonController {
      */
     @RequestMapping("/simpleSearch")
     public Iterable<SimplePersonJSON> sendMatchingPersons(@RequestParam("firstname") String firstName, @RequestParam("lastname") String lastName, @RequestParam("city") String city) {
-    	firstName = adjustFirstLetterCase(firstName);
-    	lastName = adjustFirstLetterCase(lastName);
-    	city = adjustFirstLetterCase(city);
+    	firstName = dataFormatter.adjustFirstLetterCase(firstName);
+    	lastName = dataFormatter.adjustFirstLetterCase(lastName);
+    	city = dataFormatter.adjustFirstLetterCase(city);
 
     	Address address = new Address("", "", city);
         List<Person> persons = personManager.repository().streamAll().collect(Collectors.toList());
@@ -69,9 +79,9 @@ public class PersonController {
      */
     @RequestMapping("/activists/simpleSearch")
     public Iterable<SimplePersonJSON> sendMatchingActivists(@RequestParam("firstname") String firstName, @RequestParam("lastname") String lastName, @RequestParam("city") String city) {
-    	firstName = adjustFirstLetterCase(firstName);
-    	lastName = adjustFirstLetterCase(lastName);
-    	city = adjustFirstLetterCase(city);
+    	firstName = dataFormatter.adjustFirstLetterCase(firstName);
+    	lastName = dataFormatter.adjustFirstLetterCase(lastName);
+    	city = dataFormatter.adjustFirstLetterCase(city);
 
     	Address address = new Address("", "", city);
         List<Person> activists = personManager.repository().streamAll().collect(Collectors.toList());
@@ -85,17 +95,19 @@ public class PersonController {
     }
 
     /**
-     * Converts the first letter of a string to uppercase
-     * @param str the string to convert
-     * @return the converted string
+     * Performs a full-fledged search for persons
+     * @param form form containing the search criteria
+     * @return all matching persons
      */
-    private String adjustFirstLetterCase(String str) {
-    	if (str.isEmpty()) {
-    		return str;
-    	}
-    	Character fl = str.charAt(0);
-    	fl = Character.toUpperCase(fl);
-    	return fl + str.substring(1);
+    @RequestMapping(value = "/search", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public Iterable<SimplePersonJSON> filterPersons(FilterPersonForm form) {
+    	dataFormatter.adjustFilterPersonForm(form);
+    	List<Person> persons = personManager.repository().streamAll().collect(Collectors.toList());
+    	PersonFilterBuilder filterBuilder = new PersonFilterBuilder(persons.stream());
+    	filterExtractor.extractAllFilters(form).forEach(filterBuilder::applyFilter);
+
+    	Stream<Person> matches = filterBuilder.resultingStream();
+    	return matches.map(SimplePersonJSON::new).collect(Collectors.toList());
     }
 
 }

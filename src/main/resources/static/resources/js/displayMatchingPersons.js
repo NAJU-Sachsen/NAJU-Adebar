@@ -35,15 +35,3 @@ function displayMatchingPersons(table, result) {
         $(table).append(row);
     }
 }
-
-function findMatchingPersons(firstName, lastName, city) {
-
-}
-
-function findMatchingActivists(firstName, lastName, city) {
-
-}
-
-function findMatches(url, firstName, lastName, city) {
-
-}
