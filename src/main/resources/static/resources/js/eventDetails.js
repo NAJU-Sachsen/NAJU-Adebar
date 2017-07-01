@@ -107,8 +107,8 @@ $('#add-counselor-search-btn').on('click', function() {
     var personsRequest = {
         async: true,
         data: {
-            firstname: firstname,
-            lastname: lastname,
+            firstName: firstname,
+            lastName: lastname,
             city: city,
             activist: false
         },
@@ -155,8 +155,8 @@ $('#add-organizer-search-btn').on('click', function() {
     var personsRequest = {
         async: true,
         data: {
-            firstname: firstname,
-            lastname: lastname,
+            firstName: firstname,
+            lastName: lastname,
             city: city,
             activist: false
         },
