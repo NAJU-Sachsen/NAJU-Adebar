@@ -56,7 +56,8 @@ public class PersonToEditPersonFormConverter {
         personForm.setDateOfBirth(dob);
         personForm.setEatingHabit(profile.getEatingHabits());
         personForm.setHealthImpairments(profile.getHealthImpairments());
-
+        personForm.setRemarks(profile.getRemarks());
+        
         if (profile.isNabuMember()) {
             personForm.setNabuMember(true);
             personForm.setNabuNumber(profile.getNabuMembership().getMembershipNumber());
