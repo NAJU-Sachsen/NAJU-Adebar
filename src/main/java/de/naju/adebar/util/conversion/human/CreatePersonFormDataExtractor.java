@@ -1,5 +1,6 @@
 package de.naju.adebar.util.conversion.human;
 
+import de.naju.adebar.controller.forms.human.CreateParentForm;
 import de.naju.adebar.controller.forms.human.CreatePersonForm;
 
 import de.naju.adebar.model.human.*;
@@ -61,6 +62,24 @@ public class CreatePersonFormDataExtractor {
 
 
         return person;
+    }
+    
+    /**
+     * @param child the child-to-be
+     * @param parentForm the containing the parent data
+     * @return the {@link Person} object encoded by the form
+     */
+    public Person extractParent(Person child, CreateParentForm parentForm) {
+    	Person parent = personFactory.buildNew(parentForm.getFirstName(), parentForm.getLastName(), parentForm.getEmail()).create();
+    	parent.setPhoneNumber(parentForm.getPhoneNumber());
+    	
+    	if (parentForm.isUseChildAddress()) {
+    		parent.setAddress(child.getAddress());
+    	} else {
+    		parent.setAddress(new Address());
+    	}
+    	
+    	return parent;
     }
 
     /**

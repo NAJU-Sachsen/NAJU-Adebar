@@ -136,7 +136,8 @@ public class PersonController {
 
         model.addAttribute("editPersonForm", new PersonToEditPersonFormConverter().convertToEditPersonForm(person));
         model.addAttribute("addQualificationForm", new AddQualificationForm());
-
+        model.addAttribute("addParentForm", new CreateParentForm());
+        
         model.addAttribute("person", person);
 
         if (person.isActivist()) {
@@ -261,6 +262,62 @@ public class PersonController {
         personManager.updatePerson(person.getId(), person);
 
         return "redirect:/persons/" + personId;
+    }
+    
+    /**
+     * Registers a person as parent
+     * @param personId the child
+     * @param parentId the parent
+     * @return the child's detail view
+     */
+    @RequestMapping("/persons/{cid}/parents/add/existing")
+    public String addParent(@PathVariable("cid") String personId, @RequestParam("person-id") String parentId, RedirectAttributes redirAttr) {
+    	Person person = personManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
+    	Person parent = personManager.findPerson(parentId).orElseThrow(IllegalArgumentException::new);
+    	
+    	try {
+    		person.connectParentProfile(parent);
+    		personManager.updatePerson(person.getId(), person);
+    	} catch (ImpossibleKinshipRelationException e) {
+    		redirAttr.addFlashAttribute("impossibleKinship", true);
+    	}
+    	
+    	return "redirect:/persons/" + personId; 
+    }
+    
+    /**
+     * Creates a new parent for a person
+     * @param personId the child
+     * @param createParentForm the form containing the parent's data
+     * @return the child's detail view
+     */
+    @RequestMapping("/persons/{cid}/parents/add/new")
+    public String createParent(@PathVariable("cid") String personId, @ModelAttribute("addPersonFrom") CreateParentForm createParentForm, RedirectAttributes redirAttr) {
+    	Person person = personManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
+    	Person parent = createPersonFormDataExtractor.extractParent(person, createParentForm);
+		
+    	personManager.savePerson(parent);
+    	person.connectParentProfile(parent);
+		personManager.updatePerson(person.getId(), person);
+    	
+    	return "redirect:/persons/" + personId; 
+    }
+    
+    /**
+     * Removes a parent
+     * @param personId the former child
+     * @param parentId the former parent
+     * @return the child's detail view
+     */
+    @RequestMapping("/persons/{cid}/parents/remove")
+    public String removeParent(@PathVariable("cid") String personId, @RequestParam("person-id") String parentId) {
+    	Person person = personManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
+    	Person parent = personManager.findPerson(parentId).orElseThrow(IllegalArgumentException::new);
+    	
+    	person.disconnectParentProfile(parent);
+    	personManager.updatePerson(person.getId(), person);
+    	
+    	return "redirect:/persons/" + personId; 
     }
 
 }

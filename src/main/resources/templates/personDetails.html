@@ -71,10 +71,10 @@
 
 <!-- modal dialogs -->
 <section>
-  <h2 class="hidden">Dialoge</h2>
+    <h2 class="hidden">Dialoge</h2>
 
-  <!-- 'edit person' modal -->
-  <section id="edit-person-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="edit-person-label">
+    <!-- 'edit person' modal -->
+    <section id="edit-person-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="edit-person-label">
       <div class="modal-dialog" role="document">
           <div class="modal-content">
               <header class="modal-header">
@@ -212,10 +212,10 @@
               </footer>
           </div>
       </div>
-  </section>
+    </section>
 
-  <!-- 'edit activist' modal -->
-  <section id="edit-activist-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="edit-activist-label">
+    <!-- 'edit activist' modal -->
+    <section id="edit-activist-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="edit-activist-label">
       <div class="modal-dialog" role="document">
           <div class="modal-content">
               <header class="modal-header">
@@ -257,56 +257,56 @@
               </footer>
           </div>
       </div>
-  </section>
+    </section>
 
-  <!-- 'add qualification' modal -->
-  <section id="add-qualification-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="add-qualification-label">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <header class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times;</span></button>
-          <h3 id="add-qualification-label" class="modal-title">Qualifikation hinzufügen</h3>
-        </header>
-        <section class="modal-body row">
-            <div class="col-md-4">
-              <ul class="nav nav-pills nav-stacked" id="add-qualification-tabs" role="tablist">
-                <li class="active" role="presentation"><a href="#add-qualification-tab-existing" aria-controls="add-qualification-tab-existing" role="tab" data-toggle="tab" data-tab="EXISTING">Existierende</a></li>
-                <li role="presentation"><a href="#add-qualification-tab-new" aria-controls="add-qualification-tab-new" role="tab" data-toggle="tab" data-tab="NEW">Neu</a></li>
-              </ul>
-            </div>
-            <div class="col-md-8">
-              <form id="add-qualification-form" class="form-horizontal tab-content" method="post" th:object="${addQualificationForm}" th:action="@{'/persons/' + ${person.id} + '/add-qualification'}">
-                <div role="tabpanel" class="tab-pane fade in active" id="add-qualification-tab-existing">
-                  <label for="add-qualification-existing" class="sr-only">Qualifikation</label>
-                  <select id="add-qualification-existing" class="selectpicker" data-live-search="true" th:field="*{qualification}" th:remove="all-but-first">
-                    <option th:each="qualification : ${allQualifications}" th:text="${qualification.name}" th:value="${{qualification.name}}" th:field="*{qualification}">Erste-Hilfe-Kurs</option>
-                    <option>Storchenkoffer</option>
-                    <option>Öffentlichkeitsarbeit</option>
-                  </select>
+    <!-- 'add qualification' modal -->
+    <section id="add-qualification-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="add-qualification-label">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <header class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times;</span></button>
+              <h3 id="add-qualification-label" class="modal-title">Qualifikation hinzufügen</h3>
+            </header>
+            <section class="modal-body row">
+                <div class="col-md-4">
+                  <ul class="nav nav-pills nav-stacked" id="add-qualification-tabs" role="tablist">
+                    <li class="active" role="presentation"><a href="#add-qualification-tab-existing" aria-controls="add-qualification-tab-existing" role="tab" data-toggle="tab" data-tab="EXISTING">Existierende</a></li>
+                    <li role="presentation"><a href="#add-qualification-tab-new" aria-controls="add-qualification-tab-new" role="tab" data-toggle="tab" data-tab="NEW">Neu</a></li>
+                  </ul>
                 </div>
-                <div role="tabpanel" class="tab-pane fade" id="add-qualification-tab-new">
-                  <input type="text" class="form-control" placeholder="Name" style="margin-bottom: 3px;" th:field="*{name}" />
-                  <textarea class="form-control" placeholder="Beschreibung" th:field="*{description}"></textarea>
-                </div>
-                <input type="hidden" name="addType" id="add-qualification-type" th:field="*{addType}" />
-              </form>
+                <div class="col-md-8">
+                  <form id="add-qualification-form" class="form-horizontal tab-content" method="post" th:object="${addQualificationForm}" th:action="@{'/persons/' + ${person.id} + '/add-qualification'}">
+                    <div role="tabpanel" class="tab-pane fade in active" id="add-qualification-tab-existing">
+                      <label for="add-qualification-existing" class="sr-only">Qualifikation</label>
+                      <select id="add-qualification-existing" class="selectpicker" data-live-search="true" th:field="*{qualification}" th:remove="all-but-first">
+                        <option th:each="qualification : ${allQualifications}" th:text="${qualification.name}" th:value="${{qualification.name}}" th:field="*{qualification}">Erste-Hilfe-Kurs</option>
+                        <option>Storchenkoffer</option>
+                        <option>Öffentlichkeitsarbeit</option>
+                      </select>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="add-qualification-tab-new">
+                      <input type="text" class="form-control" placeholder="Name" style="margin-bottom: 3px;" th:field="*{name}" />
+                      <textarea class="form-control" placeholder="Beschreibung" th:field="*{description}"></textarea>
+                    </div>
+                    <input type="hidden" name="addType" id="add-qualification-type" th:field="*{addType}" />
+                  </form>
+              </div>
+            </section>
+            <footer class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+              <button type="submit" form="add-qualification-form" class="btn btn-primary">Hinzufügen</button>
+            </footer>
           </div>
-        </section>
-        <footer class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
-          <button type="submit" form="add-qualification-form" class="btn btn-primary">Hinzufügen</button>
-        </footer>
-      </div>
-    </div>
-    <script>
-      $('#add-qualification-modal').find('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
-        $('#add-qualification-type').val(e.target.dataset.tab)
-      })
-    </script>
-  </section>
+        </div>
+        <script>
+          $('#add-qualification-modal').find('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+            $('#add-qualification-type').val(e.target.dataset.tab)
+          })
+        </script>
+    </section>
 
-  <!-- 'delete qualification' modal -->
-  <section id="delete-qualification-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="delete-qualification-label">
+    <!-- 'delete qualification' modal -->
+    <section id="delete-qualification-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="delete-qualification-label">
       <div class="modal-dialog" role="document">
          <div class="modal-content">
             <header class="modal-header">
@@ -335,6 +335,130 @@
          </div>
       </div>
   </section>
+
+    <!-- 'add parent' modal -->
+    <section id="connect-parent-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="connect-parent-label">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <header class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times;</span></button>
+                    <h3 id="connect-parent-label" class="modal-title">Elternteil registrieren</h3>
+                </header>
+                <div class="modal-body row">
+                    <div class="col-md-3">
+                        <ul id="connect-parent-tab-select" class="nav nav-pills nav-stacked" role="tablist">
+                            <li role="presentation" class="active">
+                                <a id="connect-parent-new-tab" href="#connect-parent-new" aria-controls="connect-parent-new" role="tab" data-toggle="tab">Neu</a>
+                            </li>
+                            <li role="presentation">
+                                <a id="connect-parent-existing-tab" href="#connect-parent-existing" aria-controls="connect-parent-existing" role="tab" data-toggle="tab">
+                                    Auswählen
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="tab-content">
+                            <div id="connect-parent-new" class="tab-pane fade in active" role="tabpanel">
+                                <form class="form-horizontal" id="connect-parent-new-form" th:object="${addParentForm}" th:action="@{/persons/{id}/parents/add/new(id=${person.id})}">
+                                    <div class="form-group">
+                                        <label for="parent-firstname" class="col-sm-3 control-label">Vorname</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" id="parent-firstname" name="firstname" class="form-control" placeholder="Vorname" required="required" th:field="*{firstName}" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="parent-lastname" class="col-sm-3 control-label">Nachname</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" id="parent-lastname" name="lastname" class="form-control" placeholder="Nachname" th:field="*{lastName}" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="parent-email" class="col-sm-3 control-label">E-Mail</label>
+                                        <div class="col-sm-9">
+                                            <div class="input-group">
+                                                <input type="email" id="parent-email" name="email" class="form-control" placeholder="E-Mail" th:field="*{email}" />
+                                                <span class="input-group-addon">(optional)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="parent-phone" class="col-sm-3 control-label">Telefon</label>
+                                        <div class="col-sm-9">
+                                            <div class="input-group">
+                                                <input type="text" id="parent-phone" class="form-control" name="phone" placeholder="Telefonnummer" th:field="*{phoneNumber}" />
+                                                <span class="input-group-addon">(optional)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div id="connect-parent-existing" class="tab-pane fade" role="tabpanel">
+                                <div class="form-group clearfix">
+                                    <label class="col-sm-3 control-label">Person suchen</label>
+                                    <div class="col-sm-9">
+                                        <div class="clearfix" style="margin-bottom: 5px;">
+                                            <input type="text" id="connect-parent-search-firstname" class="form-control pull-left" style="width: 48%;" placeholder="Vorname" />
+                                            <input type="text" id="connect-parent-search-lastname" class="form-control pull-right" style="width: 48%;" placeholder="Nachname" />
+                                        </div>
+                                        <div class="clearfix">
+                                            <input type="text" id="connect-parent-search-city" class="form-control pull-left" style="width: 68%;" placeholder="Ort"/>
+                                            <button type="button" id="connect-parent-search-btn" class="btn btn-primary pull-right" style="padding-left: 20px; padding-right: 20px;">
+                                                Suchen
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr style="width: 100%; margin-top:5px;"/>
+                                <form id="connect-parent-person-select" class="form-horizontal" method="post" th:action="@{/persons/{id}/parents/add/existing(id=${person.id})}">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Geburtsdatum</th>
+                                                <th>Adresse</th>
+                                                <th>Auswählen</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="connect-parent-tablebody" th:remove="body">
+                                            <tr>
+                                                <td>Max Mustermann</td>
+                                                <td>31.02.1999</td>
+                                                <td>Bei Mir 7 01234 Noch ein Dorf</td>
+                                                <td class="text-center">
+                                                   <label><input type="radio" name="person-id" value="0" required="required" /></label>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Claus Dieter</td>
+                                                <td>17.07.1993</td>
+                                                <td>Zu Hause 123 01478 Irgendein Dorf</td>
+                                                <td class="text-center">
+                                                    <label><input type="radio" name="person-id" value="0" required="required" /></label>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Friedlinde Müller</td>
+                                                <td>11.11.1995</td>
+                                                <td>Um die Ecke 3c 01597 Großstadt</td>
+                                                <td class="text-center">
+                                                    <label><input type="radio" name="person-id" value="0" required="required" /></label>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <footer class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+                    <button type="submit" id="connect-parent-submit" class="btn btn-primary" form="connect-parent-new-form">Registrieren</button>
+                </footer>
+            </div>
+        </div>
+    </section>
 
 </section>
 
@@ -374,6 +498,16 @@
                         Die Person konnte nicht gelöscht werden. Vielleicht ist sie ein Aktiver oder Referent?
                     </p>
                 </div>
+
+                <div class="alert alert-danger alert-dismissible" role="alert" th:if="${impossibleKinship}">
+                   <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+                      <span aria-hidden="true">&times;</span>
+                   </button>
+                   <p>
+                      Elternteil und Kind sollten nicht übereinstimmen...<br />
+                      Das wäre sonst ... gruselig ...
+                   </p>
+               </div>
 
             </section>
 
@@ -483,6 +617,38 @@
                     </section>
                 </div>
 
+                <!-- parents -->
+                <div class="col-sm-5">
+                    <section class="panel panel-default">
+                        <header class="panel-heading clearfix">
+                            <h2 class="panel-title pull-left" style="margin-top: 7.5px; margin-right: 2em;">Eltern</h2>
+                            <div class="input-group pull-right" style="margin-left: 1em;">
+                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#connect-parent-modal" th:if="${person.parentProfileMayBeConnected()}"><span class="glyphicon glyphicon-plus"></span> Hinzufügen</button>
+                            </div>
+                        </header>
+                        <table class="table" th:if="${person.hasParents()}">
+                            <tbody th:remove="all-but-first">
+                                <tr th:each="parent : ${person.parentProfiles}">
+                                    <td th:text="${parent.name}">Heinz Kunz</td>
+                                    <td><span class="glyphicon glyphicon-envelope"></span> <a href="mailto:heinzk@gmx.net" th:href="|mailto:${parent.email}|" th:text="${parent.email}">heinzk@gmx.net</a>
+                                    <span th:if="${parent.email == null} OR ${parent.email.empty}">---</span></td>
+                                    <td>
+                                        <span class="glyphicon glyphicon-phone"></span> <span th:text="${parent.phoneNumber}">0123 4567890</span>
+                                        <span th:if="${parent.phoneNumber == null} OR ${parent.phoneNumber.empty}">---</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Siglinde Kunz</td>
+                                    <td><span class="glyphicon glyphicon-envelope"></span> <a href="mailto:skung@gmx.net">skung@gmx.net</a></td>
+                                    <td><span class="glyphicon glyphicon-phone"></span> 0123 4567890</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <section class="panel-body" th:unless="${person.hasParents()}">
+                            Keine Eltern angegeben.
+                        </section>
+                    </section>
+                </div>
+
             </div>
 
             <!-- referent overview -->
@@ -546,5 +712,6 @@
 </main>
 <script src="../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
 <script src="../static/resources/js/personDetails.js" th:src="@{/resources/js/personDetails.js}"></script>
+<script src="../static/resources/js/displayMatchingPersons.js" th:src="@{/resources/js/displayMatchingPersons.js}"></script>
 </body>
 </html>

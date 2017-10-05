@@ -5,7 +5,10 @@ import org.hibernate.validator.constraints.Email;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
+
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Abstraction of a person. No matter of its concrete role (camp participant, activist, ...) some data always
@@ -15,7 +18,8 @@ import java.util.Arrays;
  */
 @Entity(name = "person")
 public class Person {
-
+	private static final int MAX_PARENT_PROFILES = 2;
+	
     @EmbeddedId @Column(name = "id") private PersonId id;
 
     @Column(name = "firstName") private String firstName;
@@ -27,7 +31,9 @@ public class Person {
     @OneToOne(cascade = CascadeType.ALL) @PrimaryKeyJoinColumn private ParticipantProfile participantProfile;
     @OneToOne(cascade = CascadeType.ALL) @PrimaryKeyJoinColumn private ActivistProfile activistProfile;
     @OneToOne(cascade = CascadeType.ALL) @PrimaryKeyJoinColumn private ReferentProfile referentProfile;
-
+    
+    @OneToMany(cascade = CascadeType.ALL) private List<Person> parentProfiles;
+    
     @Column(name = "archived") private boolean archived;
 
     // constructors
@@ -56,7 +62,9 @@ public class Person {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-
+        
+        this.parentProfiles = new ArrayList<>(MAX_PARENT_PROFILES);
+        
         this.archived = false;
     }
 
@@ -196,7 +204,25 @@ public class Person {
     public void setReferentProfile(ReferentProfile referentProfile) {
         this.referentProfile = referentProfile;
     }
-
+    
+    /**
+     * @return the person's parents
+     */
+    public Iterable<Person> getParentProfiles() {
+    	return parentProfiles;
+    }
+    
+    /**
+     * @param parentProfiles the person's parents
+     */
+    public void setParentProfiles(List<Person> parentProfiles) {
+    	if (parentProfiles == null) {
+    		this.parentProfiles = new ArrayList<>(MAX_PARENT_PROFILES);
+    	} else {
+    		this.parentProfiles = parentProfiles;
+    	}
+    }
+    
     /**
      * @return whether the person is still to be used
      */
@@ -212,26 +238,42 @@ public class Person {
     }
 
     /**
-     * @return the subscriber's name, which basically is {@code firstName + " " + lastName}
-     */
-    @Transient
-    public String getName() {
-        return firstName + " " + lastName;
-    }
-
-    /**
      * @param id the person's unique ID
      */
     @SuppressWarnings("unused")
     private void setId(PersonId id) {
         this.id = id;
     }
-
+    
+    // query methods
+    
+    /**
+     * @return the subscriber's name, which basically is {@code firstName + " " + lastName}
+     */
+    @Transient
+    public String getName() {
+        return firstName + " " + lastName;
+    }
+    
     /**
      * @return {@code true} if an email address is set, {@code false} otherwise
      */
     public boolean hasEmail() {
     	return email != null;
+    }
+    
+    /**
+     * @return {@code true} if a parent is registered for this person, {@code false} otherwise
+     */
+    public boolean hasParents() {
+    	return !parentProfiles.isEmpty();
+    }
+    
+    /**
+     * @return {@code true} if another parent profile may be connected to this person, {@code false} otherwise
+     */
+    public boolean parentProfileMayBeConnected() {
+    	return parentProfiles.size() < MAX_PARENT_PROFILES;
     }
 
     // normal methods
@@ -291,6 +333,31 @@ public class Person {
      */
     public boolean isReferent() {
         return referentProfile != null;
+    }
+    
+    /**
+     * Saves a person as parent for {@code this}
+     * @param parent the parent
+     */
+    public void connectParentProfile(Person parent) {
+    	if (!parentProfileMayBeConnected()) {
+    		throw new IllegalStateException("No more parent profile may be connected");
+    	} else if (parentProfiles.contains(parent)) {
+    		throw new ExistingParentException(String.format("Parent: %s; child: %s", parent, this));
+    	} else if (this.equals(parent)) {
+    		throw new ImpossibleKinshipRelationException("For person " + this);
+    	}
+    	parentProfiles.add(parent);
+    }
+    
+    /**
+     * Removes a parent - brutal.
+     * @param parent the former parent
+     */
+    public void disconnectParentProfile(Person parent) {
+    	if (parentProfiles.remove(parent)) {
+    		throw new IllegalArgumentException("No connection with parent " + parent);
+    	}
     }
 
     // overridden from Object

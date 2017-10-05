@@ -83,6 +83,38 @@ $('#edit-activist-hasJuleica').click(function() {
     $('#edit-activist-juleica-picker').find('input').prop('required', function(i,v) {return !v;});
 });
 
+$('#connect-parent-new-tab').on('shown.bs.tab', function() {
+   $('#connect-parent-submit').attr('form', 'connect-parent-new-form');
+});
+
+$('#connect-parent-existing-tab').on('shown.bs.tab', function() {
+   $('#connect-parent-submit').attr('form', 'connect-parent-person-select');
+});
+
+$('#connect-parent-search-btn').on('click', function() {
+    var table = '#connect-parent-tablebody';
+    var firstname = $('#connect-parent-search-firstname').val();
+    var lastname = $('#connect-parent-search-lastname').val();
+    var city = $('#connect-parent-search-city').val();
+
+    var request = {
+        async: true,
+        data: {
+            firstname: firstname,
+            lastname: lastname,
+            city: city
+        },
+        dataType: 'json',
+        method: 'POST',
+        success: function(response) {
+            displayMatchingPersons(table, response);
+        },
+        url: '/api/persons/simpleSearch'
+    };
+
+    $.ajax(request);
+});
+
 $(function() {
     initPersonData();
     initEatingHabit();
