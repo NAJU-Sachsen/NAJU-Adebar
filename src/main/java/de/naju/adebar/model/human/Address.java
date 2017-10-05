@@ -52,7 +52,7 @@ public class Address implements Serializable {
 	 * Default constructor
 	 */
 	public Address() {
-		
+		street = zip = city = additionalInfo = "";
 	}
 	
 	// getter
