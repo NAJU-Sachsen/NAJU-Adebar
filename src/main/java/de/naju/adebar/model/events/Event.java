@@ -151,7 +151,7 @@ public class Event {
         // If an instance is re-initialized from database, JPA will use it's empty constructor and set all the fields
         // afterwards. Therefore end time may be null and we must check this before validating the start date
         if (endTime != null) {
-            Assert.isTrue(!endTime.isBefore(startTime));
+            Assert.isTrue(!endTime.isBefore(startTime), "Start time may not be after end time");
         }
         this.startTime = startTime;
     }
@@ -173,7 +173,7 @@ public class Event {
         // If an instance is re-initialized from database, JPA will use it's empty constructor and set all the fields
         // afterwards. Therefore start time may be null and we must check this before validating the end date
         if (startTime != null) {
-            Assert.isTrue(!endTime.isBefore(startTime));
+            Assert.isTrue(!endTime.isBefore(startTime), "Start time may not be after end time");
         }
         this.endTime = endTime;
     }

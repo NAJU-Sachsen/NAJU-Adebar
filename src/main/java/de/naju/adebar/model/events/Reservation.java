@@ -44,7 +44,7 @@ public class Reservation {
 	public Reservation(String description, int numberOfSlots, String contactEmail) {
 		Assert.hasText(description, "Description may not be null nor empty, but was " + description);
 		if (contactEmail != null && !contactEmail.isEmpty()) {
-			Assert.isTrue(Validation.isEmail(contactEmail));
+			Assert.isTrue(Validation.isEmail(contactEmail), "Not a valid email address: " + contactEmail);
 		} else {
 			this.contactEmail = null;
 		}
@@ -81,7 +81,7 @@ public class Reservation {
 	 */
 	public void setContactEmail(String contactEmail) {
 		if (contactEmail != null) {
-			Assert.isTrue(Validation.isEmail(contactEmail));
+			Assert.isTrue(Validation.isEmail(contactEmail), "Not a valid email address: " + contactEmail);
 		}
 		this.contactEmail = contactEmail;
 	}
