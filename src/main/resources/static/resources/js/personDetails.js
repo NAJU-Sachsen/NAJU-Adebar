@@ -107,15 +107,19 @@ $('#connect-parent-search-btn').on('click', function() {
         dataType: 'json',
         method: 'POST',
         success: function(response) {
+            $('#connect-parent-modal').find('.searching').hide();
             displayMatchingPersons(table, response);
         },
         url: '/api/persons/simpleSearch'
     };
 
+    $('#connect-parent-modal').find('.searching').show();
     $.ajax(request);
 });
 
 $(function() {
+    $('#connect-parent-modal').find('.searching').hide();
+    $('#connect-parent-modal').find('.no-results').hide();
     initPersonData();
     initEatingHabit();
 });
