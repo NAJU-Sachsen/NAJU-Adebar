@@ -1,14 +1,9 @@
 package de.naju.adebar.controller;
 
-import com.google.common.collect.Iterables;
-import de.naju.adebar.app.human.DataProcessor;
-import de.naju.adebar.app.human.PersonManager;
-import de.naju.adebar.app.human.filter.PersonFilterBuilder;
-import de.naju.adebar.controller.forms.human.*;
-import de.naju.adebar.model.chapter.LocalGroup;
-import de.naju.adebar.app.chapter.LocalGroupManager;
-import de.naju.adebar.model.human.*;
-import de.naju.adebar.util.conversion.human.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,9 +14,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import com.google.common.collect.Iterables;
+
+import de.naju.adebar.app.chapter.LocalGroupManager;
+import de.naju.adebar.app.human.DataProcessor;
+import de.naju.adebar.app.human.PersonManager;
+import de.naju.adebar.app.human.filter.PersonFilterBuilder;
+import de.naju.adebar.controller.forms.human.AddQualificationForm;
+import de.naju.adebar.controller.forms.human.CreateParentForm;
+import de.naju.adebar.controller.forms.human.CreatePersonForm;
+import de.naju.adebar.controller.forms.human.EditActivistForm;
+import de.naju.adebar.controller.forms.human.EditPersonForm;
+import de.naju.adebar.controller.forms.human.FilterPersonForm;
+import de.naju.adebar.model.chapter.LocalGroup;
+import de.naju.adebar.model.human.ImpossibleKinshipRelationException;
+import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.human.Qualification;
+import de.naju.adebar.model.human.QualificationManager;
+import de.naju.adebar.util.conversion.human.ActivistToEditActivistFormConverter;
+import de.naju.adebar.util.conversion.human.AddQualificationFormDataExtractor;
+import de.naju.adebar.util.conversion.human.CreatePersonFormDataExtractor;
+import de.naju.adebar.util.conversion.human.EditActivistFormDataExtractor;
+import de.naju.adebar.util.conversion.human.EditPersonFormDataExtractor;
+import de.naju.adebar.util.conversion.human.FilterPersonFormFilterExtractor;
+import de.naju.adebar.util.conversion.human.PersonToEditPersonFormConverter;
 
 /**
  * Person related controller mappings
@@ -81,7 +97,7 @@ public class PersonController {
     public String showAllPersons(Model model) {
         model.addAttribute("addPersonForm", new CreatePersonForm());
         model.addAttribute("filterPersonsForm", new FilterPersonForm());
-        model.addAttribute("persons", personManager.repository().findAll());
+        model.addAttribute("persons", personManager.repository().findAllOrderByLastName());
         model.addAttribute("qualifications", qualificationManager.repository().findAll());
         return "persons";
     }
@@ -137,7 +153,7 @@ public class PersonController {
         model.addAttribute("editPersonForm", new PersonToEditPersonFormConverter().convertToEditPersonForm(person));
         model.addAttribute("addQualificationForm", new AddQualificationForm());
         model.addAttribute("addParentForm", new CreateParentForm());
-        
+
         model.addAttribute("person", person);
 
         if (person.isActivist()) {
@@ -263,7 +279,7 @@ public class PersonController {
 
         return "redirect:/persons/" + personId;
     }
-    
+
     /**
      * Registers a person as parent
      * @param personId the child
@@ -274,17 +290,17 @@ public class PersonController {
     public String addParent(@PathVariable("cid") String personId, @RequestParam("person-id") String parentId, RedirectAttributes redirAttr) {
     	Person person = personManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
     	Person parent = personManager.findPerson(parentId).orElseThrow(IllegalArgumentException::new);
-    	
+
     	try {
     		person.connectParentProfile(parent);
     		personManager.updatePerson(person.getId(), person);
     	} catch (ImpossibleKinshipRelationException e) {
     		redirAttr.addFlashAttribute("impossibleKinship", true);
     	}
-    	
-    	return "redirect:/persons/" + personId; 
+
+    	return "redirect:/persons/" + personId;
     }
-    
+
     /**
      * Creates a new parent for a person
      * @param personId the child
@@ -295,14 +311,14 @@ public class PersonController {
     public String createParent(@PathVariable("cid") String personId, @ModelAttribute("addPersonFrom") CreateParentForm createParentForm, RedirectAttributes redirAttr) {
     	Person person = personManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
     	Person parent = createPersonFormDataExtractor.extractParent(person, createParentForm);
-		
+
     	personManager.savePerson(parent);
     	person.connectParentProfile(parent);
 		personManager.updatePerson(person.getId(), person);
-    	
-    	return "redirect:/persons/" + personId; 
+
+    	return "redirect:/persons/" + personId;
     }
-    
+
     /**
      * Removes a parent
      * @param personId the former child
@@ -313,11 +329,11 @@ public class PersonController {
     public String removeParent(@PathVariable("cid") String personId, @RequestParam("person-id") String parentId) {
     	Person person = personManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
     	Person parent = personManager.findPerson(parentId).orElseThrow(IllegalArgumentException::new);
-    	
+
     	person.disconnectParentProfile(parent);
     	personManager.updatePerson(person.getId(), person);
-    	
-    	return "redirect:/persons/" + personId; 
+
+    	return "redirect:/persons/" + personId;
     }
 
 }

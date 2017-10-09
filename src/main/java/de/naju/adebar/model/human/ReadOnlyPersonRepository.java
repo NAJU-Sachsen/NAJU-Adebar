@@ -1,10 +1,11 @@
 package de.naju.adebar.model.human;
 
-import de.naju.adebar.infrastructure.ReadOnlyRepository;
+import java.util.stream.Stream;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.stream.Stream;
+import de.naju.adebar.infrastructure.ReadOnlyRepository;
 
 /**
  * Repository to provide read-only access to {@link Person} instances
@@ -16,8 +17,12 @@ public interface ReadOnlyPersonRepository extends ReadOnlyRepository<Person, Per
     /**
      * @return all non-archived persons
      */
-    @Query("SELECT p FROM person p WHERE p.archived=0")
+    @Override
+	@Query("SELECT p FROM person p WHERE p.archived=0")
     Iterable<Person> findAll();
+
+    @Query("SELECT p FROM person p WHERE p.archived=0 ORDER BY p.lastName")
+    Iterable<Person> findAllOrderByLastName();
 
     /**
      * @return all activists
@@ -29,7 +34,8 @@ public interface ReadOnlyPersonRepository extends ReadOnlyRepository<Person, Per
      * @param id must not be {@code null}.
      * @return the person with that ID. This person is not archived
      */
-    @Query("SELECT p FROM person p WHERE p.id=?1 AND p.archived=0")
+    @Override
+	@Query("SELECT p FROM person p WHERE p.id=?1 AND p.archived=0")
     Person findOne(PersonId id);
 
     /**

@@ -9,5 +9,15 @@ import org.springframework.stereotype.Repository;
  */
 @Repository("personRepo")
 public interface PersonRepository extends CrudRepository<Person, PersonId>, ReadOnlyPersonRepository {
-    Person findOne(PersonId id);
+
+	/*
+	 * We just need to declare this method explicitly again, as both CrudRepository and ReadOnlyPersonRepository
+	 * demand it
+	 * (non-Javadoc)
+	 * @see org.springframework.data.repository.CrudRepository#findOne(java.io.Serializable)
+	 */
+	@Override
+	Person findOne(PersonId id);
+
+
 }
