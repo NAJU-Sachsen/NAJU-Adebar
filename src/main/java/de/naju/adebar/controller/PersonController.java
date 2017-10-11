@@ -1,8 +1,9 @@
 package de.naju.adebar.controller;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -122,9 +123,10 @@ public class PersonController {
      * @return the persons' overview consisting of the persons that matched the filter
      */
     @RequestMapping("/persons/filter")
+    @Transactional
     public String filterPersons(@ModelAttribute("filterPersonsForm") FilterPersonForm filterPersonForm, Model model) {
-        List<Person> persons = personManager.repository().streamAll().collect(Collectors.toList());
-        PersonFilterBuilder filterBuilder = new PersonFilterBuilder(persons.stream());
+        Stream<Person> persons = personManager.repository().streamAll();
+        PersonFilterBuilder filterBuilder = new PersonFilterBuilder(persons);
         filterPersonFormFilterExtractor.extractAllFilters(filterPersonForm).forEach(filterBuilder::applyFilter);
 
         Iterable<Person> matchingPersons = filterBuilder.filter();

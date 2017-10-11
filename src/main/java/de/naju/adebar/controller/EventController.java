@@ -2,8 +2,9 @@ package de.naju.adebar.controller;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -130,9 +131,10 @@ public class EventController {
      * @return the overview of all matching events
      */
     @RequestMapping("/events/filter")
+    @Transactional
     public String filterEvents(@ModelAttribute("filterEventsForm") FilterEventsForm eventsForm, Model model) {
-        List<Event> events = eventManager.repository().streamAll().collect(Collectors.toList());
-        EventFilterBuilder filterBuilder = new EventFilterBuilder(events.stream());
+        Stream<Event> events = eventManager.repository().streamAll();
+        EventFilterBuilder filterBuilder = new EventFilterBuilder(events);
         filterEventsFormDataExtractor.extractAllFilters(eventsForm).forEach(filterBuilder::applyFilter);
 
         Iterable<Event> matchingEvents = filterBuilder.filter();

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.util.Assert;
@@ -55,19 +57,25 @@ public class PersonController {
      * @return all persons who matched the given criteria
      */
     @RequestMapping("/simpleSearch")
+    @Transactional
     public Iterable<SimplePersonJSON> sendMatchingPersons(@RequestParam("firstname") String firstName, @RequestParam("lastname") String lastName, @RequestParam("city") String city) {
     	firstName = dataFormatter.adjustFirstLetterCase(firstName);
     	lastName = dataFormatter.adjustFirstLetterCase(lastName);
     	city = dataFormatter.adjustFirstLetterCase(city);
 
     	Address address = new Address("", "", city);
-        List<Person> persons = personManager.repository().streamAll().collect(Collectors.toList());
-        PersonFilterBuilder filterBuilder = new PersonFilterBuilder(persons.stream());
+        Stream<Person> persons = personManager.repository().streamAll();
+        PersonFilterBuilder filterBuilder = new PersonFilterBuilder(persons);
         filterBuilder
                 .applyFilter(new NameFilter(firstName, lastName))
                 .applyFilter(new AddressFilter(address, MatchType.IF_DEFINED));
         Stream<SimplePersonJSON> jsonObjects = filterBuilder.resultingStream().map(SimplePersonJSON::new);
-        return jsonObjects.collect(Collectors.toList());
+        List<SimplePersonJSON> result = jsonObjects.collect(Collectors.toList());
+
+        persons.close();
+        jsonObjects.close();
+
+        return result;
     }
 
     /**
@@ -78,20 +86,26 @@ public class PersonController {
      * @return all activists who matched the given criteria
      */
     @RequestMapping("/activists/simpleSearch")
+    @Transactional
     public Iterable<SimplePersonJSON> sendMatchingActivists(@RequestParam("firstname") String firstName, @RequestParam("lastname") String lastName, @RequestParam("city") String city) {
     	firstName = dataFormatter.adjustFirstLetterCase(firstName);
     	lastName = dataFormatter.adjustFirstLetterCase(lastName);
     	city = dataFormatter.adjustFirstLetterCase(city);
 
     	Address address = new Address("", "", city);
-        List<Person> activists = personManager.repository().streamAll().collect(Collectors.toList());
-        PersonFilterBuilder filterBuilder = new PersonFilterBuilder(activists.stream());
+    	Stream<Person> activists = personManager.repository().streamAll();
+        PersonFilterBuilder filterBuilder = new PersonFilterBuilder(activists);
         filterBuilder
                 .applyFilter(new ActivistFilter(FilterType.ENFORCE))
                 .applyFilter(new NameFilter(firstName, lastName))
                 .applyFilter(new AddressFilter(address, MatchType.IF_DEFINED));
         Stream<SimplePersonJSON> jsonObjects = filterBuilder.resultingStream().map(SimplePersonJSON::new);
-        return jsonObjects.collect(Collectors.toList());
+        List<SimplePersonJSON> result = jsonObjects.collect(Collectors.toList());
+
+        activists.close();
+        jsonObjects.close();
+
+        return result;
     }
 
     /**
@@ -100,14 +114,20 @@ public class PersonController {
      * @return all matching persons
      */
     @RequestMapping(value = "/search", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @Transactional
     public Iterable<SimplePersonJSON> filterPersons(FilterPersonForm form) {
     	dataFormatter.adjustFilterPersonForm(form);
-    	List<Person> persons = personManager.repository().streamAll().collect(Collectors.toList());
-    	PersonFilterBuilder filterBuilder = new PersonFilterBuilder(persons.stream());
+    	Stream<Person> persons = personManager.repository().streamAll();
+    	PersonFilterBuilder filterBuilder = new PersonFilterBuilder(persons);
     	filterExtractor.extractAllFilters(form).forEach(filterBuilder::applyFilter);
 
     	Stream<Person> matches = filterBuilder.resultingStream();
-    	return matches.map(SimplePersonJSON::new).collect(Collectors.toList());
+    	List<SimplePersonJSON> result = matches.map(SimplePersonJSON::new).collect(Collectors.toList());
+
+    	persons.close();
+    	matches.close();
+
+    	return result;
     }
 
 }
