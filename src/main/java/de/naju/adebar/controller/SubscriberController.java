@@ -11,7 +11,8 @@ import de.naju.adebar.controller.forms.newsletter.AddNewsletterForm;
 import de.naju.adebar.app.chapter.LocalGroupManager;
 import de.naju.adebar.model.human.Person;
 import de.naju.adebar.model.newsletter.*;
-import de.naju.adebar.util.conversion.newsletter.PersonToSubscriberConverter;
+import de.naju.adebar.services.conversion.newsletter.PersonToSubscriberConverter;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

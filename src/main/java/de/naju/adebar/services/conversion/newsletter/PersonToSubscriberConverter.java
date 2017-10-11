@@ -1,4 +1,4 @@
-package de.naju.adebar.util.conversion.newsletter;
+package de.naju.adebar.services.conversion.newsletter;
 
 import de.naju.adebar.model.human.Person;
 import de.naju.adebar.model.newsletter.Subscriber;

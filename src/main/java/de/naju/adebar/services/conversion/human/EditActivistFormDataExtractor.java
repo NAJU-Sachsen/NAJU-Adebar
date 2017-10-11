@@ -1,4 +1,4 @@
-package de.naju.adebar.util.conversion.human;
+package de.naju.adebar.services.conversion.human;
 
 import de.naju.adebar.controller.forms.human.EditActivistForm;
 import de.naju.adebar.model.human.ActivistProfile;

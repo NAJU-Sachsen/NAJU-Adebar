@@ -35,9 +35,9 @@ import de.naju.adebar.model.events.ParticipationInfo;
 import de.naju.adebar.model.events.PersonIsTooYoungException;
 import de.naju.adebar.model.human.Person;
 import de.naju.adebar.model.human.PersonId;
-import de.naju.adebar.util.conversion.events.EventFormDataExtractor;
-import de.naju.adebar.util.conversion.events.EventToEventFormConverter;
-import de.naju.adebar.util.conversion.events.FilterEventsFormDataExtractor;
+import de.naju.adebar.services.conversion.events.EventFormDataExtractor;
+import de.naju.adebar.services.conversion.events.EventToEventFormConverter;
+import de.naju.adebar.services.conversion.events.FilterEventsFormDataExtractor;
 
 /**
  * Event related controller mappings

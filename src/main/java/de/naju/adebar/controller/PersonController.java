@@ -32,13 +32,13 @@ import de.naju.adebar.model.human.ImpossibleKinshipRelationException;
 import de.naju.adebar.model.human.Person;
 import de.naju.adebar.model.human.Qualification;
 import de.naju.adebar.model.human.QualificationManager;
-import de.naju.adebar.util.conversion.human.ActivistToEditActivistFormConverter;
-import de.naju.adebar.util.conversion.human.AddQualificationFormDataExtractor;
-import de.naju.adebar.util.conversion.human.CreatePersonFormDataExtractor;
-import de.naju.adebar.util.conversion.human.EditActivistFormDataExtractor;
-import de.naju.adebar.util.conversion.human.EditPersonFormDataExtractor;
-import de.naju.adebar.util.conversion.human.FilterPersonFormFilterExtractor;
-import de.naju.adebar.util.conversion.human.PersonToEditPersonFormConverter;
+import de.naju.adebar.services.conversion.human.ActivistToEditActivistFormConverter;
+import de.naju.adebar.services.conversion.human.AddQualificationFormDataExtractor;
+import de.naju.adebar.services.conversion.human.CreatePersonFormDataExtractor;
+import de.naju.adebar.services.conversion.human.EditActivistFormDataExtractor;
+import de.naju.adebar.services.conversion.human.EditPersonFormDataExtractor;
+import de.naju.adebar.services.conversion.human.FilterPersonFormFilterExtractor;
+import de.naju.adebar.services.conversion.human.PersonToEditPersonFormConverter;
 
 /**
  * Person related controller mappings
