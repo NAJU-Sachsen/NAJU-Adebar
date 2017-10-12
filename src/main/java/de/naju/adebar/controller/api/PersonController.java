@@ -1,11 +1,8 @@
 package de.naju.adebar.controller.api;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -17,16 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import de.naju.adebar.api.data.SimplePersonJSON;
 import de.naju.adebar.api.forms.FilterPersonForm;
 import de.naju.adebar.api.util.DataFormatter;
-import de.naju.adebar.api.util.PersonFilterDataExtractor;
-import de.naju.adebar.app.filter.FilterType;
-import de.naju.adebar.app.filter.MatchType;
 import de.naju.adebar.app.human.PersonManager;
-import de.naju.adebar.app.human.filter.ActivistFilter;
-import de.naju.adebar.app.human.filter.AddressFilter;
-import de.naju.adebar.app.human.filter.NameFilter;
-import de.naju.adebar.app.human.filter.PersonFilterBuilder;
-import de.naju.adebar.model.human.Address;
 import de.naju.adebar.model.human.Person;
+import de.naju.adebar.services.conversion.human.FilterToPredicateConverter;
 
 /**
  * REST controller to access person data.
@@ -38,15 +28,15 @@ import de.naju.adebar.model.human.Person;
 public class PersonController {
     private PersonManager personManager;
     private DataFormatter dataFormatter;
-    private PersonFilterDataExtractor filterExtractor;
+    private FilterToPredicateConverter predicateConverter;
 
     @Autowired
-    public PersonController(PersonManager personManager, DataFormatter dataFormatter, PersonFilterDataExtractor filterExtractor) {
-        Object[] params = {personManager, dataFormatter, filterExtractor};
+    public PersonController(PersonManager personManager, DataFormatter dataFormatter, FilterToPredicateConverter predicateConverter) {
+        Object[] params = {personManager, dataFormatter, predicateConverter};
         Assert.noNullElements(params, "No parameter may be null, but at least one was: " + Arrays.toString(params));
         this.personManager = personManager;
         this.dataFormatter = dataFormatter;
-        this.filterExtractor = filterExtractor;
+        this.predicateConverter = predicateConverter;
     }
 
     /**
@@ -57,23 +47,14 @@ public class PersonController {
      * @return all persons who matched the given criteria
      */
     @RequestMapping("/simpleSearch")
-    @Transactional
     public Iterable<SimplePersonJSON> sendMatchingPersons(@RequestParam("firstname") String firstName, @RequestParam("lastname") String lastName, @RequestParam("city") String city) {
     	firstName = dataFormatter.adjustFirstLetterCase(firstName);
     	lastName = dataFormatter.adjustFirstLetterCase(lastName);
     	city = dataFormatter.adjustFirstLetterCase(city);
 
-    	Address address = new Address("", "", city);
-        Stream<Person> persons = personManager.repository().streamAll();
-        PersonFilterBuilder filterBuilder = new PersonFilterBuilder(persons);
-        filterBuilder
-                .applyFilter(new NameFilter(firstName, lastName))
-                .applyFilter(new AddressFilter(address, MatchType.IF_DEFINED));
-        Stream<SimplePersonJSON> jsonObjects = filterBuilder.resultingStream().map(SimplePersonJSON::new);
-        List<SimplePersonJSON> result = jsonObjects.collect(Collectors.toList());
-
-        persons.close();
-        jsonObjects.close();
+    	List<Person> matches = personManager.repository().findAll(predicateConverter.fromFields(firstName, lastName, city));
+    	List<SimplePersonJSON> result = new ArrayList<>(matches.size());
+    	matches.forEach(m -> result.add(new SimplePersonJSON(m)));
 
         return result;
     }
@@ -86,24 +67,14 @@ public class PersonController {
      * @return all activists who matched the given criteria
      */
     @RequestMapping("/activists/simpleSearch")
-    @Transactional
     public Iterable<SimplePersonJSON> sendMatchingActivists(@RequestParam("firstname") String firstName, @RequestParam("lastname") String lastName, @RequestParam("city") String city) {
     	firstName = dataFormatter.adjustFirstLetterCase(firstName);
     	lastName = dataFormatter.adjustFirstLetterCase(lastName);
     	city = dataFormatter.adjustFirstLetterCase(city);
 
-    	Address address = new Address("", "", city);
-    	Stream<Person> activists = personManager.repository().streamAll();
-        PersonFilterBuilder filterBuilder = new PersonFilterBuilder(activists);
-        filterBuilder
-                .applyFilter(new ActivistFilter(FilterType.ENFORCE))
-                .applyFilter(new NameFilter(firstName, lastName))
-                .applyFilter(new AddressFilter(address, MatchType.IF_DEFINED));
-        Stream<SimplePersonJSON> jsonObjects = filterBuilder.resultingStream().map(SimplePersonJSON::new);
-        List<SimplePersonJSON> result = jsonObjects.collect(Collectors.toList());
-
-        activists.close();
-        jsonObjects.close();
+    	List<Person> matches = personManager.repository().findAll(predicateConverter.activistsFromFields(firstName, lastName, city));
+    	List<SimplePersonJSON> result = new ArrayList<>(matches.size());
+    	matches.forEach(m -> result.add(new SimplePersonJSON(m)));
 
         return result;
     }
@@ -114,18 +85,13 @@ public class PersonController {
      * @return all matching persons
      */
     @RequestMapping(value = "/search", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    @Transactional
     public Iterable<SimplePersonJSON> filterPersons(FilterPersonForm form) {
     	dataFormatter.adjustFilterPersonForm(form);
-    	Stream<Person> persons = personManager.repository().streamAll();
-    	PersonFilterBuilder filterBuilder = new PersonFilterBuilder(persons);
-    	filterExtractor.extractAllFilters(form).forEach(filterBuilder::applyFilter);
 
-    	Stream<Person> matches = filterBuilder.resultingStream();
-    	List<SimplePersonJSON> result = matches.map(SimplePersonJSON::new).collect(Collectors.toList());
-
-    	persons.close();
-    	matches.close();
+    	List<Person> matches = personManager.repository()
+    			.findAll(predicateConverter.fromFields(form.getFirstName(), form.getLastName(), form.getCity()));
+    	List<SimplePersonJSON> result = new ArrayList<>(matches.size());
+    	matches.forEach(m -> result.add(new SimplePersonJSON(m)));
 
     	return result;
     }

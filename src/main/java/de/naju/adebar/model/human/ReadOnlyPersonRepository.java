@@ -1,9 +1,13 @@
 package de.naju.adebar.model.human;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 import org.springframework.stereotype.Repository;
+
+import com.querydsl.core.types.Predicate;
 
 import de.naju.adebar.infrastructure.ReadOnlyRepository;
 
@@ -12,7 +16,7 @@ import de.naju.adebar.infrastructure.ReadOnlyRepository;
  * @author Rico Bergmann
  */
 @Repository("ro_personRepo")
-public interface ReadOnlyPersonRepository extends ReadOnlyRepository<Person, PersonId> {
+public interface ReadOnlyPersonRepository extends ReadOnlyRepository<Person, PersonId>, QueryDslPredicateExecutor<Person> {
 
     /**
      * @return all non-archived persons
@@ -59,4 +63,6 @@ public interface ReadOnlyPersonRepository extends ReadOnlyRepository<Person, Per
 
     @Query("SELECT p FROM person p WHERE p.archived=0")
     Stream<Person> streamAll();
+    
+    List<Person> findAll(Predicate predicate);
 }
