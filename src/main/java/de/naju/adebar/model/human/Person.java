@@ -1,14 +1,23 @@
 package de.naju.adebar.model.human;
 
-import de.naju.adebar.util.Validation;
-import org.hibernate.validator.constraints.Email;
-import org.springframework.util.Assert;
-
-import javax.persistence.*;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Transient;
+
+import org.hibernate.validator.constraints.Email;
+import org.springframework.util.Assert;
+
+import de.naju.adebar.util.Validation;
 
 /**
  * Abstraction of a person. No matter of its concrete role (camp participant, activist, ...) some data always
@@ -19,7 +28,7 @@ import java.util.List;
 @Entity(name = "person")
 public class Person {
 	private static final int MAX_PARENT_PROFILES = 2;
-	
+
     @EmbeddedId @Column(name = "id") private PersonId id;
 
     @Column(name = "firstName") private String firstName;
@@ -28,12 +37,15 @@ public class Person {
     @Column(name = "phone") private String phoneNumber;
     @Embedded private Address address;
 
+    @Column(name = "participant") private boolean participant;
+    @Column(name = "activist") private boolean activist;
+    @Column(name = "referent") private boolean referent;
     @OneToOne(cascade = CascadeType.ALL) @PrimaryKeyJoinColumn private ParticipantProfile participantProfile;
     @OneToOne(cascade = CascadeType.ALL) @PrimaryKeyJoinColumn private ActivistProfile activistProfile;
     @OneToOne(cascade = CascadeType.ALL) @PrimaryKeyJoinColumn private ReferentProfile referentProfile;
-    
+
     @OneToMany(cascade = CascadeType.ALL) private List<Person> parentProfiles;
-    
+
     @Column(name = "archived") private boolean archived;
 
     // constructors
@@ -62,9 +74,9 @@ public class Person {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        
+
         this.parentProfiles = new ArrayList<>(MAX_PARENT_PROFILES);
-        
+
         this.archived = false;
     }
 
@@ -163,6 +175,13 @@ public class Person {
     }
 
     /**
+     * @return {@code true} if the person is a camp participant, or {@code false} otherwise
+     */
+    public boolean isParticipant() {
+        return participant;
+    }
+
+    /**
      * @return the participant profile of the person. If it is not a camp participant, this will return {@code null}.
      */
     public ParticipantProfile getParticipantProfile() {
@@ -174,7 +193,15 @@ public class Person {
      * camp participant.
      */
     public void setParticipantProfile(ParticipantProfile participantProfile) {
+    	this.participant = participantProfile != null;
         this.participantProfile = participantProfile;
+    }
+
+    /**
+     * @return {@code true} if the person is an activist, or {@code false} otherwise
+     */
+    public boolean isActivist() {
+        return activist;
     }
 
     /**
@@ -188,7 +215,15 @@ public class Person {
      * @param activistProfile the activist profile of the person. May be {@code null} if the person is not an activist.
      */
     public void setActivistProfile(ActivistProfile activistProfile) {
+    	this.activist = activistProfile != null;
         this.activistProfile = activistProfile;
+    }
+
+    /**
+     * @return {@code true} if the person is a referent, or {@code false} otherwise
+     */
+    public boolean isReferent() {
+        return referent;
     }
 
     /**
@@ -202,16 +237,17 @@ public class Person {
      * @param referentProfile the referent profile of the person. May be {@code null} if the person is not a referent.
      */
     public void setReferentProfile(ReferentProfile referentProfile) {
+    	this.referent = referentProfile != null;
         this.referentProfile = referentProfile;
     }
-    
+
     /**
      * @return the person's parents
      */
     public Iterable<Person> getParentProfiles() {
     	return parentProfiles;
     }
-    
+
     /**
      * @param parentProfiles the person's parents
      */
@@ -222,8 +258,8 @@ public class Person {
     		this.parentProfiles = parentProfiles;
     	}
     }
-    
-    /**
+
+	/**
      * @return whether the person is still to be used
      */
     public boolean isArchived() {
@@ -244,9 +280,39 @@ public class Person {
     private void setId(PersonId id) {
         this.id = id;
     }
-    
+
+    /**
+     * Setter just for JPA's sake. Private to enforce consistency with the state
+     * of the {@link #participantProfile}
+     * @param participant whether the person is a participant
+     */
+    @SuppressWarnings("unused")
+    private void setParticipant(boolean participant) {
+		this.participant = participant;
+	}
+
+    /**
+     * Setter just for JPA's sake. Private to enforce consistency with the state
+     * of the {@link #activistProfile}
+     * @param participant whether the person is a participant
+     */
+	@SuppressWarnings("unused")
+    private void setActivist(boolean activist) {
+		this.activist = activist;
+	}
+	
+	/**
+     * Setter just for JPA's sake. Private to enforce consistency with the state
+     * of the {@link #referentProfile}
+     * @param participant whether the person is a participant
+     */
+	@SuppressWarnings("unused")
+	private void setReferent(boolean referent) {
+		this.referent = referent;
+	}
+
     // query methods
-    
+
     /**
      * @return the subscriber's name, which basically is {@code firstName + " " + lastName}
      */
@@ -254,21 +320,21 @@ public class Person {
     public String getName() {
         return firstName + " " + lastName;
     }
-    
+
     /**
      * @return {@code true} if an email address is set, {@code false} otherwise
      */
     public boolean hasEmail() {
     	return email != null;
     }
-    
+
     /**
      * @return {@code true} if a parent is registered for this person, {@code false} otherwise
      */
     public boolean hasParents() {
     	return !parentProfiles.isEmpty();
     }
-    
+
     /**
      * @return {@code true} if another parent profile may be connected to this person, {@code false} otherwise
      */
@@ -291,13 +357,6 @@ public class Person {
     }
 
     /**
-     * @return {@code true} if the person is a camp participant, or {@code false} otherwise
-     */
-    public boolean isParticipant() {
-        return participantProfile != null;
-    }
-
-    /**
      * Turns the person into an activist.
      * @return the new activist profile, containing all activist related data
      */
@@ -307,13 +366,6 @@ public class Person {
         }
         this.activistProfile = new ActivistProfile(this);
         return activistProfile;
-    }
-
-    /**
-     * @return {@code true} if the person is an activist, or {@code false} otherwise
-     */
-    public boolean isActivist() {
-        return activistProfile != null;
     }
 
     /**
@@ -329,13 +381,6 @@ public class Person {
     }
 
     /**
-     * @return {@code true} if the person is a referent, or {@code false} otherwise
-     */
-    public boolean isReferent() {
-        return referentProfile != null;
-    }
-    
-    /**
      * Saves a person as parent for {@code this}
      * @param parent the parent
      */
@@ -349,7 +394,7 @@ public class Person {
     	}
     	parentProfiles.add(parent);
     }
-    
+
     /**
      * Removes a parent - brutal.
      * @param parent the former parent
