@@ -1,5 +1,7 @@
 package de.naju.adebar.controller.forms.human;
 
+import java.util.List;
+
 /**
  * Model POJO for editing activists. The fields are set by Thymeleaf when the associated form is submitted.
  * @author Rico Bergmann
@@ -10,13 +12,15 @@ public class EditActivistForm {
     private boolean activist;
     private boolean owningJuleica;
     private String juleicaExpiryDate;
+    private List<Long> localGroups;
 
     public EditActivistForm() {}
 
-    public EditActivistForm(boolean activist, boolean owningJuleica, String juleicaExpiryDate) {
+    public EditActivistForm(boolean activist, boolean owningJuleica, String juleicaExpiryDate, List<Long> localGroups) {
         this.activist = activist;
         this.owningJuleica = owningJuleica;
         this.juleicaExpiryDate = juleicaExpiryDate;
+        this.localGroups = localGroups;
     }
 
     public boolean isActivist() {
@@ -43,7 +47,15 @@ public class EditActivistForm {
         this.juleicaExpiryDate = juleicaExpiryDate;
     }
 
-    @Override
+    public List<Long> getLocalGroups() {
+		return localGroups;
+	}
+
+	public void setLocalGroups(List<Long> localGroups) {
+		this.localGroups = localGroups;
+	}
+
+	@Override
     public String toString() {
         return "EditActivistForm{" +
                 "activist=" + activist +

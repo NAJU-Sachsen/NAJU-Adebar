@@ -155,6 +155,7 @@ public class PersonController {
         model.addAttribute("editPersonForm", new PersonToEditPersonFormConverter().convertToEditPersonForm(person));
         model.addAttribute("addQualificationForm", new AddQualificationForm());
         model.addAttribute("addParentForm", new CreateParentForm());
+        model.addAttribute("allChapters", localGroupManager.repository().findAll());
 
         model.addAttribute("person", person);
 
@@ -163,7 +164,7 @@ public class PersonController {
             Iterable<LocalGroup> boards = localGroupManager.findAllLocalGroupsForBoardMember(person);
 
             model.addAttribute("isActivist", !person.isArchived());
-            model.addAttribute("editActivistForm", new ActivistToEditActivistFormConverter().convertToEditActivistForm(person));
+            model.addAttribute("editActivistForm", new ActivistToEditActivistFormConverter(localGroupManager.repository()).convertToEditActivistForm(person));
             model.addAttribute("localGroups", Iterables.isEmpty(localGroups) ? null : localGroups);
             model.addAttribute("boards", Iterables.isEmpty(boards) ? null : boards);
         } else {
@@ -236,6 +237,8 @@ public class PersonController {
 
         person.setActivistProfile(editActivistFormDataExtractor.extractActivistForm(person, activistForm));
         personManager.updatePerson(person.getId(), person);
+
+        localGroupManager.updateLocalGroupMembership(person, localGroupManager.repository().findAll(activistForm.getLocalGroups()));
 
         return "redirect:/persons/" + personId;
     }

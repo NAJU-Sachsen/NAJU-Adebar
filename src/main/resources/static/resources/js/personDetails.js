@@ -4,7 +4,7 @@ function initPersonData() {
     var isNabuMember = ($('#person-is-nabu-member').val().toString() === 'true');
 
     if (!isActivist) {
-        $('#edit-activist-juleica-container').addClass('hide-initially');
+        $('#edit-activist-container').addClass('hide-initially');
     }
 
     if (!hasJuleica) {
@@ -75,7 +75,7 @@ $('#delete-qualification-modal').on('show.bs.modal', function (event) {
 });
 
 $('#edit-activist-isActivist').click(function() {
-    $('#edit-activist-juleica-container').slideToggle();
+    $('#edit-activist-container').slideToggle();
 });
 
 $('#edit-activist-hasJuleica').click(function() {

@@ -1,15 +1,17 @@
 package de.naju.adebar.app.chapter;
 
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
 import de.naju.adebar.model.chapter.Board;
 import de.naju.adebar.model.chapter.LocalGroup;
 import de.naju.adebar.model.chapter.Project;
 import de.naju.adebar.model.chapter.ReadOnlyLocalGroupRepository;
 import de.naju.adebar.model.human.Address;
+import de.naju.adebar.model.human.NoActivistException;
 import de.naju.adebar.model.human.Person;
 import de.naju.adebar.model.newsletter.Newsletter;
-import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 /**
  * Service to take care of {@link LocalGroup local groups}
@@ -111,5 +113,22 @@ public interface LocalGroupManager {
      * @return all local groups where the given activist is member of the board
      */
     Iterable<LocalGroup> findAllLocalGroupsForBoardMember(Person activist);
+
+    /**
+     * Makes an activist part of a local group if is no member yet.
+     * @param group the group the member is added to
+     * @param activist the person
+     * @throws NoActivistException if the person is no activist
+     */
+    void addActivistToLocalGroupIfNecessary(LocalGroup group, Person activist);
+
+    /**
+     * Ensures that an activist is part of exactly the local groups specified
+     * This means especially that if the person was member of other chapters before, those
+     * will be removed.
+     * @param activist the activist to update
+     * @param localGroups the local groups the activist should be part of
+     */
+    void updateLocalGroupMembership(Person activist, Iterable<LocalGroup> localGroups);
 
 }

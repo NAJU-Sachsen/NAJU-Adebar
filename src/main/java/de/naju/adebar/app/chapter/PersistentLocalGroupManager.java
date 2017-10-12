@@ -1,21 +1,32 @@
 package de.naju.adebar.app.chapter;
 
-import com.google.common.collect.Lists;
-import de.naju.adebar.model.chapter.*;
-import de.naju.adebar.model.human.Address;
-import de.naju.adebar.model.human.Person;
-import de.naju.adebar.model.newsletter.Newsletter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+
+import com.google.common.collect.Lists;
+
+import de.naju.adebar.model.chapter.Board;
+import de.naju.adebar.model.chapter.BoardRepository;
+import de.naju.adebar.model.chapter.LocalGroup;
+import de.naju.adebar.model.chapter.LocalGroupRepository;
+import de.naju.adebar.model.chapter.Project;
+import de.naju.adebar.model.chapter.ProjectRepository;
+import de.naju.adebar.model.chapter.ReadOnlyLocalGroupRepository;
+import de.naju.adebar.model.human.Address;
+import de.naju.adebar.model.human.NoActivistException;
+import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.newsletter.Newsletter;
+import de.naju.adebar.util.Streams;
 
 /**
  * A {@link LocalGroupManager} that persists its data in a database
@@ -130,7 +141,39 @@ public class PersistentLocalGroupManager implements LocalGroupManager {
         return localGroups;
     }
 
-    /**
+    @Override
+	public void addActivistToLocalGroupIfNecessary(LocalGroup group, Person activist) {
+		if (!activist.isActivist()) {
+			throw new NoActivistException("For person " + activist);
+		} else if (!group.isMember(activist)) {
+			group.addMember(activist);
+			updateLocalGroup(group.getId(), group);
+		}
+	}
+
+
+
+	@Override
+	public void updateLocalGroupMembership(Person activist, Iterable<LocalGroup> localGroups) {
+		List<LocalGroup> currentMembership = Lists.newArrayList(roRepo.findByMembersContains(activist));
+		List<LocalGroup> updatedMembership = Lists.newArrayList(localGroups);
+
+		Stream<LocalGroup> groupsToRemove = Streams.subtract(currentMembership.stream(), updatedMembership.stream());
+		Stream<LocalGroup> groupsToAdd = Streams.subtract(updatedMembership.stream(), currentMembership.stream());
+
+		groupsToRemove.forEach(chapter -> {
+			chapter.removeMember(activist);
+			updateLocalGroup(chapter.getId(), chapter);
+		});
+
+		groupsToAdd.forEach(chapter -> {
+			chapter.addMember(activist);
+			updateLocalGroup(chapter.getId(), chapter);
+		});
+
+	}
+
+	/**
      * Updates a local group's ID. To be used extremely cautiously.
      * @param localGroup the local group to update
      * @param id the new ID

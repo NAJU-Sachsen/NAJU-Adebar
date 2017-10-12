@@ -1,12 +1,22 @@
 package de.naju.adebar.services.conversion.human;
 
-import de.naju.adebar.model.human.ActivistProfile;
-import de.naju.adebar.model.human.Person;
-import de.naju.adebar.controller.forms.human.EditActivistForm;
+import java.time.format.DateTimeFormatter;
+import java.util.LinkedList;
+import java.util.Locale;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
+import com.google.common.collect.Streams;
+
+import de.naju.adebar.controller.forms.human.EditActivistForm;
+import de.naju.adebar.model.chapter.LocalGroup;
+import de.naju.adebar.model.chapter.ReadOnlyLocalGroupRepository;
+import de.naju.adebar.model.human.ActivistProfile;
+import de.naju.adebar.model.human.Person;
 
 /**
  * Service to convert an {@link Person activist} to a corresponding {@link EditActivistForm}
@@ -14,6 +24,12 @@ import java.util.Locale;
  */
 @Service
 public class ActivistToEditActivistFormConverter {
+	private ReadOnlyLocalGroupRepository groupRepo;
+
+	@Autowired
+	public ActivistToEditActivistFormConverter(@Qualifier("ro_localGroupRepo") ReadOnlyLocalGroupRepository groupRepo) {
+		this.groupRepo = groupRepo;
+	}
 
     /**
      * Performs the conversion
@@ -22,7 +38,7 @@ public class ActivistToEditActivistFormConverter {
      */
     public EditActivistForm convertToEditActivistForm(Person person) {
         if (!person.isActivist()) {
-            return new EditActivistForm(false, false, null);
+            return new EditActivistForm(false, false, null, new LinkedList<>());
         }
 
         ActivistProfile activistProfile = person.getActivistProfile();
@@ -32,7 +48,8 @@ public class ActivistToEditActivistFormConverter {
             juleicaExpiryDate = activistProfile.getJuleicaCard().getExpiryDate() != null ? activistProfile.getJuleicaCard().getExpiryDate().format(DateTimeFormatter.ofPattern(EditActivistForm.DATE_FORMAT, Locale.GERMAN)) : "";
         }
 
-        return new EditActivistForm(true, activistProfile.hasJuleica(), juleicaExpiryDate);
+        Stream<LocalGroup> groups = Streams.stream(groupRepo.findByMembersContains(person));
+        return new EditActivistForm(true, activistProfile.hasJuleica(), juleicaExpiryDate, groups.map(LocalGroup::getId).collect(Collectors.toList()));
     }
 
 }
