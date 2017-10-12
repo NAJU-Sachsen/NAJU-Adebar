@@ -300,7 +300,7 @@ public class Person {
     private void setActivist(boolean activist) {
 		this.activist = activist;
 	}
-	
+
 	/**
      * Setter just for JPA's sake. Private to enforce consistency with the state
      * of the {@link #referentProfile}
@@ -353,6 +353,7 @@ public class Person {
             throw new IllegalStateException("Person already is a participant");
         }
         this.participantProfile = new ParticipantProfile(this);
+        this.participant = true;
         return participantProfile;
     }
 
@@ -365,6 +366,7 @@ public class Person {
             throw new IllegalStateException("Person already is an activist");
         }
         this.activistProfile = new ActivistProfile(this);
+        this.activist = true;
         return activistProfile;
     }
 
@@ -377,6 +379,7 @@ public class Person {
             throw new IllegalStateException("Person already is a referent");
         }
         this.referentProfile = new ReferentProfile(this);
+        this.referent = true;
         return referentProfile;
     }
 
