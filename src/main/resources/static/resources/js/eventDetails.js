@@ -73,6 +73,7 @@ $('#add-participant-search-btn').on('click', function() {
         url: '/api/persons/simpleSearch'
     };
 
+    $(table).empty();
     $('#add-participant-modal').find('.searching').show();
     $.ajax(request);
 });
@@ -101,9 +102,11 @@ $('#add-counselor-search-btn').on('click', function() {
         url: '/api/persons/activists/simpleSearch'
     };
 
+    $(table).empty();
     $('#add-counselor-modal').find('.searching').show();
     $.ajax(activistsRequest);
 
+    var modal = $('#add-counselor-modal');
     var personsRequest = {
         async: true,
         data: {
@@ -116,11 +119,12 @@ $('#add-counselor-search-btn').on('click', function() {
         method: 'POST',
         success: function(response) {
             $('#add-counselor-modal').find('.searching-new-activists').hide();
-            displayMatchingNonActivists($('#add-counselor-modal'), response, url);
+            displayMatchingNonActivists(modal, response, url);
         },
         url: '/api/persons/search'
     };
 
+    modal.find('.new-activists').hide();
     $('#add-counselor-modal').find('.searching-new-activists').show();
     $.ajax(personsRequest);
 });
@@ -149,9 +153,11 @@ $('#add-organizer-search-btn').on('click', function() {
         url: '/api/persons/activists/simpleSearch'
     };
 
+    $(table).empty();
     $('#add-organizer-modal').find('.searching').show();
     $.ajax(activistsRequest);
 
+    var modal = $('#add-organizer-modal');
     var personsRequest = {
         async: true,
         data: {
@@ -164,11 +170,12 @@ $('#add-organizer-search-btn').on('click', function() {
         method: 'POST',
         success: function(response) {
             $('#add-organizer-modal').find('.searching-new-activists').hide();
-            displayMatchingNonActivists($('#add-organizer-modal'), response, url);
+            displayMatchingNonActivists(modal, response, url);
         },
         url: '/api/persons/search'
     };
 
+    modal.find('.new-activists').hide();
     $('#add-organizer-modal').find('.searching-new-activists').show();
     $.ajax(personsRequest);
 });
@@ -230,6 +237,7 @@ $('#add-personToContact-search-btn').on('click', function() {
         url: '/api/persons/simpleSearch'
     };
 
+    $(table).empty();
     $('#add-personToContact-modal').find('.searching').show();
     $.ajax(request);
 });
@@ -510,6 +518,7 @@ $('#add-waitingList-search-btn').on('click', function() {
         url: '/api/persons/simpleSearch'
     };
 
+    $(table).empty();
     $('#add-waitingList-modal').find('.searching').show();
     $.ajax(request);
 });

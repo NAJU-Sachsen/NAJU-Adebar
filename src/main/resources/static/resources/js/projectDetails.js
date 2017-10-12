@@ -22,6 +22,7 @@ $('#add-contributor-search-btn').on('click', function() {
         url: '/api/persons/activists/simpleSearch'
     };
 
+    $(table).empty();
     $('#add-contributor-modal').find('.searching').show();
     $.ajax(request);
 });

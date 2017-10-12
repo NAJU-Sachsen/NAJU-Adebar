@@ -113,6 +113,7 @@ $('#connect-parent-search-btn').on('click', function() {
         url: '/api/persons/simpleSearch'
     };
 
+    $(table).empty();
     $('#connect-parent-modal').find('.searching').show();
     $.ajax(request);
 });

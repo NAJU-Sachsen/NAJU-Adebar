@@ -59,5 +59,6 @@ $('#add-subscriber-search-btn').on('click', function() {
         url: '/api/persons/simpleSearch'
     };
 
+    $(table).empty();
     $.ajax(request);
 });

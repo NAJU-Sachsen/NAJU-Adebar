@@ -103,6 +103,7 @@ $('#add-member-search-btn').on('click', function() {
         url: '/api/persons/activists/simpleSearch'
     };
 
+    $(table).empty();
     $.ajax(request);
 });
 
