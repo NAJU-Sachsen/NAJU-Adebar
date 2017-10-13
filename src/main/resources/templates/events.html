@@ -168,8 +168,8 @@
                                       <input type="radio" id="add-event-belonging-project" name="belonging" th:value="PROJECT" /> Projekt
                                   </label>
                                   <div id="add-event-belonging-chapter-select" class="margin-btm-sm margin-top-lg">
-                                      <label for="add-event-belonging" class="sr-only">Ortsgruppe</label>
-                                      <select class="selectpicker" id="add-event-belonging" required="required" data-live-search="true" th:remove="all-but-first" th:field="*{localGroupId}">
+                                      <label for="add-event-chapter" class="sr-only">Ortsgruppe</label>
+                                      <select class="selectpicker" id="add-event-chapter" required="required" data-live-search="true" th:remove="all-but-first" th:field="*{localGroupId}">
                                           <option th:each="localGroup : ${localGroups}" th:text="${localGroup.name}" th:value="${localGroup.id}">NAJU Sachsen</option>
                                           <option>NAJU Dresden</option>
                                           <option>NAJU Freiberg</option>

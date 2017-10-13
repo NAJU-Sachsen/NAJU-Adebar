@@ -59,12 +59,21 @@ $('#filter-fee-type').on('change', function() {
     }
 });
 
-$('#add-event-belonging-localGroup').on('change', function() {
+function invertProp(elem, prop) {
+    elem.prop(prop, !elem.prop(prop));
+}
+
+function updateAddEventBelonging() {
     $('#add-event-belonging-chapter-select').slideToggle();
     $('#add-event-belonging-project-select').slideToggle();
+    invertProp($('#add-event-chapter'), 'required');
+    invertProp($('#add-event-project'), 'required');
+}
+
+$('#add-event-belonging-localGroup').on('change', function() {
+    updateAddEventBelonging();
 });
 
 $('#add-event-belonging-project').on('change', function() {
-    $('#add-event-belonging-chapter-select').slideToggle();
-    $('#add-event-belonging-project-select').slideToggle();
+    updateAddEventBelonging();
 });
