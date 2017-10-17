@@ -26,6 +26,7 @@ public class FilterToPredicateConverter {
 		QPerson person = QPerson.person;
 		BooleanBuilder predicate = new BooleanBuilder();
 
+		predicate.and(person.archived.isFalse());
 		if (firstName != null && !firstName.isEmpty()) {
 			predicate.and(person.firstName.contains(firstName));
 		}
@@ -53,6 +54,7 @@ public class FilterToPredicateConverter {
 		QPerson person = QPerson.person;
 		BooleanBuilder predicate = new BooleanBuilder();
 
+		predicate.and(person.archived.isFalse());
 		predicate.and(person.activist.isTrue());
 
 		if (firstName != null && !firstName.isEmpty()) {
