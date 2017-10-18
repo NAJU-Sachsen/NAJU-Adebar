@@ -1,20 +1,24 @@
 package de.naju.adebar.app.events;
 
-import de.naju.adebar.model.events.Event;
-import de.naju.adebar.model.events.EventFactory;
-import de.naju.adebar.model.events.EventId;
-import de.naju.adebar.model.events.EventRepository;
-import de.naju.adebar.model.events.ReadOnlyEventRepository;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Optional;
+import com.google.common.collect.Lists;
+
+import de.naju.adebar.model.events.Event;
+import de.naju.adebar.model.events.EventFactory;
+import de.naju.adebar.model.events.EventId;
+import de.naju.adebar.model.events.EventRepository;
+import de.naju.adebar.model.events.ReadOnlyEventRepository;
 
 /**
  * A {@link EventManager} that persists its data in a database
@@ -74,6 +78,22 @@ public class PersistentEventManager implements EventManager {
     }
 
     @Override
+	public Iterable<Event> findOngoingEvents() {
+    	LocalDateTime currentTime = LocalDateTime.now();
+    	LocalDateTime yesterdaysLastMoment = LocalDateTime.of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 0, 0).minusMinutes(1);
+    	Iterable<Event> currentEventsIterable = repository().findByStartTimeIsBeforeAndEndTimeIsAfter(currentTime, yesterdaysLastMoment);
+    	List<Event> currentEvents = Lists.newLinkedList(currentEventsIterable);
+
+    	for (Event e : currentEvents) {
+    		if (e.getEndTime().isBefore(currentTime) && !onlyDateSet(e.getEndTime())) {
+    			currentEvents.remove(e);
+    		}
+    	}
+
+		return currentEvents;
+	}
+
+	@Override
     public Optional<Event> findEvent(String id) {
     	EventId eventId = new EventId(id);
         return eventRepo.exists(eventId) ? Optional.of(eventRepo.findOne(eventId)) : Optional.empty();
@@ -82,5 +102,17 @@ public class PersistentEventManager implements EventManager {
     @Override
     public ReadOnlyEventRepository repository() {
         return roRepo;
+    }
+
+    /**
+     * Checks, whether only the date part of a {@link LocalDateTime} instance should be considered.
+     * For many events it is not important, when they start or end. Therefore the time is set to 00:00.
+     * This may distort results when querying for all events that ended before a certain time.
+     * To prevent this, one may check the correctness of the results through this function
+     * @param time the date to check
+     * @return whether the time should be ignored
+     */
+    protected boolean onlyDateSet(LocalDateTime time) {
+    	return time.getHour() == 0 && time.getMinute() == 0;
     }
 }

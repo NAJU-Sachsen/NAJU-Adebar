@@ -82,7 +82,8 @@ public class EventController {
     @RequestMapping("/events")
     public String showEventOverview(Model model) {
 
-        Iterable<Event> currentEvents = eventManager.repository().findByStartTimeIsBeforeAndEndTimeIsAfter(LocalDateTime.now(), LocalDateTime.now());
+
+        Iterable<Event> currentEvents = eventManager.findOngoingEvents();
         Iterable<Event> futureEvents = eventManager.repository().findByStartTimeIsAfter(LocalDateTime.now());
 
         model.addAttribute("currentEvents", currentEvents);

@@ -1,11 +1,12 @@
 package de.naju.adebar.app.events;
 
-import de.naju.adebar.model.events.Event;
-import de.naju.adebar.model.events.ReadOnlyEventRepository;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import de.naju.adebar.model.events.Event;
+import de.naju.adebar.model.events.ReadOnlyEventRepository;
 
 /**
  * Service to take care of {@link Event Events}
@@ -56,6 +57,12 @@ public interface EventManager {
      * @return an optional containing the event if it exists, otherwise the optional is empty
      */
     Optional<Event> findEvent(String id);
+
+    /**
+     * Queries for all events that are currently taking place
+     * @return the events
+     */
+    Iterable<Event> findOngoingEvents();
 
     /**
      * Provides access to the underlying data
