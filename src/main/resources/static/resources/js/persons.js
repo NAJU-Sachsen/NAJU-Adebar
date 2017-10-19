@@ -144,19 +144,25 @@ $('select#eatingHabit-quick').on('changed.bs.select', function() {
 });
 
 function displaySearchResults(results) {
+    $('#content').find('.searching').hide();
     var table = $('#content').find('.person-list');
     table.empty();
+
+    if (!results.length) {
+        $('#content').find('.no-results').show();
+    }
+
     for (i in results) {
         var name = results[i].name;
-        var city = results[i].city || '';
+        var address = results[i].address || '';
         var mail = results[i].email || '';
         var dob = results[i].dob || '';
         var id = results[i].id;
         table.append(
             `<tr>
-                <td class="col-md-4">${name}</td>
-                <td class="col-md-3">${city}</td>
-                <td class="col-md-2"><a href="mailto:${mail}">${mail}</a></td>
+                <td class="col-md-3">${name}</td>
+                <td class="col-md-3">${address}</td>
+                <td class="col-md-3"><a href="mailto:${mail}">${mail}</a></td>
                 <td class="col-md-2">${dob}</td>
                 <td class="col-md-1"><a href="/persons/${id}">Details</a></td>
             </tr>`);
@@ -165,6 +171,11 @@ function displaySearchResults(results) {
 
 $('#persons').on('change', function(obj) {
     var query = obj.target.value;
+
+    $('#content').find('.no-results').hide();
+    $('#content').find('.searching').show();
+    $('#content').find('.person-list').empty();
+
     var request = {
         async: true,
         data: {
@@ -175,11 +186,14 @@ $('#persons').on('change', function(obj) {
         success: displaySearchResults,
         url: '/api/persons/defaultSearch'
     };
-    $('#content').find('.person-list').empty();
+
     $.ajax(request);
 });
 
 $(function() {
+    $('#content').find('.no-results').hide();
+    $('#content').find('.searching').hide();
+
     if ($('#existing-persons-modal')) {
         $('#existing-persons-modal').modal({
             keyboard: false
