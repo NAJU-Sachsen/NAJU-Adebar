@@ -445,6 +445,72 @@
         </div>
     </div>
 
+    <div id="existing-persons-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="existing-persons-label" th:if="${existingPersons}">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="existing-persons-label" class="modal-title">Existierende Einträge</h2>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-info">
+                        Es wurden bereits Personen mit dem gleichen Namen gespeichert
+                    </div>
+                    <table class="table">
+                        <tbody th:remove="all-but-first">
+                            <tr th:each="ep : ${existingPersons}">
+                                <td th:text="|${ep.firstName} ${ep.lastName}|">Max Mustermann</td>
+                                <td th:text="${ep.participantProfile.dateOfBirth} ? ${{ep.participantProfile.dateOfBirth}} : '---'">* 01.02.2003</td>
+                                <td th:text="${ep.address.city}">Freiberg</td>
+                            </tr>
+                            <tr>
+                                <td>Max Mustermann</td>
+                                <td>* 01.02.2003</td>
+                                <td>Freiberg</td>
+                            </tr>
+                            <tr>
+                                <td>Max Mustermann</td>
+                                <td>* 01.02.2003</td>
+                                <td>Chemnitz</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Ignorieren</button>
+                    <form id="add-person-ignore" th:object="${newPerson}" th:action="@{/persons/addIgnoreSimilar}" class="hidden">
+                        <input type="hidden" name="participant" value="true" />
+                        <input type="text" name="firstName" th:field="*{firstName}"/>
+                        <input type="text" name="lastName" required="required" th:field="*{lastName}" />
+                        <input type="email" name="email" th:field="*{email}" />
+                        <input type="text" name="phone" th:field="*{phoneNumber}" />
+                        <input type="radio" name="gender" value="FEMALE" th:field="*{gender}" />
+                        <input type="radio" name="gender" value="MALE" th:field="*{gender}" />
+                        <input type="radio" name="gender" value="OTHER" th:field="*{gender}" />
+                        <input type="text" name="dob" th:field="*{dateOfBirth}"/>
+                        <textarea name="eatingHabit" th:field="*{eatingHabit}"></textarea>
+                        <textarea name="healthImpairments" th:field="*{healthImpairments}"></textarea>
+                        <input type="text" name="street" th:field="*{street}"/>
+                        <input type="text" name="zip" th:field="*{zip}"/>
+                        <input type="text" name="city" th:field="*{city}"/>
+                        <textarea name="remarks" th:field="*{remarks}"></textarea>
+                        <input type="checkbox" name="activist" th:field="*{activist}"/>
+                        <input type="checkbox" name="hasJuleica" th:field="*{hasJuleica}"/>
+                        <input type="text" name="juleicaExpiryDate" th:field="*{juleicaExpiryDate}"/>
+                        <input type="checkbox" name="referent" th:field="*{referent}"/>
+                        <select name="referent-qualifications" multiple="multiple" th:field="*{qualifications}">
+                            <option th:each="qualification : ${qualifications}" th:text="${qualification.name}" th:value="${{qualification.name}}" th:field="*{qualifications}">
+                                Erste-Hilfe Kurs
+                            </option>
+                        </select>
+                        <input type="checkbox" name="nabuMember" th:field="*{nabuMember}" />
+                        <input type="text" name="nabuNr" th:field="*{nabuNumber}" />
+                    </form>
+                    <button type="submit" class="btn btn-primary" form="add-person-ignore">Trotzdem hinzufügen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </section>
 
 <!-- page specific content-->

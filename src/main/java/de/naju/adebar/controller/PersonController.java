@@ -104,13 +104,40 @@ public class PersonController {
     }
 
     /**
-     * Adds a new person to the database
+     * Adds a new person to the database.
+     * <p>
+     * If persons with the same name are already saved, an overview featuring a confirmation dialog will be displayed instead.
+     * </p>
      * @param createPersonForm person object created by the model
      * @return the new person's detail view
      */
     @RequestMapping("/persons/add")
-    public String addPerson(@ModelAttribute("addPersonFrom") CreatePersonForm createPersonForm) {
-        Person person = createPersonFormDataExtractor.extractPerson(createPersonForm);
+    public String addPerson(@ModelAttribute("addPersonFrom") CreatePersonForm createPersonForm, Model model) {
+        Iterable<Person> similarPersons = personManager.repository().findByFirstNameAndLastName(createPersonForm.getFirstName(), createPersonForm.getLastName());
+
+        if (!Iterables.isEmpty(similarPersons)) {
+        	model.addAttribute("existingPersons", similarPersons);
+        	model.addAttribute("newPerson", createPersonForm);
+        	return showPersonOverview(model);
+        }
+
+    	Person person = createPersonFormDataExtractor.extractPerson(createPersonForm);
+        personManager.savePerson(person);
+
+        return "redirect:/persons/" + person.getId();
+    }
+
+    /**
+     * Adds a new person to the database.
+     * <p>
+     * If persons with the same name are already saved, the new person will be put into the database anyways
+     * </p>
+     * @param createPersonForm person object created by the model
+     * @return the new person's detail view
+     */
+    @RequestMapping("/persons/addIgnoreSimilar")
+    public String addPersonIgnoreSimilar(CreatePersonForm createPersonForm) {
+    	Person person = createPersonFormDataExtractor.extractPerson(createPersonForm);
         personManager.savePerson(person);
 
         return "redirect:/persons/" + person.getId();

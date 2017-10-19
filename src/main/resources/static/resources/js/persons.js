@@ -142,3 +142,11 @@ $('select#eatingHabit-quick').on('changed.bs.select', function() {
         $('#eatingHabit').removeClass('input-pulse');
     }, 2000);
 });
+
+$(function() {
+    if ($('#existing-persons-modal')) {
+        $('#existing-persons-modal').modal({
+            keyboard: false
+        });
+    }
+});
