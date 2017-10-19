@@ -63,6 +63,18 @@ public interface ReadOnlyPersonRepository extends ReadOnlyRepository<Person, Per
 
     @Query("SELECT p FROM person p WHERE p.archived=0")
     Stream<Person> streamAll();
-    
-    List<Person> findAll(Predicate predicate);
+
+    /**
+     * @param predicate the predicate
+     * @return all persons which matched the predicate
+     */
+    @Override
+	List<Person> findAll(Predicate predicate);
+
+    /**
+     * @param firstName the first name
+     * @param lastName the last name
+     * @return all persons with the given name
+     */
+    Iterable<Person> findByFirstNameAndLastName(String firstName, String lastName);
 }
