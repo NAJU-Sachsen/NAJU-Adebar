@@ -31,13 +31,13 @@ public class FilterPersonForm {
 	public void setCity(String city) {
 		this.city = city;
 	}
-	public boolean isActivist() {
+	public Boolean isActivist() {
 		return activist;
 	}
 	public void setActivist(boolean activist) {
 		this.activist = activist;
 	}
-	public boolean isReferent() {
+	public Boolean isReferent() {
 		return referent;
 	}
 	public void setReferent(boolean referent) {

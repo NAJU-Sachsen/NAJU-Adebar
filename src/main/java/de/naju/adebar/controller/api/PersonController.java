@@ -89,7 +89,7 @@ public class PersonController {
     	dataFormatter.adjustFilterPersonForm(form);
 
     	List<Person> matches = personManager.repository()
-    			.findAll(predicateConverter.fromFields(form.getFirstName(), form.getLastName(), form.getCity()));
+    			.findAll(predicateConverter.fromFields(form.getFirstName(), form.getLastName(), form.getCity(), form.isActivist(), form.isReferent()));
     	List<SimplePersonJSON> result = new ArrayList<>(matches.size());
     	matches.forEach(m -> result.add(new SimplePersonJSON(m)));
 

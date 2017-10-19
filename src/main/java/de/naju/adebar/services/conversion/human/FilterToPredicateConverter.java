@@ -43,6 +43,31 @@ public class FilterToPredicateConverter {
 	}
 
 	/**
+	 * Creates a predicate for a generic person filter. Each parameter which is either
+	 * {@code null} or empty will be ignored.
+	 * @param firstName the person's first name
+	 * @param lastName the person's last name
+	 * @param city the city the person resides in
+	 * @param activist whether the person has to be an activist
+	 * @param referent whether the person has to be a referent
+	 * @return the predicate which describes the given criteria
+	 */
+	public Predicate fromFields(String firstName, String lastName, String city, Boolean activist, Boolean referent) {
+		QPerson person = QPerson.person;
+		BooleanBuilder predicate = (BooleanBuilder) fromFields(firstName, lastName, city);
+
+		if (activist != null) {
+			predicate.and(person.activist.eq(activist));
+		}
+
+		if (referent != null) {
+			predicate.and(person.referent.eq(referent));
+		}
+
+		return predicate;
+	}
+
+	/**
 	 * Creates a predicate for a persons which are activists. Each parameter which is either
 	 * {@code null} or empty will be ignored.
 	 * @param firstName the activist's first name
