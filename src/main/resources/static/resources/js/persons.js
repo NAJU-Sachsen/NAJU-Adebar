@@ -143,6 +143,42 @@ $('select#eatingHabit-quick').on('changed.bs.select', function() {
     }, 2000);
 });
 
+function displaySearchResults(results) {
+    var table = $('#content').find('.person-list');
+    table.empty();
+    for (i in results) {
+        var name = results[i].name;
+        var city = results[i].city || '';
+        var mail = results[i].email || '';
+        var dob = results[i].dob || '';
+        var id = results[i].id;
+        table.append(
+            `<tr>
+                <td class="col-md-4">${name}</td>
+                <td class="col-md-3">${city}</td>
+                <td class="col-md-2"><a href="mailto:${mail}">${mail}</a></td>
+                <td class="col-md-2">${dob}</td>
+                <td class="col-md-1"><a href="/persons/${id}">Details</a></td>
+            </tr>`);
+    }
+}
+
+$('#persons').on('change', function(obj) {
+    var query = obj.target.value;
+    var request = {
+        async: true,
+        data: {
+            query: query
+        },
+        dataType: 'json',
+        method: 'POST',
+        success: displaySearchResults,
+        url: '/api/persons/defaultSearch'
+    };
+    $('#content').find('.person-list').empty();
+    $.ajax(request);
+});
+
 $(function() {
     if ($('#existing-persons-modal')) {
         $('#existing-persons-modal').modal({

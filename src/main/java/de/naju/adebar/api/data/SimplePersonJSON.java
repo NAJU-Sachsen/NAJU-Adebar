@@ -1,11 +1,11 @@
 package de.naju.adebar.api.data;
 
-import de.naju.adebar.model.human.Address;
-import de.naju.adebar.model.human.Person;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+
+import de.naju.adebar.model.human.Address;
+import de.naju.adebar.model.human.Person;
 
 /**
  * JSON-object for persons in simplified form. In contrast to the normal {@link Person} these objects contain only the
@@ -20,6 +20,7 @@ public class SimplePersonJSON {
 
     private String id;
     private String name;
+    private String email;
     private String dob;
     private String address;
 
@@ -30,6 +31,7 @@ public class SimplePersonJSON {
     public SimplePersonJSON(Person person) {
         this.id = person.getId().toString();
         this.name = person.getName();
+        this.email = person.getEmail();
         this.address = formatAddress(person.getAddress());
 
         if (person.isParticipant()) {
@@ -50,6 +52,13 @@ public class SimplePersonJSON {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * @return the person's email address
+     */
+    public String getEmail() {
+    	return email;
     }
 
     /**

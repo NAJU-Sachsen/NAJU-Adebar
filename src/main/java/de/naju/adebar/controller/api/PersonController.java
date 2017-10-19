@@ -3,6 +3,7 @@ package de.naju.adebar.controller.api;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -11,11 +12,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.querydsl.core.types.Predicate;
+
 import de.naju.adebar.api.data.SimplePersonJSON;
 import de.naju.adebar.api.forms.FilterPersonForm;
 import de.naju.adebar.api.util.DataFormatter;
 import de.naju.adebar.app.human.PersonManager;
 import de.naju.adebar.model.human.Person;
+import de.naju.adebar.services.api.PersonSearchPredicateCreator;
 import de.naju.adebar.services.conversion.human.FilterToPredicateConverter;
 
 /**
@@ -29,14 +33,28 @@ public class PersonController {
     private PersonManager personManager;
     private DataFormatter dataFormatter;
     private FilterToPredicateConverter predicateConverter;
+    private PersonSearchPredicateCreator searchPredicateCreator;
 
     @Autowired
-    public PersonController(PersonManager personManager, DataFormatter dataFormatter, FilterToPredicateConverter predicateConverter) {
-        Object[] params = {personManager, dataFormatter, predicateConverter};
+    public PersonController(PersonManager personManager, DataFormatter dataFormatter, FilterToPredicateConverter predicateConverter, PersonSearchPredicateCreator searchPredicateCreator) {
+        Object[] params = {personManager, dataFormatter, predicateConverter, searchPredicateCreator};
         Assert.noNullElements(params, "No parameter may be null, but at least one was: " + Arrays.toString(params));
         this.personManager = personManager;
         this.dataFormatter = dataFormatter;
         this.predicateConverter = predicateConverter;
+        this.searchPredicateCreator = searchPredicateCreator;
+    }
+
+    /**
+     * Searches for persons whose name, address or email match the query given
+     * @param query
+     * @return
+     */
+    @RequestMapping("/defaultSearch")
+    public Iterable<SimplePersonJSON> sendMatches(@RequestParam("query") String query) {
+    	Predicate predicate = searchPredicateCreator.createPredicate(query);
+    	List<Person> matches = personManager.repository().findAll(predicate);
+    	return matches.stream().map(SimplePersonJSON::new).collect(Collectors.toList());
     }
 
     /**
