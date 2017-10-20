@@ -1,18 +1,28 @@
 package de.naju.adebar.services.conversion.human;
 
-import de.naju.adebar.controller.forms.human.CreateParentForm;
-import de.naju.adebar.controller.forms.human.CreatePersonForm;
-
-import de.naju.adebar.model.human.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+
+import de.naju.adebar.controller.forms.human.CreateParentForm;
+import de.naju.adebar.controller.forms.human.CreatePersonForm;
+import de.naju.adebar.model.human.ActivistProfile;
+import de.naju.adebar.model.human.Address;
+import de.naju.adebar.model.human.Gender;
+import de.naju.adebar.model.human.JuleicaCard;
+import de.naju.adebar.model.human.NabuMembership;
+import de.naju.adebar.model.human.ParticipantProfile;
+import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.human.PersonFactory;
+import de.naju.adebar.model.human.Qualification;
+import de.naju.adebar.model.human.QualificationRepository;
+import de.naju.adebar.model.human.ReferentProfile;
 
 // TODO make CreatePersonFormDataExtractor subclass of EditPersonFormDataExtractor
 
@@ -63,22 +73,22 @@ public class CreatePersonFormDataExtractor {
 
         return person;
     }
-    
+
     /**
      * @param child the child-to-be
      * @param parentForm the containing the parent data
      * @return the {@link Person} object encoded by the form
      */
     public Person extractParent(Person child, CreateParentForm parentForm) {
-    	Person parent = personFactory.buildNew(parentForm.getFirstName(), parentForm.getLastName(), parentForm.getEmail()).create();
+    	Person parent = personFactory.buildNew(parentForm.getFirstName(), parentForm.getLastName(), parentForm.getEmail()).makeParticipant().create();
     	parent.setPhoneNumber(parentForm.getPhoneNumber());
-    	
+
     	if (parentForm.isUseChildAddress()) {
     		parent.setAddress(child.getAddress());
     	} else {
     		parent.setAddress(new Address());
     	}
-    	
+
     	return parent;
     }
 
