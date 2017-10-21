@@ -1,59 +1,60 @@
 package de.naju.adebar.controller.forms.human;
 
 /**
- * Model POJO for new parents. The fields are set by Thymeleaf when the associated form is submitted.
+ * Model POJO for new parents. The fields are set by Thymeleaf when the associated form is
+ * submitted.
+ *
  * @author Rico Bergmann
  */
 public class CreateParentForm {
-	
-	private String firstName;
-	private String lastName;
-	private String email;
-	private String phoneNumber;
-	private boolean useChildAddress;
-	
-	public CreateParentForm() {}
 
-	public String getFirstName() {
-		return firstName;
-	}
+  private String firstName;
+  private String lastName;
+  private String email;
+  private String phoneNumber;
+  private boolean useChildAddress;
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
+  public CreateParentForm() {}
 
-	public String getLastName() {
-		return lastName;
-	}
+  public String getFirstName() {
+    return firstName;
+  }
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
 
-	public String getEmail() {
-		return email;
-	}
+  public String getLastName() {
+    return lastName;
+  }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
 
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
+  public String getEmail() {
+    return email;
+  }
 
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-	public boolean isUseChildAddress() {
-		return useChildAddress;
-	}
+  public String getPhoneNumber() {
+    return phoneNumber;
+  }
 
-	public void setUseChildAddress(boolean useChildAddress) {
-		this.useChildAddress = useChildAddress;
-	}
-	
-	
-	
+  public void setPhoneNumber(String phoneNumber) {
+    this.phoneNumber = phoneNumber;
+  }
+
+  public boolean isUseChildAddress() {
+    return useChildAddress;
+  }
+
+  public void setUseChildAddress(boolean useChildAddress) {
+    this.useChildAddress = useChildAddress;
+  }
+
+
 }

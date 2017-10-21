@@ -7,13 +7,14 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class H2ConsoleConfiguration {
-    private final static String H2_CONSOLE_PATH = "/h2-console/*";
 
-    @Bean
-    ServletRegistrationBean h2servletRegistration() {
-        ServletRegistrationBean registrationBean = new ServletRegistrationBean(new WebServlet());
-        registrationBean.addUrlMappings(H2_CONSOLE_PATH);
-        return registrationBean;
-    }
+  private final static String H2_CONSOLE_PATH = "/h2-console/*";
+
+  @Bean
+  ServletRegistrationBean h2servletRegistration() {
+    ServletRegistrationBean registrationBean = new ServletRegistrationBean(new WebServlet());
+    registrationBean.addUrlMappings(H2_CONSOLE_PATH);
+    return registrationBean;
+  }
 
 }

@@ -27,42 +27,50 @@ import org.springframework.transaction.annotation.Transactional;
 @Rollback
 @Component
 public class PersistentLocalGroupManagerIntegrationTest {
-    @Autowired private PersistentLocalGroupManager localGroupManager;
-    @Autowired private LocalGroupRepository localGroupRepo;
-    @Autowired private PersonFactory personFactory;
-    @Autowired private PersonManager personManager;
 
-    private LocalGroup najuSn;
-    private Person hans;
+  @Autowired
+  private PersistentLocalGroupManager localGroupManager;
+  @Autowired
+  private LocalGroupRepository localGroupRepo;
+  @Autowired
+  private PersonFactory personFactory;
+  @Autowired
+  private PersonManager personManager;
 
-    @Before
-    public void setUp() {
-        najuSn = new LocalGroup("NAJU Sachsen", new Address());
-        hans = personFactory.buildNew("Hans", "Wurst", "hw@web.de").makeActivist().create();
-    }
+  private LocalGroup najuSn;
+  private Person hans;
 
-    @Test public void testSave() {
-        najuSn = localGroupManager.saveLocalGroup(najuSn);
-        Assert.assertTrue("Group should have been saved", localGroupRepo.exists(najuSn.getId()));
-    }
+  @Before
+  public void setUp() {
+    najuSn = new LocalGroup("NAJU Sachsen", new Address());
+    hans = personFactory.buildNew("Hans", "Wurst", "hw@web.de").makeActivist().create();
+  }
 
-    @Test public void testUpdate() {
-        String city = "Leipzig";
-        najuSn = localGroupManager.saveLocalGroup(najuSn);
+  @Test
+  public void testSave() {
+    najuSn = localGroupManager.saveLocalGroup(najuSn);
+    Assert.assertTrue("Group should have been saved", localGroupRepo.exists(najuSn.getId()));
+  }
 
-        najuSn.setAddress(new Address("", "", city));
-        localGroupManager.updateLocalGroup(najuSn.getId(), najuSn);
+  @Test
+  public void testUpdate() {
+    String city = "Leipzig";
+    najuSn = localGroupManager.saveLocalGroup(najuSn);
 
-        najuSn = localGroupManager.findLocalGroup(najuSn.getId()).orElse(null);
-        Assert.assertEquals("Group should have been updated", city, najuSn.getAddress().getCity());
-    }
+    najuSn.setAddress(new Address("", "", city));
+    localGroupManager.updateLocalGroup(najuSn.getId(), najuSn);
 
-    @Test public void testUpdateBoard() {
-        hans = personManager.savePerson(hans);
-        najuSn = localGroupManager.saveLocalGroup(najuSn);
-        Board b = new Board(hans);
+    najuSn = localGroupManager.findLocalGroup(najuSn.getId()).orElse(null);
+    Assert.assertEquals("Group should have been updated", city, najuSn.getAddress().getCity());
+  }
 
-        najuSn = localGroupManager.updateBoard(najuSn.getId(), b);
-        Assert.assertEquals("Chairman should have been updated", hans, najuSn.getBoard().getChairman());
-    }
+  @Test
+  public void testUpdateBoard() {
+    hans = personManager.savePerson(hans);
+    najuSn = localGroupManager.saveLocalGroup(najuSn);
+    Board b = new Board(hans);
+
+    najuSn = localGroupManager.updateBoard(najuSn.getId(), b);
+    Assert.assertEquals("Chairman should have been updated", hans, najuSn.getBoard().getChairman());
+  }
 }

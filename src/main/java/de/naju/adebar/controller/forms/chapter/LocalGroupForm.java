@@ -1,90 +1,95 @@
 package de.naju.adebar.controller.forms.chapter;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
+import javax.validation.constraints.NotNull;
 
 /**
- * Model POJO for local groups. The fields are set by Thymeleaf when the associated form is submitted.
+ * Model POJO for local groups. The fields are set by Thymeleaf when the associated form is
+ * submitted.
+ *
  * @author Rico Bergmann
  */
 public class LocalGroupForm {
-    @NotNull private String name;
-    private String street;
-    private String zip;
-    private String city;
-    private String nabuGroup;
-    private List<String> contactPersons;
 
-    // constructor
+  @NotNull
+  private String name;
+  private String street;
+  private String zip;
+  private String city;
+  private String nabuGroup;
+  private List<String> contactPersons;
 
-    public LocalGroupForm(String name, String street, String zip, String city, String nabuGroup, List<String> contactPersons) {
-        this.name = name;
-        this.street = street;
-        this.zip = zip;
-        this.city = city;
-        this.nabuGroup = nabuGroup;
-        this.contactPersons = contactPersons;
-    }
+  // constructor
 
-    public LocalGroupForm() {}
+  public LocalGroupForm(String name, String street, String zip, String city, String nabuGroup,
+      List<String> contactPersons) {
+    this.name = name;
+    this.street = street;
+    this.zip = zip;
+    this.city = city;
+    this.nabuGroup = nabuGroup;
+    this.contactPersons = contactPersons;
+  }
 
-    // getter and setter
+  public LocalGroupForm() {}
 
-    public String getName() {
-        return name;
-    }
+  // getter and setter
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getStreet() {
-        return street;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setStreet(String street) {
-        this.street = street;
-    }
+  public String getStreet() {
+    return street;
+  }
 
-    public String getZip() {
-        return zip;
-    }
+  public void setStreet(String street) {
+    this.street = street;
+  }
 
-    public void setZip(String zip) {
-        this.zip = zip;
-    }
+  public String getZip() {
+    return zip;
+  }
 
-    public String getCity() {
-        return city;
-    }
+  public void setZip(String zip) {
+    this.zip = zip;
+  }
 
-    public void setCity(String city) {
-        this.city = city;
-    }
+  public String getCity() {
+    return city;
+  }
 
-    public String getNabuGroup() {
-        return nabuGroup;
-    }
+  public void setCity(String city) {
+    this.city = city;
+  }
 
-    public void setNabuGroup(String nabuGroup) {
-        this.nabuGroup = nabuGroup;
-    }
+  public String getNabuGroup() {
+    return nabuGroup;
+  }
 
-    public List<String> getContactPersons() {
-        return contactPersons;
-    }
+  public void setNabuGroup(String nabuGroup) {
+    this.nabuGroup = nabuGroup;
+  }
 
-    public void setContactPersons(List<String> contactPersons) {
-        this.contactPersons = contactPersons;
-    }
+  public List<String> getContactPersons() {
+    return contactPersons;
+  }
 
-    // query methods
+  public void setContactPersons(List<String> contactPersons) {
+    this.contactPersons = contactPersons;
+  }
 
-    public boolean hasNabuGroup() {
-        return nabuGroup != null && !nabuGroup.isEmpty();
-    }
+  // query methods
 
-    public boolean hasContactPersons() {
-        return contactPersons != null;
-    }
+  public boolean hasNabuGroup() {
+    return nabuGroup != null && !nabuGroup.isEmpty();
+  }
+
+  public boolean hasContactPersons() {
+    return contactPersons != null;
+  }
 }

@@ -4,171 +4,165 @@ import javax.money.CurrencyUnit;
 import javax.money.Monetary;
 
 /**
- * Model POJO for filtering events. The fields are set by Thymeleaf when the associated form is submitted.
+ * Model POJO for filtering events. The fields are set by Thymeleaf when the associated form is
+ * submitted.
+ *
  * @author Rico Bergmann
  */
 public class FilterEventsForm {
-    public final static String DATE_TIME_FORMAT = "dd.MM.yyy HH:mm";
-    public static final CurrencyUnit CURRENCY_UNIT = Monetary.getCurrency("EUR");
 
-    private String name;
-    private String startFilterType, start;
-    private String endFilterType, end;
-    private String participantsLimitFilterType;
-    private int participantsLimit;
-    private boolean participantsAgeFilter;
-    private int participantsAge;
-    private String feeFilterType, internalFee, externalFee;
-    private String street, zip, city;
+  public final static String DATE_TIME_FORMAT = "dd.MM.yyy HH:mm";
+  public static final CurrencyUnit CURRENCY_UNIT = Monetary.getCurrency("EUR");
 
-    public FilterEventsForm() {}
+  private String name;
+  private String startFilterType, start;
+  private String endFilterType, end;
+  private String participantsLimitFilterType;
+  private int participantsLimit;
+  private boolean participantsAgeFilter;
+  private int participantsAge;
+  private String feeFilterType, internalFee, externalFee;
+  private String street, zip, city;
 
-    public String getName() {
-        return name;
-    }
+  public FilterEventsForm() {}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getStartFilterType() {
-        return startFilterType;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setStartFilterType(String startFilterType) {
-        this.startFilterType = startFilterType;
-    }
+  public String getStartFilterType() {
+    return startFilterType;
+  }
 
-    public String getStart() {
-        return start;
-    }
+  public void setStartFilterType(String startFilterType) {
+    this.startFilterType = startFilterType;
+  }
 
-    public void setStart(String start) {
-        this.start = start;
-    }
+  public String getStart() {
+    return start;
+  }
 
-    public String getEndFilterType() {
-        return endFilterType;
-    }
+  public void setStart(String start) {
+    this.start = start;
+  }
 
-    public void setEndFilterType(String endFilterType) {
-        this.endFilterType = endFilterType;
-    }
+  public String getEndFilterType() {
+    return endFilterType;
+  }
 
-    public String getEnd() {
-        return end;
-    }
+  public void setEndFilterType(String endFilterType) {
+    this.endFilterType = endFilterType;
+  }
 
-    public void setEnd(String end) {
-        this.end = end;
-    }
+  public String getEnd() {
+    return end;
+  }
 
-    public String getParticipantsLimitFilterType() {
-        return participantsLimitFilterType;
-    }
+  public void setEnd(String end) {
+    this.end = end;
+  }
 
-    public void setParticipantsLimitFilterType(String participantsLimitFilterType) {
-        this.participantsLimitFilterType = participantsLimitFilterType;
-    }
+  public String getParticipantsLimitFilterType() {
+    return participantsLimitFilterType;
+  }
 
-    public int getParticipantsLimit() {
-        return participantsLimit;
-    }
+  public void setParticipantsLimitFilterType(String participantsLimitFilterType) {
+    this.participantsLimitFilterType = participantsLimitFilterType;
+  }
 
-    public void setParticipantsLimit(int participantsLimit) {
-        this.participantsLimit = participantsLimit;
-    }
+  public int getParticipantsLimit() {
+    return participantsLimit;
+  }
 
-    public boolean getParticipantsAgeFilter() {
-        return participantsAgeFilter;
-    }
+  public void setParticipantsLimit(int participantsLimit) {
+    this.participantsLimit = participantsLimit;
+  }
 
-    public void setParticipantsAgeFilter(boolean participantsAgeFilter) {
-        this.participantsAgeFilter = participantsAgeFilter;
-    }
+  public boolean getParticipantsAgeFilter() {
+    return participantsAgeFilter;
+  }
 
-    public int getParticipantsAge() {
-        return participantsAge;
-    }
+  public void setParticipantsAgeFilter(boolean participantsAgeFilter) {
+    this.participantsAgeFilter = participantsAgeFilter;
+  }
 
-    public void setParticipantsAge(int participantsAge) {
-        this.participantsAge = participantsAge;
-    }
+  public int getParticipantsAge() {
+    return participantsAge;
+  }
 
-    public String getFeeFilterType() {
-        return feeFilterType;
-    }
+  public void setParticipantsAge(int participantsAge) {
+    this.participantsAge = participantsAge;
+  }
 
-    public void setFeeFilterType(String feeFilterType) {
-        this.feeFilterType = feeFilterType;
-    }
+  public String getFeeFilterType() {
+    return feeFilterType;
+  }
 
-    public String getInternalFee() {
-        return internalFee;
-    }
+  public void setFeeFilterType(String feeFilterType) {
+    this.feeFilterType = feeFilterType;
+  }
 
-    public void setInternalFee(String internalFee) {
-        this.internalFee = internalFee;
-    }
+  public String getInternalFee() {
+    return internalFee;
+  }
 
-    public String getExternalFee() {
-        return externalFee;
-    }
+  public void setInternalFee(String internalFee) {
+    this.internalFee = internalFee;
+  }
 
-    public void setExternalFee(String externalFee) {
-        this.externalFee = externalFee;
-    }
+  public String getExternalFee() {
+    return externalFee;
+  }
 
-    public String getStreet() {
-        return street;
-    }
+  public void setExternalFee(String externalFee) {
+    this.externalFee = externalFee;
+  }
 
-    public void setStreet(String street) {
-        this.street = street;
-    }
+  public String getStreet() {
+    return street;
+  }
 
-    public String getZip() {
-        return zip;
-    }
+  public void setStreet(String street) {
+    this.street = street;
+  }
 
-    public void setZip(String zip) {
-        this.zip = zip;
-    }
+  public String getZip() {
+    return zip;
+  }
 
-    public String getCity() {
-        return city;
-    }
+  public void setZip(String zip) {
+    this.zip = zip;
+  }
 
-    public void setCity(String city) {
-        this.city = city;
-    }
+  public String getCity() {
+    return city;
+  }
 
-    public boolean hasInternalFee() {
-        return internalFee != null && !internalFee.isEmpty();
-    }
+  public void setCity(String city) {
+    this.city = city;
+  }
 
-    public boolean hasExternalFee() {
-        return externalFee != null && !externalFee.isEmpty();
-    }
+  public boolean hasInternalFee() {
+    return internalFee != null && !internalFee.isEmpty();
+  }
 
-    @Override
-    public String toString() {
-        return "FilterEventsForm{" +
-                "name='" + name + '\'' +
-                ", startFilterType='" + startFilterType + '\'' +
-                ", start='" + start + '\'' +
-                ", endFilterType='" + endFilterType + '\'' +
-                ", end='" + end + '\'' +
-                ", participantsLimitFilterType='" + participantsLimitFilterType + '\'' +
-                ", participantsLimit=" + participantsLimit +
-                ", participantsAgeFilter=" + participantsAgeFilter +
-                ", participantsAge=" + participantsAge +
-                ", feeFilterType='" + feeFilterType + '\'' +
-                ", internalFee='" + internalFee + '\'' +
-                ", externalFee='" + externalFee + '\'' +
-                ", street='" + street + '\'' +
-                ", zip='" + zip + '\'' +
-                ", city='" + city + '\'' +
-                '}';
-    }
+  public boolean hasExternalFee() {
+    return externalFee != null && !externalFee.isEmpty();
+  }
+
+  @Override
+  public String toString() {
+    return "FilterEventsForm{" + "name='" + name + '\'' + ", startFilterType='" + startFilterType
+        + '\'' + ", start='" + start + '\'' + ", endFilterType='" + endFilterType + '\'' + ", end='"
+        + end + '\'' + ", participantsLimitFilterType='" + participantsLimitFilterType + '\''
+        + ", participantsLimit=" + participantsLimit + ", participantsAgeFilter="
+        + participantsAgeFilter + ", participantsAge=" + participantsAge + ", feeFilterType='"
+        + feeFilterType + '\'' + ", internalFee='" + internalFee + '\'' + ", externalFee='"
+        + externalFee + '\'' + ", street='" + street + '\'' + ", zip='" + zip + '\'' + ", city='"
+        + city + '\'' + '}';
+  }
 }

@@ -1,74 +1,100 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width,initial-scale=1" name="viewport"/>
-    <title>Ortsgruppen | Adebar</title>
-    <script type="text/javascript" src="../static/resources/js/jquery.min.js" th:src="@{/webjars/jquery/jquery.min.js}"></script>
-    <script type="text/javascript" src="../static/resources/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-    <link rel="stylesheet" type="text/css" href="../static/resources/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <title>Ortsgruppen | Adebar</title>
+  <script type="text/javascript" src="../static/resources/js/jquery.min.js"
+          th:src="@{/webjars/jquery/jquery.min.js}"></script>
+  <script type="text/javascript" src="../static/resources/js/bootstrap.min.js"
+          th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+  <link rel="stylesheet" type="text/css" href="../static/resources/css/bootstrap.min.css"
+        th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
 
-    <link rel="stylesheet" type="text/css" href="../static/resources/css/style.css" th:href="@{/resources/css/style.css}"/>
+  <link rel="stylesheet" type="text/css" href="../static/resources/css/style.css"
+        th:href="@{/resources/css/style.css}"/>
 
-    <script type="text/javascript" src="../static/resources/js/list.min.js" th:src="@{/resources/js/list.min.js}"></script>
-    <script type="text/javascript" src="../static/resources/js/list.fuzzysearch.min.js" th:src="@{/resources/js/list.fuzzysearch.min.js}"></script>
+  <script type="text/javascript" src="../static/resources/js/list.min.js"
+          th:src="@{/resources/js/list.min.js}"></script>
+  <script type="text/javascript" src="../static/resources/js/list.fuzzysearch.min.js"
+          th:src="@{/resources/js/list.fuzzysearch.min.js}"></script>
 
-    <link rel="stylesheet" type="text/css" href="../static/resources/css/bootstrap-datetimepicker.min.css" th:href="@{/resources/css/bootstrap-datetimepicker.min.css}" />
-    <script type="text/javascript" src="../static/resources/js/moment-with-locales.min.js" th:src="@{/resources/js/moment-with-locales.min.js}"></script>
-    <script type="text/javascript" src="../static/resources/js/bootstrap-datetimepicker.min.js" th:src="@{/resources/js/bootstrap-datetimepicker.min.js}"></script>
+  <link rel="stylesheet" type="text/css"
+        href="../static/resources/css/bootstrap-datetimepicker.min.css"
+        th:href="@{/resources/css/bootstrap-datetimepicker.min.css}"/>
+  <script type="text/javascript" src="../static/resources/js/moment-with-locales.min.js"
+          th:src="@{/resources/js/moment-with-locales.min.js}"></script>
+  <script type="text/javascript" src="../static/resources/js/bootstrap-datetimepicker.min.js"
+          th:src="@{/resources/js/bootstrap-datetimepicker.min.js}"></script>
 
-    <link rel="stylesheet" href="../static/resources/css/bootstrap-select.min.css" th:href="@{/resources/css/bootstrap-select.min.css}"/>
-    <script src="../static/resources/js/bootstrap-select.min.js" th:src="@{/resources/js/bootstrap-select.min.js}"></script>
+  <link rel="stylesheet" href="../static/resources/css/bootstrap-select.min.css"
+        th:href="@{/resources/css/bootstrap-select.min.css}"/>
+  <script src="../static/resources/js/bootstrap-select.min.js"
+          th:src="@{/resources/js/bootstrap-select.min.js}"></script>
 
-    <link rel="stylesheet" href="../static/resources/css/jquery.tablesorter.css" th:href="@{/resources/css/jquery.tablesorter.css}"/>
-    <script src="../static/resources/js/jquery.tablesorter.min.js" th:src="@{/resources/js/jquery.tablesorter.min.js}"></script>
+  <link rel="stylesheet" href="../static/resources/css/jquery.tablesorter.css"
+        th:href="@{/resources/css/jquery.tablesorter.css}"/>
+  <script src="../static/resources/js/jquery.tablesorter.min.js"
+          th:src="@{/resources/js/jquery.tablesorter.min.js}"></script>
 </head>
 <body>
 
 <!-- central navigation -->
 <nav id="top-nav" class="navbar navbar-static-top navbar-inverse">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-nav"
-                    aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">NAJU Adebar</a>
-        </div>
-
-        <div id="main-nav" class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-                <li role="presentation">
-                    <a href="overview.html" th:href="@{/overview}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Übersicht</a>
-                </li>
-                <li role="presentation">
-                    <a href="persons.html" th:href="@{/persons}"><span class="glyphicon glyphicon-user nav-icon" aria-hidden="true"></span> Personen</a>
-                </li>
-                <li role="presentation">
-                    <a href="events.html" th:href="@{/events}"><span class="glyphicon glyphicon-tent nav-icon" aria-hidden="true"></span> Veranstaltungen <span class="sr-only">(akutell)</span></a>
-                </li>
-                <li class="active" role="presentation">
-                    <a href="localGroups.html" th:href="@{/localGroups}"><span class="glyphicon glyphicon-map-marker nav-icon" aria-hidden="true"></span> Ortsgruppen</a>
-                </li>
-                <li role="presentation">
-                    <a href="newsletters.html" th:href="@{/newsletters}"><span class="glyphicon glyphicon-envelope nav-icon" aria-hidden="true"></span> Newsletter</a>
-                </li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Verschiedenes <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li class="disabled"><a href="#"><span class="glyphicon glyphicon-leaf"></span> Über</a></li>
-                        <li class="disabled"><a href="#"><span class="glyphicon glyphicon-globe"></span> Hilfe</a></li>
-                        <li><a href="#"><span class="glyphicon glyphicon-flash"></span> Fehler melden</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+              data-target="#main-nav"
+              aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">NAJU Adebar</a>
     </div>
+
+    <div id="main-nav" class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li role="presentation">
+          <a href="overview.html" th:href="@{/overview}"><span class="glyphicon glyphicon-home"
+                                                               aria-hidden="true"></span> Übersicht</a>
+        </li>
+        <li role="presentation">
+          <a href="persons.html" th:href="@{/persons}"><span
+              class="glyphicon glyphicon-user nav-icon" aria-hidden="true"></span> Personen</a>
+        </li>
+        <li role="presentation">
+          <a href="events.html" th:href="@{/events}"><span class="glyphicon glyphicon-tent nav-icon"
+                                                           aria-hidden="true"></span>
+            Veranstaltungen <span class="sr-only">(akutell)</span></a>
+        </li>
+        <li class="active" role="presentation">
+          <a href="localGroups.html" th:href="@{/localGroups}"><span
+              class="glyphicon glyphicon-map-marker nav-icon" aria-hidden="true"></span> Ortsgruppen</a>
+        </li>
+        <li role="presentation">
+          <a href="newsletters.html" th:href="@{/newsletters}"><span
+              class="glyphicon glyphicon-envelope nav-icon" aria-hidden="true"></span>
+            Newsletter</a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+             aria-haspopup="true" aria-expanded="false"> Verschiedenes <span
+              class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li class="disabled"><a href="#"><span class="glyphicon glyphicon-leaf"></span> Über</a>
+            </li>
+            <li class="disabled"><a href="#"><span class="glyphicon glyphicon-globe"></span>
+              Hilfe</a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-flash"></span> Fehler melden</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
 </nav>
 
 <!-- modal dialogs -->
@@ -76,56 +102,66 @@
   <h2 class="hidden">Dialoge</h2>
 
   <!-- 'add local group' modal -->
-  <section class="modal fade" id="add-localGroup-modal" tabindex="-1" role="dialog" aria-labelledby="add-localGroup-label">
-      <div class="modal-dialog" role="document">
-          <div class="modal-content">
-              <header class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                  </button>
-                  <h3 class="modal-title" id="add-localGroup-label">Ortsgruppe erstellen</h3>
-              </header>
-              <section class="modal-body">
-                  <form id="add-localGroup" class="form-horizontal" method="post" th:action="@{/localGroups/add}" th:object="${localGroupForm}">
-                      <div class="form-group row">
-                          <label class="control-label col-sm-3" for="add-localGroup-name">Name</label>
-                          <div class="col-sm-9">
-                              <input type="text" id="add-localGroup-name" class="form-control" placeholder="Name" required="required" autofocus="autofocus" th:field="*{name}"/>
-                          </div>
-                      </div>
-                      <div class="form-group row">
-                          <label for="add-localGroup-address" class="col-sm-3 control-label">Adresse</label>
-                          <div class="col-sm-9 address" id="add-localGroup-address">
-                              <input type="text" class="form-control street" name="street" placeholder="Straße, HNr." th:field="*{street}"/>
-                              <input type="text" class="form-control zip" name="zip" placeholder="Plz" style="width: 30%; float: left;" th:field="*{zip}"/>
-                              <input type="text" class="form-control city" name="city" placeholder="Stadt" style="width: 67%; float: right;" th:field="*{city}"/>
-                          </div>
-                      </div>
-                      <div class="form-group row">
-                          <label for="add-localGroup-newsletter" class="col-sm-3 control-label">Newsletter</label>
-                          <div class="col-sm-9" id="add-localGroup-newsletter">
-                              <div class="input-group">
-                                  <label class="input-group-addon">
-                                      <input type="checkbox" th:field="*{createNewsletter}"/> Newsletter erstellen
-                                  </label>
-                                  <input type="text" class="form-control" disabled="disabled" placeholder="Name" th:field="*{newsletterName}"/>
-                              </div>
-                          </div>
-                      </div>
-                      <div class="form-group row">
-                          <label for="add-localGroup-nabuGroupLink" class="col-sm-3 control-label">Link zur NABU Gruppe</label>
-                          <div class="col-sm-9">
-                              <input type="url" class="form-control" placeholder="Webseite" th:field="*{nabuGroup}" />
-                          </div>
-                      </div>
-                  </form>
-              </section>
-              <footer class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
-                  <button type="submit" class="btn btn-primary" form="add-localGroup">Hinzufügen</button>
-              </footer>
-          </div>
+  <section class="modal fade" id="add-localGroup-modal" tabindex="-1" role="dialog"
+           aria-labelledby="add-localGroup-label">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <header class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h3 class="modal-title" id="add-localGroup-label">Ortsgruppe erstellen</h3>
+        </header>
+        <section class="modal-body">
+          <form id="add-localGroup" class="form-horizontal" method="post"
+                th:action="@{/localGroups/add}" th:object="${localGroupForm}">
+            <div class="form-group row">
+              <label class="control-label col-sm-3" for="add-localGroup-name">Name</label>
+              <div class="col-sm-9">
+                <input type="text" id="add-localGroup-name" class="form-control" placeholder="Name"
+                       required="required" autofocus="autofocus" th:field="*{name}"/>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="add-localGroup-address" class="col-sm-3 control-label">Adresse</label>
+              <div class="col-sm-9 address" id="add-localGroup-address">
+                <input type="text" class="form-control street" name="street"
+                       placeholder="Straße, HNr." th:field="*{street}"/>
+                <input type="text" class="form-control zip" name="zip" placeholder="Plz"
+                       style="width: 30%; float: left;" th:field="*{zip}"/>
+                <input type="text" class="form-control city" name="city" placeholder="Stadt"
+                       style="width: 67%; float: right;" th:field="*{city}"/>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="add-localGroup-newsletter"
+                     class="col-sm-3 control-label">Newsletter</label>
+              <div class="col-sm-9" id="add-localGroup-newsletter">
+                <div class="input-group">
+                  <label class="input-group-addon">
+                    <input type="checkbox" th:field="*{createNewsletter}"/> Newsletter erstellen
+                  </label>
+                  <input type="text" class="form-control" disabled="disabled" placeholder="Name"
+                         th:field="*{newsletterName}"/>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="add-localGroup-nabuGroupLink" class="col-sm-3 control-label">Link zur NABU
+                Gruppe</label>
+              <div class="col-sm-9">
+                <input type="url" class="form-control" placeholder="Webseite"
+                       th:field="*{nabuGroup}"/>
+              </div>
+            </div>
+          </form>
+        </section>
+        <footer class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+          <button type="submit" class="btn btn-primary" form="add-localGroup">Hinzufügen</button>
+        </footer>
       </div>
+    </div>
   </section>
 
 </section>
@@ -133,114 +169,135 @@
 <!-- page specific content-->
 <main id="main">
 
-    <!-- page specific menu items -->
-    <header id="action-bar" class="form-inline clearfix">
-        <h2 class="hidden">Menü</h2>
+  <!-- page specific menu items -->
+  <header id="action-bar" class="form-inline clearfix">
+    <h2 class="hidden">Menü</h2>
 
-        <!-- the actions at last -->
-        <div id="actions" class="pull-right">
+    <!-- the actions at last -->
+    <div id="actions" class="pull-right">
 
-            <!-- search bar -->
-            <div class="form-group">
-                <label class="sr-only" for="persons">Name, Projekte ...</label>
-                <div class="input-group">
-                    <input id="persons" type="text" class="form-control fuzzy-search" name="persons" placeholder="Name, Projekte ..."/>
-                    <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
-                </div>
-            </div>
-
-            <div class="btn-group">
-                <button type="button" id="add-button" class="btn btn-default" data-toggle="modal" data-target="#add-localGroup-modal">
-                    <span class="glyphicon glyphicon-plus"></span> Hinzufügen
-                </button>
-            </div>
+      <!-- search bar -->
+      <div class="form-group">
+        <label class="sr-only" for="persons">Name, Projekte ...</label>
+        <div class="input-group">
+          <input id="persons" type="text" class="form-control fuzzy-search" name="persons"
+                 placeholder="Name, Projekte ..."/>
+          <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
         </div>
-    </header>
+      </div>
 
-    <!-- the 'real' content finally -->
-    <section id="content" class="tab-content" style="margin-top: 2em;">
+      <div class="btn-group">
+        <button type="button" id="add-button" class="btn btn-default" data-toggle="modal"
+                data-target="#add-localGroup-modal">
+          <span class="glyphicon glyphicon-plus"></span> Hinzufügen
+        </button>
+      </div>
+    </div>
+  </header>
 
-        <h1 style="margin-bottom: 25px;">Ortsgruppen</h1>
+  <!-- the 'real' content finally -->
+  <section id="content" class="tab-content" style="margin-top: 2em;">
 
-        <div class="localgroups row" th:remove="all-but-first">
+    <h1 style="margin-bottom: 25px;">Ortsgruppen</h1>
 
-            <div class="col-md-4" th:each="localGroup : ${localGroups}">
-                <article class="panel panel-default">
-                        <header class="panel-heading">
-                            <h2 class="panel-title"><a href="localGroupDetails.html" th:href="@{'/localGroups/' + ${localGroup.id}}" th:text="${localGroup.name}">NAJU Sachsen</a></h2>
-                        </header>
-                        <section class="list-group">
-                            <a href="localGroupDetails.html#members" class="list-group-item" th:href="@{'/localGroups/' + ${localGroup.id} + '#members'}"><span class="badge" th:text="${localGroup.memberCount}">53</span>Mitglieder</a>
-                            <a href="localGroupDetails.html#events" class="list-group-item" th:href="@{'/localGroups/' + ${localGroup.id} + '#events'}"><span class="badge" th:text="${localGroup.eventCount}">17</span>Veranstaltungen</a>
-                            <a href="localGroupDetails.html#projects" class="list-group-item" th:href="@{'/localGroups/' + ${localGroup.id} + '#projects'}"><span class="badge" th:text="${localGroup.projectCount}">0</span>Projekte</a>
-                        </section>
-                </article>
-            </div>
+    <div class="localgroups row" th:remove="all-but-first">
 
-            <div class="col-md-4">
-                <article class="panel panel-default">
-                        <header class="panel-heading">
-                            <h2 class="panel-title"><a href="localGroupDetails.html">NAJU Dresden</a></h2>
-                        </header>
-                        <section class="list-group">
-                            <a href="localGroupDetails.html#members" class="list-group-item"><span class="badge">27</span>Mitglieder</a>
-                            <a href="localGroupDetails.html#events" class="list-group-item"><span class="badge">21</span>Veranstaltungen</a>
-                            <a href="localGroupDetails.html#projects" class="list-group-item"><span class="badge">2</span>Projekte</a>
-                        </section>
-                </article>
-            </div>
+      <div class="col-md-4" th:each="localGroup : ${localGroups}">
+        <article class="panel panel-default">
+          <header class="panel-heading">
+            <h2 class="panel-title"><a href="localGroupDetails.html"
+                                       th:href="@{'/localGroups/' + ${localGroup.id}}"
+                                       th:text="${localGroup.name}">NAJU Sachsen</a></h2>
+          </header>
+          <section class="list-group">
+            <a href="localGroupDetails.html#members" class="list-group-item"
+               th:href="@{'/localGroups/' + ${localGroup.id} + '#members'}"><span class="badge"
+                                                                                  th:text="${localGroup.memberCount}">53</span>Mitglieder</a>
+            <a href="localGroupDetails.html#events" class="list-group-item"
+               th:href="@{'/localGroups/' + ${localGroup.id} + '#events'}"><span class="badge"
+                                                                                 th:text="${localGroup.eventCount}">17</span>Veranstaltungen</a>
+            <a href="localGroupDetails.html#projects" class="list-group-item"
+               th:href="@{'/localGroups/' + ${localGroup.id} + '#projects'}"><span class="badge"
+                                                                                   th:text="${localGroup.projectCount}">0</span>Projekte</a>
+          </section>
+        </article>
+      </div>
 
-            <div class="col-md-4">
-                <article class="panel panel-default">
-                        <header class="panel-heading">
-                            <h2 class="panel-title"><a href="localGroupDetails.html">NAJU Freiberg</a></h2>
-                        </header>
-                        <section class="list-group">
-                            <a href="localGroupDetails.html#members" class="list-group-item"><span class="badge">15</span>Mitglieder</a>
-                            <a href="localGroupDetails.html#events" class="list-group-item"><span class="badge">9</span>Veranstaltungen</a>
-                            <a href="localGroupDetails.html#projects" class="list-group-item"><span class="badge">3</span>Projekte</a>
-                        </section>
-                </article>
-            </div>
+      <div class="col-md-4">
+        <article class="panel panel-default">
+          <header class="panel-heading">
+            <h2 class="panel-title"><a href="localGroupDetails.html">NAJU Dresden</a></h2>
+          </header>
+          <section class="list-group">
+            <a href="localGroupDetails.html#members" class="list-group-item"><span
+                class="badge">27</span>Mitglieder</a>
+            <a href="localGroupDetails.html#events" class="list-group-item"><span
+                class="badge">21</span>Veranstaltungen</a>
+            <a href="localGroupDetails.html#projects" class="list-group-item"><span
+                class="badge">2</span>Projekte</a>
+          </section>
+        </article>
+      </div>
 
-            <div class="col-md-4">
-                <article class="panel panel-default">
-                        <header class="panel-heading">
-                            <h2 class="panel-title"><a href="localGroupDetails.html">Parthefrösche</a></h2>
-                        </header>
-                        <section class="list-group">
-                            <a href="localGroupDetails.html#members" class="list-group-item"><span class="badge">9</span>Mitglieder</a>
-                            <a href="localGroupDetails.html#events" class="list-group-item"><span class="badge">1</span>Veranstaltungen</a>
-                            <a href="localGroupDetails.html#projects" class="list-group-item"><span class="badge">0</span>Projekte</a>
-                        </section>
-                </article>
-            </div>
+      <div class="col-md-4">
+        <article class="panel panel-default">
+          <header class="panel-heading">
+            <h2 class="panel-title"><a href="localGroupDetails.html">NAJU Freiberg</a></h2>
+          </header>
+          <section class="list-group">
+            <a href="localGroupDetails.html#members" class="list-group-item"><span
+                class="badge">15</span>Mitglieder</a>
+            <a href="localGroupDetails.html#events" class="list-group-item"><span
+                class="badge">9</span>Veranstaltungen</a>
+            <a href="localGroupDetails.html#projects" class="list-group-item"><span
+                class="badge">3</span>Projekte</a>
+          </section>
+        </article>
+      </div>
 
-        </div>
+      <div class="col-md-4">
+        <article class="panel panel-default">
+          <header class="panel-heading">
+            <h2 class="panel-title"><a href="localGroupDetails.html">Parthefrösche</a></h2>
+          </header>
+          <section class="list-group">
+            <a href="localGroupDetails.html#members" class="list-group-item"><span
+                class="badge">9</span>Mitglieder</a>
+            <a href="localGroupDetails.html#events" class="list-group-item"><span
+                class="badge">1</span>Veranstaltungen</a>
+            <a href="localGroupDetails.html#projects" class="list-group-item"><span
+                class="badge">0</span>Projekte</a>
+          </section>
+        </article>
+      </div>
 
-    </section>
+    </div>
 
-    <script type="text/javascript">
-        var fuzzyOptions = {
-           searchClass: "fuzzy-search",
-           location: 0,
-           distance: 150,
-           threshold: 0.4,
-           multiSearch: true
-         };
-         var localGroupsOptions = {
-            listClass: "localgroups",
-            valueNames: ['panel-title'],
-            plugins: [ListFuzzySearch(fuzzyOptions)]
-         };
-         new List('main', localGroupsOptions);
+  </section>
 
-         $(function() {
-             $('#add-localGroup-newsletter').find('input[type=checkbox]').on('click', function() {
-                 $('#add-localGroup-newsletter').find('input[type=text]').prop('disabled', function(i,v){return !v})
-             });
-         });
-    </script>
+  <script type="text/javascript">
+    var fuzzyOptions = {
+      searchClass: "fuzzy-search",
+      location: 0,
+      distance: 150,
+      threshold: 0.4,
+      multiSearch: true
+    };
+    var localGroupsOptions = {
+      listClass: "localgroups",
+      valueNames: ['panel-title'],
+      plugins: [ListFuzzySearch(fuzzyOptions)]
+    };
+    new List('main', localGroupsOptions);
+
+    $(function () {
+      $('#add-localGroup-newsletter').find('input[type=checkbox]').on('click', function () {
+        $('#add-localGroup-newsletter').find('input[type=text]').prop('disabled', function (i, v) {
+          return !v
+        })
+      });
+    });
+  </script>
 
 </main>
 <script src="../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>

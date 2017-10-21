@@ -1,649 +1,777 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width,initial-scale=1" name="viewport"/>
-    <title>Personen | Adebar</title>
-    <script type="text/javascript" src="../static/resources/js/jquery.min.js" th:src="@{/webjars/jquery/jquery.min.js}"></script>
-    <script type="text/javascript" src="../static/resources/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-    <link rel="stylesheet" type="text/css" href="../static/resources/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <title>Personen | Adebar</title>
+  <script type="text/javascript" src="../static/resources/js/jquery.min.js"
+          th:src="@{/webjars/jquery/jquery.min.js}"></script>
+  <script type="text/javascript" src="../static/resources/js/bootstrap.min.js"
+          th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+  <link rel="stylesheet" type="text/css" href="../static/resources/css/bootstrap.min.css"
+        th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
 
-    <link rel="stylesheet" type="text/css" href="../static/resources/css/style.css" th:href="@{/resources/css/style.css}"/>
+  <link rel="stylesheet" type="text/css" href="../static/resources/css/style.css"
+        th:href="@{/resources/css/style.css}"/>
 
-    <link rel="stylesheet" type="text/css" href="../static/resources/css/animation.css" th:href="@{/resources/css/animation.css}"/>
+  <link rel="stylesheet" type="text/css" href="../static/resources/css/animation.css"
+        th:href="@{/resources/css/animation.css}"/>
 
-    <script type="text/javascript" src="../static/resources/js/list.min.js" th:src="@{/resources/js/list.min.js}"></script>
-    <script type="text/javascript" src="../static/resources/js/list.fuzzysearch.min.js" th:src="@{/resources/js/list.fuzzysearch.min.js}"></script>
+  <script type="text/javascript" src="../static/resources/js/list.min.js"
+          th:src="@{/resources/js/list.min.js}"></script>
+  <script type="text/javascript" src="../static/resources/js/list.fuzzysearch.min.js"
+          th:src="@{/resources/js/list.fuzzysearch.min.js}"></script>
 
-    <link rel="stylesheet" type="text/css" href="../static/resources/css/bootstrap-select.min.css" th:href="@{/resources/css/bootstrap-select.min.css}" />
-    <script type="text/javascript" src="../static/resources/js/bootstrap-select.min.js" th:src="@{/resources/js/bootstrap-select.min.js}"></script>
+  <link rel="stylesheet" type="text/css" href="../static/resources/css/bootstrap-select.min.css"
+        th:href="@{/resources/css/bootstrap-select.min.css}"/>
+  <script type="text/javascript" src="../static/resources/js/bootstrap-select.min.js"
+          th:src="@{/resources/js/bootstrap-select.min.js}"></script>
 
-    <link rel="stylesheet" type="text/css" href="../static/resources/css/bootstrap-datetimepicker.min.css" th:href="@{/resources/css/bootstrap-datetimepicker.min.css}" />
-    <script type="text/javascript" src="../static/resources/js/moment-with-locales.min.js" th:src="@{/resources/js/moment-with-locales.min.js}"></script>
-    <script type="text/javascript" src="../static/resources/js/bootstrap-datetimepicker.min.js" th:src="@{/resources/js/bootstrap-datetimepicker.min.js}"></script>
+  <link rel="stylesheet" type="text/css"
+        href="../static/resources/css/bootstrap-datetimepicker.min.css"
+        th:href="@{/resources/css/bootstrap-datetimepicker.min.css}"/>
+  <script type="text/javascript" src="../static/resources/js/moment-with-locales.min.js"
+          th:src="@{/resources/js/moment-with-locales.min.js}"></script>
+  <script type="text/javascript" src="../static/resources/js/bootstrap-datetimepicker.min.js"
+          th:src="@{/resources/js/bootstrap-datetimepicker.min.js}"></script>
 
 </head>
 <body>
 <!-- central navigation -->
 <nav id="top-nav" class="navbar navbar-static-top navbar-inverse">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-nav" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">NAJU Adebar</a>
-        </div>
-
-        <div id="main-nav" class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-                <li role="presentation">
-                    <a href="overview.html" th:href="@{/overview}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Übersicht</a>
-                </li>
-                <li role="presentation" class="active">
-                    <a href="#" th:href="@{/persons}"><span class="glyphicon glyphicon-user nav-icon" aria-hidden="true"></span> Personen <span class="sr-only">(akutell)</span></a>
-                </li>
-                <li role="presentation">
-                    <a href="events.html" th:href="@{/events}"><span class="glyphicon glyphicon-tent nav-icon" aria-hidden="true"></span> Veranstaltungen</a>
-                </li>
-                <li role="presentation">
-                    <a href="localGroups.html" th:href="@{/localGroups}"><span class="glyphicon glyphicon-map-marker nav-icon" aria-hidden="true"></span> Ortsgruppen</a>
-                </li>
-                <li role="presentation">
-                    <a href="newsletters.html" th:href="@{/newsletters}"><span class="glyphicon glyphicon-envelope nav-icon" aria-hidden="true"></span> Newsletter</a>
-                </li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Verschiedenes <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li class="disabled"><a href="#"><span class="glyphicon glyphicon-leaf"></span> Über</a></li>
-                        <li class="disabled"><a href="#"><span class="glyphicon glyphicon-globe"></span> Hilfe</a></li>
-                        <li><a href="#"><span class="glyphicon glyphicon-flash"></span> Fehler melden</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+              data-target="#main-nav" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">NAJU Adebar</a>
     </div>
+
+    <div id="main-nav" class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li role="presentation">
+          <a href="overview.html" th:href="@{/overview}"><span class="glyphicon glyphicon-home"
+                                                               aria-hidden="true"></span> Übersicht</a>
+        </li>
+        <li role="presentation" class="active">
+          <a href="#" th:href="@{/persons}"><span class="glyphicon glyphicon-user nav-icon"
+                                                  aria-hidden="true"></span> Personen <span
+              class="sr-only">(akutell)</span></a>
+        </li>
+        <li role="presentation">
+          <a href="events.html" th:href="@{/events}"><span class="glyphicon glyphicon-tent nav-icon"
+                                                           aria-hidden="true"></span>
+            Veranstaltungen</a>
+        </li>
+        <li role="presentation">
+          <a href="localGroups.html" th:href="@{/localGroups}"><span
+              class="glyphicon glyphicon-map-marker nav-icon" aria-hidden="true"></span> Ortsgruppen</a>
+        </li>
+        <li role="presentation">
+          <a href="newsletters.html" th:href="@{/newsletters}"><span
+              class="glyphicon glyphicon-envelope nav-icon" aria-hidden="true"></span>
+            Newsletter</a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+             aria-haspopup="true" aria-expanded="false">Verschiedenes <span
+              class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li class="disabled"><a href="#"><span class="glyphicon glyphicon-leaf"></span> Über</a>
+            </li>
+            <li class="disabled"><a href="#"><span class="glyphicon glyphicon-globe"></span>
+              Hilfe</a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-flash"></span> Fehler melden</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
 </nav>
 
 <!-- page specific dialogs -->
 <section id="dialogs">
-    <h2 class="hidden">Formulare</h2>
+  <h2 class="hidden">Formulare</h2>
 
-    <!-- 'add person' modal -->
-    <div class="modal fade" id="add-person-form" tabindex="-1" role="dialog" aria-labelledby="add-person-label">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <header class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h3 class="modal-title" id="add-person-label">Person hinzufügen</h3>
-                </header>
-                <div class="modal-body">
-                    <form id="add-person" class="form-horizontal" method="post" th:object="${addPersonForm}" th:action="@{/persons/add}">
-                        <input type="hidden" name="participant" value="true" />
-                        <div class="form-group">
-                            <label for="firstname" class="col-sm-3 control-label">Vorname</label>
-                            <div class="col-sm-9">
-                                <input type="text" id="firstname" class="form-control" name="firstName" placeholder="Vorname" autofocus="" required="required" th:field="*{firstName}"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="lastname" class="col-sm-3 control-label">Nachname</label>
-                            <div class="col-sm-9">
-                                <input type="text" id="lastname" class="form-control" name="lastName" placeholder="Nachname" required="required" th:field="*{lastName}" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="email" class="col-sm-3 control-label">E-Mail</label>
-                            <div class="col-sm-9">
-                                <input type="email" id="email" class="form-control" name="email" placeholder="E-Mail" th:field="*{email}" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="phone" class="col-sm-3 control-label">Telefon</label>
-                            <div class="col-sm-9">
-                                <input type="text" id="phone" class="form-control" name="phone" placeholder="Telefonnummer" th:field="*{phoneNumber}" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="gender" class="col-sm-3 control-label">Geschlecht</label>
-                            <div class="col-sm-9">
-                                <fieldset id="gender">
-                                    <label class="radio-inline">
-                                        <input type="radio" name="gender" value="FEMALE" required="required" checked="checked" th:field="*{gender}" />
-                                        Weiblich
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input type="radio" name="gender" value="MALE" required="required" th:field="*{gender}" />
-                                        Männlich
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input type="radio" name="gender" value="OTHER" required="required" th:field="*{gender}" />
-                                        Anderes
-                                    </label>
-                                </fieldset>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="dob" class="col-sm-3 control-label">Geburtsdatum
-                                <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" data-title="Format: DD.MM.YYYY"></span>
-                            </label>
-                            <div class="col-sm-9">
-                                <div class="input-group date" id="dob-picker">
-                                    <input type="text" class="form-control" name="dob" id="dob" placeholder="Geburtsdatum" th:field="*{dateOfBirth}"/>
-                                    <span class="input-group-addon">
+  <!-- 'add person' modal -->
+  <div class="modal fade" id="add-person-form" tabindex="-1" role="dialog"
+       aria-labelledby="add-person-label">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <header class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h3 class="modal-title" id="add-person-label">Person hinzufügen</h3>
+        </header>
+        <div class="modal-body">
+          <form id="add-person" class="form-horizontal" method="post" th:object="${addPersonForm}"
+                th:action="@{/persons/add}">
+            <input type="hidden" name="participant" value="true"/>
+            <div class="form-group">
+              <label for="firstname" class="col-sm-3 control-label">Vorname</label>
+              <div class="col-sm-9">
+                <input type="text" id="firstname" class="form-control" name="firstName"
+                       placeholder="Vorname" autofocus="" required="required"
+                       th:field="*{firstName}"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="lastname" class="col-sm-3 control-label">Nachname</label>
+              <div class="col-sm-9">
+                <input type="text" id="lastname" class="form-control" name="lastName"
+                       placeholder="Nachname" required="required" th:field="*{lastName}"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="email" class="col-sm-3 control-label">E-Mail</label>
+              <div class="col-sm-9">
+                <input type="email" id="email" class="form-control" name="email"
+                       placeholder="E-Mail" th:field="*{email}"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="phone" class="col-sm-3 control-label">Telefon</label>
+              <div class="col-sm-9">
+                <input type="text" id="phone" class="form-control" name="phone"
+                       placeholder="Telefonnummer" th:field="*{phoneNumber}"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="gender" class="col-sm-3 control-label">Geschlecht</label>
+              <div class="col-sm-9">
+                <fieldset id="gender">
+                  <label class="radio-inline">
+                    <input type="radio" name="gender" value="FEMALE" required="required"
+                           checked="checked" th:field="*{gender}"/>
+                    Weiblich
+                  </label>
+                  <label class="radio-inline">
+                    <input type="radio" name="gender" value="MALE" required="required"
+                           th:field="*{gender}"/>
+                    Männlich
+                  </label>
+                  <label class="radio-inline">
+                    <input type="radio" name="gender" value="OTHER" required="required"
+                           th:field="*{gender}"/>
+                    Anderes
+                  </label>
+                </fieldset>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="dob" class="col-sm-3 control-label">Geburtsdatum
+                <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip"
+                      data-placement="right" data-title="Format: DD.MM.YYYY"></span>
+              </label>
+              <div class="col-sm-9">
+                <div class="input-group date" id="dob-picker">
+                  <input type="text" class="form-control" name="dob" id="dob"
+                         placeholder="Geburtsdatum" th:field="*{dateOfBirth}"/>
+                  <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="eatingHabit" class="col-sm-3 control-label">Ernährung</label>
-                            <div class="col-sm-9">
-                                <div class="margin-btm">
-                                    <select id="eatingHabit-quick" class="selectpicker" data-width="auto">
-                                        <option value="" selected="selected">konventionell</option>
-                                        <option value="vegetarisch">vegetarisch</option>
-                                        <option value="vegan">vegan</option>
-                                    </select>
-                                </div>
-                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#eatingHabit-container" aria-expanded="false" aria-controls="eatingHabit-container">Weitere Ernährungsarten/-hinweise</button>
-                                <div class="collapse" id="eatingHabit-container">
-                                    <textarea class="form-control" name="eatingHabit" id="eatingHabit" placeholder="Essgewohnheiten (vegetarisch, Unverträglichkeiten...)" th:field="*{eatingHabit}"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="healthImpairments" class="col-sm-3 control-label">Allergien o.ä.</label>
-                            <div class="col-sm-9">
-                                <textarea class="form-control" name="healthImpairments" id="healthImpairments" placeholder="Allergien, Medikamente o.ä." th:field="*{healthImpairments}"></textarea>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="add-person-address" class="col-sm-3 control-label">Adresse</label>
-                            <div class="col-sm-9 address" id="add-person-address">
-                                <input type="text" class="form-control street" name="street" placeholder="Straße, HNr." th:field="*{street}"/>
-                                <input type="text" class="form-control zip" name="zip" placeholder="Plz" style="width: 30%; float: left;" th:field="*{zip}"/>
-                                <input type="text" class="form-control city" name="city" placeholder="Stadt" style="width: 67%; float: right;" th:field="*{city}"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="add-person-remarks" class="col-sm-3 control-label">Bemerkungen
-                                <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" data-title="Schwimmerlaubnis o.ä."></span>
-                            </label>
-                            <div class="col-sm-9">
-                                <textarea class="form-control" name="remarks" id="remarks" placeholder="Bemerkungen (Schwimmerlaubnis ...)" th:field="*{remarks}" maxlength="512"></textarea>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="add-person-isActivist" class="col-sm-3 control-label">Aktive</label>
-                            <div class="col-sm-9">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" id="add-person-isActivist" name="activist" th:field="*{activist}"/> die Person ist ein Aktiver
-                                    </label>
-                                </div>
-                                <div id="add-person-hasJuleica-container" class="hide-initially">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" name="hasJuleica" id="add-person-hasJuleica" th:field="*{hasJuleica}"/> die Person hat eine JuLeiCa
-                                        </label>
-                                    </div>
-                                    <div id="add-person-juleica-container" class="hide-initially" style="margin-top: 12px;">
-                                        <div id="add-person-juleica" class="input-group date datetimepicker">
-                                            <input type="text" class="form-control" name="juleicaExpiryDate" placeholder="JuLeiCa-Ablaufdatum" data-toggle="tooltip" data-placement="left" data-title="Format: DD.MM.YYYY" th:field="*{juleicaExpiryDate}"/>
-                                            <span class="input-group-addon">
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="eatingHabit" class="col-sm-3 control-label">Ernährung</label>
+              <div class="col-sm-9">
+                <div class="margin-btm">
+                  <select id="eatingHabit-quick" class="selectpicker" data-width="auto">
+                    <option value="" selected="selected">konventionell</option>
+                    <option value="vegetarisch">vegetarisch</option>
+                    <option value="vegan">vegan</option>
+                  </select>
+                </div>
+                <button class="btn btn-link" type="button" data-toggle="collapse"
+                        data-target="#eatingHabit-container" aria-expanded="false"
+                        aria-controls="eatingHabit-container">Weitere Ernährungsarten/-hinweise
+                </button>
+                <div class="collapse" id="eatingHabit-container">
+                  <textarea class="form-control" name="eatingHabit" id="eatingHabit"
+                            placeholder="Essgewohnheiten (vegetarisch, Unverträglichkeiten...)"
+                            th:field="*{eatingHabit}"></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="healthImpairments" class="col-sm-3 control-label">Allergien o.ä.</label>
+              <div class="col-sm-9">
+                <textarea class="form-control" name="healthImpairments" id="healthImpairments"
+                          placeholder="Allergien, Medikamente o.ä."
+                          th:field="*{healthImpairments}"></textarea>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="add-person-address" class="col-sm-3 control-label">Adresse</label>
+              <div class="col-sm-9 address" id="add-person-address">
+                <input type="text" class="form-control street" name="street"
+                       placeholder="Straße, HNr." th:field="*{street}"/>
+                <input type="text" class="form-control zip" name="zip" placeholder="Plz"
+                       style="width: 30%; float: left;" th:field="*{zip}"/>
+                <input type="text" class="form-control city" name="city" placeholder="Stadt"
+                       style="width: 67%; float: right;" th:field="*{city}"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="add-person-remarks" class="col-sm-3 control-label">Bemerkungen
+                <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip"
+                      data-placement="right" data-title="Schwimmerlaubnis o.ä."></span>
+              </label>
+              <div class="col-sm-9">
+                <textarea class="form-control" name="remarks" id="remarks"
+                          placeholder="Bemerkungen (Schwimmerlaubnis ...)" th:field="*{remarks}"
+                          maxlength="512"></textarea>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="add-person-isActivist" class="col-sm-3 control-label">Aktive</label>
+              <div class="col-sm-9">
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" id="add-person-isActivist" name="activist"
+                           th:field="*{activist}"/> die Person ist ein Aktiver
+                  </label>
+                </div>
+                <div id="add-person-hasJuleica-container" class="hide-initially">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="hasJuleica" id="add-person-hasJuleica"
+                             th:field="*{hasJuleica}"/> die Person hat eine JuLeiCa
+                    </label>
+                  </div>
+                  <div id="add-person-juleica-container" class="hide-initially"
+                       style="margin-top: 12px;">
+                    <div id="add-person-juleica" class="input-group date datetimepicker">
+                      <input type="text" class="form-control" name="juleicaExpiryDate"
+                             placeholder="JuLeiCa-Ablaufdatum" data-toggle="tooltip"
+                             data-placement="left" data-title="Format: DD.MM.YYYY"
+                             th:field="*{juleicaExpiryDate}"/>
+                      <span class="input-group-addon">
                                                 <span class="glyphicon glyphicon-calendar"></span>
                                             </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="add-person-isReferent" class="col-sm-3 control-label">Referenten
-                                <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" data-title="Neue Qualifikationen können in der Detailansicht erstellt werden">
-                                </span>
-                            </label>
-                            <div class="col-sm-9">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" id="add-person-isReferent" name="referent" th:field="*{referent}"/> die Person kann als Referent auf Workshops, Exkursionen o.ä. auftreten
-                                    </label>
-                                </div>
-                                <div id="add-person-referent-qualification-container" class="margin-top-lg hide-initially">
-                                    <label for="add-person-referent-qualifications" class="">Qualifikationen</label>
-                                    <div class="margin-top-sm">
-                                        <select class="selectpicker" name="referent-qualifications" id="add-person-referent-qualifications"
-                                                multiple="multiple" data-width="auto" data-live-search="true" title="Auswählen"
-                                                th:remove="all-but-first" th:field="*{qualifications}">
-                                            <option th:each="qualification : ${qualifications}" th:text="${qualification.name}" th:value="${{qualification.name}}" th:field="*{qualifications}">
-                                                Erste-Hilfe Kurs
-                                            </option>
-                                            <option>Wildlife-Workshop</option>
-                                            <option>Ornithologie</option>
-                                            <option>Ehrenamtsmanagement</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="add-person-nabu" class="col-sm-3 control-label">NABU</label>
-                            <div class="col-sm-9">
-                                <div class="input-group" id="add-person-nabu">
-                                    <label class="input-group-addon">
-                                        <input type="checkbox" name="nabuMember" id="add-person-isNabuMember" th:field="*{nabuMember}" /> NABU-Mitglied
-                                    </label>
-                                    <input type="text" name="nabuNr" class="form-control" id="add-person-nabuNr" placeholder="Mitgliedsnr." disabled="disabled" th:field="*{nabuNumber}" />
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+                    </div>
+                  </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
-                    <button type="submit" class="btn btn-primary" form="add-person">Hinzufügen</button>
-                </div>
+              </div>
             </div>
+            <div class="form-group">
+              <label for="add-person-isReferent" class="col-sm-3 control-label">Referenten
+                <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip"
+                      data-placement="right"
+                      data-title="Neue Qualifikationen können in der Detailansicht erstellt werden">
+                                </span>
+              </label>
+              <div class="col-sm-9">
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" id="add-person-isReferent" name="referent"
+                           th:field="*{referent}"/> die Person kann als Referent auf Workshops,
+                    Exkursionen o.ä. auftreten
+                  </label>
+                </div>
+                <div id="add-person-referent-qualification-container"
+                     class="margin-top-lg hide-initially">
+                  <label for="add-person-referent-qualifications" class="">Qualifikationen</label>
+                  <div class="margin-top-sm">
+                    <select class="selectpicker" name="referent-qualifications"
+                            id="add-person-referent-qualifications"
+                            multiple="multiple" data-width="auto" data-live-search="true"
+                            title="Auswählen"
+                            th:remove="all-but-first" th:field="*{qualifications}">
+                      <option th:each="qualification : ${qualifications}"
+                              th:text="${qualification.name}" th:value="${{qualification.name}}"
+                              th:field="*{qualifications}">
+                        Erste-Hilfe Kurs
+                      </option>
+                      <option>Wildlife-Workshop</option>
+                      <option>Ornithologie</option>
+                      <option>Ehrenamtsmanagement</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="add-person-nabu" class="col-sm-3 control-label">NABU</label>
+              <div class="col-sm-9">
+                <div class="input-group" id="add-person-nabu">
+                  <label class="input-group-addon">
+                    <input type="checkbox" name="nabuMember" id="add-person-isNabuMember"
+                           th:field="*{nabuMember}"/> NABU-Mitglied
+                  </label>
+                  <input type="text" name="nabuNr" class="form-control" id="add-person-nabuNr"
+                         placeholder="Mitgliedsnr." disabled="disabled" th:field="*{nabuNumber}"/>
+                </div>
+              </div>
+            </div>
+          </form>
         </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+          <button type="submit" class="btn btn-primary" form="add-person">Hinzufügen</button>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <!-- 'filter persons' modal -->
-    <div class="modal fade" id="filter-persons-form" tabindex="-1" role="dialog" aria-labelledby="filter-persons-label">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <header class="modal-header" aria-labelledby="filter-persons-label">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h3 class="modal-title" id="filter-persons-label">Personen filtern</h3>
-                </header>
-                <div class="modal-body">
-                    <form id="filter-persons" class="form-horizontal" method="post" th:action="@{/persons/filter}" th:object="${filterPersonsForm}">
-                        <div class="form-group">
-                            <label for="filter-name" class="col-sm-3 control-label">Name</label>
-                            <div class="col-sm-9" id="filter-name">
-                                <input type="text" name="firstName" class="form-control" style="width:48%; float: left;" placeholder="Vorname" th:field="*{firstName}"/>
-                                <input type="text" name="lastName" class="form-control" style="width: 48%; float: right;" placeholder="Nachname" th:field="*{lastName}"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="filter-email" class="col-sm-3 control-label">E-Mail</label>
-                            <div class="col-sm-9">
-                                <input type="email" name="email" class="form-control" id="filter-email" placeholder="E-Mail Adresse" th:field="*{email}"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="filter-gender" class="col-sm-3 control-label">Geschlecht</label>
-                            <div id="filter-gender" class="col-sm-9">
-                                <label for="filter-gender-type" class="sr-only">Geschlecht-Filter</label>
-                                <select id="filter-gender-type" class="selectpicker" name="genderFilterType" data-width="auto" th:field="*{genderFilterType}">
-                                    <option value="none" selected="selected">egal</option>
-                                    <option value="ENFORCE">Ausschließlich</option>
-                                    <option value="IGNORE">Außer</option>
-                                </select>
-                                <fieldset id="filter-gender-selection" class="radio inline-options hidden">
-                                    <label>
-                                        <input type="radio" name="gender" value="FEMALE" th:field="*{gender}"/>
-                                        Weiblich
-                                    </label>
-                                    <label>
-                                        <input type="radio" name="gender" value="MALE" th:field="*{gender}"/>
-                                        Männlich
-                                    </label>
-                                    <label>
-                                        <input type="radio" name="gender" value="OTHER" th:field="*{gender}"/>
-                                        Anderes
-                                    </label>
-                                </fieldset>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="filter-dob" class="col-sm-3 control-label">Geburtsdatum</label>
-                            <div id="filter-dob" class="col-sm-9">
-                                <div class="col-sm-3 no-padding-left">
-                                    <label for="filter-dob-type" class="sr-only">Geburtsdatum-Filter</label>
-                                    <select id="filter-dob-type" class="selectpicker" name="dobFilterType" data-width="auto" style="float: left;" th:field="*{dobFilterType}">
-                                        <option value="none" selected="selected">egal</option>
-                                        <option value="BEFORE">Vor</option>
-                                        <option value="EXACT">Exakt</option>
-                                        <option value="AFTER">Nach</option>
-                                    </select>
-                                </div>
-                                <div id="filter-dob-container" class="input-group hidden">
-                                    <input type="text" class="form-control" name="dob" placeholder="Geburtsdatum"
-                                        data-toggle="tooltip" data-placement="left" data-title="Format: DD.MM.YYYY" th:field="*{dob}"/>
-                                    <span class="input-group-addon">
+  <!-- 'filter persons' modal -->
+  <div class="modal fade" id="filter-persons-form" tabindex="-1" role="dialog"
+       aria-labelledby="filter-persons-label">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <header class="modal-header" aria-labelledby="filter-persons-label">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h3 class="modal-title" id="filter-persons-label">Personen filtern</h3>
+        </header>
+        <div class="modal-body">
+          <form id="filter-persons" class="form-horizontal" method="post"
+                th:action="@{/persons/filter}" th:object="${filterPersonsForm}">
+            <div class="form-group">
+              <label for="filter-name" class="col-sm-3 control-label">Name</label>
+              <div class="col-sm-9" id="filter-name">
+                <input type="text" name="firstName" class="form-control"
+                       style="width:48%; float: left;" placeholder="Vorname"
+                       th:field="*{firstName}"/>
+                <input type="text" name="lastName" class="form-control"
+                       style="width: 48%; float: right;" placeholder="Nachname"
+                       th:field="*{lastName}"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="filter-email" class="col-sm-3 control-label">E-Mail</label>
+              <div class="col-sm-9">
+                <input type="email" name="email" class="form-control" id="filter-email"
+                       placeholder="E-Mail Adresse" th:field="*{email}"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="filter-gender" class="col-sm-3 control-label">Geschlecht</label>
+              <div id="filter-gender" class="col-sm-9">
+                <label for="filter-gender-type" class="sr-only">Geschlecht-Filter</label>
+                <select id="filter-gender-type" class="selectpicker" name="genderFilterType"
+                        data-width="auto" th:field="*{genderFilterType}">
+                  <option value="none" selected="selected">egal</option>
+                  <option value="ENFORCE">Ausschließlich</option>
+                  <option value="IGNORE">Außer</option>
+                </select>
+                <fieldset id="filter-gender-selection" class="radio inline-options hidden">
+                  <label>
+                    <input type="radio" name="gender" value="FEMALE" th:field="*{gender}"/>
+                    Weiblich
+                  </label>
+                  <label>
+                    <input type="radio" name="gender" value="MALE" th:field="*{gender}"/>
+                    Männlich
+                  </label>
+                  <label>
+                    <input type="radio" name="gender" value="OTHER" th:field="*{gender}"/>
+                    Anderes
+                  </label>
+                </fieldset>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="filter-dob" class="col-sm-3 control-label">Geburtsdatum</label>
+              <div id="filter-dob" class="col-sm-9">
+                <div class="col-sm-3 no-padding-left">
+                  <label for="filter-dob-type" class="sr-only">Geburtsdatum-Filter</label>
+                  <select id="filter-dob-type" class="selectpicker" name="dobFilterType"
+                          data-width="auto" style="float: left;" th:field="*{dobFilterType}">
+                    <option value="none" selected="selected">egal</option>
+                    <option value="BEFORE">Vor</option>
+                    <option value="EXACT">Exakt</option>
+                    <option value="AFTER">Nach</option>
+                  </select>
+                </div>
+                <div id="filter-dob-container" class="input-group hidden">
+                  <input type="text" class="form-control" name="dob" placeholder="Geburtsdatum"
+                         data-toggle="tooltip" data-placement="left" data-title="Format: DD.MM.YYYY"
+                         th:field="*{dob}"/>
+                  <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="filter-eatingHabit" class="col-sm-3 control-label">Ernährung</label>
-                            <div class="col-sm-9">
-                                <textarea class="form-control" name="eatingHabit" id="filter-eatingHabit" placeholder="Essgewohnheiten (vegetarisch, Unverträglichkeiten...)" th:field="*{eatingHabit}"></textarea>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="filter-healthImpairments" class="col-sm-3 control-label">Allergien o.ä.</label>
-                            <div class="col-sm-9">
-                                <textarea class="form-control" name="healthImpairments" id="filter-healthImpairments" placeholder="Allergien, Medikamente o.ä." th:field="*{healthImpairments}"></textarea>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="filter-person-address" class="col-sm-3 control-label">Adresse</label>
-                            <div class="col-sm-9 address" id="filter-person-address">
-                                <input type="text" class="form-control street" name="street" placeholder="Straße, HNr." th:field="*{street}"/>
-                                <input type="text" class="form-control zip" name="zip" placeholder="Plz" style="width: 30%; float: left;" th:field="*{zip}"/>
-                                <input type="text" class="form-control city" name="city" placeholder="Stadt" style="width: 67%; float: right;" th:field="*{city}"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="filter-person-nabu" class="col-sm-3 control-label">NABU-Mitgliedschaft</label>
-                            <div class="col-sm-9" id="filter-person-nabu">
-                                <div>
-                                    <div class="margin-btm-sm">
-                                        <label for="filter-nabu-type" class="sr-only">NABU-Mitgliedschaft Filter</label>
-                                        <select id="filter-nabu-type" class="selectpicker" name="nabuMembershipFilterType" data-width="auto" th:field="*{nabuMembershipFilterType}">
-                                            <option value="none" selected="selected">egal</option>
-                                            <option value="ENFORCE">Nur NABU-Mitglieder</option>
-                                            <option value="IGNORE">Keine NABU-Mitglieder</option>
-                                        </select>
-                                    </div>
-                                    <div id="filter-nabu-membership-number" class="hide-initially">
-                                        <input type="text" class="form-control" name="nabuMembershipNumber" placeholder="Mitgliedsnummer" th:field="*{nabuMembershipNumber}" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="filter-person-activist-container" class="col-sm-3 control-label">Aktive</label>
-                            <div id="filter-person-activist-container" class="col-sm-9">
-                                <div>
-                                    <div class="margin-btm-sm">
-                                        <label for="filter-activist-type" class="sr-only">Aktiven-Filter</label>
-                                        <select id="filter-activist-type" class="selectpicker" name="activistsFilterType"
-                                                data-width="auto" th:field="*{activistFilterType}">
-                                            <option value="none" selected="selected">egal</option>
-                                            <option value="ENFORCE">Nur Aktive</option>
-                                            <option value="IGNORE">Keine Aktive</option>
-                                        </select>
-                                    </div>
-                                    <div id="filter-activist-hasJuleica-container" class="hide-initially">
-                                        <div class="margin-btm-sm">
-                                            <label for="filter-activist-juleica-type" class="sr-only">Juleica-Filter</label>
-                                            <select id="filter-activist-juleica-type" class="selectpicker" name="activistsJuleicaFilterType"
-                                                    data-width="auto" th:field="*{activistJuleicaFilterType}">
-                                                <option value="none" selected="selected">JuLeiCa egal</option>
-                                                <option value="ENFORCE">Nur Aktive mit JuLeiCa</option>
-                                                <option value="IGNORE">Nur Aktive ohne JuLeiCa</option>
-                                            </select>
-                                        </div>
-                                        <div id="filter-activist-juleicaDate-container" class="hide-initially">
-                                            <div class="margin-btm-sm">
-                                                <label for="filter-activist-juleicaDate-type" class="sr-only">Juleica-Ablaufdatum-Filter</label>
-                                                <select id="filter-activist-juleicaDate-type" class="selectpicker" name="activistsJuleicaExpiryFilterType" data-width="auto" th:field="*{activistJuleicaExpiryFilterType}">
-                                                    <option value="none" selected="selected">Ablaufdatum egal</option>
-                                                    <option value="BEFORE">Ablaufdatum vor</option>
-                                                    <option value="EXACT">Ablaufdatum exakt</option>
-                                                    <option value="AFTER">Ablaufdatum nach</option>
-                                                </select>
-                                            </div>
-                                            <div id="filter-juleica-expiry-container" class="hide-initially">
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control" name="juleicaExpiryDate" placeholder="Ablaufdatum"
-                                                        data-toggle="tooltip" data-placement="left" data-title="Format: DD.MM.YYYY" th:field="*{juleicaExpiryDate}"/>
-                                                    <span class="input-group-addon">
-                                                        <span class="glyphicon glyphicon-calendar"></span>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="filter-persons-referent-container" class="col-sm-3 control-label">Referenten</label>
-                            <div class="col-sm-9">
-                                <div class="margin-btm-sm" id="filter-persons-referent-container">
-                                    <label for="filter-referent-type" class="sr-only">Referenten-Filter</label>
-                                    <select id="filter-referent-type" class="selectpicker" name="referentsFilterType" data-width="auto" th:field="*{referentsFilterType}">
-                                        <option value="none" selected="selected">egal</option>
-                                        <option value="ENFORCE">Nur Referenten</option>
-                                        <option value="IGNORE">Keine Referenten</option>
-                                    </select>
-                                </div>
-                                <div id="filter-referents-qualification-container" class="margin-top-lg hide-initially">
-                                    <label for="filter-referent-qualifications" class="">Qualifikationen</label>
-                                    <div class="margin-top-sm">
-                                        <select class="selectpicker" name="referentQualifications" id="filter-referent-qualifications" data-width="fit" multiple="multiple" title="Auswählen" th:field="*{referentQualifications}" th:remove="all-but-first">
-                                            <option th:each="qualification : ${qualifications}" th:text="${qualification.name}" th:value="${qualification.name}">Erste-Hilfe Kurs</option>
-                                            <option>Wildlife-Workshop</option>
-                                            <option>Ornithologie</option>
-                                            <option>Ehrenamtsmanagement</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
-                    <button type="submit" class="btn btn-primary" form="filter-persons">Filtern</button>
-                </div>
+              </div>
             </div>
-        </div>
-    </div>
-
-    <div id="existing-persons-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="existing-persons-label" th:if="${existingPersons}">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2 id="existing-persons-label" class="modal-title">Existierende Einträge</h2>
+            <div class="form-group">
+              <label for="filter-eatingHabit" class="col-sm-3 control-label">Ernährung</label>
+              <div class="col-sm-9">
+                <textarea class="form-control" name="eatingHabit" id="filter-eatingHabit"
+                          placeholder="Essgewohnheiten (vegetarisch, Unverträglichkeiten...)"
+                          th:field="*{eatingHabit}"></textarea>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="filter-healthImpairments" class="col-sm-3 control-label">Allergien
+                o.ä.</label>
+              <div class="col-sm-9">
+                <textarea class="form-control" name="healthImpairments"
+                          id="filter-healthImpairments" placeholder="Allergien, Medikamente o.ä."
+                          th:field="*{healthImpairments}"></textarea>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="filter-person-address" class="col-sm-3 control-label">Adresse</label>
+              <div class="col-sm-9 address" id="filter-person-address">
+                <input type="text" class="form-control street" name="street"
+                       placeholder="Straße, HNr." th:field="*{street}"/>
+                <input type="text" class="form-control zip" name="zip" placeholder="Plz"
+                       style="width: 30%; float: left;" th:field="*{zip}"/>
+                <input type="text" class="form-control city" name="city" placeholder="Stadt"
+                       style="width: 67%; float: right;" th:field="*{city}"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="filter-person-nabu"
+                     class="col-sm-3 control-label">NABU-Mitgliedschaft</label>
+              <div class="col-sm-9" id="filter-person-nabu">
+                <div>
+                  <div class="margin-btm-sm">
+                    <label for="filter-nabu-type" class="sr-only">NABU-Mitgliedschaft Filter</label>
+                    <select id="filter-nabu-type" class="selectpicker"
+                            name="nabuMembershipFilterType" data-width="auto"
+                            th:field="*{nabuMembershipFilterType}">
+                      <option value="none" selected="selected">egal</option>
+                      <option value="ENFORCE">Nur NABU-Mitglieder</option>
+                      <option value="IGNORE">Keine NABU-Mitglieder</option>
+                    </select>
+                  </div>
+                  <div id="filter-nabu-membership-number" class="hide-initially">
+                    <input type="text" class="form-control" name="nabuMembershipNumber"
+                           placeholder="Mitgliedsnummer" th:field="*{nabuMembershipNumber}"/>
+                  </div>
                 </div>
-                <div class="modal-body">
-                    <div class="alert alert-info">
-                        Es wurden bereits Personen mit dem gleichen Namen gespeichert
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="filter-person-activist-container"
+                     class="col-sm-3 control-label">Aktive</label>
+              <div id="filter-person-activist-container" class="col-sm-9">
+                <div>
+                  <div class="margin-btm-sm">
+                    <label for="filter-activist-type" class="sr-only">Aktiven-Filter</label>
+                    <select id="filter-activist-type" class="selectpicker"
+                            name="activistsFilterType"
+                            data-width="auto" th:field="*{activistFilterType}">
+                      <option value="none" selected="selected">egal</option>
+                      <option value="ENFORCE">Nur Aktive</option>
+                      <option value="IGNORE">Keine Aktive</option>
+                    </select>
+                  </div>
+                  <div id="filter-activist-hasJuleica-container" class="hide-initially">
+                    <div class="margin-btm-sm">
+                      <label for="filter-activist-juleica-type"
+                             class="sr-only">Juleica-Filter</label>
+                      <select id="filter-activist-juleica-type" class="selectpicker"
+                              name="activistsJuleicaFilterType"
+                              data-width="auto" th:field="*{activistJuleicaFilterType}">
+                        <option value="none" selected="selected">JuLeiCa egal</option>
+                        <option value="ENFORCE">Nur Aktive mit JuLeiCa</option>
+                        <option value="IGNORE">Nur Aktive ohne JuLeiCa</option>
+                      </select>
                     </div>
-                    <table class="table">
-                        <tbody th:remove="all-but-first">
-                            <tr th:each="ep : ${existingPersons}">
-                                <td th:text="|${ep.firstName} ${ep.lastName}|">Max Mustermann</td>
-                                <td th:text="${ep.participantProfile.dateOfBirth} ? ${{ep.participantProfile.dateOfBirth}} : '---'">* 01.02.2003</td>
-                                <td th:text="${ep.address.city}">Freiberg</td>
-                            </tr>
-                            <tr>
-                                <td>Max Mustermann</td>
-                                <td>* 01.02.2003</td>
-                                <td>Freiberg</td>
-                            </tr>
-                            <tr>
-                                <td>Max Mustermann</td>
-                                <td>* 01.02.2003</td>
-                                <td>Chemnitz</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Ignorieren</button>
-                    <form id="add-person-ignore" th:object="${newPerson}" th:action="@{/persons/addIgnoreSimilar}" class="hidden">
-                        <input type="hidden" name="participant" value="true" />
-                        <input type="text" name="firstName" th:field="*{firstName}"/>
-                        <input type="text" name="lastName" required="required" th:field="*{lastName}" />
-                        <input type="email" name="email" th:field="*{email}" />
-                        <input type="text" name="phone" th:field="*{phoneNumber}" />
-                        <input type="radio" name="gender" value="FEMALE" th:field="*{gender}" />
-                        <input type="radio" name="gender" value="MALE" th:field="*{gender}" />
-                        <input type="radio" name="gender" value="OTHER" th:field="*{gender}" />
-                        <input type="text" name="dob" th:field="*{dateOfBirth}"/>
-                        <textarea name="eatingHabit" th:field="*{eatingHabit}"></textarea>
-                        <textarea name="healthImpairments" th:field="*{healthImpairments}"></textarea>
-                        <input type="text" name="street" th:field="*{street}"/>
-                        <input type="text" name="zip" th:field="*{zip}"/>
-                        <input type="text" name="city" th:field="*{city}"/>
-                        <textarea name="remarks" th:field="*{remarks}"></textarea>
-                        <input type="checkbox" name="activist" th:field="*{activist}"/>
-                        <input type="checkbox" name="hasJuleica" th:field="*{hasJuleica}"/>
-                        <input type="text" name="juleicaExpiryDate" th:field="*{juleicaExpiryDate}"/>
-                        <input type="checkbox" name="referent" th:field="*{referent}"/>
-                        <select name="referent-qualifications" multiple="multiple" th:field="*{qualifications}">
-                            <option th:each="qualification : ${qualifications}" th:text="${qualification.name}" th:value="${{qualification.name}}" th:field="*{qualifications}">
-                                Erste-Hilfe Kurs
-                            </option>
+                    <div id="filter-activist-juleicaDate-container" class="hide-initially">
+                      <div class="margin-btm-sm">
+                        <label for="filter-activist-juleicaDate-type" class="sr-only">Juleica-Ablaufdatum-Filter</label>
+                        <select id="filter-activist-juleicaDate-type" class="selectpicker"
+                                name="activistsJuleicaExpiryFilterType" data-width="auto"
+                                th:field="*{activistJuleicaExpiryFilterType}">
+                          <option value="none" selected="selected">Ablaufdatum egal</option>
+                          <option value="BEFORE">Ablaufdatum vor</option>
+                          <option value="EXACT">Ablaufdatum exakt</option>
+                          <option value="AFTER">Ablaufdatum nach</option>
                         </select>
-                        <input type="checkbox" name="nabuMember" th:field="*{nabuMember}" />
-                        <input type="text" name="nabuNr" th:field="*{nabuNumber}" />
-                    </form>
-                    <button type="submit" class="btn btn-primary" form="add-person-ignore">Trotzdem hinzufügen</button>
+                      </div>
+                      <div id="filter-juleica-expiry-container" class="hide-initially">
+                        <div class="input-group">
+                          <input type="text" class="form-control" name="juleicaExpiryDate"
+                                 placeholder="Ablaufdatum"
+                                 data-toggle="tooltip" data-placement="left"
+                                 data-title="Format: DD.MM.YYYY" th:field="*{juleicaExpiryDate}"/>
+                          <span class="input-group-addon">
+                                                        <span
+                                                            class="glyphicon glyphicon-calendar"></span>
+                                                    </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+              </div>
             </div>
+            <div class="form-group">
+              <label for="filter-persons-referent-container" class="col-sm-3 control-label">Referenten</label>
+              <div class="col-sm-9">
+                <div class="margin-btm-sm" id="filter-persons-referent-container">
+                  <label for="filter-referent-type" class="sr-only">Referenten-Filter</label>
+                  <select id="filter-referent-type" class="selectpicker" name="referentsFilterType"
+                          data-width="auto" th:field="*{referentsFilterType}">
+                    <option value="none" selected="selected">egal</option>
+                    <option value="ENFORCE">Nur Referenten</option>
+                    <option value="IGNORE">Keine Referenten</option>
+                  </select>
+                </div>
+                <div id="filter-referents-qualification-container"
+                     class="margin-top-lg hide-initially">
+                  <label for="filter-referent-qualifications" class="">Qualifikationen</label>
+                  <div class="margin-top-sm">
+                    <select class="selectpicker" name="referentQualifications"
+                            id="filter-referent-qualifications" data-width="fit" multiple="multiple"
+                            title="Auswählen" th:field="*{referentQualifications}"
+                            th:remove="all-but-first">
+                      <option th:each="qualification : ${qualifications}"
+                              th:text="${qualification.name}" th:value="${qualification.name}">
+                        Erste-Hilfe Kurs
+                      </option>
+                      <option>Wildlife-Workshop</option>
+                      <option>Ornithologie</option>
+                      <option>Ehrenamtsmanagement</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
         </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+          <button type="submit" class="btn btn-primary" form="filter-persons">Filtern</button>
+        </div>
+      </div>
     </div>
+  </div>
+
+  <div id="existing-persons-modal" class="modal fade" tabindex="-1" role="dialog"
+       aria-labelledby="existing-persons-label" th:if="${existingPersons}">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="existing-persons-label" class="modal-title">Existierende Einträge</h2>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-info">
+            Es wurden bereits Personen mit dem gleichen Namen gespeichert
+          </div>
+          <table class="table">
+            <tbody th:remove="all-but-first">
+            <tr th:each="ep : ${existingPersons}">
+              <td th:text="|${ep.firstName} ${ep.lastName}|">Max Mustermann</td>
+              <td th:text="${ep.participantProfile.dateOfBirth} ? ${{ep.participantProfile.dateOfBirth}} : '---'">
+                * 01.02.2003
+              </td>
+              <td th:text="${ep.address.city}">Freiberg</td>
+            </tr>
+            <tr>
+              <td>Max Mustermann</td>
+              <td>* 01.02.2003</td>
+              <td>Freiberg</td>
+            </tr>
+            <tr>
+              <td>Max Mustermann</td>
+              <td>* 01.02.2003</td>
+              <td>Chemnitz</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Ignorieren</button>
+          <form id="add-person-ignore" th:object="${newPerson}"
+                th:action="@{/persons/addIgnoreSimilar}" class="hidden">
+            <input type="hidden" name="participant" value="true"/>
+            <input type="text" name="firstName" th:field="*{firstName}"/>
+            <input type="text" name="lastName" required="required" th:field="*{lastName}"/>
+            <input type="email" name="email" th:field="*{email}"/>
+            <input type="text" name="phone" th:field="*{phoneNumber}"/>
+            <input type="radio" name="gender" value="FEMALE" th:field="*{gender}"/>
+            <input type="radio" name="gender" value="MALE" th:field="*{gender}"/>
+            <input type="radio" name="gender" value="OTHER" th:field="*{gender}"/>
+            <input type="text" name="dob" th:field="*{dateOfBirth}"/>
+            <textarea name="eatingHabit" th:field="*{eatingHabit}"></textarea>
+            <textarea name="healthImpairments" th:field="*{healthImpairments}"></textarea>
+            <input type="text" name="street" th:field="*{street}"/>
+            <input type="text" name="zip" th:field="*{zip}"/>
+            <input type="text" name="city" th:field="*{city}"/>
+            <textarea name="remarks" th:field="*{remarks}"></textarea>
+            <input type="checkbox" name="activist" th:field="*{activist}"/>
+            <input type="checkbox" name="hasJuleica" th:field="*{hasJuleica}"/>
+            <input type="text" name="juleicaExpiryDate" th:field="*{juleicaExpiryDate}"/>
+            <input type="checkbox" name="referent" th:field="*{referent}"/>
+            <select name="referent-qualifications" multiple="multiple" th:field="*{qualifications}">
+              <option th:each="qualification : ${qualifications}" th:text="${qualification.name}"
+                      th:value="${{qualification.name}}" th:field="*{qualifications}">
+                Erste-Hilfe Kurs
+              </option>
+            </select>
+            <input type="checkbox" name="nabuMember" th:field="*{nabuMember}"/>
+            <input type="text" name="nabuNr" th:field="*{nabuNumber}"/>
+          </form>
+          <button type="submit" class="btn btn-primary" form="add-person-ignore">Trotzdem
+            hinzufügen
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </section>
 
 <!-- page specific content-->
 <main id="main">
 
-    <!-- page specific menu items -->
-    <header id="action-bar" class="form-inline clearfix">
-        <h2 class="hidden">Menü</h2>
+  <!-- page specific menu items -->
+  <header id="action-bar" class="form-inline clearfix">
+    <h2 class="hidden">Menü</h2>
 
-        <!-- the actions at last -->
-        <div id="actions" class="pull-right">
+    <!-- the actions at last -->
+    <div id="actions" class="pull-right">
 
-            <!-- search bar -->
-            <div class="form-group">
-                <label class="sr-only" for="persons">Name, E-Mail o.ä.</label>
-                <div class="input-group">
-                    <input id="persons" type="text" class="form-control fuzzy-search" name="persons" placeholder="Name, E-Mail o.ä." data-toggle="tooltip" data-title="Mit Enter bestätigen" data-placement="bottom" />
-                    <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
-                </div>
-            </div>
-            <div class="btn-group">
-                <!-- 'add' button -->
-                <button type="button" id="add-button" class="btn btn-default" data-toggle="modal" data-target="#add-person-form">
-                    <span class="glyphicon glyphicon-plus"></span> Hinzufügen
-                </button>
-
-                <!-- 'filter' button -->
-                <button type="button" id="filter-button" class="btn btn-default" data-toggle="modal" data-target="#filter-persons-form">
-                        <span class="glyphicon glyphicon-filter"></span> Filtern
-                </button>
-
-                <a href="mailto:" class="btn btn-default" th:if="${filtered}" th:href="'mailto:recipients@naju-sachsen.de?bcc=' + ${emails}"><span class="glyphicon glyphicon-envelope"></span> E-Mail</a>
-            </div>
+      <!-- search bar -->
+      <div class="form-group">
+        <label class="sr-only" for="persons">Name, E-Mail o.ä.</label>
+        <div class="input-group">
+          <input id="persons" type="text" class="form-control fuzzy-search" name="persons"
+                 placeholder="Name, E-Mail o.ä." data-toggle="tooltip"
+                 data-title="Mit Enter bestätigen" data-placement="bottom"/>
+          <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
         </div>
-    </header>
+      </div>
+      <div class="btn-group">
+        <!-- 'add' button -->
+        <button type="button" id="add-button" class="btn btn-default" data-toggle="modal"
+                data-target="#add-person-form">
+          <span class="glyphicon glyphicon-plus"></span> Hinzufügen
+        </button>
 
-    <!-- status messages concerning the last action -->
-    <section id="status">
-        <h2 class="hidden">Status</h2>
-        <div class="alert alert-success alert-dismissible" role="alert" th:if="${personAdded}">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            <p>
-                Neuer Eintrag wurde erfolgreich hinzugefügt.
-            </p>
-        </div>
-        <div class="alert alert-danger alert-dismissible" role="alert" th:if="${false}">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            <p>
-                Während des Lesens der Datenbank sind Fehler aufgetreten.
-            </p>
-        </div>
-        <div class="alert alert-success alert-dismissible" th:if="${personDeleted}">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            <p>
-                Person wurde gelöscht.
-             </p>
-        </div>
-        <div class="alert alert-success alert-dismissible" th:if="${personUpdated}">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            <p>
-                Person wurde aktualisiert
-            </p>
-        </div>
-    </section>
+        <!-- 'filter' button -->
+        <button type="button" id="filter-button" class="btn btn-default" data-toggle="modal"
+                data-target="#filter-persons-form">
+          <span class="glyphicon glyphicon-filter"></span> Filtern
+        </button>
 
-    <!-- the 'real' content finally -->
-    <section id="content" class="tab-content">
+        <a href="mailto:" class="btn btn-default" th:if="${filtered}"
+           th:href="'mailto:recipients@naju-sachsen.de?bcc=' + ${emails}"><span
+            class="glyphicon glyphicon-envelope"></span> E-Mail</a>
+      </div>
+    </div>
+  </header>
 
-        <h1>Personen</h1>
-        <table class="table table-striped table-hover">
-            <thead>
-            <tr>
-                <th class="col-md-3">Name</th>
-                <th class="col-md-3">Stadt</th>
-                <th class="col-md-3">E-Mail</th>
-                <th class="col-md-2">Geburtsdatum</th>
-                <th class="col-md-1">Link</th>
-            </tr>
-            </thead>
-            <tbody class="person-list" th:remove="all-but-first">
-            <tr th:each="person : ${persons}">
-                <td class="person-name col-md-3" th:text="${person.name}">Claus Störtebecker</td>
-                <td class="person-city col-md-3" th:text="${person.address.city}">Auf dem Meer</td>
-                <td class="person-email col-md-3">
-                    <a href="mailto:kaeptn@gmx.net" th:href="'mailto:' + ${person.email}" th:text="${person.email}">
-                        kaeptn@gmx.net
-                    </a>
-                </td>
-                <td class="person-dob col-md-2" th:text="${person.participant} ? ${{person.participantProfile.dateOfBirth}} : '---'">28.02.1360</td>
-                <td class="col-md-1"><a href="personDetails.html" th:href="@{'/persons/' + ${person.id}}">Details</a></td>
-            </tr>
-            <tr>
-                <td class="person-name col-md-3">Max Mustermann</td>
-                <td class="person-city col-md-3">Zu Hause</td>
-                <td class="person-email col-md-3"><a href="mailto:max.mustermann@web.de">max.mustermann@web.de</a></td>
-                <td class="person-dob col-md-2">05.09.1985</td>
-                <td class="col-md-1"><a href="personDetails.html">Details</a></td>
-            </tr>
-            <tr>
-                <td class="person-name col-md-3">Berta Beate</td>
-                <td class="person-city col-md-3">Entenhause</td>
-                <td class="person-email  col-md-3"><a href="mailto:berta_beate@googlemail.com">berta_beate@googlemail.com</a></td>
-                <td class="person-dob col-md-2">14.09.1998</td>
-                <td class="col-md-1"><a href="personDetails.html">Details</a></td>
-            </tr>
-            </tbody>
-        </table>
+  <!-- status messages concerning the last action -->
+  <section id="status">
+    <h2 class="hidden">Status</h2>
+    <div class="alert alert-success alert-dismissible" role="alert" th:if="${personAdded}">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <p>
+        Neuer Eintrag wurde erfolgreich hinzugefügt.
+      </p>
+    </div>
+    <div class="alert alert-danger alert-dismissible" role="alert" th:if="${false}">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <p>
+        Während des Lesens der Datenbank sind Fehler aufgetreten.
+      </p>
+    </div>
+    <div class="alert alert-success alert-dismissible" th:if="${personDeleted}">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <p>
+        Person wurde gelöscht.
+      </p>
+    </div>
+    <div class="alert alert-success alert-dismissible" th:if="${personUpdated}">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <p>
+        Person wurde aktualisiert
+      </p>
+    </div>
+  </section>
 
-        <div class="container">
-            <div class="alert alert-info text-center searching">
-                Suche läuft... <span class="glyphicon glyphicon-refresh glyphicon-load-animate"></span>
-            </div>
-            <div class="alert alert-info text-center no-results">
-                Keine Übereinstimmung
-            </div>
-        </div>
+  <!-- the 'real' content finally -->
+  <section id="content" class="tab-content">
 
-        <form class="text-center" th:action="@{/persons/all}" th:unless="${personDisplay == 'all'}">
-            <button type="submit" class="btn btn-link btn-loading">
-                <span class="glyphicon glyphicon-refresh"></span> Alle Personen anzeigen
-            </button>
-            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" title="Das kann eine ganze Weile dauern"></span>
-        </form>
+    <h1>Personen</h1>
+    <table class="table table-striped table-hover">
+      <thead>
+      <tr>
+        <th class="col-md-3">Name</th>
+        <th class="col-md-3">Stadt</th>
+        <th class="col-md-3">E-Mail</th>
+        <th class="col-md-2">Geburtsdatum</th>
+        <th class="col-md-1">Link</th>
+      </tr>
+      </thead>
+      <tbody class="person-list" th:remove="all-but-first">
+      <tr th:each="person : ${persons}">
+        <td class="person-name col-md-3" th:text="${person.name}">Claus Störtebecker</td>
+        <td class="person-city col-md-3" th:text="${person.address.city}">Auf dem Meer</td>
+        <td class="person-email col-md-3">
+          <a href="mailto:kaeptn@gmx.net" th:href="'mailto:' + ${person.email}"
+             th:text="${person.email}">
+            kaeptn@gmx.net
+          </a>
+        </td>
+        <td class="person-dob col-md-2"
+            th:text="${person.participant} ? ${{person.participantProfile.dateOfBirth}} : '---'">
+          28.02.1360
+        </td>
+        <td class="col-md-1"><a href="personDetails.html" th:href="@{'/persons/' + ${person.id}}">Details</a>
+        </td>
+      </tr>
+      <tr>
+        <td class="person-name col-md-3">Max Mustermann</td>
+        <td class="person-city col-md-3">Zu Hause</td>
+        <td class="person-email col-md-3"><a href="mailto:max.mustermann@web.de">max.mustermann@web.de</a>
+        </td>
+        <td class="person-dob col-md-2">05.09.1985</td>
+        <td class="col-md-1"><a href="personDetails.html">Details</a></td>
+      </tr>
+      <tr>
+        <td class="person-name col-md-3">Berta Beate</td>
+        <td class="person-city col-md-3">Entenhause</td>
+        <td class="person-email  col-md-3"><a href="mailto:berta_beate@googlemail.com">berta_beate@googlemail.com</a>
+        </td>
+        <td class="person-dob col-md-2">14.09.1998</td>
+        <td class="col-md-1"><a href="personDetails.html">Details</a></td>
+      </tr>
+      </tbody>
+    </table>
 
-    </section>
+    <div class="container">
+      <div class="alert alert-info text-center searching">
+        Suche läuft... <span class="glyphicon glyphicon-refresh glyphicon-load-animate"></span>
+      </div>
+      <div class="alert alert-info text-center no-results">
+        Keine Übereinstimmung
+      </div>
+    </div>
+
+    <form class="text-center" th:action="@{/persons/all}" th:unless="${personDisplay == 'all'}">
+      <button type="submit" class="btn btn-link btn-loading">
+        <span class="glyphicon glyphicon-refresh"></span> Alle Personen anzeigen
+      </button>
+      <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom"
+            title="Das kann eine ganze Weile dauern"></span>
+    </form>
+
+  </section>
 
 </main>
 <script src="../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
