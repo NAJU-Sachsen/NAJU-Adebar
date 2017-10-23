@@ -74,38 +74,12 @@ function initEvents() {
             groupId: groupId
         },
         dataType: 'json',
-        success: displayEvents,
+        success:  displayEvents,
         url: '/api/events/localGroup'
     };
 
     $.ajax(request);
 }
-
-// display the activists matching the given query
-$('#add-member-search-btn').on('click', function() {
-    var table = '#add-member-tablebody';
-    var firstName = $('#add-member-search-firstname').val();
-    var lastName = $('#add-member-search-lastname').val();
-    var city = $('#add-member-search-city').val();
-
-    var request = {
-        async: true,
-        data: {
-            firstname: firstName,
-            lastname: lastName,
-            city: city
-        },
-        dataType: 'json',
-        method: 'POST',
-        success: function(response) {
-            displayMatchingPersons(table, response);
-        },
-        url: '/api/persons/activists/simpleSearch'
-    };
-
-    $(table).empty();
-    $.ajax(request);
-});
 
 // sync selected board members
 $('select#edit-board-select-newMember').on('changed.bs.select', function() {
@@ -148,6 +122,8 @@ $('#remove-member-modal').on('show.bs.modal', function(e) {
 // init all js components
 $(function(){
     $('#add-member-modal').find('.no-results').hide();
+    $('#add-member-modal').find('.searching').hide();
+    initSearch($('#add-member-modal'));
 
     $('#add-project-period').find('input').datetimepicker({
         format: 'DD.MM.YYYY',

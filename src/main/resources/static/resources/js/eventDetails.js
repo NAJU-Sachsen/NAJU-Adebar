@@ -51,33 +51,6 @@ $('#participants').find('a').on('click', function(e){
     e.stopPropagation();
 });
 
-$('#add-participant-search-btn').on('click', function() {
-    var table = '#add-participant-tablebody';
-    var firstname = $('#add-participants-search-firstname').val();
-    var lastname = $('#add-participants-search-lastname').val();
-    var city = $('#add-participants-search-city').val();
-
-    var request = {
-        async: true,
-        data: {
-            firstname: firstname,
-            lastname: lastname,
-            city: city
-        },
-        dataType: 'json',
-        method: 'POST',
-        success: function(response) {
-            $('#add-participant-modal').find('.searching').hide();
-            displayMatchingPersons(table, response);
-        },
-        url: '/api/persons/simpleSearch'
-    };
-
-    $(table).empty();
-    $('#add-participant-modal').find('.searching').show();
-    $.ajax(request);
-});
-
 $('#add-counselor-search-btn').on('click', function() {
     var table = '#add-counselor-tablebody';
     var firstname = $('#add-counselor-search-firstname').val();
@@ -213,33 +186,6 @@ $('#remove-organizer-modal').on('show.bs.modal', function(event) {
     $(this).find('input[disabled]').val(name);
     $(this).find('input[type=hidden]').val(id);
 
-});
-
-$('#add-personToContact-search-btn').on('click', function() {
-    var table = '#add-personToContact-tablebody';
-    var firstname = $('#add-personToContact-search-firstname').val();
-    var lastname = $('#add-personToContact-search-lastname').val();
-    var city = $('#add-personToContact-search-city').val();
-
-    var request = {
-        async: true,
-        data: {
-            firstname: firstname,
-            lastname: lastname,
-            city: city
-        },
-        dataType: 'json',
-        method: 'POST',
-        success: function(response) {
-            $('#add-personToContact-modal').find('.searching').hide();
-            displayMatchingPersons(table, response);
-        },
-        url: '/api/persons/simpleSearch'
-    };
-
-    $(table).empty();
-    $('#add-personToContact-modal').find('.searching').show();
-    $.ajax(request);
 });
 
 $('#edit-personToContact-modal').on('show.bs.modal', function(event) {
@@ -496,33 +442,6 @@ $('tr.new-reservation').find('button.cancel').click(function() {
     hideReservationErrorMsg();
 });
 
-$('#add-waitingList-search-btn').on('click', function() {
-    var table = '#add-waitingList-tablebody';
-    var firstname = $('#add-waitingList-search-firstname').val();
-    var lastname = $('#add-waitingList-search-lastname').val();
-    var city = $('#add-waitingList-search-city').val();
-
-    var request = {
-        async: true,
-        data: {
-            firstname: firstname,
-            lastname: lastname,
-            city: city
-        },
-        dataType: 'json',
-        method: 'POST',
-        success: function(response) {
-            $('#add-waitingList-modal').find('.searching').hide();
-            displayMatchingPersons(table, response);
-        },
-        url: '/api/persons/simpleSearch'
-    };
-
-    $(table).empty();
-    $('#add-waitingList-modal').find('.searching').show();
-    $.ajax(request);
-});
-
 $('#waiting-list').find('.apply-entry').click(function() {
     var row = $(this).closest('tr');
     var id = row.data('id');
@@ -561,6 +480,10 @@ $(function() {
     $('.searching').hide();
     $('.searching-new-activists').hide();
     $('.new-activists').hide();
+
+    initSearch($('#add-participant-modal'));
+    initSearch($('#add-personToContact-modal'));
+    initSearch($('#add-waitingList-modal'));
 
     $('input.reservation-description').parent().hide();
     $('input.reservation-slots').parent().hide();

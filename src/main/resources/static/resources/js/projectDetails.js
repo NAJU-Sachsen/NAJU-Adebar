@@ -1,32 +1,4 @@
 
-// display the activists matching the given query
-$('#add-contributor-search-btn').on('click', function() {
-    var table = '#add-contributor-tablebody';
-    var firstname = $('#add-contributor-search-firstname').val();
-    var lastname = $('#add-contributor-search-lastname').val();
-    var city = $('#add-contributor-search-city').val();
-
-    var request = {
-        async: true,
-        data: {
-            firstname: firstname,
-            lastname: lastname,
-            city: city
-        },
-        dataType: 'json',
-        method: 'POST',
-        success: function(response) {
-            $('#add-contributor-modal').find('.searching').hide();
-            displayMatchingPersons(table, response);
-        },
-        url: '/api/persons/activists/simpleSearch'
-    };
-
-    $(table).empty();
-    $('#add-contributor-modal').find('.searching').show();
-    $.ajax(request);
-});
-
 // dont show modals when clicking on links
 $('#contributors').find('a').on('click', function(e) {
     e.stopPropagation();
@@ -56,9 +28,9 @@ $(function() {
         format: 'DD.MM.YYYY HH:mm',
         showTodayButton: true
     });
-});
 
-$(function() {
     $('.searching').hide();
     $('.no-results').hide();
+
+    initSearch($('#add-contributor-modal'));
 });

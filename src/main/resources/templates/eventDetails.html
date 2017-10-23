@@ -184,12 +184,12 @@
                       <label class="col-sm-3 control-label">Person suchen</label>
                       <div class="col-sm-9">
                           <div class="clearfix" style="margin-bottom: 5px;">
-                              <input type="text" id="add-participants-search-firstname" class="form-control pull-left" style="width: 48%;" placeholder="Vorname" />
-                              <input type="text" id="add-participants-search-lastname" class="form-control pull-right" style="width: 48%;" placeholder="Nachname" />
+                              <input type="text" id="add-participants-search-firstname" class="form-control pull-left first-name" style="width: 48%;" placeholder="Vorname" />
+                              <input type="text" id="add-participants-search-lastname" class="form-control pull-right last-name" style="width: 48%;" placeholder="Nachname" />
                           </div>
                           <div class="clearfix">
-                              <input type="text" id="add-participants-search-city" class="form-control pull-left" style="width: 68%;" placeholder="Ort"/>
-                              <button type="button" id="add-participant-search-btn" class="btn btn-primary pull-right" style="padding-left: 20px; padding-right: 20px;">
+                              <input type="text" id="add-participants-search-city" class="form-control pull-left city" style="width: 68%;" placeholder="Ort"/>
+                              <button type="button" id="add-participant-search-btn" class="btn btn-primary pull-right search" style="padding-left: 20px; padding-right: 20px;">
                                   Suchen
                               </button>
                           </div>
@@ -206,7 +206,7 @@
                                   <th>Auswählen</th>
                               </tr>
                           </thead>
-                          <tbody id="add-participant-tablebody" th:remove="body">
+                          <tbody id="add-participant-tablebody" class="matches" th:remove="body">
                               <tr>
                                   <td>Max Mustermann</td>
                                   <td>31.02.1999</td>
@@ -1586,6 +1586,7 @@
 </main>
 <script src="../static/resources/js/displayMatchingPersons.js" th:src="@{/resources/js/displayMatchingPersons.js}"></script>
 <script src="../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
+<script src="../static/resources/js/personSearch.js" th:src="@{/resources/js/personSearch.js}"></script>
 <script src="../static/resources/js/eventDetails.js" th:src="@{/resources/js/eventDetails.js}"></script>
 </body>
 </html>

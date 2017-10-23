@@ -9,6 +9,7 @@
    <link rel="stylesheet" type="text/css" href="../static/resources/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
 
    <link rel="stylesheet" type="text/css" href="../static/resources/css/style.css" th:href="@{/resources/css/style.css}" />
+   <link rel="stylesheet" type="text/css" href="../static/resources/css/animation.css" th:href="@{/resources/css/animation.css}" />
 
    <script type="text/javascript" src="../static/resources/js/list.min.js" th:src="@{/resources/js/list.min.js}"></script>
    <script type="text/javascript" src="../static/resources/js/list.fuzzysearch.min.js" th:src="@{/resources/js/list.fuzzysearch.min.js}"></script>
@@ -92,12 +93,12 @@
                                   <label class="col-sm-3 control-label">Person suchen</label>
                                   <div class="col-sm-9">
                                       <div class="clearfix" style="margin-bottom: 5px;">
-                                          <input type="text" id="add-subscriber-search-firstname" class="form-control pull-left" style="width: 48%;" placeholder="Vorname" />
-                                          <input type="text" id="add-subscriber-search-lastname" class="form-control pull-right" style="width: 48%;" placeholder="Nachname" />
+                                          <input type="text" id="add-subscriber-search-firstname" class="form-control pull-left first-name" style="width: 48%;" placeholder="Vorname" />
+                                          <input type="text" id="add-subscriber-search-lastname" class="form-control pull-right last-name" style="width: 48%;" placeholder="Nachname" />
                                       </div>
                                       <div class="clearfix">
-                                          <input type="text" id="add-subscriber-search-city" class="form-control pull-left" style="width: 68%;" placeholder="Ort"/>
-                                          <button type="button" id="add-subscriber-search-btn" class="btn btn-primary pull-right" style="padding-left: 20px; padding-right: 20px;">
+                                          <input type="text" id="add-subscriber-search-city" class="form-control pull-left city" style="width: 68%;" placeholder="Ort"/>
+                                          <button type="button" id="add-subscriber-search-btn" class="btn btn-primary pull-right search" style="padding-left: 20px; padding-right: 20px;">
                                               Suchen
                                           </button>
                                       </div>
@@ -114,7 +115,7 @@
                                               <th>Auswählen</th>
                                           </tr>
                                       </thead>
-                                      <tbody id="add-subscriber-tablebody" th:remove="body">
+                                      <tbody id="add-subscriber-tablebody" class="matches" th:remove="body">
                                           <tr>
                                               <td>Max Mustermann</td>
                                               <td>31.02.1999</td>
@@ -142,6 +143,12 @@
                                       </tbody>
                                   </table>
                               </form>
+                              <div class="text-center searching">
+                                  Suche läuft... <span class="glyphicon glyphicon-refresh glyphicon-load-animate"></span>
+                              </div>
+                              <div class="alert alert-info no-results">
+                                  Keine Übereinstimmung
+                              </div>
                            </div>
                            <div id="add-subscriber-new" class="tab-pane fade in active" role="tabpanel">
                               <form class="form-horizontal" id="add-subscriber-new-select" th:action="@{'/newsletters/' + ${newsletter.id} + '/subscribe'}" method="post" th:object="${newSubscriber}">
@@ -378,6 +385,9 @@
    </main>
 
    <script src="../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
+   <script src="../static/resources/js/displayMatchingPersons.js" th:src="@{/resources/js/displayMatchingPersons.js}"></script>
+   <script src="../static/resources/js/personSearch.js" th:src="@{/resources/js/personSearch.js}"></script>
+   <script src="../static/resources/js/personSearch.js" th:src="@{/resources/js/personSearch.js}"></script>
    <script src="../static/resources/js/newsletterDetails.js" th:src="@{/resources/js/newsletterDetails.js}"></script>
 </body>
 </html>

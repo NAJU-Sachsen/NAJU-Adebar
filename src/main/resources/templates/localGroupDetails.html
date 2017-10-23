@@ -13,6 +13,8 @@
     <script type="text/javascript" src="../static/resources/js/list.min.js" th:src="@{/resources/js/list.min.js}"></script>
     <script type="text/javascript" src="../static/resources/js/list.fuzzysearch.min.js" th:src="@{/resources/js/list.fuzzysearch.min.js}"></script>
 
+    <link rel="stylesheet" type="text/css" href="../static/resources/css/animation.css" th:href="@{/resources/css/animation.css}"/>
+
     <link rel="stylesheet" type="text/css" href="../static/resources/css/bootstrap-datetimepicker.min.css" th:href="@{/resources/css/bootstrap-datetimepicker.min.css}" />
     <script type="text/javascript" src="../static/resources/js/moment-with-locales.min.js" th:src="@{/resources/js/moment-with-locales.min.js}"></script>
     <script type="text/javascript" src="../static/resources/js/bootstrap-datetimepicker.min.js" th:src="@{/resources/js/bootstrap-datetimepicker.min.js}"></script>
@@ -149,12 +151,12 @@
                       <label class="col-sm-3 control-label">Aktive suchen</label>
                       <div class="col-sm-9">
                           <div class="clearfix" style="margin-bottom: 5px;">
-                              <input type="text" id="add-member-search-firstname" class="form-control pull-left" style="width: 48%;" placeholder="Vorname" />
-                              <input type="text" id="add-member-search-lastname" class="form-control pull-right" style="width: 48%;" placeholder="Nachname" />
+                              <input type="text" id="add-member-search-firstname" class="form-control pull-left first-name" style="width: 48%;" placeholder="Vorname" />
+                              <input type="text" id="add-member-search-lastname" class="form-control pull-right last-name" style="width: 48%;" placeholder="Nachname" />
                           </div>
                           <div class="clearfix">
-                              <input type="text" id="add-member-search-city" class="form-control pull-left" style="width: 68%;" placeholder="Ort"/>
-                              <button type="button" id="add-member-search-btn" class="btn btn-primary pull-right" style="padding-left: 20px; padding-right: 20px;">
+                              <input type="text" id="add-member-search-city" class="form-control pull-left city" style="width: 68%;" placeholder="Ort"/>
+                              <button type="button" id="add-member-search-btn" class="btn btn-primary pull-right search" style="padding-left: 20px; padding-right: 20px;">
                                   Suchen
                               </button>
                           </div>
@@ -171,7 +173,7 @@
                                   <th>Auswählen</th>
                               </tr>
                           </thead>
-                          <tbody id="add-member-tablebody" th:remove="body">
+                          <tbody id="add-member-tablebody" class="matches" th:remove="body">
                               <tr>
                                   <td>Max Mustermann</td>
                                   <td>31.02.1999</td>
@@ -199,6 +201,9 @@
                           </tbody>
                       </table>
                   </form>
+                  <div class="text-center searching">
+                      Suche läuft... <span class="glyphicon glyphicon-refresh glyphicon-load-animate"></span>
+                  </div>
                   <div class="alert alert-info no-results">
                       Keine Übereinstimmung
                   </div>
@@ -762,6 +767,7 @@
 
 <script src="../static/resources/js/displayMatchingPersons.js" th:src="@{/resources/js/displayMatchingPersons.js}"></script>
 <script src="../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
+<script src="../static/resources/js/personSearch.js" th:src="@{/resources/js/personSearch.js}"></script>
 <script src="../static/resources/js/localGroupDetails.js" th:src="@{/resources/js/localGroupDetails.js}"></script>
 </body>
 </html>

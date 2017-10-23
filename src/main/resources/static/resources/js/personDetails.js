@@ -91,36 +91,11 @@ $('#connect-parent-existing-tab').on('shown.bs.tab', function() {
    $('#connect-parent-submit').attr('form', 'connect-parent-person-select');
 });
 
-$('#connect-parent-search-btn').on('click', function() {
-    var table = '#connect-parent-tablebody';
-    var firstname = $('#connect-parent-search-firstname').val();
-    var lastname = $('#connect-parent-search-lastname').val();
-    var city = $('#connect-parent-search-city').val();
-
-    var request = {
-        async: true,
-        data: {
-            firstname: firstname,
-            lastname: lastname,
-            city: city
-        },
-        dataType: 'json',
-        method: 'POST',
-        success: function(response) {
-            $('#connect-parent-modal').find('.searching').hide();
-            displayMatchingPersons(table, response);
-        },
-        url: '/api/persons/simpleSearch'
-    };
-
-    $(table).empty();
-    $('#connect-parent-modal').find('.searching').show();
-    $.ajax(request);
-});
-
 $(function() {
     $('#connect-parent-modal').find('.searching').hide();
     $('#connect-parent-modal').find('.no-results').hide();
+    initSearch($('#connect-parent-existing'));
+
     initPersonData();
     initEatingHabit();
 });
