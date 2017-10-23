@@ -1,550 +1,479 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
 <!--suppress ThymeleafVariablesResolveInspection -->
-<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width,initial-scale=1" name="viewport"/>
-  <title>Newsletter | Adebar</title>
-  <script type="text/javascript" src="../static/resources/js/jquery.min.js"
-          th:src="@{/webjars/jquery/jquery.min.js}"></script>
-  <script type="text/javascript" src="../static/resources/js/bootstrap.min.js"
-          th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-  <link rel="stylesheet" type="text/css" href="../static/resources/css/bootstrap.min.css"
-        th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width,initial-scale=1" name="viewport"/>
+    <title>Newsletter | Adebar</title>
+    <script type="text/javascript" src="../static/resources/js/jquery.min.js" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script type="text/javascript" src="../static/resources/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" type="text/css" href="../static/resources/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
 
-  <link rel="stylesheet" type="text/css" href="../static/resources/css/style.css"
-        th:href="@{/resources/css/style.css}"/>
+    <link rel="stylesheet" type="text/css" href="../static/resources/css/style.css" th:href="@{/resources/css/style.css}"/>
 
-  <link rel="stylesheet" type="text/css" href="../static/resources/css/animation.css"
-        th:href="@{/resources/css/animation.css}"/>
+    <link rel="stylesheet" type="text/css" href="../static/resources/css/animation.css" th:href="@{/resources/css/animation.css}"/>
 
-  <script type="text/javascript" src="../static/resources/js/list.min.js"
-          th:src="@{/resources/js/list.min.js}"></script>
-  <script type="text/javascript" src="../static/resources/js/list.fuzzysearch.min.js"
-          th:src="@{/resources/js/list.fuzzysearch.min.js}"></script>
+    <script type="text/javascript" src="../static/resources/js/list.min.js" th:src="@{/resources/js/list.min.js}"></script>
+    <script type="text/javascript" src="../static/resources/js/list.fuzzysearch.min.js" th:src="@{/resources/js/list.fuzzysearch.min.js}"></script>
 
-  <link rel="stylesheet" href="../static/resources/css/bootstrap-select.min.css"
-        th:href="@{/resources/css/bootstrap-select.min.css}"/>
-  <script src="../static/resources/js/bootstrap-select.min.js"
-          th:src="@{/resources/js/bootstrap-select.min.js}"></script>
+    <link rel="stylesheet" href="../static/resources/css/bootstrap-select.min.css" th:href="@{/resources/css/bootstrap-select.min.css}"/>
+    <script src="../static/resources/js/bootstrap-select.min.js" th:src="@{/resources/js/bootstrap-select.min.js}"></script>
 </head>
 <body>
 
 <!-- central navigation -->
 <nav id="top-nav" class="navbar navbar-static-top navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-              data-target="#main-nav"
-              aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="#">NAJU Adebar</a>
-    </div>
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-nav"
+                    aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">NAJU Adebar</a>
+        </div>
 
-    <div id="main-nav" class="collapse navbar-collapse">
-      <ul class="nav navbar-nav">
-        <li role="presentation">
-          <a href="overview.html" th:href="@{/overview}"><span class="glyphicon glyphicon-home"
-                                                               aria-hidden="true"></span> Übersicht</a>
-        </li>
-        <li role="presentation">
-          <a href="persons.html" th:href="@{/persons}"><span
-              class="glyphicon glyphicon-user nav-icon" aria-hidden="true"></span> Personen</a>
-        </li>
-        <li role="presentation">
-          <a href="events.html" th:href="@{/events}"><span class="glyphicon glyphicon-tent nav-icon"
-                                                           aria-hidden="true"></span>
-            Veranstaltungen</a>
-        </li>
-        <li role="presentation">
-          <a href="localGroups.html" th:href="@{/localGroups}"><span
-              class="glyphicon glyphicon-map-marker nav-icon" aria-hidden="true"></span> Ortsgruppen</a>
-        </li>
-        <li role="presentation" class="active">
-          <a href="#" th:href="@{/newsletters}"><span class="glyphicon glyphicon-envelope nav-icon"
-                                                      aria-hidden="true"></span> Newsletter <span
-              class="sr-only">(akutell)</span></a>
-        </li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-             aria-haspopup="true"
-             aria-expanded="false">
-            Verschiedenes <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li class="disabled"><a href="#"><span class="glyphicon glyphicon-leaf"></span> Über</a>
-            </li>
-            <li class="disabled"><a href="#"><span class="glyphicon glyphicon-globe"></span>
-              Hilfe</a></li>
-            <li><a href="#"><span class="glyphicon glyphicon-flash"></span> Fehler melden</a></li>
-          </ul>
-        </li>
-      </ul>
+        <div id="main-nav" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li role="presentation">
+                    <a href="overview.html" th:href="@{/overview}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Übersicht</a>
+                </li>
+                <li role="presentation">
+                    <a href="persons.html" th:href="@{/persons}"><span class="glyphicon glyphicon-user nav-icon" aria-hidden="true"></span> Personen</a>
+                </li>
+                <li role="presentation">
+                    <a href="events.html" th:href="@{/events}"><span class="glyphicon glyphicon-tent nav-icon" aria-hidden="true"></span> Veranstaltungen</a>
+                </li>
+                <li role="presentation">
+                    <a href="localGroups.html" th:href="@{/localGroups}"><span class="glyphicon glyphicon-map-marker nav-icon" aria-hidden="true"></span> Ortsgruppen</a>
+                </li>
+                <li role="presentation" class="active">
+                    <a href="#" th:href="@{/newsletters}"><span class="glyphicon glyphicon-envelope nav-icon" aria-hidden="true"></span> Newsletter <span class="sr-only">(akutell)</span></a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">
+                        Verschiedenes <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li class="disabled"><a href="#"><span class="glyphicon glyphicon-leaf"></span> Über</a></li>
+                        <li class="disabled"><a href="#"><span class="glyphicon glyphicon-globe"></span> Hilfe</a></li>
+                        <li><a href="#"><span class="glyphicon glyphicon-flash"></span> Fehler melden</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
     </div>
-  </div>
 </nav>
 
 <!-- page specific dialogs -->
 <section id="dialogs">
-  <h2 class="hidden">Formulare</h2>
+    <h2 class="hidden">Formulare</h2>
 
-  <!-- 'create newsletter' dialog -->
-  <div class="modal fade" id="add-newsletter-form" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <header class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-          <h3 class="modal-title" id="add-newsletter-label">Newsletter erstellen</h3>
-        </header>
-        <div class="modal-body">
-          <form id="add-newsletter" class="form-horizontal" method="post"
-                th:action="@{/newsletters/add}" th:object="${addNewsletterForm}">
-            <div class="form-group row">
-              <label class="control-label col-sm-3" for="name" id="name-label">Name</label>
-              <div class="col-sm-9">
-                <input id="name" name="name" type="text" required="required" autofocus="autofocus"
-                       placeholder="Name" class="form-control" aria-describedby="name-label"
-                       th:field="*{name}"/>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="control-label col-sm-3" for="belonging-container">Zugehörigkeit
-                <span data-toggle="tooltip" data-placement="top"
-                      data-title="Einige Funktionen sind zur Zeit noch nicht unterstützt"><span
-                    class="glyphicon glyphicon-info-sign"></span></span>
-              </label>
-              <div class="col-sm-9" id="belonging-container">
-                <div class="radio" id="belonging-type-select">
-                  <label class="radio-inline"><input type="radio" name="belonging" value="NONE"
-                                                     checked="checked"/>keine</label>
-                  <label class="radio-inline"><input type="radio" name="belonging" value="CHAPTER"/>Ortsgruppe</label>
-                  <label class="radio-inline disabled"><input type="radio" name="belonging"
-                                                              value="EVENT" disabled="disabled"/>Veranstaltung</label>
-                  <label class="radio-inline disabled"><input type="radio" name="belonging"
-                                                              value="PROJECT" disabled="disabled"/>Projekt</label>
-                </div>
+    <!-- 'create newsletter' dialog -->
+    <div class="modal fade" id="add-newsletter-form" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <header class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h3 class="modal-title" id="add-newsletter-label">Newsletter erstellen</h3>
+                </header>
+                <div class="modal-body">
+                    <form id="add-newsletter" class="form-horizontal" method="post" th:action="@{/newsletters/add}" th:object="${addNewsletterForm}">
+                        <div class="form-group row">
+                            <label class="control-label col-sm-3" for="name" id="name-label">Name</label>
+                            <div class="col-sm-9">
+                                <input id="name" name="name" type="text" required="required" autofocus="autofocus" placeholder="Name" class="form-control" aria-describedby="name-label" th:field="*{name}"/>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="control-label col-sm-3" for="belonging-container">Zugehörigkeit
+                                <span data-toggle="tooltip" data-placement="top" data-title="Einige Funktionen sind zur Zeit noch nicht unterstützt"><span class="glyphicon glyphicon-info-sign"></span></span>
+                            </label>
+                            <div class="col-sm-9" id="belonging-container">
+                                <div class="radio" id="belonging-type-select">
+                                    <label class="radio-inline"><input type="radio" name="belonging" value="NONE" checked="checked" />keine</label>
+                                    <label class="radio-inline"><input type="radio" name="belonging" value="CHAPTER" />Ortsgruppe</label>
+                                    <label class="radio-inline disabled"><input type="radio" name="belonging" value="EVENT" disabled="disabled" />Veranstaltung</label>
+                                    <label class="radio-inline disabled"><input type="radio" name="belonging" value="PROJECT" disabled="disabled" />Projekt</label>
+                                </div>
 
-                <div id="belonging-chapter" class="margin-top-lg hidden">
-                  <label for="add-newsletter-chapter" class="sr-only">Ortsgruppe</label>
-                  <select id="add-newsletter-chapter" class="selectpicker"
-                          data-title="Ortsgruppe auswählen" th:remove="all-but-first"
-                          th:field="*{localGroup}">
-                    <option th:each="localGroup : ${allChapters}" th:value="${localGroup.id}"
-                            th:text="${localGroup.name}">NAJU Sachsen
-                    </option>
-                    <option>NAJU Dresden</option>
-                    <option>NAJU Freiberg</option>
-                  </select>
+                                <div id="belonging-chapter" class="margin-top-lg hidden">
+                                    <label for="add-newsletter-chapter" class="sr-only">Ortsgruppe</label>
+                                    <select id="add-newsletter-chapter" class="selectpicker" data-title="Ortsgruppe auswählen" th:remove="all-but-first" th:field="*{localGroup}">
+                                        <option th:each="localGroup : ${allChapters}" th:value="${localGroup.id}" th:text="${localGroup.name}">NAJU Sachsen</option>
+                                        <option>NAJU Dresden</option>
+                                        <option>NAJU Freiberg</option>
+                                    </select>
+                                </div>
+                                <div id="belonging-event" class="margin-top-lg hidden">
+                                    <label for="add-newsletter-event" class="sr-only">Veranstaltung</label>
+                                    <select id="add-newsletter-event" class="selectpicker" data-title="Veranstaltung auswählen"></select>
+                                </div>
+                                <div id="belonging-project" class="margin-top-lg hidden">
+                                    <label for="add-newsletter-project" class="sr-only">Projekt</label>
+                                    <select id="add-newsletter-project" class="selectpicker" data-title="Projekt auswählen"></select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-                <div id="belonging-event" class="margin-top-lg hidden">
-                  <label for="add-newsletter-event" class="sr-only">Veranstaltung</label>
-                  <select id="add-newsletter-event" class="selectpicker"
-                          data-title="Veranstaltung auswählen"></select>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+                    <button type="submit" form="add-newsletter" class="btn btn-primary">Hinzufügen</button>
                 </div>
-                <div id="belonging-project" class="margin-top-lg hidden">
-                  <label for="add-newsletter-project" class="sr-only">Projekt</label>
-                  <select id="add-newsletter-project" class="selectpicker"
-                          data-title="Projekt auswählen"></select>
-                </div>
-              </div>
             </div>
-          </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
-          <button type="submit" form="add-newsletter" class="btn btn-primary">Hinzufügen</button>
-        </div>
-      </div>
     </div>
-  </div>
 
-  <!-- 'create subscriber' dialog -->
-  <div class="modal fade" id="add-subscriber-form" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <header class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-          <h3 class="modal-title" id="add-subscriber-label">Abonnent erstellen</h3>
-        </header>
-        <div class="modal-body">
-          <form id="add-subscriber" class="form-horizontal"
-                th:action="@{/newsletters/subscribers/add}" method="post">
-            <div class="form-group">
-              <label for="firstname" class="col-sm-2 control-label">Vorname</label>
-              <div class="col-sm-10">
-                <div class="input-group">
-                  <input type="text" id="firstname" class="form-control" name="firstName"
-                         autofocus="" placeholder="Vorname"/>
-                  <span class="input-group-addon">(optional)</span>
-                </div>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="lastname" class="col-sm-2 control-label">Nachname</label>
-              <div class="col-sm-10">
-                <div class="input-group">
-                  <input type="text" id="lastname" class="form-control" name="lastName"
-                         placeholder="Nachname"/>
-                  <span class="input-group-addon">(optional)</span>
-                </div>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="email" class="col-sm-2 control-label">E-Mail</label>
-              <div class="col-sm-10">
-                <input type="email" id="email" class="form-control" name="email" placeholder="EMail"
-                       required="required" aria-describedby="email-label"/>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="newsletter-ids" class="col-sm-2 control-label">Abonnierte Newsletter
-                <span class="pull-left glyphicon glyphicon-info-sign" data-toggle="tooltip"
-                      data-placement="right" data-title="Mit [Strg] mehrere auswählen">
+    <!-- 'create subscriber' dialog -->
+    <div class="modal fade" id="add-subscriber-form" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <header class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h3 class="modal-title" id="add-subscriber-label">Abonnent erstellen</h3>
+                </header>
+                <div class="modal-body">
+                    <form id="add-subscriber" class="form-horizontal" th:action="@{/newsletters/subscribers/add}" method="post">
+                        <div class="form-group">
+                            <label for="firstname" class="col-sm-2 control-label">Vorname</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <input type="text" id="firstname" class="form-control" name="firstName" autofocus="" placeholder="Vorname"/>
+                                    <span class="input-group-addon">(optional)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastname" class="col-sm-2 control-label">Nachname</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <input type="text" id="lastname" class="form-control" name="lastName" placeholder="Nachname"/>
+                                    <span class="input-group-addon">(optional)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="col-sm-2 control-label">E-Mail</label>
+                            <div class="col-sm-10">
+                                <input type="email" id="email" class="form-control" name="email" placeholder="EMail" required="required" aria-describedby="email-label"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="newsletter-ids" class="col-sm-2 control-label">Abonnierte Newsletter
+                                <span class="pull-left glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" data-title="Mit [Strg] mehrere auswählen">
                                 </span>
-              </label>
-              <div class="col-sm-10">
-                <select id="newsletter-ids" class="form-control" name="newsletters"
-                        multiple="multiple" required="required" th:remove="all-but-first">
-                  <option value="1" th:each="newsletter : ${newsletters}"
-                          th:value="${newsletter.id}" th:text="${newsletter.name}">NAJU Allgemein
-                    (NAJU Sachsen)
-                  </option>
-                  <option value="2">Puppenstuben (Puppenstuben-Projekt)</option>
-                  <option value="3">HIFA-Camp (HIFA)</option>
-                  <option value="4">NAJU Dresden (NAJU Dresden)</option>
-                </select>
-              </div>
+                            </label>
+                            <div class="col-sm-10">
+                                <select id="newsletter-ids" class="form-control" name="newsletters" multiple="multiple" required="required" th:remove="all-but-first">
+                                    <option value="1" th:each="newsletter : ${newsletters}" th:value="${newsletter.id}" th:text="${newsletter.name}">NAJU Allgemein (NAJU Sachsen)
+                                    </option>
+                                    <option value="2">Puppenstuben (Puppenstuben-Projekt)</option>
+                                    <option value="3">HIFA-Camp (HIFA)</option>
+                                    <option value="4">NAJU Dresden (NAJU Dresden)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+                    <button type="submit" class="btn btn-primary" form="add-subscriber">Hinzufügen</button>
+                </div>
             </div>
-          </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
-          <button type="submit" class="btn btn-primary" form="add-subscriber">Hinzufügen</button>
-        </div>
-      </div>
     </div>
-  </div>
 
-  <!-- 'edit subscriber' dialog -->
-  <div class="modal fade" id="edit-subscriber-form" tabindex="-1" role="dialog"
-       aria-labelledby="edit-subscriber-label">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <header class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Schließen">
-            <span aria-hidden="true">&times;</span>
-          </button>
-          <h3 class="modal-title" id="edit-subscriber-label">Abonnent bearbeiten</h3>
-        </header>
-        <div class="modal-body">
-          <form id="edit-subscriber" class="form-horizontal"
-                th:action="@{/newsletters/subscribers/update}" method="post">
-            <input id="edit-id" type="hidden" name="id"/>
-            <div class="form-group">
-              <label for="edit-firstname" class="col-sm-2 control-label">Vorname</label>
-              <div class="col-sm-10">
-                <div class="input-group">
-                  <input type="text" id="edit-firstName" name="edit-firstName" class="form-control"
-                         placeholder="Vorname"/>
-                  <span class="input-group-addon">(optional)</span>
+    <!-- 'edit subscriber' dialog -->
+    <div class="modal fade" id="edit-subscriber-form" tabindex="-1" role="dialog"
+         aria-labelledby="edit-subscriber-label">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <header class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Schließen">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h3 class="modal-title" id="edit-subscriber-label">Abonnent bearbeiten</h3>
+                </header>
+                <div class="modal-body">
+                    <form id="edit-subscriber" class="form-horizontal" th:action="@{/newsletters/subscribers/update}" method="post">
+                        <input id="edit-id" type="hidden" name="id"/>
+                        <div class="form-group">
+                            <label for="edit-firstname" class="col-sm-2 control-label">Vorname</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <input type="text" id="edit-firstName" name="edit-firstName" class="form-control" placeholder="Vorname"/>
+                                    <span class="input-group-addon">(optional)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-lastname" class="col-sm-2 control-label">Nachname</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <input type="text" id="edit-lastName" name="edit-lastName" class="form-control" placeholder="Nachname"/>
+                                    <span class="input-group-addon">(optional)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-email" class="col-sm-2 control-label">E-Mail</label>
+                            <div class="col-sm-10">
+                                <input type="text" id="edit-email" name="edit-email" class="form-control" required="required" placeholder="EMail"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-subscribed" class="col-sm-2 control-label">Abonnierte
+                                Newsletter</label>
+                            <div class="col-sm-10">
+                                <select id="edit-subscribed" class="form-control" name="edit-subscribed" multiple="multiple" required="required" th:remove="all-but-first" data-toggle="tooltip" data-placement="top" data-title="Mit [Strg] mehrere auswählen">
+                                    <option id="nid-1" value="1" th:each="newsletter : ${newsletters}" th:value="${newsletter.id}" th:text="${newsletter.name}" th:id="'nid-' + ${newsletter.id}">NAJU Allgemein (NAJU Sachsen)
+                                    </option>
+                                    <option id="nid-2" value="2">Puppenstuben (Puppenstuben-Projekt)</option>
+                                    <option id="nid-3" value="3">HIFA-Camp (HIFA)</option>
+                                    <option id="nid-4" value="4">NAJU Dresden (NAJU Dresden)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="edit-lastname" class="col-sm-2 control-label">Nachname</label>
-              <div class="col-sm-10">
-                <div class="input-group">
-                  <input type="text" id="edit-lastName" name="edit-lastName" class="form-control"
-                         placeholder="Nachname"/>
-                  <span class="input-group-addon">(optional)</span>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="glyphicon glyphicon-trash"></span> Löschen <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu confirm-delete">
+                            <li>
+                                <button type="submit" class="btn btn-link" form="edit-subscriber" th:formaction="@{/newsletters/subscribers/delete}">Löschen
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                    <button type="submit" class="btn btn-primary" form="edit-subscriber"><span class="glyphicon glyphicon-ok"></span> Aktualisieren
+                    </button>
                 </div>
-              </div>
             </div>
-            <div class="form-group">
-              <label for="edit-email" class="col-sm-2 control-label">E-Mail</label>
-              <div class="col-sm-10">
-                <input type="text" id="edit-email" name="edit-email" class="form-control"
-                       required="required" placeholder="EMail"/>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="edit-subscribed" class="col-sm-2 control-label">Abonnierte
-                Newsletter</label>
-              <div class="col-sm-10">
-                <select id="edit-subscribed" class="form-control" name="edit-subscribed"
-                        multiple="multiple" required="required" th:remove="all-but-first"
-                        data-toggle="tooltip" data-placement="top"
-                        data-title="Mit [Strg] mehrere auswählen">
-                  <option id="nid-1" value="1" th:each="newsletter : ${newsletters}"
-                          th:value="${newsletter.id}" th:text="${newsletter.name}"
-                          th:id="'nid-' + ${newsletter.id}">NAJU Allgemein (NAJU Sachsen)
-                  </option>
-                  <option id="nid-2" value="2">Puppenstuben (Puppenstuben-Projekt)</option>
-                  <option id="nid-3" value="3">HIFA-Camp (HIFA)</option>
-                  <option id="nid-4" value="4">NAJU Dresden (NAJU Dresden)</option>
-                </select>
-              </div>
-            </div>
-          </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
-          <div class="btn-group">
-            <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">
-              <span class="glyphicon glyphicon-trash"></span> Löschen <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu confirm-delete">
-              <li>
-                <button type="submit" class="btn btn-link" form="edit-subscriber"
-                        th:formaction="@{/newsletters/subscribers/delete}">Löschen
-                </button>
-              </li>
-            </ul>
-          </div>
-          <button type="submit" class="btn btn-primary" form="edit-subscriber"><span
-              class="glyphicon glyphicon-ok"></span> Aktualisieren
-          </button>
-        </div>
-      </div>
     </div>
-  </div>
 </section>
 
 <!-- page specific content-->
 <main id="main">
 
-  <!-- page specific menu items -->
-  <header id="action-bar" class="form-inline clearfix">
-    <ul id="tabs" class="nav nav-tabs pull-left" role="tablist">
-      <li role="presentation" class="active"><a href="#newsletters" aria-controls="newsletters"
-                                                role="tab" data-toggle="tab">Newsletter</a></li>
-      <li role="presentation"><a href="#subscribers" aria-controls="subscribers" role="tab"
-                                 data-toggle="tab">Abonnenten</a>
-      </li>
-    </ul>
+    <!-- page specific menu items -->
+    <header id="action-bar" class="form-inline clearfix">
+        <ul id="tabs" class="nav nav-tabs pull-left" role="tablist">
+            <li role="presentation" class="active"><a href="#newsletters" aria-controls="newsletters" role="tab" data-toggle="tab">Newsletter</a></li>
+            <li role="presentation"><a href="#subscribers" aria-controls="subscribers" role="tab" data-toggle="tab">Abonnenten</a>
+            </li>
+        </ul>
 
-    <!-- the actions at last -->
-    <div id="actions" class="pull-right">
+        <!-- the actions at last -->
+        <div id="actions" class="pull-right">
 
-      <!-- search bar -->
-      <div class="form-group">
-        <label class="sr-only" for="subscriber">Name, E-Mail o.ä.</label>
-        <div class="input-group">
-          <input id="subscriber" type="text" class="form-control fuzzy-search" name="subscriber"
-                 placeholder="Name, E-Mail o.ä."/>
-          <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
+            <!-- search bar -->
+            <div class="form-group">
+                <label class="sr-only" for="subscriber">Name, E-Mail o.ä.</label>
+                <div class="input-group">
+                    <input id="subscriber" type="text" class="form-control fuzzy-search" name="subscriber" placeholder="Name, E-Mail o.ä."/>
+                    <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
+                </div>
+            </div>
+
+            <!-- 'add' button -->
+            <button type="button" id="add-button" class="btn btn-default" data-toggle="modal" data-target="#add-newsletter-form">
+                <span class="glyphicon glyphicon-plus"></span> Hinzufügen
+            </button>
         </div>
-      </div>
+    </header>
 
-      <!-- 'add' button -->
-      <button type="button" id="add-button" class="btn btn-default" data-toggle="modal"
-              data-target="#add-newsletter-form">
-        <span class="glyphicon glyphicon-plus"></span> Hinzufügen
-      </button>
-    </div>
-  </header>
+    <!-- status messages concerning the last action -->
+    <section id="status">
+        <div class="alert alert-success alert-dismissible" role="alert" th:if="${newsletterAdded}">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <p>
+                Neuer Eintrag wurde erfolgreich hinzugefügt.
+            </p>
+        </div>
+        <div class="alert alert-danger alert-dismissible" role="alert" th:if="${false}">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <p>
+                Während des Lesens der Datenbank sind Fehler aufgetreten.
+            </p>
+        </div>
+        <div class="alert alert-warning alert-dismissible" th:if="${emailExists}">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <p>
+                Es gibt bereits einen Abonnenten mit dieser E-Mail Adresse!
+            </p>
+        </div>
+        <div class="alert alert-success alert-dismissible" th:if="${newsletterDeleted}">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <p>
+                Newsletter wurde gelöscht.
+            </p>
+        </div>
+        <div class="alert alert-success alert-dismissible" th:if="${subscriberCreated}">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <p>
+                Abonnent wurde erstellt
+            </p>
+        </div>
+        <div class="alert alert-success alert-dismissible" th:if="${subscriberDeleted}">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <p>
+                Abonnent wurde gelöscht
+            </p>
+        </div>
+        <div class="alert alert-success alert-dismissible" th:if="${subscriberUpdated}">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <p>
+                Abonnent wurde aktualisiert
+            </p>
+        </div>
+    </section>
 
-  <!-- status messages concerning the last action -->
-  <section id="status">
-    <div class="alert alert-success alert-dismissible" role="alert" th:if="${newsletterAdded}">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <p>
-        Neuer Eintrag wurde erfolgreich hinzugefügt.
-      </p>
-    </div>
-    <div class="alert alert-danger alert-dismissible" role="alert" th:if="${false}">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <p>
-        Während des Lesens der Datenbank sind Fehler aufgetreten.
-      </p>
-    </div>
-    <div class="alert alert-warning alert-dismissible" th:if="${emailExists}">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <p>
-        Es gibt bereits einen Abonnenten mit dieser E-Mail Adresse!
-      </p>
-    </div>
-    <div class="alert alert-success alert-dismissible" th:if="${newsletterDeleted}">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <p>
-        Newsletter wurde gelöscht.
-      </p>
-    </div>
-    <div class="alert alert-success alert-dismissible" th:if="${subscriberCreated}">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <p>
-        Abonnent wurde erstellt
-      </p>
-    </div>
-    <div class="alert alert-success alert-dismissible" th:if="${subscriberDeleted}">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <p>
-        Abonnent wurde gelöscht
-      </p>
-    </div>
-    <div class="alert alert-success alert-dismissible" th:if="${subscriberUpdated}">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <p>
-        Abonnent wurde aktualisiert
-      </p>
-    </div>
-  </section>
+    <!-- the 'real' content finally -->
+    <section id="content" class="tab-content">
 
-  <!-- the 'real' content finally -->
-  <section id="content" class="tab-content">
+        <!-- newsletter view -->
+        <div role="tabpanel" class="tab-pane fade in active" id="newsletters">
+            <h1>Newsletter</h1>
+            <table class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Abonnenten</th>
+                    <th>Zugehörig</th>
+                    <th>Link</th>
+                </tr>
+                </thead>
+                <tbody class="newsletter-list" th:remove="all-but-first">
+                <tr th:each="newsletter : ${newsletters}">
+                    <td class="newsletter-name" th:text="${newsletter.name}">NAJU Allgemein</td>
+                    <td class="newsletter-subscribers" th:text="${newsletter.subscribersCount}">357852</td>
+                    <td class="newsletter-belonging">
+                        <a href="localGroupDetails.html" th:if="${localGroups.containsKey(newsletter)}" th:href="@{/localGroups/{id}(id=${localGroups.get(newsletter).getId()})}" th:text="${localGroups.get(newsletter).getName()}">
+                            NAJU Sachsen
+                        </a>
+                        <a th:if="${events[newsletter]}" th:href="@{/events/{id}(id=${events.get(newsletter).getId()})}" th:text="${events.get(newsletter).getName()}">
+                            NAJU Sachsen
+                        </a>
+                        <a th:if="${projects[newsletter]}" th:href="@{/projects/{id}(id=${projects.get(newsletter).getId()})}" th:text="${projects.get(newsletter).getName()}">
+                            NAJU Sachsen
+                        </a>
+                        <span th:if="${noBelonging.contains(newsletter)}">---</span>
+                    </td>
+                    <td><a href="newsletterDetails.html" th:href="@{'/newsletters/' + ${newsletter.id}}">Details</a></td>
+                </tr>
+                <tr>
+                    <td class="newsletter-name">Puppenstuben</td>
+                    <td class="newsletter-subscribers">59</td>
+                    <td class="newsletter-belonging"><a href="projectDetails.html">Puppenstuben-Projekt</a></td>
+                    <td><a href="newsletterDetails.html">Details</a></td>
+                </tr>
+                <tr>
+                    <td class="newsletter-name">HIFA-Camp</td>
+                    <td class="newsletter-subscribers">147</td>
+                    <td class="newsletter-belonging"><a href="eventDetails.html">HIFA</a></td>
+                    <td><a href="newsletterDetails.html">Details</a></td>
+                </tr>
+                <tr>
+                    <td class="newsletter-name">NAJU Dresden</td>
+                    <td class="newsletter-subscribers">951</td>
+                    <td class="newsletter-belonging"><a href="localGroupDetails.html">NAJU Dresden</a></td>
+                    <td><a href="newsletterDetails.html">Details</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
 
-    <!-- newsletter view -->
-    <div role="tabpanel" class="tab-pane fade in active" id="newsletters">
-      <h1>Newsletter</h1>
-      <table class="table table-striped table-hover">
-        <thead>
-        <tr>
-          <th>Name</th>
-          <th>Abonnenten</th>
-          <th>Zugehörig</th>
-          <th>Link</th>
-        </tr>
-        </thead>
-        <tbody class="newsletter-list" th:remove="all-but-first">
-        <tr th:each="newsletter : ${newsletters}">
-          <td class="newsletter-name" th:text="${newsletter.name}">NAJU Allgemein</td>
-          <td class="newsletter-subscribers" th:text="${newsletter.subscribersCount}">357852</td>
-          <td class="newsletter-belonging">
-            <a href="localGroupDetails.html" th:if="${localGroups.containsKey(newsletter)}"
-               th:href="@{/localGroups/{id}(id=${localGroups.get(newsletter).getId()})}"
-               th:text="${localGroups.get(newsletter).getName()}">
-              NAJU Sachsen
-            </a>
-            <a th:if="${events[newsletter]}"
-               th:href="@{/events/{id}(id=${events.get(newsletter).getId()})}"
-               th:text="${events.get(newsletter).getName()}">
-              NAJU Sachsen
-            </a>
-            <a th:if="${projects[newsletter]}"
-               th:href="@{/projects/{id}(id=${projects.get(newsletter).getId()})}"
-               th:text="${projects.get(newsletter).getName()}">
-              NAJU Sachsen
-            </a>
-            <span th:if="${noBelonging.contains(newsletter)}">---</span>
-          </td>
-          <td><a href="newsletterDetails.html" th:href="@{'/newsletters/' + ${newsletter.id}}">Details</a>
-          </td>
-        </tr>
-        <tr>
-          <td class="newsletter-name">Puppenstuben</td>
-          <td class="newsletter-subscribers">59</td>
-          <td class="newsletter-belonging"><a href="projectDetails.html">Puppenstuben-Projekt</a>
-          </td>
-          <td><a href="newsletterDetails.html">Details</a></td>
-        </tr>
-        <tr>
-          <td class="newsletter-name">HIFA-Camp</td>
-          <td class="newsletter-subscribers">147</td>
-          <td class="newsletter-belonging"><a href="eventDetails.html">HIFA</a></td>
-          <td><a href="newsletterDetails.html">Details</a></td>
-        </tr>
-        <tr>
-          <td class="newsletter-name">NAJU Dresden</td>
-          <td class="newsletter-subscribers">951</td>
-          <td class="newsletter-belonging"><a href="localGroupDetails.html">NAJU Dresden</a></td>
-          <td><a href="newsletterDetails.html">Details</a></td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
+        <!-- subscriber view -->
+        <div role="tabpanel" class="tab-pane fade" id="subscribers">
+            <h1>Abonnenten</h1>
+            <table class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th>E-Mail</th>
+                    <th>Name</th>
+                </tr>
+                </thead>
+                <tbody class="subscriber-list" th:remove="all-but-first">
+                <tr data-toggle="modal" data-target="#edit-subscriber-form" th:each="subscriber : ${subscribers}" th:attr="data-whatever=${subscriber.email}">
+                    <td class="subscriber-email" th:text="${subscriber.email}">max.muster@web.de</td>
+                    <td class="subscriber-name" th:if="${subscriber.hasName()}" th:text="${subscriber.name}">Max Muster
+                    </td>
+                    <td class="subscriber-name" th:unless="${subscriber.hasName()}">---</td>
+                </tr>
+                <tr data-toggle="modal" data-target="#edit-subscriber-form">
+                    <td class="subscriber-email">bbeate@gmail.com</td>
+                    <td class="subscriber-name">Berta Beate</td>
+                </tr>
+                <tr data-toggle="modal" data-target="#edit-subscriber-form">
+                    <td class="subscriber-email">hans_wurst@gmx.net</td>
+                    <td class="subscriber-name">---</td>
+                </tr>
+                </tbody>
+            </table>
+            <form class="text-center" th:action="@{/newsletters/subscribers/all}" th:unless="${subscriberDisplay == 'all'}">
+                <button type="submit" class="btn btn-link btn-loading">
+                    <span class="glyphicon glyphicon-refresh"></span> Alle Abonnenten anzeigen
+                </button>
+                <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" title="Das kann eine ganze Weile dauern"></span>
+            </form>
+        </div>
+    </section>
 
-    <!-- subscriber view -->
-    <div role="tabpanel" class="tab-pane fade" id="subscribers">
-      <h1>Abonnenten</h1>
-      <table class="table table-striped table-hover">
-        <thead>
-        <tr>
-          <th>E-Mail</th>
-          <th>Name</th>
-        </tr>
-        </thead>
-        <tbody class="subscriber-list" th:remove="all-but-first">
-        <tr data-toggle="modal" data-target="#edit-subscriber-form"
-            th:each="subscriber : ${subscribers}" th:attr="data-whatever=${subscriber.email}">
-          <td class="subscriber-email" th:text="${subscriber.email}">max.muster@web.de</td>
-          <td class="subscriber-name" th:if="${subscriber.hasName()}" th:text="${subscriber.name}">
-            Max Muster
-          </td>
-          <td class="subscriber-name" th:unless="${subscriber.hasName()}">---</td>
-        </tr>
-        <tr data-toggle="modal" data-target="#edit-subscriber-form">
-          <td class="subscriber-email">bbeate@gmail.com</td>
-          <td class="subscriber-name">Berta Beate</td>
-        </tr>
-        <tr data-toggle="modal" data-target="#edit-subscriber-form">
-          <td class="subscriber-email">hans_wurst@gmx.net</td>
-          <td class="subscriber-name">---</td>
-        </tr>
-        </tbody>
-      </table>
-      <form class="text-center" th:action="@{/newsletters/subscribers/all}"
-            th:unless="${subscriberDisplay == 'all'}">
-        <button type="submit" class="btn btn-link btn-loading">
-          <span class="glyphicon glyphicon-refresh"></span> Alle Abonnenten anzeigen
-        </button>
-        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom"
-              title="Das kann eine ganze Weile dauern"></span>
-      </form>
-    </div>
-  </section>
+    <!-- initialize search bar -->
+    <script type="text/javascript">
+        var fuzzyOptions = {
+            searchClass: "fuzzy-search",
+            location: 0,
+            distance: 100,
+            threshold: 0.4,
+            multiSearch: true
+        };
+        var newsletterOptions = {
+            listClass: "newsletter-list",
+            valueNames: ['newsletter-name', 'newsletter-belonging'],
+            plugins: [ListFuzzySearch(fuzzyOptions)]
+        };
+        var subscriberOptions = {
+            listClass: "subscriber-list",
+            valueNames: ['subscriber-email', 'subscriber-name'],
+            plugins: [ListFuzzySearch(fuzzyOptions)]
+        };
+        new List('main', newsletterOptions);
+        new List('main', subscriberOptions)
+    </script>
 
-  <!-- initialize search bar -->
-  <script type="text/javascript">
-    var fuzzyOptions = {
-      searchClass: "fuzzy-search",
-      location: 0,
-      distance: 100,
-      threshold: 0.4,
-      multiSearch: true
-    };
-    var newsletterOptions = {
-      listClass: "newsletter-list",
-      valueNames: ['newsletter-name', 'newsletter-belonging'],
-      plugins: [ListFuzzySearch(fuzzyOptions)]
-    };
-    var subscriberOptions = {
-      listClass: "subscriber-list",
-      valueNames: ['subscriber-email', 'subscriber-name'],
-      plugins: [ListFuzzySearch(fuzzyOptions)]
-    };
-    new List('main', newsletterOptions);
-    new List('main', subscriberOptions)
-  </script>
-
-  <!-- storing the last session's tab here to restore it later-->
-  <input type="hidden" id="session-tab" value="" th:value="${tab}"/>
+    <!-- storing the last session's tab here to restore it later-->
+    <input type="hidden" id="session-tab" value="" th:value="${tab}"/>
 </main>
 <script src="../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
-<script src="../static/resources/js/newsletters.js"
-        th:src="@{/resources/js/newsletters.js}"></script>
+<script src="../static/resources/js/newsletters.js" th:src="@{/resources/js/newsletters.js}"></script>
 </body>
 </html>

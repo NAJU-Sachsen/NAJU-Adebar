@@ -1,101 +1,93 @@
 package de.naju.adebar.model.human;
 
 import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
+
 import org.springframework.util.Assert;
 
 /**
  * Just a qualification, consisting of a name and a description.
  * <p>
- * For the model it is guaranteed that a qualification's name is unique and many other objects will
- * rely on the correctness of that constraint. Therefore qualifications should be created with great
- * caution.
+ * For the model it is guaranteed that a qualification's name is unique and many other objects will rely on the
+ * correctness of that constraint. Therefore qualifications should be created with great caution.
  */
 @Entity
 public class Qualification implements Serializable {
+	private static final long serialVersionUID = 4926021134130535348L;
+	
+	@Id private String name;
+	private String description;
 
-  private static final long serialVersionUID = 4926021134130535348L;
+    /**
+     * Full constructor
+     * @param name the qualification's name. Should be unique as it is the primary key for persistence.
+     * @param description the qualification's description. May be empty
+     * @throws IllegalArgumentException if any of the parameters was null
+     */
+	public Qualification(String name, String description) {
+		Assert.hasText(name, "Name may not be null nor empty, but was: " + name);
+		Assert.notNull(description, "Description may not be null!");
+		this.name = name;
+		this.description = description;
+	}
 
-  @Id
-  private String name;
-  private String description;
+    /**
+     * Default constructor, just for JPA's sake
+     */
+	protected Qualification() {
+		
+	}
 
-  /**
-   * Full constructor
-   *
-   * @param name the qualification's name. Should be unique as it is the primary key for
-   *        persistence.
-   * @param description the qualification's description. May be empty
-   * @throws IllegalArgumentException if any of the parameters was null
-   */
-  public Qualification(String name, String description) {
-    Assert.hasText(name, "Name may not be null nor empty, but was: " + name);
-    Assert.notNull(description, "Description may not be null!");
-    this.name = name;
-    this.description = description;
-  }
+    /**
+     * @return the qualification's name
+     */
+	public String getName() {
+		return name;
+	}
 
-  /**
-   * Default constructor, just for JPA's sake
-   */
-  protected Qualification() {
+    /**
+     * @return the qualification's description
+     */
+	public String getDescription() {
+		return description;
+	}
 
-  }
+    /**
+     * @param name the name to set
+     */
+	protected void setName(String name) {
+		Assert.hasText(name, "Name may not be null nor empty, but was: " + name);
+		this.name = name;
+	}
 
-  /**
-   * @return the qualification's name
-   */
-  public String getName() {
-    return name;
-  }
+    /**
+     * @param description the description to set
+     */
+	protected void setDescription(String description) {
+		Assert.notNull(description, "Description may not be null!");
+		this.description = description;
+	}
 
-  /**
-   * @param name the name to set
-   */
-  protected void setName(String name) {
-    Assert.hasText(name, "Name may not be null nor empty, but was: " + name);
-    this.name = name;
-  }
+	// overridden from Object
 
-  /**
-   * @return the qualification's description
-   */
-  public String getDescription() {
-    return description;
-  }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-  /**
-   * @param description the description to set
-   */
-  protected void setDescription(String description) {
-    Assert.notNull(description, "Description may not be null!");
-    this.description = description;
-  }
+        Qualification that = (Qualification) o;
 
-  // overridden from Object
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+        return name.equals(that.name);
     }
 
-    Qualification that = (Qualification) o;
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
 
-    return name.equals(that.name);
-  }
-
-  @Override
-  public int hashCode() {
-    return name.hashCode();
-  }
-
-  @Override
-  public String toString() {
-    return String.format("Qualification: %s (%s)", name, description);
-  }
+    @Override public String toString() {
+	    return String.format("Qualification: %s (%s)", name, description);
+    }
 }

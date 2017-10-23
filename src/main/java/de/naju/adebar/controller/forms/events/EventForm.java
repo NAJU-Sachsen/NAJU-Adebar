@@ -6,175 +6,175 @@ import javax.validation.constraints.NotNull;
 
 /**
  * Model POJO for events. The fields are set by Thymeleaf when the associated form is submitted.
- *
  * @author Rico Bergmann
  */
 public class EventForm {
+    public enum Belonging {LOCALGROUP, PROJECT}
 
-  public final static String DATE_TIME_FORMAT = "dd.MM.yyyy HH:mm";
-  public static final CurrencyUnit CURRENCY_UNIT = Monetary.getCurrency("EUR");
-  @NotNull
-  private String name;
-  @NotNull
-  private String startTime;
-  @NotNull
-  private String endTime;
-  private String participantsLimit;
-  private String participantsAge;
-  private String internalParticipationFee, externalParticipationFee;
-  private String street, zip, city;
-  private String belonging;
-  private long localGroupId, projectId;
+    public final static String DATE_TIME_FORMAT = "dd.MM.yyyy HH:mm";
+    public static final CurrencyUnit CURRENCY_UNIT = Monetary.getCurrency("EUR");
 
-  public EventForm() {}
+    @NotNull private String name;
+    @NotNull private String startTime;
+    @NotNull private String endTime;
+    private String participantsLimit;
+    private String participantsAge;
+    private String internalParticipationFee, externalParticipationFee;
+    private String street, zip, city;
+    private String belonging;
+    private long localGroupId, projectId;
 
-  public EventForm(String name, String startTime, String endTime, String participantsLimit,
-      String participantsAge, String internalParticipationFee, String externalParticipationFee,
-      String street, String zip, String city) {
-    this.name = name;
-    this.startTime = startTime;
-    this.endTime = endTime;
-    this.participantsLimit = participantsLimit;
-    this.participantsAge = participantsAge;
-    this.internalParticipationFee = internalParticipationFee;
-    this.externalParticipationFee = externalParticipationFee;
-    this.street = street;
-    this.zip = zip;
-    this.city = city;
-  }
+    public EventForm() {}
 
-  public String getName() {
-    return name;
-  }
+    public EventForm(String name, String startTime, String endTime, String participantsLimit, String participantsAge, String internalParticipationFee, String externalParticipationFee, String street, String zip, String city) {
+        this.name = name;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.participantsLimit = participantsLimit;
+        this.participantsAge = participantsAge;
+        this.internalParticipationFee = internalParticipationFee;
+        this.externalParticipationFee = externalParticipationFee;
+        this.street = street;
+        this.zip = zip;
+        this.city = city;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public String getStartTime() {
-    return startTime;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  public void setStartTime(String startTime) {
-    this.startTime = startTime;
-  }
+    public String getStartTime() {
+        return startTime;
+    }
 
-  public String getEndTime() {
-    return endTime;
-  }
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
 
-  public void setEndTime(String endTime) {
-    this.endTime = endTime;
-  }
+    public String getEndTime() {
+        return endTime;
+    }
 
-  public String getParticipantsLimit() {
-    return participantsLimit;
-  }
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
 
-  public void setParticipantsLimit(String participantsLimit) {
-    this.participantsLimit = participantsLimit;
-  }
+    public String getParticipantsLimit() {
+        return participantsLimit;
+    }
 
-  public String getParticipantsAge() {
-    return participantsAge;
-  }
+    public void setParticipantsLimit(String participantsLimit) {
+        this.participantsLimit = participantsLimit;
+    }
 
-  public void setParticipantsAge(String participantsAge) {
-    this.participantsAge = participantsAge;
-  }
+    public String getParticipantsAge() {
+        return participantsAge;
+    }
 
-  public String getInternalParticipationFee() {
-    return internalParticipationFee;
-  }
+    public void setParticipantsAge(String participantsAge) {
+        this.participantsAge = participantsAge;
+    }
 
-  public void setInternalParticipationFee(String internalParticipationFee) {
-    this.internalParticipationFee = internalParticipationFee;
-  }
+    public String getInternalParticipationFee() {
+        return internalParticipationFee;
+    }
 
-  public String getExternalParticipationFee() {
-    return externalParticipationFee;
-  }
+    public void setInternalParticipationFee(String internalParticipationFee) {
+        this.internalParticipationFee = internalParticipationFee;
+    }
 
-  public void setExternalParticipationFee(String externalParticipationFee) {
-    this.externalParticipationFee = externalParticipationFee;
-  }
+    public String getExternalParticipationFee() {
+        return externalParticipationFee;
+    }
 
-  public String getStreet() {
-    return street;
-  }
+    public void setExternalParticipationFee(String externalParticipationFee) {
+        this.externalParticipationFee = externalParticipationFee;
+    }
 
-  public void setStreet(String street) {
-    this.street = street;
-  }
+    public String getStreet() {
+        return street;
+    }
 
-  public String getZip() {
-    return zip;
-  }
+    public void setStreet(String street) {
+        this.street = street;
+    }
 
-  public void setZip(String zip) {
-    this.zip = zip;
-  }
+    public String getZip() {
+        return zip;
+    }
 
-  public String getCity() {
-    return city;
-  }
+    public void setZip(String zip) {
+        this.zip = zip;
+    }
 
-  public void setCity(String city) {
-    this.city = city;
-  }
+    public String getCity() {
+        return city;
+    }
 
-  public String getBelonging() {
-    return belonging;
-  }
+    public void setCity(String city) {
+        this.city = city;
+    }
 
-  public void setBelonging(String belonging) {
-    this.belonging = belonging;
-  }
+    public String getBelonging() {
+        return belonging;
+    }
 
-  public long getLocalGroupId() {
-    return localGroupId;
-  }
+    public void setBelonging(String belonging) {
+        this.belonging = belonging;
+    }
 
-  public void setLocalGroupId(long localGroupId) {
-    this.localGroupId = localGroupId;
-  }
+    public long getLocalGroupId() {
+        return localGroupId;
+    }
 
-  public long getProjectId() {
-    return projectId;
-  }
+    public void setLocalGroupId(long localGroupId) {
+        this.localGroupId = localGroupId;
+    }
 
-  public void setProjectId(long projectId) {
-    this.projectId = projectId;
-  }
+    public long getProjectId() {
+        return projectId;
+    }
 
-  public boolean hasParticipantsLimit() {
-    return participantsLimit != null && !participantsLimit.isEmpty();
-  }
+    public void setProjectId(long projectId) {
+        this.projectId = projectId;
+    }
 
-  public boolean hasParticipantsAge() {
-    return participantsAge != null && !participantsAge.isEmpty();
-  }
+    public boolean hasParticipantsLimit() {
+        return participantsLimit != null && !participantsLimit.isEmpty();
+    }
 
-  public boolean hasInternalParticipationFee() {
-    return internalParticipationFee != null && !internalParticipationFee.isEmpty();
-  }
+    public boolean hasParticipantsAge() {
+        return participantsAge != null && !participantsAge.isEmpty();
+    }
 
-  public boolean hasExternalParticipationFee() {
-    return externalParticipationFee != null && !externalParticipationFee.isEmpty();
-  }
+    public boolean hasInternalParticipationFee() {
+        return internalParticipationFee != null && !internalParticipationFee.isEmpty();
+    }
 
-  @Override
-  public String toString() {
-    return "EventForm{" + "name='" + name + '\'' + ", startTime='" + startTime + '\''
-        + ", endTime='" + endTime + '\'' + ", participantsLimit='" + participantsLimit + '\''
-        + ", participantsAge='" + participantsAge + '\'' + ", internalParticipationFee='"
-        + internalParticipationFee + '\'' + ", externalParticipationFee='"
-        + externalParticipationFee + '\'' + ", street='" + street + '\'' + ", zip='" + zip + '\''
-        + ", city='" + city + '\'' + ", belonging='" + belonging + '\'' + ", localGroupId="
-        + localGroupId + ", projectId=" + projectId + '}';
-  }
+    public boolean hasExternalParticipationFee() {
+        return externalParticipationFee != null && !externalParticipationFee.isEmpty();
+    }
 
-  public enum Belonging {
-    LOCALGROUP, PROJECT
-  }
+    @Override
+    public String toString() {
+        return "EventForm{" +
+                "name='" + name + '\'' +
+                ", startTime='" + startTime + '\'' +
+                ", endTime='" + endTime + '\'' +
+                ", participantsLimit='" + participantsLimit + '\'' +
+                ", participantsAge='" + participantsAge + '\'' +
+                ", internalParticipationFee='" + internalParticipationFee + '\'' +
+                ", externalParticipationFee='" + externalParticipationFee + '\'' +
+                ", street='" + street + '\'' +
+                ", zip='" + zip + '\'' +
+                ", city='" + city + '\'' +
+                ", belonging='" + belonging + '\'' +
+                ", localGroupId=" + localGroupId +
+                ", projectId=" + projectId +
+                '}';
+    }
 }

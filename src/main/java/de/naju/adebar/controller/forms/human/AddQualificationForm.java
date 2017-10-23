@@ -3,61 +3,59 @@ package de.naju.adebar.controller.forms.human;
 import javax.validation.constraints.NotNull;
 
 /**
- * Model POJO for adding qualifications. The fields are set by Thymeleaf when the associated form is
- * submitted.
- *
+ * Model POJO for adding qualifications. The fields are set by Thymeleaf when the associated form is submitted.
  * @author Rico Bergmann
  */
 public class AddQualificationForm {
 
-  @NotNull
-  private String addType;
-  private String qualification;
-  private String name;
-  private String description;
+    public enum AddType {NEW, EXISTING}
 
-  public AddQualificationForm() {}
+    @NotNull private String addType;
+    private String qualification;
+    private String name;
+    private String description;
 
-  public String getAddType() {
-    return addType;
-  }
+    public AddQualificationForm() {}
 
-  public void setAddType(String addType) {
-    this.addType = addType;
-  }
+    public String getAddType() {
+        return addType;
+    }
 
-  public String getQualification() {
-    return qualification;
-  }
+    public void setAddType(String addType) {
+        this.addType = addType;
+    }
 
-  public void setQualification(String qualification) {
-    this.qualification = qualification;
-  }
+    public String getQualification() {
+        return qualification;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public void setQualification(String qualification) {
+        this.qualification = qualification;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public String getDescription() {
-    return description;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  public void setDescription(String description) {
-    this.description = description;
-  }
+    public String getDescription() {
+        return description;
+    }
 
-  @Override
-  public String toString() {
-    return "AddQualificationForm{" + "addType='" + addType + '\'' + ", qualification='"
-        + qualification + '\'' + ", name='" + name + '\'' + ", description='" + description + '\''
-        + '}';
-  }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-  public enum AddType {
-    NEW, EXISTING
-  }
+    @Override
+    public String toString() {
+        return "AddQualificationForm{" +
+                "addType='" + addType + '\'' +
+                ", qualification='" + qualification + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }
