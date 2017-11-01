@@ -442,7 +442,6 @@ public class Person {
 
   // overridden from Object
 
-
   @Override
   public boolean equals(Object o) {
     if (this == o)

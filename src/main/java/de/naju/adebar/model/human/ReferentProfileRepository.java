@@ -5,4 +5,5 @@ import org.springframework.data.repository.CrudRepository;
 /**
  * @author Rico Bergmann
  */
-public interface ReferentProfileRepository extends CrudRepository<ReferentProfile, PersonId> {}
+public interface ReferentProfileRepository extends CrudRepository<ReferentProfile, PersonId> {
+}

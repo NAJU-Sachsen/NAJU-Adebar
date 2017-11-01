@@ -3,177 +3,171 @@ package de.naju.adebar.controller.forms.human;
 import javax.validation.constraints.NotNull;
 
 /**
- * Model POJO for person data. The fields are set by Thymeleaf when the associated form is submitted.
+ * Model POJO for person data. The fields are set by Thymeleaf when the associated form is
+ * submitted.
+ * 
  * @author Rico Bergmann
  */
 public class EditPersonForm {
-    public final static String DATE_FORMAT = "dd.MM.yyyy";
+  public final static String DATE_FORMAT = "dd.MM.yyyy";
 
-    // general data
-    @NotNull private String firstName;
-    @NotNull private String lastName;
-    private String email;
-    private String phoneNumber;
-    private String street;
-    private String zip;
-    private String city;
+  // general data
+  @NotNull
+  private String firstName;
+  @NotNull
+  private String lastName;
+  private String email;
+  private String phoneNumber;
+  private String street;
+  private String zip;
+  private String city;
 
-    // participant data
-    private boolean participant;
-    private String gender;
-    private String dateOfBirth;
-    private String eatingHabit;
-    private String healthImpairments;
-    private String remarks;
-    private boolean nabuMember;
-    private String nabuNumber;
+  // participant data
+  private boolean participant;
+  private String gender;
+  private String dateOfBirth;
+  private String eatingHabit;
+  private String healthImpairments;
+  private String remarks;
+  private boolean nabuMember;
+  private String nabuNumber;
 
-    public EditPersonForm() {}
+  public EditPersonForm() {}
 
-    public String getFirstName() {
-        return firstName;
+  public String getFirstName() {
+    return firstName;
+  }
+
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
+
+  public String getLastName() {
+    return lastName;
+  }
+
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
+
+  public String getEmail() {
+    if (email != null && !email.isEmpty()) {
+      return email;
     }
+    return null;
+  }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-    public String getLastName() {
-        return lastName;
-    }
+  public String getPhoneNumber() {
+    return phoneNumber;
+  }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+  public void setPhoneNumber(String phoneNumber) {
+    this.phoneNumber = phoneNumber;
+  }
 
-    public String getEmail() {
-    	if (email != null && !email.isEmpty()) {
-    		return email;
-    	}
-    	return null;
-    }
+  public String getStreet() {
+    return street;
+  }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  public void setStreet(String street) {
+    this.street = street;
+  }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
+  public String getZip() {
+    return zip;
+  }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
+  public void setZip(String zip) {
+    this.zip = zip;
+  }
 
-    public String getStreet() {
-        return street;
-    }
+  public String getCity() {
+    return city;
+  }
 
-    public void setStreet(String street) {
-        this.street = street;
-    }
+  public void setCity(String city) {
+    this.city = city;
+  }
 
-    public String getZip() {
-        return zip;
-    }
+  public boolean isParticipant() {
+    return participant;
+  }
 
-    public void setZip(String zip) {
-        this.zip = zip;
-    }
+  public void setParticipant(boolean participant) {
+    this.participant = participant;
+  }
 
-    public String getCity() {
-        return city;
-    }
+  public String getGender() {
+    return gender;
+  }
 
-    public void setCity(String city) {
-        this.city = city;
-    }
+  public void setGender(String gender) {
+    this.gender = gender;
+  }
 
-    public boolean isParticipant() {
-        return participant;
-    }
+  public String getDateOfBirth() {
+    return dateOfBirth;
+  }
 
-    public void setParticipant(boolean participant) {
-        this.participant = participant;
-    }
+  public void setDateOfBirth(String dateOfBirth) {
+    this.dateOfBirth = dateOfBirth;
+  }
 
-    public String getGender() {
-        return gender;
-    }
+  public String getEatingHabit() {
+    return eatingHabit;
+  }
 
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
+  public void setEatingHabit(String eatingHabit) {
+    this.eatingHabit = eatingHabit;
+  }
 
-    public String getDateOfBirth() {
-        return dateOfBirth;
-    }
+  public String getHealthImpairments() {
+    return healthImpairments;
+  }
 
-    public void setDateOfBirth(String dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
+  public void setHealthImpairments(String healthImpairments) {
+    this.healthImpairments = healthImpairments;
+  }
 
-    public String getEatingHabit() {
-        return eatingHabit;
-    }
+  public String getRemarks() {
+    return remarks;
+  }
 
-    public void setEatingHabit(String eatingHabit) {
-        this.eatingHabit = eatingHabit;
-    }
+  public void setRemarks(String remarks) {
+    this.remarks = remarks;
+  }
 
-    public String getHealthImpairments() {
-        return healthImpairments;
-    }
+  public boolean isNabuMember() {
+    return nabuMember;
+  }
 
-    public void setHealthImpairments(String healthImpairments) {
-        this.healthImpairments = healthImpairments;
-    }
+  public void setNabuMember(boolean nabuMember) {
+    this.nabuMember = nabuMember;
+  }
 
-    public String getRemarks() {
-        return remarks;
-    }
+  public String getNabuNumber() {
+    return nabuNumber;
+  }
 
-    public void setRemarks(String remarks) {
-        this.remarks = remarks;
-    }
+  public void setNabuNumber(String nabuNumber) {
+    this.nabuNumber = nabuNumber;
+  }
 
-    public boolean isNabuMember() {
-        return nabuMember;
-    }
+  public boolean hasDateOfBirth() {
+    return dateOfBirth != null && !dateOfBirth.isEmpty();
+  }
 
-    public void setNabuMember(boolean nabuMember) {
-        this.nabuMember = nabuMember;
-    }
-
-    public String getNabuNumber() {
-        return nabuNumber;
-    }
-
-    public void setNabuNumber(String nabuNumber) {
-        this.nabuNumber = nabuNumber;
-    }
-
-    public boolean hasDateOfBirth() {
-        return dateOfBirth != null && !dateOfBirth.isEmpty();
-    }
-
-    @Override
-    public String toString() {
-        return "EditPersonForm{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", street='" + street + '\'' +
-                ", zip='" + zip + '\'' +
-                ", city='" + city + '\'' +
-                ", participant=" + participant +
-                ", gender='" + gender + '\'' +
-                ", dateOfBirth='" + dateOfBirth + '\'' +
-                ", eatingHabit='" + eatingHabit + '\'' +
-                ", healthImpairments='" + healthImpairments + '\'' +
-                ", nabuMember=" + nabuMember +
-                ", nabuNumber='" + nabuNumber + '\'' +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "EditPersonForm{" + "firstName='" + firstName + '\'' + ", lastName='" + lastName + '\''
+        + ", email='" + email + '\'' + ", phoneNumber='" + phoneNumber + '\'' + ", street='"
+        + street + '\'' + ", zip='" + zip + '\'' + ", city='" + city + '\'' + ", participant="
+        + participant + ", gender='" + gender + '\'' + ", dateOfBirth='" + dateOfBirth + '\''
+        + ", eatingHabit='" + eatingHabit + '\'' + ", healthImpairments='" + healthImpairments
+        + '\'' + ", nabuMember=" + nabuMember + ", nabuNumber='" + nabuNumber + '\'' + '}';
+  }
 }

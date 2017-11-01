@@ -5,6 +5,7 @@ import de.naju.adebar.model.human.Person;
 
 /**
  * An filter for persons
+ * 
  * @author Rico Bergmann
  * @see Person
  * @see PersonFilterBuilder

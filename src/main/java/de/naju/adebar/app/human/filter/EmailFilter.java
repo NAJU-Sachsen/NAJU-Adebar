@@ -1,22 +1,22 @@
 package de.naju.adebar.app.human.filter;
 
 import de.naju.adebar.model.human.Person;
-
 import java.util.stream.Stream;
 
 /**
  * Filter for persons depending on their email address
+ * 
  * @author Rico Bergmann
  */
 public class EmailFilter implements PersonFilter {
-    private String email;
+  private String email;
 
-    public EmailFilter(String email) {
-        this.email = email;
-    }
+  public EmailFilter(String email) {
+    this.email = email;
+  }
 
-    @Override
-    public Stream<Person> filter(Stream<Person> personStream) {
-      return personStream.filter(p -> p.getEmail().equals(email));
-    }
+  @Override
+  public Stream<Person> filter(Stream<Person> personStream) {
+    return personStream.filter(p -> p.getEmail().equals(email));
+  }
 }

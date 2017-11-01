@@ -1,7 +1,6 @@
 package de.naju.adebar.model.human;
 
 import org.springframework.util.Assert;
-
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
@@ -9,9 +8,11 @@ import java.util.Iterator;
 import java.util.UUID;
 
 /**
- * As we want to link {@link Person} instances with their {@link ParticipantProfile}, {@link ActivistProfile} and
- * {@link ReferentProfile}, we somehow need to persist these associations. This is what this class is made for. It will
- * be used as the common primary key for all these classes, when they are translated to database entries.
+ * As we want to link {@link Person} instances with their {@link ParticipantProfile},
+ * {@link ActivistProfile} and {@link ReferentProfile}, we somehow need to persist these
+ * associations. This is what this class is made for. It will be used as the common primary key for
+ * all these classes, when they are translated to database entries.
+ * 
  * @author Rico Bergmann
  * @see Person
  * @see ParticipantProfile
@@ -19,64 +20,70 @@ import java.util.UUID;
  */
 @Embeddable
 public class PersonId implements Serializable, Iterator<PersonId> {
-	private static final long serialVersionUID = -6223486850240404100L;
-	
-	@Column(unique=true) private final String id;
+  private static final long serialVersionUID = -6223486850240404100L;
 
-    /**
-     * Just create a new identifier
-     */
-    PersonId() {
-        this.id = UUID.randomUUID().toString();
-    }
+  @Column(unique = true)
+  private final String id;
 
-    /**
-     * Create an identifier using an existing one
-     * @param id the existing id to use
-     */
-    public PersonId(String id) {
-        Assert.notNull(id, "Id may not be null!");
-        this.id = id;
-    }
+  /**
+   * Just create a new identifier
+   */
+  PersonId() {
+    this.id = UUID.randomUUID().toString();
+  }
 
-    /**
-     * @return the identifier. As it should not be modified under any circumstances, it is {@code final}
-     */
-    final String getId() {
-        return id;
-    }
+  /**
+   * Create an identifier using an existing one
+   * 
+   * @param id the existing id to use
+   */
+  public PersonId(String id) {
+    Assert.notNull(id, "Id may not be null!");
+    this.id = id;
+  }
 
-    // implementation of Iterator-interface
+  /**
+   * @return the identifier. As it should not be modified under any circumstances, it is
+   *         {@code final}
+   */
+  final String getId() {
+    return id;
+  }
 
-    @Override
-    public boolean hasNext() {
-        return true;
-    }
+  // implementation of Iterator-interface
 
-    @Override
-    public PersonId next() {
-        return new PersonId();
-    }
+  @Override
+  public boolean hasNext() {
+    return true;
+  }
 
-    // overridden from Object
+  @Override
+  public PersonId next() {
+    return new PersonId();
+  }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+  // overridden from Object
 
-        PersonId personId = (PersonId) o;
+  @Override
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (o == null || getClass() != o.getClass())
+      return false;
 
-        return id.equals(personId.id);
-    }
+    PersonId personId = (PersonId) o;
 
-    @Override
-    public int hashCode() {
-        return id.hashCode();
-    }
+    return id.equals(personId.id);
+  }
 
-    @Override  public String toString() {
-        return id;
-    }
+  @Override
+  public int hashCode() {
+    return id.hashCode();
+  }
+
+  @Override
+  public String toString() {
+    return id;
+  }
 
 }

@@ -11,12 +11,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Arrays;
 import java.util.List;
 
 /**
  * Basic testing of the {@link ReferentFilter}
+ * 
  * @author Rico Bergmann
  */
 @RunWith(SpringRunner.class)
@@ -25,24 +25,30 @@ import java.util.List;
 @Rollback
 @Component
 public class ReferentFilterUnitTest extends FilterTestBootstrapper {
-    private ReferentFilter referentFilter;
+  private ReferentFilter referentFilter;
 
-    @Test public void testEnforceReferent() {
-        List<Person> result = Arrays.asList(berta, fritz);
-        referentFilter = new ReferentFilter(FilterType.ENFORCE);
-        Assert.assertArrayEquals("Should only contain referents", result.toArray(), referentFilter.filter(personRepo.streamAll()).toArray());
-    }
+  @Test
+  public void testEnforceReferent() {
+    List<Person> result = Arrays.asList(berta, fritz);
+    referentFilter = new ReferentFilter(FilterType.ENFORCE);
+    Assert.assertArrayEquals("Should only contain referents", result.toArray(),
+        referentFilter.filter(personRepo.streamAll()).toArray());
+  }
 
-    @Test public void testIgnoreReferent() {
-        List<Person> result = Arrays.asList(hans, claus, heinz);
-        referentFilter = new ReferentFilter(FilterType.IGNORE);
-        Assert.assertArrayEquals("Should not contain referents", result.toArray(), referentFilter.filter(personRepo.streamAll()).toArray());
-    }
+  @Test
+  public void testIgnoreReferent() {
+    List<Person> result = Arrays.asList(hans, claus, heinz);
+    referentFilter = new ReferentFilter(FilterType.IGNORE);
+    Assert.assertArrayEquals("Should not contain referents", result.toArray(),
+        referentFilter.filter(personRepo.streamAll()).toArray());
+  }
 
-    @Test public void testFilterQualifications() {
-        Person[] result = {berta};
-        List<Qualification> qualifications = Arrays.asList(bertaQualification1, bertaQualification2);
-        referentFilter = new ReferentFilter(qualifications);
-        Assert.assertArrayEquals("Should only contain " + berta, result, referentFilter.filter(personRepo.streamAll()).toArray());
-    }
+  @Test
+  public void testFilterQualifications() {
+    Person[] result = {berta};
+    List<Qualification> qualifications = Arrays.asList(bertaQualification1, bertaQualification2);
+    referentFilter = new ReferentFilter(qualifications);
+    Assert.assertArrayEquals("Should only contain " + berta, result,
+        referentFilter.filter(personRepo.streamAll()).toArray());
+  }
 }

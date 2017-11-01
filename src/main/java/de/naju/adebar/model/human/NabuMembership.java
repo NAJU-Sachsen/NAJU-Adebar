@@ -4,65 +4,69 @@ import javax.persistence.Embeddable;
 import java.io.Serializable;
 
 /**
- * A person may be a club member of the NABU. For now we are just interested in its membership number.
+ * A person may be a club member of the NABU. For now we are just interested in its membership
+ * number.
+ * 
  * @author Rico Bergmann
  */
 @Embeddable
 public class NabuMembership implements Serializable {
-	private static final long serialVersionUID = 8877089173523167494L;
-	
-	private String membershipNumber;
+  private static final long serialVersionUID = 8877089173523167494L;
 
-    // constructors
+  private String membershipNumber;
 
-    /**
-     * Full constructor
-     * @param membershipNumber the membership number
-     */
-    public NabuMembership(String membershipNumber) {
-        this.membershipNumber = membershipNumber;
-    }
+  // constructors
 
-    /**
-     * Default constructor
-     */
-    public NabuMembership() {}
+  /**
+   * Full constructor
+   * 
+   * @param membershipNumber the membership number
+   */
+  public NabuMembership(String membershipNumber) {
+    this.membershipNumber = membershipNumber;
+  }
 
-    // getter and setter
+  /**
+   * Default constructor
+   */
+  public NabuMembership() {}
 
-    /**
-     * @return the membership number
-     */
-    public String getMembershipNumber() {
-        return membershipNumber;
-    }
+  // getter and setter
 
-    /**
-     * @param membershipNumber the membership number
-     */
-    public void setMembershipNumber(String membershipNumber) {
-        this.membershipNumber = membershipNumber;
-    }
+  /**
+   * @return the membership number
+   */
+  public String getMembershipNumber() {
+    return membershipNumber;
+  }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+  /**
+   * @param membershipNumber the membership number
+   */
+  public void setMembershipNumber(String membershipNumber) {
+    this.membershipNumber = membershipNumber;
+  }
 
-        NabuMembership that = (NabuMembership) o;
+  @Override
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (o == null || getClass() != o.getClass())
+      return false;
 
-        return membershipNumber != null ? membershipNumber.equals(that.membershipNumber) : that.membershipNumber == null;
-    }
+    NabuMembership that = (NabuMembership) o;
 
-    @Override
-    public int hashCode() {
-        return membershipNumber != null ? membershipNumber.hashCode() : 0;
-    }
+    return membershipNumber != null ? membershipNumber.equals(that.membershipNumber)
+        : that.membershipNumber == null;
+  }
 
-    @Override
-    public String toString() {
-        return "NabuMembership{" +
-                "membershipNumber='" + membershipNumber + '\'' +
-                '}';
-    }
+  @Override
+  public int hashCode() {
+    return membershipNumber != null ? membershipNumber.hashCode() : 0;
+  }
+
+  @Override
+  public String toString() {
+    return "NabuMembership{" + "membershipNumber='" + membershipNumber + '\'' + '}';
+  }
 }

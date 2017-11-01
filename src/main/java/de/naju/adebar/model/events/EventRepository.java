@@ -5,8 +5,10 @@ import org.springframework.stereotype.Repository;
 
 /**
  * Repository to access {@link Event} instances
+ * 
  * @author Rico Bergmann
  * @see Event
  */
 @Repository("eventRepo")
-public interface EventRepository extends ReadOnlyEventRepository, CrudRepository<Event, EventId> {}
+public interface EventRepository extends ReadOnlyEventRepository, CrudRepository<Event, EventId> {
+}
