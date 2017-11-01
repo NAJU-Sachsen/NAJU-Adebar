@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width,initial-scale=1" name="viewport" />
+  <title>Einstellungen | Adebar</title>
+  <script type="text/javascript" src="../static/resources/js/jquery.min.js" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+  <script type="text/javascript" src="../static/resources/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+  <link rel="stylesheet" type="text/css" href="../static/resources/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+
+  <link rel="stylesheet" type="text/css" href="../static/resources/css/style.css" th:href="@{/resources/css/style.css}" />
+  <link rel="stylesheet" type="text/css" href="../static/resources/css/accounts.css" th:href="@{/resources/css/accounts.css}" />
+  <link rel="stylesheet" type="text/css" href="../static/resources/css/animation.css" th:href="@{/resources/css/animation.css}" />
+
+  <script type="text/javascript" src="../static/resources/js/list.min.js" th:src="@{/resources/js/list.min.js}"></script>
+  <script type="text/javascript" src="../static/resources/js/list.fuzzysearch.min.js" th:src="@{/resources/js/list.fuzzysearch.min.js}"></script>
+
+  <link rel="stylesheet" type="text/css" href="../static/resources/css/bootstrap-select.min.css" th:href="@{/resources/css/bootstrap-select.min.css}" />
+  <script type="text/javascript" src="../static/resources/js/bootstrap-select.min.js" th:src="@{/resources/js/bootstrap-select.min.js}"></script>
+
+  <link rel="stylesheet" type="text/css" href="../static/resources/css/bootstrap-datetimepicker.min.css" th:href="@{/resources/css/bootstrap-datetimepicker.min.css}" />
+  <script type="text/javascript" src="../static/resources/js/moment-with-locales.min.js" th:src="@{/resources/js/moment-with-locales.min.js}"></script>
+  <script type="text/javascript" src="../static/resources/js/bootstrap-datetimepicker.min.js" th:src="@{/resources/js/bootstrap-datetimepicker.min.js}"></script>
+
+</head>
+
+<body>
+  <!-- central navigation -->
+  <nav id="top-nav" class="navbar navbar-static-top navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-nav" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        <a class="navbar-brand" href="#">NAJU Adebar</a>
+      </div>
+
+      <div id="main-nav" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li role="presentation">
+            <a href="overview.html" th:href="@{/overview}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Übersicht</a>
+          </li>
+          <li role="presentation">
+            <a href="persons.html" th:href="@{/persons}"><span class="glyphicon glyphicon-user nav-icon" aria-hidden="true"></span> Personen <span class="sr-only">(akutell)</span></a>
+          </li>
+          <li role="presentation">
+            <a href="events.html" th:href="@{/events}"><span class="glyphicon glyphicon-tent nav-icon" aria-hidden="true"></span> Veranstaltungen</a>
+          </li>
+          <li role="presentation">
+            <a href="localGroups.html" th:href="@{/localGroups}"><span class="glyphicon glyphicon-map-marker nav-icon" aria-hidden="true"></span> Ortsgruppen</a>
+          </li>
+          <li role="presentation">
+            <a href="newsletters.html" th:href="@{/newsletters}"><span class="glyphicon glyphicon-envelope nav-icon" aria-hidden="true"></span> Newsletter</a>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Verschiedenes <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li sec:authorize="hasRole('ROLE_ADMIN')">
+                <a href="accounts.html" th:href="@{/accounts}">
+                  <span class="glyphicon glyphicon-dashboard"></span> Accounts
+                </a>
+              </li>
+              <li class="disabled"><a href="#"><span class="glyphicon glyphicon-leaf"></span> Über</a></li>
+              <li class="disabled"><a href="#"><span class="glyphicon glyphicon-globe"></span> Hilfe</a></li>
+              <li><a href="#"><span class="glyphicon glyphicon-flash"></span> Fehler melden</a></li>
+            </ul>
+          </li>
+          <li class="dropdown active">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+              <span class="glyphicon glyphicon-user"></span> <span sec:authentication="principal.associatedPerson.firstName">Anon</span>
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li class="active">
+                <a href="settings.html" th:href="@{/settings}">
+                  <span class="glyphicon glyphicon-cog"></span> Einstellungen
+                </a>
+              </li>
+              <li class="logout">
+                <button type="submit" form="logout-user">
+                  <span class="glyphicon glyphicon-log-out"></span> Ausloggen
+                </button>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- page specific dialogs -->
+  <section id="dialogs">
+    <h2 class="hidden">Formulare</h2>
+
+  </section>
+
+  <!-- page specific content-->
+  <main id="main">
+
+    <!-- status messages concerning the last action -->
+    <section id="status">
+      <h2 class="hidden">Status</h2>
+
+    </section>
+
+    <!-- the 'real' content finally -->
+    <section id="content" class="tab-content">
+
+      <div class="col-md-2 col-md-offset-2">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h1 class="panel-title">Einstellungen</h1>
+          </div>
+          <ul class="nav nav-pills nav-stacked" role="tablist">
+            <li role="presentation" class="active">
+              <a href="#settings-general" class="border-cornered" role="tab" aria-controls="settings-general" data-toggle="pill">Allgemein</a>
+            </li>
+            <li role="presentation">
+              <a href="#settings-account" class="border-cornered" role="tab" aria-controls="settings-accont" data-toggle="pill">Account</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-md-6 tab-content">
+        <div role="tabpanel" class="tab-pane fade in active" id="settings-general">
+          <div class="container-fluid">
+            <div class="row">
+              <h2 class="page-header">Aussehen</h2>
+            </div>
+            <div class="row">
+              <div class="form-group">
+                <div class="container-fluid">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="panel panel-default">
+                        <div class="panel-heading">
+                          <h3 class="panel-title">Klassisch</h3>
+                        </div>
+                        <div class="panel-body no-padding">
+                          <div class="thumbnail no-margin-btm no-padding border-cornered">
+                            <img src="../static/resources/img/design_classic.png" th:src="@{/resources/img/design_classic.png}" />
+                          </div>
+                        </div>
+                        <div class="panel-footer text-center">
+                          <button type="button" class="btn btn-default" disabled="disabled">Wählen</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="panel panel-default">
+                        <div class="panel-heading">
+                          <h3 class="panel-title">NAJU</h3>
+                        </div>
+                        <div class="panel-body no-padding">
+                          <div class="thumbnail no-margin-btm no-padding border-cornered">
+                            <img src="../static/resources/img/design_naju.png" th:src="@{/resources/img/design_naju.png}" />
+                          </div>
+                        </div>
+                        <div class="panel-footer text-center">
+                          <button type="button" class="btn btn-default" disabled="disabled">Wählen</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="alert alert-warning">
+                        Wird bald unterstützt.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <hr />
+              <div class="pull-right">
+                <button type="button" class="btn btn-success">Speichern</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="settings-account">
+          <h2 class="page-header">Passwort ändern</h2>
+          <form method="POST" th:action="@{/settings/password/update}">
+            <div class="col-md-8 change-password">
+              <div class="form-group old-password">
+                <label>Altes Passwort</label>
+                <input type="password" name="current-password" class="form-control dark" required="required" />
+              </div>
+              <div class="form-group new-password">
+                <label>Neues Passwort</label>
+                <input type="password" name="new-password" class="form-control dark" required="required" />
+              </div>
+              <div class="form-group confirm-password">
+                <label>Passwort bestätigen</label>
+                <input type="password" class="form-control dark" required="required" />
+              </div>
+              <p class="alert alert-warning weak-password">
+                Schwaches Passwort
+              </p>
+              <p class="alert alert-danger passwords-differ">
+                Passwörter stimmen nicht überein
+              </p>
+              <hr />
+              <div class="pull-right">
+                <button type="submit" class="btn btn-success">Aktualisieren</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+
+    </section>
+
+    <form id="logout-user" method="POST" th:action="@{/logout}">
+      <input type="hidden" name="csrf" th:value="csrf" />
+    </form>
+
+  </main>
+  <input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+  <script src="../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
+  <script src="../static/resources/js/passwords.js" th:src="@{/resources/js/passwords.js}"></script>
+  <script src="../static/resources/js/settings.js" th:src="@{/resources/js/settings.js}"></script>
+</body>
+
+</html>

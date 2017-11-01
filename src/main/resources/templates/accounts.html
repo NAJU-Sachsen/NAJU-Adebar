@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width,initial-scale=1" name="viewport" />
+  <title>Accounts | Adebar</title>
+  <script type="text/javascript" src="../static/resources/js/jquery.min.js" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+  <script type="text/javascript" src="../static/resources/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+  <link rel="stylesheet" type="text/css" href="../static/resources/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+
+  <link rel="stylesheet" type="text/css" href="../static/resources/css/style.css" th:href="@{/resources/css/style.css}" />
+  <link rel="stylesheet" type="text/css" href="../static/resources/css/accounts.css" th:href="@{/resources/css/accounts.css}" />
+  <link rel="stylesheet" type="text/css" href="../static/resources/css/animation.css" th:href="@{/resources/css/animation.css}" />
+
+  <script type="text/javascript" src="../static/resources/js/list.min.js" th:src="@{/resources/js/list.min.js}"></script>
+  <script type="text/javascript" src="../static/resources/js/list.fuzzysearch.min.js" th:src="@{/resources/js/list.fuzzysearch.min.js}"></script>
+
+  <link rel="stylesheet" type="text/css" href="../static/resources/css/bootstrap-select.min.css" th:href="@{/resources/css/bootstrap-select.min.css}" />
+  <script type="text/javascript" src="../static/resources/js/bootstrap-select.min.js" th:src="@{/resources/js/bootstrap-select.min.js}"></script>
+
+  <link rel="stylesheet" type="text/css" href="../static/resources/css/bootstrap-datetimepicker.min.css" th:href="@{/resources/css/bootstrap-datetimepicker.min.css}" />
+  <script type="text/javascript" src="../static/resources/js/moment-with-locales.min.js" th:src="@{/resources/js/moment-with-locales.min.js}"></script>
+  <script type="text/javascript" src="../static/resources/js/bootstrap-datetimepicker.min.js" th:src="@{/resources/js/bootstrap-datetimepicker.min.js}"></script>
+
+</head>
+
+<body>
+  <!-- central navigation -->
+  <nav id="top-nav" class="navbar navbar-static-top navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-nav" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        <a class="navbar-brand" href="#">NAJU Adebar</a>
+      </div>
+
+      <div id="main-nav" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li role="presentation">
+            <a href="overview.html" th:href="@{/overview}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Übersicht</a>
+          </li>
+          <li role="presentation">
+            <a href="persons.html" th:href="@{/persons}"><span class="glyphicon glyphicon-user nav-icon" aria-hidden="true"></span> Personen <span class="sr-only">(akutell)</span></a>
+          </li>
+          <li role="presentation">
+            <a href="events.html" th:href="@{/events}"><span class="glyphicon glyphicon-tent nav-icon" aria-hidden="true"></span> Veranstaltungen</a>
+          </li>
+          <li role="presentation">
+            <a href="localGroups.html" th:href="@{/localGroups}"><span class="glyphicon glyphicon-map-marker nav-icon" aria-hidden="true"></span> Ortsgruppen</a>
+          </li>
+          <li role="presentation">
+            <a href="newsletters.html" th:href="@{/newsletters}"><span class="glyphicon glyphicon-envelope nav-icon" aria-hidden="true"></span> Newsletter</a>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown active">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Verschiedenes <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li class="active" sec:authorize="hasRole('ROLE_ADMIN')">
+                <a href="accounts.html" th:href="@{/accounts}">
+                  <span class="glyphicon glyphicon-dashboard"></span> Accounts
+                </a>
+              </li>
+              <li class="disabled"><a href="#"><span class="glyphicon glyphicon-leaf"></span> Über</a></li>
+              <li class="disabled"><a href="#"><span class="glyphicon glyphicon-globe"></span> Hilfe</a></li>
+              <li><a href="#"><span class="glyphicon glyphicon-flash"></span> Fehler melden</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+              <span class="glyphicon glyphicon-user"></span> <span sec:authentication="principal.associatedPerson.firstName">Anon</span>
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a href="settings.html" th:href="@{/settings}">
+                  <span class="glyphicon glyphicon-cog"></span> Einstellungen
+                </a>
+              </li>
+              <li class="logout">
+                <button type="submit" form="logout-user">
+                  <span class="glyphicon glyphicon-log-out"></span> Ausloggen
+                </button>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- page specific dialogs -->
+  <section id="dialogs">
+    <h2 class="hidden">Formulare</h2>
+
+    <!-- 'create account' modal -->
+    <div id="create-account" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="create-account-label">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Schließen">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h3 id="create-account-label" class="modal-title">Account erstellen</h3>
+          </div>
+          <div class="modal-body">
+            <div class="container-fluid">
+              <div class="row">
+                <form id="new-account" method="POST" th:object="${createAccountForm}" th:action="@{/accounts/create}">
+                  <div class="col-md-6" style="border-right: #ccc 1px solid;">
+                    <h4>Person suchen</h4>
+                    <div class="form-group">
+                      <div class="input-group">
+                        <input type="search" class="form-control person-search" placeholder="Name"/>
+                        <div class="input-group-btn">
+                          <button type="button" class="btn btn-primary perform-search">
+                            <span class="glyphicon glyphicon-search"></span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <ul class="list-group container-fluid search-results" th:remove="body">
+                      <li class="list-group-item row">
+                        <h5 class="list-group-item-heading">Hans Wurst</h5>
+                        <p class="list-group-item-text col-md-10">
+                          01.02.34, Entenhausen
+                        </p>
+                        <div class="col-md-2">
+                          <input type="radio" name="person" />
+                        </div>
+                      </li>
+                      <li class="list-group-item row">
+                        <h5 class="list-group-item-heading">Hans Wurst</h5>
+                        <p class="list-group-item-text col-md-10">
+                          01.02.34, Entenhausen
+                        </p>
+                        <div class="col-md-2">
+                          <input type="radio" name="person" />
+                        </div>
+                      </li>
+                      <li class="list-group-item row">
+                        <h5 class="list-group-item-heading">Hans Wurst</h5>
+                        <p class="list-group-item-text col-md-10">
+                          01.02.34, Entenhausen
+                        </p>
+                        <div class="col-md-2">
+                          <input type="radio" name="person" />
+                        </div>
+                      </li>
+                    </ul>
+                    <div class="text-center searching">
+                        Suche läuft... <span class="glyphicon glyphicon-refresh glyphicon-load-animate"></span>
+                    </div>
+                    <div class="alert alert-info no-results">
+                        Keine Übereinstimmung
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <h4>Accountdetails</h4>
+                    <div class="form-group">
+                      <div class="input-group">
+                        <div class="input-group-addon">
+                          <span class="glyphicon glyphicon-user"></span>
+                        </div>
+                        <input type="text" class="form-control" name="username" placeholder="Username" th:field="*{username}" />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="input-group">
+                        <div class="input-group-addon">
+                          <span class="glyphicon glyphicon-lock"></span>
+                        </div>
+                        <input type="password" class="form-control" name="password" placeholder="Passwort" th:field="*{password}" />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <select class="form-control" size="7" name="roles" multiple="multiple" th:field="*{roles}">
+                        <option value="ROLE_ADMIN">ROLE_ADMIN</option>
+                        <option value="ROLE_BOARD_MEMBER">ROLE_BOARD_MEMBER</option>
+                        <option value="ROLE_CHAIRMAN">ROLE_CHAIRMAN</option>
+                        <option value="ROLE_TREASURER">ROLE_TREASURER</option>
+                        <option value="ROLE_EMPLOYEE">ROLE_EMPLOYEE</option>
+                        <option value="ROLE_FOEJ">ROLE_FOEJ</option>
+                        <option value="ROLE_JUBIREF">ROLE_JUBIREF</option>
+                      </select>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+            <button type="submit" form="new-account" class="btn btn-primary">Erstellen</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 'edit roles' modal -->
+    <div id="edit-roles" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="edit-roles-label">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Schließen">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h3 id="edit-roles-label" class="modal-title">Rollen</h3>
+          </div>
+          <div class="modal-body">
+            <form id="update-roles" method="POST" th:action="@{/accounts/update}">
+              <input type="hidden" name="account" />
+              <select class="form-control roles" name="roles" size="7" multiple="multiple">
+                <option>ROLE_ADMIN</option>
+                <option>ROLE_BOARD_MEMBER</option>
+                <option>ROLE_CHAIRMAN</option>
+                <option>ROLE_TREASURER</option>
+                <option>ROLE_EMPLOYEE</option>
+                <option>ROLE_FOEJ</option>
+                <option>ROLE_JUBIREF</option>
+              </select>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+            <button type="submit" form="update-roles" class="btn btn-primary">Aktualisieren</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 'reset password' modal -->
+    <div id="reset-password" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="reset-password-label">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Schließen">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h3 id="reset-password-label" class="modal-title">Passwort zurücksetzen</h3>
+          </div>
+          <div class="modal-body">
+            <form id="new-password" method="POST" th:action="@{/accounts/reset-password}">
+              <input type="hidden" name="account" />
+              <div class="input-group">
+                <div class="input-group-addon">
+                  <span class="glyphicon glyphicon-lock"></span>
+                </div>
+                <input type="password" class="form-control" name="password" placeholder="Neues Passwort" />
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+            <button type="submit" form="new-password" class="btn btn-primary">Zurücksetzen</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 'delete account' modal -->
+    <div id="delete-account" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="delete-account-label">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Schließen">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h3 id="delete-account-label" class="modal-title">Account löschen</h3>
+          </div>
+          <div class="modal-body">
+            <p>
+              Der Account wird gelöscht. Danach ist keine Anmeldung mehr möglich.
+            </p>
+            <form id="remove-account" method="POST" th:action="@{/accounts/delete}">
+              <input type="text" class="form-control" disabled="disabled" value="Max Mustermann" />
+              <input type="hidden" name="account" value="Max Mustermann" />
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+            <button type="submit" form="remove-account" class="btn btn-danger">Löschen</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- page specific content-->
+  <main id="main">
+
+    <!-- status messages concerning the last action -->
+    <section id="status">
+      <h2 class="hidden">Status</h2>
+
+    </section>
+
+    <!-- the 'real' content finally -->
+    <section id="content" class="tab-content">
+
+      <h1>Accounts</h1>
+
+      <div class="col-md-6 col-md-offset-3">
+        <div class="form-group form-group-lg" style="margin: 20px 0 40px 0;">
+          <div class="input-group">
+            <input type="search" class="form-control fuzzy-search" placeholder="Username" />
+            <div class="input-group-addon">
+              <span class="glyphicon glyphicon-search"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <table class="table table-striped table-hover accounts">
+        <thead>
+          <tr>
+            <th>Person</th>
+            <th>Username</th>
+            <th>Rollen</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody class="account-list" th:remove="all-but-first">
+          <tr th:each="account : ${accounts}">
+            <td class="col-md-2 person" th:text="|${account.associatedPerson.firstName} ${account.associatedPerson.lastName}|">Franzi Freundlich</td>
+            <td class="col-md-2 username" th:text="${account.username}">franzi</td>
+            <td class="col-md-2 roles" data-roles="ROLE_JUBIREF" th:attr="data-roles=${{#iterables.join(account.authorities)}}" th:remove="all-but-first">
+              <span class="label label-default" th:each="auth: ${account.authorities}" th:text="${auth.authority}">ROLE_EMPLOYEE</span>
+              <span class="label label-primary">ROLE_JUBIREF</span>
+            </td>
+            <td class="col-md-1">
+              <div class="btn-group pull-right">
+                <button type="button" class="btn btn-xs btn-link dropdown-toggle options" data-toggle="dropdown">
+                <span class="glyphicon glyphicon-option-vertical"></span>
+              </button>
+                <ul class="dropdown-menu">
+                  <li><a href="#" data-toggle="modal" data-target="#edit-roles">Anpassen</a></li>
+                  <li>
+                    <a href="#" data-toggle="modal" data-target="#reset-password">
+                      Passwort zurücksetzen
+                    </a>
+                  </li>
+                  <li><a href="#" data-toggle="modal" data-target="#delete-account">Löschen</a></li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="col-md-2 person">Max Mustermann</td>
+            <td class="col-md-2 username">max</td>
+            <td class="col-md-2 roles" data-roles="ROLE_ADMIN;ROLE_BOARD_MEMBER;ROLE_CHAIRMAN">
+              <span class="label label-danger">ROLE_ADMIN</span>
+              <span class="label label-default">ROLE_BOARD_MEMBER</span>
+              <span class="label label-primary">ROLE_CHAIRMAN</span>
+            </td>
+            <td class="col-md-1">
+              <div class="btn-group pull-right">
+                <button type="button" class="btn btn-xs btn-link dropdown-toggle options" data-toggle="dropdown">
+                <span class="glyphicon glyphicon-option-vertical"></span>
+              </button>
+                <ul class="dropdown-menu">
+                  <li><a href="#" data-toggle="modal" data-target="#edit-roles">Anpassen</a></li>
+                  <li>
+                    <a href="#" class="btn btn-link" data-toggle="modal" data-target="#reset-password">
+                      Passwort zurücksetzen
+                    </a>
+                  </li>
+                  <li><a href="#" data-toggle="modal" data-target="#delete-account">Löschen</a></li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="col-md-2 person">Katharina Klücklich</td>
+            <td class="col-md-2 username">katha</td>
+            <td class="col-md-2 roles" data-roles="ROLE_FOEJ">
+              <span class="label label-default">ROLE_FOEJ</span>
+            </td>
+            <td class="col-md-1">
+              <div class="btn-group pull-right">
+                <button type="button" class="btn btn-xs btn-link dropdown-toggle options" data-toggle="dropdown">
+                <span class="glyphicon glyphicon-option-vertical"></span>
+              </button>
+                <ul class="dropdown-menu">
+                  <li><a href="#" data-toggle="modal" data-target="#edit-roles">Anpassen</a></li>
+                  <li>
+                    <a href="#" class="btn btn-link" data-toggle="modal" data-target="#reset-password">
+                      Passwort zurücksetzen
+                    </a>
+                  </li>
+                  <li><a href="#" data-toggle="modal" data-target="#delete-account">Löschen</a></li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="col-md-2 person">Hans Wurst</td>
+            <td class="col-md-2 username">hans</td>
+            <td class="col-md-2 roles" data-roles="ROLE_TREASURER;ROLE_BOARD_MEMBER">
+              <span class="label label-default">ROLE_TREASURER</span>
+              <span class="label label-default">ROLE_BOARD_MEMBER</span>
+            </td>
+            <td class="col-md-1">
+              <div class="btn-group pull-right">
+                <button type="button" class="btn btn-xs btn-link dropdown-toggle options" data-toggle="dropdown">
+                <span class="glyphicon glyphicon-option-vertical"></span>
+              </button>
+                <ul class="dropdown-menu">
+                  <li><a href="#" data-toggle="modal" data-target="#edit-roles">Anpassen</a></li>
+                  <li>
+                    <a href="#" class="btn btn-link" data-toggle="modal" data-target="#reset-password">
+                      Passwort zurücksetzen
+                    </a>
+                  </li>
+                  <li><a href="#" data-toggle="modal" data-target="#delete-account">Löschen</a></li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="pull-right">
+        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#create-account">
+          <span class="glyphicon glyphicon-plus"></span> Erstellen
+        </button>
+      </div>
+
+    </section>
+
+    <form id="logout-user" method="POST" th:action="@{/logout}">
+      <input type="hidden" name="csrf" th:value="csrf" />
+    </form>
+
+  </main>
+  <input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+  <script src="../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
+  <script src="../static/resources/js/accounts.js" th:src="@{/resources/js/accounts.js}"></script>
+</body>
+
+</html>

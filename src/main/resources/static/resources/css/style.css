@@ -18,6 +18,10 @@ main {
     margin: 2em 15% 0 15%;
 }
 
+input[readonly] {
+  cursor: not-allowed;
+}
+
 .status p {
     margin: 0 auto;
 }
@@ -53,8 +57,16 @@ fieldset.inline-options label {
     margin-left: 10px;
 }
 
+.border-cornered {
+  border-radius: 0 !important;
+}
+
 .no-padding-left {
     padding-left: 0;
+}
+
+.no-padding {
+  padding: 0;
 }
 
 .margin-top-sm {
@@ -79,6 +91,10 @@ fieldset.inline-options label {
 
 .margin-btm-lg {
     margin-bottom: 15px;
+}
+
+.no-margin-btm {
+  margin-bottom: 0;
 }
 
 .hide-initially {
@@ -191,6 +207,10 @@ fieldset.inline-options label {
     border-color: #d43f3a;
 }
 
+.form-control.dark {
+  background-color: #fafbfc;
+}
+
 .list-group-minimalistic .list-group-item:first-child,
 .list-group-minimalistic .list-group-item:last-child {
     border-radius: 0;
@@ -208,4 +228,28 @@ fieldset.inline-options label {
 
 .inline {
     display: inline;
+}
+
+.logout {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+.logout button[type="submit"] {
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: 400;
+  line-height: 1.42857143;
+  color: #333;
+  background-color: transparent;
+  border: 0;
+  white-space: nowrap;
+}
+
+.logout button[type="submit"]:hover {
+  color: #262626;
+  background-color: #f5f5f5;
+  text-decoration: none;
 }

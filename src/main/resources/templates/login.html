@@ -1,0 +1,37 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+
+<html  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width,initial-scale=1" name="viewport"/>
+    <title>Adebar | Login</title>
+
+    <script type="text/javascript" src="../static/resources/js/jquery.min.js" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <link rel="stylesheet" type="text/css" href="../static/resources/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+
+    <link rel="stylesheet" type="text/css" href="../static/resources/css/login.css" th:href="@{/resources/css/login.css}"/>
+</head>
+<body>
+    <main class="container">
+        <form class="form-signin" th:action="@{/login}" method="post">
+          <h1 class="form-signin-heading">Anmeldung</h1>
+          <img class="stork" src="../static/resources/img/stork.png" alt="Adebar Logo" th:src="@{/resources/img/stork.png}" />
+          <p class="alert alert-danger" th:if="${param.error}">
+              Benutzername oder Password ungültig.
+          </p>
+          <p class="alert alert-info" th:if="${param.logout}">
+              See ya soon!
+          </p>
+          <label for="username" class="sr-only">Email address</label>
+          <input type="text" name="username" id="username" class="form-control" placeholder="Benutzername" required="required" autofocus="autofocus" />
+          <label for="password" class="sr-only">Password</label>
+          <input type="password" name="password" id="password" class="form-control" placeholder="Password" required="required" />
+          <button class="btn btn-lg btn-primary btn-block" type="submit">Einloggen</button>
+          <p class="help-block">
+              Benutzername "adebar", Passwort "test"
+          </p>
+          <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+        </form>
+    </main>
+</body>
+</html>
