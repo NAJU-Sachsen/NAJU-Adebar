@@ -1,13 +1,20 @@
 package de.naju.adebar.app.human.filter;
 
-import de.naju.adebar.app.human.PersonManager;
-import de.naju.adebar.model.human.*;
-import org.junit.Before;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import org.junit.Before;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import de.naju.adebar.app.human.PersonManager;
+import de.naju.adebar.model.human.Address;
+import de.naju.adebar.model.human.Gender;
+import de.naju.adebar.model.human.JuleicaCard;
+import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.human.PersonFactory;
+import de.naju.adebar.model.human.PersonRepository;
+import de.naju.adebar.model.human.Qualification;
+import de.naju.adebar.model.human.QualificationRepository;
 
 /**
  * @author Rico Bergmann
@@ -64,8 +71,10 @@ public class FilterTestBootstrapper {
   public void setUp() {
     System.out.println(personRepo.findAll());
 
-    hans = personFactory.buildNew("Hans", "Wurst", "hans.wurst@web.de").makeParticipant()
-        .makeActivist().create();
+    // hans was already created as the application's admin
+    hans = personRepo.findByFirstNameAndLastNameAndEmail("Hans", "Wurst", "hans.wurst@web.de");
+    hans.makeParticipant();
+    hans.makeActivist();
     hans.setAddress(hansAddress);
     hans.getParticipantProfile().setGender(Gender.MALE);
     hans.getParticipantProfile().setDateOfBirth(hansDob);

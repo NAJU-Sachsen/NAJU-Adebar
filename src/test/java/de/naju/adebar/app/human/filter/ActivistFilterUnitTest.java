@@ -1,8 +1,7 @@
 package de.naju.adebar.app.human.filter;
 
-import de.naju.adebar.app.filter.DateFilterType;
-import de.naju.adebar.app.filter.FilterType;
-import de.naju.adebar.model.human.Person;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,8 +10,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.Arrays;
-import java.util.List;
+import de.naju.adebar.app.filter.DateFilterType;
+import de.naju.adebar.app.filter.FilterType;
+import de.naju.adebar.model.human.Person;
 
 /**
  * Basic testing of the {@link ActivistFilter}
@@ -29,7 +29,7 @@ public class ActivistFilterUnitTest extends FilterTestBootstrapper {
 
   @Test
   public void testEnforceActivists() {
-    List<Person> expected = Arrays.asList(hans, claus, berta);
+    List<Person> expected = Arrays.asList(claus, berta, hans);
     activistFilter = new ActivistFilter(FilterType.ENFORCE);
     Object[] result = activistFilter.filter(personRepo.streamAll()).toArray();
     Assert.assertArrayEquals("Should only contain activists", expected.toArray(), result);
