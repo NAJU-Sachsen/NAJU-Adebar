@@ -76,10 +76,13 @@ $('#edit-subscriber-form').on('show.bs.modal', function(event) {
     var recipient = button.data('whatever');
     var modal = $(this);
 
+    const csrfToken = $('#csrf').val();
+
     var request = {
         async: true,
         data: {
-            email: recipient
+            email: recipient,
+            _csrf: csrfToken
         },
         dataType: 'json',
         method: 'GET',

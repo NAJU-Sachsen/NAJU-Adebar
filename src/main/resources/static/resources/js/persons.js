@@ -172,6 +172,8 @@ function displaySearchResults(results) {
 $('#persons').on('change', function(obj) {
     var query = obj.target.value;
 
+    const csrfToken = $('#csrf').val();
+
     $('#content').find('.no-results').hide();
     $('#content').find('.searching').show();
     $('#content').find('.person-list').empty();
@@ -179,7 +181,8 @@ $('#persons').on('change', function(obj) {
     var request = {
         async: true,
         data: {
-            query: query
+            query: query,
+            _csrf: csrfToken
         },
         dataType: 'json',
         method: 'POST',

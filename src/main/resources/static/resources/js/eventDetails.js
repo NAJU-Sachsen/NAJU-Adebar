@@ -59,12 +59,15 @@ $('#add-counselor-search-btn').on('click', function() {
     var eventId = $('#event-id').val();
     var url = `/events/${eventId}/counselors/add-new`;
 
+    const csrfToken = $('#csrf').val();
+
     var activistsRequest = {
         async: true,
         data: {
             firstname: firstname,
             lastname: lastname,
-            city: city
+            city: city,
+            _csrf: csrfToken
         },
         dataType: 'json',
         method: 'POST',
@@ -86,7 +89,8 @@ $('#add-counselor-search-btn').on('click', function() {
             firstName: firstname,
             lastName: lastname,
             city: city,
-            activist: false
+            activist: false,
+            _csrf: csrfToken
         },
         dataType: 'json',
         method: 'POST',
@@ -110,12 +114,15 @@ $('#add-organizer-search-btn').on('click', function() {
     var eventId = $('#event-id').val();
     var url = `/events/${eventId}/organizers/add-new`;
 
+    const csrfToken = $('#csrf').val();
+
     var activistsRequest = {
         async: true,
         data: {
             firstname: firstname,
             lastname: lastname,
-            city: city
+            city: city,
+            _csrf: csrfToken
         },
         dataType: 'json',
         method: 'POST',
@@ -137,7 +144,8 @@ $('#add-organizer-search-btn').on('click', function() {
             firstName: firstname,
             lastName: lastname,
             city: city,
-            activist: false
+            activist: false,
+            _csrf: csrfToken
         },
         dataType: 'json',
         method: 'POST',
@@ -342,13 +350,16 @@ $(document).on('click', 'button.save-reservation', function() {
 
     var row = createReservationRow(description, slots, email);
 
+    const csrfToken = $('#csrf').val();
+
     var request = {
         async: true,
         data: {
             'event': eventId,
             description: description,
             slots: slots,
-            email: email
+            email: email,
+            _csrf: csrfToken
         },
         dataType: 'json',
         method: 'POST',
@@ -378,12 +389,15 @@ $(document).on('click', 'button.remove-reservation', function() {
     var eventId = $('#event-id').val();
     var reservation = $(this).closest('tr.reservation');
     var id = reservation.find('button.remove-reservation').data('description');
+    
+    const csrfToken = $('#csrf').val();
 
     var request = {
         async: true,
         data: {
             'event': eventId,
-            id: id
+            id: id,
+            _csrf: csrfToken
         },
         dataType: 'json',
         method: 'POST',
@@ -418,13 +432,16 @@ $('tr.new-reservation').find('button.add').click(function() {
     var email = $('tr.new-reservation').find('input.reservation-email').val();
     var row = createReservationRow(description, slots, email);
 
+    const csrfToken = $('#csrf').val();
+
     var request = {
         async: true,
         data: {
             'event': eventId,
             description: description,
             slots: slots,
-            email: email
+            email: email,
+            _csrf: csrfToken
         },
         dataType: 'json',
         method: 'POST',

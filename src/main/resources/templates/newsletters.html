@@ -54,16 +54,37 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">
-                        Verschiedenes <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li class="disabled"><a href="#"><span class="glyphicon glyphicon-leaf"></span> Über</a></li>
-                        <li class="disabled"><a href="#"><span class="glyphicon glyphicon-globe"></span> Hilfe</a></li>
-                        <li><a href="#"><span class="glyphicon glyphicon-flash"></span> Fehler melden</a></li>
-                    </ul>
-                </li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Verschiedenes <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a href="accounts.html" th:href="@{/accounts}">
+                      <span class="glyphicon glyphicon-dashboard"></span> Accounts
+                    </a>
+                  </li>
+                  <li class="disabled"><a href="#"><span class="glyphicon glyphicon-leaf"></span> Über</a></li>
+                  <li class="disabled"><a href="#"><span class="glyphicon glyphicon-globe"></span> Hilfe</a></li>
+                  <li><a href="#"><span class="glyphicon glyphicon-flash"></span> Fehler melden</a></li>
+                </ul>
+              </li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                  <span class="glyphicon glyphicon-user"></span> <span sec:authentication="principal.associatedPerson.firstName">Anon</span>
+                  <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href="settings.html" th:href="@{/settings}">
+                      <span class="glyphicon glyphicon-cog"></span> Einstellungen
+                    </a>
+                  </li>
+                  <li class="logout">
+                    <button type="submit" form="logout-user">
+                      <span class="glyphicon glyphicon-log-out"></span> Ausloggen
+                    </button>
+                  </li>
+                </ul>
+              </li>
             </ul>
         </div>
     </div>
@@ -473,6 +494,7 @@
     <!-- storing the last session's tab here to restore it later-->
     <input type="hidden" id="session-tab" value="" th:value="${tab}"/>
 </main>
+<input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 <script src="../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
 <script src="../static/resources/js/newsletters.js" th:src="@{/resources/js/newsletters.js}"></script>
 </body>

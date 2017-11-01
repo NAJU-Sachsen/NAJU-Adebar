@@ -59,14 +59,37 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Verschiedenes <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li class="disabled"><a href="#"><span class="glyphicon glyphicon-leaf"></span> Über</a></li>
-                        <li class="disabled"><a href="#"><span class="glyphicon glyphicon-globe"></span> Hilfe</a></li>
-                        <li><a href="#"><span class="glyphicon glyphicon-flash"></span> Fehler melden</a></li>
-                    </ul>
-                </li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Verschiedenes <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a href="accounts.html" th:href="@{/accounts}">
+                      <span class="glyphicon glyphicon-dashboard"></span> Accounts
+                    </a>
+                  </li>
+                  <li class="disabled"><a href="#"><span class="glyphicon glyphicon-leaf"></span> Über</a></li>
+                  <li class="disabled"><a href="#"><span class="glyphicon glyphicon-globe"></span> Hilfe</a></li>
+                  <li><a href="#"><span class="glyphicon glyphicon-flash"></span> Fehler melden</a></li>
+                </ul>
+              </li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                  <span class="glyphicon glyphicon-user"></span> <span sec:authentication="principal.associatedPerson.firstName">Anon</span>
+                  <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href="settings.html" th:href="@{/settings}">
+                      <span class="glyphicon glyphicon-cog"></span> Einstellungen
+                    </a>
+                  </li>
+                  <li class="logout">
+                    <button type="submit" form="logout-user">
+                      <span class="glyphicon glyphicon-log-out"></span> Ausloggen
+                    </button>
+                  </li>
+                </ul>
+              </li>
             </ul>
         </div>
     </div>
@@ -654,12 +677,12 @@
                       <label class="col-sm-3 control-label">Personen suchen</label>
                       <div class="col-sm-9">
                           <div class="clearfix" style="margin-bottom: 5px;">
-                              <input type="text" id="add-personToContact-search-firstname" class="form-control pull-left" style="width: 48%;" placeholder="Vorname" />
-                              <input type="text" id="add-personToContact-search-lastname" class="form-control pull-right" style="width: 48%;" placeholder="Nachname" />
+                              <input type="text" id="add-personToContact-search-firstname" class="form-control pull-left first-name" style="width: 48%;" placeholder="Vorname" />
+                              <input type="text" id="add-personToContact-search-lastname" class="form-control pull-right last-name" style="width: 48%;" placeholder="Nachname" />
                           </div>
                           <div class="clearfix">
-                              <input type="text" id="add-personToContact-search-city" class="form-control pull-left" style="width: 68%;" placeholder="Ort"/>
-                              <button type="button" id="add-personToContact-search-btn" class="btn btn-primary pull-right" style="padding-left: 20px; padding-right: 20px;">
+                              <input type="text" id="add-personToContact-search-city" class="form-control pull-left city" style="width: 68%;" placeholder="Ort"/>
+                              <button type="button" id="add-personToContact-search-btn" class="btn btn-primary pull-right search" style="padding-left: 20px; padding-right: 20px;">
                                   Suchen
                               </button>
                           </div>
@@ -676,7 +699,7 @@
                                   <th>Auswählen</th>
                               </tr>
                           </thead>
-                          <tbody id="add-personToContact-tablebody" th:remove="body">
+                          <tbody id="add-personToContact-tablebody" class="matches" th:remove="body">
                               <tr>
                                   <td>Max Mustermann</td>
                                   <td>31.02.1999</td>
@@ -788,12 +811,12 @@
                         <label class="col-sm-3 control-label">Personen suchen</label>
                         <div class="col-sm-9">
                             <div class="clearfix" style="margin-bottom: 5px;">
-                                <input type="text" id="add-waitingList-search-firstname" class="form-control pull-left" style="width: 48%;" placeholder="Vorname" />
-                                <input type="text" id="add-waitingList-search-lastname" class="form-control pull-right" style="width: 48%;" placeholder="Nachname" />
+                                <input type="text" id="add-waitingList-search-firstname" class="form-control pull-left first-name" style="width: 48%;" placeholder="Vorname" />
+                                <input type="text" id="add-waitingList-search-lastname" class="form-control pull-right last-name" style="width: 48%;" placeholder="Nachname" />
                             </div>
                             <div class="clearfix">
-                                <input type="text" id="add-waitingList-search-city" class="form-control pull-left" style="width: 68%;" placeholder="Ort"/>
-                                <button type="button" id="add-waitingList-search-btn" class="btn btn-primary pull-right" style="padding-left: 20px; padding-right: 20px;">
+                                <input type="text" id="add-waitingList-search-city" class="form-control pull-left city" style="width: 68%;" placeholder="Ort"/>
+                                <button type="button" id="add-waitingList-search-btn" class="btn btn-primary pull-right search" style="padding-left: 20px; padding-right: 20px;">
                                     Suchen
                                 </button>
                             </div>
@@ -810,7 +833,7 @@
                                     <th>Auswählen</th>
                                 </tr>
                             </thead>
-                            <tbody id="add-waitingList-tablebody" th:remove="body">
+                            <tbody id="add-waitingList-tablebody" class="matches" th:remove="body">
                                 <tr>
                                     <td>Max Mustermann</td>
                                     <td>31.02.1999</td>
@@ -1584,6 +1607,7 @@
     <input type="hidden" id="event-remaining-capactiy" value="-1" th:value="${event.remainingCapacity}" />
 
 </main>
+<input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 <script src="../static/resources/js/displayMatchingPersons.js" th:src="@{/resources/js/displayMatchingPersons.js}"></script>
 <script src="../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
 <script src="../static/resources/js/personSearch.js" th:src="@{/resources/js/personSearch.js}"></script>

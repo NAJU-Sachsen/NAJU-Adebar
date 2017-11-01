@@ -68,10 +68,13 @@ function displayEvents(events) {
 function initEvents() {
     var groupId = $('#local-group-id').val();
 
+    const csrfToken = $('#csrf').val();
+
     var request = {
         async: true,
         data: {
-            groupId: groupId
+            groupId: groupId,
+            _csrf: csrfToken
         },
         dataType: 'json',
         success:  displayEvents,

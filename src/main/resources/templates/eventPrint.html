@@ -188,5 +188,6 @@
         $('#counselors').tablesorter();
         alert('Diese Seite einfach ausdrucken (z.B. über die Strg+P Tastenkombination)');
     </script>
+    <input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 </body>
 </html>
