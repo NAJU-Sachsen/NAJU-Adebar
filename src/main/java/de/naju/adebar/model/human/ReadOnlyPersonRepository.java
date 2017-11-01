@@ -77,4 +77,18 @@ public interface ReadOnlyPersonRepository
    * @return all persons with the given name
    */
   Iterable<Person> findByFirstNameAndLastName(String firstName, String lastName);
+
+  /**
+   * @param email the email
+   * @return all persons with the given email address
+   */
+  Iterable<Person> findByEmail(String email);
+
+  /**
+   * @param firstName the first name
+   * @param lastName the last name
+   * @param email the email address
+   * @return the matching person
+   */
+  Person findByFirstNameAndLastNameAndEmail(String firstName, String lastName, String email);
 }
