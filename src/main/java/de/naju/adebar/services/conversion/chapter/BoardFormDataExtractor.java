@@ -1,12 +1,12 @@
 package de.naju.adebar.services.conversion.chapter;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import de.naju.adebar.app.human.PersonManager;
 import de.naju.adebar.controller.forms.chapter.BoardForm;
 import de.naju.adebar.model.chapter.Board;
 import de.naju.adebar.model.human.Person;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
 /**
  * Service to extract the necessary data from a board form
@@ -38,12 +38,11 @@ public class BoardFormDataExtractor {
     }
 
     for (String memberId : boardForm.getMemberIds()) {
+      if (memberId.equals(boardForm.getChairmanId())) {
+        continue;
+      }
       Person member = personManager.findPerson(memberId).orElseThrow(IllegalStateException::new);
       board.addBoardMember(member);
-    }
-
-    if (!boardForm.getMemberIds().contains(boardForm.getChairmanId())) {
-      board.addBoardMember(chairman);
     }
 
     return board;
