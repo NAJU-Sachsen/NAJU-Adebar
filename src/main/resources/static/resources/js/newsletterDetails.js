@@ -9,10 +9,13 @@ $('#add-subscriber-new-tab').on('shown.bs.tab', function() {
 
 
 $('#delete-subscriber-modal').on('show.bs.modal', function (event) {
-   var button = $(event.relatedTarget);
-   var recipient = button.data('email');
-   var modal = $(this);
-   modal.find('.modal-body input').val(recipient)
+   const button = $(event.relatedTarget);
+   const recipient = button.data('email');
+   const modal = $(this);
+   const csrfToken = $('#csrf').val();
+   
+   modal.find('.modal-body input[name="email"]').val(recipient);
+   modal.find('.modal-body input[name="_csrf"]').val(csrfToken);
 });
 
 $(function() {

@@ -224,8 +224,9 @@
                </div>
                <div class="modal-body">
                   <form id="delete-subscriber" th:action="@{'/newsletters/' + ${newsletter.id} + '/unsubscribe'}" method="post">
+                     <input type="hidden" name="_csrf" value="-1" />
                      <label for="delete-subscriber-name" class="sr-only"></label>
-                      <input type="text" id="delete-subscriber-name" class="form-control" name="email" readonly="readonly" value="max.muster@email.com" />
+                      <input type="text" id="delete-subscriber-name" class="form-control" name="email" readonly="readonly" value="max.muster@email.com" />  
                   </form>
                </div>
                <div class="modal-footer">

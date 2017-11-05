@@ -246,6 +246,7 @@
               <section class="modal-body">
                   <form id="remove-contributor" class="form-horizontal" method="post" th:action="@{/projects/{id}/contributors/remove(id=${project.id})}">
                       <input type="hidden" name="person-id" value="-1" />
+                      <input type="hidden" name="_csrf" value="-1" />
                       <label for="remove-contributor-name" class="sr-only">Name</label>
                       <input type="text" id="remove-contributor-name" class="form-control" value="Max Mustermann" readonly="readonly" disabled="disabled" />
                   </form>

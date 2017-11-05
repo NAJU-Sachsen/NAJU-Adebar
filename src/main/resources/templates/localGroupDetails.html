@@ -252,6 +252,7 @@
               <section class="modal-body">
                   <form id="remove-member" class="form-horizontal" method="post" th:action="@{/localGroups/{id}/members/remove(id=${localGroup.id})}">
                       <input type="hidden" name="member-id" value="-1" />
+                      <input type="hidden" name="_csrf" value="-1" />
                       <label for="remove-member-name" class="sr-only">Name</label>
                       <input type="text" id="remove-member-name" class="form-control" value="Max Mustermann" readonly="readonly" disabled="disabled" />
                   </form>

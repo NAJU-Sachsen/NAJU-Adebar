@@ -6,12 +6,15 @@ $('#contributors').find('a').on('click', function(e) {
 
 // init the 'contributor member' modal
 $('#remove-contributor-modal').on('show.bs.modal', function(e) {
-    var button = $(e.relatedTarget);
-    var id = button.data('id');
-    var name = button.data('name');
+    const button = $(e.relatedTarget);
+    const id = button.data('id');
+    const name = button.data('name');
+
+    const csrfToken = $('#csrf').val();
 
     $(this).find('input[disabled]').val(name);
-    $(this).find('input[type=hidden]').val(id);
+    $(this).find('input[name="person-id"]').val(id);
+    $(this).find('input[name="_csrf"]').val(id);
 });
 
 $(function() {

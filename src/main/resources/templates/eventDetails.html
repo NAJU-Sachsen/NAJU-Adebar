@@ -356,7 +356,7 @@
                                   </div>
                               </div>
                               <div class="clearfix">
-                                  <form class="form-inline pull-right" method="POST" th:action="@{'/events/' + ${event.id} + '/counselors/add-new'}">
+                                  <form class="form-inline pull-right" method="POST" th:action="@{'/events/' + ${event.id} + '/organizers/add-new'}">
                                       <input type="hidden" name="person-id" value="-1" />
                                       <button type="submit" class="btn btn-default btn-sm">Als Aktive(n) markieren und hinzufügen</button>
                                   </form>
@@ -370,7 +370,7 @@
                                   </div>
                               </div>
                               <div class="clearfix">
-                                  <form class="form-inline pull-right" method="POST" th:action="@{'/events/' + ${event.id} + '/counselors/add-new'}">
+                                  <form class="form-inline pull-right" method="POST" th:action="@{'/events/' + ${event.id} + '/organizers/add-new'}">
                                       <input type="hidden" name="person-id" value="-1" />
                                       <button type="submit" class="btn btn-default btn-sm">Als Aktive(n) markieren und hinzufügen</button>
                                   </form>
@@ -384,7 +384,7 @@
                                   </div>
                               </div>
                               <div class="clearfix">
-                                  <form class="form-inline pull-right" method="POST" th:action="@{'/events/' + ${event.id} + '/counselors/add-new'}">
+                                  <form class="form-inline pull-right" method="POST" th:action="@{'/events/' + ${event.id} + '/organizers/add-new'}">
                                       <input type="hidden" name="person-id" value="-1" />
                                       <button type="submit" class="btn btn-default btn-sm">Als Aktive(n) markieren und hinzufügen</button>
                                   </form>
@@ -611,6 +611,7 @@
               <section class="modal-body">
                   <form id="remove-organizer" class="form-horizontal" method="post" th:action="@{'/events/' + ${event.id} + '/organizers/remove'}">
                       <input type="hidden" name="person-id" value="-1" />
+                      <input type="hidden" name="_csrf" value="-1" />
                       <label for="remove-organizer-name" class="sr-only">Name</label>
                       <input type="text" id="remove-organizer-name" class="form-control" value="Max Mustermann" readonly="readonly" disabled="disabled"/>
                   </form>
@@ -643,6 +644,7 @@
               <section class="modal-body">
                   <form id="remove-counselor" class="form-horizontal" th:action="@{'/events/' + ${event.id} + '/counselors/remove'}">
                       <input type="hidden" name="person-id" value="-1" />
+                      <input type="hidden" name="_csrf" value="-1" />
                       <label for="remove-counselor-name" class="sr-only">Name</label>
                       <input type="text" id="remove-counselor-name" class="form-control" value="Max Mustermann" readonly="readonly" disabled="disabled"/>
                   </form>

@@ -66,12 +66,14 @@ $('#edit-activist-juleica-picker').datetimepicker({
 });
 
 $('#delete-qualification-modal').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget); // Button that triggered the modal
-    var qualification = button.data('qualification'); // Extract info from data-* attributes
-    // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-    // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-    var modal = $(this);
-    modal.find('.modal-body input').val(qualification)
+    const button = $(event.relatedTarget);
+    const qualification = button.data('qualification');
+    const modal = $(this);
+
+    const csrfToken = $('#csrf').val();
+
+    modal.find('.modal-body input[name="name"]').val(qualification);
+    modal.find('.modal-body input[name="_csrf"]').val(csrfToken);
 });
 
 $('#edit-activist-isActivist').click(function() {

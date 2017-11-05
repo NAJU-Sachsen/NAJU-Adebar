@@ -358,6 +358,7 @@
             </header>
             <section class="modal-body">
                <form id="delete-qualification" method="post" th:action="@{'/persons/' + ${person.id} + '/qualifications/remove'}">
+                  <input type="hidden" name="_csrf" value="-1" />
                   <label for="remove-qualifikation-name" class="sr-only">Qualifikation</label>
                   <input type="text" id="remove-qualifikation-name" class="form-control" name="name" readonly="readonly" value="Erste-Hilfe-Kurs" />
                </form>

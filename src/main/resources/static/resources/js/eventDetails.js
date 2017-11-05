@@ -1,8 +1,9 @@
 
-function createPersonListEntry(url, personId, name, dob, address) {
+function createPersonListEntry(url, csrfToken, personId, name, dob, address) {
     var btn =
     `<div class="clearfix">
         <form class="form-inline pull-right" method="POST" action="${url}">
+            <input type="hidden" name="_csrf" value="${csrfToken}" />
             <input type="hidden" name="person-id" value="${personId}" />
             <button type="submit" class="btn btn-default btn-sm">Als Aktive(n) markieren und hinzufügen</button>
         </form>
@@ -31,6 +32,9 @@ function createPersonListEntry(url, personId, name, dob, address) {
 function displayMatchingNonActivists(modal, result, eventId) {
     var panel = modal.find('.new-activists');
     var list = panel.find('ul');
+
+    const csrfToken = $('#csrf').val();
+
     list.empty();
 
     if (!result.length) {
@@ -40,7 +44,7 @@ function displayMatchingNonActivists(modal, result, eventId) {
 
     for (var i = 0; i < result.length; i++) {
         var person = result[i];
-        var entry = createPersonListEntry(eventId, person.id, person.name, person.dob, person.address);
+        var entry = createPersonListEntry(eventId, csrfToken, person.id, person.name, person.dob, person.address);
         list.append(entry);
     }
 
@@ -177,23 +181,25 @@ $('#edit-participant-modal').on('show.bs.modal', function(event) {
 });
 
 $('#remove-counselor-modal').on('show.bs.modal', function(event) {
-    var button = $(event.relatedTarget);
-    var id = button.data('id');
-    var name = button.data('name');
+    const button = $(event.relatedTarget);
+    const id = button.data('id');
+    const name = button.data('name');
+    const csrfToken = $('#csrf').val();
 
     $(this).find('input[disabled]').val(name);
-    $(this).find('input[type=hidden]').val(id);
-
+    $(this).find('input[name="person-id"]').val(id);
+    $(this).find('input[name="_csrf"]').val(csrfToken);
 });
 
 $('#remove-organizer-modal').on('show.bs.modal', function(event) {
-    var button = $(event.relatedTarget);
-    var id = button.data('id');
-    var name = button.data('name');
+  const button = $(event.relatedTarget);
+  const id = button.data('id');
+  const name = button.data('name');
+  const csrfToken = $('#csrf').val();
 
-    $(this).find('input[disabled]').val(name);
-    $(this).find('input[type=hidden]').val(id);
-
+  $(this).find('input[disabled]').val(name);
+  $(this).find('input[name="person-id"]').val(id);
+  $(this).find('input[name="_csrf"]').val(csrfToken); 
 });
 
 $('#edit-personToContact-modal').on('show.bs.modal', function(event) {
@@ -389,7 +395,7 @@ $(document).on('click', 'button.remove-reservation', function() {
     var eventId = $('#event-id').val();
     var reservation = $(this).closest('tr.reservation');
     var id = reservation.find('button.remove-reservation').data('description');
-    
+
     const csrfToken = $('#csrf').val();
 
     var request = {
