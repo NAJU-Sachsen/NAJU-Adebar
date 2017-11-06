@@ -1,3 +1,60 @@
+
+function createPersonListEntry(url, csrfToken, personId, name, dob, address) {
+    var btn =
+    `<div class="clearfix">
+        <form class="form-inline pull-right" method="POST" action="${url}">
+            <input type="hidden" name="_csrf" value="${csrfToken}" />
+            <input type="hidden" name="person-id" value="${personId}" />
+            <button type="submit" class="btn btn-default btn-sm">Als Aktive(n) markieren und hinzufügen</button>
+        </form>
+     </div>`;
+     address = address.trim();
+     var description = '';
+     if (dob || address) {
+         description += '<div class="list-group-item-text">';
+         if (dob) {
+             description += `<span class="pers-dob">* ${dob}</span>`;
+         }
+         if (address) {
+             description += `<span class="pers-address">${address}</span>`;
+         }
+         description += '</div>';
+     }
+
+     var person =
+     `<div class="pull-left">
+         <h5 class="list-group-item-heading">${name}</h5>
+         ${description}
+     </div>`;
+     return '<li class="list-group-item">' + person + btn + '</li>';
+}
+
+function displayMatchingNonActivists(modal, result, eventId) {
+    var panel = modal.find('.new-activists');
+    var list = panel.find('ul');
+
+    const csrfToken = $('#csrf').val();
+
+    list.empty();
+
+    if (!result.length) {
+        panel.hide();
+        return;
+    }
+
+    for (var i = 0; i < result.length; i++) {
+        var person = result[i];
+        var entry = createPersonListEntry(eventId, csrfToken, person.id, person.name, person.dob, person.address);
+        list.append(entry);
+    }
+
+    panel.show();
+}
+
+$('#participants').find('a').on('click', function(e){
+    e.stopPropagation();
+});
+
 // create an html node consisting of the given subelements
 // no sanity checks are performed
 function createHtmlNode(type, text) {

@@ -1,5 +1,16 @@
 package de.naju.adebar.controller;
 
+import java.util.Arrays;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import de.naju.adebar.app.chapter.LocalGroupManager;
 import de.naju.adebar.app.human.DataProcessor;
 import de.naju.adebar.app.human.PersonManager;
 import de.naju.adebar.controller.forms.chapter.AddLocalGroupForm;
@@ -10,19 +21,13 @@ import de.naju.adebar.controller.forms.events.EventForm;
 import de.naju.adebar.model.chapter.Board;
 import de.naju.adebar.model.chapter.ExistingMemberException;
 import de.naju.adebar.model.chapter.LocalGroup;
-import de.naju.adebar.app.chapter.LocalGroupManager;
 import de.naju.adebar.model.human.Person;
-import de.naju.adebar.services.conversion.chapter.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import java.util.Arrays;
+import de.naju.adebar.model.human.PersonId;
+import de.naju.adebar.services.conversion.chapter.AddLocalGroupFormDataExtractor;
+import de.naju.adebar.services.conversion.chapter.BoardFormDataExtractor;
+import de.naju.adebar.services.conversion.chapter.BoardToBoardFormConverter;
+import de.naju.adebar.services.conversion.chapter.LocalGroupFormDataExtractor;
+import de.naju.adebar.services.conversion.chapter.LocalGroupToLocalGroupFormConverter;
 
 /**
  * Local group related controller mappings
@@ -198,6 +203,39 @@ public class LocalGroupController {
     localGroupManager.updateLocalGroup(groupId, localGroup);
 
     redirAttr.addFlashAttribute("memberRemoved", true);
+    return "redirect:/localGroups/" + groupId;
+  }
+
+  /**
+   * Adds a non-activist as member to the local group. This will make the person an activist.
+   * 
+   * @param groupId the chapter to which the person should be added
+   * @param personId the id of the person who should be added as counselor
+   * @param redirAttr attributes for the view to display some result information
+   * @return the local group's detail view
+   */
+  @RequestMapping("/localGroups/{gid}/members/add-new")
+  public String addNewMember(@PathVariable("gid") long groupId,
+      @RequestParam("person-id") String personId, RedirectAttributes redirAttr) {
+    LocalGroup localGroup =
+        localGroupManager.findLocalGroup(groupId).orElseThrow(IllegalArgumentException::new);
+    Person person = personManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
+
+    try {
+      person.makeActivist();
+      localGroup.addMember(person);;
+      personManager.updatePerson(new PersonId(personId), person);
+      localGroupManager.updateLocalGroup(groupId, localGroup);
+      redirAttr.addFlashAttribute("counselorAdded", true);
+    } catch (IllegalStateException e) {
+      // the person is already an activist
+      redirAttr.addFlashAttribute("existingActivist", true);
+
+    } catch (ExistingMemberException e) {
+      // the person is already an organizer
+      redirAttr.addFlashAttribute("existingMember", true);
+    }
+
     return "redirect:/localGroups/" + groupId;
   }
 

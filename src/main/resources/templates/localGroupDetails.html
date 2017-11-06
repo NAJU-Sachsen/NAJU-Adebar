@@ -230,6 +230,58 @@
                   <div class="alert alert-info no-results">
                       Keine Übereinstimmung
                   </div>
+                  <div class="panel panel-info new-activists">
+                      <div class="panel-heading">
+                          <h4 class="panel-title">Einige Personen wurden bisher noch nicht als Aktive registriert:</h4>
+                      </div>
+                      <ul class="list-group list-group-minimalistic" th:remove="body">
+                          <li class="list-group-item">
+                              <div class="pull-left">
+                                  <h5 class="list-group-item-heading">Max Mustermann</h5>
+                                  <div class="list-group-item-text">
+                                      <span>* 05.05.2005</span> <span>Freiberg</span>
+                                  </div>
+                              </div>
+                              <div class="clearfix">
+                                  <form class="form-inline pull-right" method="POST" th:action="@{'/events/' + ${event.id} + '/organizers/add-new'}">
+                                      <input type="hidden" name="person-id" value="-1" />
+                                      <button type="submit" class="btn btn-default btn-sm">Als Aktive(n) markieren und hinzufügen</button>
+                                  </form>
+                              </div>
+                          </li>
+                          <li class="list-group-item">
+                              <div class="pull-left">
+                                  <h5 class="list-group-item-heading">Max Mustermann</h5>
+                                  <div class="list-group-item-text">
+                                      <span>* 05.05.2005</span> <span>Freiberg</span>
+                                  </div>
+                              </div>
+                              <div class="clearfix">
+                                  <form class="form-inline pull-right" method="POST" th:action="@{'/events/' + ${event.id} + '/organizers/add-new'}">
+                                      <input type="hidden" name="person-id" value="-1" />
+                                      <button type="submit" class="btn btn-default btn-sm">Als Aktive(n) markieren und hinzufügen</button>
+                                  </form>
+                              </div>
+                          </li>
+                          <li class="list-group-item">
+                              <div class="pull-left">
+                                  <h5 class="list-group-item-heading">Max Mustermann</h5>
+                                  <div class="list-group-item-text">
+                                      <span>* 05.05.2005</span> <span>Freiberg</span>
+                                  </div>
+                              </div>
+                              <div class="clearfix">
+                                  <form class="form-inline pull-right" method="POST" th:action="@{'/events/' + ${event.id} + '/organizers/add-new'}">
+                                      <input type="hidden" name="person-id" value="-1" />
+                                      <button type="submit" class="btn btn-default btn-sm">Als Aktive(n) markieren und hinzufügen</button>
+                                  </form>
+                              </div>
+                          </li>
+                      </ul>
+                  </div>
+                  <div class="text-center searching-new-activists">
+                      Weiterführende Suche läuft... <span class="glyphicon glyphicon-refresh glyphicon-load-animate"></span>
+                  </div>
               </section>
               <footer class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
@@ -561,6 +613,15 @@
                </button>
                <p>
                   Vorstand wurde aktualisiert
+               </p>
+            </div>
+
+            <div class="alert alert-danger alert-dismissible" role="alert" th:if="${existingActivist}">
+               <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+               <p>
+                  Die Person ist bereits als Aktive(r) registriert!
                </p>
             </div>
 

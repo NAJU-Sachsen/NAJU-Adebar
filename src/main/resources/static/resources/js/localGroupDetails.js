@@ -124,11 +124,67 @@ $('#remove-member-modal').on('show.bs.modal', function(e) {
   $(this).find('input[name="_csrf"]').val(csrfToken);
 });
 
+$('#add-member-search-btn').on('click', function() {
+    var table = '#add-member-tablebody';
+    var firstname = $('#add-member-search-firstname').val();
+    var lastname = $('#add-member-search-lastname').val();
+    var city = $('#add-member-search-city').val();
+    var localGroupId = $('#local-group-id').val();
+    var url = `/localGroups/${localGroupId}/members/add-new`;
+
+    const csrfToken = $('#csrf').val();
+
+    var activistsRequest = {
+        async: true,
+        data: {
+            firstname: firstname,
+            lastname: lastname,
+            city: city,
+            _csrf: csrfToken
+        },
+        dataType: 'json',
+        method: 'POST',
+        success: function(response) {
+            $('#add-member-modal').find('.searching').hide();
+            displayMatchingPersons(table, response);
+        },
+        url: '/api/persons/activists/simpleSearch'
+    };
+
+    $(table).empty();
+    $('#add-member-modal').find('.searching').show();
+    $.ajax(activistsRequest);
+
+    var modal = $('#add-member-modal');
+    var personsRequest = {
+        async: true,
+        data: {
+            firstName: firstname,
+            lastName: lastname,
+            city: city,
+            activist: false,
+            _csrf: csrfToken
+        },
+        dataType: 'json',
+        method: 'POST',
+        success: function(response) {
+            $('#add-member-modal').find('.searching-new-activists').hide();
+            displayMatchingNonActivists(modal, response, url);
+        },
+        url: '/api/persons/search'
+    };
+
+    modal.find('.new-activists').hide();
+    $('#add-member-modal').find('.searching-new-activists').show();
+    $.ajax(personsRequest);
+});
+
 // init all js components
 $(function(){
     $('#add-member-modal').find('.no-results').hide();
     $('#add-member-modal').find('.searching').hide();
-    initSearch($('#add-member-modal'));
+    $('.searching-new-activists').hide();
+    $('.new-activists').hide();
 
     $('#add-project-period').find('input').datetimepicker({
         format: 'DD.MM.YYYY',
