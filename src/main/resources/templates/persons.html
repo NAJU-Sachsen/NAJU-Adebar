@@ -228,6 +228,19 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div id="add-person-activist-localgroups" class="hide-initially margin-top">
+                                  <select class="selectpicker" name="localGroups" data-width="auto" data-title="Ortsgruppen" multiple="multiple" th:remove="all-but-first" th:field="*{localGroups}">
+                                      <option th:each="chapter : ${chapters}" th:text="${chapter.name}" th:value="${chapter.id}">
+                                          NAJU Dresden
+                                      </option>
+                                      <option>
+                                          NAJU Freiberg
+                                      </option>
+                                      <option>
+                                          NAJU Leipzig
+                                      </option>
+                                  </select>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">

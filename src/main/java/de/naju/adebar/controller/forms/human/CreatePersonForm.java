@@ -14,6 +14,7 @@ public class CreatePersonForm extends EditPersonForm {
   private boolean hasJuleica;
   private String juleicaExpiryDate;
   private List<String> qualifications;
+  private List<Long> localGroups;
 
   public CreatePersonForm() {}
 
@@ -59,6 +60,14 @@ public class CreatePersonForm extends EditPersonForm {
 
   public void setQualifications(List<String> qualifications) {
     this.qualifications = qualifications;
+  }
+
+  public List<Long> getLocalGroups() {
+    return localGroups;
+  }
+
+  public void setLocalGroups(List<Long> localGroups) {
+    this.localGroups = localGroups;
   }
 
   @Override

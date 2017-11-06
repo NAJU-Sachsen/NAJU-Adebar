@@ -93,6 +93,7 @@ public class PersonController {
     model.addAttribute("addPersonForm", new CreatePersonForm());
     model.addAttribute("filterPersonsForm", new FilterPersonForm());
     model.addAttribute("persons", personManager.repository().findFirst25());
+    model.addAttribute("chapters", localGroupManager.repository().findAll());
     model.addAttribute("qualifications", qualificationManager.repository().findAll());
     return "persons";
   }
@@ -136,6 +137,15 @@ public class PersonController {
 
     Person person = createPersonFormDataExtractor.extractPerson(createPersonForm);
     personManager.savePerson(person);
+
+    if (person.isActivist()) {
+      createPersonFormDataExtractor
+          .extractActivistLocalGroups(createPersonForm, localGroupManager.repository())
+          .ifPresent(groups -> {
+            groups.forEach(
+                chapter -> localGroupManager.addActivistToLocalGroupIfNecessary(chapter, person));
+          });
+    }
 
     return "redirect:/persons/" + person.getId();
   }

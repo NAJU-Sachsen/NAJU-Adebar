@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import de.naju.adebar.controller.forms.human.CreateParentForm;
 import de.naju.adebar.controller.forms.human.CreatePersonForm;
+import de.naju.adebar.model.chapter.LocalGroup;
+import de.naju.adebar.model.chapter.ReadOnlyLocalGroupRepository;
 import de.naju.adebar.model.human.ActivistProfile;
 import de.naju.adebar.model.human.Address;
 import de.naju.adebar.model.human.Gender;
@@ -166,6 +168,21 @@ public class CreatePersonFormDataExtractor {
       return Optional.empty();
     } else {
       return Optional.of(qualificationRepo.findAll(personForm.getQualifications()));
+    }
+  }
+
+  /**
+   * @param personForm the form containing the data to extract
+   * @param groupRepo repository containing all available local groups
+   * @return an {@link Optional} containing all local groups the person is active in, or an empty
+   *         optional if the person is no activist
+   */
+  public Optional<Iterable<LocalGroup>> extractActivistLocalGroups(CreatePersonForm personForm,
+      ReadOnlyLocalGroupRepository groupRepo) {
+    if (!personForm.isActivist()) {
+      return Optional.empty();
+    } else {
+      return Optional.of(groupRepo.findAll(personForm.getLocalGroups()));
     }
   }
 }

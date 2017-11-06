@@ -35,6 +35,7 @@ $('#filter-juleica-expiry-container').datetimepicker({
 // toggle juleica-checkbox depending on whether the person is an activist or not
 $('#add-person-isActivist').click(function() {
     $('#add-person-hasJuleica-container').slideToggle();
+    $('#add-person-activist-localgroups').slideToggle();
 });
 
 // toggle juleica expiry date input depending on whether the person has a
