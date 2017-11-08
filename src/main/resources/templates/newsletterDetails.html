@@ -45,6 +45,10 @@
                <li role="presentation" class="active">
                   <a href="localGroups.html" th:href="@{/newsletters}"><span class="glyphicon glyphicon-envelope nav-icon" aria-hidden="true"></span> Newsletter <span class="sr-only">(akutell)</span></a>
                </li>
+               <li role="presentation">
+                  <a href="https://trello.com/b/ukBMWp4T/naju-adebar" target="_blank"><span class="glyphicon glyphicon-blackboard" aria-hidden="true"></span>
+                   Trello</a>
+               </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <li class="dropdown">
@@ -226,7 +230,7 @@
                   <form id="delete-subscriber" th:action="@{'/newsletters/' + ${newsletter.id} + '/unsubscribe'}" method="post">
                      <input type="hidden" name="_csrf" value="-1" />
                      <label for="delete-subscriber-name" class="sr-only"></label>
-                      <input type="text" id="delete-subscriber-name" class="form-control" name="email" readonly="readonly" value="max.muster@email.com" />  
+                      <input type="text" id="delete-subscriber-name" class="form-control" name="email" readonly="readonly" value="max.muster@email.com" />
                   </form>
                </div>
                <div class="modal-footer">
