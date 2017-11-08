@@ -54,6 +54,7 @@ public class PersonController {
    */
   @RequestMapping("/defaultSearch")
   public Iterable<SimplePersonJSON> sendMatches(@RequestParam("query") String query) {
+    query = query.trim();
     Predicate predicate = searchPredicateCreator.createPredicate(query);
     List<Person> matches = personManager.repository().findAll(predicate);
     matches.sort((p1, p2) -> p1.getLastName().compareTo(p2.getLastName()));
