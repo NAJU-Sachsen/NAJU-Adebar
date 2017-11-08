@@ -113,14 +113,14 @@ $('#members').find('a').on('click', function(e) {
 });
 
 // init the 'remove member' modal
-$('#remove-member-modal').on('show.bs.modal', function(e) {
+$('#remove-member-modal').on('show.bs.modal', function(event) {
   const button = $(event.relatedTarget);
   const id = button.data('id');
   const name = button.data('name');
   const csrfToken = $('#csrf').val();
 
   $(this).find('input[disabled]').val(name);
-  $(this).find('input[name="person-id"]').val(id);
+  $(this).find('input[name="member-id"]').val(id);
   $(this).find('input[name="_csrf"]').val(csrfToken);
 });
 
