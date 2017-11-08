@@ -1466,7 +1466,7 @@
                                             </div>
 
                                             <div class="pull-right">
-                                                <button type="button" class="btn btn-default add-reservation" data-toggle="modal" data-target="#add-reservation-modal" th:disabled="${event.bookedOut}"><span class="glyphicon glyphicon-plus"></span> Hinzufügen</button>
+                                                <button type="button" class="btn btn-default btn-sm add-reservation" data-toggle="modal" data-target="#add-reservation-modal" th:disabled="${event.bookedOut}"><span class="glyphicon glyphicon-plus"></span> Hinzufügen</button>
                                             </div>
                                         </div>
                                     </div>
@@ -1522,8 +1522,8 @@
                                         </table>
                                         <div class="panel-body">
                                             <div class="pull-right">
-                                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-waitingList-modal"><span class="glyphicon glyphicon-plus"></span> Hinzufügen</button>
-                                                <button type="button" id="apply-waitingListTop" class="btn btn-default" data-person="Fritz Fröhlich" th:attr="data-person=(${event.hasWaitingList()} ? ${event.topWaitingListSpot.name} : '')" th:disabled="!${event.hasWaitingList()}"><span class="glyphicon glyphicon-chevron-up"></span> Ersten Eintrag übernehmen</button>
+                                                <button type="button" class="btn btn-sm btn-default" data-toggle="modal" data-target="#add-waitingList-modal"><span class="glyphicon glyphicon-plus"></span> Hinzufügen</button>
+                                                <button type="button" id="apply-waitingListTop" class="btn btn-sm btn-default" data-person="Fritz Fröhlich" th:attr="data-person=(${event.hasWaitingList()} ? ${event.topWaitingListSpot.name} : '')" th:disabled="!${event.hasWaitingList()}"><span class="glyphicon glyphicon-chevron-up"></span> Ersten Eintrag übernehmen</button>
                                             </div>
                                         </div>
                                     </div>
@@ -1564,7 +1564,7 @@
                                         </table>
                                         <div class="panel-body">
                                             <div class="pull-right">
-                                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-personToContact-modal"><span class="glyphicon glyphicon-plus"></span> Hinzufügen</button>
+                                                <button type="button" class="btn btn-sm btn-default" data-toggle="modal" data-target="#add-personToContact-modal"><span class="glyphicon glyphicon-plus"></span> Hinzufügen</button>
                                             </div>
                                         </div>
                                     </div>
