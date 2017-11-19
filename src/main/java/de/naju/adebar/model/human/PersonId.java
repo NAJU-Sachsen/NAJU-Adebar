@@ -12,14 +12,14 @@ import org.springframework.util.Assert;
  * {@link ActivistProfile} and {@link ReferentProfile}, we somehow need to persist these
  * associations. This is what this class is made for. It will be used as the common primary key for
  * all these classes, when they are translated to database entries.
- * 
+ *
  * @author Rico Bergmann
  * @see Person
  * @see ParticipantProfile
  * @see <a href="https://en.wikipedia.org/wiki/Unique_key">Primary keys</a>
  */
 @Embeddable
-public class PersonId implements Serializable, Iterator<PersonId> {
+public class PersonId implements Serializable, Iterator<PersonId>, Comparable<PersonId> {
   private static final long serialVersionUID = -6223486850240404100L;
 
   @Column(name = "id", unique = true)
@@ -34,7 +34,7 @@ public class PersonId implements Serializable, Iterator<PersonId> {
 
   /**
    * Create an identifier using an existing one
-   * 
+   *
    * @param id the existing id to use
    */
   public PersonId(String id) {
@@ -60,6 +60,13 @@ public class PersonId implements Serializable, Iterator<PersonId> {
   @Override
   public PersonId next() {
     return new PersonId();
+  }
+
+  // implementation of the Comparable-interface
+
+  @Override
+  public int compareTo(PersonId other) {
+    return this.id.compareTo(other.id);
   }
 
   // overridden from Object
