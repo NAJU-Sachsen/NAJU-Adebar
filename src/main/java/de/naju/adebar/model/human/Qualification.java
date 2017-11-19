@@ -1,6 +1,7 @@
 package de.naju.adebar.model.human;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import org.springframework.util.Assert;
@@ -12,12 +13,15 @@ import org.springframework.util.Assert;
  * rely on the correctness of that constraint. Therefore qualifications should be created with great
  * caution.
  */
-@Entity
+@Entity(name = "qualification")
 public class Qualification implements Serializable {
   private static final long serialVersionUID = 4926021134130535348L;
 
   @Id
+  @Column(name = "name")
   private String name;
+
+  @Column(name = "description", length = 512)
   private String description;
 
   /**

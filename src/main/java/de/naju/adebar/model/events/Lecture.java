@@ -1,12 +1,12 @@
 package de.naju.adebar.model.events;
 
-import de.naju.adebar.model.human.Person;
-import org.springframework.util.Assert;
+import java.time.LocalDateTime;
+import java.util.Arrays;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToOne;
-import java.time.LocalDateTime;
-import java.util.Arrays;
+import org.springframework.util.Assert;
+import de.naju.adebar.model.human.Person;
 
 /**
  * Abstraction of a lecture
@@ -15,16 +15,22 @@ import java.util.Arrays;
  */
 @Embeddable
 public class Lecture {
+
   @Column(name = "title")
   private String title;
+
   @OneToOne
   private Person referent;
+
   @Column(name = "startTime")
   private LocalDateTime startTime;
+
   @Column(name = "endTime")
   private LocalDateTime endTime;
+
   @Column(name = "description")
   private String description;
+
   @Column(name = "educationalUnits")
   private double educationalUnits;
 

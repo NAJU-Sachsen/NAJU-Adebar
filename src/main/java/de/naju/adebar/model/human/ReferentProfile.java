@@ -1,8 +1,16 @@
 package de.naju.adebar.model.human;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
+import javax.persistence.MapKey;
 import org.springframework.util.Assert;
-import javax.persistence.*;
-import java.util.*;
 
 /**
  * Referents are persons who can give lectures or host field trips and the like.
@@ -16,7 +24,8 @@ public class ReferentProfile {
   @Column(name = "personId")
   private PersonId personId;
 
-  @ManyToMany(cascade = CascadeType.ALL)
+  @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @MapKey
   private Map<String, Qualification> qualifications;
 
   // constructors

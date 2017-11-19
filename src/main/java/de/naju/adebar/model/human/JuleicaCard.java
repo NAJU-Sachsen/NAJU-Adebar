@@ -17,6 +17,7 @@ public class JuleicaCard implements Cloneable {
 
   @Column(name = "expiryDate")
   private LocalDate expiryDate;
+
   @Column(name = "level")
   private String level;
 

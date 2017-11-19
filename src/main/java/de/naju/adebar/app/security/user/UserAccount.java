@@ -3,10 +3,14 @@ package de.naju.adebar.app.security.user;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToOne;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,19 +24,23 @@ import de.naju.adebar.model.human.Person;
  * @author Rico Bergmann
  *
  */
-@Entity
+@Entity(name = "userAccount")
 public class UserAccount implements UserDetails {
   private static final long serialVersionUID = 756690351442752594L;
 
   @Id
+  @Column(name = "username")
   private String username;
 
+  @Embedded
   private Password password;
 
   @OneToOne
+  @JoinColumn(name = "person")
   private Person associatedPerson;
 
   @ElementCollection(fetch = FetchType.EAGER)
+  @JoinTable(name = "userAuthorities", joinColumns = @JoinColumn(name = "userAccount"))
   private List<SimpleGrantedAuthority> authorities;
 
   private boolean enabled;

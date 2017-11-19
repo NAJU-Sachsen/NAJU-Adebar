@@ -1,5 +1,7 @@
 package de.naju.adebar.model.human;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.EmbeddedId;
@@ -21,7 +23,9 @@ public class ActivistProfile implements Cloneable {
   private PersonId personId;
 
   @Embedded
-  @Column(name = "juleica")
+  @AttributeOverrides({
+      @AttributeOverride(name = "expiryDate", column = @Column(name = "juleicaExpiryDate")),
+      @AttributeOverride(name = "level", column = @Column(name = "juleicaLevel"))})
   private JuleicaCard juleicaCard;
 
   // constructors

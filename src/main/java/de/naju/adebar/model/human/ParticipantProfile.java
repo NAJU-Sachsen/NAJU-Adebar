@@ -1,9 +1,15 @@
 package de.naju.adebar.model.human;
 
-import org.springframework.util.Assert;
-import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.Period;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.Transient;
+import org.springframework.util.Assert;
 
 /**
  * Every camp participant has to fill a registration form. The corresponding data will be collected
@@ -20,14 +26,21 @@ public class ParticipantProfile {
 
   @Column(name = "gender")
   private Gender gender;
+
   @Column(name = "dateOfBirth")
   private LocalDate dateOfBirth;
+
   @Column(name = "eatingHabit")
   private String eatingHabits;
+
   @Column(name = "healthImpairment")
   private String healthImpairments;
+
   @Embedded
+  @AttributeOverrides({@AttributeOverride(name = "membershipNumber",
+      column = @Column(name = "nabuMembershipNumber"))})
   private NabuMembership nabuMembership;
+
   @Column(name = "remarks", length = 512)
   private String remarks;
 

@@ -1,12 +1,27 @@
 package de.naju.adebar.model.chapter;
 
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Transient;
+import org.springframework.util.Assert;
 import de.naju.adebar.model.events.Event;
 import de.naju.adebar.model.human.NoActivistException;
 import de.naju.adebar.model.human.Person;
-import org.springframework.util.Assert;
-import javax.persistence.*;
-import java.time.LocalDate;
-import java.util.*;
 
 /**
  * Abstraction of a project
@@ -15,23 +30,35 @@ import java.util.*;
  */
 @Entity(name = "project")
 public class Project {
+
   @Id
   @GeneratedValue
   @Column(name = "id")
   private long id;
+
   @Column(name = "name")
   private String name;
+
   @Column(name = "startTime")
   private LocalDate startTime;
+
   @Column(name = "endTime")
   private LocalDate endTime;
-  @ManyToOne
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "localGroup")
   private LocalGroup localGroup;
-  @OneToOne
+
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "personInCharge")
   private Person personInCharge;
-  @OneToMany
+
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JoinTable(inverseJoinColumns = @JoinColumn(name = "contributorId"))
   private List<Person> contributors;
-  @OneToMany
+
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JoinTable(inverseJoinColumns = @JoinColumn(name = "eventId"))
   private List<Event> events;
 
   // constructors

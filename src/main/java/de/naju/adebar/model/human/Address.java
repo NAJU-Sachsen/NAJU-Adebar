@@ -1,8 +1,9 @@
 package de.naju.adebar.model.human;
 
+import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import org.springframework.util.Assert;
-import java.io.Serializable;
 
 /**
  * Abstraction of an address. Each address consists of street, zip and city and may contain
@@ -15,9 +16,16 @@ public class Address implements Serializable {
   public final static int ZIP_LENGTH = 5;
   private static final long serialVersionUID = -3788598615103628404L;
 
+  @Column(name = "street")
   private String street;
+
+  @Column(name = "zip")
   private String zip;
+
+  @Column(name = "city")
   private String city;
+
+  @Column(name = "hints")
   private String additionalInfo;
 
   // constructors

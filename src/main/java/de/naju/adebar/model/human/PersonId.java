@@ -1,11 +1,11 @@
 package de.naju.adebar.model.human;
 
-import org.springframework.util.Assert;
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.UUID;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import org.springframework.util.Assert;
 
 /**
  * As we want to link {@link Person} instances with their {@link ParticipantProfile},
@@ -22,7 +22,7 @@ import java.util.UUID;
 public class PersonId implements Serializable, Iterator<PersonId> {
   private static final long serialVersionUID = -6223486850240404100L;
 
-  @Column(unique = true)
+  @Column(name = "id", unique = true)
   private final String id;
 
   /**

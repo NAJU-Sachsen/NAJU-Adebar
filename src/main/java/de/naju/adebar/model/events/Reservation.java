@@ -16,8 +16,10 @@ public class Reservation {
 
   @Column(name = "description")
   private String description;
+
   @Column(name = "contactEmail")
   private String contactEmail;
+
   @Column(name = "slots")
   private int numberOfSlots;
 

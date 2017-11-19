@@ -34,10 +34,13 @@ public class Subscriber implements Serializable {
   @GeneratedValue
   @Column(name = "id")
   private long id;
+
   @Column(name = "firstName")
   private String firstName;
+
   @Column(name = "lastName")
   private String lastName;
+
   @Column(name = "email", unique = true)
   private String email;
 

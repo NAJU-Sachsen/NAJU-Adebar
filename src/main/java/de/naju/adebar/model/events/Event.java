@@ -6,13 +6,21 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
+import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Transient;
@@ -38,28 +46,50 @@ public class Event {
   @EmbeddedId
   @Column(name = "id")
   private EventId id;
+
   @Column(name = "name")
   private String name;
+
   @Column(name = "startTime")
   private LocalDateTime startTime;
+
   @Column(name = "endTime")
   private LocalDateTime endTime;
 
   @Column(name = "minParticipantAge")
   private int minimumParticipantAge;
-  @Column(name = "intParticipationFee", length = 2048)
+
+  @Column(name = "intParticipationFee")
+  @Lob
   private Money internalParticipationFee;
-  @Column(name = "extParticipationFee", length = 2048)
+
+  @Column(name = "extParticipationFee")
+  @Lob
   private Money externalParticipationFee;
+
   @Embedded
+  @AttributeOverrides({
+      @AttributeOverride(name = "street", column = @Column(name = "locationStreet")),
+      @AttributeOverride(name = "zip", column = @Column(name = "locationZip")),
+      @AttributeOverride(name = "city", column = @Column(name = "locationCity")),
+      @AttributeOverride(name = "additionalInfo", column = @Column(name = "locationHints"))})
   private Address place;
-  @ManyToMany(cascade = CascadeType.ALL)
+
+  @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JoinTable(name = "counselors", inverseJoinColumns = @JoinColumn(name = "counselorId"))
   private List<Person> counselors;
-  @ManyToMany(cascade = CascadeType.ALL)
+
+  @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JoinTable(name = "eventOrganizers", inverseJoinColumns = @JoinColumn(name = "organizerId"))
   private List<Person> organizers;
-  @ElementCollection
+
+  @ElementCollection(fetch = FetchType.LAZY)
+  @CollectionTable(name = "eventToContact", joinColumns = @JoinColumn(name = "eventId"))
+  @MapKeyJoinColumn(name = "personId")
+  @Column(name = "contactInfo")
   private Map<Person, String> personsToContact;
-  @ElementCollection
+
+  @ElementCollection(fetch = FetchType.LAZY)
   private List<Lecture> lectures;
 
   @OneToOne(cascade = CascadeType.ALL)

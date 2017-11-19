@@ -1,7 +1,8 @@
 package de.naju.adebar.model.human;
 
-import javax.persistence.Embeddable;
 import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
 /**
  * A person may be a club member of the NABU. For now we are just interested in its membership
@@ -13,6 +14,7 @@ import java.io.Serializable;
 public class NabuMembership implements Serializable {
   private static final long serialVersionUID = 8877089173523167494L;
 
+  @Column(name = "membershipNumber")
   private String membershipNumber;
 
   // constructors

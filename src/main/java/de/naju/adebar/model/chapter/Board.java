@@ -1,11 +1,20 @@
 package de.naju.adebar.model.chapter;
 
-import de.naju.adebar.model.human.Person;
-import de.naju.adebar.util.Validation;
-import org.springframework.util.Assert;
-import javax.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
+import org.springframework.util.Assert;
+import de.naju.adebar.model.human.Person;
+import de.naju.adebar.util.Validation;
 
 /**
  * Abstraction of a board of directors
@@ -14,15 +23,20 @@ import java.util.List;
  */
 @Entity(name = "board")
 public class Board {
+
   @Id
   @GeneratedValue
   @Column(name = "id")
   private long id;
-  @OneToOne
+
+  @OneToOne(fetch = FetchType.LAZY)
   private Person chairman;
+
   @Column(name = "email")
   private String email;
-  @ManyToMany
+
+  @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JoinTable(inverseJoinColumns = @JoinColumn(name = "memberId"))
   private List<Person> members;
 
   /**

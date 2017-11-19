@@ -3,6 +3,7 @@ package de.naju.adebar.model.events;
 import java.io.Serializable;
 import java.util.UUID;
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import org.springframework.util.Assert;
 
 /**
@@ -11,10 +12,11 @@ import org.springframework.util.Assert;
  * @author Rico Bergmann
  * @see Event
  */
+@Embeddable
 public class EventId implements Serializable {
   private static final long serialVersionUID = 1592830997438533859L;
 
-  @Column(unique = true)
+  @Column(name = "id", unique = true)
   private final String id;
 
   /**

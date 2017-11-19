@@ -10,12 +10,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -39,6 +43,7 @@ import de.naju.adebar.model.newsletter.Newsletter;
  */
 @Entity(name = "localGroup")
 public class LocalGroup {
+
   @Id
   @GeneratedValue
   @Column(name = "id")
@@ -47,26 +52,34 @@ public class LocalGroup {
   @Column(name = "name", unique = true)
   private String name;
 
-  @Embedded
-  @Column(unique = true)
+  @AttributeOverrides({
+      @AttributeOverride(name = "street", column = @Column(name = "addressStreet")),
+      @AttributeOverride(name = "zip", column = @Column(name = "addressZip")),
+      @AttributeOverride(name = "city", column = @Column(name = "addressCity")),
+      @AttributeOverride(name = "additionalInfo", column = @Column(name = "addressHints"))})
   private Address address;
 
-  @ManyToMany(cascade = CascadeType.ALL)
+  @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JoinTable(inverseJoinColumns = @JoinColumn(name = "memberId"))
   private List<Person> members;
 
-  @ManyToMany(cascade = CascadeType.ALL)
+  @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JoinTable(inverseJoinColumns = @JoinColumn(name = "personId"))
   private List<Person> contactPersons;
 
-  @OneToMany(cascade = CascadeType.ALL)
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JoinTable(name = "localGroupEvents", joinColumns = @JoinColumn(name = "localGroupId"),
+      inverseJoinColumns = @JoinColumn(name = "eventId"))
   private List<Event> events;
 
-  @OneToMany(cascade = CascadeType.ALL)
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private Map<String, Project> projects;
 
-  @OneToOne(cascade = CascadeType.ALL)
+  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private Board board;
 
-  @OneToMany(cascade = CascadeType.ALL)
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JoinTable(inverseJoinColumns = @JoinColumn(name = "newsletterId"))
   private Set<Newsletter> newsletters;
 
   @Column(name = "nabuGroup")

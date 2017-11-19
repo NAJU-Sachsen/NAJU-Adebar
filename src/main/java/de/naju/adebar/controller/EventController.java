@@ -334,7 +334,7 @@ public class EventController {
 
     ParticipationInfo participationInfo = event.getParticipationInfo(person);
     participationInfo.setParticipationFeePayed(feePayed);
-    participationInfo.setRegistrationFormReceived(formReceived);
+    participationInfo.setRegistrationFormFilled(formReceived);
     participationInfo.setRemarks(remarks);
     event.updateParticipationInfo(person, participationInfo);
     eventManager.updateEvent(eventId, event);

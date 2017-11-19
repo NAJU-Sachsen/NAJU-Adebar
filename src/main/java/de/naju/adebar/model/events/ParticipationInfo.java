@@ -1,28 +1,25 @@
 package de.naju.adebar.model.events;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.Embeddable;
 
 /**
  * Meta-data needed for the participating persons
  * 
  * @author Rico Bergmann
  */
-@Entity(name = "participationInfo")
+@Embeddable
 public class ParticipationInfo {
 
-  @Id
-  @GeneratedValue
-  @Column(name = "id")
-  private long id;
   @Column(name = "acknowledged")
   private boolean acknowledged;
+
   @Column(name = "feePayed")
   private boolean participationFeePayed;
-  @Column(name = "formReceived")
-  private boolean registrationFormReceived;
+
+  @Column(name = "formFilled")
+  private boolean registrationFormFilled;
+
   @Column(name = "remarks")
   private String remarks;
 
@@ -30,13 +27,6 @@ public class ParticipationInfo {
    * Only a default constructor is needed. All participation info looks the same at the beginning.
    */
   ParticipationInfo() {}
-
-  /**
-   * @return the ID (= primary key) of the dataset
-   */
-  public long getId() {
-    return id;
-  }
 
   /**
    * @return whether the participation was acknowledged
@@ -69,16 +59,16 @@ public class ParticipationInfo {
   /**
    * @return whether the registration form (featuring signature, etc.) was received
    */
-  public boolean isRegistrationFormReceived() {
-    return registrationFormReceived;
+  public boolean isRegistrationFormFilled() {
+    return registrationFormFilled;
   }
 
   /**
    * @param registrationFormReceived whether the registration form (featuring signature, etc.) was
    *        received
    */
-  public void setRegistrationFormReceived(boolean registrationFormReceived) {
-    this.registrationFormReceived = registrationFormReceived;
+  public void setRegistrationFormFilled(boolean registrationFormReceived) {
+    this.registrationFormFilled = registrationFormReceived;
   }
 
   /**
@@ -95,18 +85,11 @@ public class ParticipationInfo {
     this.remarks = remarks;
   }
 
-  /**
-   * @param id the ID (= primary key) of the dataset
-   */
-  protected void setId(long id) {
-    this.id = id;
-  }
-
   // overridden from object
 
   @Override
   public String toString() {
     return "ParticipationInfo{" + "acknowledged=" + acknowledged + ", participationFeePayed="
-        + participationFeePayed + ", registrationFormReceived=" + registrationFormReceived + '}';
+        + participationFeePayed + ", registrationFormFilled=" + registrationFormFilled + '}';
   }
 }

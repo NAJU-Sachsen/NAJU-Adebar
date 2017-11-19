@@ -3,11 +3,16 @@ package de.naju.adebar.model.human;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -33,33 +38,49 @@ public class Person {
 
   @Column(name = "firstName")
   private String firstName;
+
   @Column(name = "lastName")
   private String lastName;
+
   @Column(name = "email")
   @Email
   private String email;
+
   @Column(name = "phone")
   private String phoneNumber;
+
   @Embedded
+  @AttributeOverrides({
+      @AttributeOverride(name = "street", column = @Column(name = "addressStreet")),
+      @AttributeOverride(name = "zip", column = @Column(name = "addressZip")),
+      @AttributeOverride(name = "city", column = @Column(name = "addressCity")),
+      @AttributeOverride(name = "additionalInfo", column = @Column(name = "addressHints"))})
   private Address address;
 
   @Column(name = "participant")
   private boolean participant;
+
   @Column(name = "activist")
   private boolean activist;
+
   @Column(name = "referent")
   private boolean referent;
-  @OneToOne(cascade = CascadeType.ALL)
+
   @PrimaryKeyJoinColumn
+  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private ParticipantProfile participantProfile;
-  @OneToOne(cascade = CascadeType.ALL)
+
   @PrimaryKeyJoinColumn
+  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private ActivistProfile activistProfile;
-  @OneToOne(cascade = CascadeType.ALL)
+
   @PrimaryKeyJoinColumn
+  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private ReferentProfile referentProfile;
 
-  @ManyToMany(cascade = CascadeType.ALL)
+  @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JoinTable(name = "parents", joinColumns = @JoinColumn(name = "child"),
+      inverseJoinColumns = @JoinColumn(name = "parent"))
   private List<Person> parentProfiles;
 
   @Column(name = "archived")

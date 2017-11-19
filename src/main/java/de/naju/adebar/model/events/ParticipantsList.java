@@ -1,16 +1,22 @@
 package de.naju.adebar.model.events;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.OrderColumn;
 import javax.persistence.Transient;
 import org.springframework.util.Assert;
@@ -29,14 +35,23 @@ class ParticipantsList {
   @EmbeddedId
   @Column(name = "event")
   private EventId event;
+
   @Column(name = "participantsLimit")
   private int participantsLimit;
-  @ManyToMany(cascade = CascadeType.ALL)
+
+  @ElementCollection(fetch = FetchType.LAZY)
+  @CollectionTable(name = "eventParticipants", joinColumns = @JoinColumn(name = "eventId"))
+  @MapKeyJoinColumn(name = "participant")
   private Map<Person, ParticipationInfo> participants;
-  @ElementCollection
-  private Map<String, Reservation> reservations;
-  @ManyToMany
-  @OrderColumn
+
+  @ElementCollection(fetch = FetchType.LAZY)
+  @CollectionTable(name = "eventReservations", joinColumns = @JoinColumn(name = "eventId"))
+  private List<Reservation> reservations;
+
+  @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JoinTable(name = "eventWaitingList", joinColumns = @JoinColumn(name = "eventId"),
+      inverseJoinColumns = @JoinColumn(name = "personId"))
+  @OrderColumn(name = "position")
   private List<Person> waitingList;
 
   /**
@@ -59,8 +74,8 @@ class ParticipantsList {
     this.event = event.getId();
     this.participantsLimit = participantsLimit;
     this.participants = new HashMap<>();
-    this.reservations = new HashMap<>();
-    this.waitingList = new LinkedList<>();
+    this.reservations = new ArrayList<>();
+    this.waitingList = new ArrayList<>();
   }
 
   /**
@@ -103,7 +118,7 @@ class ParticipantsList {
    * @return the reservations
    */
   public Iterable<Reservation> getReservations() {
-    return reservations.values();
+    return reservations;
   }
 
   /**
@@ -138,8 +153,8 @@ class ParticipantsList {
   /**
    * @param reservations the reservations
    */
-  protected void setReservations(Iterable<Reservation> reservations) {
-    reservations.forEach(r -> this.reservations.put(r.getDescription(), r));
+  protected void setReservations(List<Reservation> reservations) {
+    this.reservations = reservations;
   }
 
   // query methods
@@ -150,7 +165,12 @@ class ParticipantsList {
    */
   @Transient
   public Reservation getReservationFor(String description) {
-    return reservations.get(description);
+    for (Reservation res : reservations) {
+      if (res.getDescription().equals(description)) {
+        return res;
+      }
+    }
+    return null;
   }
 
   /**
@@ -176,7 +196,7 @@ class ParticipantsList {
    */
   @Transient
   public int getReservedSlotsCount() {
-    return reservations.values().stream().mapToInt(Reservation::getNumberOfSlots).sum();
+    return reservations.stream().mapToInt(Reservation::getNumberOfSlots).sum();
   }
 
   /**
@@ -201,7 +221,7 @@ class ParticipantsList {
   public Iterable<Person> getParticipantsWithFormNotReceived() {
     List<Person> persons = new LinkedList<>();
     participants.forEach((person, info) -> {
-      if (!info.isRegistrationFormReceived()) {
+      if (!info.isRegistrationFormFilled()) {
         persons.add(person);
       }
     });
@@ -235,7 +255,7 @@ class ParticipantsList {
    */
   @Transient
   public boolean hasReservation(String description) {
-    return reservations.containsKey(description);
+    return reservations.stream().anyMatch(res -> res.getDescription().equals(description));
   }
 
   /**
@@ -378,7 +398,7 @@ class ParticipantsList {
 
       throw new TooFewEmptySlotsException(msg);
     }
-    reservations.put(reservation.getDescription(), reservation);
+    reservations.add(reservation);
   }
 
   /**
@@ -400,14 +420,12 @@ class ParticipantsList {
    * @param newData the new data to use
    */
   public void updateReservation(String description, Reservation newReservation) {
-    if (!reservations.containsKey(description)) {
+    Reservation currentReservation = getReservationFor(description);
+    if (currentReservation == null) {
       throw new IllegalStateException("No reservation registered with description " + description);
-    }
-    if (!description.equals(newReservation.getDescription())) {
-      reservations.remove(description);
-      reservations.put(newReservation.getDescription(), newReservation);
-    } else {
-      reservations.replace(description, newReservation);
+    } else if (!newReservation.equals(currentReservation)) {
+      reservations.remove(currentReservation);
+      reservations.add(newReservation);
     }
   }
 
