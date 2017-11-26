@@ -18,7 +18,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.OneToOne;
@@ -34,7 +33,7 @@ import de.naju.adebar.model.human.Person;
 /**
  * Abstraction of an event. It may be a regular camp or any other kind of event such as workshops or
  * presentations. Maybe there will be more precise classes for the different event-types one day..
- * 
+ *
  * @author Rico Bergmann
  */
 @Entity(name = "event")
@@ -60,11 +59,9 @@ public class Event {
   private int minimumParticipantAge;
 
   @Column(name = "intParticipationFee")
-  @Lob
   private Money internalParticipationFee;
 
   @Column(name = "extParticipationFee")
-  @Lob
   private Money externalParticipationFee;
 
   @Embedded
@@ -98,7 +95,7 @@ public class Event {
 
   /**
    * Simplified constructor initializing the most important data
-   * 
+   *
    * @param name the event's name
    * @param startTime the event's start time
    * @param endTime the event's end time
@@ -109,7 +106,7 @@ public class Event {
 
   /**
    * Full constructor. All parameters may be {@code null} if not stated otherwise
-   * 
+   *
    * @param name the event's name, may not be {@code null}
    * @param startTime the event's start time, may not be {@code null}
    * @param endTime the event's end time, may not be {@code null}
@@ -274,7 +271,7 @@ public class Event {
 
   /**
    * The internal participation fee is used for NABU members.
-   * 
+   *
    * @return the fee to pay in order to participate. May be {@code null}.
    */
   public Money getInternalParticipationFee() {
@@ -295,7 +292,7 @@ public class Event {
 
   /**
    * The external participation fee is used for all participants who are not members of the NABU.
-   * 
+   *
    * @return the fee to pay in order to participate. May be {@code null}.
    */
   public Money getExternalParticipationFee() {
@@ -393,7 +390,7 @@ public class Event {
   /**
    * A read-only map (participant -> participationInfo). Beware: all write-operations will result in
    * an {@link UnsupportedOperationException}!
-   * 
+   *
    * @return information about each participant
    * @see ParticipationInfo
    */
@@ -516,7 +513,7 @@ public class Event {
 
   /**
    * Queries for specific reservation data
-   * 
+   *
    * @param description the description (= ID) of the reservation to query for
    * @return the reservation
    */
@@ -563,7 +560,7 @@ public class Event {
   /**
    * Updates start and end time simultaneously. Useful to prevent contract violations that would
    * occur when doing the same through a sequential call to the related setters
-   * 
+   *
    * @param startTime
    * @param endTime
    * @throws IllegalArgumentException if {@code startTime < endTime} or one of the parameters is
@@ -579,7 +576,7 @@ public class Event {
 
   /**
    * Adds a new participant
-   * 
+   *
    * @param person the person to participate in the event
    * @throws NoParticipantException if the person is not registered as a possible participant
    * @throws ExistingParticipantException if the person already participates
@@ -603,7 +600,7 @@ public class Event {
   /**
    * Adds a new participant to the event, regardless of eventual violations of the minimum
    * participation age
-   * 
+   *
    * @param person the person to participate in the event
    * @throws NoParticipantException if the person is no participant
    * @throws ExistingParticipantException if the person already participates
@@ -655,7 +652,7 @@ public class Event {
 
   /**
    * Creates a new reservation
-   * 
+   *
    * @param description the description of the reservation
    * @return the new reservation
    */
@@ -667,7 +664,7 @@ public class Event {
 
   /**
    * Creates a new reservation
-   * 
+   *
    * @param description the description of the reservation
    * @param numberOfSlots the capacity that should be reserved
    * @return the new reservation
@@ -680,7 +677,7 @@ public class Event {
 
   /**
    * Creates a new reservation
-   * 
+   *
    * @param description the description of the reservation
    * @param numberOfSlots the capacity that should be reserved
    * @param email an email to contact for the reservation
@@ -694,7 +691,7 @@ public class Event {
 
   /**
    * Deletes a reservation
-   * 
+   *
    * @param description the description (= ID) of the reservation
    */
   public void removeReservation(String description) {
@@ -703,7 +700,7 @@ public class Event {
 
   /**
    * Updates a reservation
-   * 
+   *
    * @param description the description (= ID) of the reservation
    * @param newData the new data to use
    */
@@ -781,7 +778,7 @@ public class Event {
 
   /**
    * Enqueues a person at the end of the waiting list
-   * 
+   *
    * @param person the person to add
    */
   public void putOnWaitingList(Person person) {
@@ -790,7 +787,7 @@ public class Event {
 
   /**
    * Removes a person from the waiting list
-   * 
+   *
    * @param person the person to remove
    */
   public void removeFromWaitingList(Person person) {
@@ -806,7 +803,7 @@ public class Event {
 
   /**
    * Moves a person from the waiting list to the participants list
-   * 
+   *
    * @param person the person to move
    */
   public void applyWaitingListEntryFor(Person person) {
@@ -821,7 +818,7 @@ public class Event {
 
   /**
    * Adds a new person to contact for the event
-   * 
+   *
    * @param person the person
    * @param remark remarks regarding the reason of contact
    */
@@ -834,7 +831,7 @@ public class Event {
 
   /**
    * Removes a person from the list of persons to be contacted for the event
-   * 
+   *
    * @param person the person
    */
   public void removePersonToContact(Person person) {
