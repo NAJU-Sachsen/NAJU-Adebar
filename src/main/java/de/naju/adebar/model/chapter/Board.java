@@ -5,7 +5,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -18,7 +17,7 @@ import de.naju.adebar.util.Validation;
 
 /**
  * Abstraction of a board of directors
- * 
+ *
  * @author Rico Bergmann
  */
 @Entity(name = "board")
@@ -29,19 +28,19 @@ public class Board {
   @Column(name = "id")
   private long id;
 
-  @OneToOne(fetch = FetchType.LAZY)
+  @OneToOne
   private Person chairman;
 
   @Column(name = "email")
   private String email;
 
-  @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @ManyToMany(cascade = CascadeType.ALL)
   @JoinTable(inverseJoinColumns = @JoinColumn(name = "memberId"))
   private List<Person> members;
 
   /**
    * Minimalistic constructor. The only thing each board needs is a chairman
-   * 
+   *
    * @param chairman the board's chairman
    */
   public Board(Person chairman) {
@@ -50,7 +49,7 @@ public class Board {
 
   /**
    * Full constructor
-   * 
+   *
    * @param chairman the board's chairman
    * @param email central email address for the whole board, may be {@code null}
    * @throws IllegalArgumentException if the chairman is no activist or {@code null}
@@ -73,8 +72,7 @@ public class Board {
   /**
    * Default constructor just for JPA's sake
    */
-  @SuppressWarnings("unused")
-  private Board() {}
+  protected Board() {}
 
   // basic getter and setter
 

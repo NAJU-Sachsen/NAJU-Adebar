@@ -21,6 +21,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
@@ -38,7 +39,7 @@ import de.naju.adebar.model.newsletter.Newsletter;
  * Abstraction of a local group. Each group has a (very likely) unique set of members, i. e.
  * activist who contribute to this certain group. Furthermore a chapter may have a board of
  * directors if it is a more professional one.
- * 
+ *
  * @author Rico Bergmann
  */
 @Entity(name = "localGroup")
@@ -59,11 +60,11 @@ public class LocalGroup {
       @AttributeOverride(name = "additionalInfo", column = @Column(name = "addressHints"))})
   private Address address;
 
-  @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @ManyToMany(cascade = CascadeType.ALL)
   @JoinTable(inverseJoinColumns = @JoinColumn(name = "memberId"))
   private List<Person> members;
 
-  @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @ManyToMany(cascade = CascadeType.ALL)
   @JoinTable(inverseJoinColumns = @JoinColumn(name = "personId"))
   private List<Person> contactPersons;
 
@@ -72,7 +73,9 @@ public class LocalGroup {
       inverseJoinColumns = @JoinColumn(name = "eventId"))
   private List<Event> events;
 
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @OneToMany(cascade = CascadeType.ALL)
+  @MapKey
+  @JoinTable(inverseJoinColumns = @JoinColumn(name = "projectId"))
   private Map<String, Project> projects;
 
   @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -89,7 +92,7 @@ public class LocalGroup {
 
   /**
    * Full constructor
-   * 
+   *
    * @param name the chapter's name
    * @param address the address of the group - i. e. the office's address or the like
    */
@@ -109,8 +112,7 @@ public class LocalGroup {
   /**
    * Default constructor for JPA
    */
-  @SuppressWarnings("unused")
-  private LocalGroup() {}
+  protected LocalGroup() {}
 
   // basic getter and setter
 

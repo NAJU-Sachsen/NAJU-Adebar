@@ -25,7 +25,7 @@ import de.naju.adebar.model.human.Person;
 
 /**
  * Abstraction of a project
- * 
+ *
  * @author Rico Bergmann
  */
 @Entity(name = "project")
@@ -49,11 +49,11 @@ public class Project {
   @JoinColumn(name = "localGroup")
   private LocalGroup localGroup;
 
-  @OneToOne(fetch = FetchType.LAZY)
+  @OneToOne
   @JoinColumn(name = "personInCharge")
   private Person personInCharge;
 
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @OneToMany(cascade = CascadeType.ALL)
   @JoinTable(inverseJoinColumns = @JoinColumn(name = "contributorId"))
   private List<Person> contributors;
 
@@ -65,7 +65,7 @@ public class Project {
 
   /**
    * Reduced constructor
-   * 
+   *
    * @param name the project's name
    * @param localGroup the local group that host's the project
    */
@@ -75,7 +75,7 @@ public class Project {
 
   /**
    * Full constructor
-   * 
+   *
    * @param name the project's name
    * @param startTime the time the project starts, may be {@code null}
    * @param endTime the time the project ends, may be {@code null}
