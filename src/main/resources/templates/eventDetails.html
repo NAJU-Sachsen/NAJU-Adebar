@@ -1303,7 +1303,7 @@
                             </tr>
                         </thead>
                         <tbody th:remove="all-but-first">
-                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="0" data-fee-payed="true" data-form-received="false" data-remarks="Teilnahme nur bis Donnerstag" th:each="participant : ${event.participants}" th:attr="'data-id'=${participant.id}, 'data-fee-payed'=${event.getParticipationInfo(participant).isParticipationFeePayed()}, 'data-form-received'=${event.getParticipationInfo(participant).isRegistrationFormReceived()},
+                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="0" data-fee-payed="true" data-form-received="false" data-remarks="Teilnahme nur bis Donnerstag" th:each="participant : ${event.participants}" th:attr="'data-id'=${participant.id}, 'data-fee-payed'=${event.getParticipationInfo(participant).isParticipationFeePayed()}, 'data-form-received'=${event.getParticipationInfo(participant).isRegistrationFormFilled()},
                             'data-remarks'=${event.getParticipationInfo(participant).getRemarks()}">
                                 <td><a href="mailto:" data-toggle="" data-target="" th:href="@{/persons/{id}(id=${participant.id})}" th:text="${participant.name}">Max-Hannes Mustermann</a></td>
                                 <td th:text="${{participant.participantProfile.dateOfBirth}}">31.02.1999</td>
@@ -1315,8 +1315,8 @@
                                     <span th:unless="${event.getParticipationInfo(participant).isParticipationFeePayed()}"><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span>
                                 </td>
                                 <td class="text-center">
-                                    <span th:if="${event.getParticipationInfo(participant).isRegistrationFormReceived()}"><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span>
-                                    <span th:unless="${event.getParticipationInfo(participant).isRegistrationFormReceived()}"><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span>
+                                    <span th:if="${event.getParticipationInfo(participant).isRegistrationFormFilled()}"><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                    <span th:unless="${event.getParticipationInfo(participant).isRegistrationFormFilled()}"><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span>
                                 </td>
                                 <td th:text="${event.getParticipationInfo(participant).getRemarks()}">
                                     Teilnahme nur bis Donnerstag
