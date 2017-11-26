@@ -10,7 +10,7 @@ import de.naju.adebar.infrastructure.ReadOnlyRepository;
 
 /**
  * Repository to provide read-only access to {@link Person} instances
- * 
+ *
  * @author Rico Bergmann
  */
 @Repository("ro_personRepo")
@@ -45,7 +45,7 @@ public interface ReadOnlyPersonRepository
    * @return the first 25 non-archived persons, ordered by their last name
    */
   @Query(nativeQuery = true,
-      value = "SELECT TOP 25 p.* FROM person p WHERE p.archived=0 ORDER BY p.last_name")
+      value = "SELECT p.* FROM person p WHERE p.archived=0 ORDER BY p.last_name LIMIT 25")
   Iterable<Person> findFirst25();
 
   /**
