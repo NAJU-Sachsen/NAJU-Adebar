@@ -1,0 +1,22 @@
+.tablesorter th.header .icon {
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+}
+
+.tablesorter th.header .icon::after {
+    content: "\e150";
+}
+
+.tablesorter th.headerSortUp .icon::after {
+    content: "\e156";
+}
+
+.tablesorter th.headerSortDown .icon::after {
+    content: "\e155";
+}

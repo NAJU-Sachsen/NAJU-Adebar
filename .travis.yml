@@ -3,8 +3,21 @@ language: java
 jdk:
   - oraclejdk8
 
+services:
+  - mysql
+
 sudo: false
+
+before_install:
+  - mysql -e 'CREATE DATABASE adebar;'
+
+before_script:
+  - cp src/main/resources/application-travis.properties src/main/resources/application.properties
 
 cache:
   directories:
-    - $HOME/.m2
+      - "$HOME/.m2"
+
+notifications:
+  slack:
+    secure: O2F2K0E5t/XERfZzM8Q9ylyABpNtN+FM7PvYV32u/YzsqPDl6HLiXgSSqjcpj3OESMjkk6cFJTVNNxOd88BRFL26jeI5sIA76tKnTVrJrPNCf4MksIwvpeHRjgIA0Juz13nDlbJcvZuVIBn35Esl/NbbzMKgUQNqqUTzCiyk1OXjyD4nbnTG+aHs+Kpe5KMvBN5Pqp8HjlpxwcRkUa0RalK9v8c9e8zXgj2ZeJ0W2nLD05PtywMn77XlI3/HrhJMa3HLbniUMy8MVokfOcxcoBVL7UHHvbwX1HmwtiP8MB9XnLWmTadw8gB8p3x4iXdgZuG/e863QwQWNzoRdmG1vs/vT4/aKv8n5EdXxZPhio5vmDD9bIW1NuDxGs6Tzok8OguYkzjQ20Qpd5TplQHBlyQ+v797GW7Ix/fsI0nuiNerpOZ23lPPq67X61fdZIbaCtposMkUD0hhbQ64rHDVf4wHyqIxIu3+2hYojySTkfDOLvnjHIoS2klwbFk6u5ATEl5ONi3rJ4U8PVVmgjOC3xBCsoJVQciGccU3R2Ww3ZIVrqPV+tHT43WnBjwxh3hQ+TQJeALU/V8VnvoGMYB5TaJBlUNcXB2Bb5Z6EVC1i8OMcs2wPtW/TasDtu5bA6tcq/N/OaQHm38zz8A1fhieLlHoYXPm3D/xPBPTTYMxp3Y=
