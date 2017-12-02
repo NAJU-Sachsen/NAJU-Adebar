@@ -570,6 +570,10 @@
     </script>
     <input type="hidden" id="local-group-id" value="-1" th:value="${project.localGroup.id}" />
 
+    <form id="logout-user" method="POST" th:action="@{/logout}">
+      <input type="hidden" name="csrf" th:value="csrf" />
+    </form>
+
 </main>
 
 <input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />

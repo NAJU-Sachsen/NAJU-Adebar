@@ -495,6 +495,10 @@
         new List('main', subscriberOptions)
     </script>
 
+    <form id="logout-user" method="POST" th:action="@{/logout}">
+      <input type="hidden" name="csrf" th:value="csrf" />
+    </form>
+
     <!-- storing the last session's tab here to restore it later-->
     <input type="hidden" id="session-tab" value="" th:value="${tab}"/>
 </main>

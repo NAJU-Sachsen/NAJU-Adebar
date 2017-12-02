@@ -269,6 +269,10 @@
          });
     </script>
 
+    <form id="logout-user" method="POST" th:action="@{/logout}">
+      <input type="hidden" name="csrf" th:value="csrf" />
+    </form>
+
 </main>
 <input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 <script src="../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>

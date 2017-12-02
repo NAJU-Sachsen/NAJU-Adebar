@@ -1609,6 +1609,10 @@
          });
     </script>
 
+    <form id="logout-user" method="POST" th:action="@{/logout}">
+      <input type="hidden" name="csrf" th:value="csrf" />
+    </form>
+
     <input type="hidden" id="event-id" value="-1" th:value="${event.id}" />
     <input type="hidden" id="event-remaining-capactiy" value="-1" th:value="${event.remainingCapacity}" />
 
