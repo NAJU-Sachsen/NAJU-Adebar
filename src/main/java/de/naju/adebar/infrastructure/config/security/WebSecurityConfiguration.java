@@ -53,7 +53,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     // @formatter:off
     http.authorizeRequests()
       // resources should be available without login
-      .antMatchers("/webjars/**", "/resources/**")
+      .antMatchers("/webjars/**", "/resources/**", "/imprint")
         .permitAll()
       // for every other request, a login is necessary
       .anyRequest()

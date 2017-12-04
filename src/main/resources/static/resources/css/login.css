@@ -49,3 +49,8 @@ img.stork {
     margin-top: 25px;
     margin-bottom: 25px;
 }
+
+footer .navbar.navbar-default {
+  background-color: #ebebeb;
+  border-color: #e1e1e1;
+}

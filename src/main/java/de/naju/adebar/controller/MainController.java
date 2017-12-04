@@ -17,4 +17,9 @@ public class MainController {
     return "redirect:/events";
   }
 
+  @RequestMapping("/imprint")
+  public String showImprint() {
+    return "imprint";
+  }
+
 }
