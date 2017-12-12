@@ -4,17 +4,17 @@ import java.util.stream.Stream;
 import de.naju.adebar.util.Streams;
 
 /**
- * Simple class to combine multiple {@link AbstractFilter} logically.
+ * Simple class to combine multiple {@link AbstractStreamBasedFilter} logically.
  * 
  * @param <Entity> the type of entities to be filtered
  * @param <Filter> the type of filter to use, has to be a filter for the Entity
  * @author Rico Bergmann
  */
-public class FilterConnective<Entity, Filter extends AbstractFilter<Entity>>
-    implements AbstractFilter<Entity> {
+public class FilterConnective<Entity, Filter extends AbstractStreamBasedFilter<Entity>>
+    implements AbstractStreamBasedFilter<Entity> {
   private AbstractConnective connective;
-  private AbstractFilter<Entity> firstFilter;
-  private AbstractFilter<Entity> secondFilter;
+  private AbstractStreamBasedFilter<Entity> firstFilter;
+  private AbstractStreamBasedFilter<Entity> secondFilter;
 
   /**
    * Creates a plain connective
@@ -22,8 +22,8 @@ public class FilterConnective<Entity, Filter extends AbstractFilter<Entity>>
    * @param filter the first filter to use
    * @return a new connective to be linked with other filters
    */
-  public static <Entity, Filter extends AbstractFilter<Entity>> FilterConnective<Entity, Filter> forFilter(
-      AbstractFilter<Entity> filter) {
+  public static <Entity, Filter extends AbstractStreamBasedFilter<Entity>> FilterConnective<Entity, Filter> forFilter(
+      AbstractStreamBasedFilter<Entity> filter) {
     return new FilterConnective<>(filter);
   }
 
@@ -32,7 +32,7 @@ public class FilterConnective<Entity, Filter extends AbstractFilter<Entity>>
    * 
    * @param filter the first filter to use
    */
-  public FilterConnective(AbstractFilter<Entity> filter) {
+  public FilterConnective(AbstractStreamBasedFilter<Entity> filter) {
     this.firstFilter = filter;
   }
 
@@ -44,9 +44,9 @@ public class FilterConnective<Entity, Filter extends AbstractFilter<Entity>>
    * @param filter the second filter to use
    * @return the resulting connective
    * @throws IllegalStateException if multiple connectives where specified (i.e.
-   *         {@link #and(AbstractFilter)} or {@link #or(AbstractFilter)} where called before)
+   *         {@link #and(AbstractStreamBasedFilter)} or {@link #or(AbstractStreamBasedFilter)} where called before)
    */
-  public FilterConnective<Entity, Filter> and(AbstractFilter<Entity> filter) {
+  public FilterConnective<Entity, Filter> and(AbstractStreamBasedFilter<Entity> filter) {
     assertConnectiveIsUnspecified();
     this.connective = new AndConnective();
     this.secondFilter = filter;
@@ -61,9 +61,9 @@ public class FilterConnective<Entity, Filter extends AbstractFilter<Entity>>
    * @param filter the second filter to use
    * @return the resulting connective
    * @throws IllegalStateException if multiple connectives where specified (i.e.
-   *         {@link #and(AbstractFilter)} or {@link #or(AbstractFilter)} where called before)
+   *         {@link #and(AbstractStreamBasedFilter)} or {@link #or(AbstractStreamBasedFilter)} where called before)
    */
-  public FilterConnective<Entity, Filter> or(AbstractFilter<Entity> filter) {
+  public FilterConnective<Entity, Filter> or(AbstractStreamBasedFilter<Entity> filter) {
     assertConnectiveIsUnspecified();
     this.connective = new OrConnective();
     this.secondFilter = filter;
@@ -104,7 +104,7 @@ public class FilterConnective<Entity, Filter extends AbstractFilter<Entity>>
    * Implementation of the `AND` connective
    *
    * @author Rico Bergmann
-   * @see FilterConnective#and(AbstractFilter)
+   * @see FilterConnective#and(AbstractStreamBasedFilter)
    */
   private class AndConnective extends AbstractConnective {
 
@@ -120,7 +120,7 @@ public class FilterConnective<Entity, Filter extends AbstractFilter<Entity>>
    * Implementation of the `OR` connective
    *
    * @author Rico Bergmann
-   * @see FilterConnective#or(AbstractFilter)
+   * @see FilterConnective#or(AbstractStreamBasedFilter)
    */
   private class OrConnective extends AbstractConnective {
 

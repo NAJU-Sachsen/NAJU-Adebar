@@ -1,7 +1,7 @@
 package de.naju.adebar.app.events.filter;
 
 import java.util.stream.Stream;
-import de.naju.adebar.app.filter.FilterBuilder;
+import de.naju.adebar.app.filter.StreamBasedFilterBuilder;
 import de.naju.adebar.model.events.Event;
 
 /**
@@ -9,7 +9,7 @@ import de.naju.adebar.model.events.Event;
  * 
  * @author Rico Bergmann
  */
-public class EventFilterBuilder extends FilterBuilder<Event> {
+public class EventFilterBuilder extends StreamBasedFilterBuilder<Event> {
 
   public EventFilterBuilder(Stream<Event> eventStream) {
     super(eventStream);

@@ -14,14 +14,14 @@ import org.springframework.util.Assert;
  * @see <a href="https://en.wikipedia.org/wiki/Builder_pattern">Builder pattern</a>
  * @param <T> the type of objects to be filtered
  */
-public class FilterBuilder<T> {
+public class StreamBasedFilterBuilder<T> {
   protected Stream<T> inputStream;
-  protected Set<AbstractFilter<T>> filters;
+  protected Set<AbstractStreamBasedFilter<T>> filters;
 
   /**
    * @param inputStream the objects to be filtered
    */
-  public FilterBuilder(Stream<T> inputStream) {
+  public StreamBasedFilterBuilder(Stream<T> inputStream) {
     Assert.notNull(inputStream, "Input stream may not be null");
     this.inputStream = inputStream;
     this.filters = new HashSet<>();
@@ -35,7 +35,7 @@ public class FilterBuilder<T> {
    * @param filter the filter to apply to the given persons
    * @return the builder instance for easy chaining
    */
-  public FilterBuilder<T> applyFilter(AbstractFilter<T> filter) {
+  public StreamBasedFilterBuilder<T> applyFilter(AbstractStreamBasedFilter<T> filter) {
     Assert.notNull(filter, "Filter may not be null!");
     filters.add(filter);
     return this;

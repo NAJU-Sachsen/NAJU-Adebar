@@ -7,7 +7,7 @@ import java.util.stream.Stream;
  * 
  * @author Rico Bergmann
  */
-public interface AbstractFilter<T> {
+public interface AbstractStreamBasedFilter<T> {
 
   /**
    * That's why we call it "filter". It receives elements, filters them and gives elements again.

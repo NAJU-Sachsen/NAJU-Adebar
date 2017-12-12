@@ -1,6 +1,6 @@
 package de.naju.adebar.app.events.filter;
 
-import de.naju.adebar.app.filter.AbstractFilter;
+import de.naju.adebar.app.filter.AbstractStreamBasedFilter;
 import de.naju.adebar.model.events.Event;
 
 /**
@@ -8,5 +8,5 @@ import de.naju.adebar.model.events.Event;
  * 
  * @author Rico Bergmann
  */
-public interface EventFilter extends AbstractFilter<Event> {
+public interface EventFilter extends AbstractStreamBasedFilter<Event> {
 }

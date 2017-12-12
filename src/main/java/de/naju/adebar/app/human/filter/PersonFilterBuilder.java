@@ -1,7 +1,7 @@
 package de.naju.adebar.app.human.filter;
 
-import de.naju.adebar.app.filter.AbstractFilter;
-import de.naju.adebar.app.filter.FilterBuilder;
+import de.naju.adebar.app.filter.AbstractStreamBasedFilter;
+import de.naju.adebar.app.filter.StreamBasedFilterBuilder;
 import de.naju.adebar.model.human.Person;
 import org.springframework.util.Assert;
 import java.util.stream.Stream;
@@ -13,7 +13,7 @@ import java.util.stream.Stream;
  * @author Rico Bergmann
  * @see <a href="https://en.wikipedia.org/wiki/Builder_pattern">Builder pattern</a>
  */
-public class PersonFilterBuilder extends FilterBuilder<Person> {
+public class PersonFilterBuilder extends StreamBasedFilterBuilder<Person> {
 
   /**
    * @param personStream the persons to be filtered
@@ -30,7 +30,7 @@ public class PersonFilterBuilder extends FilterBuilder<Person> {
    */
   public PersonFilterBuilder applyFilter(PersonFilter filter) {
     Assert.notNull(filter, "Filter may not be null!");
-    for (AbstractFilter<Person> f : filters) {
+    for (AbstractStreamBasedFilter<Person> f : filters) {
       if (filter.getClass() == f.getClass()) {
         throw new ConflictingFilterCriteriaException(
             "Already containing a filter of class: " + f.getClass());
