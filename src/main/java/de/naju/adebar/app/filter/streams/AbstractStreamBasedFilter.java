@@ -4,19 +4,11 @@ import java.util.stream.Stream;
 import de.naju.adebar.app.filter.AbstractFilter;
 
 /**
- * Interface for filters. We only need them to filter
+ * An {@link AbstractFilter} which consumes and produces a {@link Stream} of objects
  * 
  * @author Rico Bergmann
+ *
+ * @param <T> the kind of objects in the stream
  */
 public interface AbstractStreamBasedFilter<T> extends AbstractFilter<Stream<T>> {
-
-  /**
-   * That's why we call it "filter". It receives elements, filters them and gives elements again.
-   * 
-   * @param input the stream to filter
-   * @return the filtered stream
-   */
-  @Override
-  Stream<T> filter(Stream<T> input);
-
 }
