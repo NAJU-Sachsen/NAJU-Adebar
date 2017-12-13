@@ -1,6 +1,6 @@
 package de.naju.adebar.app.human.filter;
 
-import de.naju.adebar.app.filter.streams.DateFilterType;
+import de.naju.adebar.app.filter.DateFilterType;
 import de.naju.adebar.model.human.Person;
 import org.junit.Assert;
 import org.junit.Test;

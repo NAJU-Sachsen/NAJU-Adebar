@@ -1,4 +1,4 @@
-package de.naju.adebar.app.filter.streams;
+package de.naju.adebar.app.filter;
 
 /**
  * Enumeration to specify how to treat possibly incomplete data

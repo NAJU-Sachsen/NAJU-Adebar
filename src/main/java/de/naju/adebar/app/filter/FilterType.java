@@ -1,4 +1,4 @@
-package de.naju.adebar.app.filter.streams;
+package de.naju.adebar.app.filter;
 
 /**
  * Enumeration to specify whether to search only for objects possessing a special attribute or only

@@ -3,7 +3,7 @@ package de.naju.adebar.app.events.filter;
 import java.time.LocalDateTime;
 import java.util.function.Function;
 import java.util.stream.Stream;
-import de.naju.adebar.app.filter.streams.DateTimeFilterType;
+import de.naju.adebar.app.filter.DateTimeFilterType;
 import de.naju.adebar.model.events.Event;
 
 /**

@@ -1,9 +1,9 @@
 package de.naju.adebar.services.conversion.events;
 
 import de.naju.adebar.app.events.filter.*;
-import de.naju.adebar.app.filter.streams.ComparableFilterType;
-import de.naju.adebar.app.filter.streams.DateTimeFilterType;
-import de.naju.adebar.app.filter.streams.MatchType;
+import de.naju.adebar.app.filter.ComparableFilterType;
+import de.naju.adebar.app.filter.DateTimeFilterType;
+import de.naju.adebar.app.filter.MatchType;
 import de.naju.adebar.controller.forms.events.FilterEventsForm;
 import de.naju.adebar.model.human.Address;
 import org.javamoney.moneta.Money;

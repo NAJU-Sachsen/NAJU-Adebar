@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-import de.naju.adebar.app.filter.streams.FilterType;
+import de.naju.adebar.app.filter.FilterType;
 import de.naju.adebar.model.human.Person;
 import de.naju.adebar.model.human.Qualification;
 

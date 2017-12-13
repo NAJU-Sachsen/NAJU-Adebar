@@ -1,6 +1,6 @@
 package de.naju.adebar.app.human.filter;
 
-import de.naju.adebar.app.filter.streams.FilterType;
+import de.naju.adebar.app.filter.FilterType;
 import de.naju.adebar.model.human.Person;
 import java.util.stream.Stream;
 

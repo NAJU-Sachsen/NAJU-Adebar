@@ -1,7 +1,7 @@
 package de.naju.adebar.app.events.filter;
 
 import java.util.stream.Stream;
-import de.naju.adebar.app.filter.streams.MatchType;
+import de.naju.adebar.app.filter.MatchType;
 import de.naju.adebar.model.events.Event;
 import de.naju.adebar.model.human.Address;
 

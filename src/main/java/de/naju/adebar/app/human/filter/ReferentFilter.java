@@ -1,7 +1,7 @@
 package de.naju.adebar.app.human.filter;
 
 import com.google.common.collect.Lists;
-import de.naju.adebar.app.filter.streams.FilterType;
+import de.naju.adebar.app.filter.FilterType;
 import de.naju.adebar.model.human.Person;
 import de.naju.adebar.model.human.Qualification;
 import java.util.List;
