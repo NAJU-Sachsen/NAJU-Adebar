@@ -2,7 +2,7 @@ package de.naju.adebar.app.events.filter;
 
 import java.util.stream.Stream;
 import org.javamoney.moneta.Money;
-import de.naju.adebar.app.filter.ComparableFilterType;
+import de.naju.adebar.app.filter.streams.ComparableFilterType;
 import de.naju.adebar.model.events.Event;
 
 /**

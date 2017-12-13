@@ -184,7 +184,7 @@ public class PersonController {
     filterPersonFormFilterExtractor.extractAllFilters(filterPersonForm)
         .forEach(filterBuilder::applyFilter);
 
-    Iterable<Person> matchingPersons = filterBuilder.filter();
+    Iterable<Person> matchingPersons = filterBuilder.filterAndCollect();
     String matchingPersonsEmail =
         dataProcessor.extractEmailAddressesAsString(matchingPersons, EMAIL_DELIMITER);
 

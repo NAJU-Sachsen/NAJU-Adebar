@@ -1,9 +1,9 @@
 package de.naju.adebar.services.conversion.human;
 
 import com.google.common.collect.Lists;
-import de.naju.adebar.app.filter.DateFilterType;
-import de.naju.adebar.app.filter.FilterType;
-import de.naju.adebar.app.filter.MatchType;
+import de.naju.adebar.app.filter.streams.DateFilterType;
+import de.naju.adebar.app.filter.streams.FilterType;
+import de.naju.adebar.app.filter.streams.MatchType;
 import de.naju.adebar.app.human.filter.*;
 import de.naju.adebar.controller.forms.human.FilterPersonForm;
 import de.naju.adebar.model.human.*;

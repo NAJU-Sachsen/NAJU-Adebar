@@ -154,7 +154,7 @@ public class EventController {
     EventFilterBuilder filterBuilder = new EventFilterBuilder(events);
     filterEventsFormDataExtractor.extractAllFilters(eventsForm).forEach(filterBuilder::applyFilter);
 
-    Iterable<Event> matchingEvents = filterBuilder.filter();
+    Iterable<Event> matchingEvents = filterBuilder.filterAndCollect();
 
     model.addAttribute("filteredEvents", matchingEvents);
     model.addAttribute("filteredEventsLocalGroups",

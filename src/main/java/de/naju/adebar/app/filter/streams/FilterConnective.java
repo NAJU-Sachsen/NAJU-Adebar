@@ -1,4 +1,4 @@
-package de.naju.adebar.app.filter;
+package de.naju.adebar.app.filter.streams;
 
 import java.util.stream.Stream;
 import de.naju.adebar.util.Streams;

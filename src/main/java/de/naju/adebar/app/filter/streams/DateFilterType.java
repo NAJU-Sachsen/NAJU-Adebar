@@ -1,4 +1,4 @@
-package de.naju.adebar.app.filter;
+package de.naju.adebar.app.filter.streams;
 
 import java.time.LocalDate;
 

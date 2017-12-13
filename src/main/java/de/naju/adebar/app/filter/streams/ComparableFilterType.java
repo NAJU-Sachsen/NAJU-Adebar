@@ -1,4 +1,4 @@
-package de.naju.adebar.app.filter;
+package de.naju.adebar.app.filter.streams;
 
 /**
  * Enum describing how to filter objects that possess a total ordering.
