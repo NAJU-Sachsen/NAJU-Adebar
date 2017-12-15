@@ -1,6 +1,7 @@
 = NAJU-Adebar
 
 image:https://travis-ci.org/portux/NAJU-Adebar.svg?branch=master["Build Status", link="https://travis-ci.org/portux/NAJU-Adebar"]
+image:https://img.shields.io/badge/SonarQube-overview-blue.svg["SonarQube", link="https://sonarcloud.io/dashboard?id=de.naju.sachsen:adebar:develop"]
 
 Management tool used by the http://naju-sachsen.de[NAJU Sachsen] to keep track of volunteers and the like.
 Currently under heavy development and in pre-alpha state.
