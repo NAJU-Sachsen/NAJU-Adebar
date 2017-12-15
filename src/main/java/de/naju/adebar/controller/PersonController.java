@@ -1,7 +1,6 @@
 package de.naju.adebar.controller;
 
 import java.util.Arrays;
-import java.util.stream.Stream;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,10 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.google.common.collect.Iterables;
+import com.querydsl.core.BooleanBuilder;
 import de.naju.adebar.app.chapter.LocalGroupManager;
 import de.naju.adebar.app.human.DataProcessor;
 import de.naju.adebar.app.human.PersonManager;
-import de.naju.adebar.app.human.filter.PersonFilterBuilder;
+import de.naju.adebar.app.human.filter.predicate.PersonFilterBuilder;
 import de.naju.adebar.controller.forms.human.AddQualificationForm;
 import de.naju.adebar.controller.forms.human.CreateParentForm;
 import de.naju.adebar.controller.forms.human.CreatePersonForm;
@@ -179,12 +179,12 @@ public class PersonController {
   @Transactional
   public String filterPersons(
       @ModelAttribute("filterPersonsForm") FilterPersonForm filterPersonForm, Model model) {
-    Stream<Person> persons = personManager.repository().streamAll();
-    PersonFilterBuilder filterBuilder = new PersonFilterBuilder(persons);
+    PersonFilterBuilder filterBuilder = new PersonFilterBuilder();
     filterPersonFormFilterExtractor.extractAllFilters(filterPersonForm)
         .forEach(filterBuilder::applyFilter);
 
-    Iterable<Person> matchingPersons = filterBuilder.filterAndCollect();
+    BooleanBuilder predicate = filterBuilder.filter();
+    Iterable<Person> matchingPersons = personManager.repository().findAll(predicate);
     String matchingPersonsEmail =
         dataProcessor.extractEmailAddressesAsString(matchingPersons, EMAIL_DELIMITER);
 

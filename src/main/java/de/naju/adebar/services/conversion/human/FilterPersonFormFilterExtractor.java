@@ -1,20 +1,33 @@
 package de.naju.adebar.services.conversion.human;
 
-import com.google.common.collect.Lists;
-import de.naju.adebar.app.filter.DateFilterType;
-import de.naju.adebar.app.filter.FilterType;
-import de.naju.adebar.app.filter.MatchType;
-import de.naju.adebar.app.human.filter.*;
-import de.naju.adebar.controller.forms.human.FilterPersonForm;
-import de.naju.adebar.model.human.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+import com.google.common.collect.Lists;
+import de.naju.adebar.app.filter.DateFilterType;
+import de.naju.adebar.app.filter.FilterType;
+import de.naju.adebar.app.filter.MatchType;
+import de.naju.adebar.app.human.filter.predicate.ActivistFilter;
+import de.naju.adebar.app.human.filter.predicate.AddressFilter;
+import de.naju.adebar.app.human.filter.predicate.DateOfBirthFilter;
+import de.naju.adebar.app.human.filter.predicate.EatingHabitFilter;
+import de.naju.adebar.app.human.filter.predicate.EmailFilter;
+import de.naju.adebar.app.human.filter.predicate.GenderFilter;
+import de.naju.adebar.app.human.filter.predicate.HealthImpairmentsFilter;
+import de.naju.adebar.app.human.filter.predicate.NabuMembershipFilter;
+import de.naju.adebar.app.human.filter.predicate.NameFilter;
+import de.naju.adebar.app.human.filter.predicate.PersonFilter;
+import de.naju.adebar.app.human.filter.predicate.ReferentFilter;
+import de.naju.adebar.controller.forms.human.FilterPersonForm;
+import de.naju.adebar.model.human.Address;
+import de.naju.adebar.model.human.Gender;
+import de.naju.adebar.model.human.Qualification;
+import de.naju.adebar.model.human.QualificationRepository;
 
 /**
  * Service to convert {@link FilterPersonForm} data to the corresponding objects
