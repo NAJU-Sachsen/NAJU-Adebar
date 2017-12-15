@@ -1,6 +1,8 @@
 package de.naju.adebar.controller;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -184,12 +186,25 @@ public class PersonController {
         .forEach(filterBuilder::applyFilter);
 
     BooleanBuilder predicate = filterBuilder.filter();
-    Iterable<Person> matchingPersons = personManager.repository().findAll(predicate);
+
+    List<Person> matchingPersons = personManager.repository().findAll(predicate);
+    HashSet<Person> persons;
+    if (filterPersonForm.isReturnParents()) {
+      persons = new HashSet<Person>(matchingPersons.size());
+      matchingPersons.stream().map(Person::getParentProfiles).forEach(parents -> {
+        parents.forEach(parent -> {
+          persons.add(parent);
+        });
+      });
+    } else {
+      persons = new HashSet<>(matchingPersons);
+    }
+
     String matchingPersonsEmail =
-        dataProcessor.extractEmailAddressesAsString(matchingPersons, EMAIL_DELIMITER);
+        dataProcessor.extractEmailAddressesAsString(persons, EMAIL_DELIMITER);
 
     model.addAttribute("filtered", true);
-    model.addAttribute("persons", matchingPersons);
+    model.addAttribute("persons", persons);
     model.addAttribute("emails", matchingPersonsEmail);
     model.addAttribute("qualifications", qualificationManager.repository().findAll());
     model.addAttribute("addPersonForm", new CreatePersonForm());

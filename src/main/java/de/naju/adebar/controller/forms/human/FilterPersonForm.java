@@ -21,6 +21,7 @@ public class FilterPersonForm {
   private String referentsFilterType;
   private List<String> referentQualifications;
   private String nabuMembershipFilterType, nabuMembershipNumber;
+  private boolean returnParents;
 
   public FilterPersonForm() {
 
@@ -184,6 +185,14 @@ public class FilterPersonForm {
 
   public void setNabuMembershipNumber(String nabuMembershipNumber) {
     this.nabuMembershipNumber = nabuMembershipNumber;
+  }
+
+  public boolean isReturnParents() {
+    return returnParents;
+  }
+
+  public void setReturnParents(boolean returnParents) {
+    this.returnParents = returnParents;
   }
 
   @Override
