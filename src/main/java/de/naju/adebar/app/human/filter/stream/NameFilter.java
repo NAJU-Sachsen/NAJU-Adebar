@@ -1,4 +1,4 @@
-package de.naju.adebar.app.human.filter;
+package de.naju.adebar.app.human.filter.stream;
 
 import de.naju.adebar.model.human.Person;
 import java.util.stream.Stream;

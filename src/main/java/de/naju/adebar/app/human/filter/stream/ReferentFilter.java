@@ -1,4 +1,4 @@
-package de.naju.adebar.app.human.filter;
+package de.naju.adebar.app.human.filter.stream;
 
 import com.google.common.collect.Lists;
 import de.naju.adebar.app.filter.FilterType;
