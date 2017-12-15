@@ -1,4 +1,4 @@
-package de.naju.adebar.app.human.filter;
+package de.naju.adebar.app.filter;
 
 /**
  * Exception to indicate that the specified filter criteria contradict each other, e.g. if only
