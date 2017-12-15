@@ -8,7 +8,7 @@ import java.util.List;
  * @author Rico Bergmann
  */
 public class FilterPersonForm {
-  public static String DATE_FORMAT = "dd.MM.yyyy";
+  public final static String DATE_FORMAT = "dd.MM.yyyy";
 
   private String firstName, lastName;
   private String email;

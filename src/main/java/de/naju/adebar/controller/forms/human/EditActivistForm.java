@@ -9,7 +9,7 @@ import java.util.List;
  * @author Rico Bergmann
  */
 public class EditActivistForm {
-  public static String DATE_FORMAT = "dd.MM.yyy";
+  public final static String DATE_FORMAT = "dd.MM.yyy";
 
   private boolean activist;
   private boolean owningJuleica;
