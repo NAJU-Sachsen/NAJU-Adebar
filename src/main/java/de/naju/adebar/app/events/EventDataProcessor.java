@@ -156,7 +156,7 @@ public class EventDataProcessor {
   public LocalDateTime adjustTime(LocalDateTime time) {
     LocalDateTime adjusted = LocalDateTime.from(time);
     if (time.getHour() == FIRST_TIME_SLICE && time.getMinute() == FIRST_TIME_SLICE) {
-      adjusted.plusDays(ONE_DAY);
+      adjusted = adjusted.plusDays(ONE_DAY);
     }
     return adjusted;
   }
