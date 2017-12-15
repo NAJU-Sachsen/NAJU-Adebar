@@ -26,7 +26,8 @@ addons:
   sonarcloud:
     organization: "portux-github"
     token:
-      secure: "adebar"
+      secure: "XeDVd803azAASKgFZTVyAdUrCHsXNy2OlitlPVj8/nYiX3SYwI+1Sn/yAigRckDlpRAecIUNI/XbYUaZEpOJHouMEzWfMfGQM2dUFYEY1AhDIM35ugW8oa3801SaqNywGfFeSQ9nnD2Du3mVGhXMISFGANvM9K2QpqeyFxW+2DrVJ6qf+r7oSbRWIHlAovzS7w2qxwxFpmzoP8Cfq+MHHC36gNUclYsmP9A+5LF9ahoKJdMnn8lzcnfCBCKTs5CNaajeon96OrvNPwX/3TCzAltel3ilkOVozJ/GQq2VLroWMMdA8bLuBJ7im7h6tILmWmOMhoTiEEElfIbCV0w+oBQ+fWTopN22Q6jylAVVPG+NXLlbys3wQKf3g/29wpayyv56Ao1JRCKbEaSiTICR4K9jSeQ3M3yb1QrkB+hZPSuEGGcAPG11s0WR5r1L1+/+5SgOEsfkUaNRv98bt7Y85DhTHLw05V2JoLwyHqVzgBLVztW5ZZ2UAtqLvt7iNHQpobdzGzKdZj5F+4j6oPzcO4Tr44JU1az+d+cCMt4GoAx1GIfK10OPw54ez9EMXSRiqUBjTIzAqYolZ4sXnlZ7awbZ2vZFWZneBGwJckfizwAc6RKKkWjeO/uJWxIoyi+q2qvf/orKcs3lOdpFqt6totVx5H+IRHvjm2BzMA+Fkbc="
+
 
 notifications:
   slack:
