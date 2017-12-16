@@ -24,7 +24,7 @@ import de.naju.adebar.model.human.Person;
 
 /**
  * The participants (and reservations) of an {@link Event} will be stored here
- * 
+ *
  * @author Rico Bergmann
  *
  */
@@ -57,7 +57,7 @@ class ParticipantsList {
   /**
    * Creates a new participants list with an unlimited number of possible participants and
    * reservations
-   * 
+   *
    * @param event the event to create the list for
    */
   public ParticipantsList(Event event) {
@@ -66,7 +66,7 @@ class ParticipantsList {
 
   /**
    * Creates a new participants list
-   * 
+   *
    * @param event event the event to create the list for
    * @param participantsLimit the maximum number of participants
    */
@@ -349,7 +349,7 @@ class ParticipantsList {
 
   /**
    * Adds a new participant
-   * 
+   *
    * @param person the person to participate in the event
    * @throws ExistingParticipantException if the person already participates
    * @throws BookedOutException if no more persons may participate
@@ -385,7 +385,7 @@ class ParticipantsList {
 
   /**
    * Adds a new reservation
-   * 
+   *
    * @param reservation the reservation
    * @throws ExistingReservationException if there already is a reservation with that description
    */
@@ -403,19 +403,19 @@ class ParticipantsList {
 
   /**
    * Deletes a reservation
-   * 
+   *
    * @param description the description (= ID) of the reservation
    */
   public void removeReservation(String description) {
     if (!hasReservation(description)) {
       throw new IllegalArgumentException("List has no reservation: " + description);
     }
-    reservations.remove(description);
+    reservations.removeIf(reservation -> reservation.getDescription().equals(description));
   }
 
   /**
    * Updates a reservation
-   * 
+   *
    * @param description the description (= ID) of the reservation
    * @param newData the new data to use
    */
@@ -431,7 +431,7 @@ class ParticipantsList {
 
   /**
    * Enqueues a person at the end of the waiting list
-   * 
+   *
    * @param person the person to add
    * @throws IllegalArgumentException if the person was {@code null}
    * @throws ExistingParticipantException if the person is already registered as a participant
@@ -449,7 +449,7 @@ class ParticipantsList {
 
   /**
    * Removes a person from the waiting list
-   * 
+   *
    * @param person the person to remove
    * @throws IllegalArgumentException if the person is not wait-listed
    */
@@ -471,7 +471,7 @@ class ParticipantsList {
 
   /**
    * Maps an internal list index (which is ≥0) to a 'real world' index (which is ≥1)
-   * 
+   *
    * @param idx the index to normalize
    * @return the normalized index
    */
