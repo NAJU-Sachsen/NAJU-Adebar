@@ -18,7 +18,7 @@ import de.naju.adebar.util.Validation;
  * {@link de.naju.adebar.model.human.Person Person}, e.g. one may solely subscribe to a newsletter
  * through a website and therefore will not become part of the activist database itself.
  * </p>
- * 
+ *
  * @author Rico Bergmann
  *
  */
@@ -55,7 +55,7 @@ public class Subscriber implements Serializable {
 
   /**
    * Minimalist constructor
-   * 
+   *
    * @param email the subscriber's email address
    * @throws IllegalArgumentException if the email is not valid
    */
@@ -65,7 +65,7 @@ public class Subscriber implements Serializable {
 
   /**
    * Full constructor
-   * 
+   *
    * @param firstName the subsriber's first name
    * @param lastName the subsriber's last name
    * @param email the subsriber's email
@@ -152,7 +152,7 @@ public class Subscriber implements Serializable {
   /**
    * Updates the subscriber's id (= primary key). As this method should only be called by Spring, it
    * is {@code protected}
-   * 
+   *
    * @param id the new id
    */
   protected void setId(long id) {
@@ -183,17 +183,21 @@ public class Subscriber implements Serializable {
    * @return {@code true} if at least first name or last name is not empty
    */
   public boolean hasName() {
-    if (firstName == null && lastName == null) {
-      return false;
-    } else if (firstName == null && lastName.isEmpty()) {
-      return false;
-    } else if (lastName == null && firstName.isEmpty()) {
-      return false;
-    } else if (firstName.isEmpty() && lastName.isEmpty()) {
-      return false;
-    } else {
-      return true;
-    }
+    return hasFirstName() || hasLastName();
+  }
+
+  /**
+   * @return {@code true} iff the first name is neither {@code null} nor empty
+   */
+  public boolean hasFirstName() {
+    return firstName != null && !firstName.isEmpty();
+  }
+
+  /**
+   * @return {@code true} iff the last name is neither {@code null} nor empty
+   */
+  public boolean hasLastName() {
+    return lastName != null && !lastName.isEmpty();
   }
 
   // overridden from Object

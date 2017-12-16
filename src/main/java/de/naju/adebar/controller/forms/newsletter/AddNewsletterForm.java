@@ -6,17 +6,23 @@ import javax.validation.constraints.NotNull;
  * @author Rico Bergmann
  */
 public class AddNewsletterForm {
+
   public enum Belonging {
     NONE, CHAPTER, EVENT, PROJECT
   }
 
   @NotNull
   private String name;
+
   @NotNull
   private Belonging belonging;
+
   private long localGroup;
 
-  public AddNewsletterForm() {}
+  public AddNewsletterForm() {
+    this.name = "";
+    this.belonging = Belonging.NONE;
+  }
 
   public String getName() {
     return name;

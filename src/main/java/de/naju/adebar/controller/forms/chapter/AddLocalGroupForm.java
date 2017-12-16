@@ -5,15 +5,19 @@ import javax.validation.constraints.NotNull;
 /**
  * Model POJO for new local groups to add. The fields are set by Thymeleaf when the associated form
  * is submitted.
- * 
+ *
  * @author Rico Bergmann
  */
 public class AddLocalGroupForm extends LocalGroupForm {
+
   private boolean createNewsletter;
+
   @NotNull
   private String newsletterName;
 
-  public AddLocalGroupForm() {}
+  public AddLocalGroupForm() {
+    newsletterName = "";
+  }
 
   public boolean isCreateNewsletter() {
     return createNewsletter;

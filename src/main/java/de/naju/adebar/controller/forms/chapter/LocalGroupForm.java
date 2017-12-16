@@ -1,15 +1,16 @@
 package de.naju.adebar.controller.forms.chapter;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
+import javax.validation.constraints.NotNull;
 
 /**
  * Model POJO for local groups. The fields are set by Thymeleaf when the associated form is
  * submitted.
- * 
+ *
  * @author Rico Bergmann
  */
 public class LocalGroupForm {
+
   @NotNull
   private String name;
   private String street;
@@ -30,7 +31,9 @@ public class LocalGroupForm {
     this.contactPersons = contactPersons;
   }
 
-  public LocalGroupForm() {}
+  public LocalGroupForm() {
+    this.name = "";
+  }
 
   // getter and setter
 

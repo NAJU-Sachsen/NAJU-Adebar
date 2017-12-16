@@ -6,10 +6,11 @@ import javax.validation.constraints.NotNull;
 
 /**
  * Model POJO for events. The fields are set by Thymeleaf when the associated form is submitted.
- * 
+ *
  * @author Rico Bergmann
  */
 public class EventForm {
+
   public enum Belonging {
     LOCALGROUP, PROJECT
   }
@@ -19,8 +20,10 @@ public class EventForm {
 
   @NotNull
   private String name;
+
   @NotNull
   private String startTime;
+
   @NotNull
   private String endTime;
   private String participantsLimit;
@@ -29,8 +32,6 @@ public class EventForm {
   private String street, zip, city;
   private String belonging;
   private long localGroupId, projectId;
-
-  public EventForm() {}
 
   public EventForm(String name, String startTime, String endTime, String participantsLimit,
       String participantsAge, String internalParticipationFee, String externalParticipationFee,
@@ -45,6 +46,12 @@ public class EventForm {
     this.street = street;
     this.zip = zip;
     this.city = city;
+  }
+
+  public EventForm() {
+    this.name = "";
+    this.startTime = "";
+    this.endTime = "";
   }
 
   public String getName() {

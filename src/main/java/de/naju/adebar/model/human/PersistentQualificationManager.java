@@ -1,13 +1,13 @@
 package de.naju.adebar.model.human;
 
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import java.util.Optional;
 
 /**
  * A {@link QualificationManager} that persists the data in a database.
- * 
+ *
  * @author Rico Bergmann
  */
 @Service
@@ -37,7 +37,7 @@ public class PersistentQualificationManager implements QualificationManager {
 
   @Override
   public boolean hasQualification(String name) {
-    return qualificationRepo.equals(name);
+    return qualificationRepo.exists(name);
   }
 
   @Override

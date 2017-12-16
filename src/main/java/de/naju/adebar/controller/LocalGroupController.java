@@ -31,7 +31,7 @@ import de.naju.adebar.services.conversion.chapter.LocalGroupToLocalGroupFormConv
 
 /**
  * Local group related controller mappings
- * 
+ *
  * @author Rico Bergmann
  * @see LocalGroup
  */
@@ -71,7 +71,7 @@ public class LocalGroupController {
 
   /**
    * Displays an overview of all local groups
-   * 
+   *
    * @param model model from which the displayed data should be taken
    * @return the local groups' overview view
    */
@@ -84,7 +84,7 @@ public class LocalGroupController {
 
   /**
    * Adds a new local group to the database
-   * 
+   *
    * @param addLocalGroupForm the submitted local group data
    * @param redirAttr attributes for the view that should be used after redirection
    * @return the local group's detail view
@@ -101,7 +101,7 @@ public class LocalGroupController {
 
   /**
    * Detail view for a local group
-   * 
+   *
    * @param groupId the id of the group to display
    * @param model model from which the displayed data should be taken
    * @return the local group's detail view
@@ -123,8 +123,10 @@ public class LocalGroupController {
 
     model.addAttribute("memberEmails",
         humanDataProcessor.extractEmailAddressesAsString(members, EMAIL_DELIMITER));
-    model.addAttribute("boardEmails", board != null
-        ? humanDataProcessor.extractEmailAddressesAsString(boardMembers, EMAIL_DELIMITER) : "");
+    model.addAttribute("boardEmails",
+        board != null
+            ? humanDataProcessor.extractEmailAddressesAsString(boardMembers, EMAIL_DELIMITER)
+            : "");
     model.addAttribute("contactPersonsEmails",
         humanDataProcessor.extractEmailAddressesAsString(contactPersons, EMAIL_DELIMITER));
 
@@ -139,7 +141,7 @@ public class LocalGroupController {
 
   /**
    * Updates information about a local group
-   * 
+   *
    * @param groupId the id of the group to update
    * @param localGroupForm the submitted new local group data
    * @param redirAttr attributes for the view that should be used after redirection
@@ -149,7 +151,8 @@ public class LocalGroupController {
   public String editLocalGroup(@PathVariable("gid") long groupId,
       @ModelAttribute("localGroupForm") LocalGroupForm localGroupForm,
       RedirectAttributes redirAttr) {
-    localGroupManager.findLocalGroup(groupId).orElseThrow(IllegalArgumentException::new);
+    Assert.isTrue(localGroupManager.findLocalGroup(groupId).isPresent(),
+        "There is no local group with ID " + groupId);
 
     localGroupManager.adoptLocalGroupData(groupId,
         localGroupFormDataExtractor.extractLocalGroup(localGroupForm));
@@ -160,7 +163,7 @@ public class LocalGroupController {
 
   /**
    * Adds a member to a local group
-   * 
+   *
    * @param groupId the id of the local group to add the member to
    * @param personId the id of the person to add as member
    * @param redirAttr attributes for the view that should be used after redirection
@@ -186,7 +189,7 @@ public class LocalGroupController {
 
   /**
    * Removes a member from a local group
-   * 
+   *
    * @param groupId the chapter to remove the member from
    * @param memberId the id of the person to remove
    * @param redirAttr attributes for the view that should be used after redirection
@@ -208,7 +211,7 @@ public class LocalGroupController {
 
   /**
    * Adds a non-activist as member to the local group. This will make the person an activist.
-   * 
+   *
    * @param groupId the chapter to which the person should be added
    * @param personId the id of the person who should be added as counselor
    * @param redirAttr attributes for the view to display some result information
@@ -241,7 +244,7 @@ public class LocalGroupController {
 
   /**
    * Updates the local group's board
-   * 
+   *
    * @param groupId the group whose board is to be updated
    * @param boardForm the submitted data describing the board
    * @param redirAttr attributes for the view that should be used after redirection
@@ -250,7 +253,9 @@ public class LocalGroupController {
   @RequestMapping("/localGroups/{gid}/board")
   public String updateBoard(@PathVariable("gid") long groupId,
       @ModelAttribute("boardForm") BoardForm boardForm, RedirectAttributes redirAttr) {
-    localGroupManager.findLocalGroup(groupId).orElseThrow(IllegalArgumentException::new);
+    Assert.isTrue(localGroupManager.findLocalGroup(groupId).isPresent(),
+        "There is no local group with ID " + groupId);
+
 
     localGroupManager.updateBoard(groupId, boardFormDataExtractor.extractBoard(boardForm));
 

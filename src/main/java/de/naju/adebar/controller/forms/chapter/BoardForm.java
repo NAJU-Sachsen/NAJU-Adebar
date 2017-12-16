@@ -1,22 +1,24 @@
 package de.naju.adebar.controller.forms.chapter;
 
-import de.naju.adebar.util.Validation;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import javax.validation.constraints.NotNull;
+import de.naju.adebar.util.Validation;
 
 /**
  * Model POJO for boards. The fields are set by Thymeleaf when the associated form is submitted.
- * 
+ *
  * @author Rico Bergmann
  */
 public class BoardForm {
+
   @NotNull
   private String chairmanId;
   private String email;
   private List<String> memberIds;
 
   public BoardForm() {
+    this.chairmanId = "";
     this.memberIds = new ArrayList<>();
   }
 

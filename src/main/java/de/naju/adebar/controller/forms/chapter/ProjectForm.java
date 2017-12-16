@@ -4,7 +4,7 @@ import javax.validation.constraints.NotNull;
 
 /**
  * Model POJO for projects. The fields are set by Thymeleaf when the associated form is submitted.
- * 
+ *
  * @author Rico Bergmann
  */
 public class ProjectForm {
@@ -13,6 +13,7 @@ public class ProjectForm {
   @NotNull
   private String name;
   private String start, end;
+
   @NotNull
   private String personInCharge;
   private long localGroupId;
@@ -26,7 +27,10 @@ public class ProjectForm {
     this.localGroupId = localGroupId;
   }
 
-  public ProjectForm() {}
+  public ProjectForm() {
+    this.name = "";
+    this.personInCharge = "";
+  }
 
   public String getName() {
     return name;

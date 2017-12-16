@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 /**
  * Model POJO for person data. The fields are set by Thymeleaf when the associated form is
  * submitted.
- * 
+ *
  * @author Rico Bergmann
  */
 public class EditPersonForm {
@@ -14,8 +14,10 @@ public class EditPersonForm {
   // general data
   @NotNull
   private String firstName;
+
   @NotNull
   private String lastName;
+
   private String email;
   private String phoneNumber;
   private String street;
@@ -32,7 +34,10 @@ public class EditPersonForm {
   private boolean nabuMember;
   private String nabuNumber;
 
-  public EditPersonForm() {}
+  public EditPersonForm() {
+    this.firstName = "";
+    this.lastName = "";
+  }
 
   public String getFirstName() {
     return firstName;

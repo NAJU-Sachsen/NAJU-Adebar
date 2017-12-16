@@ -27,7 +27,7 @@ import de.naju.adebar.model.human.ReferentProfileRepository;
 
 /**
  * A {@link PersonManager} that persists its data in a database
- * 
+ *
  * @author Rico Bergmann
  */
 @Service
@@ -137,7 +137,7 @@ public class PersistentPersonManager implements PersonManager {
 
   /**
    * Replaces the data of a person
-   * 
+   *
    * @param person the person to update
    * @param newData the person with the new data to use
    */
@@ -160,7 +160,7 @@ public class PersistentPersonManager implements PersonManager {
   /**
    * Replaces the participation profile of a person if specified. Otherwise the database will be
    * cleaned.
-   * 
+   *
    * @param person the person to update
    * @param newPerson the new person data
    */
@@ -178,15 +178,14 @@ public class PersistentPersonManager implements PersonManager {
 
   /**
    * Replaces the participation profile of a person
-   * 
+   *
    * @param person the person to update
    * @param newProfile the new profile to use
    */
   protected ParticipantProfile doUpdateParticipantProfile(Person person,
       ParticipantProfile newProfile) {
-    if (person.getParticipantProfile() == newProfile) {
-      return newProfile;
-    } else if (person.getId().equals(newProfile.getPersonId())) {
+    if (person.getParticipantProfile() == newProfile
+        || person.getId().equals(newProfile.getPersonId())) {
       return newProfile;
     }
     try {
@@ -201,7 +200,7 @@ public class PersistentPersonManager implements PersonManager {
 
   /**
    * Replaces the activist profile of a person if specified. Otherwise the database will be cleaned.
-   * 
+   *
    * @param person the person to update
    * @param newPerson the new person data
    */
@@ -218,14 +217,13 @@ public class PersistentPersonManager implements PersonManager {
 
   /**
    * Replaces the activist profile of a person
-   * 
+   *
    * @param person the person to update
    * @param newProfile the new profile to use
    */
   protected ActivistProfile doUpdateActivistProfile(Person person, ActivistProfile newProfile) {
-    if (person.getActivistProfile() == newProfile) {
-      return newProfile;
-    } else if (person.getId().equals(newProfile.getPersonId())) {
+    if (person.getActivistProfile() == newProfile
+        || person.getId().equals(newProfile.getPersonId())) {
       return newProfile;
     }
     ActivistProfile profile = person.getActivistProfile();
@@ -235,7 +233,7 @@ public class PersistentPersonManager implements PersonManager {
 
   /**
    * Replaces the referent profile of a person if specified. Otherwise the database will be cleaned.
-   * 
+   *
    * @param person the person to update
    * @param newPerson the new person data
    */
@@ -252,14 +250,13 @@ public class PersistentPersonManager implements PersonManager {
 
   /**
    * Replaces the referent profile of a person
-   * 
+   *
    * @param person the person to update
    * @param newProfile the new profile to use
    */
   protected ReferentProfile doUpdateReferentProfile(Person person, ReferentProfile newProfile) {
-    if (person.getReferentProfile() == newProfile) {
-      return newProfile;
-    } else if (person.getId().equals(newProfile.getPersonId())) {
+    if (person.getReferentProfile() == newProfile
+        || person.getId().equals(newProfile.getPersonId())) {
       return newProfile;
     }
     ReferentProfile profile = person.getReferentProfile();
@@ -269,7 +266,7 @@ public class PersistentPersonManager implements PersonManager {
 
   /**
    * Sets the qualifications of a referent
-   * 
+   *
    * @param profile the referent to update
    * @param qualifications the referent's qualifications
    */

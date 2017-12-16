@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 /**
  * Model POJO for adding qualifications. The fields are set by Thymeleaf when the associated form is
  * submitted.
- * 
+ *
  * @author Rico Bergmann
  */
 public class AddQualificationForm {
@@ -20,7 +20,9 @@ public class AddQualificationForm {
   private String name;
   private String description;
 
-  public AddQualificationForm() {}
+  public AddQualificationForm() {
+    this.addType = "";
+  }
 
   public String getAddType() {
     return addType;
