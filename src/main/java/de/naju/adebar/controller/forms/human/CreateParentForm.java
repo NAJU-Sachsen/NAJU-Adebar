@@ -11,8 +11,6 @@ public class CreateParentForm extends PersonForm {
   private String phoneNumber;
   private boolean useChildAddress;
 
-  public CreateParentForm() {}
-
   public String getPhoneNumber() {
     return phoneNumber;
   }

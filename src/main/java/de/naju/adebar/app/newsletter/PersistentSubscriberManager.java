@@ -30,11 +30,10 @@ public class PersistentSubscriberManager implements SubscriberManager {
       if (existingSubscriber.get().equals(subscriber)) {
         return existingSubscriber.get();
       } else if (existingSubscriber.get().hasName() && subscriber.hasName()) {
-        ExistingSubscriberException e = new ExistingSubscriberException(String.format(
+        throw new ExistingSubscriberException(String.format(
             "Cannot create subscriber %s: "
                 + "There is already a subscriber with the same email but different data: %s",
             subscriber, existingSubscriber), existingSubscriber.get());
-        throw e;
       } else if (subscriber.hasName() && !existingSubscriber.get().hasName()) {
         return updateSubscriber(existingSubscriber.get(), subscriber);
       } else {

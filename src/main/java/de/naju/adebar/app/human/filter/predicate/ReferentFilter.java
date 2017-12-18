@@ -33,13 +33,12 @@ public class ReferentFilter implements PersonFilter {
 
     @Override
     public BooleanBuilder filter(BooleanBuilder input) {
-      switch (filterType) {
-        case ENFORCE:
-          return input.and(person.referent.isTrue());
-        case IGNORE:
-          return input.and(person.referent.isFalse());
-        default:
-          throw new AssertionError(filterImpl);
+      if (filterType == FilterType.ENFORCE) {
+        return input.and(person.referent.isTrue());
+      } else if (filterType == FilterType.IGNORE) {
+        return input.and(person.referent.isFalse());
+      } else {
+        throw new AssertionError(filterImpl);
       }
     }
   }

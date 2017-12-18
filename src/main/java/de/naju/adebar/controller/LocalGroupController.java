@@ -204,7 +204,7 @@ public class LocalGroupController {
 
     try {
       person.makeActivist();
-      localGroup.addMember(person);;
+      localGroup.addMember(person);
       managers.persons.updatePerson(new PersonId(personId), person);
       managers.localGroups.updateLocalGroup(groupId, localGroup);
       redirAttr.addFlashAttribute("counselorAdded", true);

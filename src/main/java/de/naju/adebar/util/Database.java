@@ -23,6 +23,9 @@ public class Database {
    * @param db database to print
    */
   public static void dumpDatabase(CrudRepository<?, ?> db) {
+    if (!log.isDebugEnabled()) {
+      return;
+    }
     for (Object entity : db.findAll()) {
       log.debug(entity.toString());
     }
@@ -34,6 +37,9 @@ public class Database {
    * @param db database to print
    */
   public static void dumpDatabase(ReadOnlyRepository<?, ?> db) {
+    if (!log.isDebugEnabled()) {
+      return;
+    }
     for (Object entity : db.findAll()) {
       log.debug(entity.toString());
     }

@@ -156,7 +156,7 @@ public class PersistentPersonManager implements PersonManager {
       changeId.setAccessible(true);
       changeId.invoke(newData, person.getId());
     } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-      throw new RuntimeException(REFLECTION_EXCEPTION_MSG, e);
+      throw new IdUpdateFailedException(REFLECTION_EXCEPTION_MSG, e);
     }
     return newData;
   }
@@ -197,7 +197,7 @@ public class PersistentPersonManager implements PersonManager {
       changeId.setAccessible(true);
       changeId.invoke(newProfile, person.getId());
     } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-      throw new RuntimeException(REFLECTION_EXCEPTION_MSG, e);
+      throw new IdUpdateFailedException(REFLECTION_EXCEPTION_MSG, e);
     }
     return newProfile;
   }

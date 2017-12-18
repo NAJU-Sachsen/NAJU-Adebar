@@ -11,7 +11,7 @@ import de.naju.adebar.app.filter.AbstractFilterBuilder;
  * @author Rico Bergmann
  * @see AbstractPredicateBasedFilter
  */
-public class PredicateBasedFilterBuilder<T>
+public class PredicateBasedFilterBuilder
     implements AbstractFilterBuilder<BooleanBuilder, AbstractPredicateBasedFilter> {
   private BooleanBuilder predicate;
 
