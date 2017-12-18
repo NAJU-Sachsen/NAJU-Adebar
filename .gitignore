@@ -32,3 +32,5 @@ libraries/
 # local test files
 [lL]ocalTest*
 
+# DBeaver
+.dbeaver-data-sources.xml
