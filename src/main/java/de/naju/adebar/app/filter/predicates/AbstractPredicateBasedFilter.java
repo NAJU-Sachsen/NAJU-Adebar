@@ -8,9 +8,9 @@ import de.naju.adebar.app.filter.AbstractFilter;
 /**
  * An {@link AbstractFilter} which consumes and produces a {@link Predicate} which may then be
  * applied to some {@link QueryDslPredicateExecutor}
- * 
+ *
  * @author Rico Bergmann
  */
-public interface AbstractPredicateBasedFilter<T> extends AbstractFilter<BooleanBuilder> {
+public interface AbstractPredicateBasedFilter extends AbstractFilter<BooleanBuilder> {
 
 }

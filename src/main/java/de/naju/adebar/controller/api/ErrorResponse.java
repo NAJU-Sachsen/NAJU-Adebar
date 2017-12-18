@@ -3,15 +3,16 @@ package de.naju.adebar.controller.api;
 /**
  * Basic response 'code' to indicate failure of an operation. Additional information might be added
  * through an error message
- * 
+ *
  * @author Rico Bergmann
  *
  */
 public class ErrorResponse extends JsonResponse {
+
   /**
    * Default String to indicate failure
    */
-  public final static String RETURN_ERROR = "error";
+  public static final String RETURN_ERROR = "error";
 
   private String msg;
 
@@ -24,7 +25,7 @@ public class ErrorResponse extends JsonResponse {
 
   /**
    * Constructor to provide an additional error message
-   * 
+   *
    * @param msg the message
    */
   public ErrorResponse(String msg) {

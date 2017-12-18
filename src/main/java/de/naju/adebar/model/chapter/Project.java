@@ -31,6 +31,9 @@ import de.naju.adebar.model.human.Person;
 @Entity(name = "project")
 public class Project {
 
+  private static final String ILLEGAL_START_END_TIME =
+      "Illegal combination of start time (%s) and end time (%s)";
+
   @Id
   @GeneratedValue
   @Column(name = "id")
@@ -90,8 +93,8 @@ public class Project {
     Assert.noNullElements(params, "No parameter may be null: " + Arrays.toString(params));
     Assert.hasText(name, "Name may not be empty: " + name);
     if (startTime != null && endTime != null) {
-      Assert.isTrue(!endTime.isBefore(startTime), String
-          .format("Illegal combination of start time (%s) and end time (%s)", startTime, endTime));
+      Assert.isTrue(!endTime.isBefore(startTime),
+          String.format(ILLEGAL_START_END_TIME, startTime, endTime));
     }
     if (personInCharge != null && !personInCharge.isActivist()) {
       throw new NoActivistException("Person in charge must be an activist: " + personInCharge);
@@ -153,8 +156,8 @@ public class Project {
    */
   public void setStartTime(LocalDate startTime) {
     if (startTime != null && endTime != null) {
-      Assert.isTrue(!endTime.isBefore(startTime), String
-          .format("Illegal combination of start time (%s) and end time (%s)", startTime, endTime));
+      Assert.isTrue(!endTime.isBefore(startTime),
+          String.format(ILLEGAL_START_END_TIME, startTime, endTime));
     }
     this.startTime = startTime;
   }
@@ -171,8 +174,8 @@ public class Project {
    */
   public void setEndTime(LocalDate endTime) {
     if (startTime != null && endTime != null) {
-      Assert.isTrue(!endTime.isBefore(startTime), String
-          .format("Illegal combination of start time (%s) and end time (%s)", startTime, endTime));
+      Assert.isTrue(!endTime.isBefore(startTime),
+          String.format(ILLEGAL_START_END_TIME, startTime, endTime));
     }
     this.endTime = endTime;
   }

@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import de.naju.adebar.app.IdUpdateFailedException;
 import de.naju.adebar.model.chapter.LocalGroup;
 import de.naju.adebar.model.chapter.Project;
 import de.naju.adebar.model.chapter.ProjectRepository;
@@ -14,7 +15,7 @@ import de.naju.adebar.model.chapter.ReadOnlyProjectRepository;
 
 /**
  * A {@link ProjectManager} that persists its data in a database
- * 
+ *
  * @author Rico Bergmann
  */
 @Service
@@ -82,7 +83,7 @@ public class PersistentProjectManager implements ProjectManager {
 
   /**
    * Updates a project's ID. To be used extremely cautiously.
-   * 
+   *
    * @param project the project to update
    * @param id the new ID
    */
@@ -92,7 +93,7 @@ public class PersistentProjectManager implements ProjectManager {
       changeId.setAccessible(true);
       changeId.invoke(project, id);
     } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-      throw new RuntimeException("Error during invocation of reflection", e);
+      throw new IdUpdateFailedException("Error during invocation of reflection", e);
     }
   }
 }

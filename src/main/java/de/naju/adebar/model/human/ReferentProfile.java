@@ -1,5 +1,6 @@
 package de.naju.adebar.model.human;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,11 +15,13 @@ import org.springframework.util.Assert;
 
 /**
  * Referents are persons who can give lectures or host field trips and the like.
- * 
+ *
  * @author Rico Bergmann
  */
 @Entity(name = "referent")
-public class ReferentProfile {
+public class ReferentProfile implements Serializable {
+
+  private static final long serialVersionUID = 1139549945134682245L;
 
   @EmbeddedId
   @Column(name = "personId")
@@ -32,7 +35,7 @@ public class ReferentProfile {
 
   /**
    * Each referent profile has to be created based on an existing person.
-   * 
+   *
    * @param person the person to create the profile for
    */
   ReferentProfile(Person person) {

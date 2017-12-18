@@ -15,7 +15,7 @@ import de.naju.adebar.model.events.Event;
 
 /**
  * Service to conveniently access {@link Event} instances and to collect data about them
- * 
+ *
  * @author Rico Bergmann
  */
 @Service
@@ -28,8 +28,8 @@ public class EventDataProcessor {
     ALL, RUNNING, FUTURE, PAST
   }
 
-  private final static int FIRST_TIME_SLICE = 0;
-  private final static long ONE_DAY = 1;
+  private static final int FIRST_TIME_SLICE = 0;
+  private static final long ONE_DAY = 1;
 
   private EventManager eventManager;
   private LocalGroupManager localGroupManager;

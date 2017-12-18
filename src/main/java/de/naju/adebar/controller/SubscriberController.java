@@ -1,16 +1,6 @@
 package de.naju.adebar.controller;
 
-import java.util.Arrays;
 import java.util.List;
-import de.naju.adebar.app.human.PersonManager;
-import de.naju.adebar.app.newsletter.NewsletterDataProcessor;
-import de.naju.adebar.app.newsletter.NewsletterManager;
-import de.naju.adebar.app.newsletter.SubscriberManager;
-import de.naju.adebar.controller.forms.newsletter.AddNewsletterForm;
-import de.naju.adebar.app.chapter.LocalGroupManager;
-import de.naju.adebar.model.human.Person;
-import de.naju.adebar.model.newsletter.*;
-import de.naju.adebar.services.conversion.newsletter.PersonToSubscriberConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import de.naju.adebar.controller.forms.newsletter.AddNewsletterForm;
+import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.newsletter.AlreadySubscribedException;
+import de.naju.adebar.model.newsletter.ExistingSubscriberException;
+import de.naju.adebar.model.newsletter.Newsletter;
+import de.naju.adebar.model.newsletter.Subscriber;
 
 /**
  * Subscriber related controller mappings
@@ -31,53 +27,44 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  */
 @Controller
 public class SubscriberController {
-  private NewsletterRepository newsletterRepo;
-  private SubscriberRepository subscriberRepo;
-  private NewsletterManager newsletterManager;
-  private SubscriberManager subscriberManager;
-  private PersonManager personManager;
-  private PersonToSubscriberConverter personToSubscriberConverter;
-  private NewsletterDataProcessor dataProcessor;
-  private LocalGroupManager localGroupManager;
+
+  private static final String SUBSCRIBERS = "subscribers";
+  private static final String REDIRECT_NEWSLETTERS = "redirect:/newsletters";
+  private static final String REDIRECT_NEWSLETTER_DETAILS = "redirect:/newsletters/";
+
+  private final SubscriberControllerRepositories repositories;
+  private final SubscriberControllerManagers managers;
+  private final SubscriberControllerDataProcessors dataProcessors;
 
   @Autowired
-  public SubscriberController(NewsletterRepository newsletterRepo,
-      SubscriberRepository newsletterSubscriberRepo, NewsletterManager newsletterManager,
-      SubscriberManager subscriberManager, PersonManager personManager,
-      PersonToSubscriberConverter personToSubscriberConverter,
-      NewsletterDataProcessor dataProcessor, LocalGroupManager localGroupManager) {
-    Object[] params =
-        {newsletterRepo, newsletterSubscriberRepo, newsletterManager, subscriberManager,
-            personManager, personToSubscriberConverter, dataProcessor, localGroupManager};
-    Assert.notNull(params, "At least one parameter was null: " + Arrays.toString(params));
-    this.newsletterRepo = newsletterRepo;
-    this.subscriberRepo = newsletterSubscriberRepo;
-    this.newsletterManager = newsletterManager;
-    this.subscriberManager = subscriberManager;
-    this.personManager = personManager;
-    this.personToSubscriberConverter = personToSubscriberConverter;
-    this.dataProcessor = dataProcessor;
-    this.localGroupManager = localGroupManager;
+  public SubscriberController(SubscriberControllerRepositories repositories,
+      SubscriberControllerManagers managers, SubscriberControllerDataProcessors dataProcessors) {
+    Assert.notNull(repositories, "Repositories may not be null");
+    Assert.notNull(managers, "Managers may not be null");
+    Assert.notNull(dataProcessors, "Data processors may not be null");
+    this.repositories = repositories;
+    this.managers = managers;
+    this.dataProcessors = dataProcessors;
   }
 
   /**
    * Displays the subscriber overview with all subscribers
-   * 
+   *
    * @param model model to display the data in
    * @return the newsletters' overview view
    */
   @RequestMapping(value = "newsletters/subscribers/all")
   public String showAllNewsletterSubscribers(Model model) {
-    model.addAttribute("newsletters", newsletterRepo.findAll());
-    model.addAttribute("subscribers", subscriberRepo.findAll());
-    model.addAttribute("localGroups", dataProcessor.getLocalGroupBelonging());
-    model.addAttribute("events", dataProcessor.getEventBelonging());
-    model.addAttribute("projects", dataProcessor.getProjectBelonging());
-    model.addAttribute("noBelonging", dataProcessor.getNewslettersWithoutBelonging());
+    model.addAttribute("newsletters", repositories.newsletters.findAll());
+    model.addAttribute(SUBSCRIBERS, repositories.subscribers.findAll());
+    model.addAttribute("localGroups", dataProcessors.newsletters.getLocalGroupBelonging());
+    model.addAttribute("events", dataProcessors.newsletters.getEventBelonging());
+    model.addAttribute("projects", dataProcessors.newsletters.getProjectBelonging());
+    model.addAttribute("noBelonging", dataProcessors.newsletters.getNewslettersWithoutBelonging());
 
-    model.addAttribute("allChapters", localGroupManager.repository().findAll());
+    model.addAttribute("allChapters", managers.localGroups.repository().findAll());
     model.addAttribute("addNewsletterForm", new AddNewsletterForm());
-    model.addAttribute("tab", "subscribers");
+    model.addAttribute("tab", SUBSCRIBERS);
     model.addAttribute("subscriberDisplay", "all");
 
     return "newsletters";
@@ -85,7 +72,7 @@ public class SubscriberController {
 
   /**
    * Adds a subscriber to a newsletter
-   * 
+   *
    * @param newsletterId the id (= primary key) of the newsletter
    * @param subscriber subscriber object created by the model
    * @param redirAttr attributes for the view to display some result information
@@ -94,25 +81,25 @@ public class SubscriberController {
   @RequestMapping(value = "/newsletters/{nid}/subscribe", method = RequestMethod.POST)
   public String subscribe(@PathVariable("nid") Long newsletterId,
       @ModelAttribute("newSubscriber") Subscriber subscriber, RedirectAttributes redirAttr) {
-    Newsletter newsletter = newsletterRepo.findOne(newsletterId);
+    Newsletter newsletter = repositories.newsletters.findOne(newsletterId);
 
     try {
-      subscriber = subscriberManager.saveSubscriber(subscriber);
-      newsletterManager.subscribe(subscriber, newsletter);
+      subscriber = managers.subscribers.saveSubscriber(subscriber);
+      managers.newsletters.subscribe(subscriber, newsletter);
       redirAttr.addFlashAttribute("subscribed", true);
     } catch (ExistingSubscriberException e) {
       redirAttr.addFlashAttribute("emailExists", true);
-      redirAttr.addFlashAttribute("existingSubscriber", e.getExistingSubscriber());
+      redirAttr.addFlashAttribute("existingSubscriber", e.getSubscriber());
     } catch (AlreadySubscribedException e) {
       redirAttr.addAttribute("alreadySubscribed", true);
     }
 
-    return "redirect:/newsletters/" + newsletterId;
+    return REDIRECT_NEWSLETTER_DETAILS + newsletterId;
   }
 
   /**
    * Adds an existing person to a newsletter
-   * 
+   *
    * @param newsletterId the id of the newsletter
    * @param personId the id of the person
    * @param redirAttr attributes for the view that should be used after redirection
@@ -121,23 +108,24 @@ public class SubscriberController {
   @RequestMapping(value = "/newsletters/{nid}/subscribe-person")
   public String subscribePerson(@PathVariable("nid") Long newsletterId,
       @RequestParam("person-id") String personId, RedirectAttributes redirAttr) {
-    Newsletter newsletter = newsletterRepo.findOne(newsletterId);
-    Person person = personManager.findPerson(personId).orElseThrow(IllegalArgumentException::new);
+    Newsletter newsletter = repositories.newsletters.findOne(newsletterId);
+    Person person =
+        managers.persons.findPerson(personId).orElseThrow(IllegalArgumentException::new);
 
     try {
-      Subscriber subscriber =
-          subscriberManager.saveSubscriber(personToSubscriberConverter.convertPerson(person));
-      newsletterManager.subscribe(subscriber, newsletter);
+      Subscriber subscriber = managers.subscribers
+          .saveSubscriber(dataProcessors.personToSubscriberConverter.convertPerson(person));
+      managers.newsletters.subscribe(subscriber, newsletter);
     } catch (AlreadySubscribedException e) {
       redirAttr.addFlashAttribute("alreadySubscribed", true);
     }
 
-    return "redirect:/newsletters/" + newsletterId;
+    return REDIRECT_NEWSLETTER_DETAILS + newsletterId;
   }
 
   /**
    * Removes a subscriber form the newsletter
-   * 
+   *
    * @param newsletterId the id (= primary key) of the newsletter
    * @param email the email address (= primary key) of the subscriber to remove
    * @param redirAttr attributes for the view to display some result information
@@ -146,17 +134,17 @@ public class SubscriberController {
   @RequestMapping(value = "/newsletters/{nid}/unsubscribe", method = RequestMethod.POST)
   public String unsubscribe(@PathVariable("nid") Long newsletterId,
       @RequestParam("email") String email, RedirectAttributes redirAttr) {
-    Newsletter newsletter = newsletterRepo.findOne(newsletterId);
+    Newsletter newsletter = repositories.newsletters.findOne(newsletterId);
 
-    newsletterManager.unsubscribe(email, newsletter);
+    managers.newsletters.unsubscribe(email, newsletter);
 
     redirAttr.addFlashAttribute("subscriberRemoved", true);
-    return "redirect:/newsletters/" + newsletterId;
+    return REDIRECT_NEWSLETTER_DETAILS + newsletterId;
   }
 
   /**
    * Creates a new subscriber and signs it up to the given newsletters
-   * 
+   *
    * @param firstName the subscriber's first name
    * @param lastName the subscriber's last name
    * @param email the subscriber's email
@@ -170,20 +158,21 @@ public class SubscriberController {
       @RequestParam("newsletters") List<Long> newsletters, RedirectAttributes redirAttr) {
 
     try {
-      Subscriber subscriber = subscriberManager.createSubscriber(firstName, lastName, email);
-      newsletterManager.updateSubscriptions(subscriber, newsletterRepo.findAll(newsletters));
+      Subscriber subscriber = managers.subscribers.createSubscriber(firstName, lastName, email);
+      managers.newsletters.updateSubscriptions(subscriber,
+          repositories.newsletters.findAll(newsletters));
       redirAttr.addFlashAttribute("subscriberCreated", true);
     } catch (ExistingSubscriberException e) {
       redirAttr.addFlashAttribute("emailExists", true);
     }
 
-    redirAttr.addFlashAttribute("tab", "subscribers");
-    return "redirect:/newsletters";
+    redirAttr.addFlashAttribute("tab", SUBSCRIBERS);
+    return REDIRECT_NEWSLETTERS;
   }
 
   /**
    * Updates the information of a subscriber
-   * 
+   *
    * @param id the subscriber's old email
    * @param firstName the subscriber's new first name
    * @param lastName the subscriber's new last name
@@ -198,35 +187,38 @@ public class SubscriberController {
       @RequestParam("edit-lastName") String lastName, @RequestParam("edit-email") String email,
       @RequestParam("edit-subscribed") List<Long> newsletterIds, RedirectAttributes redirAttr) {
 
-    subscriberRepo.findByEmail(id).ifPresent(subscriber -> {
-      subscriber = subscriberManager.updateSubscriberFirstName(subscriber, firstName);
-      subscriber = subscriberManager.updateSubscriberLastName(subscriber, lastName);
-      subscriber = subscriberManager.updateSubscriberEmail(subscriber, email);
-      newsletterManager.updateSubscriptions(subscriber, newsletterRepo.findAll(newsletterIds));
+    repositories.subscribers.findByEmail(id).ifPresent(subscriber -> {
+      subscriber = managers.subscribers.updateSubscriberFirstName(subscriber, firstName);
+      subscriber = managers.subscribers.updateSubscriberLastName(subscriber, lastName);
+      subscriber = managers.subscribers.updateSubscriberEmail(subscriber, email);
+      managers.newsletters.updateSubscriptions(subscriber,
+          repositories.newsletters.findAll(newsletterIds));
 
-      redirAttr.addFlashAttribute("tab", "subscribers");
+      redirAttr.addFlashAttribute("tab", SUBSCRIBERS);
       redirAttr.addFlashAttribute("subscriberUpdated", true);
     });
 
-    return "redirect:/newsletters";
+    return REDIRECT_NEWSLETTERS;
   }
 
   /**
    * Removes a subscriber from the system
-   * 
+   *
    * @param id the subscriber's id
    * @param redirAttr attributes for the view to display some result information
    * @return the newsletter overview view
    */
   @RequestMapping(value = "/newsletters/subscribers/delete", method = RequestMethod.POST)
   public String deleteSubscriber(@RequestParam("id") String id, RedirectAttributes redirAttr) {
-    Iterable<Newsletter> subscribedNewsletters = newsletterRepo.findBySubscribersEmail(id);
+    Iterable<Newsletter> subscribedNewsletters =
+        repositories.newsletters.findBySubscribersEmail(id);
 
-    subscribedNewsletters.forEach(newsletter -> newsletterManager.unsubscribe(id, newsletter));
-    subscriberManager.deleteSubscriber(id);
+    subscribedNewsletters.forEach(newsletter -> managers.newsletters.unsubscribe(id, newsletter));
+    managers.subscribers.deleteSubscriber(id);
 
-    redirAttr.addFlashAttribute("tab", "subscribers");
+    redirAttr.addFlashAttribute("tab", SUBSCRIBERS);
     redirAttr.addFlashAttribute("subscriberDeleted", true);
-    return "redirect:/newsletters";
+    return REDIRECT_NEWSLETTERS;
   }
+
 }

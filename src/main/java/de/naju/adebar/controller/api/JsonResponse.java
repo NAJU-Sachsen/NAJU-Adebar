@@ -3,14 +3,15 @@ package de.naju.adebar.controller.api;
 /**
  * Basic response 'code' structure. Depending on the actual response, additional fields might be
  * added through subclasses.
- * 
+ *
  * @author Rico Bergmann
  */
 public class JsonResponse {
+
   /**
    * Default String to indicate correct behavior
    */
-  public final static String RETURN_OK = "ok";
+  public static final String RETURN_OK = "ok";
 
   protected String status;
 

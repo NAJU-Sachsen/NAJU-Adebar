@@ -20,9 +20,12 @@ import de.naju.adebar.model.human.Person;
 /**
  * A user account. Each account is created for an activist who thereby gets access to the
  * application.
- * 
- * @author Rico Bergmann
+ * <p>
+ * Although UserAccount inherits serializability from {@link UserDetails} one should never attempt
+ * to serialize any instance of it - the person associated to this account would be lost in the
+ * process otherwise.
  *
+ * @author Rico Bergmann
  */
 @Entity(name = "userAccount")
 public class UserAccount implements UserDetails {
@@ -47,7 +50,7 @@ public class UserAccount implements UserDetails {
 
   /**
    * Full constructor
-   * 
+   *
    * @param username the username, must be unique
    * @param password the password
    * @param person the person the account is created for
@@ -87,7 +90,7 @@ public class UserAccount implements UserDetails {
 
   @Override
   public String getPassword() {
-    return password.getPassword();
+    return password.getValue();
   }
 
   @Override
@@ -117,7 +120,7 @@ public class UserAccount implements UserDetails {
 
   /**
    * Checks whether the user has a certain authority
-   * 
+   *
    * @param authority the authority to check
    * @return whether the user has this role
    */
@@ -127,7 +130,7 @@ public class UserAccount implements UserDetails {
 
   /**
    * Updates the password
-   * 
+   *
    * @param password the new password
    */
   void setPassword(String password) {
@@ -137,7 +140,7 @@ public class UserAccount implements UserDetails {
 
   /**
    * Updates the password
-   * 
+   *
    * @param password the new password
    */
   void setPassword(Password password) {
@@ -147,7 +150,7 @@ public class UserAccount implements UserDetails {
 
   /**
    * Updates the authorities
-   * 
+   *
    * @param authorities the new authorities
    */
   void setAuthorities(List<SimpleGrantedAuthority> authorities) {
@@ -156,7 +159,7 @@ public class UserAccount implements UserDetails {
 
   /**
    * Sets the username. Just for JPA's sake
-   * 
+   *
    * @param username
    */
   @SuppressWarnings("unused")

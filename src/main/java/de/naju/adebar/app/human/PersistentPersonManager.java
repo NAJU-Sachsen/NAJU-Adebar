@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import com.google.common.collect.Lists;
+import de.naju.adebar.app.IdUpdateFailedException;
 import de.naju.adebar.model.human.ActivistProfile;
 import de.naju.adebar.model.human.ActivistProfileRepository;
 import de.naju.adebar.model.human.NoReferentException;
@@ -32,6 +33,9 @@ import de.naju.adebar.model.human.ReferentProfileRepository;
  */
 @Service
 public class PersistentPersonManager implements PersonManager {
+
+  private static final String REFLECTION_EXCEPTION_MSG = "Error during invocation of reflection";
+
   private PersonRepository personRepo;
   private ReadOnlyPersonRepository roRepo;
   private PersonFactory personFactory;
@@ -152,7 +156,7 @@ public class PersistentPersonManager implements PersonManager {
       changeId.setAccessible(true);
       changeId.invoke(newData, person.getId());
     } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-      throw new RuntimeException("Error during invocation of reflection", e);
+      throw new RuntimeException(REFLECTION_EXCEPTION_MSG, e);
     }
     return newData;
   }
@@ -193,7 +197,7 @@ public class PersistentPersonManager implements PersonManager {
       changeId.setAccessible(true);
       changeId.invoke(newProfile, person.getId());
     } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-      throw new RuntimeException("Error during invocation of reflection", e);
+      throw new RuntimeException(REFLECTION_EXCEPTION_MSG, e);
     }
     return newProfile;
   }
@@ -277,7 +281,7 @@ public class PersistentPersonManager implements PersonManager {
       changeQualifications.setAccessible(true);
       changeQualifications.invoke(profile, qualifications);
     } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-      throw new RuntimeException("Error during invocation of reflection", e);
+      throw new IdUpdateFailedException(REFLECTION_EXCEPTION_MSG, e);
     }
   }
 

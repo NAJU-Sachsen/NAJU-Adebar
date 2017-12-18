@@ -24,16 +24,15 @@ import de.naju.adebar.model.human.Qualification;
 import de.naju.adebar.model.human.QualificationRepository;
 import de.naju.adebar.model.human.ReferentProfile;
 
-// TODO make CreatePersonFormDataExtractor subclass of EditPersonFormDataExtractor
-
 /**
  * Service to extract the necessary data from a 'create person' form
- * 
+ *
  * @author Rico Bergmann
  * @see CreatePersonForm
  */
 @Service
 public class CreatePersonFormDataExtractor {
+
   private PersonFactory personFactory;
   private QualificationRepository qualificationRepo;
   private DateTimeFormatter dateFormatter;
@@ -104,8 +103,9 @@ public class CreatePersonFormDataExtractor {
   public void fillParticipantProfile(ParticipantProfile profile, CreatePersonForm personForm) {
     Gender gender = Gender.valueOf(personForm.getGender());
     profile.setGender(gender);
-    LocalDate dob = personForm.hasDateOfBirth()
-        ? LocalDate.parse(personForm.getDateOfBirth(), dateFormatter) : null;
+    LocalDate dob =
+        personForm.hasDateOfBirth() ? LocalDate.parse(personForm.getDateOfBirth(), dateFormatter)
+            : null;
     profile.setDateOfBirth(dob);
     NabuMembership nabu = personForm.isNabuMember() ? new NabuMembership(personForm.getNabuNumber())
         : new NabuMembership();
@@ -134,7 +134,7 @@ public class CreatePersonFormDataExtractor {
    */
   public void fillReferentProfile(ReferentProfile profile, CreatePersonForm personForm) {
     extractQualifications(personForm, qualificationRepo)
-        .ifPresent(qs -> qs.forEach(q -> profile.addQualification(q)));
+        .ifPresent(qs -> qs.forEach(profile::addQualification));
   }
 
   /**

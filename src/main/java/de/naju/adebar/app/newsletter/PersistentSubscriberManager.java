@@ -1,16 +1,16 @@
 package de.naju.adebar.app.newsletter;
 
 import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import de.naju.adebar.model.newsletter.ExistingSubscriberException;
 import de.naju.adebar.model.newsletter.NoSuchSubscriberException;
 import de.naju.adebar.model.newsletter.Subscriber;
 import de.naju.adebar.model.newsletter.SubscriberRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 /**
  * A {@link SubscriberManager} that persists the data in a database
- * 
+ *
  * @author Rico Bergmann
  */
 @Service
@@ -33,8 +33,7 @@ public class PersistentSubscriberManager implements SubscriberManager {
         ExistingSubscriberException e = new ExistingSubscriberException(String.format(
             "Cannot create subscriber %s: "
                 + "There is already a subscriber with the same email but different data: %s",
-            subscriber, existingSubscriber));
-        e.setExistingSubscriber(existingSubscriber.get());
+            subscriber, existingSubscriber), existingSubscriber.get());
         throw e;
       } else if (subscriber.hasName() && !existingSubscriber.get().hasName()) {
         return updateSubscriber(existingSubscriber.get(), subscriber);

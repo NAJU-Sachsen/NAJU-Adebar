@@ -1,30 +1,38 @@
 package de.naju.adebar.services.conversion.events;
 
-import de.naju.adebar.app.events.filter.*;
-import de.naju.adebar.app.filter.ComparableFilterType;
-import de.naju.adebar.app.filter.DateTimeFilterType;
-import de.naju.adebar.app.filter.MatchType;
-import de.naju.adebar.controller.forms.events.FilterEventsForm;
-import de.naju.adebar.model.human.Address;
-import org.javamoney.moneta.Money;
-import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import org.javamoney.moneta.Money;
+import org.springframework.stereotype.Service;
+import de.naju.adebar.app.events.filter.AddressFilter;
+import de.naju.adebar.app.events.filter.EndTimeFilter;
+import de.naju.adebar.app.events.filter.EventFilter;
+import de.naju.adebar.app.events.filter.MinimumParticipantAgeFilter;
+import de.naju.adebar.app.events.filter.NameFilter;
+import de.naju.adebar.app.events.filter.ParticipantsLimitFilter;
+import de.naju.adebar.app.events.filter.ParticipationFeeFilter;
+import de.naju.adebar.app.events.filter.StartTimeFilter;
+import de.naju.adebar.app.filter.ComparableFilterType;
+import de.naju.adebar.app.filter.DateTimeFilterType;
+import de.naju.adebar.app.filter.MatchType;
+import de.naju.adebar.controller.forms.events.FilterEventsForm;
+import de.naju.adebar.model.human.Address;
 
 /**
  * Service to convert {@link FilterEventsForm} data to corresponding objects
- * 
+ *
  * @author Rico Bergmann
  */
 @Service
 public class FilterEventsFormDataExtractor {
-  private final static String NO_FILTER = "none";
 
-  private DateTimeFormatter dateTimeFormatter;
+  private static final String NO_FILTER = "none";
+
+  private final DateTimeFormatter dateTimeFormatter;
 
   public FilterEventsFormDataExtractor() {
     this.dateTimeFormatter =
@@ -156,7 +164,8 @@ public class FilterEventsFormDataExtractor {
       throw new IllegalStateException("No participation fee filter specified");
     }
 
-    Money internalFee = null, externalFee = null;
+    Money internalFee = null;
+    Money externalFee = null;
     if (eventsForm.hasInternalFee()) {
       internalFee =
           Money.of(new BigDecimal(eventsForm.getInternalFee()), FilterEventsForm.CURRENCY_UNIT);

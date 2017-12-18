@@ -6,13 +6,14 @@ import java.util.Locale;
 
 /**
  * Custom formatter for time and time spans
- * 
+ *
  * @author Rico Bergmann
  */
 public class TimeFormatter {
-  private final static String DAY_ONLY = "dd.";
-  private final static String DATE_FORMAT = "dd.MM.yy";
-  private final static String DATE_TIME_FORMAT = "dd.MM.yy HH:mm";
+
+  private static final String DAY_ONLY = "dd.";
+  private static final String DATE_FORMAT = "dd.MM.yy";
+  private static final String DATE_TIME_FORMAT = "dd.MM.yy HH:mm";
 
   private DateTimeFormatter dateFormatter;
   private DateTimeFormatter dateTimeFormatter;
@@ -24,7 +25,7 @@ public class TimeFormatter {
 
   /**
    * Formats a time span
-   * 
+   *
    * @param from start date
    * @param to end date
    * @return the formatted time span
@@ -38,7 +39,7 @@ public class TimeFormatter {
 
   /**
    * Formats a date-time object. Basically it will ignore hour and minutes if the time is 0:00
-   * 
+   *
    * @param time a date to format
    * @return the formatted date
    */
@@ -51,7 +52,7 @@ public class TimeFormatter {
 
   /**
    * Formats the dates as two directly following ones, i.e. as "d₁/d₂" rather than "d₁ - d₂"
-   * 
+   *
    * @param from the first date
    * @param to the second date
    * @return the formatted time period
@@ -65,7 +66,7 @@ public class TimeFormatter {
    * Checks, if some pretty-printing is possible. If a date's time is 0:00 it should be treated as a
    * pure date (as the way 'time is not important' is expressed within the model is through setting
    * the time to 0:00)
-   * 
+   *
    * @param time the time to check
    * @return {@code true} if the time should be formatted as 'date-only', {@code false} otherwise
    */
@@ -76,7 +77,7 @@ public class TimeFormatter {
   /**
    * Checks, if some pretty printing is possible. If two dates follow directly on each other, they
    * should be printed as "d₁/d₂" rather than "d₁ - d₂"
-   * 
+   *
    * @param from the first date
    * @param to the second date
    * @return {@code true} if the dates should be formatted as directly following ones, {@code false}

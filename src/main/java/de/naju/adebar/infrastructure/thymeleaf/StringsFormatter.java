@@ -4,18 +4,19 @@ import java.util.StringJoiner;
 
 /**
  * Custom formatter for sets of strings
- * 
+ *
  * @author Rico Bergmann
  */
 public class StringsFormatter {
+
   /**
    * Default formatter to use if no other was specified
    */
-  private final static String DEFAULT_FORMATTER = ", ";
+  private static final String DEFAULT_FORMATTER = ", ";
 
   /**
    * Joins the objects to one large string separated by the {@link #DEFAULT_FORMATTER}
-   * 
+   *
    * @param objs the objects to join
    * @return the joined objects
    */
@@ -25,7 +26,7 @@ public class StringsFormatter {
 
   /**
    * Joins the objects to one large string, using a custom separator
-   * 
+   *
    * @param separator the separator to use
    * @param objs the objects to join
    * @return the joined objects
@@ -47,7 +48,7 @@ public class StringsFormatter {
   /**
    * Joins a single object. Depending on the concrete type (e.g. for arrays) the join may be
    * delegated or done directly done through the function.
-   * 
+   *
    * @param separator
    * @param obj
    * @return
@@ -63,7 +64,7 @@ public class StringsFormatter {
 
   /**
    * Joins an array of objects
-   * 
+   *
    * @param separator the separator to use for the join
    * @param objs the objects to join
    * @return the joined objects
@@ -78,7 +79,7 @@ public class StringsFormatter {
 
   /**
    * Joins an iterable
-   * 
+   *
    * @param separator the separator to use for the join
    * @param objs the objects to join
    * @return the joined objects

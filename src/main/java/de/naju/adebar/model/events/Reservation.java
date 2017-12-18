@@ -7,12 +7,13 @@ import de.naju.adebar.util.Validation;
 
 /**
  * A reservation for an event
- * 
+ *
  * @author Rico Bergmann
  */
 @Embeddable
 public class Reservation {
-  private final static int SINGLE_RESERVATION = 1;
+
+  private static final int SINGLE_RESERVATION = 1;
 
   @Column(name = "description")
   private String description;

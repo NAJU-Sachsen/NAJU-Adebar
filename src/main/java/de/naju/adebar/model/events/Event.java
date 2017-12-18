@@ -38,9 +38,14 @@ import de.naju.adebar.model.human.Person;
  */
 @Entity(name = "event")
 public class Event {
+
   public enum EventStatus {
     PLANNED, RUNNING, PAST, CANCELLED
   }
+
+  private static final String START_TIME_AFTER_END_TIME = "Start time may not be after end time";
+  private static final String PERSON_NOT_IN_TO_CONTACT_LIST =
+      "Person is not registered as 'should be contacted': ";
 
   @EmbeddedId
   @Column(name = "id")
@@ -101,57 +106,21 @@ public class Event {
    * @param endTime the event's end time
    */
   Event(EventId id, String name, LocalDateTime startTime, LocalDateTime endTime) {
-    this(id, name, startTime, endTime, Integer.MAX_VALUE, 0, null, null, new Address("", "", ""));
-  }
-
-  /**
-   * Full constructor. All parameters may be {@code null} if not stated otherwise
-   *
-   * @param name the event's name, may not be {@code null}
-   * @param startTime the event's start time, may not be {@code null}
-   * @param endTime the event's end time, may not be {@code null}
-   * @param participantsLimit the number of persons that may at most participate
-   * @param minimumParticipantAge the age which new participants must be at least
-   * @param internalParticipationFee the fee to pay in order to participate
-   * @param place the address where the event takes place
-   * @throws IllegalArgumentException if any of the fields' contracts is violated. Refer to the
-   *         setter methods for further information about those contracts.
-   */
-  Event(EventId id, String name, LocalDateTime startTime, LocalDateTime endTime,
-      int participantsLimit, int minimumParticipantAge, Money internalParticipationFee,
-      Money externalParticipationFee, Address place) {
     Assert.notNull(id, "Event id may not be null!");
     Assert.hasText(name, "Name must contain text but was: " + name);
     Assert.notNull(startTime, "Start time must not be null!");
     Assert.notNull(endTime, "End time must not be null!");
     Assert.isTrue(!startTime.isAfter(endTime), "Start time must be before end time");
-    Assert.isTrue(participantsLimit > 0,
-        "Participants limit must be positive, but was: " + participantsLimit);
-    Assert.isTrue(minimumParticipantAge >= 0,
-        "Minimum participant age must not be negative but was: " + minimumParticipantAge);
-
-    if (internalParticipationFee != null) {
-      Assert.isTrue(internalParticipationFee.isPositiveOrZero(),
-          "Internal participation fee may not be negative, but was: " + internalParticipationFee);
-    }
-    if (externalParticipationFee != null) {
-      Assert.isTrue(externalParticipationFee.isPositiveOrZero(),
-          "External participation fee may not be negative, but was: " + externalParticipationFee);
-    }
-
     this.id = id;
     this.name = name;
     this.startTime = startTime;
     this.endTime = endTime;
-    this.minimumParticipantAge = minimumParticipantAge;
-    this.internalParticipationFee = internalParticipationFee;
-    this.externalParticipationFee = externalParticipationFee;
-    this.place = place;
+    this.place = new Address("", "", "");
     this.counselors = new LinkedList<>();
     this.organizers = new LinkedList<>();
     this.personsToContact = new HashMap<>();
     this.lectures = new LinkedList<>();
-    this.participantsList = new ParticipantsList(this, participantsLimit);
+    this.participantsList = new ParticipantsList(this, Integer.MAX_VALUE);
   }
 
   /**
@@ -204,7 +173,7 @@ public class Event {
     // afterwards. Therefore end time may be null and we must check this
     // before validating the start date
     if (endTime != null) {
-      Assert.isTrue(!endTime.isBefore(startTime), "Start time may not be after end time");
+      Assert.isTrue(!endTime.isBefore(startTime), START_TIME_AFTER_END_TIME);
     }
     this.startTime = startTime;
   }
@@ -229,7 +198,7 @@ public class Event {
     // afterwards. Therefore start time may be null and we must check this
     // before validating the end date
     if (startTime != null) {
-      Assert.isTrue(!endTime.isBefore(startTime), "Start time may not be after end time");
+      Assert.isTrue(!endTime.isBefore(startTime), START_TIME_AFTER_END_TIME);
     }
     this.endTime = endTime;
   }
@@ -569,7 +538,7 @@ public class Event {
   public void updateTimePeriod(LocalDateTime startTime, LocalDateTime endTime) {
     Assert.notNull(startTime, "Start time may not be null!");
     Assert.notNull(endTime, "End time may not be null!");
-    Assert.isTrue(!endTime.isBefore(startTime), "Start time may not be after end time");
+    Assert.isTrue(!endTime.isBefore(startTime), START_TIME_AFTER_END_TIME);
     this.startTime = startTime;
     this.endTime = endTime;
   }
@@ -836,8 +805,7 @@ public class Event {
    */
   public void removePersonToContact(Person person) {
     if (!shouldBeContacted(person)) {
-      throw new IllegalArgumentException(
-          "Person is not registered as 'should be contacted': " + person);
+      throw new IllegalArgumentException(PERSON_NOT_IN_TO_CONTACT_LIST + person);
     }
     personsToContact.remove(person);
   }
@@ -857,8 +825,7 @@ public class Event {
   @Transient
   public String getContactRemarkFor(Person person) {
     if (!shouldBeContacted(person)) {
-      throw new IllegalArgumentException(
-          "Person is not registered as 'should be contacted': " + person);
+      throw new IllegalArgumentException(PERSON_NOT_IN_TO_CONTACT_LIST + person);
     }
     return personsToContact.get(person);
   }
@@ -869,8 +836,7 @@ public class Event {
    */
   public void updatePersonToContact(Person person, String remark) {
     if (!shouldBeContacted(person)) {
-      throw new IllegalArgumentException(
-          "Person is not registered as 'should be contacted': " + person);
+      throw new IllegalArgumentException(PERSON_NOT_IN_TO_CONTACT_LIST + person);
     }
     personsToContact.replace(person, remark);
   }
@@ -916,10 +882,7 @@ public class Event {
 
   @Override
   public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((id == null) ? 0 : id.hashCode());
-    return result;
+    return id.hashCode();
   }
 
   @Override

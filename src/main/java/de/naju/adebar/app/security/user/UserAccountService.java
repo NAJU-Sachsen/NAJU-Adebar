@@ -10,7 +10,7 @@ import org.springframework.util.Assert;
 /**
  * The {@link UserDetailsService} for our {@link UserAccount} implementation. Completely straight
  * forward.
- * 
+ *
  * @author Rico Bergmann
  *
  */
@@ -25,7 +25,7 @@ public class UserAccountService implements UserDetailsService {
   }
 
   @Override
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+  public UserDetails loadUserByUsername(String username) {
     return userRepository.findByUsername(username)
         .orElseThrow(() -> new UsernameNotFoundException("For username " + username));
   }

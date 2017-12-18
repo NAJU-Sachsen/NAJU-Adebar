@@ -15,12 +15,15 @@ import de.naju.adebar.model.human.Person;
 
 /**
  * A {@link UserAccountManager} that persists its data in a database
- * 
+ *
  * @author Rico Bergmann
  *
  */
 @Service
 public class PersistentUserAccountManager implements UserAccountManager {
+
+  private static final String USERNAME_NOT_FOUND_MSG = "For username ";
+
   private UserAccountRepository accountRepo;
   private PasswordEncoder passwordEncoder;
 
@@ -68,7 +71,7 @@ public class PersistentUserAccountManager implements UserAccountManager {
   @Override
   public void deleteAccount(String username) {
     if (!usernameExists(username)) {
-      throw new UsernameNotFoundException("For username " + username);
+      throw new UsernameNotFoundException(USERNAME_NOT_FOUND_MSG + username);
     }
     accountRepo.delete(username);
   }
@@ -81,8 +84,8 @@ public class PersistentUserAccountManager implements UserAccountManager {
   @Override
   public UserAccount updatePassword(String username, String currentPassword, String newPassword,
       boolean encrypted) {
-    UserAccount account =
-        find(username).orElseThrow(() -> new UsernameNotFoundException("For username " + username));
+    UserAccount account = find(username)
+        .orElseThrow(() -> new UsernameNotFoundException(USERNAME_NOT_FOUND_MSG + username));
 
     if (!passwordEncoder.matches(currentPassword, account.getPassword())) {
       throw new PasswordMismatchException("For user " + username);
@@ -95,8 +98,8 @@ public class PersistentUserAccountManager implements UserAccountManager {
   @Override
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   public UserAccount resetPassword(String username, String newPassword, boolean encrypted) {
-    UserAccount account =
-        find(username).orElseThrow(() -> new UsernameNotFoundException("For username " + username));
+    UserAccount account = find(username)
+        .orElseThrow(() -> new UsernameNotFoundException(USERNAME_NOT_FOUND_MSG + username));
     account.setPassword(generatePassword(newPassword, encrypted));
     return accountRepo.save(account);
   }
@@ -116,7 +119,7 @@ public class PersistentUserAccountManager implements UserAccountManager {
 
   /**
    * Creates a new {@link Password} instance and encrypts it if necessary
-   * 
+   *
    * @param rawPassword the password to use
    * @param encrypted whether the password is already encrypted
    * @return the password

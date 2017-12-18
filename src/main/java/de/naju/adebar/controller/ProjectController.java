@@ -1,15 +1,6 @@
 package de.naju.adebar.controller;
 
-import de.naju.adebar.app.chapter.LocalGroupManager;
-import de.naju.adebar.app.chapter.ProjectManager;
-import de.naju.adebar.app.human.DataProcessor;
-import de.naju.adebar.app.human.PersonManager;
-import de.naju.adebar.controller.forms.chapter.ProjectForm;
-import de.naju.adebar.controller.forms.events.EventForm;
-import de.naju.adebar.model.chapter.*;
-import de.naju.adebar.model.human.Person;
-import de.naju.adebar.services.conversion.chapter.ProjectFormDataExtractor;
-import de.naju.adebar.services.conversion.chapter.ProjectToProjectFormConverter;
+import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,28 +10,41 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import java.util.Arrays;
+import de.naju.adebar.app.chapter.LocalGroupManager;
+import de.naju.adebar.app.chapter.ProjectManager;
+import de.naju.adebar.app.human.HumanDataProcessor;
+import de.naju.adebar.app.human.PersonManager;
+import de.naju.adebar.controller.forms.chapter.ProjectForm;
+import de.naju.adebar.controller.forms.events.EventForm;
+import de.naju.adebar.model.chapter.ExistingContributorException;
+import de.naju.adebar.model.chapter.LocalGroup;
+import de.naju.adebar.model.chapter.Project;
+import de.naju.adebar.model.human.Person;
+import de.naju.adebar.services.conversion.chapter.ProjectFormDataExtractor;
+import de.naju.adebar.services.conversion.chapter.ProjectToProjectFormConverter;
 
 /**
  * Project related controller mappings
- * 
+ *
  * @author Rico Bergmann
  * @see Project
  */
 @Controller
 public class ProjectController {
-  private final static String EMAIL_DELIMITER = ";";
 
-  private ProjectManager projectManager;
-  private PersonManager personManager;
-  private LocalGroupManager localGroupManager;
-  private DataProcessor humanDataProcessor;
-  private ProjectFormDataExtractor dataExtractor;
-  private ProjectToProjectFormConverter formConverter;
+  private static final String EMAIL_DELIMITER = ";";
+  private static final String REDIRECT_PROJECTS = "redirect:/projects/";
+
+  private final ProjectManager projectManager;
+  private final PersonManager personManager;
+  private final LocalGroupManager localGroupManager;
+  private final HumanDataProcessor humanDataProcessor;
+  private final ProjectFormDataExtractor dataExtractor;
+  private final ProjectToProjectFormConverter formConverter;
 
   @Autowired
   public ProjectController(ProjectManager projectManager, PersonManager personManager,
-      LocalGroupManager localGroupManager, DataProcessor humanDataProcessor,
+      LocalGroupManager localGroupManager, HumanDataProcessor humanDataProcessor,
       ProjectFormDataExtractor dataExtractor, ProjectToProjectFormConverter formConverter) {
     Object[] params =
         {projectManager, personManager, localGroupManager, dataExtractor, formConverter};
@@ -55,7 +59,7 @@ public class ProjectController {
 
   /**
    * Detail view for a project
-   * 
+   *
    * @param projectId the id of the project to display
    * @param model model from which the displayed data should be taken
    * @return the project's detail view
@@ -78,7 +82,7 @@ public class ProjectController {
 
   /**
    * Adds a new project to the database
-   * 
+   *
    * @param projectForm the submitted data about the project to add
    * @param redirAttr attributes for the view that should be used after redirection
    * @return the project's detail view
@@ -93,12 +97,12 @@ public class ProjectController {
         dataExtractor.extractProject(projectForm));
 
     redirAttr.addFlashAttribute("projectAdded", true);
-    return "redirect:/projects/" + project.getId();
+    return REDIRECT_PROJECTS + project.getId();
   }
 
   /**
    * Updates the information about a project
-   * 
+   *
    * @param projectId the id of the project to update
    * @param projectForm the submitted new project data
    * @param redirAttr attributes for the view that should be used after redirection
@@ -112,12 +116,12 @@ public class ProjectController {
     projectManager.updateProject(projectId, project);
 
     redirAttr.addFlashAttribute("projectUpdated", true);
-    return "redirect:/projects/" + projectId;
+    return REDIRECT_PROJECTS + projectId;
   }
 
   /**
    * Adds a contributor to a local group
-   * 
+   *
    * @param projectId the id of the project to update
    * @param personId the id of the activist to add
    * @param redirAttr attributes for the view that should be used after redirection
@@ -138,12 +142,12 @@ public class ProjectController {
       redirAttr.addFlashAttribute("existingContributor", true);
     }
 
-    return "redirect:/projects/" + projectId;
+    return REDIRECT_PROJECTS + projectId;
   }
 
   /**
    * Removes a contributor from a project
-   * 
+   *
    * @param projectId the id of the project to update
    * @param personId the id of the activist to remove
    * @param redirAttr attributes for the view that should be used after redirection
@@ -160,7 +164,7 @@ public class ProjectController {
     projectManager.updateProject(projectId, project);
 
     redirAttr.addFlashAttribute("contributorRemoved", true);
-    return "redirect:/projects/" + projectId;
+    return REDIRECT_PROJECTS + projectId;
   }
 
 }

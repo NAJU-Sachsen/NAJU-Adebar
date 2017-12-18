@@ -31,13 +31,14 @@ import de.naju.adebar.model.human.QualificationRepository;
 
 /**
  * Service to convert {@link FilterPersonForm} data to the corresponding objects
- * 
+ *
  * @author Rico Bergmann
  */
 @Service
 public class FilterPersonFormFilterExtractor {
-  private final static String NO_FILTER = "none";
-  private final static String ENFORCE_PROPERTY = "ENFORCE";
+
+  private static final String NO_FILTER = "none";
+  private static final String ENFORCE_PROPERTY = "ENFORCE";
 
   private DateTimeFormatter dateFormatter;
 

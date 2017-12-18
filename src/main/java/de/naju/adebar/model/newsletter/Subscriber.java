@@ -28,7 +28,7 @@ public class Subscriber implements Serializable {
   /**
    * if serialized, this id will be used
    */
-  private final static long serialVersionUID = 7082774853885904589L;
+  private static final long serialVersionUID = 7082774853885904589L;
 
   @Id
   @GeneratedValue

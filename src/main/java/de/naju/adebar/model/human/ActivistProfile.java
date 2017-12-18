@@ -1,5 +1,6 @@
 package de.naju.adebar.model.human;
 
+import java.io.Serializable;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -12,11 +13,13 @@ import org.springframework.util.Assert;
  * Activists are persons who contribute to events, e.g. organize them or work as counselors or
  * 'work' for our society. For now we only need to keep track of Juleica-cards and their expiry
  * dates.
- * 
+ *
  * @author Rico Bergmann
  */
 @Entity(name = "activist")
-public class ActivistProfile implements Cloneable {
+public class ActivistProfile implements Serializable {
+
+  private static final long serialVersionUID = 5030185144084038691L;
 
   @EmbeddedId
   @Column(name = "personId")
@@ -31,17 +34,25 @@ public class ActivistProfile implements Cloneable {
   // constructors
 
   /**
+   * Copy constructor
+   *
+   * @param other the activist profile to copy
+   */
+  public ActivistProfile(ActivistProfile other) {
+    this.personId = new PersonId(other.personId);
+    if (other.hasJuleica()) {
+      this.juleicaCard = new JuleicaCard(other.juleicaCard);
+    }
+  }
+
+  /**
    * Each activist profile has to be created in terms of an existing person.
-   * 
+   *
    * @param person the person to create the profile for
    */
   ActivistProfile(Person person) {
     Assert.notNull(person, "Id may not be null");
     this.personId = person.getId();
-  }
-
-  private ActivistProfile(PersonId id) {
-    this.personId = id;
   }
 
   /**
@@ -101,19 +112,6 @@ public class ActivistProfile implements Cloneable {
       return false;
     }
     return juleicaCard.isValid();
-  }
-
-  // "implementation" of Cloneable
-
-  @Override
-  public ActivistProfile clone() {
-    ActivistProfile clonedProfile = new ActivistProfile(personId);
-
-    if (hasJuleica()) {
-      clonedProfile.setJuleicaCard(juleicaCard.clone());
-    }
-
-    return clonedProfile;
   }
 
   // overridden from Object

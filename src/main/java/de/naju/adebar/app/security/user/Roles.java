@@ -5,11 +5,13 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 /**
  * A set of predefined roles used within the application. Roles and authorities are used
  * interchangeably within the security architecture.
- * 
+ *
  * @author Rico Bergmann
  *
  */
 public class Roles {
+
+  private Roles() {}
 
   /**
    * The admin. May do everything.

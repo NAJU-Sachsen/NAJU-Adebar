@@ -8,7 +8,7 @@ import de.naju.adebar.model.human.Qualification;
 
 public class ReferentFilter implements PersonFilter {
 
-  private final QPerson person = QPerson.person;
+  private static final QPerson person = QPerson.person;
   private PersonFilter filterImpl;
 
   public ReferentFilter(FilterType filterType) {

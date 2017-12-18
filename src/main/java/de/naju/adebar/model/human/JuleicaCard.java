@@ -1,5 +1,6 @@
 package de.naju.adebar.model.human;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -8,12 +9,15 @@ import javax.persistence.Transient;
 /**
  * A Juleica card qualifies an activist to host events with teenagers and assures a basic education
  * regarding youth protection, essential legal regulations and first-aid measures.
- * 
+ *
  * @author Rico Bergmann
  */
 @Embeddable
-public class JuleicaCard implements Cloneable {
-  public final static String BASIC_JULEICA_LEVEL = "G";
+public class JuleicaCard implements Serializable {
+
+  public static final String BASIC_JULEICA_LEVEL = "G";
+  private static final long serialVersionUID = 6618405361861972937L;
+
 
   @Column(name = "expiryDate")
   private LocalDate expiryDate;
@@ -25,7 +29,7 @@ public class JuleicaCard implements Cloneable {
 
   /**
    * Minimalistic constructor.
-   * 
+   *
    * @param expiryDate the expiry date of the Juleica card
    */
   public JuleicaCard(LocalDate expiryDate) {
@@ -35,13 +39,23 @@ public class JuleicaCard implements Cloneable {
 
   /**
    * Full constructor
-   * 
+   *
    * @param expiryDate the expiry date of the Juleica card
    * @param level the level of the Juleica education (G or A most likely)
    */
   public JuleicaCard(LocalDate expiryDate, String level) {
     this.expiryDate = expiryDate;
     this.level = level;
+  }
+
+  /**
+   * Copy constructor
+   *
+   * @param other the juleica card to copy
+   */
+  public JuleicaCard(JuleicaCard other) {
+    this.expiryDate = LocalDate.from(other.expiryDate);
+    this.level = other.level;
   }
 
   /**

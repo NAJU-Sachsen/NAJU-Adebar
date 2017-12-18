@@ -2,28 +2,36 @@ package de.naju.adebar.controller.forms.events;
 
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
+import de.naju.adebar.controller.forms.AddressForm;
 
 /**
  * Model POJO for filtering events. The fields are set by Thymeleaf when the associated form is
  * submitted.
- * 
+ *
  * @author Rico Bergmann
  */
-public class FilterEventsForm {
-  public final static String DATE_TIME_FORMAT = "dd.MM.yyy HH:mm";
+public class FilterEventsForm extends AddressForm {
+
+  public static final String DATE_TIME_FORMAT = "dd.MM.yyy HH:mm";
   public static final CurrencyUnit CURRENCY_UNIT = Monetary.getCurrency("EUR");
 
   private String name;
-  private String startFilterType, start;
-  private String endFilterType, end;
+
+  private String startFilterType;
+  private String start;
+
+  private String endFilterType;
+  private String end;
+
   private String participantsLimitFilterType;
   private int participantsLimit;
+
   private boolean participantsAgeFilter;
   private int participantsAge;
-  private String feeFilterType, internalFee, externalFee;
-  private String street, zip, city;
 
-  public FilterEventsForm() {}
+  private String feeFilterType;
+  private String internalFee;
+  private String externalFee;
 
   public String getName() {
     return name;
@@ -121,30 +129,6 @@ public class FilterEventsForm {
     this.externalFee = externalFee;
   }
 
-  public String getStreet() {
-    return street;
-  }
-
-  public void setStreet(String street) {
-    this.street = street;
-  }
-
-  public String getZip() {
-    return zip;
-  }
-
-  public void setZip(String zip) {
-    this.zip = zip;
-  }
-
-  public String getCity() {
-    return city;
-  }
-
-  public void setCity(String city) {
-    this.city = city;
-  }
-
   public boolean hasInternalFee() {
     return internalFee != null && !internalFee.isEmpty();
   }
@@ -161,7 +145,7 @@ public class FilterEventsForm {
         + ", participantsLimit=" + participantsLimit + ", participantsAgeFilter="
         + participantsAgeFilter + ", participantsAge=" + participantsAge + ", feeFilterType='"
         + feeFilterType + '\'' + ", internalFee='" + internalFee + '\'' + ", externalFee='"
-        + externalFee + '\'' + ", street='" + street + '\'' + ", zip='" + zip + '\'' + ", city='"
-        + city + '\'' + '}';
+        + externalFee + '\'' + ", street='" + getStreet() + '\'' + ", zip='" + getZip() + '\''
+        + ", city='" + getCity() + '\'' + '}';
   }
 }

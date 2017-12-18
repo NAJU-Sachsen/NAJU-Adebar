@@ -1,18 +1,19 @@
 package de.naju.adebar.services.conversion.events;
 
-import de.naju.adebar.controller.forms.events.EventForm;
-import de.naju.adebar.model.events.Event;
-import org.springframework.stereotype.Service;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import org.springframework.stereotype.Service;
+import de.naju.adebar.controller.forms.events.EventForm;
+import de.naju.adebar.model.events.Event;
 
 /**
  * Service to convert an {@link Event} to a corresponding {@link EventForm}
- * 
+ *
  * @author Rico Bergmann
  */
 @Service
 public class EventToEventFormConverter {
+
   private DateTimeFormatter dateTimeFormatter;
 
   public EventToEventFormConverter() {
@@ -21,12 +22,15 @@ public class EventToEventFormConverter {
 
   /**
    * Performs the conversion
-   * 
+   *
    * @param event the event to convert
    * @return the created form
    */
   public EventForm convertToEventForm(Event event) {
-    String street, zip, city;
+    String street;
+    String zip;
+    String city;
+
     if (event.getPlace() == null) {
       street = zip = city = null;
     } else {
@@ -42,10 +46,12 @@ public class EventToEventFormConverter {
     String externalFee = event.getExternalParticipationFee() == null ? null
         : event.getExternalParticipationFee().getNumberStripped().toPlainString();
 
-    return new EventForm(event.getName(), dateTimeFormatter.format(event.getStartTime()),
-        dateTimeFormatter.format(event.getEndTime()), participantsLimit,
-        Integer.toString(event.getMinimumParticipantAge()), internalFee, externalFee, street, zip,
-        city);
+    EventForm eventForm =
+        new EventForm(event.getName(), dateTimeFormatter.format(event.getStartTime()),
+            dateTimeFormatter.format(event.getEndTime()), street, zip, city);
+    eventForm.setParticipationInfo(participantsLimit,
+        Integer.toString(event.getMinimumParticipantAge()), internalFee, externalFee);
+    return eventForm;
   }
 
 }

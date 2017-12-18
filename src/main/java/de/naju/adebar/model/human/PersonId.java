@@ -20,17 +20,11 @@ import org.springframework.util.Assert;
  */
 @Embeddable
 public class PersonId implements Serializable, Iterator<PersonId>, Comparable<PersonId> {
+
   private static final long serialVersionUID = -6223486850240404100L;
 
   @Column(name = "id", unique = true)
   private final String id;
-
-  /**
-   * Just create a new identifier
-   */
-  PersonId() {
-    this.id = UUID.randomUUID().toString();
-  }
 
   /**
    * Create an identifier using an existing one
@@ -40,6 +34,22 @@ public class PersonId implements Serializable, Iterator<PersonId>, Comparable<Pe
   public PersonId(String id) {
     Assert.notNull(id, "Id may not be null!");
     this.id = id;
+  }
+
+  /**
+   * Copy constructor
+   *
+   * @param other the person ID to copy
+   */
+  public PersonId(PersonId other) {
+    this.id = other.id;
+  }
+
+  /**
+   * Just create a new identifier
+   */
+  PersonId() {
+    this.id = UUID.randomUUID().toString();
   }
 
   /**

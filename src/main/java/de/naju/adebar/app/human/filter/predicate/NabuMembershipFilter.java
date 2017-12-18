@@ -6,7 +6,7 @@ import de.naju.adebar.model.human.QPerson;
 
 public class NabuMembershipFilter implements PersonFilter {
 
-  private final QPerson person = QPerson.person;
+  private static final QPerson person = QPerson.person;
   private PersonFilter filterImpl;
 
   public NabuMembershipFilter(String membershipNumber) {

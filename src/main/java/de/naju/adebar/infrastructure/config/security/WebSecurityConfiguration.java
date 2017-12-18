@@ -26,7 +26,7 @@ import de.naju.adebar.app.security.user.UserAccountService;
 
 /**
  * Controller configuration specifically regarding security aspects
- * 
+ *
  * @author Rico Bergmann
  *
  */
@@ -70,7 +70,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
    * Configure how to receive the user account information for authentication
    */
   @Autowired
-  public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+  public void configureGlobal(AuthenticationManagerBuilder auth) {
     auth.authenticationProvider(authProvider());
   }
 
@@ -81,8 +81,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
   protected AffirmativeBased accessDecisionManager() {
     AccessDecisionVoter<?>[] voters = {new AdebarAuthorizer(), new WebExpressionVoter(),
         new RoleVoter(), new AuthenticatedVoter()};
-    AffirmativeBased affirmativeBased = new AffirmativeBased(Lists.newArrayList(voters));
-    return affirmativeBased;
+    return new AffirmativeBased(Lists.newArrayList(voters));
   }
 
   /**

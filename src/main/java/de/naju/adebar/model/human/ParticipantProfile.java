@@ -1,5 +1,6 @@
 package de.naju.adebar.model.human;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Period;
 import javax.persistence.AttributeOverride;
@@ -14,11 +15,13 @@ import org.springframework.util.Assert;
 /**
  * Every camp participant has to fill a registration form. The corresponding data will be collected
  * in this profile.
- * 
+ *
  * @author Rico Bergmann
  */
 @Entity(name = "participant")
-public class ParticipantProfile {
+public class ParticipantProfile implements Serializable {
+
+  private static final long serialVersionUID = -8782037527937407767L;
 
   @EmbeddedId
   @Column(name = "personId")
@@ -48,7 +51,7 @@ public class ParticipantProfile {
 
   /**
    * Each participant profile has to be created in terms of an existing person.
-   * 
+   *
    * @param person the person to create the profile for
    */
   ParticipantProfile(Person person) {

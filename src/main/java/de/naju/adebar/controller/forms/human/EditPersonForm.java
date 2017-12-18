@@ -1,28 +1,17 @@
 package de.naju.adebar.controller.forms.human;
 
-import javax.validation.constraints.NotNull;
-
 /**
  * Model POJO for person data. The fields are set by Thymeleaf when the associated form is
  * submitted.
  *
  * @author Rico Bergmann
  */
-public class EditPersonForm {
-  public final static String DATE_FORMAT = "dd.MM.yyyy";
+public class EditPersonForm extends PersonForm {
+
+  public static final String DATE_FORMAT = "dd.MM.yyyy";
 
   // general data
-  @NotNull
-  private String firstName;
-
-  @NotNull
-  private String lastName;
-
-  private String email;
   private String phoneNumber;
-  private String street;
-  private String zip;
-  private String city;
 
   // participant data
   private boolean participant;
@@ -34,68 +23,12 @@ public class EditPersonForm {
   private boolean nabuMember;
   private String nabuNumber;
 
-  public EditPersonForm() {
-    this.firstName = "";
-    this.lastName = "";
-  }
-
-  public String getFirstName() {
-    return firstName;
-  }
-
-  public void setFirstName(String firstName) {
-    this.firstName = firstName;
-  }
-
-  public String getLastName() {
-    return lastName;
-  }
-
-  public void setLastName(String lastName) {
-    this.lastName = lastName;
-  }
-
-  public String getEmail() {
-    if (email != null && !email.isEmpty()) {
-      return email;
-    }
-    return null;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
   public String getPhoneNumber() {
     return phoneNumber;
   }
 
   public void setPhoneNumber(String phoneNumber) {
     this.phoneNumber = phoneNumber;
-  }
-
-  public String getStreet() {
-    return street;
-  }
-
-  public void setStreet(String street) {
-    this.street = street;
-  }
-
-  public String getZip() {
-    return zip;
-  }
-
-  public void setZip(String zip) {
-    this.zip = zip;
-  }
-
-  public String getCity() {
-    return city;
-  }
-
-  public void setCity(String city) {
-    this.city = city;
   }
 
   public boolean isParticipant() {
@@ -168,11 +101,12 @@ public class EditPersonForm {
 
   @Override
   public String toString() {
-    return "EditPersonForm{" + "firstName='" + firstName + '\'' + ", lastName='" + lastName + '\''
-        + ", email='" + email + '\'' + ", phoneNumber='" + phoneNumber + '\'' + ", street='"
-        + street + '\'' + ", zip='" + zip + '\'' + ", city='" + city + '\'' + ", participant="
-        + participant + ", gender='" + gender + '\'' + ", dateOfBirth='" + dateOfBirth + '\''
-        + ", eatingHabit='" + eatingHabit + '\'' + ", healthImpairments='" + healthImpairments
-        + '\'' + ", nabuMember=" + nabuMember + ", nabuNumber='" + nabuNumber + '\'' + '}';
+    return "EditPersonForm{" + "firstName='" + getFirstName() + '\'' + ", lastName='"
+        + getLastName() + '\'' + ", email='" + getEmail() + '\'' + ", phoneNumber='" + phoneNumber
+        + '\'' + ", street='" + getStreet() + '\'' + ", zip='" + getZip() + '\'' + ", city='"
+        + getCity() + '\'' + ", participant=" + participant + ", gender='" + gender + '\''
+        + ", dateOfBirth='" + dateOfBirth + '\'' + ", eatingHabit='" + eatingHabit + '\''
+        + ", healthImpairments='" + healthImpairments + '\'' + ", nabuMember=" + nabuMember
+        + ", nabuNumber='" + nabuNumber + '\'' + '}';
   }
 }

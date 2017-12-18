@@ -7,12 +7,12 @@ import de.naju.adebar.app.filter.AbstractFilterBuilder;
 
 /**
  * An {@link AbstractFilterBuilder} which consumes and produces a {@link Predicate}
- * 
+ *
  * @author Rico Bergmann
  * @see AbstractPredicateBasedFilter
  */
 public class PredicateBasedFilterBuilder<T>
-    implements AbstractFilterBuilder<BooleanBuilder, AbstractPredicateBasedFilter<T>> {
+    implements AbstractFilterBuilder<BooleanBuilder, AbstractPredicateBasedFilter> {
   private BooleanBuilder predicate;
 
   public PredicateBasedFilterBuilder() {
@@ -20,8 +20,8 @@ public class PredicateBasedFilterBuilder<T>
   }
 
   @Override
-  public AbstractFilterBuilder<BooleanBuilder, AbstractPredicateBasedFilter<T>> applyFilter(
-      AbstractPredicateBasedFilter<T> filter) {
+  public AbstractFilterBuilder<BooleanBuilder, AbstractPredicateBasedFilter> applyFilter(
+      AbstractPredicateBasedFilter filter) {
     Assert.notNull(filter, "Filter may not be null");
     this.predicate = filter.filter(predicate);
     return this;

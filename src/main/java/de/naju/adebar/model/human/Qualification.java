@@ -15,6 +15,7 @@ import org.springframework.util.Assert;
  */
 @Entity(name = "qualification")
 public class Qualification implements Serializable {
+
   private static final long serialVersionUID = 4926021134130535348L;
 
   @Id
@@ -26,7 +27,7 @@ public class Qualification implements Serializable {
 
   /**
    * Full constructor
-   * 
+   *
    * @param name the qualification's name. Should be unique as it is the primary key for
    *        persistence.
    * @param description the qualification's description. May be empty

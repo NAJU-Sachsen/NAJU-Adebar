@@ -1,5 +1,6 @@
 package de.naju.adebar.model.human;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +30,9 @@ import de.naju.adebar.util.Validation;
  * @see de.naju.adebar.model.human
  */
 @Entity(name = "person")
-public class Person {
+public class Person implements Serializable {
+
+  private static final long serialVersionUID = -5665458502703758980L;
   private static final int MAX_PARENT_PROFILES = 2;
 
   @EmbeddedId
@@ -174,9 +177,9 @@ public class Person {
   }
 
   /**
-   * @param email the person's email address, may be {@code null
-   * @throws IllegalArgumentException if the email is not valid, i.e. does not match the email regex
-   *         (Existence of the address is not checked)
+   * @param email the person's email address, may be {@code null @throws IllegalArgumentException if
+   *        the email is not valid, i.e. does not match the email regex (Existence of the address is
+   *        not checked)
    */
   public void setEmail(String email) {
     if (email != null) {

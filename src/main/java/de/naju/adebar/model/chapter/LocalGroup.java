@@ -32,9 +32,6 @@ import de.naju.adebar.model.human.NoActivistException;
 import de.naju.adebar.model.human.Person;
 import de.naju.adebar.model.newsletter.Newsletter;
 
-// TODO a local group should be able to contain multiple newsletters
-// TODO adjust relation of board, contact persons and NABU-board
-
 /**
  * Abstraction of a local group. Each group has a (very likely) unique set of members, i. e.
  * activist who contribute to this certain group. Furthermore a chapter may have a board of

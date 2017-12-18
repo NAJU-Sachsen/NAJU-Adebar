@@ -5,18 +5,17 @@ import java.util.List;
 /**
  * Model POJO for new persons. The fields are set by Thymeleaf when the associated form is
  * submitted.
- * 
+ *
  * @author Rico Bergmann
  */
 public class CreatePersonForm extends EditPersonForm {
 
-  private boolean activist, referent;
+  private boolean activist;
+  private boolean referent;
   private boolean hasJuleica;
   private String juleicaExpiryDate;
   private List<String> qualifications;
   private List<Long> localGroups;
-
-  public CreatePersonForm() {}
 
   public boolean isActivist() {
     return activist;

@@ -6,10 +6,10 @@ package de.naju.adebar.app.filter;
  * 
  * @author Rico Bergmann
  * @see <a href="https://en.wikipedia.org/wiki/Builder_pattern">Builder pattern</a>
- * @param <Result> the result-type the filter should produce
- * @param <Filter> the {@link AbstractFilter} implementation to use
+ * @param <R> the result-type the filter should produce
+ * @param <F> the {@link AbstractFilter} implementation to use
  */
-public interface AbstractFilterBuilder<Result, Filter extends AbstractFilter<? extends Result>> {
+public interface AbstractFilterBuilder<R, F extends AbstractFilter<? extends R>> {
 
   /**
    * Saves a new filter for execution. However applying a filter does not preserve order, i. e.
@@ -19,12 +19,12 @@ public interface AbstractFilterBuilder<Result, Filter extends AbstractFilter<? e
    * @param filter the filter to apply
    * @return the builder instance for easy chaining
    */
-  AbstractFilterBuilder<Result, Filter> applyFilter(Filter filter);
+  AbstractFilterBuilder<R, F> applyFilter(F filter);
 
   /**
    * Executes the filters
    * 
    * @return the objects that matched all of the criteria
    */
-  Result filter();
+  R filter();
 }

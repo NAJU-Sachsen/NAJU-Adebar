@@ -22,9 +22,12 @@ import de.naju.adebar.model.human.Person;
 @Controller
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 public class AccountController {
-  private PersonManager personManager;
-  private UserAccountManager accountManager;
-  private UserAccountRepository accountRepo;
+
+  private static final String REDIRECT_ACCOUNTS = "redirect:/accounts";
+
+  private final PersonManager personManager;
+  private final UserAccountManager accountManager;
+  private final UserAccountRepository accountRepo;
 
   @Autowired
   public AccountController(PersonManager personManager, UserAccountManager accountManager,
@@ -56,7 +59,7 @@ public class AccountController {
     accountManager.createFor(createAccountForm.getUsername(), createAccountForm.getPassword(),
         person, authorities, false);
 
-    return "redirect:/accounts";
+    return REDIRECT_ACCOUNTS;
   }
 
   @RequestMapping("/accounts/update")
@@ -69,7 +72,7 @@ public class AccountController {
 
     accountManager.updateAuthorities(account, newAuthorities);
 
-    return "redirect:/accounts";
+    return REDIRECT_ACCOUNTS;
   }
 
   @RequestMapping("/accounts/reset-password")
@@ -77,13 +80,13 @@ public class AccountController {
       @RequestParam("password") String password) {
     accountManager.resetPassword(username, password, false);
 
-    return "redirect:/accounts";
+    return REDIRECT_ACCOUNTS;
   }
 
   @RequestMapping("/accounts/delete")
   public String deleteAccount(@RequestParam("account") String username) {
     accountManager.deleteAccount(username);
-    return "redirect:/accounts";
+    return REDIRECT_ACCOUNTS;
   }
 
 }

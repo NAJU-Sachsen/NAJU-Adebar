@@ -7,7 +7,7 @@ import de.naju.adebar.model.human.QPerson;
 
 public class DateOfBirthFilter implements PersonFilter {
 
-  private final QPerson person = QPerson.person;
+  private static final QPerson person = QPerson.person;
   private LocalDate dob;
   private DateFilterType filterType;
 

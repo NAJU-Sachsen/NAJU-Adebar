@@ -7,11 +7,12 @@ import javax.persistence.Embeddable;
 /**
  * A person may be a club member of the NABU. For now we are just interested in its membership
  * number.
- * 
+ *
  * @author Rico Bergmann
  */
 @Embeddable
 public class NabuMembership implements Serializable {
+
   private static final long serialVersionUID = 8877089173523167494L;
 
   @Column(name = "membershipNumber")
@@ -21,7 +22,7 @@ public class NabuMembership implements Serializable {
 
   /**
    * Full constructor
-   * 
+   *
    * @param membershipNumber the membership number
    */
   public NabuMembership(String membershipNumber) {

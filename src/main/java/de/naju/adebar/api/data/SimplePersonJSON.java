@@ -10,13 +10,13 @@ import de.naju.adebar.model.human.Person;
  * JSON-object for persons in simplified form. In contrast to the normal {@link Person} these
  * objects contain only the most important data: ID, name, date of birth and address. Instances are
  * immutable.
- * 
+ *
  * @author Rico Bergmann
  */
 public class SimplePersonJSON {
-  private final static String DATE_FORMAT = "dd.MM.yyyy";
-  private final static int ADDRESS_COMPONENTS = 5;
-  private final static String ADDRESS_COMPONENT_SEPARATOR = " ";
+  private static final String DATE_FORMAT = "dd.MM.yyyy";
+  private static final String ADDRESS_COMPONENT_SEPARATOR = " ";
+  private static final int ADDRESS_COMPONENTS = 5;
 
   private String id;
   private String name;
@@ -26,7 +26,7 @@ public class SimplePersonJSON {
 
   /**
    * Objects will be created depending on an existing {@link Person} instance
-   * 
+   *
    * @param person the person to simplify
    */
   public SimplePersonJSON(Person person) {

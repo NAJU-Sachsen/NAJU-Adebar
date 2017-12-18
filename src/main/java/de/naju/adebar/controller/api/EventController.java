@@ -18,15 +18,16 @@ import de.naju.adebar.model.events.Reservation;
 
 /**
  * REST controller to access event data
- * 
+ *
  * @author Rico Bergmann
  * @see <a href= "https://en.wikipedia.org/wiki/Representational_State_Transfer">REST Services</a>
  */
 @RestController("api_eventController")
 @RequestMapping("/api/events")
 public class EventController {
-  private EventManager eventManager;
-  private LocalGroupManager groupManager;
+
+  private final EventManager eventManager;
+  private final LocalGroupManager groupManager;
 
   @Autowired
   public EventController(EventManager eventManager, LocalGroupManager groupManager) {
@@ -38,7 +39,7 @@ public class EventController {
 
   /**
    * Provides all events of a local group
-   * 
+   *
    * @param groupId the id of the local group
    * @return all events that are hosted by that group
    */
@@ -55,7 +56,7 @@ public class EventController {
 
   /**
    * Creates a new reservation for an event
-   * 
+   *
    * @param eventId the event to add the reservation to
    * @param description the description of the reservation. Must be present
    * @param slots the number of slots to reserve. Must be present
@@ -83,7 +84,7 @@ public class EventController {
 
   /**
    * Updates a reservation
-   * 
+   *
    * @param eventId the event to which the reservation belongs
    * @param id the ID (= current description) of the reservation
    * @param description the new description
@@ -111,7 +112,7 @@ public class EventController {
 
   /**
    * Deletes a reservation from an event
-   * 
+   *
    * @param eventId the event to which the reservation belongs
    * @param description the description (= ID) of the reservation
    * @return a response code
@@ -134,7 +135,7 @@ public class EventController {
   /**
    * Response code to indicate that an event does not have enough capacity for new participants or
    * reservations of a certain size.
-   * 
+   *
    * @author Rico Bergmann
    *
    */
@@ -142,13 +143,13 @@ public class EventController {
     /**
      * Default String to indicate an overbooked event
      */
-    public final static String RETURN_OVERBOOKED = "overbooked";
+    public static final String RETURN_OVERBOOKED = "overbooked";
 
     private int slotsAvailable;
 
     /**
      * Constructor to specify the number of available slots
-     * 
+     *
      * @param slotsAvailable the unused capacity
      */
     public OverbookedResponse(int slotsAvailable) {

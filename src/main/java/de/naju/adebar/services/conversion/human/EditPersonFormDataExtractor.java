@@ -1,20 +1,27 @@
 package de.naju.adebar.services.conversion.human;
 
-import de.naju.adebar.controller.forms.human.CreatePersonForm;
-import de.naju.adebar.controller.forms.human.EditPersonForm;
-import de.naju.adebar.model.human.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+import de.naju.adebar.app.IdUpdateFailedException;
+import de.naju.adebar.controller.forms.human.CreatePersonForm;
+import de.naju.adebar.controller.forms.human.EditPersonForm;
+import de.naju.adebar.model.human.Address;
+import de.naju.adebar.model.human.Gender;
+import de.naju.adebar.model.human.NabuMembership;
+import de.naju.adebar.model.human.ParticipantProfile;
+import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.human.PersonFactory;
+import de.naju.adebar.model.human.PersonId;
 
 /**
  * Service to extract the necessary data from an 'edit person' form
- * 
+ *
  * @author Rico Bergmann
  * @see EditPersonForm
  */
@@ -56,21 +63,23 @@ public class EditPersonFormDataExtractor {
   public void extractParticipantProfile(Person person, EditPersonForm personForm) {
     ParticipantProfile profile = person.makeParticipant();
     Gender gender = Gender.valueOf(personForm.getGender());
-    LocalDate dob = personForm.hasDateOfBirth()
-        ? LocalDate.parse(personForm.getDateOfBirth(), dateFormatter) : null;
+    LocalDate dob =
+        personForm.hasDateOfBirth() ? LocalDate.parse(personForm.getDateOfBirth(), dateFormatter)
+            : null;
 
     profile.setGender(gender);
     profile.setDateOfBirth(dob);
     profile.setEatingHabits(personForm.getEatingHabit());
     profile.setHealthImpairments(personForm.getHealthImpairments());
     profile.setRemarks(personForm.getRemarks());
-    profile.setNabuMembership(personForm.isNabuMember()
-        ? new NabuMembership(personForm.getNabuNumber()) : new NabuMembership());
+    profile.setNabuMembership(
+        personForm.isNabuMember() ? new NabuMembership(personForm.getNabuNumber())
+            : new NabuMembership());
   }
 
   /**
    * Sets the ID of a person
-   * 
+   *
    * @param p the person to update
    * @param id the ID to set
    */
@@ -80,7 +89,7 @@ public class EditPersonFormDataExtractor {
       changeId.setAccessible(true);
       changeId.invoke(p, id);
     } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-      throw new RuntimeException("Error during invocation of reflection", e);
+      throw new IdUpdateFailedException("Error during invocation of reflection", e);
     }
   }
 

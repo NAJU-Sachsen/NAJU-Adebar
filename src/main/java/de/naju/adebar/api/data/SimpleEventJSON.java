@@ -7,18 +7,20 @@ import de.naju.adebar.model.events.Event;
  * JSON-object for representing events in a simplified form. In contrast to an {@link Event}, this
  * class only provides access to the most important data: id, name, time and place. Instances are
  * immutable
- * 
+ *
  * @author Rico Bergmann
  */
 public class SimpleEventJSON {
+
   private String id;
   private String name;
-  private LocalDateTime startDate, endDate;
+  private LocalDateTime startDate;
+  private LocalDateTime endDate;
   private String place;
 
   /**
    * Objects will be created in terms of an existing {@link Event} instance
-   * 
+   *
    * @param event the event to simplify
    */
   public SimpleEventJSON(Event event) {

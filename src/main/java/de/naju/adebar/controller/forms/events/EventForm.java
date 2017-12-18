@@ -3,19 +3,20 @@ package de.naju.adebar.controller.forms.events;
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
 import javax.validation.constraints.NotNull;
+import de.naju.adebar.controller.forms.AddressForm;
 
 /**
  * Model POJO for events. The fields are set by Thymeleaf when the associated form is submitted.
  *
  * @author Rico Bergmann
  */
-public class EventForm {
+public class EventForm extends AddressForm {
 
   public enum Belonging {
     LOCALGROUP, PROJECT
   }
 
-  public final static String DATE_TIME_FORMAT = "dd.MM.yyyy HH:mm";
+  public static final String DATE_TIME_FORMAT = "dd.MM.yyyy HH:mm";
   public static final CurrencyUnit CURRENCY_UNIT = Monetary.getCurrency("EUR");
 
   @NotNull
@@ -26,26 +27,22 @@ public class EventForm {
 
   @NotNull
   private String endTime;
+
   private String participantsLimit;
   private String participantsAge;
-  private String internalParticipationFee, externalParticipationFee;
-  private String street, zip, city;
-  private String belonging;
-  private long localGroupId, projectId;
+  private String internalParticipationFee;
+  private String externalParticipationFee;
 
-  public EventForm(String name, String startTime, String endTime, String participantsLimit,
-      String participantsAge, String internalParticipationFee, String externalParticipationFee,
-      String street, String zip, String city) {
+  private String belonging;
+  private long localGroupId;
+  private long projectId;
+
+  public EventForm(String name, String startTime, String endTime, String street, String zip,
+      String city) {
+    super(street, zip, city);
     this.name = name;
     this.startTime = startTime;
     this.endTime = endTime;
-    this.participantsLimit = participantsLimit;
-    this.participantsAge = participantsAge;
-    this.internalParticipationFee = internalParticipationFee;
-    this.externalParticipationFee = externalParticipationFee;
-    this.street = street;
-    this.zip = zip;
-    this.city = city;
   }
 
   public EventForm() {
@@ -110,30 +107,6 @@ public class EventForm {
     this.externalParticipationFee = externalParticipationFee;
   }
 
-  public String getStreet() {
-    return street;
-  }
-
-  public void setStreet(String street) {
-    this.street = street;
-  }
-
-  public String getZip() {
-    return zip;
-  }
-
-  public void setZip(String zip) {
-    this.zip = zip;
-  }
-
-  public String getCity() {
-    return city;
-  }
-
-  public void setCity(String city) {
-    this.city = city;
-  }
-
   public String getBelonging() {
     return belonging;
   }
@@ -174,14 +147,22 @@ public class EventForm {
     return externalParticipationFee != null && !externalParticipationFee.isEmpty();
   }
 
+  public void setParticipationInfo(String participantsLimit, String participantsAge,
+      String internalParticipationFee, String externalParticipationFee) {
+    this.participantsLimit = participantsLimit;
+    this.participantsAge = participantsAge;
+    this.internalParticipationFee = internalParticipationFee;
+    this.externalParticipationFee = externalParticipationFee;
+  }
+
   @Override
   public String toString() {
     return "EventForm{" + "name='" + name + '\'' + ", startTime='" + startTime + '\''
         + ", endTime='" + endTime + '\'' + ", participantsLimit='" + participantsLimit + '\''
         + ", participantsAge='" + participantsAge + '\'' + ", internalParticipationFee='"
         + internalParticipationFee + '\'' + ", externalParticipationFee='"
-        + externalParticipationFee + '\'' + ", street='" + street + '\'' + ", zip='" + zip + '\''
-        + ", city='" + city + '\'' + ", belonging='" + belonging + '\'' + ", localGroupId="
-        + localGroupId + ", projectId=" + projectId + '}';
+        + externalParticipationFee + '\'' + ", street='" + getStreet() + '\'' + ", zip='" + getZip()
+        + '\'' + ", city='" + getCity() + '\'' + ", belonging='" + belonging + '\''
+        + ", localGroupId=" + localGroupId + ", projectId=" + projectId + '}';
   }
 }

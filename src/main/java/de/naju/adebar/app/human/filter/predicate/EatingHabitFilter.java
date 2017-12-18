@@ -5,7 +5,7 @@ import de.naju.adebar.model.human.QPerson;
 
 public class EatingHabitFilter implements PersonFilter {
 
-  private final QPerson person = QPerson.person;
+  private static final QPerson person = QPerson.person;
   private String eatingHabit;
 
   public EatingHabitFilter(String eatingHabit) {

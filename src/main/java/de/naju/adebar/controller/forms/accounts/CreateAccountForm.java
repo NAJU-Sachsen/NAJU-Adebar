@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Model POJO for new accounts. The fields are set by Thymeleaf when the associated form is
  * submitted.
- * 
+ *
  * @author Rico Bergmann
  *
  */
@@ -15,8 +15,6 @@ public class CreateAccountForm {
   private String username;
   private String password;
   private List<String> roles;
-
-  public CreateAccountForm() {}
 
   public String getPerson() {
     return person;

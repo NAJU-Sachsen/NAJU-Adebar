@@ -30,7 +30,8 @@ import de.naju.adebar.model.human.Person;
  */
 @Entity(name = "participantsList")
 class ParticipantsList {
-  private final static int WAITING_LIST_HEAD = 0;
+
+  private static final int WAITING_LIST_HEAD = 0;
 
   @EmbeddedId
   @Column(name = "event")

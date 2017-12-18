@@ -14,12 +14,12 @@ import de.naju.adebar.model.human.Address;
 
 /**
  * Service to convert {@link FilterPersonForm} data to the corresponding objects
- * 
+ *
  * @author Rico Bergmann
  */
 @Service
 public class PersonFilterDataExtractor {
-  private final static int MAX_FILTER_COUNT = 4;
+  private static final int MAX_FILTER_COUNT = 4;
 
   /**
    * @param form the form to extract data from
@@ -45,7 +45,7 @@ public class PersonFilterDataExtractor {
 
   /**
    * Creates the name filter
-   * 
+   *
    * @param form the data to use for the filter
    * @return the filter
    */
@@ -55,7 +55,7 @@ public class PersonFilterDataExtractor {
 
   /**
    * Creates the address filter
-   * 
+   *
    * @param form the data to use for the filter
    * @return the filter
    */
@@ -65,7 +65,7 @@ public class PersonFilterDataExtractor {
 
   /**
    * Creates the activist filter
-   * 
+   *
    * @param form the data to use for the filter
    * @return the filter
    */
@@ -79,7 +79,7 @@ public class PersonFilterDataExtractor {
 
   /**
    * Creates the referent filter
-   * 
+   *
    * @param form the data to use for the filter
    * @return the filter
    */

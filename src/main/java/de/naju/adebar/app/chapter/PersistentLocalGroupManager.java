@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import com.google.common.collect.Lists;
+import de.naju.adebar.app.IdUpdateFailedException;
 import de.naju.adebar.model.chapter.Board;
 import de.naju.adebar.model.chapter.BoardRepository;
 import de.naju.adebar.model.chapter.LocalGroup;
@@ -27,7 +28,7 @@ import de.naju.adebar.util.Streams;
 
 /**
  * A {@link LocalGroupManager} that persists its data in a database
- * 
+ *
  * @author Rico Bergmann
  */
 @Service
@@ -178,7 +179,7 @@ public class PersistentLocalGroupManager implements LocalGroupManager {
 
   /**
    * Updates a local group's ID. To be used extremely cautiously.
-   * 
+   *
    * @param localGroup the local group to update
    * @param id the new ID
    */
@@ -188,13 +189,13 @@ public class PersistentLocalGroupManager implements LocalGroupManager {
       changeId.setAccessible(true);
       changeId.invoke(localGroup, id);
     } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-      throw new RuntimeException("Error during invocation of reflection", e);
+      throw new IdUpdateFailedException("Error during invocation of reflection", e);
     }
   }
 
   /**
    * Updates the members of a local group's board
-   * 
+   *
    * @param board the board to update
    * @param members the board's members
    */
@@ -204,7 +205,7 @@ public class PersistentLocalGroupManager implements LocalGroupManager {
       changeBoardMembers.setAccessible(true);
       changeBoardMembers.invoke(board, members);
     } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-      throw new RuntimeException("Error during invocation of reflection", e);
+      throw new IdUpdateFailedException("Error during invocation of reflection", e);
     }
   }
 }

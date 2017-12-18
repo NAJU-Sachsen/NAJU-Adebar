@@ -5,7 +5,7 @@ import de.naju.adebar.model.human.QPerson;
 
 public class NameFilter implements PersonFilter {
 
-  private final QPerson person = QPerson.person;
+  private static final QPerson person = QPerson.person;
   private String firstName;
   private String lastName;
 

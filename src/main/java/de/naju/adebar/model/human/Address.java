@@ -8,13 +8,14 @@ import org.springframework.util.Assert;
 /**
  * Abstraction of an address. Each address consists of street, zip and city and may contain
  * additional info - e.g. room numbers or the like.
- * 
+ *
  * @author Rico Bergmann
  */
 @Embeddable
 public class Address implements Serializable {
-  public final static int ZIP_LENGTH = 5;
+
   private static final long serialVersionUID = -3788598615103628404L;
+  public static final int ZIP_LENGTH = 5;
 
   @Column(name = "street")
   private String street;
@@ -36,7 +37,7 @@ public class Address implements Serializable {
 
   /**
    * Full constructor
-   * 
+   *
    * @param street the street, may not be empty
    * @param zip the zip, must be 5 characters long
    * @param city the city, may not be empty
@@ -130,11 +131,6 @@ public class Address implements Serializable {
 
   // overwritten from Object
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see java.lang.Object#hashCode()
-   */
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -146,57 +142,41 @@ public class Address implements Serializable {
     return result;
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see java.lang.Object#equals(java.lang.Object)
-   */
   @Override
   public boolean equals(Object obj) {
-    if (this == obj) {
+    if (this == obj)
       return true;
-    }
-    if (obj == null) {
+    if (obj == null)
       return false;
-    }
-    if (!(obj instanceof Address)) {
+    if (getClass() != obj.getClass())
       return false;
-    }
     Address other = (Address) obj;
     if (additionalInfo == null) {
-      if (other.additionalInfo != null) {
+      if (other.additionalInfo != null)
         return false;
-      }
-    } else if (!additionalInfo.equals(other.additionalInfo)) {
+    } else if (!additionalInfo.equals(other.additionalInfo))
       return false;
-    }
     if (city == null) {
-      if (other.city != null) {
+      if (other.city != null)
         return false;
-      }
-    } else if (!city.equals(other.city)) {
+    } else if (!city.equals(other.city))
       return false;
-    }
     if (street == null) {
-      if (other.street != null) {
+      if (other.street != null)
         return false;
-      }
-    } else if (!street.equals(other.street)) {
+    } else if (!street.equals(other.street))
       return false;
-    }
     if (zip == null) {
-      if (other.zip != null) {
+      if (other.zip != null)
         return false;
-      }
-    } else if (!zip.equals(other.zip)) {
+    } else if (!zip.equals(other.zip))
       return false;
-    }
     return true;
   }
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see java.lang.Object#toString()
    */
   @Override

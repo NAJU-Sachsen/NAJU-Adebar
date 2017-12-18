@@ -7,7 +7,7 @@ import de.naju.adebar.model.human.QPerson;
 
 public class GenderFilter implements PersonFilter {
 
-  private final QPerson person = QPerson.person;
+  private static final QPerson person = QPerson.person;
   private Gender gender;
   private FilterType filterType;
 

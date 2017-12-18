@@ -2,6 +2,7 @@ package de.naju.adebar.services.conversion.human;
 
 import org.springframework.stereotype.Service;
 import de.naju.adebar.controller.forms.human.AddQualificationForm;
+import de.naju.adebar.controller.forms.human.AddQualificationForm.AddType;
 import de.naju.adebar.model.human.Qualification;
 
 /**
@@ -15,14 +16,11 @@ public class AddQualificationFormDataExtractor {
         AddQualificationForm.AddType.valueOf(qualificationForm.getAddType());
 
     Qualification qualification = null;
-    switch (addType) {
-      case NEW:
-        qualification =
-            new Qualification(qualificationForm.getName(), qualificationForm.getDescription());
-        break;
-      case EXISTING:
-        qualification = new Qualification(qualificationForm.getQualification(), "");
-        break;
+    if (addType == AddType.NEW) {
+      qualification =
+          new Qualification(qualificationForm.getName(), qualificationForm.getDescription());
+    } else if (addType == AddType.EXISTING) {
+      qualification = new Qualification(qualificationForm.getQualification(), "");
     }
     return qualification;
   }

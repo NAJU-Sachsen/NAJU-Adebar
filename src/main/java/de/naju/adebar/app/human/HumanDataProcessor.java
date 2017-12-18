@@ -13,7 +13,7 @@ import de.naju.adebar.model.human.Person;
  * @author Rico Bergmann
  */
 @Service
-public class DataProcessor {
+public class HumanDataProcessor {
 
   /**
    * @param persons the persons to process

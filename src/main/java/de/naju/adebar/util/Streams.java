@@ -9,15 +9,17 @@ import java.util.stream.Stream;
 /**
  * Utility functions on streams. Mostly of mathematical nature. Beware that all of these functions
  * (unless stated otherwise) will waste the streams given!
- * 
+ *
  * @author Rico Bergmann
  * @see Stream
  */
 public class Streams {
 
+  private Streams() {}
+
   /**
    * Calculates a stream c, such that {@code c := a ∩ b}
-   * 
+   *
    * @param a the first stream
    * @param b the second stream
    * @return c
@@ -36,7 +38,7 @@ public class Streams {
 
   /**
    * Calculates a stream c, such that {@code c := a ∪ b}
-   * 
+   *
    * @param a the first stream
    * @param b the second stream
    * @return c
@@ -50,7 +52,7 @@ public class Streams {
 
   /**
    * Calculates a stream c, such that {@code c := a \ b}
-   * 
+   *
    * @param a the first stream
    * @param b the second stream
    * @return c
@@ -64,7 +66,7 @@ public class Streams {
 
   /**
    * Checks, if a stream contains a certain element. This will waste the stream!
-   * 
+   *
    * @param s the stream to check
    * @param e the element to check for
    * @return {@code true ⇔  elem ∈ stream}

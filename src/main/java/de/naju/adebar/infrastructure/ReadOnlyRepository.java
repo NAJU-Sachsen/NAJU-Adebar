@@ -16,7 +16,7 @@ import java.io.Serializable;
  *      repositories</a>
  */
 @NoRepositoryBean
-public interface ReadOnlyRepository<T, ID extends Serializable> extends Repository<T, ID> {
+public interface ReadOnlyRepository<T, I extends Serializable> extends Repository<T, I> {
 
   /**
    * Retrieves an entity by its id.
@@ -24,7 +24,7 @@ public interface ReadOnlyRepository<T, ID extends Serializable> extends Reposito
    * @param id must not be {@code null}.
    * @return the entity with the given id or {@code null} if none found
    */
-  T findOne(ID id);
+  T findOne(I id);
 
   /**
    * Returns all instances of the type.
@@ -36,7 +36,7 @@ public interface ReadOnlyRepository<T, ID extends Serializable> extends Reposito
   /**
    * Returns all instances of the type with the given IDs.
    */
-  Iterable<T> findAll(Iterable<ID> ids);
+  Iterable<T> findAll(Iterable<I> ids);
 
   /**
    * Checks, whether an entity with the given id exists.
@@ -44,7 +44,7 @@ public interface ReadOnlyRepository<T, ID extends Serializable> extends Reposito
    * @param id must not be {@code null}.
    * @return
    */
-  boolean exists(ID id);
+  boolean exists(I id);
 
   /**
    * Returns the number of entities available

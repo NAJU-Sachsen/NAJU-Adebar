@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import com.google.common.collect.Lists;
+import de.naju.adebar.app.IdUpdateFailedException;
 import de.naju.adebar.model.events.Event;
 import de.naju.adebar.model.events.EventFactory;
 import de.naju.adebar.model.events.EventId;
@@ -19,11 +20,12 @@ import de.naju.adebar.model.events.ReadOnlyEventRepository;
 
 /**
  * A {@link EventManager} that persists its data in a database
- * 
+ *
  * @author Rico Bergmann
  */
 @Service
 public class PersistentEventManager implements EventManager {
+
   private EventFactory eventFactory;
   private EventRepository eventRepo;
   private ReadOnlyEventRepository roRepo;
@@ -57,7 +59,7 @@ public class PersistentEventManager implements EventManager {
       changeId.setAccessible(true);
       changeId.invoke(newEvent, new EventId(id));
     } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-      throw new RuntimeException("Error during invocation of reflection", e);
+      throw new IdUpdateFailedException("Error during invocation of reflection", e);
     }
 
     return saveEvent(newEvent);
@@ -113,7 +115,7 @@ public class PersistentEventManager implements EventManager {
    * For many events it is not important, when they start or end. Therefore the time is set to
    * 00:00. This may distort results when querying for all events that ended before a certain time.
    * To prevent this, one may check the correctness of the results through this function
-   * 
+   *
    * @param time the date to check
    * @return whether the time should be ignored
    */

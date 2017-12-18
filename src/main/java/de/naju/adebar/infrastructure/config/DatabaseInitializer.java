@@ -2,6 +2,8 @@ package de.naju.adebar.infrastructure.config;
 
 import java.util.Arrays;
 import javax.annotation.PostConstruct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -18,6 +20,9 @@ import de.naju.adebar.model.human.PersonFactory;
 @PropertySource("classpath:startup.properties")
 @Component
 public class DatabaseInitializer {
+
+  private static final Logger log = LoggerFactory.getLogger(DatabaseInitializer.class);
+
   private Environment environment;
   private PersonManager personManager;
   private PersonFactory personFactory;
@@ -43,6 +48,7 @@ public class DatabaseInitializer {
     if (!isEmptyDatabase()) {
       return;
     }
+    log.info("Database appears to be empty. Setting up admin account.");
     Person admin = loadPersonFromProperties();
     String username = loadUsernameFromProperties();
     String password = loadInitialPasswordFromProperties();

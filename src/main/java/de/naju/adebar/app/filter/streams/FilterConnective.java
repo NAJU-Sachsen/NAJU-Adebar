@@ -5,34 +5,36 @@ import de.naju.adebar.util.Streams;
 
 /**
  * Simple class to combine multiple {@link AbstractStreamBasedFilter} logically.
- * 
- * @param <Entity> the type of entities to be filtered
- * @param <Filter> the type of filter to use, has to be a filter for the Entity
+ *
+ * @param <E> the type of entities to be filtered
+ * @param <F> the type of filter to use, has to be a filter for the Entity
  * @author Rico Bergmann
  */
-public class FilterConnective<Entity, Filter extends AbstractStreamBasedFilter<Entity>>
-    implements AbstractStreamBasedFilter<Entity> {
-  private AbstractConnective connective;
-  private AbstractStreamBasedFilter<Entity> firstFilter;
-  private AbstractStreamBasedFilter<Entity> secondFilter;
+public class FilterConnective<E, F extends AbstractStreamBasedFilter<E>>
+    implements AbstractStreamBasedFilter<E> {
+  private AbstractConnective<E> connective;
+  private AbstractStreamBasedFilter<E> firstFilter;
+  private AbstractStreamBasedFilter<E> secondFilter;
 
   /**
    * Creates a plain connective
-   * 
+   *
    * @param filter the first filter to use
+   * @param <E> the type of entities to be filtered
+   * @param <F> the type of filter to use, has to be a filter for the Entity
    * @return a new connective to be linked with other filters
    */
-  public static <Entity, Filter extends AbstractStreamBasedFilter<Entity>> FilterConnective<Entity, Filter> forFilter(
-      AbstractStreamBasedFilter<Entity> filter) {
+  public static <E, F extends AbstractStreamBasedFilter<E>> FilterConnective<E, F> forFilter(
+      AbstractStreamBasedFilter<E> filter) {
     return new FilterConnective<>(filter);
   }
 
   /**
    * Creates a plain connective
-   * 
+   *
    * @param filter the first filter to use
    */
-  public FilterConnective(AbstractStreamBasedFilter<Entity> filter) {
+  public FilterConnective(AbstractStreamBasedFilter<E> filter) {
     this.firstFilter = filter;
   }
 
@@ -40,13 +42,14 @@ public class FilterConnective<Entity, Filter extends AbstractStreamBasedFilter<E
    * Creates an `AND` connective between the two filters. More precisely if the result of the first
    * filter is R₁ and the result of the second filter is R₂, then {@code F₁ ∧ F₂} will contain all
    * elements {@code e}, where {@code e∈R₁ ∧ e∈R₂}.
-   * 
+   *
    * @param filter the second filter to use
    * @return the resulting connective
    * @throws IllegalStateException if multiple connectives where specified (i.e.
-   *         {@link #and(AbstractStreamBasedFilter)} or {@link #or(AbstractStreamBasedFilter)} where called before)
+   *         {@link #and(AbstractStreamBasedFilter)} or {@link #or(AbstractStreamBasedFilter)} where
+   *         called before)
    */
-  public FilterConnective<Entity, Filter> and(AbstractStreamBasedFilter<Entity> filter) {
+  public FilterConnective<E, F> and(AbstractStreamBasedFilter<E> filter) {
     assertConnectiveIsUnspecified();
     this.connective = new AndConnective();
     this.secondFilter = filter;
@@ -57,13 +60,14 @@ public class FilterConnective<Entity, Filter extends AbstractStreamBasedFilter<E
    * Creates an `OR` connective between the two filters. More precisely if the result of the first
    * filter F₁ is R₁ and the result of the second filter F₂ is R₂, then {@code F₁ ∨ F₂} will contain
    * all elements {@code e}, where {@code e∈R₁ ∨ e∈R₂}.
-   * 
+   *
    * @param filter the second filter to use
    * @return the resulting connective
    * @throws IllegalStateException if multiple connectives where specified (i.e.
-   *         {@link #and(AbstractStreamBasedFilter)} or {@link #or(AbstractStreamBasedFilter)} where called before)
+   *         {@link #and(AbstractStreamBasedFilter)} or {@link #or(AbstractStreamBasedFilter)} where
+   *         called before)
    */
-  public FilterConnective<Entity, Filter> or(AbstractStreamBasedFilter<Entity> filter) {
+  public FilterConnective<E, F> or(AbstractStreamBasedFilter<E> filter) {
     assertConnectiveIsUnspecified();
     this.connective = new OrConnective();
     this.secondFilter = filter;
@@ -71,7 +75,7 @@ public class FilterConnective<Entity, Filter extends AbstractStreamBasedFilter<E
   }
 
   @Override
-  public Stream<Entity> filter(Stream<Entity> input) {
+  public Stream<E> filter(Stream<E> input) {
     return connective.apply(input);
   }
 
@@ -89,7 +93,7 @@ public class FilterConnective<Entity, Filter extends AbstractStreamBasedFilter<E
    *
    * @author Rico Bergmann
    */
-  private abstract class AbstractConnective {
+  private interface AbstractConnective<E> {
 
     /**
      * Executes the connective on the given input
@@ -97,7 +101,7 @@ public class FilterConnective<Entity, Filter extends AbstractStreamBasedFilter<E
      * @param input the input to execute the filters on
      * @return all elements which matched the specification of the logical connective
      */
-    public abstract Stream<Entity> apply(Stream<Entity> input);
+    public Stream<E> apply(Stream<E> input);
   }
 
   /**
@@ -106,10 +110,10 @@ public class FilterConnective<Entity, Filter extends AbstractStreamBasedFilter<E
    * @author Rico Bergmann
    * @see FilterConnective#and(AbstractStreamBasedFilter)
    */
-  private class AndConnective extends AbstractConnective {
+  private class AndConnective implements AbstractConnective<E> {
 
     @Override
-    public Stream<Entity> apply(Stream<Entity> input) {
+    public Stream<E> apply(Stream<E> input) {
       input = firstFilter.filter(input);
       return secondFilter.filter(input);
     }
@@ -122,12 +126,12 @@ public class FilterConnective<Entity, Filter extends AbstractStreamBasedFilter<E
    * @author Rico Bergmann
    * @see FilterConnective#or(AbstractStreamBasedFilter)
    */
-  private class OrConnective extends AbstractConnective {
+  private class OrConnective implements AbstractConnective<E> {
 
     @Override
-    public Stream<Entity> apply(Stream<Entity> input) {
-      Stream<Entity> firstFiltered = firstFilter.filter(input);
-      Stream<Entity> secondFiltered = secondFilter.filter(input);
+    public Stream<E> apply(Stream<E> input) {
+      Stream<E> firstFiltered = firstFilter.filter(input);
+      Stream<E> secondFiltered = secondFilter.filter(input);
       return Streams.union(firstFiltered, secondFiltered);
     }
 

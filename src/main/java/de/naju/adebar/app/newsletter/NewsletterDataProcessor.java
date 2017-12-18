@@ -1,18 +1,21 @@
 package de.naju.adebar.app.newsletter;
 
-import de.naju.adebar.model.chapter.LocalGroup;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import de.naju.adebar.app.chapter.LocalGroupManager;
+import de.naju.adebar.model.chapter.LocalGroup;
 import de.naju.adebar.model.chapter.Project;
 import de.naju.adebar.model.newsletter.Newsletter;
 import de.naju.adebar.model.newsletter.NewsletterRepository;
 import de.naju.adebar.model.newsletter.Subscriber;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
-import java.util.*;
 
-// TODO many Map methods are mostly stubs as Projects and Events cannot be associated to a
-// newsletter yet
 
 /**
  * Service to easily access data from a newsletter.
@@ -22,22 +25,23 @@ import java.util.*;
  * this functionality has been outsourced from the {@link Newsletter} class itself. The class is
  * stateless following DDD once more. (More or less... at least it is inspired by DDD)
  * </p>
- * 
+ *
  * @author Rico Bergmann
  *
  */
 @Service
 public class NewsletterDataProcessor {
-  /**
-   * Many email addresses will be separated by this token
-   */
-  private final static String EMAIL_DELIMITER = ";";
 
   /**
-   * default email address for newsletters. All instances of sent newsletters will have this address
+   * A list of email addresses will be separated by this token
+   */
+  private static final String EMAIL_DELIMITER = ";";
+
+  /**
+   * Default email address for newsletters. All instances of sent newsletters will have this address
    * as sender.
    */
-  private final static String NEWSLETTER_EMAIL = "newsletter@naju-sachsen.de";
+  private static final String NEWSLETTER_EMAIL = "newsletter@naju-sachsen.de";
 
   private NewsletterRepository newsletterRepo;
   private LocalGroupManager localGroupManager;
@@ -54,7 +58,7 @@ public class NewsletterDataProcessor {
   /**
    * Concatenates all subscribers of the newsletters given and returns them as one large
    * {@code String}. This may be especially useful, when used as recipients of emails.
-   * 
+   *
    * @param newsletters the newsletters to examine
    * @return concatenation of all subscribers, separated by the {@code EMAIL_DELIMITER}
    */
@@ -118,8 +122,7 @@ public class NewsletterDataProcessor {
   public List<Newsletter> getNewslettersWithoutBelonging() {
     List<Newsletter> noBelonging = new LinkedList<>();
     for (Newsletter newsletter : newsletterRepo.findAll()) {
-      if (!belongsToLocalGroup(newsletter) && !belongsToProject(newsletter)
-          && !belongsToEvent(newsletter)) {
+      if (!belongsToLocalGroup(newsletter)) {
         noBelonging.add(newsletter);
       }
     }
@@ -132,22 +135,6 @@ public class NewsletterDataProcessor {
    */
   private boolean belongsToLocalGroup(Newsletter newsletter) {
     return localGroupManager.repository().findByNewslettersContains(newsletter).isPresent();
-  }
-
-  /**
-   * @param newsletter the newsletter to check
-   * @return {@code true} if the newsletter belongs to a project, or {@code false} otherwise
-   */
-  private boolean belongsToProject(Newsletter newsletter) {
-    return false;
-  }
-
-  /**
-   * @param newsletter the newsletter to check
-   * @return {@code true} if the newsletter belongs to an event, or {@code false} otherwise
-   */
-  private boolean belongsToEvent(Newsletter newsletter) {
-    return false;
   }
 
 }

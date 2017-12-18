@@ -8,11 +8,13 @@ import javax.validation.constraints.NotNull;
  * @author Rico Bergmann
  */
 public class ProjectForm {
-  public final static String DATE_FORMAT = "dd.MM.yyyy";
+
+  public static final String DATE_FORMAT = "dd.MM.yyyy";
 
   @NotNull
   private String name;
-  private String start, end;
+  private String start;
+  private String end;
 
   @NotNull
   private String personInCharge;

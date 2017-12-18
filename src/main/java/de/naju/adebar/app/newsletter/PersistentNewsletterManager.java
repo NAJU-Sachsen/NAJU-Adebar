@@ -3,20 +3,26 @@ package de.naju.adebar.app.newsletter;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Optional;
-import com.google.common.collect.Iterables;
-import de.naju.adebar.model.newsletter.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.google.common.collect.Iterables;
 import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.newsletter.AlreadySubscribedException;
+import de.naju.adebar.model.newsletter.ExistingSubscriberException;
+import de.naju.adebar.model.newsletter.Newsletter;
+import de.naju.adebar.model.newsletter.NewsletterRepository;
+import de.naju.adebar.model.newsletter.NoSuchSubscriberException;
+import de.naju.adebar.model.newsletter.Subscriber;
+import de.naju.adebar.model.newsletter.SubscriberRepository;
 
 /**
  * A {@link NewsletterManager} that persists the data in a database
- * 
+ *
  * @author Rico Bergmann
  */
 @Service
 public class PersistentNewsletterManager implements NewsletterManager {
-  private final static int INITIAL_NEWSLETTER_COUNT = 15;
+  private static final int INITIAL_NEWSLETTER_COUNT = 15;
 
   private NewsletterRepository newsletterRepo;
   private SubscriberRepository subscriberRepo;
@@ -76,7 +82,8 @@ public class PersistentNewsletterManager implements NewsletterManager {
             String.format(
                 "There is already a subscriber with this email address, but different data: "
                     + "existing: %s new: %s",
-                subscriberRepo.findOne(subscriber.getId()), subscriber));
+                subscriberRepo.findOne(subscriber.getId()), subscriber),
+            subscriber);
       }
     }
 

@@ -4,52 +4,34 @@ import java.util.List;
 
 /**
  * Model POJO for filters. The fields are set by Thymeleaf when the associated form is submitted.
- * 
+ *
  * @author Rico Bergmann
  */
-public class FilterPersonForm {
-  public final static String DATE_FORMAT = "dd.MM.yyyy";
+public class FilterPersonForm extends PersonForm {
 
-  private String firstName, lastName;
-  private String email;
-  private String genderFilterType, gender;
-  private String dobFilterType, dob;
-  private String eatingHabit, healthImpairments;
-  private String street, zip, city;
-  private String activistFilterType, activistJuleicaFilterType;
-  private String activistJuleicaExpiryFilterType, juleicaExpiryDate;
+  public static final String DATE_FORMAT = "dd.MM.yyyy";
+
+  private String genderFilterType;
+  private String gender;
+
+  private String dobFilterType;
+  private String dob;
+
+  private String eatingHabit;
+  private String healthImpairments;
+
+  private String activistFilterType;
+  private String activistJuleicaFilterType;
+  private String activistJuleicaExpiryFilterType;
+  private String juleicaExpiryDate;
+
   private String referentsFilterType;
   private List<String> referentQualifications;
-  private String nabuMembershipFilterType, nabuMembershipNumber;
+
+  private String nabuMembershipFilterType;
+  private String nabuMembershipNumber;
+
   private boolean returnParents;
-
-  public FilterPersonForm() {
-
-  }
-
-  public String getFirstName() {
-    return firstName;
-  }
-
-  public void setFirstName(String firstName) {
-    this.firstName = firstName;
-  }
-
-  public String getLastName() {
-    return lastName;
-  }
-
-  public void setLastName(String lastName) {
-    this.lastName = lastName;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
-  }
 
   public String getGenderFilterType() {
     return genderFilterType;
@@ -97,30 +79,6 @@ public class FilterPersonForm {
 
   public void setHealthImpairments(String healthImpairments) {
     this.healthImpairments = healthImpairments;
-  }
-
-  public String getStreet() {
-    return street;
-  }
-
-  public void setStreet(String street) {
-    this.street = street;
-  }
-
-  public String getZip() {
-    return zip;
-  }
-
-  public void setZip(String zip) {
-    this.zip = zip;
-  }
-
-  public String getCity() {
-    return city;
-  }
-
-  public void setCity(String city) {
-    this.city = city;
   }
 
   public String getActivistFilterType() {
@@ -197,14 +155,14 @@ public class FilterPersonForm {
 
   @Override
   public String toString() {
-    return "FilterPersonForm{" + "firstName='" + firstName + '\'' + ", lastName='" + lastName + '\''
-        + ", email='" + email + '\'' + ", genderFilterType='" + genderFilterType + '\''
-        + ", gender='" + gender + '\'' + ", dobFilterType='" + dobFilterType + '\'' + ", dob='"
-        + dob + '\'' + ", eatingHabit='" + eatingHabit + '\'' + ", healthImpairments='"
-        + healthImpairments + '\'' + ", street='" + street + '\'' + ", zip='" + zip + '\''
-        + ", city='" + city + '\'' + ", activistFilterType='" + activistFilterType + '\''
-        + ", activistJuleicaFilterType='" + activistJuleicaFilterType + '\''
-        + ", activistJuleicaExpiryFilterType='" + activistJuleicaExpiryFilterType + '\''
+    return "FilterPersonForm{" + "firstName='" + getFirstName() + '\'' + ", lastName='"
+        + getLastName() + '\'' + ", email='" + getEmail() + '\'' + ", genderFilterType='"
+        + genderFilterType + '\'' + ", gender='" + gender + '\'' + ", dobFilterType='"
+        + dobFilterType + '\'' + ", dob='" + dob + '\'' + ", eatingHabit='" + eatingHabit + '\''
+        + ", healthImpairments='" + healthImpairments + '\'' + ", street='" + getStreet() + '\''
+        + ", zip='" + getZip() + '\'' + ", city='" + getCity() + '\'' + ", activistFilterType='"
+        + activistFilterType + '\'' + ", activistJuleicaFilterType='" + activistJuleicaFilterType
+        + '\'' + ", activistJuleicaExpiryFilterType='" + activistJuleicaExpiryFilterType + '\''
         + ", juleicaExpiryDate='" + juleicaExpiryDate + '\'' + ", referentsFilterType='"
         + referentsFilterType + '\'' + ", referentQualifications=" + referentQualifications
         + ", nabuMembershipFilterType='" + nabuMembershipFilterType + '\''
