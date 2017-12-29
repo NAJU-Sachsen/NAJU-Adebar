@@ -42,6 +42,9 @@ import de.naju.adebar.util.Validation;
 @Entity(name = "person")
 public final class Person {
 
+  private static final String FOR_PERSON_MSG = "For person ";
+  private static final String WRONG_PERSON_MSG =
+      "Profile ID %s does not match the current person %s";
   private static final int MAX_PARENT_PROFILES = 2;
 
   @EmbeddedId
@@ -101,7 +104,8 @@ public final class Person {
   @Column(name = "archived")
   private boolean archived;
 
-  private transient final Collection<AbstractPersonRelatedEvent> events = new ArrayList<>();
+  @Transient
+  private final Collection<AbstractPersonRelatedEvent> events = new ArrayList<>();
 
   /**
    * Full constructor to create new Person instances. However to create a new object from outside
@@ -467,10 +471,10 @@ public final class Person {
    */
   public Person updateParticipantProfile(ParticipantProfile profile) {
     if (!isParticipant()) {
-      throw new NoParticipantException("For person " + this);
+      throw new NoParticipantException(FOR_PERSON_MSG + this);
     } else if (!profile.getPersonId().equals(this.id)) {
-      throw new IllegalArgumentException(String.format(
-          "Profile ID %s does not match the current person %s", profile.getPersonId(), this.id));
+      throw new IllegalArgumentException(
+          String.format(WRONG_PERSON_MSG, profile.getPersonId(), this.id));
     }
     Person updatedPerson = new Person(this);
     updatedPerson.setParticipantProfile(profile);
@@ -528,10 +532,10 @@ public final class Person {
    */
   public Person updateActivistProfile(ActivistProfile profile) {
     if (!isActivist()) {
-      throw new NoActivistException("For person " + this);
+      throw new NoActivistException(FOR_PERSON_MSG + this);
     } else if (!profile.getPersonId().equals(this.id)) {
-      throw new IllegalArgumentException(String.format(
-          "Profile ID %s does not match the current person %s", profile.getPersonId(), this.id));
+      throw new IllegalArgumentException(
+          String.format(WRONG_PERSON_MSG, profile.getPersonId(), this.id));
     }
     Person updatedPerson = new Person(this);
     updatedPerson.setActivistProfile(profile);
@@ -589,10 +593,10 @@ public final class Person {
    */
   public Person updateReferentProfile(ReferentProfile profile) {
     if (!isReferent()) {
-      throw new NoReferentException("For person " + this);
+      throw new NoReferentException(FOR_PERSON_MSG + this);
     } else if (!profile.getPersonId().equals(this.id)) {
-      throw new IllegalArgumentException(String.format(
-          "Profile ID %s does not match the current person %s", profile.getPersonId(), this.id));
+      throw new IllegalArgumentException(
+          String.format(WRONG_PERSON_MSG, profile.getPersonId(), this.id));
     }
     Person updatedPerson = new Person(this);
     updatedPerson.setReferentProfile(profile);
@@ -639,7 +643,7 @@ public final class Person {
     } else if (parentProfiles.contains(parent)) {
       throw new ExistingParentException(String.format("Parent: %s; child: %s", parent, this));
     } else if (this.equals(parent)) {
-      throw new ImpossibleKinshipRelationException("For person " + this);
+      throw new ImpossibleKinshipRelationException(FOR_PERSON_MSG + this);
     }
 
     Person updatedPerson = new Person(this);

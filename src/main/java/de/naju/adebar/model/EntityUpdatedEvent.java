@@ -23,7 +23,7 @@ public abstract class EntityUpdatedEvent<E> {
 
   private final E entity;
   private final LocalDateTime timestamp;
-  private Set<ChangeSetEntry<?>> changeset;
+  private Set<ChangeSetEntry> changeset;
 
   /**
    * Creates a new event with an empty change set
@@ -41,12 +41,12 @@ public abstract class EntityUpdatedEvent<E> {
    * @param changeset the changes that occurred. May be {@code null} if it should be left
    *        unspecified.
    */
-  protected EntityUpdatedEvent(E entity, Collection<ChangeSetEntry<?>> changeset) {
+  protected EntityUpdatedEvent(E entity, Collection<ChangeSetEntry> changeset) {
     Assert.notNull(entity, "Entity must be specified");
     this.entity = entity;
     this.timestamp = LocalDateTime.now();
     this.changeset = changeset != null //
-        ? new HashSet<ChangeSetEntry<?>>(changeset) //
+        ? new HashSet<ChangeSetEntry>(changeset) //
         : new HashSet<>();
   }
 
@@ -74,13 +74,14 @@ public abstract class EntityUpdatedEvent<E> {
   /**
    * @return the change set. If none has been specified, the collection will be empty.
    */
-  public Collection<ChangeSetEntry<?>> getChangeset() {
+  public Collection<ChangeSetEntry> getChangeset() {
     return Collections.unmodifiableCollection(changeset);
   }
 
+
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see java.lang.Object#hashCode()
    */
   @Override
@@ -92,11 +93,20 @@ public abstract class EntityUpdatedEvent<E> {
     return result;
   }
 
-  public boolean equals(EntityUpdatedEvent<E> other) {
-    if (this == other)
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
       return true;
-    if (other == null)
+    if (obj == null)
       return false;
+    if (!(obj instanceof EntityUpdatedEvent))
+      return false;
+    EntityUpdatedEvent<?> other = (EntityUpdatedEvent<?>) obj;
     if (entity == null) {
       if (other.entity != null)
         return false;

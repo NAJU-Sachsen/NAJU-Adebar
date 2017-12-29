@@ -7,13 +7,12 @@ import org.springframework.util.Assert;
  *
  * @author Rico Bergmann
  * @see EntityUpdatedEvent
- * @param <T> the field which was updated
  */
-public class ChangeSetEntry<T> {
+public class ChangeSetEntry {
 
   private final String field;
-  private final T oldValue;
-  private final T newValue;
+  private final Object oldValue;
+  private final Object newValue;
 
   /**
    * Creates a new entry
@@ -23,8 +22,8 @@ public class ChangeSetEntry<T> {
    * @param newValue the field's value after the update
    * @return the entry
    */
-  public static <T> ChangeSetEntry<T> forField(String field, T oldValue, T newValue) {
-    return new ChangeSetEntry<>(field, oldValue, newValue);
+  public static ChangeSetEntry forField(String field, Object oldValue, Object newValue) {
+    return new ChangeSetEntry(field, oldValue, newValue);
   }
 
   /**
@@ -34,7 +33,7 @@ public class ChangeSetEntry<T> {
    * @param oldValue the field's value before the update
    * @param newValue the field's value after the update
    */
-  private ChangeSetEntry(String field, T oldValue, T newValue) {
+  private ChangeSetEntry(String field, Object oldValue, Object newValue) {
     Assert.hasText(field, "The field must be specified");
     this.field = field;
     this.oldValue = oldValue;
@@ -51,20 +50,20 @@ public class ChangeSetEntry<T> {
   /**
    * @return the field's value before the update
    */
-  public final T getOldValue() {
+  public final Object getOldValue() {
     return oldValue;
   }
 
   /**
    * @return the field's value after the update
    */
-  public final T getNewValue() {
+  public final Object getNewValue() {
     return newValue;
   }
 
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see java.lang.Object#hashCode()
    */
   @Override
@@ -75,11 +74,20 @@ public class ChangeSetEntry<T> {
     return result;
   }
 
-  public boolean equals(ChangeSetEntry<T> other) {
-    if (this == other)
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
       return true;
-    if (other == null)
+    if (obj == null)
       return false;
+    if (getClass() != obj.getClass())
+      return false;
+    ChangeSetEntry other = (ChangeSetEntry) obj;
     if (field == null) {
       if (other.field != null)
         return false;

@@ -23,7 +23,7 @@ public abstract class AbstractPersonRelatedEvent extends EntityUpdatedEvent<Pers
   /**
    * @see EntityUpdatedEvent#EntityUpdatedEvent(E, Collection)
    */
-  protected AbstractPersonRelatedEvent(Person person, Collection<ChangeSetEntry<?>> changeset) {
+  protected AbstractPersonRelatedEvent(Person person, Collection<ChangeSetEntry> changeset) {
     super(person, changeset);
   }
 }

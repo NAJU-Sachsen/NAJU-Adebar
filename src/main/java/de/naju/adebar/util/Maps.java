@@ -12,6 +12,8 @@ import java.util.function.Function;
  */
 public class Maps {
 
+  private Maps() {}
+
   /**
    * Generates a new map from the given collection
    *

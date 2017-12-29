@@ -29,7 +29,7 @@ public class PersonDataUpdatedEvent extends AbstractPersonRelatedEvent {
    * @return the event
    */
   public static PersonDataUpdatedEvent withChangeset(Person updatedPerson,
-      Collection<ChangeSetEntry<?>> changeset) {
+      Collection<ChangeSetEntry> changeset) {
     return new PersonDataUpdatedEvent(updatedPerson, changeset);
   }
 
@@ -44,7 +44,7 @@ public class PersonDataUpdatedEvent extends AbstractPersonRelatedEvent {
    * @param person the person. May not be {@code null}
    * @param changeset the change set
    */
-  private PersonDataUpdatedEvent(Person person, Collection<ChangeSetEntry<?>> changeset) {
+  private PersonDataUpdatedEvent(Person person, Collection<ChangeSetEntry> changeset) {
     super(person, changeset);
   }
 

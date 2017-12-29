@@ -1,11 +1,11 @@
 package de.naju.adebar.app.human.filter.stream;
 
+import java.util.List;
+import java.util.stream.Stream;
 import com.google.common.collect.Lists;
 import de.naju.adebar.app.filter.FilterType;
 import de.naju.adebar.model.human.Person;
 import de.naju.adebar.model.human.Qualification;
-import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * Filter for persons depending on their referent status. It features two constructors depending on
@@ -50,11 +50,10 @@ public class ReferentFilter implements PersonFilter {
     // if the filter type is not null, we only need to filter for the
     // general referent status
     if (filterType != null) {
-      switch (filterType) {
-        case ENFORCE:
-          return personStream.filter(Person::isReferent);
-        case IGNORE:
-          return personStream.filter(p -> !p.isReferent());
+      if (filterType == FilterType.ENFORCE) {
+        return personStream.filter(Person::isReferent);
+      } else if (filterType == FilterType.IGNORE) {
+        return personStream.filter(p -> !p.isReferent());
       }
     } else {
       // if we filter for referent with specific qualifications, we should
