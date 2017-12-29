@@ -46,7 +46,7 @@ public abstract class EntityUpdatedEvent<E> {
     this.entity = entity;
     this.timestamp = LocalDateTime.now();
     this.changeset = changeset != null //
-        ? new HashSet<ChangeSetEntry>(changeset) //
+        ? new HashSet<>(changeset) //
         : new HashSet<>();
   }
 
@@ -127,7 +127,7 @@ public abstract class EntityUpdatedEvent<E> {
    */
   @Override
   public String toString() {
-    return String.format("%s for %s at %t", this.getClass().getSimpleName(), entity, timestamp);
+    return String.format("%s for %s at %tc", this.getClass().getSimpleName(), entity, timestamp);
   }
 
 }
