@@ -25,8 +25,7 @@ public class EditActivistFormDataExtractor {
 
     }
     ActivistProfile profile = new ActivistProfile(person.getActivistProfile());
-    profile.setJuleicaCard(juleica);
-    return profile;
+    return profile.updateJuleicaCard(juleica);
   }
 
 }

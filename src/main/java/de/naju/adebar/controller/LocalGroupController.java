@@ -18,7 +18,6 @@ import de.naju.adebar.model.chapter.Board;
 import de.naju.adebar.model.chapter.ExistingMemberException;
 import de.naju.adebar.model.chapter.LocalGroup;
 import de.naju.adebar.model.human.Person;
-import de.naju.adebar.model.human.PersonId;
 
 /**
  * Local group related controller mappings
@@ -205,7 +204,7 @@ public class LocalGroupController {
     try {
       person.makeActivist();
       localGroup.addMember(person);
-      managers.persons.updatePerson(new PersonId(personId), person);
+      managers.persons.updatePerson(person);
       managers.localGroups.updateLocalGroup(groupId, localGroup);
       redirAttr.addFlashAttribute("counselorAdded", true);
     } catch (IllegalStateException e) {

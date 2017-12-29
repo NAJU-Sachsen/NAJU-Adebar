@@ -1,6 +1,5 @@
 package de.naju.adebar.model.human;
 
-import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import org.springframework.util.Assert;
@@ -8,13 +7,14 @@ import org.springframework.util.Assert;
 /**
  * Abstraction of an address. Each address consists of street, zip and city and may contain
  * additional info - e.g. room numbers or the like.
+ * <p>
+ * Mind that an address is a value-object - once created it may not be modified any more.
  *
  * @author Rico Bergmann
  */
 @Embeddable
-public class Address implements Serializable {
+public class Address {
 
-  private static final long serialVersionUID = -3788598615103628404L;
   public static final int ZIP_LENGTH = 5;
 
   @Column(name = "street")
@@ -29,8 +29,39 @@ public class Address implements Serializable {
   @Column(name = "hints")
   private String additionalInfo;
 
-  // constructors
+  /**
+   * Creates a new address
+   *
+   * @param street the street, may not be empty
+   * @param zip the zip, must be 5 characters long
+   * @param city the city, may not be empty
+   * @return the address
+   */
+  public static Address of(String street, String zip, String city) {
+    return new Address(street, zip, city);
+  }
 
+  /**
+   * Creates a new address
+   *
+   * @param street the street, may not be empty
+   * @param zip the zip, must be 5 characters long
+   * @param city the city, may not be empty
+   * @param additionalInfo the additional info, may be empty but not {@code null}
+   * @return the address
+   */
+  public static Address of(String street, String zip, String city, String additionalInfo) {
+    return new Address(street, zip, city, additionalInfo);
+  }
+
+  /**
+   * Simplified constructor
+   *
+   * @param street the street, may not be empty
+   * @param zip the zip, must be 5 characters long
+   * @param city the city, may not be empty
+   * @throws IllegalArgumentException if any of the parameters is {@code null}
+   */
   public Address(String street, String zip, String city) {
     this(street, zip, city, "");
   }
@@ -65,8 +96,6 @@ public class Address implements Serializable {
     street = zip = city = additionalInfo = "";
   }
 
-  // getter
-
   /**
    * @return the street
    */
@@ -95,12 +124,10 @@ public class Address implements Serializable {
     return additionalInfo;
   }
 
-  // setter
-
   /**
    * @param street the street to set
    */
-  public void setStreet(String street) {
+  protected void setStreet(String street) {
     Assert.notNull(street, "Street may not be null!");
     this.street = street;
   }
@@ -108,7 +135,7 @@ public class Address implements Serializable {
   /**
    * @param zip the zip to set
    */
-  public void setZip(String zip) {
+  protected void setZip(String zip) {
     Assert.notNull(zip, "Zip may not be null!");
     this.zip = zip;
   }
@@ -116,7 +143,7 @@ public class Address implements Serializable {
   /**
    * @param city the city to set
    */
-  public void setCity(String city) {
+  protected void setCity(String city) {
     Assert.notNull(city, "City may not be null!");
     this.city = city;
   }
@@ -124,16 +151,14 @@ public class Address implements Serializable {
   /**
    * @param additionalInfo the additional info to set
    */
-  public void setAdditionalInfo(String additionalInfo) {
+  protected void setAdditionalInfo(String additionalInfo) {
     Assert.notNull(additionalInfo, "Additional info may not be null!");
     this.additionalInfo = additionalInfo;
   }
 
-  // overwritten from Object
-
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see java.lang.Object#hashCode()
    */
   @Override
@@ -149,7 +174,7 @@ public class Address implements Serializable {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override

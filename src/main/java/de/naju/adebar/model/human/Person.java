@@ -1,8 +1,10 @@
 package de.naju.adebar.model.human;
 
-import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -19,20 +21,27 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Transient;
 import org.hibernate.validator.constraints.Email;
+import org.springframework.data.domain.AfterDomainEventPublication;
+import org.springframework.data.domain.DomainEvents;
 import org.springframework.util.Assert;
+import com.querydsl.core.annotations.PropertyType;
+import com.querydsl.core.annotations.QueryType;
 import de.naju.adebar.util.Validation;
 
 /**
  * Abstraction of a person. No matter of its concrete role (camp participant, activist, ...) some
  * data always needs to be tracked. This will be handled here.
  *
+ * In terms of DDD a Person acts as an aggregate-root for a number of profiles.
+ *
  * @author Rico Bergmann
- * @see de.naju.adebar.model.human
+ * @see ParticipantProfile
+ * @see ActivistProfile
+ * @see ReferentProfile
  */
 @Entity(name = "person")
-public class Person implements Serializable {
+public final class Person {
 
-  private static final long serialVersionUID = -5665458502703758980L;
   private static final int MAX_PARENT_PROFILES = 2;
 
   @EmbeddedId
@@ -71,14 +80,17 @@ public class Person implements Serializable {
 
   @PrimaryKeyJoinColumn
   @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @QueryType(PropertyType.ENTITY)
   private ParticipantProfile participantProfile;
 
   @PrimaryKeyJoinColumn
   @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @QueryType(PropertyType.ENTITY)
   private ActivistProfile activistProfile;
 
   @PrimaryKeyJoinColumn
   @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @QueryType(PropertyType.ENTITY)
   private ReferentProfile referentProfile;
 
   @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -89,7 +101,7 @@ public class Person implements Serializable {
   @Column(name = "archived")
   private boolean archived;
 
-  // constructors
+  private transient final Collection<AbstractPersonRelatedEvent> events = new ArrayList<>();
 
   /**
    * Full constructor to create new Person instances. However to create a new object from outside
@@ -128,7 +140,31 @@ public class Person implements Serializable {
   @SuppressWarnings("unused")
   private Person() {}
 
-  // getter and setter
+  /**
+   * Copy constructor.
+   * <p>
+   * When calling this method, only {@code this} should be used for further operations and the
+   * cloned instance should be ignored. This is why the copy constructor will incorporate all of
+   * {@code other's} events and wipe them on {@code other}. In general this constructor should only
+   * be executed if some data has to be updated.
+   *
+   * @param other the person to copy
+   */
+  private Person(Person other) {
+    this(other.id, other.firstName, other.lastName, other.email);
+    this.phoneNumber = other.phoneNumber;
+    this.address = other.address;
+    this.participant = other.participant;
+    this.participantProfile = other.participantProfile;
+    this.activist = other.activist;
+    this.activistProfile = other.activistProfile;
+    this.referent = other.referent;
+    this.referentProfile = other.referentProfile;
+    this.parentProfiles = other.parentProfiles;
+    this.archived = other.archived;
+    other.events.forEach(this.events::add);
+    other.clearEvents();
+  }
 
   /**
    * @return the person's unique ID.
@@ -145,28 +181,10 @@ public class Person implements Serializable {
   }
 
   /**
-   * @param firstName the person's first name
-   * @throws IllegalArgumentException if the new name is empty or {@code null}
-   */
-  public void setFirstName(String firstName) {
-    Assert.hasText(firstName, "First name may not be null nor empty, but was: " + firstName);
-    this.firstName = firstName;
-  }
-
-  /**
    * @return the person's last name
    */
   public String getLastName() {
     return lastName;
-  }
-
-  /**
-   * @param lastName the person's last name
-   * @throws IllegalArgumentException if the new name is empty or {@code null}
-   */
-  public void setLastName(String lastName) {
-    Assert.hasText(lastName, "Last name may not be null nor empty, but was: " + lastName);
-    this.lastName = lastName;
   }
 
   /**
@@ -177,18 +195,6 @@ public class Person implements Serializable {
   }
 
   /**
-   * @param email the person's email address, may be {@code null @throws IllegalArgumentException if
-   *        the email is not valid, i.e. does not match the email regex (Existence of the address is
-   *        not checked)
-   */
-  public void setEmail(String email) {
-    if (email != null) {
-      Assert.isTrue(Validation.isEmail(email), "Not a valid email address: " + email);
-    }
-    this.email = email;
-  }
-
-  /**
    * @return the person's phone number. May be {@code null}.
    */
   public String getPhoneNumber() {
@@ -196,24 +202,10 @@ public class Person implements Serializable {
   }
 
   /**
-   * @param phoneNumber the person's phone number. May be {@code null}.
-   */
-  public void setPhoneNumber(String phoneNumber) {
-    this.phoneNumber = phoneNumber;
-  }
-
-  /**
    * @return the person's address. May be {@code null}.
    */
   public Address getAddress() {
     return address;
-  }
-
-  /**
-   * @param address the person's address. May be {@code null}.
-   */
-  public void setAddress(Address address) {
-    this.address = address;
   }
 
   /**
@@ -232,15 +224,6 @@ public class Person implements Serializable {
   }
 
   /**
-   * @param participantProfile the participant profile of the person. May be {@code null} if the
-   *        person is not a camp participant.
-   */
-  public void setParticipantProfile(ParticipantProfile participantProfile) {
-    this.participant = participantProfile != null;
-    this.participantProfile = participantProfile;
-  }
-
-  /**
    * @return {@code true} if the person is an activist, or {@code false} otherwise
    */
   public boolean isActivist() {
@@ -253,15 +236,6 @@ public class Person implements Serializable {
    */
   public ActivistProfile getActivistProfile() {
     return activistProfile;
-  }
-
-  /**
-   * @param activistProfile the activist profile of the person. May be {@code null} if the person is
-   *        not an activist.
-   */
-  public void setActivistProfile(ActivistProfile activistProfile) {
-    this.activist = activistProfile != null;
-    this.activistProfile = activistProfile;
   }
 
   /**
@@ -280,30 +254,10 @@ public class Person implements Serializable {
   }
 
   /**
-   * @param referentProfile the referent profile of the person. May be {@code null} if the person is
-   *        not a referent.
-   */
-  public void setReferentProfile(ReferentProfile referentProfile) {
-    this.referent = referentProfile != null;
-    this.referentProfile = referentProfile;
-  }
-
-  /**
    * @return the person's parents
    */
   public Iterable<Person> getParentProfiles() {
     return parentProfiles;
-  }
-
-  /**
-   * @param parentProfiles the person's parents
-   */
-  public void setParentProfiles(List<Person> parentProfiles) {
-    if (parentProfiles == null) {
-      this.parentProfiles = new ArrayList<>(MAX_PARENT_PROFILES);
-    } else {
-      this.parentProfiles = parentProfiles;
-    }
   }
 
   /**
@@ -314,10 +268,508 @@ public class Person implements Serializable {
   }
 
   /**
-   * @param archived whether the person is still to be used
+   * @return the subscriber's name, which basically is {@code firstName + " " + lastName}
    */
-  public void setArchived(boolean archived) {
-    this.archived = archived;
+  @Transient
+  public String getName() {
+    return firstName + " " + lastName;
+  }
+
+  /**
+   * @return {@code true} if an email address is set, {@code false} otherwise
+   */
+  public boolean hasEmail() {
+    return email != null;
+  }
+
+  /**
+   * @return {@code true} if a parent is registered for this person, {@code false} otherwise
+   */
+  public boolean hasParents() {
+    return !parentProfiles.isEmpty();
+  }
+
+  /**
+   * @return {@code true} if another parent profile may be connected to this person, {@code false}
+   *         otherwise
+   */
+  public boolean parentProfileMayBeConnected() {
+    return parentProfiles.size() < MAX_PARENT_PROFILES;
+  }
+
+  /**
+   * Updates the personal information.
+   * <p>
+   * Once a person instance has been created, it is immutable. Therefore a copy is being created and
+   * returned.
+   *
+   * @param firstName the new first name
+   * @param lastName the new last name
+   * @param email the new email
+   * @param phoneNumber the new phone number
+   * @return the updated person
+   */
+  public Person updateInformation(String firstName, String lastName, String email,
+      String phoneNumber) {
+    Person updatedPerson = new Person(this);
+    updatedPerson.setFirstName(firstName);
+    updatedPerson.setLastName(lastName);
+    updatedPerson.setEmail(email);
+    updatedPerson.setPhoneNumber(phoneNumber);
+
+    if (!updateEventWasRegistered()) {
+      updatedPerson.registerEvent(PersonDataUpdatedEvent.forPerson(updatedPerson));
+    }
+    return updatedPerson;
+  }
+
+  /**
+   * Updates the personal information.
+   * <p>
+   * Once a person instance has been created, it is immutable. Therefore a copy is being created and
+   * returned.
+   *
+   * @param firstName the new first name
+   * @return the updated person
+   */
+  public Person updateFirstName(String firstName) {
+    Person updatedPerson = new Person(this);
+    updatedPerson.setFirstName(firstName);
+
+    if (!updateEventWasRegistered()) {
+      updatedPerson.registerEvent(PersonDataUpdatedEvent.forPerson(updatedPerson));
+    }
+    return updatedPerson;
+  }
+
+  /**
+   * Updates the personal information.
+   * <p>
+   * Once a person instance has been created, it is immutable. Therefore a copy is being created and
+   * returned.
+   *
+   * @param lastName the new last name
+   * @return the updated person
+   */
+  public Person updateLastName(String lastName) {
+    Person updatedPerson = new Person(this);
+    updatedPerson.setLastName(lastName);
+
+    if (!updateEventWasRegistered()) {
+      updatedPerson.registerEvent(PersonDataUpdatedEvent.forPerson(updatedPerson));
+    }
+    return updatedPerson;
+  }
+
+
+  /**
+   * Updates the personal information.
+   * <p>
+   * Once a person instance has been created, it is immutable. Therefore a copy is being created and
+   * returned.
+   *
+   * @param email the new email address
+   * @return the updated person
+   */
+  public Person updateEmail(String email) {
+    Person updatedPerson = new Person(this);
+    updatedPerson.setEmail(email);
+
+    if (!updateEventWasRegistered()) {
+      updatedPerson.registerEvent(PersonDataUpdatedEvent.forPerson(updatedPerson));
+    }
+    return updatedPerson;
+  }
+
+  /**
+   * Updates the personal information.
+   * <p>
+   * Once a person instance has been created, it is immutable. Therefore a copy is being created and
+   * returned.
+   *
+   * @param phoneNumber the new phone number
+   * @return the updated person
+   */
+  public Person updatePhoneNumber(String phoneNumber) {
+    Person updatedPerson = new Person(this);
+    updatedPerson.setPhoneNumber(phoneNumber);
+
+    if (!updateEventWasRegistered()) {
+      updatedPerson.registerEvent(PersonDataUpdatedEvent.forPerson(updatedPerson));
+    }
+    return updatedPerson;
+  }
+
+  /**
+   * Updates the personal information.
+   * <p>
+   * Once a person instance has been created, it is immutable. Therefore a copy is being created and
+   * returned.
+   *
+   * @param address the new address
+   * @return the updated person
+   */
+  public Person updateAddress(Address address) {
+    Person updatedPerson = new Person(this);
+    updatedPerson.setAddress(address);
+
+    if (!updateEventWasRegistered()) {
+      updatedPerson.registerEvent(PersonDataUpdatedEvent.forPerson(updatedPerson));
+    }
+    return updatedPerson;
+  }
+
+  /**
+   * Turns the person into a camp participant.
+   * <p>
+   * Be sure to save the person in order to persist the profile.
+   *
+   * @return the person's new participant profile
+   * @throws IllegalStateException if the person already is a camp participant
+   */
+  public ParticipantProfile makeParticipant() {
+    if (isParticipant()) {
+      throw new IllegalStateException("Person already is a participant");
+    }
+    this.participantProfile = new ParticipantProfile(this);
+    this.participant = true;
+    return participantProfile;
+  }
+
+  /**
+   * Turns the person into a camp participant, initializing its profile right away.
+   * <p>
+   * Be sure to save the person in order to persist the profile.
+   *
+   * @param gender the person's gender
+   * @param dateOfBirth the person's date of birth
+   * @param eatingHabits the person's eating habits
+   * @param healthImpairments the person's health impairments
+   * @return the person's new participant profile
+   * @throws IllegalStateException if the person already is a camp participant
+   */
+  public ParticipantProfile makeParticipant(Gender gender, LocalDate dateOfBirth,
+      String eatingHabits, String healthImpairments) {
+    if (isParticipant()) {
+      throw new IllegalStateException("Person already is a participant");
+    }
+    this.participantProfile =
+        new ParticipantProfile(this, gender, dateOfBirth, eatingHabits, healthImpairments);
+    this.participant = true;
+    return participantProfile;
+  }
+
+  /**
+   * Updates the participation information
+   *
+   * @param profile the new data
+   * @return the updated person
+   */
+  public Person updateParticipantProfile(ParticipantProfile profile) {
+    if (!isParticipant()) {
+      throw new NoParticipantException("For person " + this);
+    } else if (!profile.getPersonId().equals(this.id)) {
+      throw new IllegalArgumentException(String.format(
+          "Profile ID %s does not match the current person %s", profile.getPersonId(), this.id));
+    }
+    Person updatedPerson = new Person(this);
+    updatedPerson.setParticipantProfile(profile);
+
+    if (!updateEventWasRegistered()) {
+      updatedPerson.registerEvent(PersonDataUpdatedEvent.forPerson(updatedPerson));
+    }
+    return updatedPerson;
+  }
+
+  /**
+   * Turns the person into an activist.
+   * <p>
+   * Be sure to save the person in order to persist the profile.
+   *
+   * @return the new activist profile, containing all activist related data
+   * @throws IllegalStateException if the person already is an activist
+   */
+  public ActivistProfile makeActivist() {
+    if (isActivist()) {
+      throw new IllegalStateException("Person already is an activist");
+    }
+    this.activistProfile = new ActivistProfile(this);
+    this.activist = true;
+
+    registerEvent(NewActivistRegisteredEvent.forPerson(this));
+    return activistProfile;
+  }
+
+  /**
+   * Turns the person into an activist, initializing its profile right away.
+   * <p>
+   * Be sure to save the person in order to persist the profile.
+   *
+   * @param juleica the person's juleica, may be {@code null} if there is none
+   * @return the new activist profile
+   * @throws IllegalStateException if the person already is an activist
+   */
+  public ActivistProfile makeActivist(JuleicaCard juleica) {
+    if (isActivist()) {
+      throw new IllegalStateException("Person already is an activist");
+    }
+    this.activistProfile = new ActivistProfile(this, juleica);
+    this.activist = true;
+
+    registerEvent(NewActivistRegisteredEvent.forPerson(this));
+    return activistProfile;
+  }
+
+  /**
+   * Updates the activist information
+   *
+   * @param profile the new data
+   * @return the updated person
+   */
+  public Person updateActivistProfile(ActivistProfile profile) {
+    if (!isActivist()) {
+      throw new NoActivistException("For person " + this);
+    } else if (!profile.getPersonId().equals(this.id)) {
+      throw new IllegalArgumentException(String.format(
+          "Profile ID %s does not match the current person %s", profile.getPersonId(), this.id));
+    }
+    Person updatedPerson = new Person(this);
+    updatedPerson.setActivistProfile(profile);
+
+    if (!updateEventWasRegistered()) {
+      updatedPerson.registerEvent(PersonDataUpdatedEvent.forPerson(updatedPerson));
+    }
+    return updatedPerson;
+  }
+
+  /**
+   * Turns the person into a referent.
+   * <p>
+   * Be sure to save the person in order to persist the profile.
+   *
+   * @return the new referent profile, containing all referent related data.
+   * @throws IllegalStateException if the person already is a referent
+   */
+  public ReferentProfile makeReferent() {
+    if (isReferent()) {
+      throw new IllegalStateException("Person already is a referent");
+    }
+    this.referentProfile = new ReferentProfile(this);
+    this.referent = true;
+
+    registerEvent(NewReferentRegisteredEvent.forPerson(this));
+    return referentProfile;
+  }
+
+  /**
+   * Turns the person into a referent.
+   * <p>
+   * Be sure to save the person in order to persist the profile.
+   *
+   * @param qualifications the person's qualifications
+   * @return the new referent profile
+   * @throws IllegalStateException if the person already is a referent
+   */
+  public ReferentProfile makeReferent(Collection<Qualification> qualifications) {
+    if (isReferent()) {
+      throw new IllegalStateException("Person already is a referent");
+    }
+    this.referentProfile = new ReferentProfile(this, qualifications);
+    this.referent = true;
+
+    registerEvent(NewReferentRegisteredEvent.forPerson(this));
+    return referentProfile;
+  }
+
+  /**
+   * Updates the referent information
+   *
+   * @param profile the new data
+   * @return the updated person
+   */
+  public Person updateReferentProfile(ReferentProfile profile) {
+    if (!isReferent()) {
+      throw new NoReferentException("For person " + this);
+    } else if (!profile.getPersonId().equals(this.id)) {
+      throw new IllegalArgumentException(String.format(
+          "Profile ID %s does not match the current person %s", profile.getPersonId(), this.id));
+    }
+    Person updatedPerson = new Person(this);
+    updatedPerson.setReferentProfile(profile);
+
+    if (!updateEventWasRegistered()) {
+      updatedPerson.registerEvent(PersonDataUpdatedEvent.forPerson(updatedPerson));
+    }
+    return updatedPerson;
+  }
+
+  /**
+   * Marks the person as "archived" - it should not be modified any further. However this is not
+   * being enforced.
+   *
+   * @return the archived person
+   */
+  public Person archive() {
+    if (archived) {
+      throw new IllegalStateException("Person is already archived " + this);
+    }
+    Person archivedPerson = new Person(this);
+    archivedPerson.anonymiseProfile();
+    archivedPerson.anonymiseAddress();
+    archivedPerson.archived = true;
+
+    registerEvent(PersonArchivedEvent.forPerson(archivedPerson));
+    return archivedPerson;
+  }
+
+  /**
+   * Adds a person as parent to the current person
+   *
+   * @param parent the parent
+   * @return the person with the new parent
+   * @throws IllegalStateException if the person already has two parents
+   * @throws ExistingParentException if the parent is already known
+   * @throws ImpossibleKinshipRelationException if parent and child are the same person. No cycle
+   *         checks in the relationship graph are being performed yet.
+   *
+   */
+  public Person connectParentProfile(Person parent) {
+    if (!parentProfileMayBeConnected()) {
+      throw new IllegalStateException("No more parent profile may be connected");
+    } else if (parentProfiles.contains(parent)) {
+      throw new ExistingParentException(String.format("Parent: %s; child: %s", parent, this));
+    } else if (this.equals(parent)) {
+      throw new ImpossibleKinshipRelationException("For person " + this);
+    }
+
+    Person updatedPerson = new Person(this);
+    updatedPerson.parentProfiles.add(parent);
+
+    if (!updateEventWasRegistered()) {
+      updatedPerson.registerEvent(PersonDataUpdatedEvent.forPerson(updatedPerson));
+    }
+    return updatedPerson;
+  }
+
+  /**
+   * Removes a parent - brutal.
+   *
+   * @param parent the former parent
+   * @return the person without its parent
+   * @throws IllegalArgumentException if the given parent is not known to be one
+   */
+  public Person disconnectParentProfile(Person parent) {
+    if (parentProfiles.remove(parent)) {
+      throw new IllegalArgumentException("No connection with parent " + parent);
+    }
+
+    Person updatedPerson = new Person(this);
+    updatedPerson.parentProfiles.remove(parent);
+
+    if (!updateEventWasRegistered()) {
+      updatedPerson.registerEvent(PersonDataUpdatedEvent.forPerson(updatedPerson));
+    }
+    return updatedPerson;
+  }
+
+  /**
+   * @param firstName the person's first name
+   * @throws IllegalArgumentException if the new name is empty or {@code null}
+   */
+  protected void setFirstName(String firstName) {
+    Assert.hasText(firstName, "First name may not be null nor empty, but was: " + firstName);
+    this.firstName = firstName;
+  }
+
+  /**
+   * @param lastName the person's last name
+   * @throws IllegalArgumentException if the new name is empty or {@code null}
+   */
+  protected void setLastName(String lastName) {
+    Assert.hasText(lastName, "Last name may not be null nor empty, but was: " + lastName);
+    this.lastName = lastName;
+  }
+
+  /**
+   * @param email the person's email address, may be {@code null @throws IllegalArgumentException if
+   *        the email is not valid, i.e. does not match the email regex (Existence of the address is
+   *        not checked)
+   */
+  protected void setEmail(String email) {
+    if (email != null) {
+      Assert.isTrue(Validation.isEmail(email), "Not a valid email address: " + email);
+    }
+    this.email = email;
+  }
+
+  /**
+   * @param phoneNumber the person's phone number. May be {@code null}.
+   */
+  protected void setPhoneNumber(String phoneNumber) {
+    this.phoneNumber = phoneNumber;
+  }
+
+  /**
+   * @param address the person's address. May be {@code null}.
+   */
+  protected void setAddress(Address address) {
+    this.address = address;
+  }
+
+  /**
+   * @param participantProfile the participant profile of the person. May be {@code null} if the
+   *        person is not a camp participant.
+   */
+  protected void setParticipantProfile(ParticipantProfile participantProfile) {
+    this.participant = participantProfile != null;
+    this.participantProfile = participantProfile;
+  }
+
+  /**
+   * @param activistProfile the activist profile of the person. May be {@code null} if the person is
+   *        not an activist.
+   */
+  protected void setActivistProfile(ActivistProfile activistProfile) {
+    this.activist = activistProfile != null;
+    this.activistProfile = activistProfile;
+  }
+
+  /**
+   * @param referentProfile the referent profile of the person. May be {@code null} if the person is
+   *        not a referent.
+   */
+  protected void setReferentProfile(ReferentProfile referentProfile) {
+    this.referent = referentProfile != null;
+    this.referentProfile = referentProfile;
+  }
+
+  /**
+   * @param parentProfiles the person's parents
+   */
+  protected void setParentProfiles(List<Person> parentProfiles) {
+    if (parentProfiles == null) {
+      this.parentProfiles = new ArrayList<>(MAX_PARENT_PROFILES);
+    } else {
+      this.parentProfiles = parentProfiles;
+    }
+  }
+
+  /**
+   * @return all events that where saved for publishing. This will include at most one
+   *         {@link PersonDataUpdatedEvent} and one {@link PersonArchivedEvent}
+   */
+  @DomainEvents
+  Collection<AbstractPersonRelatedEvent> getModificationEvents() {
+    return Collections.unmodifiableCollection(events);
+  }
+
+  /**
+   * Marks all events as "has been published" should always be called after the result of
+   * {@link #getModificationEvents()} has been processed
+   */
+  @AfterDomainEventPublication
+  void clearEvents() {
+    events.clear();
   }
 
   /**
@@ -361,110 +813,43 @@ public class Person implements Serializable {
     this.referent = referent;
   }
 
-  // query methods
-
   /**
-   * @return the subscriber's name, which basically is {@code firstName + " " + lastName}
+   * @param archived whether the person is still to be used
    */
-  @Transient
-  public String getName() {
-    return firstName + " " + lastName;
+  @SuppressWarnings("unused")
+  private void setArchived(boolean archived) {
+    this.archived = archived;
   }
 
   /**
-   * @return {@code true} if an email address is set, {@code false} otherwise
+   * @return whether at least one {@link PersonDataUpdatedEvent} was registered since the last
+   *         {@link PersonRepository#save(Entity)} operation
    */
-  public boolean hasEmail() {
-    return email != null;
+  private boolean updateEventWasRegistered() {
+    return events.stream().anyMatch(e -> e.getClass().equals(PersonDataUpdatedEvent.class));
   }
 
   /**
-   * @return {@code true} if a parent is registered for this person, {@code false} otherwise
+   * @param event saves an event for publishing
    */
-  public boolean hasParents() {
-    return !parentProfiles.isEmpty();
+  private void registerEvent(AbstractPersonRelatedEvent event) {
+    events.add(event);
   }
 
   /**
-   * @return {@code true} if another parent profile may be connected to this person, {@code false}
-   *         otherwise
+   * Removes all data that could potentially identify this person
    */
-  public boolean parentProfileMayBeConnected() {
-    return parentProfiles.size() < MAX_PARENT_PROFILES;
-  }
-
-  // normal methods
-
-  /**
-   * Turns the person into a camp participant.
-   *
-   * @return the person's new participant profile
-   */
-  public ParticipantProfile makeParticipant() {
-    if (isParticipant()) {
-      throw new IllegalStateException("Person already is a participant");
-    }
-    this.participantProfile = new ParticipantProfile(this);
-    this.participant = true;
-    return participantProfile;
+  private void anonymiseProfile() {
+    this.firstName = "";
+    this.email = null;
   }
 
   /**
-   * Turns the person into an activist.
-   *
-   * @return the new activist profile, containing all activist related data
+   * Removes all data that would make an address unique - which in this case is just its street
    */
-  public ActivistProfile makeActivist() {
-    if (isActivist()) {
-      throw new IllegalStateException("Person already is an activist");
-    }
-    this.activistProfile = new ActivistProfile(this);
-    this.activist = true;
-    return activistProfile;
+  private void anonymiseAddress() {
+    this.address = new Address("", address.getZip(), address.getCity());
   }
-
-  /**
-   * Turns the person into a referent.
-   *
-   * @return the new referent profile, containing all referent related data.
-   */
-  public ReferentProfile makeReferent() {
-    if (isReferent()) {
-      throw new IllegalStateException("Person already is a referent");
-    }
-    this.referentProfile = new ReferentProfile(this);
-    this.referent = true;
-    return referentProfile;
-  }
-
-  /**
-   * Saves a person as parent for {@code this}
-   *
-   * @param parent the parent
-   */
-  public void connectParentProfile(Person parent) {
-    if (!parentProfileMayBeConnected()) {
-      throw new IllegalStateException("No more parent profile may be connected");
-    } else if (parentProfiles.contains(parent)) {
-      throw new ExistingParentException(String.format("Parent: %s; child: %s", parent, this));
-    } else if (this.equals(parent)) {
-      throw new ImpossibleKinshipRelationException("For person " + this);
-    }
-    parentProfiles.add(parent);
-  }
-
-  /**
-   * Removes a parent - brutal.
-   *
-   * @param parent the former parent
-   */
-  public void disconnectParentProfile(Person parent) {
-    if (parentProfiles.remove(parent)) {
-      throw new IllegalArgumentException("No connection with parent " + parent);
-    }
-  }
-
-  // overridden from Object
 
   @Override
   public boolean equals(Object o) {

@@ -2,6 +2,7 @@ package de.naju.adebar.model.human;
 
 import java.io.Serializable;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -69,6 +70,9 @@ public class PersonId implements Serializable, Iterator<PersonId>, Comparable<Pe
 
   @Override
   public PersonId next() {
+    if (!hasNext()) {
+      throw new NoSuchElementException();
+    }
     return new PersonId();
   }
 

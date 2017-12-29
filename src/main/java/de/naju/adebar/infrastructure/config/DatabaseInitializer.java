@@ -10,12 +10,12 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import com.google.common.collect.Lists;
-import de.naju.adebar.app.human.PersonManager;
 import de.naju.adebar.app.security.user.Roles;
 import de.naju.adebar.app.security.user.UserAccountManager;
 import de.naju.adebar.app.security.user.UserAccountRepository;
 import de.naju.adebar.model.human.Person;
 import de.naju.adebar.model.human.PersonFactory;
+import de.naju.adebar.model.human.PersonManager;
 
 @PropertySource("classpath:startup.properties")
 @Component

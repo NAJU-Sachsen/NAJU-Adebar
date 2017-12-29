@@ -1,6 +1,5 @@
 package de.naju.adebar.model.human;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -13,19 +12,15 @@ import javax.persistence.Transient;
  * @author Rico Bergmann
  */
 @Embeddable
-public class JuleicaCard implements Serializable {
+public class JuleicaCard {
 
   public static final String BASIC_JULEICA_LEVEL = "G";
-  private static final long serialVersionUID = 6618405361861972937L;
-
 
   @Column(name = "expiryDate")
   private LocalDate expiryDate;
 
   @Column(name = "level")
   private String level;
-
-  // constructors
 
   /**
    * Minimalistic constructor.
@@ -65,8 +60,6 @@ public class JuleicaCard implements Serializable {
     this.level = BASIC_JULEICA_LEVEL;
   }
 
-  // getter and setter
-
   /**
    * @return the expiry date of the card. May be {@code null}.
    */
@@ -75,24 +68,10 @@ public class JuleicaCard implements Serializable {
   }
 
   /**
-   * @param expiryDate the expiry date of the card. May be {@code null}.
-   */
-  public void setExpiryDate(LocalDate expiryDate) {
-    this.expiryDate = expiryDate;
-  }
-
-  /**
    * @return the level of the Juleica education. May be {@code null}.
    */
   public String getLevel() {
     return level;
-  }
-
-  /**
-   * @param level the level of the Juleica education. May be {@code null}.
-   */
-  public void setLevel(String level) {
-    this.level = level;
   }
 
   /**
@@ -107,14 +86,19 @@ public class JuleicaCard implements Serializable {
     return expiryDate.isAfter(LocalDate.now());
   }
 
-  // "implementation" of Cloneable
-
-  @Override
-  public JuleicaCard clone() {
-    return new JuleicaCard(expiryDate, level);
+  /**
+   * @param expiryDate the expiry date of the card. May be {@code null}.
+   */
+  protected void setExpiryDate(LocalDate expiryDate) {
+    this.expiryDate = expiryDate;
   }
 
-  // overridden from Object
+  /**
+   * @param level the level of the Juleica education. May be {@code null}.
+   */
+  protected void setLevel(String level) {
+    this.level = level;
+  }
 
   @Override
   public boolean equals(Object o) {

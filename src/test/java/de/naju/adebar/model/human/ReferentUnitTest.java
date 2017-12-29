@@ -1,13 +1,13 @@
 package de.naju.adebar.model.human;
 
-import com.google.common.collect.Iterables;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import com.google.common.collect.Iterables;
 
 /**
  * Basic testing of the {@link ReferentProfile} class
- * 
+ *
  * @author Rico Bergmann
  */
 public class ReferentUnitTest {
@@ -29,15 +29,19 @@ public class ReferentUnitTest {
 
   @Test
   public void testAddQualification() {
-    referent.getReferentProfile().addQualification(qualification);
+    referent = referent.updateReferentProfile( //
+        referent.getReferentProfile().addQualification(qualification));
     Assert.assertTrue(String.format("%s should have qualification %s", referent, qualification),
         referent.getReferentProfile().hasQualification(qualification));
   }
 
   @Test
   public void testRemoveQualification() {
-    referent.getReferentProfile().addQualification(qualification);
-    referent.getReferentProfile().removeQualification(qualification);
+    referent = referent.updateReferentProfile( //
+        referent.getReferentProfile().addQualification(qualification));
+    referent = referent.updateReferentProfile( //
+        referent.getReferentProfile().removeQualification(qualification));
+
     Assert.assertFalse(
         String.format("%s should not have qualification %s any more", referent, qualification),
         referent.getReferentProfile().hasQualification(qualification));

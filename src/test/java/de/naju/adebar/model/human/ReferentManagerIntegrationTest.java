@@ -1,6 +1,5 @@
-package de.naju.adebar.app.human;
+package de.naju.adebar.model.human;
 
-import de.naju.adebar.model.human.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Basic behavior testing of the {@link PersonManager} regarding {@link ReferentProfile}
- * 
+ *
  * @author Rico Bergmann
  */
 @RunWith(SpringRunner.class)
@@ -54,8 +53,8 @@ public class ReferentManagerIntegrationTest {
   @Test
   public void testUpdateReferent() {
     claus = personManager.savePerson(claus);
-    claus.getReferentProfile().addQualification(qualification);
-    claus = personManager.updatePerson(clausId, claus);
+    claus = claus.updateReferentProfile(claus.getReferentProfile().addQualification(qualification));
+    claus = personManager.updatePerson(claus);
     Assert.assertTrue(claus.toString() + " should have been updated!",
         claus.getReferentProfile().hasQualification(qualification));
   }

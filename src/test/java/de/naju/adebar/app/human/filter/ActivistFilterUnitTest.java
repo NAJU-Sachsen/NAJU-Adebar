@@ -17,7 +17,7 @@ import de.naju.adebar.model.human.Person;
 
 /**
  * Basic testing of the {@link ActivistFilter}
- * 
+ *
  * @author Rico Bergmann
  */
 @RunWith(SpringRunner.class)
@@ -40,8 +40,8 @@ public class ActivistFilterUnitTest extends FilterTestBootstrapper {
   public void testIgnoreActivists() {
     Person[] result = {fritz, heinz};
     activistFilter = new ActivistFilter(FilterType.IGNORE);
-    Assert.assertArrayEquals("Should not contain activists", result,
-        activistFilter.filter(personRepo.streamAll()).toArray());
+    Object[] actualResult = activistFilter.filter(personRepo.streamAll()).toArray();
+    Assert.assertArrayEquals("Should not contain activists", result, actualResult);
   }
 
   @Test

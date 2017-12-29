@@ -1,6 +1,5 @@
 package de.naju.adebar.model.human;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Period;
 import javax.persistence.AttributeOverride;
@@ -19,9 +18,7 @@ import org.springframework.util.Assert;
  * @author Rico Bergmann
  */
 @Entity(name = "participant")
-public class ParticipantProfile implements Serializable {
-
-  private static final long serialVersionUID = -8782037527937407767L;
+public class ParticipantProfile {
 
   @EmbeddedId
   @Column(name = "personId")
@@ -47,7 +44,19 @@ public class ParticipantProfile implements Serializable {
   @Column(name = "remarks", length = 512)
   private String remarks;
 
-  // constructors
+  /**
+   * Copy constructor
+   *
+   * @param other the profile to copy
+   */
+  public ParticipantProfile(ParticipantProfile other) {
+    this.personId = new PersonId(other.personId);
+    this.gender = other.gender;
+    this.dateOfBirth = other.dateOfBirth;
+    this.eatingHabits = other.eatingHabits;
+    this.healthImpairments = other.healthImpairments;
+    this.nabuMembership = other.nabuMembership;
+  }
 
   /**
    * Each participant profile has to be created in terms of an existing person.
@@ -60,12 +69,31 @@ public class ParticipantProfile implements Serializable {
   }
 
   /**
+   * Convenience constructor to initialize a new profile right away.
+   *
+   * @param person the person to create the person for
+   * @param gender the person's gender
+   * @param dateOfBirth the person's date of birth
+   * @param eatingHabits the person's eating habits
+   * @param healthImpairments the person's health impairments
+   */
+  ParticipantProfile(Person person, Gender gender, LocalDate dateOfBirth, String eatingHabits,
+      String healthImpairments) {
+    Assert.notNull(person, "Id may not be null");
+    Assert.isTrue(dateOfBirth == null || dateOfBirth.isBefore(LocalDate.now()),
+        "Date of birth must be past!");
+    this.personId = person.getId();
+    this.gender = gender;
+    this.dateOfBirth = dateOfBirth;
+    this.eatingHabits = eatingHabits;
+    this.healthImpairments = healthImpairments;
+  }
+
+  /**
    * Default constructor for JPA's sake
    */
   @SuppressWarnings("unused")
   private ParticipantProfile() {}
-
-  // getter and setter
 
   /**
    * @return the ID of the person to whom this profile belongs.
@@ -82,28 +110,10 @@ public class ParticipantProfile implements Serializable {
   }
 
   /**
-   * @param gender the person's gender. May be {@code null}.
-   */
-  public void setGender(Gender gender) {
-    this.gender = gender;
-  }
-
-  /**
    * @return the person's date of birth. May be {@code null}.
    */
   public LocalDate getDateOfBirth() {
     return dateOfBirth;
-  }
-
-  /**
-   * @param dateOfBirth the person's date of birth. May be {@code null}.
-   * @throws IllegalArgumentException if the date of birth is not past
-   */
-  public void setDateOfBirth(LocalDate dateOfBirth) {
-    if (dateOfBirth != null) {
-      Assert.isTrue(dateOfBirth.isBefore(LocalDate.now()), "Date of birth must be past!");
-    }
-    this.dateOfBirth = dateOfBirth;
   }
 
   /**
@@ -115,27 +125,11 @@ public class ParticipantProfile implements Serializable {
   }
 
   /**
-   * @param eatingHabits the person's eating habit (i.e. vegetarian and the like as well as
-   *        food-related allergies). May be {@code null}.
-   */
-  public void setEatingHabits(String eatingHabits) {
-    this.eatingHabits = eatingHabits;
-  }
-
-  /**
    * @return the person's health impairments (mainly non-food-related allergies like hayfever). May
    *         be {@code null}.
    */
   public String getHealthImpairments() {
     return healthImpairments;
-  }
-
-  /**
-   * @param healthImpairments the person's health impairments (mainly non-food-related allergies
-   *        like hayfever). May be {@code null}.
-   */
-  public void setHealthImpairments(String healthImpairments) {
-    this.healthImpairments = healthImpairments;
   }
 
   /**
@@ -147,39 +141,12 @@ public class ParticipantProfile implements Serializable {
   }
 
   /**
-   *
-   * @param nabuMembership information regarding the person's membership in the NABU. May be
-   *        {@code null} if the person is not a NABU member.
-   */
-  public void setNabuMembership(NabuMembership nabuMembership) {
-    this.nabuMembership = nabuMembership;
-  }
-
-  /**
    * @return additional remarks such as swimming permission or other information. May be
    *         {@code null}.
    */
   public String getRemarks() {
     return remarks;
   }
-
-  /**
-   * @param remarks additional remarks such as swimming permission or other information. May be
-   *        {@code null}.
-   */
-  public void setRemarks(String remarks) {
-    this.remarks = remarks;
-  }
-
-  /**
-   * @param personId the ID of the person to whom this profile belongs.
-   */
-  @SuppressWarnings("unused")
-  private void setPersonId(PersonId personId) {
-    this.personId = personId;
-  }
-
-  // normal methods
 
   /**
    * @return {@code true} if the person has a date of birth specified and {@code false} otherwise
@@ -208,7 +175,131 @@ public class ParticipantProfile implements Serializable {
     return nabuMembership != null;
   }
 
-  // overridden from Object
+  /**
+   * Updates the participation information
+   *
+   * @param gender the new gender
+   * @param dateOfBirth the new date of birth <small>(does it change?)</small>
+   * @param eatingHabits new eating habits <small>- it's vegan isn't it?</small>
+   * @param healthImpairments (hopefully less) health impairments
+   * @return the new profile information
+   */
+  public ParticipantProfile updateProfile(Gender gender, LocalDate dateOfBirth, String eatingHabits,
+      String healthImpairments) {
+    ParticipantProfile updatedProfile = new ParticipantProfile(this);
+    updatedProfile.setGender(gender);
+    updatedProfile.setDateOfBirth(dateOfBirth);
+    updatedProfile.setEatingHabits(eatingHabits);
+    updatedProfile.setHealthImpairments(healthImpairments);
+    return updatedProfile;
+  }
+
+  /**
+   * Updates participation info
+   *
+   * @param gender the new gender
+   * @return the updated profile information
+   */
+  public ParticipantProfile updateGender(Gender gender) {
+    ParticipantProfile updatedProfile = new ParticipantProfile(this);
+    updatedProfile.setGender(gender);
+    return updatedProfile;
+  }
+
+  /**
+   * Updates participation info
+   *
+   * @param dateOfBirth the new date of birth
+   * @return the updated profile information
+   */
+  public ParticipantProfile updateDateOfBirth(LocalDate dateOfBirth) {
+    ParticipantProfile updatedProfile = new ParticipantProfile(this);
+    updatedProfile.setDateOfBirth(dateOfBirth);
+    return updatedProfile;
+  }
+
+  /**
+   * Updates the participation-related remarks
+   *
+   * @param remarks the remarks
+   * @return the new profile information
+   */
+  public ParticipantProfile updateRemarks(String remarks) {
+    ParticipantProfile updatedProfile = new ParticipantProfile(this);
+    updatedProfile.setRemarks(remarks);
+    return updatedProfile;
+  }
+
+  /**
+   * Updates the NABU membership information
+   *
+   * @param nabuMembership the new information
+   * @return the new profile
+   */
+  public ParticipantProfile updateNabuMembership(NabuMembership nabuMembership) {
+    ParticipantProfile updatedProfile = new ParticipantProfile(this);
+    updatedProfile.setNabuMembership(nabuMembership);
+    return updatedProfile;
+  }
+
+  /**
+   * @param gender the person's gender. May be {@code null}.
+   */
+  protected void setGender(Gender gender) {
+    this.gender = gender;
+  }
+
+  /**
+   * @param dateOfBirth the person's date of birth. May be {@code null}.
+   * @throws IllegalArgumentException if the date of birth is not past
+   */
+  protected void setDateOfBirth(LocalDate dateOfBirth) {
+    if (dateOfBirth != null) {
+      Assert.isTrue(dateOfBirth.isBefore(LocalDate.now()), "Date of birth must be past!");
+    }
+    this.dateOfBirth = dateOfBirth;
+  }
+
+  /**
+   * @param eatingHabits the person's eating habit (i.e. vegetarian and the like as well as
+   *        food-related allergies). May be {@code null}.
+   */
+  protected void setEatingHabits(String eatingHabits) {
+    this.eatingHabits = eatingHabits;
+  }
+
+  /**
+   * @param healthImpairments the person's health impairments (mainly non-food-related allergies
+   *        like hayfever). May be {@code null}.
+   */
+  protected void setHealthImpairments(String healthImpairments) {
+    this.healthImpairments = healthImpairments;
+  }
+
+  /**
+   *
+   * @param nabuMembership information regarding the person's membership in the NABU. May be
+   *        {@code null} if the person is not a NABU member.
+   */
+  protected void setNabuMembership(NabuMembership nabuMembership) {
+    this.nabuMembership = nabuMembership;
+  }
+
+  /**
+   * @param remarks additional remarks such as swimming permission or other information. May be
+   *        {@code null}.
+   */
+  protected void setRemarks(String remarks) {
+    this.remarks = remarks;
+  }
+
+  /**
+   * @param personId the ID of the person to whom this profile belongs.
+   */
+  @SuppressWarnings("unused")
+  private void setPersonId(PersonId personId) {
+    this.personId = personId;
+  }
 
   @Override
   public boolean equals(Object o) {

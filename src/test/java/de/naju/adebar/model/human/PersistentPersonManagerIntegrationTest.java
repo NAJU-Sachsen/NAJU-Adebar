@@ -1,6 +1,6 @@
-package de.naju.adebar.app.human;
+package de.naju.adebar.model.human;
 
-import de.naju.adebar.model.human.*;
+import java.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,11 +11,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-import java.time.LocalDate;
 
 /**
  * Basic testing of the {@link PersistentPersonManager}
- * 
+ *
  * @author Rico Bergmann
  */
 @RunWith(SpringRunner.class)
@@ -81,7 +80,7 @@ public class PersistentPersonManagerIntegrationTest {
     claus = personManager.savePerson(claus);
     claus.setAddress(bertaAddress);
     claus.getParticipantProfile().setDateOfBirth(heinzDob);
-    claus = personManager.updatePerson(claus.getId(), claus);
+    claus = personManager.updatePerson(claus);
     Assert.assertEquals("Address should have been updated!", bertaAddress, claus.getAddress());
     Assert.assertEquals("Dob should have been updated!", heinzDob,
         claus.getParticipantProfile().getDateOfBirth());

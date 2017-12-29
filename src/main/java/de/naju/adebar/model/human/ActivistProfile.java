@@ -1,6 +1,5 @@
 package de.naju.adebar.model.human;
 
-import java.io.Serializable;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -17,9 +16,7 @@ import org.springframework.util.Assert;
  * @author Rico Bergmann
  */
 @Entity(name = "activist")
-public class ActivistProfile implements Serializable {
-
-  private static final long serialVersionUID = 5030185144084038691L;
+public class ActivistProfile {
 
   @EmbeddedId
   @Column(name = "personId")
@@ -30,8 +27,6 @@ public class ActivistProfile implements Serializable {
       @AttributeOverride(name = "expiryDate", column = @Column(name = "juleicaExpiryDate")),
       @AttributeOverride(name = "level", column = @Column(name = "juleicaLevel"))})
   private JuleicaCard juleicaCard;
-
-  // constructors
 
   /**
    * Copy constructor
@@ -56,12 +51,23 @@ public class ActivistProfile implements Serializable {
   }
 
   /**
+   * Convenience constructor to avoid creating a new profile and then setting its Juleica card
+   * through a call to {@link #updateJuleicaCard(JuleicaCard)} right after.
+   * 
+   * @param person the person to create the profile for
+   * @param juleica the new juleica card
+   */
+  ActivistProfile(Person person, JuleicaCard juleica) {
+    Assert.notNull(person, "Id may not be null");
+    this.personId = person.getId();
+    this.juleicaCard = juleica;
+  }
+
+  /**
    * Default constructor just for JPA's sake
    */
   @SuppressWarnings("unused")
   private ActivistProfile() {}
-
-  // getter and setter
 
   /**
    * @return the ID of the person to whom this profile belongs
@@ -77,24 +83,6 @@ public class ActivistProfile implements Serializable {
   public JuleicaCard getJuleicaCard() {
     return juleicaCard;
   }
-
-  /**
-   * @param juleicaCard the activist's Juleica card. May be {@code null} if the person does not have
-   *        a Juleica card
-   */
-  public void setJuleicaCard(JuleicaCard juleicaCard) {
-    this.juleicaCard = juleicaCard;
-  }
-
-  /**
-   * @param personId the ID of the person to whom this profile belongs.
-   */
-  @SuppressWarnings("unused")
-  private void setPersonId(PersonId personId) {
-    this.personId = personId;
-  }
-
-  // normal methods
 
   /**
    * @return {@code true} if the activist has a Juleica card, or {@code false} otherwise
@@ -114,7 +102,33 @@ public class ActivistProfile implements Serializable {
     return juleicaCard.isValid();
   }
 
-  // overridden from Object
+  /**
+   * Replaces the current Juleica card
+   *
+   * @param juleica the new card
+   * @return the profile for the new card
+   */
+  public ActivistProfile updateJuleicaCard(JuleicaCard juleica) {
+    ActivistProfile updatedProfile = new ActivistProfile(this);
+    updatedProfile.setJuleicaCard(juleica);
+    return updatedProfile;
+  }
+
+  /**
+   * @param juleicaCard the activist's Juleica card. May be {@code null} if the person does not have
+   *        a Juleica card
+   */
+  protected void setJuleicaCard(JuleicaCard juleicaCard) {
+    this.juleicaCard = juleicaCard;
+  }
+
+  /**
+   * @param personId the ID of the person to whom this profile belongs.
+   */
+  @SuppressWarnings("unused")
+  private void setPersonId(PersonId personId) {
+    this.personId = personId;
+  }
 
   @Override
   public boolean equals(Object o) {

@@ -1,11 +1,11 @@
 package de.naju.adebar.services.conversion.chapter;
 
-import de.naju.adebar.app.human.PersonManager;
 import de.naju.adebar.controller.forms.chapter.ProjectForm;
 import de.naju.adebar.model.chapter.LocalGroup;
 import de.naju.adebar.model.chapter.Project;
 import de.naju.adebar.model.chapter.ReadOnlyLocalGroupRepository;
 import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.human.PersonManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;

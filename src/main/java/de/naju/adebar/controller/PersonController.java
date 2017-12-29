@@ -238,11 +238,11 @@ public class PersonController {
   public String editPerson(@PathVariable("pid") String personId,
       @ModelAttribute("editPersonForm") EditPersonForm personForm, RedirectAttributes redirAttr) {
 
-    Person person =
-        managers.persons.findPerson(personId).orElseThrow(IllegalArgumentException::new);
+    Person person = managers.persons.findPerson(personId) //
+        .orElseThrow(IllegalArgumentException::new);
 
-    managers.persons.updatePerson(person.getId(),
-        dataProcessors.editPersonExtractor.extractPerson(person.getId(), personForm));
+    managers.persons.updatePerson( //
+        dataProcessors.editPersonExtractor.updatePerson(person, personForm));
 
     redirAttr.addFlashAttribute("personUpdated", true);
     return REDIRECT_PERSONS + personId;
@@ -284,16 +284,16 @@ public class PersonController {
       @ModelAttribute("editActivistForm") EditActivistForm activistForm,
       RedirectAttributes redirAttr) {
 
-    Person person =
-        managers.persons.findPerson(personId).orElseThrow(IllegalArgumentException::new);
+    Person person = managers.persons.findPerson(personId) //
+        .orElseThrow(IllegalArgumentException::new);
 
     if (!person.isActivist()) {
       person.makeActivist();
     }
 
-    person.setActivistProfile(
+    person = person.updateActivistProfile(
         dataProcessors.editActivistExtractor.extractActivistForm(person, activistForm));
-    managers.persons.updatePerson(person.getId(), person);
+    managers.persons.updatePerson(person);
 
     managers.localGroups.updateLocalGroupMembership(person,
         managers.localGroups.repository().findAll(activistForm.getLocalGroups()));
@@ -341,14 +341,14 @@ public class PersonController {
   public String removeQualification(@PathVariable("pid") String personId,
       @RequestParam("name") String qualificationName, RedirectAttributes redirAttr) {
 
-    Person person =
-        managers.persons.findPerson(personId).orElseThrow(IllegalArgumentException::new);
+    Person person = managers.persons.findPerson(personId) //
+        .orElseThrow(IllegalArgumentException::new);
 
     Qualification qualification = managers.qualifications.findQualification(qualificationName)
         .orElseThrow(IllegalArgumentException::new);
 
-    person.getReferentProfile().removeQualification(qualification);
-    managers.persons.updatePerson(person.getId(), person);
+    person.updateReferentProfile(person.getReferentProfile().removeQualification(qualification));
+    managers.persons.updatePerson(person);
 
     return REDIRECT_PERSONS + personId;
   }
@@ -363,14 +363,14 @@ public class PersonController {
   @RequestMapping("/persons/{cid}/parents/add/existing")
   public String addParent(@PathVariable("cid") String personId,
       @RequestParam("person-id") String parentId, RedirectAttributes redirAttr) {
-    Person person =
-        managers.persons.findPerson(personId).orElseThrow(IllegalArgumentException::new);
-    Person parent =
-        managers.persons.findPerson(parentId).orElseThrow(IllegalArgumentException::new);
+    Person person = managers.persons.findPerson(personId) //
+        .orElseThrow(IllegalArgumentException::new);
+    Person parent = managers.persons.findPerson(parentId) //
+        .orElseThrow(IllegalArgumentException::new);
 
     try {
-      person.connectParentProfile(parent);
-      managers.persons.updatePerson(person.getId(), person);
+      person = person.connectParentProfile(parent);
+      managers.persons.updatePerson(person);
     } catch (ImpossibleKinshipRelationException e) {
       redirAttr.addFlashAttribute("impossibleKinship", true);
     }
@@ -389,13 +389,13 @@ public class PersonController {
   public String createParent(@PathVariable("cid") String personId,
       @ModelAttribute("addPersonFrom") CreateParentForm createParentForm,
       RedirectAttributes redirAttr) {
-    Person person =
-        managers.persons.findPerson(personId).orElseThrow(IllegalArgumentException::new);
+    Person person = managers.persons.findPerson(personId) //
+        .orElseThrow(IllegalArgumentException::new);
     Person parent = dataProcessors.createPersonExtractor.extractParent(person, createParentForm);
 
     managers.persons.savePerson(parent);
-    person.connectParentProfile(parent);
-    managers.persons.updatePerson(person.getId(), person);
+    person = person.connectParentProfile(parent);
+    managers.persons.updatePerson(person);
 
     return REDIRECT_PERSONS + personId;
   }
@@ -410,13 +410,13 @@ public class PersonController {
   @RequestMapping("/persons/{cid}/parents/remove")
   public String removeParent(@PathVariable("cid") String personId,
       @RequestParam("person-id") String parentId) {
-    Person person =
-        managers.persons.findPerson(personId).orElseThrow(IllegalArgumentException::new);
-    Person parent =
-        managers.persons.findPerson(parentId).orElseThrow(IllegalArgumentException::new);
+    Person person = managers.persons.findPerson(personId) //
+        .orElseThrow(IllegalArgumentException::new);
+    Person parent = managers.persons.findPerson(parentId) //
+        .orElseThrow(IllegalArgumentException::new);
 
-    person.disconnectParentProfile(parent);
-    managers.persons.updatePerson(person.getId(), person);
+    person = person.disconnectParentProfile(parent);
+    managers.persons.updatePerson(person);
 
     return REDIRECT_PERSONS + personId;
   }

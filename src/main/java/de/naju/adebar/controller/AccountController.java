@@ -12,12 +12,12 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import de.naju.adebar.app.human.PersonManager;
 import de.naju.adebar.app.security.user.UserAccount;
 import de.naju.adebar.app.security.user.UserAccountManager;
 import de.naju.adebar.app.security.user.UserAccountRepository;
 import de.naju.adebar.controller.forms.accounts.CreateAccountForm;
 import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.human.PersonManager;
 
 @Controller
 @PreAuthorize("hasRole('ROLE_ADMIN')")

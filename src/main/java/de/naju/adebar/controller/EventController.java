@@ -25,7 +25,6 @@ import de.naju.adebar.model.events.ExistingParticipantException;
 import de.naju.adebar.model.events.ParticipationInfo;
 import de.naju.adebar.model.events.PersonIsTooYoungException;
 import de.naju.adebar.model.human.Person;
-import de.naju.adebar.model.human.PersonId;
 
 /**
  * Event related controller mappings
@@ -411,7 +410,7 @@ public class EventController {
     try {
       person.makeActivist();
       event.addCounselor(person);
-      managers.persons.updatePerson(new PersonId(personId), person);
+      managers.persons.updatePerson(person);
       managers.events.updateEvent(eventId, event);
       redirAttr.addFlashAttribute("counselorAdded", true);
     } catch (IllegalStateException e) {
@@ -491,7 +490,7 @@ public class EventController {
     try {
       person.makeActivist();
       event.addOrganizer(person);
-      managers.persons.updatePerson(new PersonId(personId), person);
+      managers.persons.updatePerson(person);
       managers.events.updateEvent(eventId, event);
       redirAttr.addFlashAttribute("organizerAdded", true);
     } catch (IllegalStateException e) {

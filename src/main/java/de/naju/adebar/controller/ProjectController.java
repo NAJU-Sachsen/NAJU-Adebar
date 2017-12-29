@@ -13,13 +13,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import de.naju.adebar.app.chapter.LocalGroupManager;
 import de.naju.adebar.app.chapter.ProjectManager;
 import de.naju.adebar.app.human.HumanDataProcessor;
-import de.naju.adebar.app.human.PersonManager;
 import de.naju.adebar.controller.forms.chapter.ProjectForm;
 import de.naju.adebar.controller.forms.events.EventForm;
 import de.naju.adebar.model.chapter.ExistingContributorException;
 import de.naju.adebar.model.chapter.LocalGroup;
 import de.naju.adebar.model.chapter.Project;
 import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.human.PersonManager;
 import de.naju.adebar.services.conversion.chapter.ProjectFormDataExtractor;
 import de.naju.adebar.services.conversion.chapter.ProjectToProjectFormConverter;
 

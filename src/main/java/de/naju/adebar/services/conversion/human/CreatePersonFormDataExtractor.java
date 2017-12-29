@@ -3,8 +3,10 @@ package de.naju.adebar.services.conversion.human;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -12,17 +14,18 @@ import de.naju.adebar.controller.forms.human.CreateParentForm;
 import de.naju.adebar.controller.forms.human.CreatePersonForm;
 import de.naju.adebar.model.chapter.LocalGroup;
 import de.naju.adebar.model.chapter.ReadOnlyLocalGroupRepository;
-import de.naju.adebar.model.human.ActivistProfile;
 import de.naju.adebar.model.human.Address;
 import de.naju.adebar.model.human.Gender;
 import de.naju.adebar.model.human.JuleicaCard;
 import de.naju.adebar.model.human.NabuMembership;
-import de.naju.adebar.model.human.ParticipantProfile;
 import de.naju.adebar.model.human.Person;
 import de.naju.adebar.model.human.PersonFactory;
+import de.naju.adebar.model.human.PersonFactory.ActivistBuilder;
+import de.naju.adebar.model.human.PersonFactory.ParticipantBuilder;
+import de.naju.adebar.model.human.PersonFactory.PersonBuilder;
+import de.naju.adebar.model.human.PersonFactory.ReferentBuilder;
 import de.naju.adebar.model.human.Qualification;
 import de.naju.adebar.model.human.QualificationRepository;
-import de.naju.adebar.model.human.ReferentProfile;
 
 /**
  * Service to extract the necessary data from a 'create person' form
@@ -52,28 +55,30 @@ public class CreatePersonFormDataExtractor {
    * @return the {@link Person} object encoded by the form
    */
   public Person extractPerson(CreatePersonForm personForm) {
-    Person person = personFactory
-        .buildNew(personForm.getFirstName(), personForm.getLastName(), personForm.getEmail())
-        .create();
-    person.setPhoneNumber(personForm.getPhoneNumber());
-    person.setAddress(extractAddress(personForm));
+    PersonBuilder builder = personFactory
+        .buildNew(personForm.getFirstName(), personForm.getLastName(), personForm.getEmail()) //
+        .specifyPhoneNumber(personForm.getPhoneNumber()) //
+        .specifyAddress(extractAddress(personForm));
 
     if (personForm.isParticipant()) {
-      person.makeParticipant();
-      fillParticipantProfile(person.getParticipantProfile(), personForm);
+      ParticipantBuilder participantBuilder = builder.makeParticipant();
+      fillParticipantProfile(participantBuilder, personForm);
+      builder = participantBuilder.done();
     }
 
     if (personForm.isActivist()) {
-      person.makeActivist();
-      fillActivistProfile(person.getActivistProfile(), personForm);
+      ActivistBuilder activistBuilder = builder.makeActivist();
+      fillActivistProfile(activistBuilder, personForm);
+      builder = activistBuilder.done();
     }
 
     if (personForm.isReferent()) {
-      person.makeReferent();
-      fillReferentProfile(person.getReferentProfile(), personForm);
+      ReferentBuilder referentBuilder = builder.makeReferent();
+      fillReferentProfile(referentBuilder, personForm);
+      builder = referentBuilder.done();
     }
 
-    return person;
+    return builder.create();
   }
 
   /**
@@ -82,59 +87,55 @@ public class CreatePersonFormDataExtractor {
    * @return the {@link Person} object encoded by the form
    */
   public Person extractParent(Person child, CreateParentForm parentForm) {
-    Person parent = personFactory
-        .buildNew(parentForm.getFirstName(), parentForm.getLastName(), parentForm.getEmail())
-        .makeParticipant().create();
-    parent.setPhoneNumber(parentForm.getPhoneNumber());
+    PersonBuilder parentBuilder = personFactory.buildNew(parentForm.getFirstName(),
+        parentForm.getLastName(), parentForm.getEmail());
+    parentBuilder.specifyPhoneNumber(parentForm.getPhoneNumber());
 
     if (parentForm.isUseChildAddress()) {
-      parent.setAddress(child.getAddress());
-    } else {
-      parent.setAddress(new Address());
+      parentBuilder.specifyAddress(child.getAddress());
     }
 
-    return parent;
+    parentBuilder.makeParticipant().done();
+
+    return parentBuilder.create();
   }
 
   /**
    * @param profile the profile to complete
    * @param personForm the data to use
    */
-  public void fillParticipantProfile(ParticipantProfile profile, CreatePersonForm personForm) {
+  public void fillParticipantProfile(ParticipantBuilder builder, CreatePersonForm personForm) {
     Gender gender = Gender.valueOf(personForm.getGender());
-    profile.setGender(gender);
-    LocalDate dob =
-        personForm.hasDateOfBirth() ? LocalDate.parse(personForm.getDateOfBirth(), dateFormatter)
-            : null;
-    profile.setDateOfBirth(dob);
-    NabuMembership nabu = personForm.isNabuMember() ? new NabuMembership(personForm.getNabuNumber())
-        : new NabuMembership();
-    profile.setNabuMembership(nabu);
-    profile.setEatingHabits(personForm.getEatingHabit());
-    profile.setHealthImpairments(personForm.getHealthImpairments());
-    profile.setRemarks(personForm.getRemarks());
-  }
+    builder.specifyGender(gender);
 
-  /**
-   * @param profile the profile to complete
-   * @param personForm the data to use
-   */
-  public void fillActivistProfile(ActivistProfile profile, CreatePersonForm personForm) {
-    if (!personForm.getHasJuleica()) {
-      return;
+    if (personForm.hasDateOfBirth()) {
+      builder.specifyDateOfBirth(LocalDate.parse(personForm.getDateOfBirth(), dateFormatter));
     }
-    JuleicaCard juleicaCard = new JuleicaCard();
-    extractJuleicaExpiryDate(personForm).ifPresent(juleicaCard::setExpiryDate);
-    profile.setJuleicaCard(juleicaCard);
+
+    if (personForm.isNabuMember()) {
+      builder.specifyNabuMembership(new NabuMembership(personForm.getNabuNumber()));
+    }
+
+    builder.specifyEatingHabits(personForm.getEatingHabit());
+    builder.specifyHealthImpairments(personForm.getHealthImpairments());
+    builder.addRemarks(personForm.getRemarks());
   }
 
   /**
    * @param profile the profile to complete
    * @param personForm the data to use
    */
-  public void fillReferentProfile(ReferentProfile profile, CreatePersonForm personForm) {
-    extractQualifications(personForm, qualificationRepo)
-        .ifPresent(qs -> qs.forEach(profile::addQualification));
+  public void fillActivistProfile(ActivistBuilder builder, CreatePersonForm personForm) {
+    extractJuleicaExpiryDate(personForm)
+        .ifPresent(date -> builder.specifyJuleicaCard(new JuleicaCard(date)));
+  }
+
+  /**
+   * @param profile the profile to complete
+   * @param personForm the data to use
+   */
+  public void fillReferentProfile(ReferentBuilder builder, CreatePersonForm personForm) {
+    extractQualifications(personForm, qualificationRepo).ifPresent(builder::specifyQualifications);
   }
 
   /**
@@ -150,7 +151,9 @@ public class CreatePersonFormDataExtractor {
    * @return an {@link Optional} containing the person's JuLeiCa expiry date if present
    */
   public Optional<LocalDate> extractJuleicaExpiryDate(CreatePersonForm personForm) {
-    if (!personForm.isActivist() || !personForm.hasJuleicaExpiryDate()) {
+    if (!personForm.isActivist() //
+        || !personForm.getHasJuleica() //
+        || !personForm.hasJuleicaExpiryDate()) {
       return Optional.empty();
     } else {
       return Optional.of(LocalDate.parse(personForm.getJuleicaExpiryDate(), dateFormatter));
@@ -162,12 +165,14 @@ public class CreatePersonFormDataExtractor {
    * @param qualificationRepo repository containing all available qualifications
    * @return an {@link Optional} containing all qualifications of the person if they are present
    */
-  public Optional<Iterable<Qualification>> extractQualifications(CreatePersonForm personForm,
+  public Optional<List<Qualification>> extractQualifications(CreatePersonForm personForm,
       QualificationRepository qualificationRepo) {
     if (!personForm.isReferent()) {
       return Optional.empty();
     } else {
-      return Optional.of(qualificationRepo.findAll(personForm.getQualifications()));
+      return Optional.of( //
+          Lists.newArrayList( //
+              qualificationRepo.findAll(personForm.getQualifications())));
     }
   }
 

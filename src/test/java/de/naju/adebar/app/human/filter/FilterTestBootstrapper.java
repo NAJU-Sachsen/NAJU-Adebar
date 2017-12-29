@@ -6,12 +6,12 @@ import java.util.List;
 import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import de.naju.adebar.app.human.PersonManager;
 import de.naju.adebar.model.human.Address;
 import de.naju.adebar.model.human.Gender;
 import de.naju.adebar.model.human.JuleicaCard;
 import de.naju.adebar.model.human.Person;
 import de.naju.adebar.model.human.PersonFactory;
+import de.naju.adebar.model.human.PersonManager;
 import de.naju.adebar.model.human.PersonRepository;
 import de.naju.adebar.model.human.Qualification;
 import de.naju.adebar.model.human.QualificationRepository;
@@ -75,37 +75,53 @@ public class FilterTestBootstrapper {
     hans = personRepo.findByFirstNameAndLastNameAndEmail("Hans", "Wurst", "hans.wurst@web.de");
     hans.makeParticipant();
     hans.makeActivist();
-    hans.setAddress(hansAddress);
-    hans.getParticipantProfile().setGender(Gender.MALE);
-    hans.getParticipantProfile().setDateOfBirth(hansDob);
-    hans.getActivistProfile().setJuleicaCard(new JuleicaCard(hansJuleicaExpiry));
+    hans = hans.updateAddress(hansAddress);
+    hans = hans.updateParticipantProfile(hans.getParticipantProfile().updateGender(Gender.MALE));
+    hans = hans.updateParticipantProfile(hans.getParticipantProfile().updateDateOfBirth(hansDob));
+    hans = hans.updateActivistProfile(
+        hans.getActivistProfile().updateJuleicaCard(new JuleicaCard(hansJuleicaExpiry)));
 
+    // @formatter:off
     claus = personFactory.buildNew("Claus", "Störtebecker", "derkaeptn@meermensch.de")
-        .makeParticipant().makeActivist().create();
-    claus.setAddress(clausAddress);
-    claus.getParticipantProfile().setGender(Gender.MALE);
-    claus.getParticipantProfile().setDateOfBirth(clausDob);
-    claus.getActivistProfile().setJuleicaCard(new JuleicaCard(clausJuleicaExpiry));
+        .specifyAddress(clausAddress)
+        .makeParticipant()
+          .specifyGender(Gender.MALE)
+          .specifyDateOfBirth(clausDob)
+          .done()
+        .makeActivist()
+          .specifyJuleicaCard(new JuleicaCard(clausJuleicaExpiry))
+          .done()
+        .create();
 
-    berta = personFactory.buildNew("Berta", "Beate", "bb@gmx.net").makeParticipant().makeActivist()
-        .makeReferent().create();
-    berta.setAddress(bertaAddress);
-    berta.getParticipantProfile().setGender(Gender.FEMALE);
-    berta.getParticipantProfile().setDateOfBirth(bertaDob);
-    berta.getActivistProfile().setJuleicaCard(new JuleicaCard(bertaJuleicaExpiry));
-    berta.getReferentProfile().addQualification(bertaQualification1);
-    berta.getReferentProfile().addQualification(bertaQualification2);
+    berta = personFactory.buildNew("Berta", "Beate", "bb@gmx.net")
+        .specifyAddress(bertaAddress)
+        .makeParticipant()
+          .specifyGender(Gender.FEMALE)
+          .specifyDateOfBirth(bertaDob)
+          .done()
+        .makeActivist()
+          .specifyJuleicaCard(new JuleicaCard(bertaJuleicaExpiry))
+          .done()
+        .makeReferent()
+          .specifyQualifications(Arrays.asList(bertaQualification1, bertaQualification2))
+        .create();
 
-    fritz = personFactory.buildNew("Fritz", "Käse", "fritz_kaese@googlemail.com").makeParticipant()
-        .makeReferent().create();
-    fritz.setAddress(fritzAddress);
-    fritz.getParticipantProfile().setDateOfBirth(fritzDob);
+    fritz = personFactory.buildNew("Fritz", "Käse", "fritz_kaese@googlemail.com")
+        .specifyAddress(fritzAddress)
+        .makeParticipant()
+          .specifyDateOfBirth(fritzDob)
+          .done()
+        .makeReferent()
+        .create();
 
-    heinz =
-        personFactory.buildNew("Heinz", "Meinz", "misterheinz@aol.com").makeParticipant().create();
-    heinz.setAddress(heinzAddress);
-    heinz.getParticipantProfile().setGender(Gender.MALE);
-    heinz.getParticipantProfile().setDateOfBirth(heinzDob);
+    heinz = personFactory.buildNew("Heinz", "Meinz", "misterheinz@aol.com")
+        .specifyAddress(heinzAddress)
+        .makeParticipant()
+          .specifyGender(Gender.MALE)
+          .specifyDateOfBirth(heinzDob)
+        .create();
+
+    // @formatter:on
 
     persons = Arrays.asList(hans, claus, berta, fritz, heinz);
 

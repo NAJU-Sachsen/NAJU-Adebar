@@ -1,12 +1,5 @@
 package de.naju.adebar.app.chapter;
 
-import de.naju.adebar.app.human.PersonManager;
-import de.naju.adebar.model.chapter.Board;
-import de.naju.adebar.model.chapter.LocalGroup;
-import de.naju.adebar.model.chapter.LocalGroupRepository;
-import de.naju.adebar.model.human.Address;
-import de.naju.adebar.model.human.Person;
-import de.naju.adebar.model.human.PersonFactory;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,6 +10,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
+import de.naju.adebar.model.chapter.Board;
+import de.naju.adebar.model.chapter.LocalGroup;
+import de.naju.adebar.model.chapter.LocalGroupRepository;
+import de.naju.adebar.model.human.Address;
+import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.human.PersonFactory;
+import de.naju.adebar.model.human.PersonManager;
 
 /**
  * @author Rico Bergmann

@@ -3,9 +3,9 @@ package de.naju.adebar.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import de.naju.adebar.app.chapter.LocalGroupManager;
-import de.naju.adebar.app.human.PersonManager;
 import de.naju.adebar.app.newsletter.NewsletterManager;
 import de.naju.adebar.app.newsletter.SubscriberManager;
+import de.naju.adebar.model.human.PersonManager;
 
 /**
  * Managers for the {@link SubscriberController}

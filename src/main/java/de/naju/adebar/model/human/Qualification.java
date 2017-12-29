@@ -1,6 +1,5 @@
 package de.naju.adebar.model.human;
 
-import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -14,9 +13,7 @@ import org.springframework.util.Assert;
  * caution.
  */
 @Entity(name = "qualification")
-public class Qualification implements Serializable {
-
-  private static final long serialVersionUID = 4926021134130535348L;
+public class Qualification {
 
   @Id
   @Column(name = "name")
@@ -76,8 +73,6 @@ public class Qualification implements Serializable {
     Assert.notNull(description, "Description may not be null!");
     this.description = description;
   }
-
-  // overridden from Object
 
   @Override
   public boolean equals(Object o) {

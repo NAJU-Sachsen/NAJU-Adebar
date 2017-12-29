@@ -1,8 +1,11 @@
 package de.naju.adebar.model.human;
 
-import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+
+// TODO rename to NabuMembershipInfo once compile errors are gone
+// TODO make it immutable
+// TODO add boolean nabuMember
 
 /**
  * A person may be a club member of the NABU. For now we are just interested in its membership
@@ -11,14 +14,10 @@ import javax.persistence.Embeddable;
  * @author Rico Bergmann
  */
 @Embeddable
-public class NabuMembership implements Serializable {
-
-  private static final long serialVersionUID = 8877089173523167494L;
+public class NabuMembership {
 
   @Column(name = "membershipNumber")
   private String membershipNumber;
-
-  // constructors
 
   /**
    * Full constructor
@@ -34,8 +33,6 @@ public class NabuMembership implements Serializable {
    */
   public NabuMembership() {}
 
-  // getter and setter
-
   /**
    * @return the membership number
    */
@@ -46,7 +43,7 @@ public class NabuMembership implements Serializable {
   /**
    * @param membershipNumber the membership number
    */
-  public void setMembershipNumber(String membershipNumber) {
+  protected void setMembershipNumber(String membershipNumber) {
     this.membershipNumber = membershipNumber;
   }
 
