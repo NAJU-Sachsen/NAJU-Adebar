@@ -1,4 +1,34 @@
 
+$('#add-participant-search-btn').on('click', function() {
+    const table = $('#add-participant-modal').find('.matches');
+    const firstname = $('#add-participants-search-firstname').val();
+    const lastname = $('#add-participants-search-lastname').val();
+    const city = $('#add-participants-search-city').val();
+
+    const csrfToken = $('#csrf').val();
+
+    var participantsReq = {
+      async: true,
+      data: {
+        firstname: firstname,
+        lastname: lastname,
+        city: city,
+        _csrf: csrfToken
+      },
+      dataType: 'json',
+      method: 'POST',
+      success: function(resp) {
+        $('#add-participant-modal').find('.searching').hide();
+        displayMatchingParticipants(table, resp);
+      },
+      url: '/api/persons/simpleSearch'
+    };
+
+    table.empty();
+    $('#add-participant-modal').find('.searching').show();
+    $.ajax(participantsReq);
+})
+
 $('#add-counselor-search-btn').on('click', function() {
     var table = '#add-counselor-tablebody';
     var firstname = $('#add-counselor-search-firstname').val();
@@ -159,6 +189,84 @@ $('#edit-personToContact-modal').on('show.bs.modal', function(event) {
     $('#remove-personToContact-id').val(id);
 });
 
+// add participant
+
+$(document).on('click', 'input.mark-participant', function() {
+  const row = $(this).closest('tr.matching-person');
+  const id = $(this).val();
+  const name = row.find('.name').text();
+  const dob = row.find('.date-of-birth').text();
+  const address = row.find('.address').text();
+
+  addParticipant(id, name, dob, address);
+  removeFromMatches(row);
+})
+
+$(document).on('click', 'button.remove-participant', function() {
+  const row = $(this).closest('.list-group-item');
+  row.fadeOut(200, function() { $(this).remove() });
+})
+
+function createParticipantRow(id, name, dob, address) {
+  var selectColumn = '<td class="text-center"><input type="radio" name="person-id" value="' + id + '" required="required" /></td>';
+  return '<tr>' + createHtmlNode('td', name) + createHtmlNode('td', dob) + createHtmlNode('td', address) + selectColumn + '</tr>';
+}
+
+function displayMatchingParticipants(table, result) {
+  if (!result.length) {
+    $(table).parent().parent().parent().find('.no-results').show();
+  } else {
+    $(table).parent().parent().parent().find('.no-results').hide();
+  }
+
+  $(table).empty();
+
+  for (var i = 0; i < result.length; i++) {
+    var person = result[i];
+
+    var dob = person.dob;
+    if (!dob) {
+      dob = '---';
+    }
+
+    var row = `<tr class="matching-person">
+                <td class="name">${person.name}</td>
+                <td class="date-of-birth">${dob}</td>
+                <td class="address">${person.address}</td>
+                <td class="text-center">
+                  <label><input type="checkbox" class="mark-participant" value="${person.id}" /></label>
+                </td>
+              </tr>`;
+
+    $(table).append(row);
+  }
+}
+
+function addParticipant(id, name, dob, address) {
+  const list = $('#add-participant');
+  const entry = $(`
+    <div class="list-group-item">
+      <h5>${name}</h5>
+      <div class="clearfix">
+        <div class="col-sm-9">
+          <div><span class="glyphicon glyphicon-star"></span> ${dob}</div>
+          <div><span class="glyphicon glyphicon-home"></span> ${address}</div>
+        </div>
+        <div class="col-sm-3">
+          <button type="button" class="remove-participant btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+        </div>
+        <input class="participant-id" type="hidden" name="person-id" value="${id}" />
+      </div>
+    </div>
+    `).hide();
+  list.append(entry);
+  entry.show(200);
+}
+
+function removeFromMatches(tr) {
+  tr.fadeOut(200, function() { $(this).remove() });
+}
+
 // dynamic reservation table
 
 function createReservationRow(description, slots, email) {
@@ -314,7 +422,6 @@ $(document).on('click', 'button.save-reservation', function() {
         dataType: 'json',
         method: 'POST',
         success: function(response) {
-            console.table(response);
             fetchEditReservationResponse(response, reservationEdit, row);
         },
         error: displayReservationErrorMsg,
@@ -448,7 +555,6 @@ $(function() {
     $('.searching-new-activists').hide();
     $('.new-activists').hide();
 
-    initSearch($('#add-participant-modal'));
     initSearch($('#add-personToContact-modal'));
     initSearch($('#add-waitingList-modal'));
 

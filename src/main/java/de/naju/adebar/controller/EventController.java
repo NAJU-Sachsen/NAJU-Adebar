@@ -1,6 +1,8 @@
 package de.naju.adebar.controller;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -242,22 +244,50 @@ public class EventController {
    */
   @RequestMapping("/events/{eid}/participants/add")
   public String addParticipant(@PathVariable("eid") String eventId,
-      @RequestParam("person-id") String personId, RedirectAttributes redirAttr) {
+      @RequestParam("person-id") List<String> personIds, RedirectAttributes redirAttr) {
     Event event = managers.events.findEvent(eventId).orElseThrow(IllegalArgumentException::new);
-    Person person =
-        managers.persons.findPerson(personId).orElseThrow(IllegalArgumentException::new);
 
-    try {
-      event.addParticipant(person);
-      managers.events.updateEvent(eventId, event);
-      redirAttr.addFlashAttribute("participantAdded", true);
-    } catch (ExistingParticipantException e) {
-      redirAttr.addFlashAttribute("participatesAlready", true);
-    } catch (PersonIsTooYoungException e) {
-      redirAttr.addFlashAttribute("participantTooYoung", true);
-      redirAttr.addFlashAttribute("newParticipantId", personId);
-    } catch (BookedOutException e) {
-      redirAttr.addFlashAttribute("bookedOut", true);
+    if (personIds.isEmpty()) {
+      return REDIRECT_EVENTS + eventId;
+    }
+
+    ArrayList<Person> addedParticipants = new ArrayList<>(personIds.size());
+    ArrayList<Person> existingParticipants = new ArrayList<>(personIds.size());
+    ArrayList<Person> tooYoungPersons = new ArrayList<>(personIds.size());
+    ArrayList<Person> bookedOutPersons = new ArrayList<>(personIds.size());
+
+    for (String id : personIds) {
+      Person person = managers.persons.findPerson(id).orElseThrow(IllegalArgumentException::new);
+
+      try {
+        event.addParticipant(person);
+        managers.events.updateEvent(eventId, event);
+        addedParticipants.add(person);
+      } catch (ExistingParticipantException e) {
+        existingParticipants.add(person);
+      } catch (PersonIsTooYoungException e) {
+        tooYoungPersons.add(person);
+      } catch (BookedOutException e) {
+        bookedOutPersons.add(person);
+      }
+    }
+
+    addedParticipants.trimToSize();
+    existingParticipants.trimToSize();
+    tooYoungPersons.trimToSize();
+    bookedOutPersons.trimToSize();
+
+    if (!addedParticipants.isEmpty()) {
+      redirAttr.addFlashAttribute("participantsAdded", addedParticipants);
+    }
+    if (!existingParticipants.isEmpty()) {
+      redirAttr.addFlashAttribute("participatesAlready", existingParticipants);
+    }
+    if (!tooYoungPersons.isEmpty()) {
+      redirAttr.addFlashAttribute("participantTooYoung", tooYoungPersons);
+    }
+    if (!bookedOutPersons.isEmpty()) {
+      redirAttr.addFlashAttribute("bookedOut", bookedOutPersons);
     }
 
     return REDIRECT_EVENTS + eventId;
@@ -273,17 +303,37 @@ public class EventController {
    */
   @RequestMapping("/events/{eid}/participants/force-add")
   public String addParticipantIgnoreAge(@PathVariable("eid") String eventId,
-      @RequestParam("person-id") String personId, RedirectAttributes redirAttr) {
+      @RequestParam("person-id") List<String> personIds, RedirectAttributes redirAttr) {
     Event event = managers.events.findEvent(eventId).orElseThrow(IllegalArgumentException::new);
-    Person person =
-        managers.persons.findPerson(personId).orElseThrow(IllegalArgumentException::new);
 
-    try {
-      event.addParticipantIgnoreAge(person);
-      managers.events.updateEvent(eventId, event);
-      redirAttr.addFlashAttribute("participantAdded", true);
-    } catch (ExistingParticipantException e) {
-      redirAttr.addFlashAttribute("participatesAlready", true);
+    if (personIds.isEmpty()) {
+      return REDIRECT_EVENTS + eventId;
+    }
+
+    ArrayList<Person> addedParticipants = new ArrayList<>(personIds.size());
+    ArrayList<Person> existingParticipants = new ArrayList<>(personIds.size());
+
+    for (String personId : personIds) {
+      Person person =
+          managers.persons.findPerson(personId).orElseThrow(IllegalArgumentException::new);
+
+      try {
+        event.addParticipantIgnoreAge(person);
+        managers.events.updateEvent(eventId, event);
+        addedParticipants.add(person);
+      } catch (ExistingParticipantException e) {
+        existingParticipants.add(person);
+      }
+    }
+
+    addedParticipants.trimToSize();
+    existingParticipants.trimToSize();
+
+    if (!addedParticipants.isEmpty()) {
+      redirAttr.addFlashAttribute("participantsAdded", addedParticipants);
+    }
+    if (!existingParticipants.isEmpty()) {
+      redirAttr.addFlashAttribute("participatesAlready", existingParticipants);
     }
 
     return REDIRECT_EVENTS + eventId;
