@@ -1,9 +1,11 @@
 package de.naju.adebar.app.security.user;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import de.naju.adebar.model.human.PersonId;
 
 /**
  * Repository to access {@link UserAccount} instances
@@ -14,13 +16,21 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 public interface UserAccountRepository extends CrudRepository<UserAccount, String> {
 
   /**
-   * Queries for a useraccount by its username. Basically the same as {@link #findOne(String)}, just
-   * for returning {@link Optional}
+   * Queries for an user account by its username. Basically the same as
+   * {@link #findOne(Serializable)}, just for receiving an {@link Optional}
    * 
    * @param username the username
-   * @return the useraccount if it exists or an empty optional otherwise
+   * @return the user account if it exists or an empty optional otherwise
    */
   Optional<UserAccount> findByUsername(String username);
+
+  /**
+   * Queries for an user account by the person it is associated to.
+   * 
+   * @param id the person's id
+   * @return the user account if it exists
+   */
+  Optional<UserAccount> findByAssociatedPerson(PersonId id);
 
   /**
    * Queries for all user accounts with a given authority

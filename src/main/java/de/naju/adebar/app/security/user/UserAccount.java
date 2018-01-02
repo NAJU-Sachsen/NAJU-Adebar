@@ -1,8 +1,11 @@
 package de.naju.adebar.app.security.user;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
@@ -11,24 +14,26 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.OneToOne;
+import org.springframework.data.domain.AbstractAggregateRoot;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.Assert;
 import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.human.PersonId;
+import de.naju.adebar.util.Validation;
 
 /**
  * A user account. Each account is created for an activist who thereby gets access to the
  * application.
  * <p>
- * Although UserAccount inherits serializability from {@link UserDetails} one should never attempt
- * to serialize any instance of it - the person associated to this account would be lost in the
- * process otherwise.
+ * Each account maintains its own copy of the personal information it cares about. Therefore there
+ * is no necessity link to a {@link Person} directly.
  *
  * @author Rico Bergmann
  */
 @Entity(name = "userAccount")
-public class UserAccount implements UserDetails {
+public class UserAccount extends AbstractAggregateRoot implements UserDetails {
+
   private static final long serialVersionUID = 756690351442752594L;
 
   @Id
@@ -38,9 +43,13 @@ public class UserAccount implements UserDetails {
   @Embedded
   private Password password;
 
-  @OneToOne
-  @JoinColumn(name = "person")
-  private Person associatedPerson;
+  @Embedded
+  @AttributeOverrides(@AttributeOverride(name = "id", column = @Column(name = "associatedPerson")))
+  private PersonId associatedPerson;
+
+  private String firstName;
+  private String lastName;
+  private String email;
 
   @ElementCollection(fetch = FetchType.EAGER)
   @JoinTable(name = "userAuthorities", joinColumns = @JoinColumn(name = "userAccount"))
@@ -65,7 +74,10 @@ public class UserAccount implements UserDetails {
     Assert.noNullElements(authorities.toArray(), "No authority may be null");
     this.username = username;
     this.password = password;
-    this.associatedPerson = person;
+    this.associatedPerson = person.getId();
+    this.firstName = person.getFirstName();
+    this.lastName = person.getLastName();
+    this.email = person.getEmail();
     this.authorities = authorities;
     this.enabled = enabled;
   }
@@ -77,10 +89,31 @@ public class UserAccount implements UserDetails {
   private UserAccount() {}
 
   /**
-   * @return the person this account is created for
+   * @return the ID of the person this account is created for
    */
-  public Person getAssociatedPerson() {
+  public PersonId getAssociatedPerson() {
     return associatedPerson;
+  }
+
+  /**
+   * @return the person's first name
+   */
+  public String getFirstName() {
+    return firstName;
+  }
+
+  /**
+   * @return the person's last name
+   */
+  public String getLastName() {
+    return lastName;
+  }
+
+  /**
+   * @return the person's email
+   */
+  public String getEmail() {
+    return email;
   }
 
   @Override
@@ -129,32 +162,43 @@ public class UserAccount implements UserDetails {
   }
 
   /**
-   * Updates the password
-   *
-   * @param password the new password
+   * Sets the user's personal data
+   * 
+   * @param firstName the person's first name
+   * @param lastName the person's last name
+   * @param email the person's last name
+   * @return the updated account
    */
-  void setPassword(String password) {
-    Assert.hasText(password, "New password may not be empty");
-    this.password = new Password(password);
+  UserAccount updatePersonalInformation(String firstName, String lastName, String email) {
+    setFirstName(firstName);
+    setLastName(lastName);
+    setEmail(email);
+    registerEvent(UserAccountUpdatedEvent.forAccount(this));
+    return this;
   }
 
   /**
-   * Updates the password
-   *
-   * @param password the new password
+   * Sets the user's authorities
+   * 
+   * @param authorities the authorities
+   * @return the updated account
    */
-  void setPassword(Password password) {
-    Assert.notNull(password, "New password may not be null");
-    this.password = password;
+  UserAccount updateAuthorities(List<SimpleGrantedAuthority> authorities) {
+    setAuthorities(authorities);
+    registerEvent(UserAccountUpdatedEvent.forAccount(this));
+    return this;
   }
 
   /**
-   * Updates the authorities
-   *
-   * @param authorities the new authorities
+   * Sets the user's password
+   * 
+   * @param password the new password
+   * @return the updated account
    */
-  void setAuthorities(List<SimpleGrantedAuthority> authorities) {
-    this.authorities = authorities;
+  UserAccount updatePassword(Password password) {
+    setPassword(password);
+    registerEvent(UserAccountUpdatedEvent.forAccount(this));
+    return this;
   }
 
   /**
@@ -166,6 +210,82 @@ public class UserAccount implements UserDetails {
   private void setUsername(String username) {
     Assert.hasText(username, "User name may not be empty");
     this.username = username;
+  }
+
+  /**
+   * Sets the associated person. Just for JPA's sake
+   * 
+   * @param associatedPerson
+   */
+  @SuppressWarnings("unused")
+  private void setAssociatedPerson(PersonId associatedPerson) {
+    Assert.notNull(associatedPerson, "Associated person may not null");
+    this.associatedPerson = associatedPerson;
+  }
+
+  /**
+   * Updates the password
+   *
+   * @param password the new password
+   */
+  @SuppressWarnings("unused")
+  private void setPassword(String password) {
+    Assert.hasText(password, "New password may not be empty");
+    this.password = new Password(password);
+  }
+
+  /**
+   * Updates the password
+   *
+   * @param password the new password
+   */
+  private void setPassword(Password password) {
+    Assert.notNull(password, "New password may not be null");
+    this.password = password;
+  }
+
+  /**
+   * Updates the authorities
+   *
+   * @param authorities the new authorities
+   */
+  private void setAuthorities(List<SimpleGrantedAuthority> authorities) {
+    if (authorities == null) {
+      this.authorities = new ArrayList<>();
+    }
+    this.authorities = authorities;
+  }
+
+  /**
+   * @param firstName the first name
+   */
+  private void setFirstName(String firstName) {
+    Assert.hasText(firstName, "First name may not be empty");
+    this.firstName = firstName;
+  }
+
+  /**
+   * @param lastName the last name
+   */
+  private void setLastName(String lastName) {
+    Assert.hasText(lastName, "Last name may not be empty");
+    this.lastName = lastName;
+  }
+
+  /**
+   * @param email the email
+   */
+  private void setEmail(String email) {
+    Assert.isTrue(Validation.isEmail(email), "Not a valid email address " + email);
+    this.email = email;
+  }
+
+  /**
+   * @param enabled whether the account is enabled
+   */
+  @SuppressWarnings("unused")
+  private void setEnabled(boolean enabled) {
+    this.enabled = enabled;
   }
 
   @Override

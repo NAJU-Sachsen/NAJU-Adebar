@@ -78,7 +78,7 @@
               </li>
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                  <span class="glyphicon glyphicon-user"></span> <span sec:authentication="principal.associatedPerson.firstName">Anon</span>
+                  <span class="glyphicon glyphicon-user"></span> <span sec:authentication="principal.firstName">Anon</span>
                   <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
@@ -198,7 +198,7 @@
 
   <!-- 'add participant' modal -->
   <section class="modal fade" id="add-participant-modal" tabindex="-1" role="dialog" aria-labelledby="add-participant-label">
-      <div class="modal-dialog" role="document">
+      <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content">
               <header class="modal-header">
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -207,66 +207,102 @@
                   <h3 class="modal-title" id="add-participant-label">Teilnehmer hinzufügen</h3>
               </header>
               <section class="modal-body">
-                  <div class="form-group clearfix">
-                      <label class="col-sm-3 control-label">Person suchen</label>
-                      <div class="col-sm-9">
-                          <div class="clearfix" style="margin-bottom: 5px;">
-                              <input type="text" id="add-participants-search-firstname" class="form-control pull-left first-name" style="width: 48%;" placeholder="Vorname" />
-                              <input type="text" id="add-participants-search-lastname" class="form-control pull-right last-name" style="width: 48%;" placeholder="Nachname" />
+                <div class="container-fluid">
+                  <div class="col-md-7" style="border-right: #ddd solid 1px;">
+                    <div class="form-group clearfix">
+                        <label class=" control-label">Person suchen</label>
+                        <div class="col-sm-12">
+                            <div class="clearfix" style="margin-bottom: 5px;">
+                                <input type="text" id="add-participants-search-firstname" class="form-control pull-left first-name" style="width: 48%;" placeholder="Vorname" />
+                                <input type="text" id="add-participants-search-lastname" class="form-control pull-right last-name" style="width: 48%;" placeholder="Nachname" />
+                            </div>
+                            <div class="clearfix">
+                                <input type="text" id="add-participants-search-city" class="form-control pull-left city" style="width: 68%;" placeholder="Ort"/>
+                                <button type="button" id="add-participant-search-btn" class="btn btn-primary pull-right search" style="padding-left: 20px; padding-right: 20px;">
+                                    Suchen
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="width: 100%; margin-top:5px;"/>
+                    <div>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Geburtsdatum</th>
+                                    <th>Adresse</th>
+                                    <th>Auswählen</th>
+                                </tr>
+                            </thead>
+                            <tbody id="add-participant-tablebody" class="matches" th:remove="body">
+                                <tr class="matching-person">
+                                    <td class="name">Max Mustermann</td>
+                                    <td class="date-of-birth">31.02.1999</td>
+                                    <td class="address">Bei Mir 7 01234 Noch ein Dorf</td>
+                                    <td class="text-center">
+                                        <label><input type="checkbox" class="mark-participant" value="0" /></label>
+                                    </td>
+                                </tr>
+                                <tr class="matching-person">
+                                    <td class="name">Claus Dieter</td>
+                                    <td class="date-of-birth">17.07.1993</td>
+                                    <td class="address">Zu Hause 123 01478 Irgendein Dorf</td>
+                                    <td class="text-center">
+                                        <label><input type="checkbox" class="mark-participant" value="0" /></label>
+                                    </td>
+                                </tr>
+                                <tr class="matching-person">
+                                    <td class="name">Friedlinde Müller</td>
+                                    <td class="date-of-birth">11.11.1995</td>
+                                    <td class="address">Um die Ecke 3c 01597 Großstadt</td>
+                                    <td class="text-center">
+                                        <label><input type="checkbox" class="mark-participant" value="0" /></label>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="text-center searching">
+                        Suche läuft... <span class="glyphicon glyphicon-refresh glyphicon-load-animate"></span>
+                    </div>
+                    <div class="alert alert-info no-results">
+                        Keine Übereinstimmung
+                    </div>
+                  </div>
+                  <div class="col-md-5">
+                    <h4>Neue Teilnehmer:</h4>
+                    <form id="add-participant" class="list-group" method="post" th:action="@{'/events/' + ${event.id} + '/participants/add'}" th:remove="all-but-first">
+                      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                      <div class="list-group-item">
+                        <h5>Berta Beate</h5>
+                        <div class="clearfix">
+                          <div class="col-sm-9">
+                            <div><span class="glyphicon glyphicon-star"></span> 03.03.2003</div>
+                            <div><span class="glyphicon glyphicon-home"></span> Entenhausen</div>
                           </div>
-                          <div class="clearfix">
-                              <input type="text" id="add-participants-search-city" class="form-control pull-left city" style="width: 68%;" placeholder="Ort"/>
-                              <button type="button" id="add-participant-search-btn" class="btn btn-primary pull-right search" style="padding-left: 20px; padding-right: 20px;">
-                                  Suchen
-                              </button>
+                          <div class="col-sm-3">
+                            <button type="button" class="remove-participant btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
                           </div>
+                          <input class="participant-id" type="hidden" name="person-id" />
+                        </div>
                       </div>
+                      <div class="list-group-item">
+                        <h5>Klaus Klücklich</h5>
+                        <div class="clearfix">
+                          <div class="col-sm-9">
+                            <div><span class="glyphicon glyphicon-star"></span> 09.10.2011</div>
+                            <div><span class="glyphicon glyphicon-home"></span> Da drüben</div>
+                          </div>
+                          <div class="col-sm-3">
+                            <button type="button" class="remove-participant btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+                          </div>
+                          <input class="participant-id" type="hidden" name="person-id" />
+                        </div>
+                      </div>
+                    </form>
                   </div>
-                  <hr style="width: 100%; margin-top:5px;"/>
-                  <form id="add-participant" class="form-horizontal" method="post" th:action="@{'/events/' + ${event.id} + '/participants/add'}">
-                      <table class="table">
-                          <thead>
-                              <tr>
-                                  <th>Name</th>
-                                  <th>Geburtsdatum</th>
-                                  <th>Adresse</th>
-                                  <th>Auswählen</th>
-                              </tr>
-                          </thead>
-                          <tbody id="add-participant-tablebody" class="matches" th:remove="body">
-                              <tr>
-                                  <td>Max Mustermann</td>
-                                  <td>31.02.1999</td>
-                                  <td>Bei Mir 7 01234 Noch ein Dorf</td>
-                                  <td class="text-center">
-                                      <label><input type="radio" name="person-id" value="0" required="required" /></label>
-                                  </td>
-                              </tr>
-                              <tr>
-                                  <td>Claus Dieter</td>
-                                  <td>17.07.1993</td>
-                                  <td>Zu Hause 123 01478 Irgendein Dorf</td>
-                                  <td class="text-center">
-                                      <label><input type="radio" name="person-id" value="0" required="required" /></label>
-                                  </td>
-                              </tr>
-                              <tr>
-                                  <td>Friedlinde Müller</td>
-                                  <td>11.11.1995</td>
-                                  <td>Um die Ecke 3c 01597 Großstadt</td>
-                                  <td class="text-center">
-                                      <label><input type="radio" name="person-id" value="0" required="required" /></label>
-                                  </td>
-                              </tr>
-                          </tbody>
-                      </table>
-                  </form>
-                  <div class="text-center searching">
-                      Suche läuft... <span class="glyphicon glyphicon-refresh glyphicon-load-animate"></span>
-                  </div>
-                  <div class="alert alert-info no-results">
-                      Keine Übereinstimmung
-                  </div>
+                </div>
               </section>
               <footer class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
@@ -974,13 +1010,16 @@
         <section id="status">
             <h2 class="hidden">Status</h2>
 
-            <div class="alert alert-success alert-dismissible" role="alert" th:if="${participantAdded}">
+            <div class="alert alert-success alert-dismissible" role="alert" th:if="${participantsAdded}">
                <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
                   <span aria-hidden="true">&times;</span>
                </button>
                <p>
-                  Teilnehmer hinzugefügt
+                 Die folgenden Teilnehmer wurden erfolgreich hinzugefügt:
                </p>
+               <ul>
+                 <li th:each="participant : ${participantsAdded}" th:text="${participant.name}">Hans Wurst</li>
+               </ul>
             </div>
 
             <div class="alert alert-warning alert-dismissible" role="alert" th:if="${participatesAlready}">
@@ -988,8 +1027,11 @@
                   <span aria-hidden="true">&times;</span>
                </button>
                <p>
-                  Person nimmt bereits teil
+                  Die folgenden Personen nehmen bereits teil;
                </p>
+               <ul>
+                 <li th:each="participant : ${participatesAlready}" th:text="${participant.name}">Hans Wurst</li>
+               </ul>
             </div>
 
             <div class="alert alert-warning alert-dismissible" role="alert" th:if="${participantTooYoung}">
@@ -997,8 +1039,17 @@
                   <span aria-hidden="true">&times;</span>
               </button>
                <form th:action="@{'/events/' + ${event.id} + '/participants/force-add'}">
-                   Der/die Teilnehmende ist noch zu jung.
-                   <input type="hidden" name="person-id" th:value="${newParticipantId}" />
+                   Die folgenden Teilnehmenden sind noch zu jung:
+                   <p class="help-block">
+                     Falls sie trotzdem hinzugefügt werden sollen, die entsprechenden Teilnehmenden auswählen.
+                   </p>
+                   <div class="form-group" th:each="participant : ${participantTooYoung}">
+                     <div class="checkbox">
+                       <label th:inline="text">
+                         <input type="checkbox" name="person-id" th:value="${participant.id}" /> [[${participant.name}]]
+                      </label>
+                    </div>
+                  </div>
                    <button type="submit" class="btn btn-link alert-link">Trotzdem hinzufügen</button>
                </form>
             </div>
@@ -1053,8 +1104,11 @@
                   <span aria-hidden="true">&times;</span>
                </button>
                <p>
-                  Die Veranstaltung ist bereits ausgebucht
+                  Die folgenden Personen konnten nicht hinzugefügt werden, da die Veranstaltung bereits ausgebucht ist
                </p>
+               <ul>
+                 <li th:each="person : ${bookedOut}" th:text="${person.name}"></li>
+               </ul>
             </div>
 
             <div class="alert alert-info alert-dismissible" role="alert" th:if="${participationInfoUpdated}">

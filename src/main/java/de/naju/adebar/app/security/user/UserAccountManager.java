@@ -4,8 +4,9 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.stereotype.Service;
 import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.human.PersonDataUpdatedEvent;
+import de.naju.adebar.model.human.PersonId;
 
 /**
  * Service to take care of the {@link UserAccountManager} lifecycle
@@ -13,7 +14,6 @@ import de.naju.adebar.model.human.Person;
  * @author Rico Bergmann
  *
  */
-@Service
 public interface UserAccountManager {
 
   /**
@@ -59,6 +59,22 @@ public interface UserAccountManager {
   Optional<UserAccount> find(String username);
 
   /**
+   * Searches for a user account
+   * 
+   * @param personId the Id of the person to which the account belongs
+   * @return the account if it exists
+   */
+  Optional<UserAccount> find(PersonId personId);
+
+  /**
+   * Searches for a user account
+   * 
+   * @param person the person to who owns the account
+   * @return the account if it exists
+   */
+  Optional<UserAccount> find(Person person);
+
+  /**
    * Removes a user account
    * 
    * @param username the user name of the account
@@ -72,6 +88,14 @@ public interface UserAccountManager {
    * @return whether the username exists
    */
   boolean usernameExists(String username);
+
+  /**
+   * Checks if a person has an user account
+   * 
+   * @param person the person
+   * @return whether the person has a user account
+   */
+  boolean hasUserAccount(Person person);
 
   /**
    * Replaces the a user account's current password
@@ -103,7 +127,13 @@ public interface UserAccountManager {
    * @param newAuthorities the new authorities
    * @return the updated authorities
    */
-  @PreAuthorize("hasRole('ROLE_ADMIN')")
   UserAccount updateAuthorities(UserAccount account, List<SimpleGrantedAuthority> newAuthorities);
+
+  /**
+   * Adapts the user account of a person whenever the person's data has changed
+   * 
+   * @param event the update event for a person. The person may or may not have an user account.
+   */
+  void updateUserAccountIfNecessary(PersonDataUpdatedEvent event);
 
 }

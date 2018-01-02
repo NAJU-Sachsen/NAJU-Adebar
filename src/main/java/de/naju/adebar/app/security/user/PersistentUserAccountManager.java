@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,6 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.human.PersonDataUpdatedEvent;
+import de.naju.adebar.model.human.PersonId;
 
 /**
  * A {@link UserAccountManager} that persists its data in a database
@@ -69,6 +72,16 @@ public class PersistentUserAccountManager implements UserAccountManager {
   }
 
   @Override
+  public Optional<UserAccount> find(PersonId personId) {
+    return accountRepo.findByAssociatedPerson(personId);
+  }
+
+  @Override
+  public Optional<UserAccount> find(Person person) {
+    return find(person.getId());
+  }
+
+  @Override
   public void deleteAccount(String username) {
     if (!usernameExists(username)) {
       throw new UsernameNotFoundException(USERNAME_NOT_FOUND_MSG + username);
@@ -82,6 +95,11 @@ public class PersistentUserAccountManager implements UserAccountManager {
   }
 
   @Override
+  public boolean hasUserAccount(Person person) {
+    return accountRepo.findByAssociatedPerson(person.getId()).isPresent();
+  }
+
+  @Override
   public UserAccount updatePassword(String username, String currentPassword, String newPassword,
       boolean encrypted) {
     UserAccount account = find(username)
@@ -91,8 +109,7 @@ public class PersistentUserAccountManager implements UserAccountManager {
       throw new PasswordMismatchException("For user " + username);
     }
 
-    account.setPassword(generatePassword(newPassword, encrypted));
-    return accountRepo.save(account);
+    return accountRepo.save(account.updatePassword(generatePassword(newPassword, encrypted)));
   }
 
   @Override
@@ -100,8 +117,8 @@ public class PersistentUserAccountManager implements UserAccountManager {
   public UserAccount resetPassword(String username, String newPassword, boolean encrypted) {
     UserAccount account = find(username)
         .orElseThrow(() -> new UsernameNotFoundException(USERNAME_NOT_FOUND_MSG + username));
-    account.setPassword(generatePassword(newPassword, encrypted));
-    return accountRepo.save(account);
+
+    return accountRepo.save(account.updatePassword(generatePassword(newPassword, encrypted)));
   }
 
   @Override
@@ -113,8 +130,21 @@ public class PersistentUserAccountManager implements UserAccountManager {
       newAuthorities.add(Roles.ROLE_USER);
     }
 
-    account.setAuthorities(newAuthorities);
-    return accountRepo.save(account);
+    return accountRepo.save(account.updateAuthorities(newAuthorities));
+  }
+
+  @Override
+  @EventListener
+  public void updateUserAccountIfNecessary(PersonDataUpdatedEvent event) {
+    find(event.getEntity()).ifPresent(account -> updateUserAccount(account, event.getEntity()));
+  }
+
+  private void updateUserAccount(UserAccount account, Person person) {
+    accountRepo.save( //
+        account.updatePersonalInformation( //
+            person.getFirstName(), //
+            person.getLastName(), //
+            person.getEmail()));
   }
 
   /**
