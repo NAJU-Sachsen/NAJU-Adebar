@@ -190,10 +190,7 @@ public class PersonController {
    * @return the person's detail view
    */
   @RequestMapping("/persons/{pid}")
-  public String showPersonDetails(@PathVariable("pid") String personId, Model model) {
-
-    Person person =
-        managers.persons.findPerson(personId).orElseThrow(IllegalArgumentException::new);
+  public String showPersonDetails(@PathVariable("pid") Person person, Model model) {
 
     model.addAttribute("editPersonForm",
         new PersonToEditPersonFormConverter().convertToEditPersonForm(person));
@@ -241,8 +238,9 @@ public class PersonController {
     Person person = managers.persons.findPerson(personId) //
         .orElseThrow(IllegalArgumentException::new);
 
-    managers.persons.updatePerson( //
-        dataProcessors.editPersonExtractor.updatePerson(person, personForm));
+    Person updated = dataProcessors.editPersonExtractor.updatePerson(person, personForm);
+
+    managers.persons.updatePerson(updated);
 
     redirAttr.addFlashAttribute("personUpdated", true);
     return REDIRECT_PERSONS + personId;
@@ -291,8 +289,7 @@ public class PersonController {
       person.makeActivist();
     }
 
-    person = person.updateActivistProfile(
-        dataProcessors.editActivistExtractor.extractActivistForm(person, activistForm));
+    dataProcessors.editActivistExtractor.updateActivist(person, activistForm);
     managers.persons.updatePerson(person);
 
     managers.localGroups.updateLocalGroupMembership(person,
@@ -347,7 +344,7 @@ public class PersonController {
     Qualification qualification = managers.qualifications.findQualification(qualificationName)
         .orElseThrow(IllegalArgumentException::new);
 
-    person.updateReferentProfile(person.getReferentProfile().removeQualification(qualification));
+    person.getReferentProfile().removeQualification(qualification);
     managers.persons.updatePerson(person);
 
     return REDIRECT_PERSONS + personId;

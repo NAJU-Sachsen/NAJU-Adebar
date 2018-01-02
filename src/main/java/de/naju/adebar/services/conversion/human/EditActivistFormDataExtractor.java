@@ -15,7 +15,7 @@ import de.naju.adebar.model.human.Person;
 @Service
 public class EditActivistFormDataExtractor {
 
-  public ActivistProfile extractActivistForm(Person person, EditActivistForm activistForm) {
+  public ActivistProfile updateActivist(Person person, EditActivistForm activistForm) {
     JuleicaCard juleica = null;
     if (!activistForm.isActivist()) {
       return null;
@@ -24,8 +24,7 @@ public class EditActivistFormDataExtractor {
           DateTimeFormatter.ofPattern(EditActivistForm.DATE_FORMAT, Locale.GERMAN)));
 
     }
-    ActivistProfile profile = new ActivistProfile(person.getActivistProfile());
-    return profile.updateJuleicaCard(juleica);
+    return person.getActivistProfile().updateJuleicaCard(juleica);
   }
 
 }

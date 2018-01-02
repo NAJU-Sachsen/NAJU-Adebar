@@ -75,11 +75,12 @@ public class FilterTestBootstrapper {
     hans = personRepo.findByFirstNameAndLastNameAndEmail("Hans", "Wurst", "hans.wurst@web.de");
     hans.makeParticipant();
     hans.makeActivist();
-    hans = hans.updateAddress(hansAddress);
-    hans = hans.updateParticipantProfile(hans.getParticipantProfile().updateGender(Gender.MALE));
-    hans = hans.updateParticipantProfile(hans.getParticipantProfile().updateDateOfBirth(hansDob));
-    hans = hans.updateActivistProfile(
-        hans.getActivistProfile().updateJuleicaCard(new JuleicaCard(hansJuleicaExpiry)));
+    hans.updateAddress(hansAddress);
+    hans.getParticipantProfile() //
+        .updateGender(Gender.MALE) //
+        .updateDateOfBirth(hansDob);
+    hans.getActivistProfile() //
+        .updateJuleicaCard(new JuleicaCard(hansJuleicaExpiry));
 
     // @formatter:off
     claus = personFactory.buildNew("Claus", "Störtebecker", "derkaeptn@meermensch.de")

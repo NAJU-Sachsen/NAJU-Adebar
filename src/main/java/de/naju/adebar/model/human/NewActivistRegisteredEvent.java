@@ -28,4 +28,9 @@ public class NewActivistRegisteredEvent extends AbstractPersonRelatedEvent {
     super(person);
   }
 
+  @Override
+  boolean aggregateMayContainMultipleInstances() {
+    return false;
+  }
+
 }

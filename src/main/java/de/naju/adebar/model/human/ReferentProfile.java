@@ -20,7 +20,7 @@ import de.naju.adebar.util.Maps;
  * @author Rico Bergmann
  */
 @Entity(name = "referent")
-public class ReferentProfile {
+public class ReferentProfile extends AbstractProfile {
 
   @EmbeddedId
   @Column(name = "personId")
@@ -29,16 +29,6 @@ public class ReferentProfile {
   @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @MapKey
   private Map<String, Qualification> qualifications;
-
-  /**
-   * Copy constructor
-   *
-   * @param other the profile to copy
-   */
-  public ReferentProfile(ReferentProfile other) {
-    this.personId = new PersonId(other.personId);
-    this.qualifications = new HashMap<>(other.qualifications);
-  }
 
   /**
    * Each referent profile has to be created based on an existing person.
@@ -104,9 +94,12 @@ public class ReferentProfile {
     if (hasQualification(qualification)) {
       throw new ExistingQualificationException("Person is already qualified for " + qualification);
     }
-    ReferentProfile updatedProfile = new ReferentProfile(this);
-    updatedProfile.qualifications.put(qualification.getName(), qualification);
-    return updatedProfile;
+    qualifications.put(qualification.getName(), qualification);
+
+    getRelatedPerson().ifPresent( //
+        person -> registerEventIfPossible(PersonDataUpdatedEvent.forPerson(person)));
+
+    return this;
   }
 
   /**
@@ -118,9 +111,12 @@ public class ReferentProfile {
     if (!hasQualification(qualification)) {
       throw new IllegalArgumentException("Person has no such qualification: " + qualification);
     }
-    ReferentProfile updatedProfile = new ReferentProfile(this);
-    updatedProfile.qualifications.remove(qualification.getName());
-    return updatedProfile;
+    qualifications.remove(qualification.getName());
+
+    getRelatedPerson().ifPresent( //
+        person -> registerEventIfPossible(PersonDataUpdatedEvent.forPerson(person)));
+
+    return this;
   }
 
   /**

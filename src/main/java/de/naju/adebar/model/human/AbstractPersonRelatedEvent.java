@@ -12,7 +12,6 @@ import de.naju.adebar.model.EntityUpdatedEvent;
  */
 public abstract class AbstractPersonRelatedEvent extends EntityUpdatedEvent<Person> {
 
-
   /**
    * @see EntityUpdatedEvent#EntityUpdatedEvent(E)
    */
@@ -26,4 +25,9 @@ public abstract class AbstractPersonRelatedEvent extends EntityUpdatedEvent<Pers
   protected AbstractPersonRelatedEvent(Person person, Collection<ChangeSetEntry> changeset) {
     super(person, changeset);
   }
+
+  /**
+   * @return whether an aggregate may publish multiple instances of this event at the same time
+   */
+  abstract boolean aggregateMayContainMultipleInstances();
 }

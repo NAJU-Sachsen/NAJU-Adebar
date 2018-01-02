@@ -1,6 +1,7 @@
 package de.naju.adebar.model.events;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -125,7 +126,7 @@ class ParticipantsList {
   /**
    * @return the waiting list
    */
-  public Iterable<Person> getWaitingList() {
+  public Collection<Person> getWaitingList() {
     return waitingList;
   }
 

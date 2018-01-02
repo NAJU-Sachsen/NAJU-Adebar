@@ -48,8 +48,7 @@ public class EditPersonFormDataExtractor {
         updated.makeParticipant();
       }
 
-      updated = updated.updateParticipantProfile(
-          updateParticipantProfile(updated.getParticipantProfile(), personForm));
+      updateParticipantProfile(updated.getParticipantProfile(), personForm);
     }
 
     return updated;

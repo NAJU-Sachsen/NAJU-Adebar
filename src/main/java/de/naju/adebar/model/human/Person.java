@@ -24,8 +24,7 @@ import org.hibernate.validator.constraints.Email;
 import org.springframework.data.domain.AfterDomainEventPublication;
 import org.springframework.data.domain.DomainEvents;
 import org.springframework.util.Assert;
-import com.querydsl.core.annotations.PropertyType;
-import com.querydsl.core.annotations.QueryType;
+import de.naju.adebar.model.events.Event;
 import de.naju.adebar.util.Validation;
 
 /**
@@ -40,11 +39,9 @@ import de.naju.adebar.util.Validation;
  * @see ReferentProfile
  */
 @Entity(name = "person")
-public final class Person {
+public class Person {
 
   private static final String FOR_PERSON_MSG = "For person ";
-  private static final String WRONG_PERSON_MSG =
-      "Profile ID %s does not match the current person %s";
   private static final int MAX_PARENT_PROFILES = 2;
 
   @EmbeddedId
@@ -83,17 +80,14 @@ public final class Person {
 
   @PrimaryKeyJoinColumn
   @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  @QueryType(PropertyType.ENTITY)
   private ParticipantProfile participantProfile;
 
   @PrimaryKeyJoinColumn
   @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  @QueryType(PropertyType.ENTITY)
   private ActivistProfile activistProfile;
 
   @PrimaryKeyJoinColumn
   @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  @QueryType(PropertyType.ENTITY)
   private ReferentProfile referentProfile;
 
   @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -105,7 +99,14 @@ public final class Person {
   private boolean archived;
 
   @Transient
-  private final Collection<AbstractPersonRelatedEvent> events = new ArrayList<>();
+  private final Collection<AbstractPersonRelatedEvent> domainEvents = new ArrayList<>();
+
+
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(name = "eventParticipants", //
+      joinColumns = @JoinColumn(name = "participant"), //
+      inverseJoinColumns = @JoinColumn(name = "eventId"))
+  private List<Event> participatingEvents;
 
   /**
    * Full constructor to create new Person instances. However to create a new object from outside
@@ -143,32 +144,6 @@ public final class Person {
    */
   @SuppressWarnings("unused")
   private Person() {}
-
-  /**
-   * Copy constructor.
-   * <p>
-   * When calling this method, only {@code this} should be used for further operations and the
-   * cloned instance should be ignored. This is why the copy constructor will incorporate all of
-   * {@code other's} events and wipe them on {@code other}. In general this constructor should only
-   * be executed if some data has to be updated.
-   *
-   * @param other the person to copy
-   */
-  private Person(Person other) {
-    this(other.id, other.firstName, other.lastName, other.email);
-    this.phoneNumber = other.phoneNumber;
-    this.address = other.address;
-    this.participant = other.participant;
-    this.participantProfile = other.participantProfile;
-    this.activist = other.activist;
-    this.activistProfile = other.activistProfile;
-    this.referent = other.referent;
-    this.referentProfile = other.referentProfile;
-    this.parentProfiles = other.parentProfiles;
-    this.archived = other.archived;
-    other.events.forEach(this.events::add);
-    other.clearEvents();
-  }
 
   /**
    * @return the person's unique ID.
@@ -224,6 +199,7 @@ public final class Person {
    *         return {@code null}.
    */
   public ParticipantProfile getParticipantProfile() {
+    participantProfile.provideRelatedPerson(this);
     return participantProfile;
   }
 
@@ -239,6 +215,7 @@ public final class Person {
    *         return {@code null}.
    */
   public ActivistProfile getActivistProfile() {
+    activistProfile.provideRelatedPerson(this);
     return activistProfile;
   }
 
@@ -254,6 +231,7 @@ public final class Person {
    *         return {@code null}.
    */
   public ReferentProfile getReferentProfile() {
+    referentProfile.provideRelatedPerson(this);
     return referentProfile;
   }
 
@@ -269,6 +247,10 @@ public final class Person {
    */
   public boolean isArchived() {
     return archived;
+  }
+
+  public Collection<Event> getParticipatingEvents() {
+    return Collections.unmodifiableList(participatingEvents);
   }
 
   /**
@@ -315,16 +297,15 @@ public final class Person {
    */
   public Person updateInformation(String firstName, String lastName, String email,
       String phoneNumber) {
-    Person updatedPerson = new Person(this);
-    updatedPerson.setFirstName(firstName);
-    updatedPerson.setLastName(lastName);
-    updatedPerson.setEmail(email);
-    updatedPerson.setPhoneNumber(phoneNumber);
+    setFirstName(firstName);
+    setLastName(lastName);
+    setEmail(email);
+    setPhoneNumber(phoneNumber);
 
     if (!updateEventWasRegistered()) {
-      updatedPerson.registerEvent(PersonDataUpdatedEvent.forPerson(updatedPerson));
+      registerEvent(PersonDataUpdatedEvent.forPerson(this));
     }
-    return updatedPerson;
+    return this;
   }
 
   /**
@@ -337,13 +318,12 @@ public final class Person {
    * @return the updated person
    */
   public Person updateFirstName(String firstName) {
-    Person updatedPerson = new Person(this);
-    updatedPerson.setFirstName(firstName);
+    setFirstName(firstName);
 
     if (!updateEventWasRegistered()) {
-      updatedPerson.registerEvent(PersonDataUpdatedEvent.forPerson(updatedPerson));
+      registerEvent(PersonDataUpdatedEvent.forPerson(this));
     }
-    return updatedPerson;
+    return this;
   }
 
   /**
@@ -356,13 +336,12 @@ public final class Person {
    * @return the updated person
    */
   public Person updateLastName(String lastName) {
-    Person updatedPerson = new Person(this);
-    updatedPerson.setLastName(lastName);
+    setLastName(lastName);
 
     if (!updateEventWasRegistered()) {
-      updatedPerson.registerEvent(PersonDataUpdatedEvent.forPerson(updatedPerson));
+      registerEvent(PersonDataUpdatedEvent.forPerson(this));
     }
-    return updatedPerson;
+    return this;
   }
 
 
@@ -376,13 +355,12 @@ public final class Person {
    * @return the updated person
    */
   public Person updateEmail(String email) {
-    Person updatedPerson = new Person(this);
-    updatedPerson.setEmail(email);
+    setEmail(email);
 
     if (!updateEventWasRegistered()) {
-      updatedPerson.registerEvent(PersonDataUpdatedEvent.forPerson(updatedPerson));
+      registerEvent(PersonDataUpdatedEvent.forPerson(this));
     }
-    return updatedPerson;
+    return this;
   }
 
   /**
@@ -395,13 +373,12 @@ public final class Person {
    * @return the updated person
    */
   public Person updatePhoneNumber(String phoneNumber) {
-    Person updatedPerson = new Person(this);
-    updatedPerson.setPhoneNumber(phoneNumber);
+    setPhoneNumber(phoneNumber);
 
     if (!updateEventWasRegistered()) {
-      updatedPerson.registerEvent(PersonDataUpdatedEvent.forPerson(updatedPerson));
+      registerEvent(PersonDataUpdatedEvent.forPerson(this));
     }
-    return updatedPerson;
+    return this;
   }
 
   /**
@@ -414,13 +391,12 @@ public final class Person {
    * @return the updated person
    */
   public Person updateAddress(Address address) {
-    Person updatedPerson = new Person(this);
-    updatedPerson.setAddress(address);
+    setAddress(address);
 
     if (!updateEventWasRegistered()) {
-      updatedPerson.registerEvent(PersonDataUpdatedEvent.forPerson(updatedPerson));
+      registerEvent(PersonDataUpdatedEvent.forPerson(this));
     }
-    return updatedPerson;
+    return this;
   }
 
   /**
@@ -464,28 +440,6 @@ public final class Person {
   }
 
   /**
-   * Updates the participation information
-   *
-   * @param profile the new data
-   * @return the updated person
-   */
-  public Person updateParticipantProfile(ParticipantProfile profile) {
-    if (!isParticipant()) {
-      throw new NoParticipantException(FOR_PERSON_MSG + this);
-    } else if (!profile.getPersonId().equals(this.id)) {
-      throw new IllegalArgumentException(
-          String.format(WRONG_PERSON_MSG, profile.getPersonId(), this.id));
-    }
-    Person updatedPerson = new Person(this);
-    updatedPerson.setParticipantProfile(profile);
-
-    if (!updateEventWasRegistered()) {
-      updatedPerson.registerEvent(PersonDataUpdatedEvent.forPerson(updatedPerson));
-    }
-    return updatedPerson;
-  }
-
-  /**
    * Turns the person into an activist.
    * <p>
    * Be sure to save the person in order to persist the profile.
@@ -522,28 +476,6 @@ public final class Person {
 
     registerEvent(NewActivistRegisteredEvent.forPerson(this));
     return activistProfile;
-  }
-
-  /**
-   * Updates the activist information
-   *
-   * @param profile the new data
-   * @return the updated person
-   */
-  public Person updateActivistProfile(ActivistProfile profile) {
-    if (!isActivist()) {
-      throw new NoActivistException(FOR_PERSON_MSG + this);
-    } else if (!profile.getPersonId().equals(this.id)) {
-      throw new IllegalArgumentException(
-          String.format(WRONG_PERSON_MSG, profile.getPersonId(), this.id));
-    }
-    Person updatedPerson = new Person(this);
-    updatedPerson.setActivistProfile(profile);
-
-    if (!updateEventWasRegistered()) {
-      updatedPerson.registerEvent(PersonDataUpdatedEvent.forPerson(updatedPerson));
-    }
-    return updatedPerson;
   }
 
   /**
@@ -586,28 +518,6 @@ public final class Person {
   }
 
   /**
-   * Updates the referent information
-   *
-   * @param profile the new data
-   * @return the updated person
-   */
-  public Person updateReferentProfile(ReferentProfile profile) {
-    if (!isReferent()) {
-      throw new NoReferentException(FOR_PERSON_MSG + this);
-    } else if (!profile.getPersonId().equals(this.id)) {
-      throw new IllegalArgumentException(
-          String.format(WRONG_PERSON_MSG, profile.getPersonId(), this.id));
-    }
-    Person updatedPerson = new Person(this);
-    updatedPerson.setReferentProfile(profile);
-
-    if (!updateEventWasRegistered()) {
-      updatedPerson.registerEvent(PersonDataUpdatedEvent.forPerson(updatedPerson));
-    }
-    return updatedPerson;
-  }
-
-  /**
    * Marks the person as "archived" - it should not be modified any further. However this is not
    * being enforced.
    *
@@ -617,13 +527,12 @@ public final class Person {
     if (archived) {
       throw new IllegalStateException("Person is already archived " + this);
     }
-    Person archivedPerson = new Person(this);
-    archivedPerson.anonymiseProfile();
-    archivedPerson.anonymiseAddress();
-    archivedPerson.archived = true;
+    anonymiseProfile();
+    anonymiseAddress();
+    archived = true;
 
-    registerEvent(PersonArchivedEvent.forPerson(archivedPerson));
-    return archivedPerson;
+    registerEvent(PersonArchivedEvent.forPerson(this));
+    return this;
   }
 
   /**
@@ -646,13 +555,12 @@ public final class Person {
       throw new ImpossibleKinshipRelationException(FOR_PERSON_MSG + this);
     }
 
-    Person updatedPerson = new Person(this);
-    updatedPerson.parentProfiles.add(parent);
+    parentProfiles.add(parent);
 
     if (!updateEventWasRegistered()) {
-      updatedPerson.registerEvent(PersonDataUpdatedEvent.forPerson(updatedPerson));
+      registerEvent(PersonDataUpdatedEvent.forPerson(this));
     }
-    return updatedPerson;
+    return this;
   }
 
   /**
@@ -667,13 +575,12 @@ public final class Person {
       throw new IllegalArgumentException("No connection with parent " + parent);
     }
 
-    Person updatedPerson = new Person(this);
-    updatedPerson.parentProfiles.remove(parent);
+    parentProfiles.remove(parent);
 
     if (!updateEventWasRegistered()) {
-      updatedPerson.registerEvent(PersonDataUpdatedEvent.forPerson(updatedPerson));
+      registerEvent(PersonDataUpdatedEvent.forPerson(this));
     }
-    return updatedPerson;
+    return this;
   }
 
   /**
@@ -759,12 +666,35 @@ public final class Person {
   }
 
   /**
+   * @param event saves an event for publishing
+   */
+  void registerEvent(AbstractPersonRelatedEvent event) {
+    domainEvents.add(event);
+  }
+
+  /**
+   * @return whether at least one {@link PersonDataUpdatedEvent} was registered since the last
+   *         {@link PersonRepository#save(Entity)} operation
+   */
+  boolean updateEventWasRegistered() {
+    return hasRegisteredEventOf(PersonDataUpdatedEvent.class);
+  }
+
+  /**
+   * @param clazz the event type to check for
+   * @return whether the aggregate has at least one event of the given class registered
+   */
+  boolean hasRegisteredEventOf(Class<? extends AbstractPersonRelatedEvent> clazz) {
+    return domainEvents.stream().anyMatch(e -> e.getClass().equals(clazz));
+  }
+
+  /**
    * @return all events that where saved for publishing. This will include at most one
    *         {@link PersonDataUpdatedEvent} and one {@link PersonArchivedEvent}
    */
   @DomainEvents
   Collection<AbstractPersonRelatedEvent> getModificationEvents() {
-    return Collections.unmodifiableCollection(events);
+    return Collections.unmodifiableCollection(domainEvents);
   }
 
   /**
@@ -773,7 +703,7 @@ public final class Person {
    */
   @AfterDomainEventPublication
   void clearEvents() {
-    events.clear();
+    domainEvents.clear();
   }
 
   /**
@@ -825,19 +755,10 @@ public final class Person {
     this.archived = archived;
   }
 
-  /**
-   * @return whether at least one {@link PersonDataUpdatedEvent} was registered since the last
-   *         {@link PersonRepository#save(Entity)} operation
-   */
-  private boolean updateEventWasRegistered() {
-    return events.stream().anyMatch(e -> e.getClass().equals(PersonDataUpdatedEvent.class));
-  }
-
-  /**
-   * @param event saves an event for publishing
-   */
-  private void registerEvent(AbstractPersonRelatedEvent event) {
-    events.add(event);
+  @SuppressWarnings("unused")
+  private void setParticipatingEvents(List<Event> participatingEvents) {
+    Assert.notNull(participatingEvents, "Events may not be null");
+    this.participatingEvents = participatingEvents;
   }
 
   /**

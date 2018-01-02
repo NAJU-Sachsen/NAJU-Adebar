@@ -1,5 +1,6 @@
 package de.naju.adebar.model.human;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import de.naju.adebar.model.ChangeSetEntry;
 
@@ -34,6 +35,30 @@ public class PersonDataUpdatedEvent extends AbstractPersonRelatedEvent {
   }
 
   /**
+   * Combines two events into one, retaining the original change set
+   * 
+   * @param other the other event
+   * @return the combined event
+   */
+  public static PersonDataUpdatedEvent mergeWith(PersonDataUpdatedEvent other) {
+    return mergeWith(other, new ArrayList<>());
+  }
+
+  /**
+   * Combines two events into one, while also merging their change sets
+   * 
+   * @param other the other event
+   * @param changeset the additional change set
+   * @return the combined event
+   */
+  public static PersonDataUpdatedEvent mergeWith(PersonDataUpdatedEvent other,
+      Collection<ChangeSetEntry> changeset) {
+    Collection<ChangeSetEntry> mergedChangeset = new ArrayList<>(other.getChangeset());
+    mergedChangeset.addAll(changeset);
+    return new PersonDataUpdatedEvent(other.getEntity(), mergedChangeset);
+  }
+
+  /**
    * @param person the person. May not be {@code null}
    */
   private PersonDataUpdatedEvent(Person person) {
@@ -48,5 +73,9 @@ public class PersonDataUpdatedEvent extends AbstractPersonRelatedEvent {
     super(person, changeset);
   }
 
+  @Override
+  boolean aggregateMayContainMultipleInstances() {
+    return false;
+  }
 
 }

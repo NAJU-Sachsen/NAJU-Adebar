@@ -28,4 +28,9 @@ public class NewReferentRegisteredEvent extends AbstractPersonRelatedEvent {
     super(person);
   }
 
+  @Override
+  boolean aggregateMayContainMultipleInstances() {
+    return false;
+  }
+
 }

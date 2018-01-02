@@ -28,4 +28,9 @@ public class PersonArchivedEvent extends AbstractPersonRelatedEvent {
     super(person);
   }
 
+  @Override
+  boolean aggregateMayContainMultipleInstances() {
+    return false;
+  }
+
 }

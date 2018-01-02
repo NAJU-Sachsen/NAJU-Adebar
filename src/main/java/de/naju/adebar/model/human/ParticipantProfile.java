@@ -18,7 +18,7 @@ import org.springframework.util.Assert;
  * @author Rico Bergmann
  */
 @Entity(name = "participant")
-public class ParticipantProfile {
+public class ParticipantProfile extends AbstractProfile {
 
   @EmbeddedId
   @Column(name = "personId")
@@ -43,20 +43,6 @@ public class ParticipantProfile {
 
   @Column(name = "remarks", length = 512)
   private String remarks;
-
-  /**
-   * Copy constructor
-   *
-   * @param other the profile to copy
-   */
-  public ParticipantProfile(ParticipantProfile other) {
-    this.personId = new PersonId(other.personId);
-    this.gender = other.gender;
-    this.dateOfBirth = other.dateOfBirth;
-    this.eatingHabits = other.eatingHabits;
-    this.healthImpairments = other.healthImpairments;
-    this.nabuMembership = other.nabuMembership;
-  }
 
   /**
    * Each participant profile has to be created in terms of an existing person.
@@ -186,12 +172,15 @@ public class ParticipantProfile {
    */
   public ParticipantProfile updateProfile(Gender gender, LocalDate dateOfBirth, String eatingHabits,
       String healthImpairments) {
-    ParticipantProfile updatedProfile = new ParticipantProfile(this);
-    updatedProfile.setGender(gender);
-    updatedProfile.setDateOfBirth(dateOfBirth);
-    updatedProfile.setEatingHabits(eatingHabits);
-    updatedProfile.setHealthImpairments(healthImpairments);
-    return updatedProfile;
+    setGender(gender);
+    setDateOfBirth(dateOfBirth);
+    setEatingHabits(eatingHabits);
+    setHealthImpairments(healthImpairments);
+
+    getRelatedPerson().ifPresent( //
+        person -> registerEventIfPossible(PersonDataUpdatedEvent.forPerson(person)));
+
+    return this;
   }
 
   /**
@@ -201,9 +190,12 @@ public class ParticipantProfile {
    * @return the updated profile information
    */
   public ParticipantProfile updateGender(Gender gender) {
-    ParticipantProfile updatedProfile = new ParticipantProfile(this);
-    updatedProfile.setGender(gender);
-    return updatedProfile;
+    setGender(gender);
+
+    getRelatedPerson().ifPresent( //
+        person -> registerEventIfPossible(PersonDataUpdatedEvent.forPerson(person)));
+
+    return this;
   }
 
   /**
@@ -213,9 +205,12 @@ public class ParticipantProfile {
    * @return the updated profile information
    */
   public ParticipantProfile updateDateOfBirth(LocalDate dateOfBirth) {
-    ParticipantProfile updatedProfile = new ParticipantProfile(this);
-    updatedProfile.setDateOfBirth(dateOfBirth);
-    return updatedProfile;
+    setDateOfBirth(dateOfBirth);
+
+    getRelatedPerson().ifPresent( //
+        person -> registerEventIfPossible(PersonDataUpdatedEvent.forPerson(person)));
+
+    return this;
   }
 
   /**
@@ -225,9 +220,8 @@ public class ParticipantProfile {
    * @return the new profile information
    */
   public ParticipantProfile updateRemarks(String remarks) {
-    ParticipantProfile updatedProfile = new ParticipantProfile(this);
-    updatedProfile.setRemarks(remarks);
-    return updatedProfile;
+    setRemarks(remarks);
+    return this;
   }
 
   /**
@@ -237,9 +231,12 @@ public class ParticipantProfile {
    * @return the new profile
    */
   public ParticipantProfile updateNabuMembership(NabuMembership nabuMembership) {
-    ParticipantProfile updatedProfile = new ParticipantProfile(this);
-    updatedProfile.setNabuMembership(nabuMembership);
-    return updatedProfile;
+    setNabuMembership(nabuMembership);
+
+    getRelatedPerson().ifPresent( //
+        person -> registerEventIfPossible(PersonDataUpdatedEvent.forPerson(person)));
+
+    return this;
   }
 
   /**

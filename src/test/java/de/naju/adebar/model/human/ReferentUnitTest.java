@@ -29,18 +29,15 @@ public class ReferentUnitTest {
 
   @Test
   public void testAddQualification() {
-    referent = referent.updateReferentProfile( //
-        referent.getReferentProfile().addQualification(qualification));
+    referent.getReferentProfile().addQualification(qualification);
     Assert.assertTrue(String.format("%s should have qualification %s", referent, qualification),
         referent.getReferentProfile().hasQualification(qualification));
   }
 
   @Test
   public void testRemoveQualification() {
-    referent = referent.updateReferentProfile( //
-        referent.getReferentProfile().addQualification(qualification));
-    referent = referent.updateReferentProfile( //
-        referent.getReferentProfile().removeQualification(qualification));
+    referent.getReferentProfile().addQualification(qualification);
+    referent.getReferentProfile().removeQualification(qualification);
 
     Assert.assertFalse(
         String.format("%s should not have qualification %s any more", referent, qualification),

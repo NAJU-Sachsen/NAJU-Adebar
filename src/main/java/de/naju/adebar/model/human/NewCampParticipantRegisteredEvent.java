@@ -28,4 +28,9 @@ public class NewCampParticipantRegisteredEvent extends AbstractPersonRelatedEven
     super(person);
   }
 
+  @Override
+  boolean aggregateMayContainMultipleInstances() {
+    return false;
+  }
+
 }

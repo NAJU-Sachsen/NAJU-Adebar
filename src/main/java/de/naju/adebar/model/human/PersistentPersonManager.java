@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 /**
@@ -13,6 +14,7 @@ import org.springframework.util.Assert;
  * @author Rico Bergmann
  */
 @Service
+@Transactional
 public class PersistentPersonManager implements PersonManager {
 
   private PersonRepository personRepo;
@@ -99,8 +101,7 @@ public class PersistentPersonManager implements PersonManager {
     } else {
       qualificationToAdd = qualification;
     }
-    person = person
-        .updateReferentProfile(person.getReferentProfile().addQualification(qualificationToAdd));
+    person.getReferentProfile().addQualification(qualificationToAdd);
     updatePerson(person);
   }
 

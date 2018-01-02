@@ -21,6 +21,7 @@ public class ChangeSetEntry {
    * @param oldValue the field's value before the update
    * @param newValue the field's value after the update
    * @return the entry
+   * @throws IllegalArgumentException if {@code oldValue} and {@code newValue} are equal
    */
   public static ChangeSetEntry forField(String field, Object oldValue, Object newValue) {
     return new ChangeSetEntry(field, oldValue, newValue);
@@ -32,9 +33,15 @@ public class ChangeSetEntry {
    * @param field the updated field
    * @param oldValue the field's value before the update
    * @param newValue the field's value after the update
+   * @throws IllegalArgumentException if {@code oldValue} and {@code newValue} are equal
    */
   private ChangeSetEntry(String field, Object oldValue, Object newValue) {
     Assert.hasText(field, "The field must be specified");
+    if ((oldValue != null && oldValue.equals(newValue)) //
+        || (oldValue == null && newValue == null)) {
+      throw new IllegalArgumentException(
+          String.format("Values are equal: %s, %s", oldValue, newValue));
+    }
     this.field = field;
     this.oldValue = oldValue;
     this.newValue = newValue;
@@ -59,6 +66,32 @@ public class ChangeSetEntry {
    */
   public final Object getNewValue() {
     return newValue;
+  }
+
+  /**
+   * Merges {@code this} entry with another one. The result of {@code a.combineWith(b)} will have
+   * the following structure:
+   * 
+   * <pre>
+   * {@code field := a.field
+   * oldValue := a.oldValue
+   * newValue := b.newValue
+   *    
+   * }
+   * </pre>
+   * 
+   * @param other
+   * @return the merged (new) entry
+   * @throws UncombinableChangeSetEntriesException if the entries fields do not match or if the
+   *         values do not "connect" (i.e. {@code this.newValue != other.oldValue})
+   */
+  public ChangeSetEntry combineWith(ChangeSetEntry other) {
+    if (!this.field.equals(other.field)) {
+      throw new UncombinableChangeSetEntriesException("Fields do not match", this, other);
+    } else if (!this.newValue.equals(other.oldValue)) {
+      throw new UncombinableChangeSetEntriesException("Values do not match", this, other);
+    }
+    return new ChangeSetEntry(field, oldValue, other.newValue);
   }
 
   /*

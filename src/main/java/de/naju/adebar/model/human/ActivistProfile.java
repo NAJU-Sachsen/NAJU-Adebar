@@ -16,7 +16,7 @@ import org.springframework.util.Assert;
  * @author Rico Bergmann
  */
 @Entity(name = "activist")
-public class ActivistProfile {
+public class ActivistProfile extends AbstractProfile {
 
   @EmbeddedId
   @Column(name = "personId")
@@ -27,18 +27,6 @@ public class ActivistProfile {
       @AttributeOverride(name = "expiryDate", column = @Column(name = "juleicaExpiryDate")),
       @AttributeOverride(name = "level", column = @Column(name = "juleicaLevel"))})
   private JuleicaCard juleicaCard;
-
-  /**
-   * Copy constructor
-   *
-   * @param other the activist profile to copy
-   */
-  public ActivistProfile(ActivistProfile other) {
-    this.personId = new PersonId(other.personId);
-    if (other.hasJuleica()) {
-      this.juleicaCard = new JuleicaCard(other.juleicaCard);
-    }
-  }
 
   /**
    * Each activist profile has to be created in terms of an existing person.
@@ -109,9 +97,12 @@ public class ActivistProfile {
    * @return the profile for the new card
    */
   public ActivistProfile updateJuleicaCard(JuleicaCard juleica) {
-    ActivistProfile updatedProfile = new ActivistProfile(this);
-    updatedProfile.setJuleicaCard(juleica);
-    return updatedProfile;
+    setJuleicaCard(juleica);
+
+    getRelatedPerson().ifPresent( //
+        person -> registerEventIfPossible(PersonDataUpdatedEvent.forPerson(person)));
+
+    return this;
   }
 
   /**

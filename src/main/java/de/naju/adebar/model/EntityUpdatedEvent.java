@@ -1,6 +1,7 @@
 package de.naju.adebar.model;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -127,7 +128,8 @@ public abstract class EntityUpdatedEvent<E> {
    */
   @Override
   public String toString() {
-    return String.format("%s for %s at %tc", this.getClass().getSimpleName(), entity, timestamp);
+    return this.getClass().getSimpleName() + " for " + entity + " at "
+        + timestamp.format(DateTimeFormatter.ISO_DATE_TIME);
   }
 
 }

@@ -53,7 +53,7 @@ public class ReferentManagerIntegrationTest {
   @Test
   public void testUpdateReferent() {
     claus = personManager.savePerson(claus);
-    claus = claus.updateReferentProfile(claus.getReferentProfile().addQualification(qualification));
+    claus.getReferentProfile().addQualification(qualification);
     claus = personManager.updatePerson(claus);
     Assert.assertTrue(claus.toString() + " should have been updated!",
         claus.getReferentProfile().hasQualification(qualification));
