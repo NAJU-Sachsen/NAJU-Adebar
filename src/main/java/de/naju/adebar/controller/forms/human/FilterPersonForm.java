@@ -31,6 +31,8 @@ public class FilterPersonForm extends PersonForm {
   private String nabuMembershipFilterType;
   private String nabuMembershipNumber;
 
+  private String participatedEventName;
+
   private boolean returnParents;
 
   public String getGenderFilterType() {
@@ -143,6 +145,14 @@ public class FilterPersonForm extends PersonForm {
 
   public void setNabuMembershipNumber(String nabuMembershipNumber) {
     this.nabuMembershipNumber = nabuMembershipNumber;
+  }
+
+  public String getParticipatedEventName() {
+    return participatedEventName;
+  }
+
+  public void setParticipatedEventName(String participatedEventName) {
+    this.participatedEventName = participatedEventName;
   }
 
   public boolean isReturnParents() {

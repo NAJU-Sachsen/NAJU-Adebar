@@ -17,6 +17,7 @@ import de.naju.adebar.app.human.filter.predicate.AddressFilter;
 import de.naju.adebar.app.human.filter.predicate.DateOfBirthFilter;
 import de.naju.adebar.app.human.filter.predicate.EatingHabitFilter;
 import de.naju.adebar.app.human.filter.predicate.EmailFilter;
+import de.naju.adebar.app.human.filter.predicate.EventParticipationFilter;
 import de.naju.adebar.app.human.filter.predicate.GenderFilter;
 import de.naju.adebar.app.human.filter.predicate.HealthImpairmentsFilter;
 import de.naju.adebar.app.human.filter.predicate.NabuMembershipFilter;
@@ -281,6 +282,18 @@ public class FilterPersonFormFilterExtractor {
     }
   }
 
+  public boolean hasEventParticipationFilter(FilterPersonForm personForm) {
+    return personForm.getParticipatedEventName() != null
+        && !personForm.getParticipatedEventName().isEmpty();
+  }
+
+  public EventParticipationFilter extractEventParticipationFilter(FilterPersonForm personForm) {
+    if (!hasEventParticipationFilter(personForm)) {
+      throw new IllegalStateException("No event participation filter was specified: " + personForm);
+    }
+    return new EventParticipationFilter(personForm.getParticipatedEventName());
+  }
+
   /**
    * @param personForm the form to extract data from
    * @return all filters which are encoded by the form
@@ -307,6 +320,8 @@ public class FilterPersonFormFilterExtractor {
       filters.add(extractReferentFilter(personForm));
     if (hasNabuMembershipFilter(personForm))
       filters.add(extractNabuMembershipFilter(personForm));
+    if (hasEventParticipationFilter(personForm))
+      filters.add(extractEventParticipationFilter(personForm));
     return filters;
   }
 
