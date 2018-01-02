@@ -569,6 +569,44 @@
         </div>
     </div>
 
+    <!-- 'edit recipients' modal -->
+    <div id="edit-recipients-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="edit-recipients-label">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h3 class="modal-title" id="edit-recipients-label">Empfänger*innen anpassen</h3>
+          </div>
+          <div class="modal-body">
+            <form id="edit-recipients">
+              <div class="form-group">
+                <select class="selectpicker toggle-recipient" title="Empfänger*in suchen" multiple="multiple" data-live-search="true" data-selected-text-format="static" data-actions-box="true" th:remove="all-but-first">
+                  <option value="hans.wurst@gmx.de" th:each="person : ${persons}" th:value="${person.email}" th:text="|${person.email} (${person.name})|">hans.wurst@gmx.de</option>
+                  <option value="berta.beate@web.de">berta.beate@web.de</option>
+                  <option value="heinzdieter@googlemail.com">heinzdieter@googlemail.com</option>
+                  <option value="franzi_freundlich@aol.com">franzi_freundlich@aol.com</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <select class="form-control recipient-list" required="required" multiple="multiple" data-toggle="tooltip" data-placement="bottom" data-title="Mit [Strg] an-/abwählen. Mit [Shift] einen Bereich auswählen." th:remove="all-but-first">
+                  <option value="hans.wurst@gmx.de" th:each="person : ${persons}" th:value="${person.email}" th:text="|${person.email} (${person.name})|">hans.wurst@gmx.de</option>
+                  <option class="recipient-email" value="berta.beate@web.de">berta.beate@web.de</option>
+                  <option class="recipient-email" value="heinzdieter@googlemail.com">heinzdieter@googlemail.com</option>
+                  <option class="recipient-email" value="franzi_freundlich@aol.com">franzi_freundlich@aol.com</option>
+                </select>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+            <a href="mailto:recipients@naju-sachsen.de?bcc=" class="btn btn-primary send-email">Senden</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
 </section>
 
 <!-- page specific content-->
@@ -601,6 +639,13 @@
                 </button>
 
                 <a href="mailto:" class="btn btn-default" th:if="${filtered}" th:href="'mailto:recipients@naju-sachsen.de?bcc=' + ${emails}"><span class="glyphicon glyphicon-envelope"></span> E-Mail</a>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <span class="caret"></span>
+                  <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a href="#" data-toggle="modal" data-target="#edit-recipients-modal">Empfänger*innen anpassen</a></li>
+                </ul>
             </div>
         </div>
     </header>

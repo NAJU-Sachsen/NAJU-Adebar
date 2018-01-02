@@ -194,6 +194,34 @@ $('#persons').on('change', function(obj) {
     $.ajax(request);
 });
 
+// sync select recipients
+
+function updateRecipients(recipients) {
+  let href = 'mailto:recipients@naju-sachsen.de?bcc=';
+
+  for (mail of recipients) {
+    href += mail + ';';
+  }
+
+  $('#edit-recipients-modal').find('a.send-email').attr('href', href);
+}
+
+$('select.toggle-recipient').on('changed.bs.select', function() {
+    $(this).selectpicker('toggle');
+    const recipients = $(this).val();
+    $('select.recipient-list').val(recipients);
+    updateRecipients(recipients);
+});
+
+
+$('select.recipient-list').on('change', function() {
+    const selectPicker = $('select.toggle-recipient');
+    const recipients = $('select.recipient-list').val();
+    selectPicker.val(recipients);
+    selectPicker.selectpicker('refresh');
+    updateRecipients(recipients);
+});
+
 $(function() {
     $('#content').find('.no-results').hide();
     $('#content').find('.searching').hide();
@@ -203,4 +231,5 @@ $(function() {
             keyboard: false
         });
     }
+
 });
