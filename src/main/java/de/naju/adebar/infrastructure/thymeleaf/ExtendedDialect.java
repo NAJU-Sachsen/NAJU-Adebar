@@ -31,6 +31,7 @@ public class ExtendedDialect extends AbstractDialect implements IExpressionEnhan
     expressions.put("money", new CurrencyFormatter());
     expressions.put("cstStrings", new StringsFormatter());
     expressions.put("iterables", new IterableUtility());
+    expressions.put("objects", new ObjectUtility());
     return expressions;
   }
 

@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import de.naju.adebar.app.news.ReleaseNotesPublishedEvent;
 import de.naju.adebar.model.human.Person;
 import de.naju.adebar.model.human.PersonDataUpdatedEvent;
 import de.naju.adebar.model.human.PersonId;
@@ -139,6 +140,26 @@ public class PersistentUserAccountManager implements UserAccountManager {
     find(event.getEntity()).ifPresent(account -> updateUserAccount(account, event.getEntity()));
   }
 
+  @Override
+  @EventListener
+  public void notifyAboutNewReleaseNotes(ReleaseNotesPublishedEvent event) {
+    Iterable<UserAccount> accounts = accountRepo.findAll();
+    accounts.forEach(UserAccount::notifyAboutNewReleaseNotes);
+    accountRepo.save(accounts);
+  }
+
+  @Override
+  public void readReleaseNotes(UserAccount account) {
+    account.readReleaseNotes();
+    accountRepo.save(account);
+  }
+
+  /**
+   * Sets the personal data of the user account
+   * 
+   * @param account the account to update
+   * @param person the person whose data should be used
+   */
   private void updateUserAccount(UserAccount account, Person person) {
     accountRepo.save( //
         account.updatePersonalInformation( //

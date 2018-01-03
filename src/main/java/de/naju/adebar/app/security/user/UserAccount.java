@@ -47,9 +47,17 @@ public class UserAccount extends AbstractAggregateRoot implements UserDetails {
   @AttributeOverrides(@AttributeOverride(name = "id", column = @Column(name = "associatedPerson")))
   private PersonId associatedPerson;
 
+  @Column(name = "firstName")
   private String firstName;
+
+  @Column(name = "lastName")
   private String lastName;
+
+  @Column(name = "email")
   private String email;
+
+  @Column(name = "readReleaseNotes")
+  private boolean readLatestReleaseNotes;
 
   @ElementCollection(fetch = FetchType.EAGER)
   @JoinTable(name = "userAuthorities", joinColumns = @JoinColumn(name = "userAccount"))
@@ -78,6 +86,7 @@ public class UserAccount extends AbstractAggregateRoot implements UserDetails {
     this.firstName = person.getFirstName();
     this.lastName = person.getLastName();
     this.email = person.getEmail();
+    this.readLatestReleaseNotes = false;
     this.authorities = authorities;
     this.enabled = enabled;
   }
@@ -107,6 +116,13 @@ public class UserAccount extends AbstractAggregateRoot implements UserDetails {
    */
   public String getLastName() {
     return lastName;
+  }
+
+  /**
+   * @return whether the user has already read the latest release notes
+   */
+  public boolean hasReadReleaseNotes() {
+    return readLatestReleaseNotes;
   }
 
   /**
@@ -202,9 +218,31 @@ public class UserAccount extends AbstractAggregateRoot implements UserDetails {
   }
 
   /**
+   * Marks that the user read the latest release notes
+   * 
+   * @return the updated account
+   */
+  UserAccount readReleaseNotes() {
+    setReadLatestReleaseNotes(true);
+    registerEvent(UserAccountUpdatedEvent.forAccount(this));
+    return this;
+  }
+
+  /**
+   * Notifies the user about the existence of new release notes
+   * 
+   * @return the updated account
+   */
+  UserAccount notifyAboutNewReleaseNotes() {
+    setReadLatestReleaseNotes(false);
+    registerEvent(UserAccountUpdatedEvent.forAccount(this));
+    return this;
+  }
+
+  /**
    * Sets the username. Just for JPA's sake
    *
-   * @param username
+   * @param username the username
    */
   @SuppressWarnings("unused")
   private void setUsername(String username) {
@@ -215,7 +253,7 @@ public class UserAccount extends AbstractAggregateRoot implements UserDetails {
   /**
    * Sets the associated person. Just for JPA's sake
    * 
-   * @param associatedPerson
+   * @param associatedPerson the associated person
    */
   @SuppressWarnings("unused")
   private void setAssociatedPerson(PersonId associatedPerson) {
@@ -281,6 +319,25 @@ public class UserAccount extends AbstractAggregateRoot implements UserDetails {
   }
 
   /**
+   * Just for JPA
+   * 
+   * @return whether the user has read the latest release notes
+   */
+  @SuppressWarnings("unused")
+  private boolean isReadLatestReleaseNotes() {
+    return readLatestReleaseNotes;
+  }
+
+  /**
+   * Just for JPA
+   * 
+   * @param readLatestReleaseNotes whether the user has read the latest release notes
+   */
+  private void setReadLatestReleaseNotes(boolean readLatestReleaseNotes) {
+    this.readLatestReleaseNotes = readLatestReleaseNotes;
+  }
+
+  /**
    * @param enabled whether the account is enabled
    */
   @SuppressWarnings("unused")
@@ -288,6 +345,11 @@ public class UserAccount extends AbstractAggregateRoot implements UserDetails {
     this.enabled = enabled;
   }
 
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.lang.Object#hashCode()
+   */
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -296,6 +358,11 @@ public class UserAccount extends AbstractAggregateRoot implements UserDetails {
     return result;
   }
 
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
   @Override
   public boolean equals(Object obj) {
     if (this == obj)
@@ -309,11 +376,6 @@ public class UserAccount extends AbstractAggregateRoot implements UserDetails {
       if (other.username != null)
         return false;
     } else if (!username.equals(other.username))
-      return false;
-    if (password == null) {
-      if (other.password != null)
-        return false;
-    } else if (!password.equals(other.password))
       return false;
     return true;
   }

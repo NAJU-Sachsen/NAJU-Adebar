@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import de.naju.adebar.app.news.ReleaseNotesPublishedEvent;
 import de.naju.adebar.model.human.Person;
 import de.naju.adebar.model.human.PersonDataUpdatedEvent;
 import de.naju.adebar.model.human.PersonId;
@@ -135,5 +136,19 @@ public interface UserAccountManager {
    * @param event the update event for a person. The person may or may not have an user account.
    */
   void updateUserAccountIfNecessary(PersonDataUpdatedEvent event);
+
+  /**
+   * Marks all user accounts to have not read the latest release notes
+   * 
+   * @param event the event for the new release notes
+   */
+  void notifyAboutNewReleaseNotes(ReleaseNotesPublishedEvent event);
+
+  /**
+   * Marks an user account to have read the latest release notes
+   * 
+   * @param account the user account
+   */
+  void readReleaseNotes(UserAccount account);
 
 }

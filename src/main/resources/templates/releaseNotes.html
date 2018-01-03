@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta content="width=device-width,initial-scale=1" name="viewport" />
-  <title>Einstellungen | Adebar</title>
+  <title>Accounts | Adebar</title>
   <script type="text/javascript" src="../static/resources/js/jquery.min.js" th:src="@{/webjars/jquery/jquery.min.js}"></script>
   <script type="text/javascript" src="../static/resources/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
   <link rel="stylesheet" type="text/css" href="../static/resources/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
@@ -58,11 +58,12 @@
             <a href="newsletters.html" th:href="@{/newsletters}"><span class="glyphicon glyphicon-envelope nav-icon" aria-hidden="true"></span> Newsletter</a>
           </li>
           <li role="presentation">
-            <a href="https://trello.com/b/ukBMWp4T/naju-adebar" target="_blank"><span class="glyphicon glyphicon-blackboard" aria-hidden="true"></span> Trello</a>
+            <a href="https://trello.com/b/ukBMWp4T/naju-adebar" target="_blank"><span class="glyphicon glyphicon-blackboard" aria-hidden="true"></span>
+              Trello</a>
           </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li class="dropdown">
+          <li class="dropdown active">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Verschiedenes <span class="caret"></span></a>
             <ul class="dropdown-menu">
               <li sec:authorize="hasRole('ROLE_ADMIN')">
@@ -70,7 +71,7 @@
                   <span class="glyphicon glyphicon-dashboard"></span> Accounts
                 </a>
               </li>
-              <li sec:authorize="hasRole('ROLE_ADMIN')">
+              <li class="active" sec:authorize="hasRole('ROLE_ADMIN')">
                 <a href="releaseNotes.html" th:href="@{/release-notes}">
                   <span class="glyphicon glyphicon-tags"></span> Release Notes
                 </a>
@@ -80,13 +81,13 @@
               <li><a href="https://github.com/portux/NAJU-Adebar/issues"><span class="glyphicon glyphicon-fire"></span> Aktuelle Probleme</a></li>
             </ul>
           </li>
-          <li class="dropdown active">
+          <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
               <span class="glyphicon glyphicon-user"></span> <span sec:authentication="principal.firstName">Anon</span>
               <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
-              <li class="active">
+              <li>
                 <a href="settings.html" th:href="@{/settings}">
                   <span class="glyphicon glyphicon-cog"></span> Einstellungen
                 </a>
@@ -107,6 +108,38 @@
   <section id="dialogs">
     <h2 class="hidden">Formulare</h2>
 
+    <div id="create-notes-modal" class="modal fade" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h3 class="modal-title">Neue Release Notes</h3>
+          </div>
+          <div class="modal-body">
+            <form id="add-release-notes" class="" method="post" th:action="@{/release-notes}" th:object="${newNotes}">
+              <div class="form-group">
+                <label class="control-label" for="rl-title">Title</label>
+                  <div class="input-group">
+                    <input type="text" id="rl-title" class="form-control" placeholder="Toller Release-Name?" th:field="*{title}" />
+                    <span class="input-group-addon">(optional)</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label" for="rl-description">Beschreibung</label>
+                <textarea id="rl-description" class="form-control" required="required" maxlength="1023" placeholder="Was gibt's neues?" th:field="*{description}"></textarea>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+            <button type="submit" class="btn btn-primary" form="add-release-notes">Erstellen</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </section>
 
   <!-- page specific content-->
@@ -119,112 +152,61 @@
     </section>
 
     <!-- the 'real' content finally -->
-    <section id="content" class="tab-content">
+    <section id="content">
 
-      <div class="col-md-2 col-md-offset-2">
-        <div class="panel panel-default">
+      <h1>Release Notes</h1>
+
+      <div class="clearfix" style="margin-right: 90px; margin-bottom:45px;">
+        <div class="pull-right">
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create-notes-modal">
+            <span class="glyphicon glyphicon-plus"></span> Hinzufügen
+          </button>
+        </div>
+      </div>
+
+      <div class="container" th:if="${currentNotes}">
+        <article class="panel panel-default">
           <div class="panel-heading">
-            <h1 class="panel-title">Einstellungen</h1>
+            <h3 class="panel-title" th:text="|Aktuelles Release: ${currentNotes.title}|">Aktuelles Release: Atemberaubende Adebar</h3>
           </div>
-          <ul class="nav nav-pills nav-stacked" role="tablist">
-            <li role="presentation" class="active">
-              <a href="#settings-general" class="border-cornered" role="tab" aria-controls="settings-general" data-toggle="pill">Allgemein</a>
-            </li>
-            <li role="presentation">
-              <a href="#settings-account" class="border-cornered" role="tab" aria-controls="settings-accont" data-toggle="pill">Account</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="col-md-6 tab-content">
-        <div role="tabpanel" class="tab-pane fade in active" id="settings-general">
-          <div class="container-fluid">
-            <div class="row">
-              <h2 class="page-header">Aussehen</h2>
-            </div>
-            <div class="row">
-              <div class="form-group">
-                <div class="container-fluid">
-                  <div class="row">
-                    <div class="col-md-4">
-                      <div class="panel panel-default">
-                        <div class="panel-heading">
-                          <h3 class="panel-title">Klassisch</h3>
-                        </div>
-                        <div class="panel-body no-padding">
-                          <div class="thumbnail no-margin-btm no-padding border-cornered">
-                            <img src="../static/resources/img/design_classic.png" th:src="@{/resources/img/design_classic.png}" />
-                          </div>
-                        </div>
-                        <div class="panel-footer text-center">
-                          <button type="button" class="btn btn-default" disabled="disabled">Wählen</button>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="panel panel-default">
-                        <div class="panel-heading">
-                          <h3 class="panel-title">NAJU</h3>
-                        </div>
-                        <div class="panel-body no-padding">
-                          <div class="thumbnail no-margin-btm no-padding border-cornered">
-                            <img src="../static/resources/img/design_naju.png" th:src="@{/resources/img/design_naju.png}" />
-                          </div>
-                        </div>
-                        <div class="panel-footer text-center">
-                          <button type="button" class="btn btn-default" disabled="disabled">Wählen</button>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="alert alert-warning">
-                        Wird bald unterstützt.
-                      </div>
-                    </div>
-                  </div>
-                </div>
+          <div class="panel-body">
+            <div class="container-fluid">
+              <div class="col-sm-9">
+                <pre th:text="${currentNotes.description}">
+Alles neu und toll
+                </pre>
+                <p th:inline="text">Veröffentlicht: [[${{currentNotes.date}}]]</p>
               </div>
-            </div>
-            <div class="row">
-              <hr />
-              <div class="pull-right">
-                <button type="button" class="btn btn-success">Speichern</button>
+              <div class="col-sm-3">
+                <form method="post" th:action="@{/release-notes/outdated}">
+                  <button type="submit" class="btn btn-danger">Als veraltet markieren</button>
+                </form>
               </div>
             </div>
           </div>
-        </div>
-        <div role="tabpanel" class="tab-pane fade" id="settings-account">
-          <h2 class="page-header">Passwort ändern</h2>
-          <form method="POST" th:action="@{/settings/password/update}">
-            <div class="col-md-8 change-password">
-              <div class="form-group old-password">
-                <label>Altes Passwort</label>
-                <input type="password" name="current-password" class="form-control dark" required="required" />
-              </div>
-              <div class="form-group new-password">
-                <label>Neues Passwort</label>
-                <input type="password" name="new-password" class="form-control dark" required="required" />
-              </div>
-              <div class="form-group confirm-password">
-                <label>Passwort bestätigen</label>
-                <input type="password" class="form-control dark" required="required" />
-              </div>
-              <p class="alert alert-warning weak-password">
-                Schwaches Passwort
-              </p>
-              <p class="alert alert-danger passwords-differ">
-                Passwörter stimmen nicht überein
-              </p>
-              <hr />
-              <div class="pull-right">
-                <button type="submit" class="btn btn-success">Aktualisieren</button>
-              </div>
-            </div>
-          </form>
+        </article>
+      </div>
+
+      <div class="container text-center" th:unless="${currentNotes}">
+        <div class="alert alert-info">
+          Aktuell gibt es keine Release Notes.
         </div>
       </div>
 
+      <div class="container" th:unless="${#iterables.isEmpty(outdatedNotes)}">
+        <h3>Alte Release Notes</h3>
+        <div class="list-group" th:remove="all-but-first">
+          <article class="list-group-item" th:each="notes : ${outdatedNotes}">
+            <h4 class="list-group-item-heading" th:inline="text">
+              Release Notes [[${notes.title} ?: '"${notes.title}"']]
+              <small>(veröffentlicht am [[${{notes.date}}]])</small>
+            </h4>
+              <pre class="list-group-item-text" style="margin-top: 15px;" th:text="${notes.description}">
+* Bug XYZ gefixed
+* dabei 42 neue Bugs geschaffen</pre>
+          </article>
+        </div>
+      </div>
 
     </section>
 
@@ -235,8 +217,7 @@
   </main>
   <input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
   <script src="../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
-  <script src="../static/resources/js/passwords.js" th:src="@{/resources/js/passwords.js}"></script>
-  <script src="../static/resources/js/settings.js" th:src="@{/resources/js/settings.js}"></script>
+  <script src="../static/resources/js/accounts.js" th:src="@{/resources/js/accounts.js}"></script>
 </body>
 
 </html>

@@ -71,6 +71,11 @@
                       <span class="glyphicon glyphicon-dashboard"></span> Accounts
                     </a>
                   </li>
+                  <li sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a href="releaseNotes.html" th:href="@{/release-notes}">
+                      <span class="glyphicon glyphicon-tags"></span> Release Notes
+                    </a>
+                  </li>
                   <li class="disabled"><a href="#"><span class="glyphicon glyphicon-leaf"></span> Über</a></li>
                   <li class="disabled"><a href="#"><span class="glyphicon glyphicon-globe"></span> Hilfe</a></li>
                   <li><a href="https://github.com/portux/NAJU-Adebar/issues"><span class="glyphicon glyphicon-fire"></span> Aktuelle Probleme</a></li>
@@ -1343,118 +1348,119 @@
                     </header>
 
                     <!-- participants -->
-                    <table id="participants" class="table table-striped table-hover tablesorter">
-                        <thead>
-                            <tr>
-                                <th>Name <span class="icon"></span></th>
-                                <th>Geburtsdatum <span class="icon"></span></th>
-                                <th>Ernährung <span class="icon"></span></th>
-                                <th>Allergien o.ä. <span class="icon"></span></th>
-                                <th>Wohnort <span class="icon"></span></th>
-                                <th>TNB bezahlt? <span class="icon"></span></th>
-                                <th>Formular erhalten? <span class="icon"></span></th>
-                                <th>Bemerkungen <span class="icon"></span></th>
-                            </tr>
-                        </thead>
-                        <tbody th:remove="all-but-first">
-                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="0" data-fee-payed="true" data-form-received="false" data-remarks="Teilnahme nur bis Donnerstag" th:each="participant : ${event.participants}" th:attr="'data-id'=${participant.id}, 'data-fee-payed'=${event.getParticipationInfo(participant).isParticipationFeePayed()}, 'data-form-received'=${event.getParticipationInfo(participant).isRegistrationFormFilled()},
-                            'data-remarks'=${event.getParticipationInfo(participant).getRemarks()}">
-                                <td><a href="mailto:" data-toggle="" data-target="" th:href="@{/persons/{id}(id=${participant.id})}" th:text="${participant.name}">Max-Hannes Mustermann</a></td>
-                                <td th:text="${{participant.participantProfile.dateOfBirth}}">31.02.1999</td>
-                                <td th:text="${participant.participantProfile.eatingHabits}">Veganer</td>
-                                <td th:text="${participant.participantProfile.healthImpairments}">Heuschnupfen</td>
-                                <td th:text="${participant.address.city}">Freital</td>
-                                <td class="text-center">
-                                    <span th:if="${event.getParticipationInfo(participant).isParticipationFeePayed()}"><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span>
-                                    <span th:unless="${event.getParticipationInfo(participant).isParticipationFeePayed()}"><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span>
-                                </td>
-                                <td class="text-center">
-                                    <span th:if="${event.getParticipationInfo(participant).isRegistrationFormFilled()}"><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span>
-                                    <span th:unless="${event.getParticipationInfo(participant).isRegistrationFormFilled()}"><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span>
-                                </td>
-                                <td th:text="${event.getParticipationInfo(participant).getRemarks()}">
-                                    Teilnahme nur bis Donnerstag
-                                </td>
-                            </tr>
-                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="1" data-fee-payed="true" data-form-received="false" data-remarks="Teilnahme nur bis Donnerstag, Anreise gemeinsam mit dem Zug von Dresden">
-                                <td><a href="mailto:">Max-Hannes Mustermann</a></td>
-                                <td>31.02.1999</td>
-                                <td>Veganer</td>
-                                <td>Heuschnupfen</td>
-                                <td>Freital</td>
-                                <td class="text-center"><span><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span></td>
-                                <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
-                                <td>
-                                    Teilnahme nur bis Donnerstag, Anreise gemeinsam mit dem Zug von Dresden
-                                </td>
-                            </tr>
-                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="2" data-fee-payed="false" data-form-received="false" data-remarks="Anreise gemeinsam mit dem Zug von Dresden">
-                                <td><a href="mailto:">Max-Hannes Mustermann</a></td>
-                                <td>31.02.1999</td>
-                                <td>Veganer</td>
-                                <td>Heuschnupfen</td>
-                                <td>Freital</td>
-                                <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
-                                <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
-                                <td>
-                                    Anreise gemeinsam mit dem Zug von Dresden
-                                </td>
-                            </tr>
-                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="3" data-fee-payed="true" data-form-received="false">
-                                <td><a href="mailto:">Max-Hannes Mustermann</a></td>
-                                <td>31.02.1999</td>
-                                <td>Veganer</td>
-                                <td>Heuschnupfen</td>
-                                <td>Freital</td>
-                                <td class="text-center"><span><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span></td>
-                                <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
-                                <td></td>
-                            </tr>
-                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="4" data-fee-payed="false" data-form-received="false" data-remarks="Anreise gemeinsam mit dem Zug von Chemnitz">
-                                <td><a href="mailto:">Max-Hannes Mustermann</a></td>
-                                <td>31.02.1999</td>
-                                <td>Veganer</td>
-                                <td>Heuschnupfen</td>
-                                <td>Freital</td>
-                                <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
-                                <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
-                                <td>
-                                    Anreise gemeinsam mit dem Zug von Chemnitz
-                                </td>
-                            </tr>
-                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="5" data-fee-payed="false" data-form-received="true">
-                                <td><a href="mailto:">Max-Hannes Mustermann</a></td>
-                                <td>31.02.1999</td>
-                                <td>Veganer</td>
-                                <td>Heuschnupfen</td>
-                                <td>Freital</td>
-                                <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
-                                <td class="text-center"><span><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span></td>
-                                <td></td>
-                            </tr>
-                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="6" data-fee-payed="true" data-form-received="true">
-                                <td><a href="mailto:">Max-Hannes Mustermann</a></td>
-                                <td>31.02.1999</td>
-                                <td>Veganer</td>
-                                <td>Heuschnupfen</td>
-                                <td>Freital</td>
-                                <td class="text-center"><span><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span></td>
-                                <td class="text-center"><span><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span></td>
-                                <td></td>
-                            </tr>
-                            <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="7" data-fee-payed="true" data-form-received="false">
-                                <td><a href="mailto:">Max-Hannes Mustermann</a></td>
-                                <td>31.02.1999</td>
-                                <td>Veganer</td>
-                                <td>Heuschnupfen</td>
-                                <td>Freital</td>
-                                <td class="text-center"><span><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span></td>
-                                <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
-                                <td></td>
-                            </tr>
-                        </tbody>
-                    </table>
-
+                    <div class="table-responsive">
+                      <table id="participants" class="table table-striped table-hover tablesorter">
+                          <thead>
+                              <tr>
+                                  <th>Name <span class="icon"></span></th>
+                                  <th>Geburtsdatum <span class="icon"></span></th>
+                                  <th>Ernährung <span class="icon"></span></th>
+                                  <th>Allergien o.ä. <span class="icon"></span></th>
+                                  <th>Wohnort <span class="icon"></span></th>
+                                  <th>TNB bezahlt? <span class="icon"></span></th>
+                                  <th>Formular erhalten? <span class="icon"></span></th>
+                                  <th>Bemerkungen <span class="icon"></span></th>
+                              </tr>
+                          </thead>
+                          <tbody th:remove="all-but-first">
+                              <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="0" data-fee-payed="true" data-form-received="false" data-remarks="Teilnahme nur bis Donnerstag" th:each="participant : ${event.participants}" th:attr="'data-id'=${participant.id}, 'data-fee-payed'=${event.getParticipationInfo(participant).isParticipationFeePayed()}, 'data-form-received'=${event.getParticipationInfo(participant).isRegistrationFormFilled()},
+                              'data-remarks'=${event.getParticipationInfo(participant).getRemarks()}">
+                                  <td><a href="mailto:" data-toggle="" data-target="" th:href="@{/persons/{id}(id=${participant.id})}" th:text="${participant.name}">Max-Hannes Mustermann</a></td>
+                                  <td th:text="${{participant.participantProfile.dateOfBirth}}">31.02.1999</td>
+                                  <td th:text="${participant.participantProfile.eatingHabits}">Veganer</td>
+                                  <td th:text="${participant.participantProfile.healthImpairments}">Heuschnupfen</td>
+                                  <td th:text="${participant.address.city}">Freital</td>
+                                  <td class="text-center">
+                                      <span th:if="${event.getParticipationInfo(participant).isParticipationFeePayed()}"><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                      <span th:unless="${event.getParticipationInfo(participant).isParticipationFeePayed()}"><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span>
+                                  </td>
+                                  <td class="text-center">
+                                      <span th:if="${event.getParticipationInfo(participant).isRegistrationFormFilled()}"><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span>
+                                      <span th:unless="${event.getParticipationInfo(participant).isRegistrationFormFilled()}"><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span>
+                                  </td>
+                                  <td th:text="${event.getParticipationInfo(participant).getRemarks()}">
+                                      Teilnahme nur bis Donnerstag
+                                  </td>
+                              </tr>
+                              <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="1" data-fee-payed="true" data-form-received="false" data-remarks="Teilnahme nur bis Donnerstag, Anreise gemeinsam mit dem Zug von Dresden">
+                                  <td><a href="mailto:">Max-Hannes Mustermann</a></td>
+                                  <td>31.02.1999</td>
+                                  <td>Veganer</td>
+                                  <td>Heuschnupfen</td>
+                                  <td>Freital</td>
+                                  <td class="text-center"><span><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span></td>
+                                  <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
+                                  <td>
+                                      Teilnahme nur bis Donnerstag, Anreise gemeinsam mit dem Zug von Dresden
+                                  </td>
+                              </tr>
+                              <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="2" data-fee-payed="false" data-form-received="false" data-remarks="Anreise gemeinsam mit dem Zug von Dresden">
+                                  <td><a href="mailto:">Max-Hannes Mustermann</a></td>
+                                  <td>31.02.1999</td>
+                                  <td>Veganer</td>
+                                  <td>Heuschnupfen</td>
+                                  <td>Freital</td>
+                                  <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
+                                  <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
+                                  <td>
+                                      Anreise gemeinsam mit dem Zug von Dresden
+                                  </td>
+                              </tr>
+                              <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="3" data-fee-payed="true" data-form-received="false">
+                                  <td><a href="mailto:">Max-Hannes Mustermann</a></td>
+                                  <td>31.02.1999</td>
+                                  <td>Veganer</td>
+                                  <td>Heuschnupfen</td>
+                                  <td>Freital</td>
+                                  <td class="text-center"><span><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span></td>
+                                  <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
+                                  <td></td>
+                              </tr>
+                              <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="4" data-fee-payed="false" data-form-received="false" data-remarks="Anreise gemeinsam mit dem Zug von Chemnitz">
+                                  <td><a href="mailto:">Max-Hannes Mustermann</a></td>
+                                  <td>31.02.1999</td>
+                                  <td>Veganer</td>
+                                  <td>Heuschnupfen</td>
+                                  <td>Freital</td>
+                                  <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
+                                  <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
+                                  <td>
+                                      Anreise gemeinsam mit dem Zug von Chemnitz
+                                  </td>
+                              </tr>
+                              <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="5" data-fee-payed="false" data-form-received="true">
+                                  <td><a href="mailto:">Max-Hannes Mustermann</a></td>
+                                  <td>31.02.1999</td>
+                                  <td>Veganer</td>
+                                  <td>Heuschnupfen</td>
+                                  <td>Freital</td>
+                                  <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
+                                  <td class="text-center"><span><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span></td>
+                                  <td></td>
+                              </tr>
+                              <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="6" data-fee-payed="true" data-form-received="true">
+                                  <td><a href="mailto:">Max-Hannes Mustermann</a></td>
+                                  <td>31.02.1999</td>
+                                  <td>Veganer</td>
+                                  <td>Heuschnupfen</td>
+                                  <td>Freital</td>
+                                  <td class="text-center"><span><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span></td>
+                                  <td class="text-center"><span><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span></td>
+                                  <td></td>
+                              </tr>
+                              <tr data-toggle="modal" data-target="#edit-participant-modal" data-id="7" data-fee-payed="true" data-form-received="false">
+                                  <td><a href="mailto:">Max-Hannes Mustermann</a></td>
+                                  <td>31.02.1999</td>
+                                  <td>Veganer</td>
+                                  <td>Heuschnupfen</td>
+                                  <td>Freital</td>
+                                  <td class="text-center"><span><span class="hidden">ja</span><span class="glyphicon glyphicon-ok text-success"></span></span></td>
+                                  <td class="text-center"><span><span class="hidden">nein</span><span class="glyphicon glyphicon-remove text-danger"></span></span></td>
+                                  <td></td>
+                              </tr>
+                          </tbody>
+                      </table>
+                    </div>
                     <hr />
 
                     <!-- reservations, waiting list and persons to contact -->

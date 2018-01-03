@@ -77,3 +77,27 @@ $('#add-event-belonging-localGroup').on('change', function() {
 $('#add-event-belonging-project').on('change', function() {
     updateAddEventBelonging();
 });
+
+$('#release-notes-modal').find('.confirm').click(function() {
+  const csrfToken = $('#csrf').val();
+  const person = $('#principal').text();
+
+	const confirmationPayload = {
+    async: true,
+    data: {
+      user: person,
+      _csrf: csrfToken
+    },
+    dataType: 'json',
+    method: 'post',
+    url: '/release-notes/read'
+	};
+
+	$.ajax(confirmationPayload);
+});
+
+$(function() {
+  if ($('#release-notes-modal')) {
+      $('#release-notes-modal').modal();
+  }
+})

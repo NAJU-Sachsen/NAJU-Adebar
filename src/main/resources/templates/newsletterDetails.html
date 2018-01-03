@@ -59,6 +59,11 @@
                       <span class="glyphicon glyphicon-dashboard"></span> Accounts
                     </a>
                   </li>
+                  <li sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a href="releaseNotes.html" th:href="@{/release-notes}">
+                      <span class="glyphicon glyphicon-tags"></span> Release Notes
+                    </a>
+                  </li>
                   <li class="disabled"><a href="#"><span class="glyphicon glyphicon-leaf"></span> Über</a></li>
                   <li class="disabled"><a href="#"><span class="glyphicon glyphicon-globe"></span> Hilfe</a></li>
                   <li><a href="https://github.com/portux/NAJU-Adebar/issues"><span class="glyphicon glyphicon-fire"></span> Aktuelle Probleme</a></li>

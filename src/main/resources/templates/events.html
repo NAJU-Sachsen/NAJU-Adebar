@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width,initial-scale=1" name="viewport"/>
@@ -68,6 +68,11 @@
                   <li sec:authorize="hasRole('ROLE_ADMIN')">
                     <a href="accounts.html" th:href="@{/accounts}">
                       <span class="glyphicon glyphicon-dashboard"></span> Accounts
+                    </a>
+                  </li>
+                  <li sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a href="releaseNotes.html" th:href="@{/release-notes}">
+                      <span class="glyphicon glyphicon-tags"></span> Release Notes
                     </a>
                   </li>
                   <li class="disabled"><a href="#"><span class="glyphicon glyphicon-leaf"></span> Über</a></li>
@@ -362,6 +367,26 @@
       </div>
   </div>
 
+  <div class="modal fade" id="release-notes-modal" tabindex="-1" th:if="${releaseNotes}" sec:authorize="!getPrincipal().hasReadReleaseNotes()">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+          </button>
+          <h3 class="modal-title" th:inline="text">Neue Adebar-Version: [[${releaseNotes.title} ?: '"${releaseNotes.title}"']]</h3>
+        </div>
+        <div class="modal-body">
+          <pre th:text="${releaseNotes.description}"></pre>
+          <p th:inline="text">Veröffentlich: [[${{releaseNotes.date}}]]</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary confirm" data-dismiss="modal">Super!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </section>
 
 <!-- page specific content-->
@@ -420,7 +445,8 @@
 
             </section>
 
-            <section class="row" th:if="${ {#iterables.isEmpty(currentEvents)} and {#iterables.isEmpty(futureEvents)} }">
+            <!-- no events -->
+            <section class="row" th:if="${ {#iterables.isEmpty(currentEvents)} and {#iterables.isEmpty(futureEvents)} and not {#objects.isSpecified(pastEvents)} }">
               <div class="container text-center">
                 <div class="alert alert-info">
                   Hmm zur Zeit scheint nichts los zu sein...
@@ -429,7 +455,7 @@
             </section>
 
             <!-- current events -->
-            <section class="row" th:if="${normalDisplay and not {#iterables.isEmpty(currentEvents)}}">
+            <section class="row" th:if="${ {#objects.isSpecified(normalDisplay)} and not {#iterables.isEmpty(currentEvents)} }">
                 <h2>Laufende Veranstaltungen</h2>
                 <table id="current-events" class="table table-striped table-hover tablesorter">
                     <thead>
@@ -468,7 +494,7 @@
             </section>
 
             <!-- future events -->
-            <section class="row" th:if="${normalDisplay and not {#iterables.isEmpty(futureEvents)}}">
+            <section class="row" th:if="${ {#objects.isSpecified(normalDisplay)} and not {#iterables.isEmpty(futureEvents)} }">
                 <h2>Kommende Veranstaltungen</h2>
                 <table id="prospective-events" class="table table-striped table-hover tablesorter">
                     <thead>
@@ -669,6 +695,7 @@
 
 </main>
 <input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+<span class="hidden" id="principal" sec:authentication="principal.associatedPerson"></span>
 <script src="../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
 <script src="../static/resources/js/events.js" th:src="@{/resources/js/events.js}"></script>
 </body>

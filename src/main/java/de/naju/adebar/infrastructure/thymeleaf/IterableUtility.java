@@ -4,7 +4,7 @@ import java.util.StringJoiner;
 import com.google.common.collect.Iterables;
 
 /**
- * Provides usefull helpers for dealing with {@link Iterable} instances
+ * Provides useful helpers for dealing with {@link Iterable} instances
  * 
  * @author Rico Bergmann
  */
@@ -41,6 +41,9 @@ public class IterableUtility {
    * @return whether the iterable contains no elements
    */
   public boolean isEmpty(Iterable<?> it) {
+    if (it == null) {
+      return true;
+    }
     return Iterables.isEmpty(it);
   }
 
