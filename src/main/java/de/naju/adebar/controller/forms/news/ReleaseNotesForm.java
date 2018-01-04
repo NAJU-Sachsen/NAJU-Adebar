@@ -15,8 +15,6 @@ public class ReleaseNotesForm {
   @NotEmpty
   private String description;
 
-  public ReleaseNotesForm() {}
-
   public String getTitle() {
     return title;
   }
