@@ -25,83 +25,9 @@
 
 </head>
 <body>
-<!-- central navigation -->
-<nav id="top-nav" class="navbar navbar-static-top navbar-inverse">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-nav" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">NAJU Adebar</a>
-        </div>
 
-        <div id="main-nav" class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-                <li role="presentation">
-                    <a href="overview.html" th:href="@{/overview}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Übersicht</a>
-                </li>
-                <li role="presentation" class="active">
-                    <a href="#" th:href="@{/persons}"><span class="glyphicon glyphicon-user nav-icon" aria-hidden="true"></span> Personen <span class="sr-only">(akutell)</span></a>
-                </li>
-                <li role="presentation">
-                    <a href="events.html" th:href="@{/events}"><span class="glyphicon glyphicon-tent nav-icon" aria-hidden="true"></span> Veranstaltungen</a>
-                </li>
-                <li role="presentation">
-                    <a href="localGroups.html" th:href="@{/localGroups}"><span class="glyphicon glyphicon-map-marker nav-icon" aria-hidden="true"></span> Ortsgruppen</a>
-                </li>
-                <li role="presentation">
-                    <a href="newsletters.html" th:href="@{/newsletters}"><span class="glyphicon glyphicon-envelope nav-icon" aria-hidden="true"></span> Newsletter</a>
-                </li>
-                <li role="presentation">
-                    <a href="https://trello.com/b/ukBMWp4T/naju-adebar" target="_blank"><span class="glyphicon glyphicon-blackboard" aria-hidden="true"></span>
-                    Trello</a>
-                </li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Verschiedenes <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li sec:authorize="hasRole('ROLE_ADMIN')">
-                          <a href="accounts.html" th:href="@{/accounts}">
-                            <span class="glyphicon glyphicon-dashboard"></span> Accounts
-                          </a>
-                        </li>
-                        <li sec:authorize="hasRole('ROLE_ADMIN')">
-                          <a href="releaseNotes.html" th:href="@{/release-notes}">
-                            <span class="glyphicon glyphicon-tags"></span> Release Notes
-                          </a>
-                        </li>
-                        <li class="disabled"><a href="#"><span class="glyphicon glyphicon-leaf"></span> Über</a></li>
-                        <li class="disabled"><a href="#"><span class="glyphicon glyphicon-globe"></span> Hilfe</a></li>
-                        <li><a href="https://github.com/portux/NAJU-Adebar/issues"><span class="glyphicon glyphicon-fire"></span> Aktuelle Probleme</a></li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                    <span class="glyphicon glyphicon-user"></span> <span sec:authentication="principal.firstName">Anon</span>
-                    <span class="caret"></span>
-                  </a>
-                  <ul class="dropdown-menu">
-                    <li>
-                      <a href="settings.html" th:href="@{/settings}">
-                        <span class="glyphicon glyphicon-cog"></span> Einstellungen
-                      </a>
-                    </li>
-                    <li>
-                      <form method="POST" class="logout" th:action="@{/logout}">
-                        <input type="hidden" name="csrf" th:value="csrf" />
-                        <button type="submit" class="btn btn-link"><span class="glyphicon glyphicon-log-out"></span> Ausloggen</button>
-                      </form>
-                    </li>
-                  </ul>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<!-- central navigation -->
+<nav th:replace="navigation :: topNav(page='persons')"></nav>
 
 <!-- page specific dialogs -->
 <section id="dialogs">
