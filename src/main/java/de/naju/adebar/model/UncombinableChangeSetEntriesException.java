@@ -12,8 +12,8 @@ public class UncombinableChangeSetEntriesException extends RuntimeException {
 
   private static final long serialVersionUID = 57226328154376298L;
 
-  private final ChangeSetEntry first;
-  private final ChangeSetEntry second;
+  private final transient ChangeSetEntry first;
+  private final transient ChangeSetEntry second;
 
   /**
    * @param first the base entry

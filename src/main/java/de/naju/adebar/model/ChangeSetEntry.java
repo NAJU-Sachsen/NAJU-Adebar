@@ -1,6 +1,5 @@
 package de.naju.adebar.model;
 
-import java.io.Serializable;
 import org.springframework.util.Assert;
 
 /**
@@ -9,9 +8,7 @@ import org.springframework.util.Assert;
  * @author Rico Bergmann
  * @see EntityUpdatedEvent
  */
-public class ChangeSetEntry implements Serializable {
-
-  private static final long serialVersionUID = -7300491336806085275L;
+public class ChangeSetEntry {
 
   private final String field;
   private final Object oldValue;
