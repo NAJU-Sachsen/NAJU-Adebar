@@ -39,7 +39,7 @@ public class ParticipantProfile extends AbstractProfile {
   @Embedded
   @AttributeOverrides({@AttributeOverride(name = "membershipNumber",
       column = @Column(name = "nabuMembershipNumber"))})
-  private NabuMembership nabuMembership;
+  private NabuMembershipInformation nabuMembership;
 
   @Column(name = "remarks", length = 512)
   private String remarks;
@@ -122,7 +122,7 @@ public class ParticipantProfile extends AbstractProfile {
    * @return information regarding the person's membership in the NABU. May be {@code null} if the
    *         person is not a NABU member.
    */
-  public NabuMembership getNabuMembership() {
+  public NabuMembershipInformation getNabuMembership() {
     return nabuMembership;
   }
 
@@ -158,7 +158,17 @@ public class ParticipantProfile extends AbstractProfile {
    */
   @Transient
   public boolean isNabuMember() {
-    return nabuMembership != null;
+    if (isNabuMembershipUnknown()) {
+      return false;
+    }
+    return nabuMembership.isNabuMember();
+  }
+
+  /**
+   * @return {@code true} if it is unknown, whether the person is a NABU member
+   */
+  public boolean isNabuMembershipUnknown() {
+    return nabuMembership == null;
   }
 
   /**
@@ -230,7 +240,7 @@ public class ParticipantProfile extends AbstractProfile {
    * @param nabuMembership the new information
    * @return the new profile
    */
-  public ParticipantProfile updateNabuMembership(NabuMembership nabuMembership) {
+  public ParticipantProfile updateNabuMembership(NabuMembershipInformation nabuMembership) {
     setNabuMembership(nabuMembership);
 
     getRelatedPerson().ifPresent( //
@@ -275,10 +285,9 @@ public class ParticipantProfile extends AbstractProfile {
 
   /**
    *
-   * @param nabuMembership information regarding the person's membership in the NABU. May be
-   *        {@code null} if the person is not a NABU member.
+   * @param nabuMembership information regarding the person's membership in the NABU.
    */
-  protected void setNabuMembership(NabuMembership nabuMembership) {
+  protected void setNabuMembership(NabuMembershipInformation nabuMembership) {
     this.nabuMembership = nabuMembership;
   }
 

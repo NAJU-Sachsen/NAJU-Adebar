@@ -262,7 +262,7 @@ public class PersonFactory {
      * @param nabuMembership the information
      * @return the builder to use for further calls
      */
-    public ParticipantBuilder specifyNabuMembership(NabuMembership nabuMembership) {
+    public ParticipantBuilder specifyNabuMembership(NabuMembershipInformation nabuMembership) {
       parentBuilder.currentBuild().getParticipantProfile().setNabuMembership(nabuMembership);
       return this;
     }

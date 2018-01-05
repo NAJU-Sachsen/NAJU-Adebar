@@ -17,7 +17,7 @@ import de.naju.adebar.model.chapter.ReadOnlyLocalGroupRepository;
 import de.naju.adebar.model.human.Address;
 import de.naju.adebar.model.human.Gender;
 import de.naju.adebar.model.human.JuleicaCard;
-import de.naju.adebar.model.human.NabuMembership;
+import de.naju.adebar.model.human.NabuMembershipInformation;
 import de.naju.adebar.model.human.Person;
 import de.naju.adebar.model.human.PersonFactory;
 import de.naju.adebar.model.human.PersonFactory.ActivistBuilder;
@@ -112,9 +112,21 @@ public class CreatePersonFormDataExtractor {
       builder.specifyDateOfBirth(LocalDate.parse(personForm.getDateOfBirth(), dateFormatter));
     }
 
-    if (personForm.isNabuMember()) {
-      builder.specifyNabuMembership(new NabuMembership(personForm.getNabuNumber()));
+    NabuMembershipInformation nabuMembershipInformation = null;
+    switch (personForm.getNabuMember()) {
+      case IS_MEMBER:
+        nabuMembershipInformation = new NabuMembershipInformation(personForm.getNabuNumber());
+        break;
+      case NO_MEMBER:
+        nabuMembershipInformation = new NabuMembershipInformation(false);
+        break;
+      case UNKNOWN:
+        nabuMembershipInformation = null;
+        break;
+      default:
+        throw new AssertionError(personForm.getNabuMember());
     }
+    builder.specifyNabuMembership(nabuMembershipInformation);
 
     builder.specifyEatingHabits(personForm.getEatingHabit());
     builder.specifyHealthImpairments(personForm.getHealthImpairments());

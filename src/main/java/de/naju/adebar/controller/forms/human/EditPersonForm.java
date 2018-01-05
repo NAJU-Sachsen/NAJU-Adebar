@@ -8,6 +8,10 @@ package de.naju.adebar.controller.forms.human;
  */
 public class EditPersonForm extends PersonForm {
 
+  public enum NabuMembershipStatus {
+    IS_MEMBER, NO_MEMBER, UNKNOWN
+  }
+
   public static final String DATE_FORMAT = "dd.MM.yyyy";
 
   // general data
@@ -20,7 +24,7 @@ public class EditPersonForm extends PersonForm {
   private String eatingHabit;
   private String healthImpairments;
   private String remarks;
-  private boolean nabuMember;
+  private NabuMembershipStatus nabuMember;
   private String nabuNumber;
 
   public String getPhoneNumber() {
@@ -79,11 +83,11 @@ public class EditPersonForm extends PersonForm {
     this.remarks = remarks;
   }
 
-  public boolean isNabuMember() {
+  public NabuMembershipStatus getNabuMember() {
     return nabuMember;
   }
 
-  public void setNabuMember(boolean nabuMember) {
+  public void setNabuMember(NabuMembershipStatus nabuMember) {
     this.nabuMember = nabuMember;
   }
 

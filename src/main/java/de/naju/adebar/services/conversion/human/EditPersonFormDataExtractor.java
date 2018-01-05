@@ -8,7 +8,7 @@ import de.naju.adebar.controller.forms.human.CreatePersonForm;
 import de.naju.adebar.controller.forms.human.EditPersonForm;
 import de.naju.adebar.model.human.Address;
 import de.naju.adebar.model.human.Gender;
-import de.naju.adebar.model.human.NabuMembership;
+import de.naju.adebar.model.human.NabuMembershipInformation;
 import de.naju.adebar.model.human.ParticipantProfile;
 import de.naju.adebar.model.human.Person;
 
@@ -67,13 +67,24 @@ public class EditPersonFormDataExtractor {
         ? LocalDate.parse(personForm.getDateOfBirth(), dateFormatter) //
         : null;
 
-    NabuMembership nabuMembership = personForm.isNabuMember() //
-        ? new NabuMembership(personForm.getNabuNumber()) //
-        : new NabuMembership();
+    NabuMembershipInformation nabuMembershipInformation = null;
+    switch (personForm.getNabuMember()) {
+      case IS_MEMBER:
+        nabuMembershipInformation = new NabuMembershipInformation(personForm.getNabuNumber());
+        break;
+      case NO_MEMBER:
+        nabuMembershipInformation = new NabuMembershipInformation(false);
+        break;
+      case UNKNOWN:
+        nabuMembershipInformation = null;
+        break;
+      default:
+        throw new AssertionError(personForm.getNabuMember());
+    }
 
     return profile
         .updateProfile(gender, dob, personForm.getEatingHabit(), personForm.getHealthImpairments())
-        .updateNabuMembership(nabuMembership).updateRemarks(personForm.getRemarks());
+        .updateNabuMembership(nabuMembershipInformation).updateRemarks(personForm.getRemarks());
   }
 
 }

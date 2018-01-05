@@ -137,13 +137,15 @@
                           </div>
                       </div>
                       <div class="form-group">
-                          <label for="add-person-nabu" class="col-sm-3 control-label">NABU</label>
+                          <label for="add-person-nabu" class="col-sm-3 control-label">NABU-Mitglied</label>
                           <div class="col-sm-9">
                               <div class="input-group" id="add-person-nabu">
-                                  <label class="input-group-addon">
-                                      <input type="checkbox" name="nabuMember" id="add-person-isNabuMember" th:field="*{nabuMember}" /> NABU-Mitglied
-                                  </label>
-                                  <input type="text" name="nabuNr" class="form-control" id="add-person-nabuNr" placeholder="Mitgliedsnr."  th:field="*{nabuNumber}" />
+                                  <select class="selectpicker form-control" name="nabuMember" id="add-person-isNabuMember" data-width="40%" th:field="*{{nabuMember}}">
+                                    <option value="UNKNOWN">Unbekannt</option>
+                                    <option value="IS_MEMBER">NABU-Mitglied</option>
+                                    <option value="NO_MEMBER">Kein Mitglied</option>
+                                  </select>
+                                  <input type="text" name="nabuNr" class="form-control" id="add-person-nabuNr" placeholder="Mitgliedsnr."  style="width: 60%;" th:field="*{nabuNumber}" />
                               </div>
                           </div>
                       </div>
@@ -542,8 +544,9 @@
                                 </tr>
                                 <tr class="row" th:if="${person.participant}">
                                     <th class="col-sm-4"><span class="glyphicon glyphicon-tree-deciduous"></span> NABU-Mitglied:</th>
-                                    <td class="col-sm-8" th:if="${person.getParticipantProfile().isNabuMember()}" th:text="|Mitgliedsnummer: ${person.participantProfile.nabuMembership.membershipNumber ?: 'unbekannt'}|">Mitgliedsnummer: 9874563</td>
-                                    <td class="col-sm-8" th:unless="${person.getParticipantProfile().isNabuMember()}">kein Mitglied</td>
+                                    <td class="col-sm-8" th:if="${person.getParticipantProfile().isNabuMember()}" th:text="|Mitgliedsnummer: ${person.getParticipantProfile().getNabuMembership().hasMembershipNumber() ? person.getParticipantProfile().getNabuMembership().getMembershipNumber() : 'unbekannt'}|">Mitgliedsnummer: 9874563</td>
+                                    <td class="col-sm-8" th:if="${person.participantProfile.nabuMembershipUnknown}">unbekannt</td>
+                                    <td class="col-sm-8" th:if="${!person.participantProfile.nabuMember and !person.participantProfile.nabuMembershipUnknown}">kein Mitglied</td>
                                 </tr>
                                 <tr class="row" th:if="${person.participant}">
                                     <th class="col-sm-4"><span class="glyphicon glyphicon-grain"></span> Bemerkungen:</th>

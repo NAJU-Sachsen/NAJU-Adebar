@@ -1,13 +1,13 @@
 package de.naju.adebar.services.conversion.human;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+import org.springframework.stereotype.Service;
 import de.naju.adebar.controller.forms.human.EditPersonForm;
 import de.naju.adebar.model.human.Address;
 import de.naju.adebar.model.human.ParticipantProfile;
 import de.naju.adebar.model.human.Person;
-import org.springframework.stereotype.Service;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 
 /**
  * Service to convert a {@link Person} to a corresponding {@link EditPersonForm}
@@ -50,8 +50,9 @@ public class PersonToEditPersonFormConverter {
 
   protected void fillParticipantData(EditPersonForm personForm, ParticipantProfile profile) {
     LocalDate d = profile.getDateOfBirth();
-    String dob = d != null
-        ? d.format(DateTimeFormatter.ofPattern(EditPersonForm.DATE_FORMAT, Locale.GERMAN)) : null;
+    String dob = d != null //
+        ? d.format(DateTimeFormatter.ofPattern(EditPersonForm.DATE_FORMAT, Locale.GERMAN)) //
+        : null;
 
     personForm.setParticipant(true);
     personForm.setGender(profile.getGender() != null ? profile.getGender().toString() : null);
@@ -61,8 +62,12 @@ public class PersonToEditPersonFormConverter {
     personForm.setRemarks(profile.getRemarks());
 
     if (profile.isNabuMember()) {
-      personForm.setNabuMember(true);
+      personForm.setNabuMember(EditPersonForm.NabuMembershipStatus.IS_MEMBER);
       personForm.setNabuNumber(profile.getNabuMembership().getMembershipNumber());
+    } else if (profile.isNabuMembershipUnknown()) {
+      personForm.setNabuMember(EditPersonForm.NabuMembershipStatus.UNKNOWN);
+    } else {
+      personForm.setNabuMember(EditPersonForm.NabuMembershipStatus.NO_MEMBER);
     }
   }
 

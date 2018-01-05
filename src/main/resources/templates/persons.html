@@ -210,10 +210,12 @@
                             <label for="add-person-nabu" class="col-sm-3 control-label">NABU</label>
                             <div class="col-sm-9">
                                 <div class="input-group" id="add-person-nabu">
-                                    <label class="input-group-addon">
-                                        <input type="checkbox" name="nabuMember" id="add-person-isNabuMember" th:field="*{nabuMember}" /> NABU-Mitglied
-                                    </label>
-                                    <input type="text" name="nabuNr" class="form-control" id="add-person-nabuNr" placeholder="Mitgliedsnr." disabled="disabled" th:field="*{nabuNumber}" />
+                                  <select class="selectpicker form-control" name="nabuMember" id="add-person-isNabuMember" data-width="40%" th:field="*{nabuMember}">
+                                    <option value="UNKNOWN">Unbekannt</option>
+                                    <option value="IS_MEMBER">NABU-Mitglied</option>
+                                    <option value="NO_MEMBER">Kein Mitglied</option>
+                                  </select>
+                                  <input type="text" name="nabuNr" class="form-control" id="add-person-nabuNr" placeholder="Mitgliedsnr."  disabled="disabled" style="width: 60%;" th:field="*{nabuNumber}" />
                                 </div>
                             </div>
                         </div>
@@ -434,6 +436,7 @@
         </div>
     </div>
 
+    <!-- 'matching persons' modal -->
     <div id="existing-persons-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="existing-persons-label" th:if="${existingPersons}">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -570,11 +573,11 @@
                 </button>
 
                 <a href="mailto:" class="btn btn-default" th:if="${filtered}" th:href="'mailto:recipients@naju-sachsen.de?bcc=' + ${emails}"><span class="glyphicon glyphicon-envelope"></span> E-Mail</a>
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:if="${filtered}">
                   <span class="caret"></span>
                   <span class="sr-only">Toggle Dropdown</span>
                 </button>
-                <ul class="dropdown-menu">
+                <ul class="dropdown-menu" th:if="${filtered}">
                   <li><a href="#" data-toggle="modal" data-target="#edit-recipients-modal">Empfänger*innen anpassen</a></li>
                 </ul>
             </div>

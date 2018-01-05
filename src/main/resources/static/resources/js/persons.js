@@ -50,8 +50,9 @@ $('#add-person-isReferent').click(function() {
 });
 
 // disable nabu membership number if checkbox is not selected
-$('#add-person-isNabuMember').click(function() {
-    $('#add-person-nabuNr').prop('disabled', function(i,v){return !v;});
+$('#add-person-isNabuMember').change(function() {
+    const disableMembershipNumber = $(this).find(':selected').val() !== 'IS_MEMBER';
+    $('#add-person-nabuNr').prop('disabled', disableMembershipNumber);
 });
 
 // show gender select only if gender should be filtered
