@@ -3,11 +3,9 @@ package de.naju.adebar.model.chapter;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import javax.persistence.AttributeOverride;
@@ -21,7 +19,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
@@ -70,10 +67,8 @@ public class LocalGroup {
       inverseJoinColumns = @JoinColumn(name = "eventId"))
   private List<Event> events;
 
-  @OneToMany(cascade = CascadeType.ALL)
-  @MapKey
-  @JoinTable(inverseJoinColumns = @JoinColumn(name = "projectId"))
-  private Map<String, Project> projects;
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "localGroup")
+  private List<Project> projects;
 
   @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private Board board;
@@ -102,7 +97,7 @@ public class LocalGroup {
     this.members = new LinkedList<>();
     this.contactPersons = new LinkedList<>();
     this.events = new LinkedList<>();
-    this.projects = new HashMap<>();
+    this.projects = new LinkedList<>();
     this.newsletters = new HashSet<>();
   }
 
@@ -183,8 +178,8 @@ public class LocalGroup {
   /**
    * @return the projects the local group organizes
    */
-  public Map<String, Project> getProjects() {
-    return Collections.unmodifiableMap(projects);
+  public List<Project> getProjects() {
+    return Collections.unmodifiableList(projects);
   }
 
   /**
@@ -243,7 +238,7 @@ public class LocalGroup {
   /**
    * @param projects the projects the local group organizes
    */
-  protected void setProjects(Map<String, Project> projects) {
+  protected void setProjects(List<Project> projects) {
     this.projects = projects;
   }
 
@@ -284,12 +279,7 @@ public class LocalGroup {
    */
   @Transient
   public Optional<Project> getProject(String name) {
-    for (String projectName : projects.keySet()) {
-      if (projectName.equals(name)) {
-        return Optional.of(projects.get(name));
-      }
-    }
-    return Optional.empty();
+    return projects.stream().filter(project -> project.getName().equals(name)).findAny();
   }
 
   /**
@@ -380,26 +370,16 @@ public class LocalGroup {
    */
   public void addProject(Project project) {
     Assert.notNull(project, "Project may not be null");
-    if (projects.containsKey(project.getName())) {
+    if (hasProjectWithName(project.getName())) {
       throw new IllegalArgumentException("Local group does already organize project " + project);
     } else if (!this.equals(project.getLocalGroup())) {
       throw new IllegalStateException("Project is already hosted by another local group");
     }
-    projects.put(project.getName(), project);
+    projects.add(project);
   }
 
-  /**
-   * @param project the project to update
-   * @throws IllegalArgumentException if the project is {@code null}
-   * @throws IllegalStateException if the project is already hosted by another chapter (according to
-   *         project.localGroup)
-   */
-  public void updateProject(Project project) {
-    Assert.notNull(project, "Project may not be null");
-    if (!this.equals(project.getLocalGroup())) {
-      throw new IllegalStateException("Project is already hosted by another local group");
-    }
-    projects.put(project.getName(), project);
+  public boolean hasProjectWithName(String name) {
+    return projects.stream().anyMatch(p -> p.getName().equals(name));
   }
 
   /**

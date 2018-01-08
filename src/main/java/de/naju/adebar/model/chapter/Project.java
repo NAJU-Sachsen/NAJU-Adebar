@@ -14,9 +14,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 import org.springframework.util.Assert;
 import de.naju.adebar.model.events.Event;
@@ -52,11 +52,11 @@ public class Project {
   @JoinColumn(name = "localGroup")
   private LocalGroup localGroup;
 
-  @OneToOne
+  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinColumn(name = "personInCharge")
   private Person personInCharge;
 
-  @OneToMany(cascade = CascadeType.ALL)
+  @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(inverseJoinColumns = @JoinColumn(name = "contributorId"))
   private List<Person> contributors;
 
@@ -118,8 +118,6 @@ public class Project {
     this.contributors = new LinkedList<>();
     this.events = new LinkedList<>();
   }
-
-  // basic setter and getter
 
   /**
    * @return the project's id (= primary key)
@@ -254,8 +252,6 @@ public class Project {
     this.contributors = contributors;
   }
 
-  // query methods
-
   /**
    * @return {@code true} if a start time was defined, {@code false} otherwise
    */
@@ -296,8 +292,6 @@ public class Project {
     }
     return Collections.min(events, Comparator.comparing(Event::getStartTime));
   }
-
-  // modification methods
 
   /**
    * @param person the activist to add
@@ -353,8 +347,6 @@ public class Project {
   public boolean hasEvent(Event event) {
     return events.contains(event);
   }
-
-  // overridden from Object
 
   @Override
   public boolean equals(Object o) {
