@@ -142,8 +142,7 @@ public class Person {
   /**
    * Default constructor for JPA's sake
    */
-  @SuppressWarnings("unused")
-  private Person() {}
+  Person() {}
 
   /**
    * @return the person's unique ID.
