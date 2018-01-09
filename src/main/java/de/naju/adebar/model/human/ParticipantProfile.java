@@ -52,6 +52,7 @@ public class ParticipantProfile extends AbstractProfile {
   ParticipantProfile(Person person) {
     Assert.notNull(person, "Id may not be null");
     this.personId = person.getId();
+    provideRelatedPerson(person);
   }
 
   /**
@@ -73,6 +74,7 @@ public class ParticipantProfile extends AbstractProfile {
     this.dateOfBirth = dateOfBirth;
     this.eatingHabits = eatingHabits;
     this.healthImpairments = healthImpairments;
+    provideRelatedPerson(person);
   }
 
   /**

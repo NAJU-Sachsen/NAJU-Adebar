@@ -38,7 +38,8 @@ public class ReferentProfile extends AbstractProfile {
   ReferentProfile(Person person) {
     Assert.notNull(person, "Id may not be null");
     this.personId = person.getId();
-    qualifications = new HashMap<>();
+    this.qualifications = new HashMap<>();
+    provideRelatedPerson(person);
   }
 
   /**
@@ -51,6 +52,7 @@ public class ReferentProfile extends AbstractProfile {
     Assert.notNull(person, "Id may not be null");
     this.personId = person.getId();
     this.qualifications = Maps.fromCollection(qualifications, Qualification::getName);
+    provideRelatedPerson(person);
   }
 
   /**

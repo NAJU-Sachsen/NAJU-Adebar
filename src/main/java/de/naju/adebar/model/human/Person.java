@@ -198,7 +198,6 @@ public class Person {
    *         return {@code null}.
    */
   public ParticipantProfile getParticipantProfile() {
-    participantProfile.provideRelatedPerson(this);
     return participantProfile;
   }
 
@@ -214,7 +213,6 @@ public class Person {
    *         return {@code null}.
    */
   public ActivistProfile getActivistProfile() {
-    activistProfile.provideRelatedPerson(this);
     return activistProfile;
   }
 
@@ -230,7 +228,6 @@ public class Person {
    *         return {@code null}.
    */
   public ReferentProfile getReferentProfile() {
-    referentProfile.provideRelatedPerson(this);
     return referentProfile;
   }
 
@@ -633,6 +630,7 @@ public class Person {
   protected void setParticipantProfile(ParticipantProfile participantProfile) {
     this.participant = participantProfile != null;
     this.participantProfile = participantProfile;
+    participantProfile.provideRelatedPerson(this);
   }
 
   /**
@@ -642,6 +640,7 @@ public class Person {
   protected void setActivistProfile(ActivistProfile activistProfile) {
     this.activist = activistProfile != null;
     this.activistProfile = activistProfile;
+    activistProfile.provideRelatedPerson(this);
   }
 
   /**
@@ -651,6 +650,7 @@ public class Person {
   protected void setReferentProfile(ReferentProfile referentProfile) {
     this.referent = referentProfile != null;
     this.referentProfile = referentProfile;
+    referentProfile.provideRelatedPerson(this);
   }
 
   /**
