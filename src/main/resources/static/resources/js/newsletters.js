@@ -23,14 +23,7 @@ function initEditSubscriberModal(modal, data) {
     }
 
     modal.find('#edit-email').val(data.subscriber.email);
-
-    for (var nid = 0; nid <  data.subscribedNewsletters.length; nid++) {
-        if (!data.hasOwnProperty('subscribedNewsletters')) {
-            var id = '#nid-' + data.subscribedNewsletters[nid];
-            modal.find(id).attr('selected', 'selected');
-        }
-    }
-
+    modal.find('#edit-subscribed').val(data.subscribedNewsletters);
 }
 
 function hideAllSelects() {
