@@ -23,9 +23,9 @@ import de.naju.adebar.controller.forms.human.EditActivistForm;
 import de.naju.adebar.controller.forms.human.EditPersonForm;
 import de.naju.adebar.controller.forms.human.FilterPersonForm;
 import de.naju.adebar.model.chapter.LocalGroup;
-import de.naju.adebar.model.human.ImpossibleKinshipRelationException;
-import de.naju.adebar.model.human.Person;
-import de.naju.adebar.model.human.Qualification;
+import de.naju.adebar.model.persons.ImpossibleKinshipRelationException;
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.Qualification;
 import de.naju.adebar.services.conversion.human.ActivistToEditActivistFormConverter;
 import de.naju.adebar.services.conversion.human.PersonToEditPersonFormConverter;
 
@@ -185,7 +185,7 @@ public class PersonController {
   /**
    * Detail view for persons
    *
-   * @param personId the id of the person to display
+   * @param person the person
    * @param model model to display the data in
    * @return the person's detail view
    */

@@ -5,9 +5,9 @@ import java.util.Optional;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import de.naju.adebar.app.news.ReleaseNotesPublishedEvent;
-import de.naju.adebar.model.human.Person;
-import de.naju.adebar.model.human.PersonDataUpdatedEvent;
-import de.naju.adebar.model.human.PersonId;
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.PersonDataUpdatedEvent;
+import de.naju.adebar.model.persons.PersonId;
 
 /**
  * Service to take care of the {@link UserAccountManager} lifecycle

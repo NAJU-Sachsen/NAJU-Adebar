@@ -13,9 +13,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import de.naju.adebar.app.news.ReleaseNotesPublishedEvent;
-import de.naju.adebar.model.human.Person;
-import de.naju.adebar.model.human.PersonDataUpdatedEvent;
-import de.naju.adebar.model.human.PersonId;
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.PersonDataUpdatedEvent;
+import de.naju.adebar.model.persons.PersonId;
 
 /**
  * A {@link UserAccountManager} that persists its data in a database

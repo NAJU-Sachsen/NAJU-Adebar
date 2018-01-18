@@ -1,7 +1,7 @@
 package de.naju.adebar.app.human.filter.predicate;
 
 import com.querydsl.core.BooleanBuilder;
-import de.naju.adebar.model.human.QPerson;
+import de.naju.adebar.model.persons.QPerson;
 
 public class HealthImpairmentsFilter implements PersonFilter {
 

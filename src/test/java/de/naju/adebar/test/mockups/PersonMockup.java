@@ -1,8 +1,8 @@
 package de.naju.adebar.test.mockups;
 
-import de.naju.adebar.model.human.Gender;
-import de.naju.adebar.model.human.Person;
-import de.naju.adebar.model.human.PersonFactory;
+import de.naju.adebar.model.persons.Gender;
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.PersonFactory;
 
 public class PersonMockup {
 

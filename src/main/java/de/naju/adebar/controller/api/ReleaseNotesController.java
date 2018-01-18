@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import de.naju.adebar.app.news.ReleaseNotes;
 import de.naju.adebar.app.security.user.UserAccount;
 import de.naju.adebar.app.security.user.UserAccountManager;
-import de.naju.adebar.model.human.PersonId;
+import de.naju.adebar.model.persons.PersonId;
 
 /**
  * REST-mappings for the {@link ReleaseNotes}

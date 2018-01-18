@@ -12,7 +12,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import org.springframework.util.Assert;
-import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.util.Validation;
 
 /**

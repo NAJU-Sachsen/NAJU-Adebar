@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.stream.Stream;
 import com.google.common.collect.Lists;
 import de.naju.adebar.app.filter.FilterType;
-import de.naju.adebar.model.human.Person;
-import de.naju.adebar.model.human.Qualification;
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.Qualification;
 
 /**
  * Filter for persons depending on their referent status. It features two constructors depending on
@@ -13,7 +13,7 @@ import de.naju.adebar.model.human.Qualification;
  * why actually no activists are needed here. For easy conversion there is a dedicated package
  * 
  * @author Rico Bergmann
- * @see de.naju.adebar.model.human.ReferentProfile
+ * @see de.naju.adebar.model.persons.ReferentProfile
  * @see de.naju.adebar.util.conversion conversion
  */
 public class ReferentFilter implements PersonFilter {

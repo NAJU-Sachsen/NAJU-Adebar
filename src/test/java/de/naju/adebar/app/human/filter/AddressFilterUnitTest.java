@@ -2,8 +2,8 @@ package de.naju.adebar.app.human.filter;
 
 import de.naju.adebar.app.filter.MatchType;
 import de.naju.adebar.app.human.filter.stream.AddressFilter;
-import de.naju.adebar.model.human.Address;
-import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.persons.Address;
+import de.naju.adebar.model.persons.Person;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

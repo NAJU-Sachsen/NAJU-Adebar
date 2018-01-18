@@ -3,8 +3,8 @@ package de.naju.adebar.api.data;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
-import de.naju.adebar.model.human.Address;
-import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.persons.Address;
+import de.naju.adebar.model.persons.Person;
 
 /**
  * JSON-object for persons in simplified form. In contrast to the normal {@link Person} these

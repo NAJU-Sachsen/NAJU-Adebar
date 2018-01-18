@@ -2,7 +2,7 @@ package de.naju.adebar.model.chapter;
 
 import de.naju.adebar.infrastructure.ReadOnlyRepository;
 import de.naju.adebar.model.events.Event;
-import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.newsletter.Newsletter;
 import org.springframework.stereotype.Repository;
 import java.util.Optional;

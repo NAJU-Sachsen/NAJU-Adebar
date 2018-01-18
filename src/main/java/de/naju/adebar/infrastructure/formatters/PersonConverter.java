@@ -2,9 +2,9 @@ package de.naju.adebar.infrastructure.formatters;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.util.Assert;
-import de.naju.adebar.model.human.Person;
-import de.naju.adebar.model.human.PersonId;
-import de.naju.adebar.model.human.ReadOnlyPersonRepository;
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.PersonId;
+import de.naju.adebar.model.persons.ReadOnlyPersonRepository;
 
 public class PersonConverter implements Converter<String, Person> {
 

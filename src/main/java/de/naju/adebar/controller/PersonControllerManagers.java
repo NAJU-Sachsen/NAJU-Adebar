@@ -3,8 +3,8 @@ package de.naju.adebar.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import de.naju.adebar.app.chapter.LocalGroupManager;
-import de.naju.adebar.model.human.PersonManager;
-import de.naju.adebar.model.human.QualificationManager;
+import de.naju.adebar.model.persons.PersonManager;
+import de.naju.adebar.model.persons.QualificationManager;
 
 /**
  * Managers for the {@link PersonController}

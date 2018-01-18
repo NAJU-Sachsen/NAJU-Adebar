@@ -6,11 +6,11 @@ import java.util.Locale;
 import org.springframework.stereotype.Service;
 import de.naju.adebar.controller.forms.human.CreatePersonForm;
 import de.naju.adebar.controller.forms.human.EditPersonForm;
-import de.naju.adebar.model.human.Address;
-import de.naju.adebar.model.human.Gender;
-import de.naju.adebar.model.human.NabuMembershipInformation;
-import de.naju.adebar.model.human.ParticipantProfile;
-import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.persons.Address;
+import de.naju.adebar.model.persons.Gender;
+import de.naju.adebar.model.persons.NabuMembershipInformation;
+import de.naju.adebar.model.persons.ParticipantProfile;
+import de.naju.adebar.model.persons.Person;
 
 /**
  * Service to extract the necessary data from an 'edit person' form

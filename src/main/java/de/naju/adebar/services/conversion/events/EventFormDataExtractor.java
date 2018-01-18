@@ -4,7 +4,7 @@ import de.naju.adebar.controller.forms.events.EventForm;
 import de.naju.adebar.controller.forms.events.EventForm.*;
 import de.naju.adebar.model.events.Event;
 import de.naju.adebar.model.events.EventFactory;
-import de.naju.adebar.model.human.Address;
+import de.naju.adebar.model.persons.Address;
 import org.javamoney.moneta.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

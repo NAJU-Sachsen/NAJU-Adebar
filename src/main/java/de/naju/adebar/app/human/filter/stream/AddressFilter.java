@@ -1,8 +1,8 @@
 package de.naju.adebar.app.human.filter.stream;
 
 import de.naju.adebar.app.filter.MatchType;
-import de.naju.adebar.model.human.Address;
-import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.persons.Address;
+import de.naju.adebar.model.persons.Person;
 import java.util.stream.Stream;
 
 /**

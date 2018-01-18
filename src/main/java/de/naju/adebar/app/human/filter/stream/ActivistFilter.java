@@ -2,7 +2,7 @@ package de.naju.adebar.app.human.filter.stream;
 
 import de.naju.adebar.app.filter.DateFilterType;
 import de.naju.adebar.app.filter.FilterType;
-import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.persons.Person;
 import java.time.LocalDate;
 import java.util.stream.Stream;
 
@@ -17,7 +17,7 @@ import java.util.stream.Stream;
  * </ol>
  * 
  * @author Rico Bergmann
- * @see de.naju.adebar.model.human.ActivistProfile
+ * @see de.naju.adebar.model.persons.ActivistProfile
  * @see de.naju.adebar.util.conversion conversion
  */
 public class ActivistFilter implements PersonFilter {

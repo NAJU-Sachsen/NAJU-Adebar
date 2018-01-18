@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.google.common.collect.Iterables;
-import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.newsletter.AlreadySubscribedException;
 import de.naju.adebar.model.newsletter.ExistingSubscriberException;
 import de.naju.adebar.model.newsletter.Newsletter;

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import de.naju.adebar.controller.forms.newsletter.AddNewsletterForm;
-import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.newsletter.AlreadySubscribedException;
 import de.naju.adebar.model.newsletter.ExistingSubscriberException;
 import de.naju.adebar.model.newsletter.Newsletter;

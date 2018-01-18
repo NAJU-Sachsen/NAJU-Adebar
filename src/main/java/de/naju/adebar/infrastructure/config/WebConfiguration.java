@@ -9,7 +9,7 @@ import de.naju.adebar.infrastructure.config.security.WebSecurityConfiguration;
 import de.naju.adebar.infrastructure.formatters.EventConverter;
 import de.naju.adebar.infrastructure.formatters.PersonConverter;
 import de.naju.adebar.model.events.ReadOnlyEventRepository;
-import de.naju.adebar.model.human.ReadOnlyPersonRepository;
+import de.naju.adebar.model.persons.ReadOnlyPersonRepository;
 
 /**
  * The general configuration of the web controllers.

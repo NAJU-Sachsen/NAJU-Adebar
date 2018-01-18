@@ -14,8 +14,8 @@ import com.querydsl.core.types.Predicate;
 import de.naju.adebar.api.data.SimplePersonJSON;
 import de.naju.adebar.api.forms.FilterPersonForm;
 import de.naju.adebar.api.util.DataFormatter;
-import de.naju.adebar.model.human.Person;
-import de.naju.adebar.model.human.PersonManager;
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.PersonManager;
 import de.naju.adebar.services.api.PersonSearchPredicateCreator;
 import de.naju.adebar.services.conversion.human.FilterToPredicateConverter;
 

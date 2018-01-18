@@ -6,7 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToOne;
 import org.springframework.util.Assert;
-import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.persons.Person;
 
 /**
  * Abstraction of a lecture

@@ -18,8 +18,8 @@ import de.naju.adebar.controller.forms.events.EventForm;
 import de.naju.adebar.model.chapter.ExistingContributorException;
 import de.naju.adebar.model.chapter.LocalGroup;
 import de.naju.adebar.model.chapter.Project;
-import de.naju.adebar.model.human.Person;
-import de.naju.adebar.model.human.PersonManager;
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.PersonManager;
 import de.naju.adebar.services.conversion.chapter.ProjectFormDataExtractor;
 import de.naju.adebar.services.conversion.chapter.ProjectToProjectFormConverter;
 

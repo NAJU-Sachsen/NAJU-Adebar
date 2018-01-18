@@ -3,7 +3,7 @@ package de.naju.adebar.app.human.filter.stream;
 import de.naju.adebar.app.filter.ConflictingFilterCriteriaException;
 import de.naju.adebar.app.filter.streams.AbstractStreamBasedFilter;
 import de.naju.adebar.app.filter.streams.StreamBasedFilterBuilder;
-import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.persons.Person;
 import org.springframework.util.Assert;
 import java.util.stream.Stream;
 

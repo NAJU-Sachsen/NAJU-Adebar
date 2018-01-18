@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import de.naju.adebar.app.filter.DateFilterType;
 import de.naju.adebar.app.filter.FilterType;
 import de.naju.adebar.app.human.filter.stream.ActivistFilter;
-import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.persons.Person;
 
 /**
  * Basic testing of the {@link ActivistFilter}

@@ -3,8 +3,8 @@ package de.naju.adebar.app.human.filter.predicate;
 import java.util.List;
 import com.querydsl.core.BooleanBuilder;
 import de.naju.adebar.app.filter.FilterType;
-import de.naju.adebar.model.human.QPerson;
-import de.naju.adebar.model.human.Qualification;
+import de.naju.adebar.model.persons.QPerson;
+import de.naju.adebar.model.persons.Qualification;
 
 public class ReferentFilter implements PersonFilter {
 

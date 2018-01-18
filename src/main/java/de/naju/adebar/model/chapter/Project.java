@@ -20,8 +20,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 import org.springframework.util.Assert;
 import de.naju.adebar.model.events.Event;
-import de.naju.adebar.model.human.NoActivistException;
-import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.persons.NoActivistException;
+import de.naju.adebar.model.persons.Person;
 
 /**
  * Abstraction of a project

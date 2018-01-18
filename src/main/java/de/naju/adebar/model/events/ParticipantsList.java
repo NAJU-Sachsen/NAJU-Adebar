@@ -21,7 +21,7 @@ import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.OrderColumn;
 import javax.persistence.Transient;
 import org.springframework.util.Assert;
-import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.persons.Person;
 
 /**
  * The participants (and reservations) of an {@link Event} will be stored here

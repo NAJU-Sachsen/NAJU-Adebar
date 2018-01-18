@@ -10,7 +10,7 @@ import de.naju.adebar.app.human.filter.stream.AddressFilter;
 import de.naju.adebar.app.human.filter.stream.NameFilter;
 import de.naju.adebar.app.human.filter.stream.PersonFilter;
 import de.naju.adebar.app.human.filter.stream.ReferentFilter;
-import de.naju.adebar.model.human.Address;
+import de.naju.adebar.model.persons.Address;
 
 /**
  * Service to convert {@link FilterPersonForm} data to the corresponding objects

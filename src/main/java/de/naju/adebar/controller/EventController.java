@@ -26,7 +26,7 @@ import de.naju.adebar.model.events.Event;
 import de.naju.adebar.model.events.ExistingParticipantException;
 import de.naju.adebar.model.events.ParticipationInfo;
 import de.naju.adebar.model.events.PersonIsTooYoungException;
-import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.persons.Person;
 
 /**
  * Event related controller mappings

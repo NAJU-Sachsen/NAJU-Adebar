@@ -24,9 +24,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 import org.springframework.util.Assert;
 import de.naju.adebar.model.events.Event;
-import de.naju.adebar.model.human.Address;
-import de.naju.adebar.model.human.NoActivistException;
-import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.persons.Address;
+import de.naju.adebar.model.persons.NoActivistException;
+import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.newsletter.Newsletter;
 
 /**

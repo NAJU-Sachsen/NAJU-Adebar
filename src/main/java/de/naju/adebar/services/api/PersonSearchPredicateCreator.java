@@ -3,7 +3,7 @@ package de.naju.adebar.services.api;
 import org.springframework.stereotype.Service;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
-import de.naju.adebar.model.human.QPerson;
+import de.naju.adebar.model.persons.QPerson;
 
 /**
  * Service to create predicates for searches

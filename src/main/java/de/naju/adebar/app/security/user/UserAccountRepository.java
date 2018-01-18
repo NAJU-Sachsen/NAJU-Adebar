@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import de.naju.adebar.model.human.PersonId;
+import de.naju.adebar.model.persons.PersonId;
 
 /**
  * Repository to access {@link UserAccount} instances

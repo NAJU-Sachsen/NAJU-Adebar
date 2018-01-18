@@ -18,8 +18,8 @@ import org.springframework.data.domain.AbstractAggregateRoot;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.Assert;
-import de.naju.adebar.model.human.Person;
-import de.naju.adebar.model.human.PersonId;
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.PersonId;
 import de.naju.adebar.util.Validation;
 
 /**

@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.StringJoiner;
 import java.util.stream.Stream;
 import org.springframework.stereotype.Service;
-import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.persons.Person;
 
 /**
  * Service to conveniently extract data from {@link Person} instances

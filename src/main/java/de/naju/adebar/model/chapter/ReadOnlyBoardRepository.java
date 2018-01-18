@@ -1,7 +1,7 @@
 package de.naju.adebar.model.chapter;
 
 import de.naju.adebar.infrastructure.ReadOnlyRepository;
-import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.persons.Person;
 
 /**
  * @author Rico Bergmann

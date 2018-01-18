@@ -25,10 +25,10 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Transient;
 import org.javamoney.moneta.Money;
 import org.springframework.util.Assert;
-import de.naju.adebar.model.human.Address;
-import de.naju.adebar.model.human.NoActivistException;
-import de.naju.adebar.model.human.NoParticipantException;
-import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.persons.Address;
+import de.naju.adebar.model.persons.NoActivistException;
+import de.naju.adebar.model.persons.NoParticipantException;
+import de.naju.adebar.model.persons.Person;
 
 /**
  * Abstraction of an event. It may be a regular camp or any other kind of event such as workshops or

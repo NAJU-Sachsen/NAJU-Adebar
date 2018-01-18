@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import de.naju.adebar.controller.forms.chapter.BoardForm;
 import de.naju.adebar.model.chapter.Board;
-import de.naju.adebar.model.human.Person;
-import de.naju.adebar.model.human.PersonManager;
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.PersonManager;
 
 /**
  * Service to extract the necessary data from a board form

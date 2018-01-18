@@ -3,7 +3,7 @@ package de.naju.adebar.services.conversion.human;
 import org.springframework.stereotype.Service;
 import de.naju.adebar.controller.forms.human.AddQualificationForm;
 import de.naju.adebar.controller.forms.human.AddQualificationForm.AddType;
-import de.naju.adebar.model.human.Qualification;
+import de.naju.adebar.model.persons.Qualification;
 
 /**
  * @author Rico Bergmann

@@ -12,8 +12,8 @@ import com.google.common.collect.Streams;
 import de.naju.adebar.controller.forms.human.EditActivistForm;
 import de.naju.adebar.model.chapter.LocalGroup;
 import de.naju.adebar.model.chapter.ReadOnlyLocalGroupRepository;
-import de.naju.adebar.model.human.ActivistProfile;
-import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.persons.ActivistProfile;
+import de.naju.adebar.model.persons.Person;
 
 /**
  * Service to convert an {@link Person activist} to a corresponding {@link EditActivistForm}

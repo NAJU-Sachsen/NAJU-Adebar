@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.stereotype.Service;
-import de.naju.adebar.model.human.Gender;
-import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.persons.Gender;
+import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.test.mockups.PersonMockup;
 
 /**

@@ -5,9 +5,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import org.springframework.stereotype.Service;
 import de.naju.adebar.controller.forms.human.EditPersonForm;
-import de.naju.adebar.model.human.Address;
-import de.naju.adebar.model.human.ParticipantProfile;
-import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.persons.Address;
+import de.naju.adebar.model.persons.ParticipantProfile;
+import de.naju.adebar.model.persons.Person;
 
 /**
  * Service to convert a {@link Person} to a corresponding {@link EditPersonForm}

@@ -13,10 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 import de.naju.adebar.model.chapter.Board;
 import de.naju.adebar.model.chapter.LocalGroup;
 import de.naju.adebar.model.chapter.LocalGroupRepository;
-import de.naju.adebar.model.human.Address;
-import de.naju.adebar.model.human.Person;
-import de.naju.adebar.model.human.PersonFactory;
-import de.naju.adebar.model.human.PersonManager;
+import de.naju.adebar.model.persons.Address;
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.PersonFactory;
+import de.naju.adebar.model.persons.PersonManager;
 
 /**
  * @author Rico Bergmann

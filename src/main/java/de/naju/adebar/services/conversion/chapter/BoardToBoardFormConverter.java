@@ -2,7 +2,7 @@ package de.naju.adebar.services.conversion.chapter;
 
 import de.naju.adebar.controller.forms.chapter.BoardForm;
 import de.naju.adebar.model.chapter.Board;
-import de.naju.adebar.model.human.PersonId;
+import de.naju.adebar.model.persons.PersonId;
 import org.springframework.stereotype.Service;
 import java.util.LinkedList;
 import java.util.List;

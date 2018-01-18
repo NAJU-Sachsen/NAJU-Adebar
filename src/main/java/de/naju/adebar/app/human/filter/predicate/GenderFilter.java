@@ -2,8 +2,8 @@ package de.naju.adebar.app.human.filter.predicate;
 
 import com.querydsl.core.BooleanBuilder;
 import de.naju.adebar.app.filter.FilterType;
-import de.naju.adebar.model.human.Gender;
-import de.naju.adebar.model.human.QPerson;
+import de.naju.adebar.model.persons.Gender;
+import de.naju.adebar.model.persons.QPerson;
 
 public class GenderFilter implements PersonFilter {
 

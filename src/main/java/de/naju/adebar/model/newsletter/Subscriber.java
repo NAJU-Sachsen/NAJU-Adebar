@@ -15,7 +15,7 @@ import de.naju.adebar.util.Validation;
  * </p>
  * <p>
  * This class is necessary, as not all persons that subscribe to a newsletter have to be tracked as
- * {@link de.naju.adebar.model.human.Person Person}, e.g. one may solely subscribe to a newsletter
+ * {@link de.naju.adebar.model.persons.Person Person}, e.g. one may solely subscribe to a newsletter
  * through a website and therefore will not become part of the activist database itself.
  * </p>
  *

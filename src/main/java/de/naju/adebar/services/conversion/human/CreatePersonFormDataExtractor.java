@@ -14,18 +14,18 @@ import de.naju.adebar.controller.forms.human.CreateParentForm;
 import de.naju.adebar.controller.forms.human.CreatePersonForm;
 import de.naju.adebar.model.chapter.LocalGroup;
 import de.naju.adebar.model.chapter.ReadOnlyLocalGroupRepository;
-import de.naju.adebar.model.human.Address;
-import de.naju.adebar.model.human.Gender;
-import de.naju.adebar.model.human.JuleicaCard;
-import de.naju.adebar.model.human.NabuMembershipInformation;
-import de.naju.adebar.model.human.Person;
-import de.naju.adebar.model.human.PersonFactory;
-import de.naju.adebar.model.human.PersonFactory.ActivistBuilder;
-import de.naju.adebar.model.human.PersonFactory.ParticipantBuilder;
-import de.naju.adebar.model.human.PersonFactory.PersonBuilder;
-import de.naju.adebar.model.human.PersonFactory.ReferentBuilder;
-import de.naju.adebar.model.human.Qualification;
-import de.naju.adebar.model.human.QualificationRepository;
+import de.naju.adebar.model.persons.Address;
+import de.naju.adebar.model.persons.Gender;
+import de.naju.adebar.model.persons.JuleicaCard;
+import de.naju.adebar.model.persons.NabuMembershipInformation;
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.PersonFactory;
+import de.naju.adebar.model.persons.PersonFactory.ActivistBuilder;
+import de.naju.adebar.model.persons.PersonFactory.ParticipantBuilder;
+import de.naju.adebar.model.persons.PersonFactory.PersonBuilder;
+import de.naju.adebar.model.persons.PersonFactory.ReferentBuilder;
+import de.naju.adebar.model.persons.Qualification;
+import de.naju.adebar.model.persons.QualificationRepository;
 
 /**
  * Service to extract the necessary data from a 'create person' form

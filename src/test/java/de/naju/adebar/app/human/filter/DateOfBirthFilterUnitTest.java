@@ -2,7 +2,7 @@ package de.naju.adebar.app.human.filter;
 
 import de.naju.adebar.app.filter.DateFilterType;
 import de.naju.adebar.app.human.filter.stream.DateOfBirthFilter;
-import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.persons.Person;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

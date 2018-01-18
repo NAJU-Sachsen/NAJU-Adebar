@@ -6,15 +6,15 @@ import java.util.List;
 import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import de.naju.adebar.model.human.Address;
-import de.naju.adebar.model.human.Gender;
-import de.naju.adebar.model.human.JuleicaCard;
-import de.naju.adebar.model.human.Person;
-import de.naju.adebar.model.human.PersonFactory;
-import de.naju.adebar.model.human.PersonManager;
-import de.naju.adebar.model.human.PersonRepository;
-import de.naju.adebar.model.human.Qualification;
-import de.naju.adebar.model.human.QualificationRepository;
+import de.naju.adebar.model.persons.Address;
+import de.naju.adebar.model.persons.Gender;
+import de.naju.adebar.model.persons.JuleicaCard;
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.PersonFactory;
+import de.naju.adebar.model.persons.PersonManager;
+import de.naju.adebar.model.persons.PersonRepository;
+import de.naju.adebar.model.persons.Qualification;
+import de.naju.adebar.model.persons.QualificationRepository;
 
 /**
  * @author Rico Bergmann

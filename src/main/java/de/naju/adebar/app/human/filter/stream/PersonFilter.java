@@ -1,7 +1,7 @@
 package de.naju.adebar.app.human.filter.stream;
 
 import de.naju.adebar.app.filter.streams.AbstractStreamBasedFilter;
-import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.persons.Person;
 
 /**
  * An filter for persons

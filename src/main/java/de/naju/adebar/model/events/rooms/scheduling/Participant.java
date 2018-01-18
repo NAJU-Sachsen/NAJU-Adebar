@@ -4,7 +4,7 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 import org.springframework.util.Assert;
 import com.google.common.collect.Lists;
-import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.persons.Person;
 
 /**
  * Value object encapsulating a {@link Person} as well as its participation times.

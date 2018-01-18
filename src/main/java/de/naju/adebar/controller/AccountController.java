@@ -16,8 +16,8 @@ import de.naju.adebar.app.security.user.UserAccount;
 import de.naju.adebar.app.security.user.UserAccountManager;
 import de.naju.adebar.app.security.user.UserAccountRepository;
 import de.naju.adebar.controller.forms.accounts.CreateAccountForm;
-import de.naju.adebar.model.human.Person;
-import de.naju.adebar.model.human.PersonManager;
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.PersonManager;
 
 @Controller
 @PreAuthorize("hasRole('ROLE_ADMIN')")

@@ -5,9 +5,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import org.springframework.stereotype.Service;
 import de.naju.adebar.controller.forms.human.EditActivistForm;
-import de.naju.adebar.model.human.ActivistProfile;
-import de.naju.adebar.model.human.JuleicaCard;
-import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.persons.ActivistProfile;
+import de.naju.adebar.model.persons.JuleicaCard;
+import de.naju.adebar.model.persons.Person;
 
 /**
  * @author Rico Bergmann

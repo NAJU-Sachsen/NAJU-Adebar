@@ -13,9 +13,9 @@ import com.google.common.collect.Lists;
 import de.naju.adebar.app.security.user.Roles;
 import de.naju.adebar.app.security.user.UserAccountManager;
 import de.naju.adebar.app.security.user.UserAccountRepository;
-import de.naju.adebar.model.human.Person;
-import de.naju.adebar.model.human.PersonFactory;
-import de.naju.adebar.model.human.PersonManager;
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.PersonFactory;
+import de.naju.adebar.model.persons.PersonManager;
 
 @PropertySource("classpath:startup.properties")
 @Component

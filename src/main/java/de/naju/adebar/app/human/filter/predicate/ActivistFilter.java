@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import com.querydsl.core.BooleanBuilder;
 import de.naju.adebar.app.filter.DateFilterType;
 import de.naju.adebar.app.filter.FilterType;
-import de.naju.adebar.model.human.QPerson;
+import de.naju.adebar.model.persons.QPerson;
 
 public class ActivistFilter implements PersonFilter {
 

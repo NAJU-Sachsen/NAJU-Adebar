@@ -1,7 +1,7 @@
 package de.naju.adebar.model.events;
 
 import de.naju.adebar.infrastructure.ReadOnlyRepository;
-import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.persons.Person;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;

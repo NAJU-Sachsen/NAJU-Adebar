@@ -3,7 +3,7 @@ package de.naju.adebar.app.newsletter;
 import de.naju.adebar.model.newsletter.Newsletter;
 import de.naju.adebar.model.newsletter.Subscriber;
 import org.springframework.stereotype.Service;
-import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.persons.Person;
 
 /**
  * Service to take care of {@link Newsletter Newsletters} and more complex management operations

@@ -1,6 +1,6 @@
 package de.naju.adebar.services.conversion.newsletter;
 
-import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.newsletter.Subscriber;
 import org.springframework.stereotype.Service;
 

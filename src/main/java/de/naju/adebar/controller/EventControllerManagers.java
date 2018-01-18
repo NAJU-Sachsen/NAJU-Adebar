@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import de.naju.adebar.app.chapter.LocalGroupManager;
 import de.naju.adebar.app.chapter.ProjectManager;
 import de.naju.adebar.app.events.EventManager;
-import de.naju.adebar.model.human.PersonManager;
+import de.naju.adebar.model.persons.PersonManager;
 
 /**
  * Managers for the {@link EventController}

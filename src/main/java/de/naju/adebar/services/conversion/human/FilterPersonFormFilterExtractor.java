@@ -25,10 +25,10 @@ import de.naju.adebar.app.human.filter.predicate.NameFilter;
 import de.naju.adebar.app.human.filter.predicate.PersonFilter;
 import de.naju.adebar.app.human.filter.predicate.ReferentFilter;
 import de.naju.adebar.controller.forms.human.FilterPersonForm;
-import de.naju.adebar.model.human.Address;
-import de.naju.adebar.model.human.Gender;
-import de.naju.adebar.model.human.Qualification;
-import de.naju.adebar.model.human.QualificationRepository;
+import de.naju.adebar.model.persons.Address;
+import de.naju.adebar.model.persons.Gender;
+import de.naju.adebar.model.persons.Qualification;
+import de.naju.adebar.model.persons.QualificationRepository;
 
 /**
  * Service to convert {@link FilterPersonForm} data to the corresponding objects
