@@ -40,15 +40,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
   public static final String LOGOUT_ROUTE = "/logout";
 
   private final UserAccountService userAccountService;
-  private final RequestCache requestCache;
 
   @Autowired
-  public WebSecurityConfiguration(UserAccountService userAccountService,
-      RequestCache requestCache) {
+  public WebSecurityConfiguration(UserAccountService userAccountService) {
     Assert.notNull(userAccountService, "User account manager may not be null");
-    Assert.notNull(requestCache, "The requestCache may not be null");
     this.userAccountService = userAccountService;
-    this.requestCache = requestCache;
   }
 
   /**
@@ -69,8 +65,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
       .and().formLogin()
         .loginPage(LOGIN_ROUTE).loginProcessingUrl(LOGIN_ROUTE).permitAll().and().logout()
         .logoutUrl(LOGOUT_ROUTE).logoutSuccessUrl(LOGIN_ROUTE + "?logout").permitAll()
-      .and()
-        .requestCache().requestCache(requestCache)
       .and()
         .exceptionHandling().accessDeniedHandler(accessDenied());
     // @formatter:on
