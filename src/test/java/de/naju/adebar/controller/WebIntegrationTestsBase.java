@@ -24,7 +24,7 @@ import de.naju.adebar.app.security.user.UserAccountManager;
  */
 @SpringBootTest
 @RunWith(SpringRunner.class)
-public class WebIntegrationTestsBase {
+public abstract class WebIntegrationTestsBase {
 
   protected MockMvc mvc;
 
