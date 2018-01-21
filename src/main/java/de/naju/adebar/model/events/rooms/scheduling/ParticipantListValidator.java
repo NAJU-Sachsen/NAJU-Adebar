@@ -10,17 +10,17 @@ public interface ParticipantListValidator {
   /**
    * Indicates that the scheduler is pretty confident in its solution.
    */
-  static int HIGH_RELIABILITY = 100;
+  int HIGH_RELIABILITY = 100;
 
   /**
    * Indicates that the scheduler is neither confident nor dubious about its solution.
    */
-  static int NORMAL_RELIABILITY = 50;
+  int NORMAL_RELIABILITY = 50;
 
   /**
    * Indicates that the scheduler is not confident in its solution at all.
    */
-  static int LOW_RELIABILITY = 10;
+  int LOW_RELIABILITY = 10;
 
   /**
    * Checks whether a number of persons may participate in an event with the given specification.

@@ -55,8 +55,7 @@ public class GreedyParticipationTimeCombiner implements ParticipationTimeCombine
       }
     }
 
-    boolean[] timesArr = new boolean[latestTime];
-    return timesArr;
+    return new boolean[latestTime];
   }
 
   /**
