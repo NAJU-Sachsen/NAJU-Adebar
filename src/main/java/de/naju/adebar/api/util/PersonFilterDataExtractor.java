@@ -5,11 +5,11 @@ import org.springframework.stereotype.Service;
 import de.naju.adebar.api.forms.FilterPersonForm;
 import de.naju.adebar.app.filter.FilterType;
 import de.naju.adebar.app.filter.MatchType;
-import de.naju.adebar.app.human.filter.stream.ActivistFilter;
-import de.naju.adebar.app.human.filter.stream.AddressFilter;
-import de.naju.adebar.app.human.filter.stream.NameFilter;
-import de.naju.adebar.app.human.filter.stream.PersonFilter;
-import de.naju.adebar.app.human.filter.stream.ReferentFilter;
+import de.naju.adebar.app.persons.filter.stream.ActivistFilter;
+import de.naju.adebar.app.persons.filter.stream.AddressFilter;
+import de.naju.adebar.app.persons.filter.stream.NameFilter;
+import de.naju.adebar.app.persons.filter.stream.PersonFilter;
+import de.naju.adebar.app.persons.filter.stream.ReferentFilter;
 import de.naju.adebar.model.persons.Address;
 
 /**

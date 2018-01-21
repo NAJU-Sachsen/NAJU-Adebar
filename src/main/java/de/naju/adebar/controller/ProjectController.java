@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import de.naju.adebar.app.chapter.LocalGroupManager;
 import de.naju.adebar.app.chapter.ProjectManager;
-import de.naju.adebar.app.human.HumanDataProcessor;
+import de.naju.adebar.app.persons.HumanDataProcessor;
 import de.naju.adebar.controller.forms.chapter.ProjectForm;
 import de.naju.adebar.controller.forms.events.EventForm;
 import de.naju.adebar.model.chapter.ExistingContributorException;

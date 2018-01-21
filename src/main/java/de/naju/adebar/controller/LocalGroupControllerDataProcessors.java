@@ -2,7 +2,7 @@ package de.naju.adebar.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import de.naju.adebar.app.human.HumanDataProcessor;
+import de.naju.adebar.app.persons.HumanDataProcessor;
 import de.naju.adebar.services.conversion.chapter.AddLocalGroupFormDataExtractor;
 import de.naju.adebar.services.conversion.chapter.BoardFormDataExtractor;
 import de.naju.adebar.services.conversion.chapter.BoardToBoardFormConverter;

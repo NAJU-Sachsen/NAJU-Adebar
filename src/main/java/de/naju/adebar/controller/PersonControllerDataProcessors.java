@@ -2,12 +2,12 @@ package de.naju.adebar.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import de.naju.adebar.app.human.HumanDataProcessor;
-import de.naju.adebar.services.conversion.human.AddQualificationFormDataExtractor;
-import de.naju.adebar.services.conversion.human.CreatePersonFormDataExtractor;
-import de.naju.adebar.services.conversion.human.EditActivistFormDataExtractor;
-import de.naju.adebar.services.conversion.human.EditPersonFormDataExtractor;
-import de.naju.adebar.services.conversion.human.FilterPersonFormFilterExtractor;
+import de.naju.adebar.app.persons.HumanDataProcessor;
+import de.naju.adebar.services.conversion.persons.AddQualificationFormDataExtractor;
+import de.naju.adebar.services.conversion.persons.CreatePersonFormDataExtractor;
+import de.naju.adebar.services.conversion.persons.EditActivistFormDataExtractor;
+import de.naju.adebar.services.conversion.persons.EditPersonFormDataExtractor;
+import de.naju.adebar.services.conversion.persons.FilterPersonFormFilterExtractor;
 
 /**
  * Data processor for the {@link PersonController}

@@ -15,19 +15,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.google.common.collect.Iterables;
 import com.querydsl.core.BooleanBuilder;
-import de.naju.adebar.app.human.filter.predicate.PersonFilterBuilder;
-import de.naju.adebar.controller.forms.human.AddQualificationForm;
-import de.naju.adebar.controller.forms.human.CreateParentForm;
-import de.naju.adebar.controller.forms.human.CreatePersonForm;
-import de.naju.adebar.controller.forms.human.EditActivistForm;
-import de.naju.adebar.controller.forms.human.EditPersonForm;
-import de.naju.adebar.controller.forms.human.FilterPersonForm;
+import de.naju.adebar.app.persons.filter.predicate.PersonFilterBuilder;
+import de.naju.adebar.controller.forms.persons.AddQualificationForm;
+import de.naju.adebar.controller.forms.persons.CreateParentForm;
+import de.naju.adebar.controller.forms.persons.CreatePersonForm;
+import de.naju.adebar.controller.forms.persons.EditActivistForm;
+import de.naju.adebar.controller.forms.persons.EditPersonForm;
+import de.naju.adebar.controller.forms.persons.FilterPersonForm;
 import de.naju.adebar.model.chapter.LocalGroup;
 import de.naju.adebar.model.persons.ImpossibleKinshipRelationException;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.persons.Qualification;
-import de.naju.adebar.services.conversion.human.ActivistToEditActivistFormConverter;
-import de.naju.adebar.services.conversion.human.PersonToEditPersonFormConverter;
+import de.naju.adebar.services.conversion.persons.ActivistToEditActivistFormConverter;
+import de.naju.adebar.services.conversion.persons.PersonToEditPersonFormConverter;
 
 /**
  * Person related controller mappings

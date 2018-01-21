@@ -3,7 +3,7 @@ package de.naju.adebar.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import de.naju.adebar.app.events.EventDataProcessor;
-import de.naju.adebar.app.human.HumanDataProcessor;
+import de.naju.adebar.app.persons.HumanDataProcessor;
 import de.naju.adebar.services.conversion.events.EventFormDataExtractor;
 import de.naju.adebar.services.conversion.events.EventToEventFormConverter;
 import de.naju.adebar.services.conversion.events.FilterEventsFormDataExtractor;

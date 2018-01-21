@@ -17,7 +17,7 @@ import de.naju.adebar.api.util.DataFormatter;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.persons.PersonManager;
 import de.naju.adebar.services.api.PersonSearchPredicateCreator;
-import de.naju.adebar.services.conversion.human.FilterToPredicateConverter;
+import de.naju.adebar.services.conversion.persons.FilterToPredicateConverter;
 
 /**
  * REST controller to access person data.
