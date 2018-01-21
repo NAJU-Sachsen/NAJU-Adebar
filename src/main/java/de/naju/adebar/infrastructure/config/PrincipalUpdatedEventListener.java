@@ -1,4 +1,4 @@
-package de.naju.adebar.infrastructure.config.security;
+package de.naju.adebar.infrastructure.config;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

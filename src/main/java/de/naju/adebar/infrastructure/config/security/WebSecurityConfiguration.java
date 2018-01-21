@@ -18,6 +18,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.FilterInvocation;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.access.expression.WebExpressionVoter;
 import org.springframework.util.Assert;
@@ -34,10 +35,11 @@ import de.naju.adebar.app.security.user.UserAccountService;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableWebSecurity
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
+
   public static final String LOGIN_ROUTE = "/login";
   public static final String LOGOUT_ROUTE = "/logout";
 
-  private UserAccountService userAccountService;
+  private final UserAccountService userAccountService;
 
   @Autowired
   public WebSecurityConfiguration(UserAccountService userAccountService) {
@@ -62,7 +64,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
       // excluding the login page from necessity to login
       .and().formLogin()
         .loginPage(LOGIN_ROUTE).loginProcessingUrl(LOGIN_ROUTE).permitAll().and().logout()
-        .logoutUrl(LOGOUT_ROUTE).logoutSuccessUrl(LOGIN_ROUTE + "?logout").permitAll();
+        .logoutUrl(LOGOUT_ROUTE).logoutSuccessUrl(LOGIN_ROUTE + "?logout").permitAll()
+      .and()
+        .exceptionHandling().accessDeniedHandler(accessDenied());
     // @formatter:on
   }
 
@@ -113,6 +117,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
   @Bean(name = "PasswordEncoder")
   protected PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
+  }
+
+  @Bean
+  protected AccessDeniedHandler accessDenied() {
+    return new RedirectingAccessDeniedHandler();
   }
 
   /**

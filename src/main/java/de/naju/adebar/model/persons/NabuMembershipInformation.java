@@ -12,6 +12,10 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class NabuMembershipInformation {
 
+  public enum MembershipStatus {
+    IS_MEMBER, NO_MEMBER, UNKNOWN
+  }
+
   private static final String NO_NABU_MEMBER_MSG = "Not a NABU member";
 
   @Column(name = "nabuMember")

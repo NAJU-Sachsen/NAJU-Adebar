@@ -8,16 +8,7 @@ package de.naju.adebar.controller.forms.human;
  */
 public class CreateParentForm extends PersonForm {
 
-  private String phoneNumber;
   private boolean useChildAddress;
-
-  public String getPhoneNumber() {
-    return phoneNumber;
-  }
-
-  public void setPhoneNumber(String phoneNumber) {
-    this.phoneNumber = phoneNumber;
-  }
 
   public boolean isUseChildAddress() {
     return useChildAddress;

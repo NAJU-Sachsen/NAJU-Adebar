@@ -1,5 +1,7 @@
 package de.naju.adebar.controller.forms.human;
 
+import de.naju.adebar.model.human.NabuMembershipInformation.MembershipStatus;
+
 /**
  * Model POJO for person data. The fields are set by Thymeleaf when the associated form is
  * submitted.
@@ -8,14 +10,7 @@ package de.naju.adebar.controller.forms.human;
  */
 public class EditPersonForm extends PersonForm {
 
-  public enum NabuMembershipStatus {
-    IS_MEMBER, NO_MEMBER, UNKNOWN
-  }
-
   public static final String DATE_FORMAT = "dd.MM.yyyy";
-
-  // general data
-  private String phoneNumber;
 
   // participant data
   private boolean participant;
@@ -24,16 +19,8 @@ public class EditPersonForm extends PersonForm {
   private String eatingHabit;
   private String healthImpairments;
   private String remarks;
-  private NabuMembershipStatus nabuMember;
+  private MembershipStatus nabuMember;
   private String nabuNumber;
-
-  public String getPhoneNumber() {
-    return phoneNumber;
-  }
-
-  public void setPhoneNumber(String phoneNumber) {
-    this.phoneNumber = phoneNumber;
-  }
 
   public boolean isParticipant() {
     return participant;
@@ -83,11 +70,11 @@ public class EditPersonForm extends PersonForm {
     this.remarks = remarks;
   }
 
-  public NabuMembershipStatus getNabuMember() {
+  public MembershipStatus getNabuMember() {
     return nabuMember;
   }
 
-  public void setNabuMember(NabuMembershipStatus nabuMember) {
+  public void setNabuMember(MembershipStatus nabuMember) {
     this.nabuMember = nabuMember;
   }
 
@@ -106,11 +93,10 @@ public class EditPersonForm extends PersonForm {
   @Override
   public String toString() {
     return "EditPersonForm{" + "firstName='" + getFirstName() + '\'' + ", lastName='"
-        + getLastName() + '\'' + ", email='" + getEmail() + '\'' + ", phoneNumber='" + phoneNumber
-        + '\'' + ", street='" + getStreet() + '\'' + ", zip='" + getZip() + '\'' + ", city='"
-        + getCity() + '\'' + ", participant=" + participant + ", gender='" + gender + '\''
-        + ", dateOfBirth='" + dateOfBirth + '\'' + ", eatingHabit='" + eatingHabit + '\''
-        + ", healthImpairments='" + healthImpairments + '\'' + ", nabuMember=" + nabuMember
-        + ", nabuNumber='" + nabuNumber + '\'' + '}';
+        + getLastName() + '\'' + ", email='" + getEmail() + '\'' + ", street='" + getStreet() + '\''
+        + ", zip='" + getZip() + '\'' + ", city='" + getCity() + '\'' + ", participant="
+        + participant + ", gender='" + gender + '\'' + ", dateOfBirth='" + dateOfBirth + '\''
+        + ", eatingHabit='" + eatingHabit + '\'' + ", healthImpairments='" + healthImpairments
+        + '\'' + ", nabuMember=" + nabuMember + ", nabuNumber='" + nabuNumber + '\'' + '}';
   }
 }

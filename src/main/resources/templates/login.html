@@ -23,7 +23,10 @@
           <h1 class="form-signin-heading">Anmeldung</h1>
           <img class="stork" src="../static/resources/img/stork.png" alt="Adebar Logo" th:src="@{/resources/img/stork.png}" />
           <p class="alert alert-danger" th:if="${param.error}">
-              Benutzername oder Password ungültig.
+              Benutzername oder Passwort ungültig.
+          </p>
+          <p class="alert alert-warning" th:if="${param.expired}">
+              Die letzte Sitzung ist abgelaufen. Bitte erneut anmelden.
           </p>
           <p class="alert alert-info" th:if="${param.logout}">
               See ya soon!

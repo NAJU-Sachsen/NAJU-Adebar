@@ -74,11 +74,11 @@ $('#filter-dob-type').on('change', function() {
 });
 
 var filterNabuType = $('#filter-nabu-type');
-var filterNabuMembershipType = (filterNabuType.find('option:selected').val().toString() === 'ENFORCE');
+var filterNabuMembershipType = (filterNabuType.find('option:selected').val().toString() === 'IS_MEMBER');
 
 // show nabu membership number input only if only for nabu members should be filtered
 filterNabuType.on('change', function() {
-    if ($(this).find('option:selected').val().toString() === 'ENFORCE' && !filterNabuMembershipType) {
+    if ($(this).find('option:selected').val().toString() === 'IS_MEMBER' && !filterNabuMembershipType) {
         $('#filter-nabu-membership-number').slideToggle();
         filterNabuMembershipType = !filterNabuMembershipType;
     } else if (filterNabuMembershipType){

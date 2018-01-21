@@ -44,16 +44,6 @@ public class JuleicaCard {
   }
 
   /**
-   * Copy constructor
-   *
-   * @param other the juleica card to copy
-   */
-  public JuleicaCard(JuleicaCard other) {
-    this.expiryDate = LocalDate.from(other.expiryDate);
-    this.level = other.level;
-  }
-
-  /**
    * Default constructor
    */
   public JuleicaCard() {
