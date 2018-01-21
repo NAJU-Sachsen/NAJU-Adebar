@@ -44,11 +44,11 @@ public interface EventManager {
   Event updateEvent(String id, Event newEvent);
 
   /**
-   * Changes the state of a saved event. In difference to {@link #updateEvent(long, Event)} this
+   * Changes the state of a saved event. In difference to {@link #updateEvent(String, Event)} this
    * does only modify "static" information such as name or participation fee but leaves "dynamic"
    * content such as the participants, organizers and counselors untouched.
    * 
-   * @param eventId the event to update
+   * @param id the event to update
    * @param eventData the event's "static" data to adopt
    * @return the updated (and saved) event
    */

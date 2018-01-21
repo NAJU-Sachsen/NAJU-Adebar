@@ -69,7 +69,7 @@ public class EventController {
 
     Iterable<Event> currentEvents = managers.events.findOngoingEvents();
     Iterable<Event> futureEvents =
-        managers.events.repository().findByStartTimeIsAfter(LocalDateTime.now());
+        managers.events.repository().findByStartTimeAfterOrderByStartTime(LocalDateTime.now());
 
     model.addAttribute("currentEvents", currentEvents);
     model.addAttribute("currentEventsLocalGroups",
@@ -102,7 +102,7 @@ public class EventController {
   public String showPastEvents(Model model) {
 
     Iterable<Event> pastEvents =
-        managers.events.repository().findByEndTimeIsBefore(LocalDateTime.now());
+        managers.events.repository().findByEndTimeBeforeOrderByStartTimeDesc(LocalDateTime.now());
 
     model.addAttribute("pastEvents", pastEvents);
     model.addAttribute("pastEventsLocalGroups",
@@ -153,12 +153,10 @@ public class EventController {
    * Adds a new event to the database
    *
    * @param eventForm the submitted event data
-   * @param redirAttr attributes for the view to display some result information
    * @return the event's detail view
    */
   @RequestMapping("/events/add")
-  public String addEvent(@ModelAttribute(ADD_EVENT_FORM) EventForm eventForm,
-      RedirectAttributes redirAttr) {
+  public String addEvent(@ModelAttribute(ADD_EVENT_FORM) EventForm eventForm) {
     Event event = managers.events.saveEvent(dataProcessors.eventExtractor.extractEvent(eventForm));
 
     if (dataProcessors.eventExtractor.extractBelonging(eventForm) == Belonging.PROJECT) {
@@ -238,7 +236,7 @@ public class EventController {
    * young.
    *
    * @param eventId the id of the event to add the participant to
-   * @param personId the id of the person to add
+   * @param personIds the ids of the persons to add
    * @param redirAttr attributes for the view to display some result information
    * @return the event's detail view
    */
@@ -297,7 +295,7 @@ public class EventController {
    * Adds a participant to an event regardless of his age
    *
    * @param eventId the id of the event to add the participant to
-   * @param personId the id of the person to add
+   * @param personIds the ids of the persons to add
    * @param redirAttr attributes for the view to display some result information
    * @return the event's detail view
    */

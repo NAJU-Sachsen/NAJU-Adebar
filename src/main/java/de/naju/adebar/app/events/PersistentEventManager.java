@@ -87,7 +87,7 @@ public class PersistentEventManager implements EventManager {
         .of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 0, 0)
         .minusMinutes(1);
     Iterable<Event> currentEventsIterable =
-        repository().findByStartTimeIsBeforeAndEndTimeIsAfter(currentTime, yesterdaysLastMoment);
+        repository().findByStartTimeBeforeAndEndTimeAfterOrderByStartTime(currentTime, yesterdaysLastMoment);
     List<Event> currentEvents = Lists.newLinkedList(currentEventsIterable);
 
     for (Event e : currentEvents) {

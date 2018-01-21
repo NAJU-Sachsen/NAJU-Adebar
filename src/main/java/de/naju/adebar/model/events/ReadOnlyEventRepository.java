@@ -16,10 +16,21 @@ import java.util.stream.Stream;
 public interface ReadOnlyEventRepository extends ReadOnlyRepository<Event, EventId> {
 
   /**
+   * @return all events ordered by their start time
+   */
+  Iterable<Event> findAllByOrderByStartTime();
+
+  /**
    * @param time the time to query for
    * @return all events which start after the specified time
    */
   Iterable<Event> findByStartTimeIsAfter(LocalDateTime time);
+
+  /**
+   * @param time the time to query for
+   * @return all events which start after the specified time, ordered by their start time
+   */
+  Iterable<Event> findByStartTimeAfterOrderByStartTime(LocalDateTime time);
 
   /**
    * @param time the time to query for
@@ -28,12 +39,25 @@ public interface ReadOnlyEventRepository extends ReadOnlyRepository<Event, Event
   Iterable<Event> findByEndTimeIsBefore(LocalDateTime time);
 
   /**
+   * @param time the time to query for
+   * @return all events which end before the specified time, ordered by their start time (descending)
+   */
+  Iterable<Event> findByEndTimeBeforeOrderByStartTimeDesc(LocalDateTime time);
+
+  /**
    * @param timeBefore the earlier time
    * @param timeAfter the later time
    * @return all events that take place within the given interval
    */
   Iterable<Event> findByStartTimeIsBeforeAndEndTimeIsAfter(LocalDateTime timeBefore,
       LocalDateTime timeAfter);
+
+  /**
+   * @param timeBefore the earlier time
+   * @param timeAfter the later time
+   * @return all events that take place within the given interval, odered by their start time
+   */
+  Iterable<Event> findByStartTimeBeforeAndEndTimeAfterOrderByStartTime(LocalDateTime timeBefore, LocalDateTime timeAfter);
 
   /**
    * @param person the participant to query for
