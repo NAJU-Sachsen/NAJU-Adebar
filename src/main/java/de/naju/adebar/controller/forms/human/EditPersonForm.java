@@ -93,11 +93,10 @@ public class EditPersonForm extends PersonForm {
   @Override
   public String toString() {
     return "EditPersonForm{" + "firstName='" + getFirstName() + '\'' + ", lastName='"
-        + getLastName() + '\'' + ", email='" + getEmail() + '\'' + ", phoneNumber='" + phoneNumber
-        + '\'' + ", street='" + getStreet() + '\'' + ", zip='" + getZip() + '\'' + ", city='"
-        + getCity() + '\'' + ", participant=" + participant + ", gender='" + gender + '\''
-        + ", dateOfBirth='" + dateOfBirth + '\'' + ", eatingHabit='" + eatingHabit + '\''
-        + ", healthImpairments='" + healthImpairments + '\'' + ", nabuMember=" + nabuMember
-        + ", nabuNumber='" + nabuNumber + '\'' + '}';
+        + getLastName() + '\'' + ", email='" + getEmail() + '\'' + ", street='" + getStreet() + '\''
+        + ", zip='" + getZip() + '\'' + ", city='" + getCity() + '\'' + ", participant="
+        + participant + ", gender='" + gender + '\'' + ", dateOfBirth='" + dateOfBirth + '\''
+        + ", eatingHabit='" + eatingHabit + '\'' + ", healthImpairments='" + healthImpairments
+        + '\'' + ", nabuMember=" + nabuMember + ", nabuNumber='" + nabuNumber + '\'' + '}';
   }
 }
