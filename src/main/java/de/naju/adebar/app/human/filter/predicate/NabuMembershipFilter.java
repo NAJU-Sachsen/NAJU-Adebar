@@ -1,7 +1,7 @@
 package de.naju.adebar.app.human.filter.predicate;
 
 import com.querydsl.core.BooleanBuilder;
-import de.naju.adebar.app.filter.FilterType;
+import de.naju.adebar.model.human.NabuMembershipInformation.MembershipStatus;
 import de.naju.adebar.model.human.QPerson;
 
 public class NabuMembershipFilter implements PersonFilter {
@@ -13,8 +13,8 @@ public class NabuMembershipFilter implements PersonFilter {
     this.filterImpl = new NabuMembershipNumberFilter(membershipNumber);
   }
 
-  public NabuMembershipFilter(FilterType filterType) {
-    this.filterImpl = new GeneralNabuMembershipFilter(filterType);
+  public NabuMembershipFilter(MembershipStatus membershipStatus) {
+    this.filterImpl = new GeneralNabuMembershipFilter(membershipStatus);
   }
 
   @Override
@@ -23,18 +23,20 @@ public class NabuMembershipFilter implements PersonFilter {
   }
 
   private class GeneralNabuMembershipFilter implements PersonFilter {
-    private FilterType filterType;
+    private MembershipStatus membershipStatus;
 
-    public GeneralNabuMembershipFilter(FilterType filterType) {
-      this.filterType = filterType;
+    public GeneralNabuMembershipFilter(MembershipStatus membershipStatus) {
+      this.membershipStatus = membershipStatus;
     }
 
     @Override
     public BooleanBuilder filter(BooleanBuilder input) {
-      switch (filterType) {
-        case ENFORCE:
-          return input.and(person.participantProfile.nabuMembership.isNotNull());
-        case IGNORE:
+      switch (membershipStatus) {
+        case IS_MEMBER:
+          return input.and(person.participantProfile.nabuMembership.nabuMember.isTrue());
+        case NO_MEMBER:
+          return input.and(person.participantProfile.nabuMembership.nabuMember.isFalse());
+        case UNKNOWN:
           return input.and(person.participantProfile.nabuMembership.isNull());
         default:
           throw new AssertionError(filterImpl);

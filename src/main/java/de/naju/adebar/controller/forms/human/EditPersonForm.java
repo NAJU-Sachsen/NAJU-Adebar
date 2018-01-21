@@ -1,5 +1,7 @@
 package de.naju.adebar.controller.forms.human;
 
+import de.naju.adebar.model.human.NabuMembershipInformation.MembershipStatus;
+
 /**
  * Model POJO for person data. The fields are set by Thymeleaf when the associated form is
  * submitted.
@@ -7,10 +9,6 @@ package de.naju.adebar.controller.forms.human;
  * @author Rico Bergmann
  */
 public class EditPersonForm extends PersonForm {
-
-  public enum NabuMembershipStatus {
-    IS_MEMBER, NO_MEMBER, UNKNOWN
-  }
 
   public static final String DATE_FORMAT = "dd.MM.yyyy";
 
@@ -24,7 +22,7 @@ public class EditPersonForm extends PersonForm {
   private String eatingHabit;
   private String healthImpairments;
   private String remarks;
-  private NabuMembershipStatus nabuMember;
+  private MembershipStatus nabuMember;
   private String nabuNumber;
 
   public String getPhoneNumber() {
@@ -83,11 +81,11 @@ public class EditPersonForm extends PersonForm {
     this.remarks = remarks;
   }
 
-  public NabuMembershipStatus getNabuMember() {
+  public MembershipStatus getNabuMember() {
     return nabuMember;
   }
 
-  public void setNabuMember(NabuMembershipStatus nabuMember) {
+  public void setNabuMember(MembershipStatus nabuMember) {
     this.nabuMember = nabuMember;
   }
 

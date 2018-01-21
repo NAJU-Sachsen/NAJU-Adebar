@@ -23,10 +23,12 @@ import de.naju.adebar.app.human.filter.predicate.HealthImpairmentsFilter;
 import de.naju.adebar.app.human.filter.predicate.NabuMembershipFilter;
 import de.naju.adebar.app.human.filter.predicate.NameFilter;
 import de.naju.adebar.app.human.filter.predicate.PersonFilter;
+import de.naju.adebar.app.human.filter.predicate.PhoneNumberFilter;
 import de.naju.adebar.app.human.filter.predicate.ReferentFilter;
 import de.naju.adebar.controller.forms.human.FilterPersonForm;
 import de.naju.adebar.model.human.Address;
 import de.naju.adebar.model.human.Gender;
+import de.naju.adebar.model.human.NabuMembershipInformation.MembershipStatus;
 import de.naju.adebar.model.human.Qualification;
 import de.naju.adebar.model.human.QualificationRepository;
 
@@ -274,11 +276,13 @@ public class FilterPersonFormFilterExtractor {
     if (!hasNabuMembershipFilter(personForm)) {
       throw new IllegalStateException("No NABU membership filter was specified: " + personForm);
     }
-    FilterType filterType = FilterType.valueOf(personForm.getNabuMembershipFilterType());
-    if (filterType == FilterType.ENFORCE && !personForm.getNabuMembershipNumber().isEmpty()) {
+    MembershipStatus membershipStatus =
+        MembershipStatus.valueOf(personForm.getNabuMembershipFilterType());
+    if (membershipStatus == MembershipStatus.IS_MEMBER
+        && !personForm.getNabuMembershipNumber().isEmpty()) {
       return new NabuMembershipFilter(personForm.getNabuMembershipNumber());
     } else {
-      return new NabuMembershipFilter(filterType);
+      return new NabuMembershipFilter(membershipStatus);
     }
   }
 
@@ -292,6 +296,17 @@ public class FilterPersonFormFilterExtractor {
       throw new IllegalStateException("No event participation filter was specified: " + personForm);
     }
     return new EventParticipationFilter(personForm.getParticipatedEventName());
+  }
+
+  public boolean hasPhoneNumberFilter(FilterPersonForm personForm) {
+    return personForm.getPhoneNumber() != null && !personForm.getPhoneNumber().isEmpty();
+  }
+
+  public PhoneNumberFilter extractPhoneNumberFilter(FilterPersonForm personForm) {
+    if (!hasPhoneNumberFilter(personForm)) {
+      throw new IllegalStateException("No phone number filter was specified: " + personForm);
+    }
+    return new PhoneNumberFilter(personForm.getPhoneNumber());
   }
 
   /**
@@ -322,6 +337,8 @@ public class FilterPersonFormFilterExtractor {
       filters.add(extractNabuMembershipFilter(personForm));
     if (hasEventParticipationFilter(personForm))
       filters.add(extractEventParticipationFilter(personForm));
+    if (hasPhoneNumberFilter(personForm))
+      filters.add(extractPhoneNumberFilter(personForm));
     return filters;
   }
 

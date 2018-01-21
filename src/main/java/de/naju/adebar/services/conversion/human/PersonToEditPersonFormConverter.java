@@ -6,6 +6,7 @@ import java.util.Locale;
 import org.springframework.stereotype.Service;
 import de.naju.adebar.controller.forms.human.EditPersonForm;
 import de.naju.adebar.model.human.Address;
+import de.naju.adebar.model.human.NabuMembershipInformation.MembershipStatus;
 import de.naju.adebar.model.human.ParticipantProfile;
 import de.naju.adebar.model.human.Person;
 
@@ -62,12 +63,12 @@ public class PersonToEditPersonFormConverter {
     personForm.setRemarks(profile.getRemarks());
 
     if (profile.isNabuMember()) {
-      personForm.setNabuMember(EditPersonForm.NabuMembershipStatus.IS_MEMBER);
+      personForm.setNabuMember(MembershipStatus.IS_MEMBER);
       personForm.setNabuNumber(profile.getNabuMembership().getMembershipNumber());
     } else if (profile.isNabuMembershipUnknown()) {
-      personForm.setNabuMember(EditPersonForm.NabuMembershipStatus.UNKNOWN);
+      personForm.setNabuMember(MembershipStatus.UNKNOWN);
     } else {
-      personForm.setNabuMember(EditPersonForm.NabuMembershipStatus.NO_MEMBER);
+      personForm.setNabuMember(MembershipStatus.NO_MEMBER);
     }
   }
 

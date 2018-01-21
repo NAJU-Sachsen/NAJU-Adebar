@@ -1,12 +1,17 @@
 package de.naju.adebar.app.human.filter.stream;
 
-import de.naju.adebar.app.filter.FilterType;
-import de.naju.adebar.model.human.Person;
 import java.util.stream.Stream;
+import de.naju.adebar.app.filter.FilterType;
+import de.naju.adebar.model.human.NabuMembershipInformation;
+import de.naju.adebar.model.human.Person;
 
 /**
  * @author Rico Bergmann
+ * @deprecated The filter is not adjusted to the {@link NabuMembershipInformation} capturing whether
+ *             a person is NABU member or not. It may be supported again some time in the future but
+ *             as of now it should not be used any more.
  */
+@Deprecated
 public class NabuMembershipFilter implements PersonFilter {
   private FilterType filterType;
   private String membershipNumber;
