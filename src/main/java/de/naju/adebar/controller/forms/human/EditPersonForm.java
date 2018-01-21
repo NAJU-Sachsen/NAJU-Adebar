@@ -12,9 +12,6 @@ public class EditPersonForm extends PersonForm {
 
   public static final String DATE_FORMAT = "dd.MM.yyyy";
 
-  // general data
-  private String phoneNumber;
-
   // participant data
   private boolean participant;
   private String gender;
@@ -24,14 +21,6 @@ public class EditPersonForm extends PersonForm {
   private String remarks;
   private MembershipStatus nabuMember;
   private String nabuNumber;
-
-  public String getPhoneNumber() {
-    return phoneNumber;
-  }
-
-  public void setPhoneNumber(String phoneNumber) {
-    this.phoneNumber = phoneNumber;
-  }
 
   public boolean isParticipant() {
     return participant;
