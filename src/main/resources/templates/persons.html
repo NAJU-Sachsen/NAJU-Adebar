@@ -255,6 +255,12 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label for="filter-phone" class="col-sm-3 control-label">Telefon-Nummer</label>
+                            <div class="col-sm-9">
+                                <input type="tel" name="phone" class="form-control" id="filter-phone" placeholder="Telefon" th:field="*{phoneNumber}" />
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label for="filter-gender" class="col-sm-3 control-label">Geschlecht</label>
                             <div id="filter-gender" class="col-sm-9">
                                 <label for="filter-gender-type" class="sr-only">Geschlecht-Filter</label>
@@ -328,8 +334,9 @@
                                         <label for="filter-nabu-type" class="sr-only">NABU-Mitgliedschaft Filter</label>
                                         <select id="filter-nabu-type" class="selectpicker" name="nabuMembershipFilterType" data-width="auto" th:field="*{nabuMembershipFilterType}">
                                             <option value="none" selected="selected">egal</option>
-                                            <option value="ENFORCE">Nur NABU-Mitglieder</option>
-                                            <option value="IGNORE">Keine NABU-Mitglieder</option>
+                                            <option value="IS_MEMBER">Nur NABU-Mitglieder</option>
+                                            <option value="NO_MEMBER">Keine NABU-Mitglieder</option>
+                                            <option value="UNKNOWN">Unbekannter Mitgliedschafts-Status</option>
                                         </select>
                                     </div>
                                     <div id="filter-nabu-membership-number" class="hide-initially">
