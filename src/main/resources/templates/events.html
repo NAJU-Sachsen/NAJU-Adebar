@@ -292,6 +292,7 @@
       </div>
   </div>
 
+  <!-- latest release notes modal -->
   <div class="modal fade" id="release-notes-modal" tabindex="-1" th:if="${releaseNotes}" sec:authorize="!getPrincipal().hasReadReleaseNotes()">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -524,7 +525,7 @@
             <!-- filtered events -->
             <section class="row" th:if="${filteredEvents}">
                 <h2>Übereinstimmende Veranstaltungen</h2>
-                <table id="past-events" class="table table-striped table-hover tablesorter">
+                <table id="filtered-events" class="table table-striped table-hover tablesorter">
                     <thead>
                         <tr>
                             <th>Name <span class="icon"></span></th>
@@ -534,7 +535,7 @@
                             <th>Zugehörig <span class="icon"></span></th>
                         </tr>
                     </thead>
-                    <tbody class="event-list-past" th:remove="all-but-first">
+                    <tbody class="event-list-filtered" th:remove="all-but-first">
                         <tr th:each="event : ${filteredEvents}">
                             <td><a class="event-name" href="eventDetails.html" th:href="@{'/events/' + ${event.id}}" th:text="${event.name}">HIFA-Camp</a></td>
                             <td class="event-time" th:text="${{#time.formatTimeSpan(event.getStartTime(), event.getEndTime())}}">24.05.-28.05.</td>
@@ -567,18 +568,24 @@
            threshold: 0.4,
            multiSearch: true
          };
-         var currentEventsOptions = {
-            listClass: "event-list-current",
-            valueNames: ['event-name', 'event-time', 'event-place', 'event-belonging'],
-            plugins: [ListFuzzySearch(fuzzyOptions)]
-         };
-         var prospectiveEventsOptions = {
-             listClass: "event-list-prospective",
-             valueNames: ['event-name', 'event-time', 'event-place', 'event-belonging'],
-             plugins: [ListFuzzySearch(fuzzyOptions)]
-         };
-         new List('main', currentEventsOptions);
-         new List('main', prospectiveEventsOptions);
+
+         if ($('#current-events')) {
+            var currentEventsOptions = {
+                listClass: "event-list-current",
+                valueNames: ['event-name', 'event-time', 'event-place', 'event-belonging'],
+                plugins: [ListFuzzySearch(fuzzyOptions)]
+            };
+            new List('main', currentEventsOptions);
+         }
+
+         if ($('#prospective-events')) {
+            var prospectiveEventsOptions = {
+                listClass: "event-list-prospective",
+                valueNames: ['event-name', 'event-time', 'event-place', 'event-belonging'],
+                plugins: [ListFuzzySearch(fuzzyOptions)]
+            };
+            new List('main', prospectiveEventsOptions);
+         }
 
          var dateSpanExtractor = function(node) {
              // TODO: extract dates function here
@@ -588,7 +595,6 @@
              $('#current-events').tablesorter();
              $('#prospective-events').tablesorter();
          })
-
     </script>
 
     <script type="text/javascript" th:if="${pastEvents}">
@@ -613,7 +619,32 @@
 
          $(document).ready(function() {
              $('#past-events').tablesorter();
-         })
+         });
+    </script>
+
+    <script type="text/javascript" th:if="${filteredEvents}">
+        var fuzzyOptions = {
+           searchClass: "fuzzy-search",
+           location: 0,
+           distance: 150,
+           threshold: 0.4,
+           multiSearch: true
+         };
+         var filteredEventsOptions = {
+            listClass: "event-list-filtered",
+            valueNames: ['event-name', 'event-time', 'event-place', 'event-belonging'],
+            plugins: [ListFuzzySearch(fuzzyOptions)]
+         };
+
+         new List('main', filteredEventsOptions);
+
+         var dateSpanExtractor = function(node) {
+             // TODO: extract dates function here
+         };
+
+         $(document).ready(function() {
+             $('#filtered-events').tablesorter();
+         });
     </script>
 
     <form id="logout-user" method="POST" th:action="@{/logout}">
