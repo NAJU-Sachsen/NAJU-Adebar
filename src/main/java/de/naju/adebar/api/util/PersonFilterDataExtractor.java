@@ -1,7 +1,5 @@
 package de.naju.adebar.api.util;
 
-import java.util.ArrayList;
-import org.springframework.stereotype.Service;
 import de.naju.adebar.api.forms.FilterPersonForm;
 import de.naju.adebar.app.filter.FilterType;
 import de.naju.adebar.app.filter.MatchType;
@@ -10,7 +8,9 @@ import de.naju.adebar.app.persons.filter.stream.AddressFilter;
 import de.naju.adebar.app.persons.filter.stream.NameFilter;
 import de.naju.adebar.app.persons.filter.stream.PersonFilter;
 import de.naju.adebar.app.persons.filter.stream.ReferentFilter;
-import de.naju.adebar.model.persons.Address;
+import de.naju.adebar.model.Address;
+import java.util.ArrayList;
+import org.springframework.stereotype.Service;
 
 /**
  * Service to convert {@link FilterPersonForm} data to the corresponding objects
@@ -19,6 +19,7 @@ import de.naju.adebar.model.persons.Address;
  */
 @Service
 public class PersonFilterDataExtractor {
+
   private static final int MAX_FILTER_COUNT = 4;
 
   /**

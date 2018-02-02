@@ -2,7 +2,7 @@ package de.naju.adebar.app.persons.filter.predicate;
 
 import com.querydsl.core.BooleanBuilder;
 import de.naju.adebar.app.filter.MatchType;
-import de.naju.adebar.model.persons.Address;
+import de.naju.adebar.model.Address;
 import de.naju.adebar.model.persons.QPerson;
 
 public class AddressFilter implements PersonFilter {

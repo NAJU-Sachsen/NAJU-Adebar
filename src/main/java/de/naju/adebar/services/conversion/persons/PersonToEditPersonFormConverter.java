@@ -1,18 +1,18 @@
 package de.naju.adebar.services.conversion.persons;
 
+import de.naju.adebar.controller.forms.persons.EditPersonForm;
+import de.naju.adebar.model.Address;
+import de.naju.adebar.model.persons.NabuMembershipInformation.MembershipStatus;
+import de.naju.adebar.model.persons.ParticipantProfile;
+import de.naju.adebar.model.persons.Person;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import org.springframework.stereotype.Service;
-import de.naju.adebar.controller.forms.persons.EditPersonForm;
-import de.naju.adebar.model.persons.Address;
-import de.naju.adebar.model.persons.NabuMembershipInformation.MembershipStatus;
-import de.naju.adebar.model.persons.ParticipantProfile;
-import de.naju.adebar.model.persons.Person;
 
 /**
  * Service to convert a {@link Person} to a corresponding {@link EditPersonForm}
- * 
+ *
  * @author Rico Bergmann
  */
 @Service
@@ -20,7 +20,7 @@ public class PersonToEditPersonFormConverter {
 
   /**
    * Performs the conversion
-   * 
+   *
    * @param person the person to convert
    * @return the created form
    */

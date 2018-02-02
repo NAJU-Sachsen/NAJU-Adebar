@@ -2,7 +2,7 @@ package de.naju.adebar.app.persons.filter;
 
 import de.naju.adebar.app.filter.MatchType;
 import de.naju.adebar.app.persons.filter.stream.AddressFilter;
-import de.naju.adebar.model.persons.Address;
+import de.naju.adebar.model.Address;
 import de.naju.adebar.model.persons.Person;
 import org.junit.Assert;
 import org.junit.Test;
@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Basic testing for the {@link AddressFilter}
- * 
+ *
  * @author Rico Bergmann
  */
 @RunWith(SpringRunner.class)
@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Rollback
 @Component
 public class AddressFilterUnitTest extends FilterTestBootstrapper {
+
   private Address address;
   private AddressFilter addressFilter;
 

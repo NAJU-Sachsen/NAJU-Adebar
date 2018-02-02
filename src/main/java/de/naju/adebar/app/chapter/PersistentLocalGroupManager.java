@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import com.google.common.collect.Lists;
 import de.naju.adebar.app.IdUpdateFailedException;
+import de.naju.adebar.model.Address;
 import de.naju.adebar.model.chapter.Board;
 import de.naju.adebar.model.chapter.BoardRepository;
 import de.naju.adebar.model.chapter.LocalGroup;
@@ -20,10 +21,9 @@ import de.naju.adebar.model.chapter.LocalGroupRepository;
 import de.naju.adebar.model.chapter.Project;
 import de.naju.adebar.model.chapter.ProjectRepository;
 import de.naju.adebar.model.chapter.ReadOnlyLocalGroupRepository;
-import de.naju.adebar.model.persons.Address;
+import de.naju.adebar.model.newsletter.Newsletter;
 import de.naju.adebar.model.persons.NoActivistException;
 import de.naju.adebar.model.persons.Person;
-import de.naju.adebar.model.newsletter.Newsletter;
 import de.naju.adebar.util.Streams;
 
 /**
@@ -33,6 +33,7 @@ import de.naju.adebar.util.Streams;
  */
 @Service
 public class PersistentLocalGroupManager implements LocalGroupManager {
+
   private LocalGroupRepository localGroupRepo;
   private ProjectRepository projectRepo;
   private BoardRepository boardRepo;

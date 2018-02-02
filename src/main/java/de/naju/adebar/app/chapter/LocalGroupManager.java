@@ -2,18 +2,18 @@ package de.naju.adebar.app.chapter;
 
 import java.util.Optional;
 import org.springframework.stereotype.Service;
+import de.naju.adebar.model.Address;
 import de.naju.adebar.model.chapter.Board;
 import de.naju.adebar.model.chapter.LocalGroup;
 import de.naju.adebar.model.chapter.Project;
 import de.naju.adebar.model.chapter.ReadOnlyLocalGroupRepository;
-import de.naju.adebar.model.persons.Address;
+import de.naju.adebar.model.newsletter.Newsletter;
 import de.naju.adebar.model.persons.NoActivistException;
 import de.naju.adebar.model.persons.Person;
-import de.naju.adebar.model.newsletter.Newsletter;
 
 /**
  * Service to take care of {@link LocalGroup local groups}
- * 
+ *
  * @author Rico Bergmann
  * @see LocalGroup
  */
@@ -22,7 +22,7 @@ public interface LocalGroupManager {
 
   /**
    * Saves the given local group. It may or may not be saved already
-   * 
+   *
    * @param localGroup the chapter to save
    * @return the saved chapter. As its internal state may differ after the save, this instance
    *         should be used for future operations
@@ -31,7 +31,7 @@ public interface LocalGroupManager {
 
   /**
    * Creates a new local group
-   * 
+   *
    * @param name the local group's name
    * @param address the local group's address
    * @return the freshly created local group instance
@@ -41,7 +41,7 @@ public interface LocalGroupManager {
   /**
    * Changes the state of a saved local group. This will overwrite the complete state of the group
    * to update
-   * 
+   *
    * @param id the identifier of the local group to update
    * @param newLocalGroup the new local group's data
    * @return the updated chapter
@@ -52,7 +52,7 @@ public interface LocalGroupManager {
    * Changes the state of a saved local group. In difference to
    * {@link #updateLocalGroup(long, LocalGroup)} this does only modify "static" information, such as
    * name and address, but leaves "dynamic" fields like events and projects untouched
-   * 
+   *
    * @param id the identifier of the local group to update
    * @param localGroupData the local groups "static" data to adopt
    * @return the updated chapter
@@ -61,7 +61,7 @@ public interface LocalGroupManager {
 
   /**
    * Updates the board of a local group
-   * 
+   *
    * @param groupId the identifier of the local group to update
    * @param boardData the board's data
    * @return the updated chapter
@@ -70,7 +70,7 @@ public interface LocalGroupManager {
 
   /**
    * Queries for a specific local group
-   * 
+   *
    * @param id the local group's id
    * @return an optional containing the chapter if it exists, otherwise the optional is empty
    */
@@ -78,14 +78,14 @@ public interface LocalGroupManager {
 
   /**
    * Provides access to the underlying data
-   * 
+   *
    * @return a read only instance of the database
    */
   ReadOnlyLocalGroupRepository repository();
 
   /**
    * Adds a newsletter to a local group.. Surprise surprise
-   * 
+   *
    * @param localGroup the local group to add the newsletter to
    * @param newsletter the newsletter to add
    */
@@ -93,7 +93,7 @@ public interface LocalGroupManager {
 
   /**
    * Deletes the newsletter from a local group
-   * 
+   *
    * @param localGroup the chapter to remove the newsletter from
    * @param newsletter the newsletter to remove
    */
@@ -101,7 +101,7 @@ public interface LocalGroupManager {
 
   /**
    * Creates a new project for a local group
-   * 
+   *
    * @param localGroup the local group
    * @param projectName the project's name
    * @return the created project
@@ -110,7 +110,7 @@ public interface LocalGroupManager {
 
   /**
    * Chains a new project and a local group together.
-   * 
+   *
    * @param localGroup the local group
    * @param project the project
    * @return the persisted project
@@ -120,7 +120,7 @@ public interface LocalGroupManager {
 
   /**
    * Provides access to all local groups where the given activist is member of the board
-   * 
+   *
    * @param activist the activist
    * @return all local groups where the given activist is member of the board
    */
@@ -128,7 +128,7 @@ public interface LocalGroupManager {
 
   /**
    * Makes an activist part of a local group if is no member yet.
-   * 
+   *
    * @param group the group the member is added to
    * @param activist the person
    * @throws NoActivistException if the person is no activist
@@ -138,7 +138,7 @@ public interface LocalGroupManager {
   /**
    * Ensures that an activist is part of exactly the local groups specified This means especially
    * that if the person was member of other chapters before, those will be removed.
-   * 
+   *
    * @param activist the activist to update
    * @param localGroups the local groups the activist should be part of
    */

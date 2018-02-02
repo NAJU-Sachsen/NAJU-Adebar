@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import de.naju.adebar.model.Address;
 
 /**
  * Factory to create {@link Person} instances. Using the Builder pattern.

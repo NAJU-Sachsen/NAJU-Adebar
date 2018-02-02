@@ -1,28 +1,30 @@
 package de.naju.adebar.services.conversion.events;
 
+import static de.naju.adebar.controller.forms.events.EventForm.CURRENCY_UNIT;
+
 import de.naju.adebar.controller.forms.events.EventForm;
-import de.naju.adebar.controller.forms.events.EventForm.*;
+import de.naju.adebar.controller.forms.events.EventForm.Belonging;
+import de.naju.adebar.model.Address;
 import de.naju.adebar.model.events.Event;
 import de.naju.adebar.model.events.EventFactory;
-import de.naju.adebar.model.persons.Address;
-import org.javamoney.moneta.Money;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
-import static de.naju.adebar.controller.forms.events.EventForm.CURRENCY_UNIT;
+import org.javamoney.moneta.Money;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 /**
  * Service to extract the necessary data from a 'add event' or 'edit event' form
- * 
+ *
  * @author Rico Bergmann
  * @see EventForm
  */
 @Service
 public class EventFormDataExtractor {
+
   private EventFactory eventFactory;
   private DateTimeFormatter dateTimeFormatter;
 

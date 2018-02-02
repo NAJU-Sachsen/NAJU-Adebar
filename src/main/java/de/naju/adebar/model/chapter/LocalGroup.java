@@ -23,11 +23,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 import org.springframework.util.Assert;
+import de.naju.adebar.model.Address;
 import de.naju.adebar.model.events.Event;
-import de.naju.adebar.model.persons.Address;
+import de.naju.adebar.model.newsletter.Newsletter;
 import de.naju.adebar.model.persons.NoActivistException;
 import de.naju.adebar.model.persons.Person;
-import de.naju.adebar.model.newsletter.Newsletter;
 
 /**
  * Abstraction of a local group. Each group has a (very likely) unique set of members, i. e.
@@ -116,6 +116,13 @@ public class LocalGroup {
   }
 
   /**
+   * @param id the primary key of the local group
+   */
+  protected void setId(long id) {
+    this.id = id;
+  }
+
+  /**
    * @return the local group's name
    */
   public String getName() {
@@ -155,6 +162,13 @@ public class LocalGroup {
   }
 
   /**
+   * @param members the local group's members
+   */
+  protected void setMembers(List<Person> members) {
+    this.members = members;
+  }
+
+  /**
    * @return the local group's contact persons
    */
   public Iterable<Person> getContactPersons() {
@@ -176,10 +190,24 @@ public class LocalGroup {
   }
 
   /**
+   * @param events the events the local group hosts
+   */
+  protected void setEvents(List<Event> events) {
+    this.events = events;
+  }
+
+  /**
    * @return the projects the local group organizes
    */
   public List<Project> getProjects() {
     return Collections.unmodifiableList(projects);
+  }
+
+  /**
+   * @param projects the projects the local group organizes
+   */
+  protected void setProjects(List<Project> projects) {
+    this.projects = projects;
   }
 
   /**
@@ -200,6 +228,10 @@ public class LocalGroup {
     return newsletters;
   }
 
+  public void setNewsletters(Set<Newsletter> newsletters) {
+    this.newsletters = newsletters;
+  }
+
   /**
    * @return the website of the NABU group this NAJU belongs to
    */
@@ -212,38 +244,6 @@ public class LocalGroup {
    */
   public void setNabuGroupLink(URL nabuGroupLink) {
     this.nabuGroupLink = nabuGroupLink;
-  }
-
-  /**
-   * @param id the primary key of the local group
-   */
-  protected void setId(long id) {
-    this.id = id;
-  }
-
-  /**
-   * @param members the local group's members
-   */
-  protected void setMembers(List<Person> members) {
-    this.members = members;
-  }
-
-  /**
-   * @param events the events the local group hosts
-   */
-  protected void setEvents(List<Event> events) {
-    this.events = events;
-  }
-
-  /**
-   * @param projects the projects the local group organizes
-   */
-  protected void setProjects(List<Project> projects) {
-    this.projects = projects;
-  }
-
-  public void setNewsletters(Set<Newsletter> newsletters) {
-    this.newsletters = newsletters;
   }
 
   // query methods
@@ -283,8 +283,8 @@ public class LocalGroup {
   }
 
   /**
-   * @return {@code true} if a board is specified (i.e. different from {@code null}) or
-   *         {@code false} otherwise
+   * @return {@code true} if a board is specified (i.e. different from {@code null}) or {@code
+   * false} otherwise
    */
   public boolean hasBoard() {
     return board != null;
@@ -403,10 +403,12 @@ public class LocalGroup {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o)
+    if (this == o) {
       return true;
-    if (o == null || getClass() != o.getClass())
+    }
+    if (o == null || getClass() != o.getClass()) {
       return false;
+    }
 
     LocalGroup that = (LocalGroup) o;
 
@@ -414,12 +416,15 @@ public class LocalGroup {
       return that.id == this.id;
     }
 
-    if (!name.equals(that.name))
+    if (!name.equals(that.name)) {
       return false;
-    if (!address.equals(that.address))
+    }
+    if (!address.equals(that.address)) {
       return false;
-    if (!members.equals(that.members))
+    }
+    if (!members.equals(that.members)) {
       return false;
+    }
     return board != null ? board.equals(that.board) : that.board == null;
   }
 

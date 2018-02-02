@@ -3,7 +3,7 @@ package de.naju.adebar.api.data;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
-import de.naju.adebar.model.persons.Address;
+import de.naju.adebar.model.Address;
 import de.naju.adebar.model.persons.Person;
 
 /**

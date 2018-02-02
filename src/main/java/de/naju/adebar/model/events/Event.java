@@ -25,7 +25,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Transient;
 import org.javamoney.moneta.Money;
 import org.springframework.util.Assert;
-import de.naju.adebar.model.persons.Address;
+import de.naju.adebar.model.Address;
 import de.naju.adebar.model.persons.NoActivistException;
 import de.naju.adebar.model.persons.NoParticipantException;
 import de.naju.adebar.model.persons.Person;

@@ -20,7 +20,7 @@ import de.naju.adebar.app.filter.ComparableFilterType;
 import de.naju.adebar.app.filter.DateTimeFilterType;
 import de.naju.adebar.app.filter.MatchType;
 import de.naju.adebar.controller.forms.events.FilterEventsForm;
-import de.naju.adebar.model.persons.Address;
+import de.naju.adebar.model.Address;
 
 /**
  * Service to convert {@link FilterEventsForm} data to corresponding objects

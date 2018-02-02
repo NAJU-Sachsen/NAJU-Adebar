@@ -1,16 +1,17 @@
 package de.naju.adebar.app.persons.filter.stream;
 
-import de.naju.adebar.app.filter.MatchType;
-import de.naju.adebar.model.persons.Address;
-import de.naju.adebar.model.persons.Person;
 import java.util.stream.Stream;
+import de.naju.adebar.app.filter.MatchType;
+import de.naju.adebar.model.Address;
+import de.naju.adebar.model.persons.Person;
 
 /**
  * Filter for persons depending on their addresses.
- * 
+ *
  * @author Rico Bergmann
  */
 public class AddressFilter implements PersonFilter {
+
   private Address address;
   private MatchType matchType;
 

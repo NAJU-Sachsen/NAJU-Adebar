@@ -1,24 +1,25 @@
 package de.naju.adebar.services.conversion.chapter;
 
 import de.naju.adebar.controller.forms.chapter.LocalGroupForm;
+import de.naju.adebar.model.Address;
 import de.naju.adebar.model.chapter.LocalGroup;
-import de.naju.adebar.model.persons.Address;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.persons.PersonManager;
-import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 /**
  * Service to extract the necessary data from a local group form
- * 
+ *
  * @author Rico Bergmann
  */
 @Service
 public class LocalGroupFormDataExtractor {
+
   private PersonManager personManager;
 
   public LocalGroupFormDataExtractor(PersonManager personManager) {

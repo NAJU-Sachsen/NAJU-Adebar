@@ -2,15 +2,16 @@ package de.naju.adebar.app.events.filter;
 
 import java.util.stream.Stream;
 import de.naju.adebar.app.filter.MatchType;
+import de.naju.adebar.model.Address;
 import de.naju.adebar.model.events.Event;
-import de.naju.adebar.model.persons.Address;
 
 /**
  * Filter for events based on where they take place
- * 
+ *
  * @author Rico Bergmann
  */
 public class AddressFilter implements EventFilter {
+
   private Address address;
   private MatchType matchType;
 

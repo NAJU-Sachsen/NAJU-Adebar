@@ -6,14 +6,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.stereotype.Component;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
+import de.naju.adebar.model.Address;
 import de.naju.adebar.model.chapter.Board;
 import de.naju.adebar.model.chapter.LocalGroup;
 import de.naju.adebar.model.chapter.LocalGroupRepository;
-import de.naju.adebar.model.persons.Address;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.persons.PersonFactory;
 import de.naju.adebar.model.persons.PersonManager;
@@ -24,9 +22,8 @@ import de.naju.adebar.model.persons.PersonManager;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
-@Rollback
-@Component
 public class PersistentLocalGroupManagerIntegrationTest {
+
   @Autowired
   private PersistentLocalGroupManager localGroupManager;
   @Autowired
