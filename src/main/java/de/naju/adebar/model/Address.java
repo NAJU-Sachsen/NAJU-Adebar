@@ -6,8 +6,9 @@ import org.springframework.util.Assert;
 
 /**
  * Abstraction of an address. Each address consists of street, zip and city and may contain
- * additional info - e.g. room numbers or the like. <p> Mind that an address is a value-object -
- * once created it may not be modified any more.
+ * additional info - e.g. room numbers or the like.
+ * <p>
+ * Mind that an address is a value-object - once created it may not be modified any more.
  *
  * @author Rico Bergmann
  */
@@ -27,6 +28,31 @@ public class Address {
 
   @Column(name = "hints")
   private String additionalInfo;
+
+  /**
+   * Creates a new address
+   *
+   * @param street the street, may not be empty
+   * @param zip the zip, must be 5 characters long
+   * @param city the city, may not be empty
+   * @return the address
+   */
+  public static Address of(String street, String zip, String city) {
+    return new Address(street, zip, city);
+  }
+
+  /**
+   * Creates a new address
+   *
+   * @param street the street, may not be empty
+   * @param zip the zip, must be 5 characters long
+   * @param city the city, may not be empty
+   * @param additionalInfo the additional info, may be empty but not {@code null}
+   * @return the address
+   */
+  public static Address of(String street, String zip, String city, String additionalInfo) {
+    return new Address(street, zip, city, additionalInfo);
+  }
 
   /**
    * Simplified constructor
@@ -68,31 +94,6 @@ public class Address {
    */
   public Address() {
     street = zip = city = additionalInfo = "";
-  }
-
-  /**
-   * Creates a new address
-   *
-   * @param street the street, may not be empty
-   * @param zip the zip, must be 5 characters long
-   * @param city the city, may not be empty
-   * @return the address
-   */
-  public static Address of(String street, String zip, String city) {
-    return new Address(street, zip, city);
-  }
-
-  /**
-   * Creates a new address
-   *
-   * @param street the street, may not be empty
-   * @param zip the zip, must be 5 characters long
-   * @param city the city, may not be empty
-   * @param additionalInfo the additional info, may be empty but not {@code null}
-   * @return the address
-   */
-  public static Address of(String street, String zip, String city, String additionalInfo) {
-    return new Address(street, zip, city, additionalInfo);
   }
 
   /**
