@@ -1,5 +1,11 @@
-package de.naju.adebar.app.persons.filter.stream;
+package de.naju.adebar.app.persons.filter;
 
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
+import org.junit.Before;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import de.naju.adebar.model.Address;
 import de.naju.adebar.model.persons.Gender;
 import de.naju.adebar.model.persons.JuleicaCard;
@@ -9,12 +15,6 @@ import de.naju.adebar.model.persons.PersonManager;
 import de.naju.adebar.model.persons.PersonRepository;
 import de.naju.adebar.model.persons.Qualification;
 import de.naju.adebar.model.persons.QualificationRepository;
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
-import org.junit.Before;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  * @author Rico Bergmann
@@ -23,50 +23,50 @@ import org.springframework.stereotype.Component;
 public class FilterTestBootstrapper {
 
   @Autowired
-  PersonFactory personFactory;
+  protected PersonFactory personFactory;
 
-  Address hansAddress = new Address("zu Hause 3", "01234", "Nirgends");
-  Address clausAddress = new Address("Hinter der Boje 7", "55555", "Aufm Meer");
-  Address bertaAddress = new Address("Bei Mir 1", "98765", "Entenhausen");
-  Address fritzAddress = new Address("Waseblitzer Straße 11", "03107", "Dersden");
-  Address heinzAddress = new Address("Am Nischel 42", "01911", "Chmenitz");
+  protected Address hansAddress = new Address("zu Hause 3", "01234", "Nirgends");
+  protected Address clausAddress = new Address("Hinter der Boje 7", "55555", "Aufm Meer");
+  protected Address bertaAddress = new Address("Bei Mir 1", "98765", "Entenhausen");
+  protected Address fritzAddress = new Address("Waseblitzer Straße 11", "03107", "Dersden");
+  protected Address heinzAddress = new Address("Am Nischel 42", "01911", "Chmenitz");
 
-  LocalDate hansDob = LocalDate.now().minusDays(3L);
-  LocalDate clausDob = LocalDate.of(1635, 3, 5);
-  LocalDate bertaDob = LocalDate.now().minusYears(23);
-  LocalDate fritzDob = LocalDate.now().minusYears(55);
-  LocalDate heinzDob = bertaDob;
+  protected LocalDate hansDob = LocalDate.now().minusDays(3L);
+  protected LocalDate clausDob = LocalDate.of(1635, 3, 5);
+  protected LocalDate bertaDob = LocalDate.now().minusYears(23);
+  protected LocalDate fritzDob = LocalDate.now().minusYears(55);
+  protected LocalDate heinzDob = bertaDob;
 
-  LocalDate hansJuleicaExpiry = LocalDate.of(2017, 2, 1);
-  LocalDate clausJuleicaExpiry = hansJuleicaExpiry.minusDays(1L);
-  LocalDate bertaJuleicaExpiry = hansJuleicaExpiry.plusDays(1L);
+  protected LocalDate hansJuleicaExpiry = LocalDate.of(2017, 2, 1);
+  protected LocalDate clausJuleicaExpiry = hansJuleicaExpiry.minusDays(1L);
+  protected LocalDate bertaJuleicaExpiry = hansJuleicaExpiry.plusDays(1L);
 
-  Qualification bertaQualification1 = new Qualification("Widlife", "");
-  Qualification bertaQualification2 = new Qualification("Erste-Hilfe Kurs", "");
-
-  // participant and activist
-  Person hans;
+  protected Qualification bertaQualification1 = new Qualification("Widlife", "");
+  protected Qualification bertaQualification2 = new Qualification("Erste-Hilfe Kurs", "");
 
   // participant and activist
-  Person claus;
+  protected Person hans;
+
+  // participant and activist
+  protected Person claus;
 
   // participant and referent and activist
-  Person berta;
+  protected Person berta;
 
   // participant and referent
-  Person fritz;
+  protected Person fritz;
 
   // only a camp participant
-  Person heinz;
+  protected Person heinz;
 
-  List<Person> persons;
+  protected List<Person> persons;
 
   @Autowired
-  PersonManager personManager;
+  protected PersonManager personManager;
   @Autowired
-  PersonRepository personRepo;
+  protected PersonRepository personRepo;
   @Autowired
-  QualificationRepository qualificationRepo;
+  protected QualificationRepository qualificationRepo;
 
   @Before
   public void setUp() {

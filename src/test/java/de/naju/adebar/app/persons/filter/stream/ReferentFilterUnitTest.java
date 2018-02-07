@@ -11,6 +11,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import de.naju.adebar.app.filter.FilterType;
+import de.naju.adebar.app.persons.filter.FilterTestBootstrapper;
 import de.naju.adebar.app.persons.filter.stream.ReferentFilter;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.persons.Qualification;

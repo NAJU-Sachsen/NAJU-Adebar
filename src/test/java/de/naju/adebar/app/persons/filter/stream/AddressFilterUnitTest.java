@@ -1,6 +1,7 @@
 package de.naju.adebar.app.persons.filter.stream;
 
 import de.naju.adebar.app.filter.MatchType;
+import de.naju.adebar.app.persons.filter.FilterTestBootstrapper;
 import de.naju.adebar.app.persons.filter.stream.AddressFilter;
 import de.naju.adebar.model.Address;
 import de.naju.adebar.model.persons.Person;
