@@ -1,4 +1,4 @@
-package de.naju.adebar.app.persons.filter;
+package de.naju.adebar.app.persons.filter.stream;
 
 import java.util.Arrays;
 import java.util.List;

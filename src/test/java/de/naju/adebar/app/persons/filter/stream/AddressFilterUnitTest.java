@@ -1,4 +1,4 @@
-package de.naju.adebar.app.persons.filter;
+package de.naju.adebar.app.persons.filter.stream;
 
 import de.naju.adebar.app.filter.MatchType;
 import de.naju.adebar.app.persons.filter.stream.AddressFilter;

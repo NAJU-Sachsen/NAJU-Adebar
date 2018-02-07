@@ -1,4 +1,4 @@
-package de.naju.adebar.app.persons.filter;
+package de.naju.adebar.app.persons.filter.stream;
 
 import de.naju.adebar.model.Address;
 import de.naju.adebar.model.persons.Gender;
