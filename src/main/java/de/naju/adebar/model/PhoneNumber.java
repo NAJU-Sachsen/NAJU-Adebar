@@ -1,8 +1,11 @@
 package de.naju.adebar.model;
 
 import java.util.Objects;
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 import org.springframework.util.Assert;
 import de.naju.adebar.util.Validation;
 
@@ -12,6 +15,7 @@ import de.naju.adebar.util.Validation;
  * <p>
  * Each instance will try to unify the way the phone number is being represented - independently of
  * the format it as input.
+ *
  * <p>
  * Upon creation some basic sanity checks on the credibility of the phone number will be created,
  * however those may not give complete accuracy.
@@ -25,7 +29,9 @@ public class PhoneNumber {
   public static final int MINIMUM_LENGTH = 10;
   public static final int DIALING_CODE_LENGTH = 4;
 
-  @Column(name = "phoneNumber")
+  @Column(name = "phone")
+  @Access(AccessType.PROPERTY) // we currently need property based access to ensure the
+                               // normalization of old phone numbers (which were just plain strings)
   private String number;
 
   /**
@@ -136,6 +142,7 @@ public class PhoneNumber {
    * @param characterIdx the position
    * @return whether the first character is a plus
    */
+  @Transient
   private static boolean isLeadingPlus(String number, int characterIdx) {
     return characterIdx == 0 && number.charAt(characterIdx) == '+';
   }
@@ -145,6 +152,7 @@ public class PhoneNumber {
    * @return whether it is in international format
    * @see #isInInternationalFormat()
    */
+  @Transient
   private static boolean isInInternationalFormat(CharSequence number) {
     return number.length() > 0 && number.charAt(0) == '+';
   }
@@ -180,12 +188,13 @@ public class PhoneNumber {
   @SuppressWarnings("unused")
   private void setNumber(String number) {
     assertValidNumber(number);
-    this.number = number;
+    this.number = normalizePhoneNumber(number);
   }
 
   /**
    * @return whether the number is for mobile phones and in international format
    */
+  @Transient
   public boolean isInInternationalFormat() {
     return isInInternationalFormat(number);
   }
