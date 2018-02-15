@@ -62,12 +62,17 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-              <li class="dropdown" th:classappend="${page == 'accounts' or page == 'releaseNotes' or page == 'about' or page == 'help'} ? 'active'">
+              <li class="dropdown" th:classappend="${page == 'accounts' or page == 'releaseNotes' or page == 'about' or page == 'help' or page == 'sqlConsole'} ? 'active'">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Verschiedenes <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                   <li sec:authorize="hasRole('ROLE_ADMIN')" th:classappend="${page == 'accounts'} ? 'active'">
                     <a href="accounts.html" th:href="@{/accounts}">
                       <span class="glyphicon glyphicon-dashboard"></span> Accounts
+                    </a>
+                  </li>
+                  <li sec:authorize="hasRole('ROLE_ADMIN')" th:classappend="${page == 'sqlConsole'} ? 'active'">
+                    <a href="sqlConsole.html" th:href="@{/admin/sql-console}">
+                      <span class="glyphicon glyphicon-console"></span> SQL-Konsole
                     </a>
                   </li>
                   <li sec:authorize="hasRole('ROLE_ADMIN')" th:classappend="${page == 'releaseNotes'} ? 'active'">
