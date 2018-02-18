@@ -327,9 +327,9 @@
 
             <!-- search bar -->
             <div class="form-group">
-                <label class="sr-only" for="persons">Name, Ort o.ä.</label>
+                <label class="sr-only" for="events">Name, Ort o.ä.</label>
                 <div class="input-group">
-                    <input id="persons" type="text" class="form-control fuzzy-search" name="persons" placeholder="Name, Ort o.ä."/>
+                    <input id="events" type="text" class="form-control fuzzy-search" name="events" placeholder="Name, Ort o.ä."/>
                     <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
                 </div>
             </div>
@@ -569,7 +569,7 @@
            multiSearch: true
          };
 
-         if ($('#current-events')) {
+         if ($('#current-events').length) {
             var currentEventsOptions = {
                 listClass: "event-list-current",
                 valueNames: ['event-name', 'event-time', 'event-place', 'event-belonging'],
@@ -578,7 +578,7 @@
             new List('main', currentEventsOptions);
          }
 
-         if ($('#prospective-events')) {
+         if ($('#prospective-events').length) {
             var prospectiveEventsOptions = {
                 listClass: "event-list-prospective",
                 valueNames: ['event-name', 'event-time', 'event-place', 'event-belonging'],
