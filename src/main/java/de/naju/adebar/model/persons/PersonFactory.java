@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import de.naju.adebar.model.Address;
+import de.naju.adebar.model.PhoneNumber;
 
 /**
  * Factory to create {@link Person} instances. Using the Builder pattern.
@@ -109,7 +110,7 @@ public class PersonFactory {
      * @param phoneNumber the number
      * @return the builder to use for further calls
      */
-    public PersonBuilder specifyPhoneNumber(String phoneNumber) {
+    public PersonBuilder specifyPhoneNumber(PhoneNumber phoneNumber) {
       person.setPhoneNumber(phoneNumber);
       return this;
     }
