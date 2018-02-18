@@ -70,11 +70,15 @@ public class EditPersonForm extends PersonForm {
     this.remarks = remarks;
   }
 
-  public MembershipStatus getNabuMember() {
+  public boolean isNabuMember() {
+    return nabuMember != null;
+  }
+
+  public MembershipStatus getNabuMembershipStatus() {
     return nabuMember;
   }
 
-  public void setNabuMember(MembershipStatus nabuMember) {
+  public void setNabuMembershipStatus(MembershipStatus nabuMember) {
     this.nabuMember = nabuMember;
   }
 

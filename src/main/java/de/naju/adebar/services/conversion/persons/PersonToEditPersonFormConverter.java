@@ -66,12 +66,12 @@ public class PersonToEditPersonFormConverter {
     personForm.setRemarks(profile.getRemarks());
 
     if (profile.isNabuMember()) {
-      personForm.setNabuMember(MembershipStatus.IS_MEMBER);
+      personForm.setNabuMembershipStatus(MembershipStatus.IS_MEMBER);
       personForm.setNabuNumber(profile.getNabuMembership().getMembershipNumber());
     } else if (profile.isNabuMembershipUnknown()) {
-      personForm.setNabuMember(MembershipStatus.UNKNOWN);
+      personForm.setNabuMembershipStatus(MembershipStatus.UNKNOWN);
     } else {
-      personForm.setNabuMember(MembershipStatus.NO_MEMBER);
+      personForm.setNabuMembershipStatus(MembershipStatus.NO_MEMBER);
     }
   }
 

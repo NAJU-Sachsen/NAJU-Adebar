@@ -119,7 +119,7 @@ public class CreatePersonFormDataExtractor {
     }
 
     NabuMembershipInformation nabuMembershipInformation = null;
-    switch (personForm.getNabuMember()) {
+    switch (personForm.getNabuMembershipStatus()) {
       case IS_MEMBER:
         nabuMembershipInformation = new NabuMembershipInformation(personForm.getNabuNumber());
         break;
@@ -130,7 +130,7 @@ public class CreatePersonFormDataExtractor {
         nabuMembershipInformation = null;
         break;
       default:
-        throw new AssertionError(personForm.getNabuMember());
+        throw new AssertionError(personForm.getNabuMembershipStatus());
     }
     builder.specifyNabuMembership(nabuMembershipInformation);
 

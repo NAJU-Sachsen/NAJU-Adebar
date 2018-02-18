@@ -210,7 +210,7 @@
                             <label for="add-person-nabu" class="col-sm-3 control-label">NABU</label>
                             <div class="col-sm-9">
                                 <div class="input-group" id="add-person-nabu">
-                                  <select class="selectpicker form-control" name="nabuMember" id="add-person-isNabuMember" data-width="40%" th:field="*{nabuMember}">
+                                  <select class="selectpicker form-control" name="nabuMember" id="add-person-isNabuMember" data-width="40%" th:field="*{nabuMembershipStatus}">
                                     <option value="UNKNOWN">Unbekannt</option>
                                     <option value="IS_MEMBER">NABU-Mitglied</option>
                                     <option value="NO_MEMBER">Kein Mitglied</option>
@@ -501,7 +501,11 @@
                                 Erste-Hilfe Kurs
                             </option>
                         </select>
-                        <input type="checkbox" name="nabuMember" th:field="*{nabuMember}" />
+                        <select name="nabuMember" th:field="*{nabuMembershipStatus}">
+                          <option value="UNKNOWN">Unbekannt</option>
+                          <option value="IS_MEMBER">NABU-Mitglied</option>
+                          <option value="NO_MEMBER">Kein Mitglied</option>
+                        </select>
                         <input type="text" name="nabuNr" th:field="*{nabuNumber}" />
                     </form>
                     <button type="submit" class="btn btn-primary" form="add-person-ignore">Trotzdem hinzufügen</button>
