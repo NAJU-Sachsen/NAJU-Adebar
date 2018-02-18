@@ -25,6 +25,7 @@ import org.springframework.data.domain.AfterDomainEventPublication;
 import org.springframework.data.domain.DomainEvents;
 import org.springframework.util.Assert;
 import de.naju.adebar.model.Address;
+import de.naju.adebar.model.PhoneNumber;
 import de.naju.adebar.model.events.Event;
 import de.naju.adebar.util.Validation;
 
@@ -62,8 +63,8 @@ public class Person {
   @Email
   private String email;
 
-  @Column(name = "phone")
-  private String phoneNumber;
+  @Embedded
+  private PhoneNumber phoneNumber;
 
   @Embedded
   @AttributeOverrides({
@@ -213,14 +214,14 @@ public class Person {
   /**
    * @return the person's phone number. May be {@code null}.
    */
-  public String getPhoneNumber() {
+  public PhoneNumber getPhoneNumber() {
     return phoneNumber;
   }
 
   /**
    * @param phoneNumber the person's phone number. May be {@code null}.
    */
-  protected void setPhoneNumber(String phoneNumber) {
+  protected void setPhoneNumber(PhoneNumber phoneNumber) {
     this.phoneNumber = phoneNumber;
   }
 
@@ -411,6 +412,20 @@ public class Person {
   }
 
   /**
+   * @return whether the phone number is set
+   */
+  public boolean hasPhoneNumber() {
+    return phoneNumber != null;
+  }
+
+  /**
+   * @return whether the address is set
+   */
+  public boolean hasAddress() {
+    return address != null;
+  }
+
+  /**
    * @return {@code true} if a parent is registered for this person, {@code false} otherwise
    */
   public boolean hasParents() {
@@ -438,7 +453,7 @@ public class Person {
    * @return the updated person
    */
   public Person updateInformation(String firstName, String lastName, String email,
-      String phoneNumber) {
+      PhoneNumber phoneNumber) {
     setFirstName(firstName);
     setLastName(lastName);
     setEmail(email);
@@ -513,7 +528,7 @@ public class Person {
    * @param phoneNumber the new phone number
    * @return the updated person
    */
-  public Person updatePhoneNumber(String phoneNumber) {
+  public Person updatePhoneNumber(PhoneNumber phoneNumber) {
     setPhoneNumber(phoneNumber);
 
     if (!updateEventWasRegistered()) {
