@@ -13,6 +13,7 @@ import com.google.common.collect.Lists;
 import de.naju.adebar.controller.forms.persons.CreateParentForm;
 import de.naju.adebar.controller.forms.persons.CreatePersonForm;
 import de.naju.adebar.model.Address;
+import de.naju.adebar.model.PhoneNumber;
 import de.naju.adebar.model.chapter.LocalGroup;
 import de.naju.adebar.model.chapter.ReadOnlyLocalGroupRepository;
 import de.naju.adebar.model.persons.Gender;
@@ -26,6 +27,7 @@ import de.naju.adebar.model.persons.PersonFactory.PersonBuilder;
 import de.naju.adebar.model.persons.PersonFactory.ReferentBuilder;
 import de.naju.adebar.model.persons.Qualification;
 import de.naju.adebar.model.persons.QualificationRepository;
+import de.naju.adebar.util.Validation;
 
 /**
  * Service to extract the necessary data from a 'create person' form
@@ -55,9 +57,13 @@ public class CreatePersonFormDataExtractor {
    * @return the {@link Person} object encoded by the form
    */
   public Person extractPerson(CreatePersonForm personForm) {
+    PhoneNumber phone = Validation.isPhoneNumber(personForm.getPhoneNumber()) //
+        ? PhoneNumber.of(personForm.getPhoneNumber()) //
+        : null;
+
     PersonBuilder builder = personFactory
         .buildNew(personForm.getFirstName(), personForm.getLastName(), personForm.getEmail()) //
-        .specifyPhoneNumber(personForm.getPhoneNumber()) //
+        .specifyPhoneNumber(phone) //
         .specifyAddress(extractAddress(personForm));
 
     if (personForm.isParticipant()) {
@@ -89,7 +95,7 @@ public class CreatePersonFormDataExtractor {
   public Person extractParent(Person child, CreateParentForm parentForm) {
     PersonBuilder parentBuilder = personFactory.buildNew(parentForm.getFirstName(),
         parentForm.getLastName(), parentForm.getEmail());
-    parentBuilder.specifyPhoneNumber(parentForm.getPhoneNumber());
+    parentBuilder.specifyPhoneNumber(PhoneNumber.of(parentForm.getPhoneNumber()));
 
     if (parentForm.isUseChildAddress()) {
       parentBuilder.specifyAddress(child.getAddress());

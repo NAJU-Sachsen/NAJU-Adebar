@@ -1,16 +1,17 @@
 package de.naju.adebar.services.conversion.persons;
 
-import de.naju.adebar.controller.forms.persons.CreatePersonForm;
-import de.naju.adebar.controller.forms.persons.EditPersonForm;
-import de.naju.adebar.model.Address;
-import de.naju.adebar.model.persons.Gender;
-import de.naju.adebar.model.persons.NabuMembershipInformation;
-import de.naju.adebar.model.persons.ParticipantProfile;
-import de.naju.adebar.model.persons.Person;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import org.springframework.stereotype.Service;
+import de.naju.adebar.controller.forms.persons.CreatePersonForm;
+import de.naju.adebar.controller.forms.persons.EditPersonForm;
+import de.naju.adebar.model.Address;
+import de.naju.adebar.model.PhoneNumber;
+import de.naju.adebar.model.persons.Gender;
+import de.naju.adebar.model.persons.NabuMembershipInformation;
+import de.naju.adebar.model.persons.ParticipantProfile;
+import de.naju.adebar.model.persons.Person;
 
 /**
  * Service to extract the necessary data from an 'edit person' form
@@ -33,11 +34,12 @@ public class EditPersonFormDataExtractor {
    * @return the {@link Person} object encoded by the form
    */
   public Person updatePerson(Person person, EditPersonForm personForm) {
-    Person updated = person.updateInformation( //
-        personForm.getFirstName(), //
-        personForm.getLastName(), //
-        personForm.getEmail(), //
-        personForm.getPhoneNumber()) //
+    Person updated = person //
+        .updateInformation( //
+            personForm.getFirstName(), //
+            personForm.getLastName(), //
+            personForm.getEmail(), //
+            PhoneNumber.of(personForm.getPhoneNumber())) //
         .updateAddress( //
             new Address(personForm.getStreet(), personForm.getZip(), personForm.getCity()));
 

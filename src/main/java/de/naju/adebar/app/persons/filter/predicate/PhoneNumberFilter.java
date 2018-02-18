@@ -14,11 +14,11 @@ public class PhoneNumberFilter implements PersonFilter {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.naju.adebar.app.filter.AbstractFilter#filter(java.lang.Object)
    */
   @Override
   public BooleanBuilder filter(BooleanBuilder input) {
-    return input.and(person.phoneNumber.eq(phoneNumber));
+    return input.and(person.phoneNumber.number.eq(phoneNumber));
   }
 }

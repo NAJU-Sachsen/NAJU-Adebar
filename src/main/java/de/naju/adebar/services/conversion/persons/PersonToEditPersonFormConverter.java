@@ -1,14 +1,14 @@
 package de.naju.adebar.services.conversion.persons;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+import org.springframework.stereotype.Service;
 import de.naju.adebar.controller.forms.persons.EditPersonForm;
 import de.naju.adebar.model.Address;
 import de.naju.adebar.model.persons.NabuMembershipInformation.MembershipStatus;
 import de.naju.adebar.model.persons.ParticipantProfile;
 import de.naju.adebar.model.persons.Person;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
-import org.springframework.stereotype.Service;
 
 /**
  * Service to convert a {@link Person} to a corresponding {@link EditPersonForm}
@@ -39,10 +39,13 @@ public class PersonToEditPersonFormConverter {
     personForm.setFirstName(person.getFirstName());
     personForm.setLastName(person.getLastName());
     personForm.setEmail(person.getEmail());
-    personForm.setPhoneNumber(person.getPhoneNumber());
 
-    Address address = person.getAddress();
-    if (address != null) {
+    if (person.hasPhoneNumber()) {
+      personForm.setPhoneNumber(person.getPhoneNumber().getNumber());
+    }
+
+    if (person.hasAddress()) {
+      Address address = person.getAddress();
       personForm.setStreet(address.getStreet());
       personForm.setZip(address.getZip());
       personForm.setCity(address.getCity());

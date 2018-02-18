@@ -18,7 +18,7 @@ public class PhoneNumberConverter implements Converter<String, PhoneNumber> {
    */
   @Override
   public PhoneNumber convert(String source) {
-    return new PhoneNumber(source);
+    return PhoneNumber.of(source);
   }
 
 }

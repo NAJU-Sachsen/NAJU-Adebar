@@ -163,7 +163,7 @@ public class PhoneNumber {
    * @param number the number
    * @throws IllegalArgumentException if the phone number is not valid
    */
-  public PhoneNumber(String number) {
+  private PhoneNumber(String number) {
     assertValidNumber(number);
     this.number = normalizePhoneNumber(number);
 
@@ -172,7 +172,6 @@ public class PhoneNumber {
   /**
    * Default constructor just for JPA's sake
    */
-  @SuppressWarnings("unused")
   private PhoneNumber() {}
 
   /**
