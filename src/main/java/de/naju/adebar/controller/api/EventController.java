@@ -94,7 +94,7 @@ public class EventController {
    */
   @RequestMapping("/editReservation")
   public JsonResponse editReservation(@RequestParam("event") String eventId,
-      @RequestParam("description") String id, @RequestParam("description") String description,
+      @RequestParam("oldDescription") String id, @RequestParam("description") String description,
       @RequestParam("slots") int slots, @RequestParam("email") String email) {
     Event event = eventManager.findEvent(eventId).orElseThrow(IllegalArgumentException::new);
 

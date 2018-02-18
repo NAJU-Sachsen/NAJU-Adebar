@@ -383,13 +383,32 @@ $(document).on('click', 'button.edit-reservation', function() {
     var email = reservation.find('td.email').text();
     var maxSlots = $('#event-remaining-capactiy').val();
 
-    var editDescription = '<td class="col-md-6"><input type="text" class="form-control input-sm reservation-description" placeholder="Beschreibung" value="' + description + '" required="required"></td>';
-    var editSlots = '<td class="col-md-2"><input type="number" class="form-control text-right input-sm reservation-slots" value="' + slots + '" min="1" max="' + maxSlots + '"></td>';
-    var editEmail = '<td class="col-md-3"><input type="email" class="form-control input-sm reservation-email" placeholder="Kontakt E-Mail" value="' + email + '"></td>';
+    var editDescription =
+      `<td class="col-md-6">
+        <input type="text" class="form-control input-sm reservation-description" placeholder="Beschreibung" value="${description}" required="required">
+      </td>`;
+    var editSlots =
+      `<td class="col-md-2">
+        <input type="number" class="form-control text-right input-sm reservation-slots" value="${slots}" min="1" max="${maxSlots}">
+      </td>`;
+    var editEmail =
+      `<td class="col-md-3">
+        <input type="email" class="form-control input-sm reservation-email" placeholder="Kontakt E-Mail" value="${email}">
+      </td>`;
 
-    var editControls = '<td class="col-md-1" style="vertical-align:middle;"><div class="btn-group btn-group-xs" role="group"><button type="button" class="btn btn-default hover-success save-reservation"><span class="glyphicon glyphicon-ok"></span></button><button type="button" class="btn btn-default hover-danger cancel-edit" data-description="' + description + '" data-slots="' + slots + '" data-email="' + email + '"><span class="glyphicon glyphicon-remove"></span></button></div></td>';
+    var editControls =
+      `<td class="col-md-1" style="vertical-align:middle;">
+        <div class="btn-group btn-group-xs" role="group">
+          <button type="button" class="btn btn-default hover-success save-reservation">
+            <span class="glyphicon glyphicon-ok"></span>
+          </button>
+          <button type="button" class="btn btn-default hover-danger cancel-edit" data-description="${description}" data-slots="${slots}" data-email="${email}">
+            <span class="glyphicon glyphicon-remove"></span>
+          </button>
+        </div>
+      </td>`;
 
-    var editRow = '<tr class="row reservation-edit">' + editDescription + editSlots + editEmail + editControls + '</tr>';
+    var editRow = `<tr class="row reservation-edit" data-current-description="${description}">${editDescription}${editSlots}${editEmail}${editControls}</tr>`;
 
     reservation.before(editRow);
     reservation.remove();
@@ -402,6 +421,7 @@ $(document).on('click', 'button.save-reservation', function() {
 
     var eventId = $('#event-id').val();
     var reservationEdit = $(this).closest('tr.reservation-edit');
+    var oldDescription = reservationEdit.data('current-description');
     var description = reservationEdit.find('input.reservation-description').val();
     var slots = reservationEdit.find('input.reservation-slots').val();
     var email = reservationEdit.find('input.reservation-email').val();
@@ -414,6 +434,7 @@ $(document).on('click', 'button.save-reservation', function() {
         async: true,
         data: {
             'event': eventId,
+            oldDescription: oldDescription,
             description: description,
             slots: slots,
             email: email,
