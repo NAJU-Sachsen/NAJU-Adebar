@@ -38,7 +38,7 @@ public class PersonToEditPersonFormConverter {
   protected void fillPersonData(EditPersonForm personForm, Person person) {
     personForm.setFirstName(person.getFirstName());
     personForm.setLastName(person.getLastName());
-    personForm.setEmail(person.getEmail());
+    personForm.setEmail(person.getEmail().getValue());
 
     if (person.hasPhoneNumber()) {
       personForm.setPhoneNumber(person.getPhoneNumber().getNumber());

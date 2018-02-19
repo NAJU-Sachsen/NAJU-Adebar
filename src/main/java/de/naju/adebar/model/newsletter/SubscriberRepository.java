@@ -4,6 +4,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+import de.naju.adebar.model.Email;
 
 /**
  * Repository to access {@link Subscriber}
@@ -36,7 +37,7 @@ public interface SubscriberRepository extends CrudRepository<Subscriber, Long> {
    * @param email the email for query for
    * @return the subscriber with the given email if present
    */
-  Optional<Subscriber> findByEmail(String email);
+  Optional<Subscriber> findByEmail(Email email);
 
   /**
    * @return the first ten subscribers ordered by their email addresses

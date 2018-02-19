@@ -13,6 +13,7 @@ import com.google.common.collect.Lists;
 import de.naju.adebar.controller.forms.persons.CreateParentForm;
 import de.naju.adebar.controller.forms.persons.CreatePersonForm;
 import de.naju.adebar.model.Address;
+import de.naju.adebar.model.Email;
 import de.naju.adebar.model.PhoneNumber;
 import de.naju.adebar.model.chapter.LocalGroup;
 import de.naju.adebar.model.chapter.ReadOnlyLocalGroupRepository;
@@ -62,7 +63,8 @@ public class CreatePersonFormDataExtractor {
         : null;
 
     PersonBuilder builder = personFactory
-        .buildNew(personForm.getFirstName(), personForm.getLastName(), personForm.getEmail()) //
+        .buildNew(personForm.getFirstName(), personForm.getLastName(),
+            Email.of(personForm.getEmail())) //
         .specifyPhoneNumber(phone) //
         .specifyAddress(extractAddress(personForm));
 
@@ -94,7 +96,7 @@ public class CreatePersonFormDataExtractor {
    */
   public Person extractParent(Person child, CreateParentForm parentForm) {
     PersonBuilder parentBuilder = personFactory.buildNew(parentForm.getFirstName(),
-        parentForm.getLastName(), parentForm.getEmail());
+        parentForm.getLastName(), Email.of(parentForm.getEmail()));
     parentBuilder.specifyPhoneNumber(PhoneNumber.of(parentForm.getPhoneNumber()));
 
     if (parentForm.isUseChildAddress()) {

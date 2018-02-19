@@ -12,11 +12,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import de.naju.adebar.controller.forms.newsletter.AddNewsletterForm;
-import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.Email;
 import de.naju.adebar.model.newsletter.AlreadySubscribedException;
 import de.naju.adebar.model.newsletter.ExistingSubscriberException;
 import de.naju.adebar.model.newsletter.Newsletter;
 import de.naju.adebar.model.newsletter.Subscriber;
+import de.naju.adebar.model.persons.Person;
 
 /**
  * Subscriber related controller mappings
@@ -133,7 +134,7 @@ public class SubscriberController {
    */
   @RequestMapping(value = "/newsletters/{nid}/unsubscribe", method = RequestMethod.POST)
   public String unsubscribe(@PathVariable("nid") Long newsletterId,
-      @RequestParam("email") String email, RedirectAttributes redirAttr) {
+      @RequestParam("email") Email email, RedirectAttributes redirAttr) {
     Newsletter newsletter = repositories.newsletters.findOne(newsletterId);
 
     managers.newsletters.unsubscribe(email, newsletter);
@@ -154,7 +155,7 @@ public class SubscriberController {
    */
   @RequestMapping(value = "/newsletters/subscribers/add", method = RequestMethod.POST)
   public String createSubscriber(@RequestParam("firstName") String firstName,
-      @RequestParam("lastName") String lastName, @RequestParam("email") String email,
+      @RequestParam("lastName") String lastName, @RequestParam("email") Email email,
       @RequestParam("newsletters") List<Long> newsletters, RedirectAttributes redirAttr) {
 
     try {
@@ -182,9 +183,9 @@ public class SubscriberController {
    * @return the newsletter overview view
    */
   @RequestMapping(value = "/newsletters/subscribers/update", method = RequestMethod.POST)
-  public String updateSubscriber(@RequestParam("id") String id,
+  public String updateSubscriber(@RequestParam("id") Email id,
       @RequestParam("edit-firstName") String firstName,
-      @RequestParam("edit-lastName") String lastName, @RequestParam("edit-email") String email,
+      @RequestParam("edit-lastName") String lastName, @RequestParam("edit-email") Email email,
       @RequestParam("edit-subscribed") List<Long> newsletterIds, RedirectAttributes redirAttr) {
 
     repositories.subscribers.findByEmail(id).ifPresent(subscriber -> {
@@ -209,7 +210,7 @@ public class SubscriberController {
    * @return the newsletter overview view
    */
   @RequestMapping(value = "/newsletters/subscribers/delete", method = RequestMethod.POST)
-  public String deleteSubscriber(@RequestParam("id") String id, RedirectAttributes redirAttr) {
+  public String deleteSubscriber(@RequestParam("id") Email id, RedirectAttributes redirAttr) {
     Iterable<Newsletter> subscribedNewsletters =
         repositories.newsletters.findBySubscribersEmail(id);
 

@@ -2,6 +2,7 @@ package de.naju.adebar.model.persons;
 
 import java.util.Optional;
 import org.springframework.stereotype.Service;
+import de.naju.adebar.model.Email;
 
 /**
  * Service to take care of {@link Person Persons}
@@ -30,7 +31,7 @@ public interface PersonManager {
    * @param email the person's email
    * @return the freshly created person instance
    */
-  Person createPerson(String firstName, String lastName, String email);
+  Person createPerson(String firstName, String lastName, Email email);
 
   /**
    * Creates a new person
@@ -43,7 +44,7 @@ public interface PersonManager {
    * @param referent whether the person it a referent
    * @return the freshly created person instance
    */
-  Person createPerson(String firstName, String lastName, String email, boolean participant,
+  Person createPerson(String firstName, String lastName, Email email, boolean participant,
       boolean activist, boolean referent);
 
   /**

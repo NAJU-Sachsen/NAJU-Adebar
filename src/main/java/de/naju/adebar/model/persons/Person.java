@@ -20,14 +20,13 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Transient;
-import org.hibernate.validator.constraints.Email;
 import org.springframework.data.domain.AfterDomainEventPublication;
 import org.springframework.data.domain.DomainEvents;
 import org.springframework.util.Assert;
 import de.naju.adebar.model.Address;
+import de.naju.adebar.model.Email;
 import de.naju.adebar.model.PhoneNumber;
 import de.naju.adebar.model.events.Event;
-import de.naju.adebar.util.Validation;
 
 /**
  * Abstraction of a person. No matter of its concrete role (camp participant, activist, ...) some
@@ -59,9 +58,8 @@ public class Person {
   @Column(name = "lastName")
   private String lastName;
 
-  @Column(name = "email")
-  @Email
-  private String email;
+  @Embedded
+  private Email email;
 
   @Embedded
   private PhoneNumber phoneNumber;
@@ -98,7 +96,7 @@ public class Person {
   @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinTable(name = "parents", joinColumns = @JoinColumn(name = "child"),
       inverseJoinColumns = @JoinColumn(name = "parent"))
-  private List<Person> parentProfiles;
+  private List<Person> parents;
 
   @Column(name = "archived")
   private boolean archived;
@@ -120,22 +118,18 @@ public class Person {
    * @throws IllegalArgumentException if any of the parameters constraints are violated.
    * @see PersonFactory
    */
-  Person(PersonId id, String firstName, String lastName, String email) {
+  Person(PersonId id, String firstName, String lastName, Email email) {
     Object[] params = {id, firstName, lastName};
     Assert.noNullElements(params, "No argument may be null: " + Arrays.toString(params));
     Assert.hasText(firstName, "First name may not be null nor empty, but was: " + firstName);
     Assert.hasText(lastName, "Last name may not be null nor empty, but was: " + lastName);
-
-    if (email != null && !email.isEmpty()) {
-      Assert.isTrue(Validation.isEmail(email), "Not a valid email address: " + email);
-    }
 
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
 
-    this.parentProfiles = new ArrayList<>(MAX_PARENT_PROFILES);
+    this.parents = new ArrayList<>(MAX_PARENT_PROFILES);
 
     this.archived = false;
   }
@@ -195,19 +189,14 @@ public class Person {
   /**
    * @return the person's email address
    */
-  public String getEmail() {
+  public Email getEmail() {
     return email;
   }
 
   /**
-   * @param email the person's email address, may be {@code null @throws IllegalArgumentException if
-   * the email is not valid, i.e. does not match the email regex (Existence of the address is not
-   * checked)
+   * @param email the person's email address, may be {@code null}
    */
-  protected void setEmail(String email) {
-    if (email != null) {
-      Assert.isTrue(Validation.isEmail(email), "Not a valid email address: " + email);
-    }
+  protected void setEmail(Email email) {
     this.email = email;
   }
 
@@ -351,7 +340,7 @@ public class Person {
    * @return the person's parents
    */
   public Iterable<Person> getParentProfiles() {
-    return parentProfiles;
+    return parents;
   }
 
   /**
@@ -359,9 +348,9 @@ public class Person {
    */
   protected void setParentProfiles(List<Person> parentProfiles) {
     if (parentProfiles == null) {
-      this.parentProfiles = new ArrayList<>(MAX_PARENT_PROFILES);
+      this.parents = new ArrayList<>(MAX_PARENT_PROFILES);
     } else {
-      this.parentProfiles = parentProfiles;
+      this.parents = parentProfiles;
     }
   }
 
@@ -429,7 +418,7 @@ public class Person {
    * @return {@code true} if a parent is registered for this person, {@code false} otherwise
    */
   public boolean hasParents() {
-    return !parentProfiles.isEmpty();
+    return !parents.isEmpty();
   }
 
   /**
@@ -437,7 +426,7 @@ public class Person {
    *         otherwise
    */
   public boolean parentProfileMayBeConnected() {
-    return parentProfiles.size() < MAX_PARENT_PROFILES;
+    return parents.size() < MAX_PARENT_PROFILES;
   }
 
   /**
@@ -452,7 +441,7 @@ public class Person {
    * @param phoneNumber the new phone number
    * @return the updated person
    */
-  public Person updateInformation(String firstName, String lastName, String email,
+  public Person updateInformation(String firstName, String lastName, Email email,
       PhoneNumber phoneNumber) {
     setFirstName(firstName);
     setLastName(lastName);
@@ -510,7 +499,7 @@ public class Person {
    * @param email the new email address
    * @return the updated person
    */
-  public Person updateEmail(String email) {
+  public Person updateEmail(Email email) {
     setEmail(email);
 
     if (!updateEventWasRegistered()) {
@@ -704,13 +693,13 @@ public class Person {
   public Person connectParentProfile(Person parent) {
     if (!parentProfileMayBeConnected()) {
       throw new IllegalStateException("No more parent profile may be connected");
-    } else if (parentProfiles.contains(parent)) {
+    } else if (parents.contains(parent)) {
       throw new ExistingParentException(String.format("Parent: %s; child: %s", parent, this));
     } else if (this.equals(parent)) {
       throw new ImpossibleKinshipRelationException(FOR_PERSON_MSG + this);
     }
 
-    parentProfiles.add(parent);
+    parents.add(parent);
 
     if (!updateEventWasRegistered()) {
       registerEvent(PersonDataUpdatedEvent.forPerson(this));
@@ -726,11 +715,11 @@ public class Person {
    * @throws IllegalArgumentException if the given parent is not known to be one
    */
   public Person disconnectParentProfile(Person parent) {
-    if (parentProfiles.remove(parent)) {
+    if (parents.remove(parent)) {
       throw new IllegalArgumentException("No connection with parent " + parent);
     }
 
-    parentProfiles.remove(parent);
+    parents.remove(parent);
 
     if (!updateEventWasRegistered()) {
       registerEvent(PersonDataUpdatedEvent.forPerson(this));

@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import de.naju.adebar.model.Address;
+import de.naju.adebar.model.Email;
 import de.naju.adebar.model.chapter.Board;
 import de.naju.adebar.model.chapter.LocalGroup;
 import de.naju.adebar.model.chapter.LocalGroupRepository;
@@ -39,7 +40,7 @@ public class PersistentLocalGroupManagerIntegrationTest {
   @Before
   public void setUp() {
     najuSn = new LocalGroup("NAJU Sachsen", new Address());
-    hans = personFactory.buildNew("Hans", "Wurst", "hw@web.de").makeActivist().create();
+    hans = personFactory.buildNew("Hans", "Wurst", Email.of("hw@web.de")).makeActivist().create();
   }
 
   @Test

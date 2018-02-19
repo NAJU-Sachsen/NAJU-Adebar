@@ -7,7 +7,7 @@ import de.naju.adebar.model.persons.QPerson;
 
 /**
  * Service to create predicates for searches
- * 
+ *
  * @author Rico Bergmann
  */
 @Service
@@ -16,7 +16,7 @@ public class PersonSearchPredicateCreator {
   /**
    * The predicate will filter for all persons whose name, address (city) or email is like the query
    * specified
-   * 
+   *
    * @param query the criteria
    * @return the predicate
    */
@@ -29,7 +29,7 @@ public class PersonSearchPredicateCreator {
     for (String arg : args) {
       predicate.or(person.firstName.containsIgnoreCase(arg));
       predicate.or(person.lastName.containsIgnoreCase(arg));
-      predicate.or(person.email.isNotNull().and(person.email.containsIgnoreCase(arg)));
+      predicate.or(person.email.isNotNull().and(person.email.value.containsIgnoreCase(arg)));
       predicate.or(person.address.city.isNotNull().and(person.address.city.equalsIgnoreCase(arg)));
     }
 

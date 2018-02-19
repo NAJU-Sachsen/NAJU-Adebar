@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import de.naju.adebar.model.Address;
+import de.naju.adebar.model.Email;
 import de.naju.adebar.model.PhoneNumber;
 
 /**
@@ -56,7 +57,7 @@ public class PersonFactory {
    * @param email the person's email
    * @return the builder object to continue the creation
    */
-  public PersonBuilder buildNew(String firstName, String lastName, String email) {
+  public PersonBuilder buildNew(String firstName, String lastName, Email email) {
     return new PersonBuilder(firstName, lastName, email);
   }
 
@@ -74,7 +75,7 @@ public class PersonFactory {
      * @param lastName the person's last name
      * @param email the person's email
      */
-    public PersonBuilder(String firstName, String lastName, String email) {
+    public PersonBuilder(String firstName, String lastName, Email email) {
       PersonId id = idGenerator.next();
       person = new Person(id, firstName, lastName, email);
       person.setAddress(new Address());

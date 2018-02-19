@@ -32,7 +32,7 @@ public class SimplePersonJSON {
   public SimplePersonJSON(Person person) {
     this.id = person.getId().toString();
     this.name = person.getName();
-    this.email = person.getEmail();
+    this.email = person.getEmail().getValue();
     this.address = formatAddress(person.getAddress());
 
     if (person.isParticipant()) {

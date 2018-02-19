@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import de.naju.adebar.model.Address;
+import de.naju.adebar.model.Email;
 
 /**
  * Basic behavior testing for the {@link PersistentPersonManager} and its behavior on
@@ -33,8 +34,8 @@ public class ActivistManagementIntegrationTest {
   @Before
   public void setUp() {
     Address clausAddress = new Address("Hinner der Boje 7", "24103", "Auf'm Meer");
-    this.claus = personFactory.buildNew("Claus", "Störtebecker", "der_kaeptn@web.de").makeActivist()
-        .create();
+    this.claus = personFactory.buildNew("Claus", "Störtebecker", Email.of("der_kaeptn@web.de"))
+        .makeActivist().create();
     claus.setAddress(clausAddress);
 
     personManager.savePerson(claus);

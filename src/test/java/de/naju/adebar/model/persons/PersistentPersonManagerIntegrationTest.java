@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import de.naju.adebar.model.Address;
+import de.naju.adebar.model.Email;
 
 /**
  * Basic testing of the {@link PersistentPersonManager}
@@ -36,7 +37,7 @@ public class PersistentPersonManagerIntegrationTest {
   public void setUp() {
     Address clausAddress = new Address("Hinner der Boje 7", "24103", "Auf'm Meer");
     LocalDate clausDob = LocalDate.now().minusYears(42L);
-    this.claus = personFactory.buildNew("Claus", "Störtebecker", "der_kaeptn@web.de")
+    this.claus = personFactory.buildNew("Claus", "Störtebecker", Email.of("der_kaeptn@web.de"))
         .makeParticipant().create();
     claus.getParticipantProfile().setGender(Gender.MALE);
     claus.setAddress(clausAddress);
@@ -44,8 +45,8 @@ public class PersistentPersonManagerIntegrationTest {
 
     this.bertaAddress = new Address("An der Schiefen Ebene 2", "01234", "Entenhausen", "Zimmer 13");
     LocalDate bertaDob = LocalDate.now().minusYears(27L);
-    this.berta =
-        personFactory.buildNew("Berta", "Beate", "berta@gmx.net").makeParticipant().create();
+    this.berta = personFactory.buildNew("Berta", "Beate", Email.of("berta@gmx.net"))
+        .makeParticipant().create();
     berta.setAddress(bertaAddress);
     berta.getParticipantProfile().setGender(Gender.FEMALE);
     berta.getParticipantProfile().setDateOfBirth(bertaDob);
@@ -68,7 +69,8 @@ public class PersistentPersonManagerIntegrationTest {
 
   @Test
   public void testCreatePerson() {
-    Person heinz = personManager.createPerson("Heinz", "Der Heinz", "heeeiiiinnnzzzzz@gmail.com");
+    Person heinz =
+        personManager.createPerson("Heinz", "Der Heinz", Email.of("heeeiiiinnnzzzzz@gmail.com"));
     Assert.assertTrue(heinz.toString() + " should have been saved!",
         personRepo.exists(heinz.getId()));
   }

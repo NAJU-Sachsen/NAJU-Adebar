@@ -1,6 +1,5 @@
 package de.naju.adebar.model.newsletter;
 
-import de.naju.adebar.app.newsletter.PersistentNewsletterManager;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,10 +10,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
+import de.naju.adebar.app.newsletter.PersistentNewsletterManager;
+import de.naju.adebar.model.Email;
 
 /**
  * Basic behavior testing for the {@link PersistentNewsletterManager}
- * 
+ *
  * @author Rico Bergmann
  */
 @RunWith(SpringRunner.class)
@@ -36,7 +37,7 @@ public class NewsletterIntegrationTest {
   @Before
   public void setUp() {
     hifaNewsletter = new Newsletter("HIFA");
-    hans = new Subscriber("Hans", "Wurst", "hans.wurst@web.de");
+    hans = new Subscriber("Hans", "Wurst", Email.of("hans.wurst@web.de"));
 
     newsletterRepo.save(hifaNewsletter);
     subscriberRepo.save(hans);

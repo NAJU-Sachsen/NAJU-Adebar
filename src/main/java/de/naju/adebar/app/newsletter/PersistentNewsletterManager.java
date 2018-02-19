@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.google.common.collect.Iterables;
-import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.Email;
 import de.naju.adebar.model.newsletter.AlreadySubscribedException;
 import de.naju.adebar.model.newsletter.ExistingSubscriberException;
 import de.naju.adebar.model.newsletter.Newsletter;
@@ -14,6 +14,7 @@ import de.naju.adebar.model.newsletter.NewsletterRepository;
 import de.naju.adebar.model.newsletter.NoSuchSubscriberException;
 import de.naju.adebar.model.newsletter.Subscriber;
 import de.naju.adebar.model.newsletter.SubscriberRepository;
+import de.naju.adebar.model.persons.Person;
 
 /**
  * A {@link NewsletterManager} that persists the data in a database
@@ -133,7 +134,7 @@ public class PersistentNewsletterManager implements NewsletterManager {
   }
 
   @Override
-  public void unsubscribe(String email, Newsletter newsletter) {
+  public void unsubscribe(Email email, Newsletter newsletter) {
     Optional<Subscriber> subscriber = subscriberRepo.findByEmail(email);
     if (subscriber.isPresent()) {
       unsubscribe(subscriber.get(), newsletter);

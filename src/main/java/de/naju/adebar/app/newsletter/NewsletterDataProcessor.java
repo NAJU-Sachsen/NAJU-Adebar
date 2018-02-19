@@ -68,10 +68,15 @@ public class NewsletterDataProcessor {
     for (Newsletter newsletter : newsletters) {
       Iterable<Subscriber> subscribers = newsletter.getSubscribers();
       subscribers.forEach(s -> {
-        if (emailBuilder.indexOf(s.getEmail()) == -1)
+
+        // check if the email is already added
+        if (emailBuilder.indexOf(s.getEmail().getValue()) == -1)
           emailBuilder.append(s.getEmail()).append(EMAIL_DELIMITER);
       });
     }
+
+    // if at least one email was added, we added a delimiter as well
+    // delete the last occurence here
     if (emailBuilder.lastIndexOf(EMAIL_DELIMITER) != -1) {
       emailBuilder.deleteCharAt(emailBuilder.lastIndexOf(EMAIL_DELIMITER));
     }

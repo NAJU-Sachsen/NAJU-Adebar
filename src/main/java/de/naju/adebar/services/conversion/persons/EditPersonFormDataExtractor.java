@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import de.naju.adebar.controller.forms.persons.CreatePersonForm;
 import de.naju.adebar.controller.forms.persons.EditPersonForm;
 import de.naju.adebar.model.Address;
+import de.naju.adebar.model.Email;
 import de.naju.adebar.model.PhoneNumber;
 import de.naju.adebar.model.persons.Gender;
 import de.naju.adebar.model.persons.NabuMembershipInformation;
@@ -38,7 +39,7 @@ public class EditPersonFormDataExtractor {
         .updateInformation( //
             personForm.getFirstName(), //
             personForm.getLastName(), //
-            personForm.getEmail(), //
+            Email.of(personForm.getEmail()), //
             PhoneNumber.of(personForm.getPhoneNumber())) //
         .updateAddress( //
             new Address(personForm.getStreet(), personForm.getZip(), personForm.getCity()));

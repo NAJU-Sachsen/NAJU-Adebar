@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import de.naju.adebar.model.Email;
 
 /**
  * A {@link PersonManager} that persists its data in a database
@@ -41,13 +42,13 @@ public class PersistentPersonManager implements PersonManager {
   }
 
   @Override
-  public Person createPerson(String firstName, String lastName, String email) {
+  public Person createPerson(String firstName, String lastName, Email email) {
     Person p = personFactory.buildNew(firstName, lastName, email).create();
     return savePerson(p);
   }
 
   @Override
-  public Person createPerson(String firstName, String lastName, String email, boolean participant,
+  public Person createPerson(String firstName, String lastName, Email email, boolean participant,
       boolean activist, boolean referent) {
     Person p = personFactory.buildNew(firstName, lastName, email).create();
     if (participant) {

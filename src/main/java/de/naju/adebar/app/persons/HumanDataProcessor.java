@@ -9,7 +9,7 @@ import de.naju.adebar.model.persons.Person;
 
 /**
  * Service to conveniently extract data from {@link Person} instances
- * 
+ *
  * @author Rico Bergmann
  */
 @Service
@@ -23,7 +23,7 @@ public class HumanDataProcessor {
     List<String> emailAddresses = new LinkedList<>();
     persons.forEach(p -> {
       if (p.hasEmail())
-        emailAddresses.add(p.getEmail());
+        emailAddresses.add(p.getEmail().getValue());
     });
     return emailAddresses;
   }
@@ -33,12 +33,12 @@ public class HumanDataProcessor {
    * @return a {@link Stream} of all email-addresses
    */
   public Stream<String> extractEmailAddressesAsStream(Stream<Person> persons) {
-    return persons.filter(Person::hasEmail).map(Person::getEmail);
+    return persons.filter(Person::hasEmail).map(p -> p.getEmail().getValue());
   }
 
   /**
    * Concatenates the persons' email-addresses using a delimiter
-   * 
+   *
    * @param persons the persons to process
    * @param delimiter the delimiter to use for the concatenation. It will be inserted between two
    *        addresses.
@@ -52,7 +52,7 @@ public class HumanDataProcessor {
 
   /**
    * Concatenates the persons' email-addresses using a delimiter
-   * 
+   *
    * @param persons the persons to process
    * @param delimiter the delimiter to use for the concatenation. It will be inserted between two
    *        addresses.

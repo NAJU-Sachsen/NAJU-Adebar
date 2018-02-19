@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import de.naju.adebar.model.Address;
+import de.naju.adebar.model.Email;
 
 /**
  * Basic behavior testing of the {@link PersonManager} regarding {@link ReferentProfile}
@@ -33,8 +34,8 @@ public class ReferentManagerIntegrationTest {
   @Before
   public void setUp() {
     Address clausAddress = new Address("Hinner der Boje 7", "24103", "Auf'm Meer");
-    this.claus = personFactory.buildNew("Claus", "Störtebecker", "der_kaeptn@web.de").makeReferent()
-        .create();
+    this.claus = personFactory.buildNew("Claus", "Störtebecker", Email.of("der_kaeptn@web.de"))
+        .makeReferent().create();
     this.claus.setAddress(clausAddress);
     this.qualification = new Qualification("Erste Hilfe Kurs",
         "Hat die Qualifikation, einen Erste-Hilfe Kurs zu leiten");
@@ -60,7 +61,7 @@ public class ReferentManagerIntegrationTest {
   @Test
   public void testIsReferent() {
     personManager.savePerson(claus);
-    Person berta = personFactory.buildNew("Berta", "Beate", "berta@gmx.net").create();
+    Person berta = personFactory.buildNew("Berta", "Beate", Email.of("berta@gmx.net")).create();
     personManager.savePerson(berta);
 
     Assert.assertFalse(berta.toString() + " is not an activist",

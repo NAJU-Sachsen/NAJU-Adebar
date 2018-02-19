@@ -2,11 +2,12 @@ package de.naju.adebar.model.newsletter;
 
 import java.io.Serializable;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import org.springframework.util.Assert;
-import de.naju.adebar.util.Validation;
+import de.naju.adebar.model.Email;
 
 /**
  * Abstraction of person that subscribed to a newsletter.
@@ -41,8 +42,8 @@ public class Subscriber implements Serializable {
   @Column(name = "lastName")
   private String lastName;
 
-  @Column(name = "email", unique = true)
-  private String email;
+  @Embedded
+  private Email email;
 
   // constructors
 
@@ -59,7 +60,7 @@ public class Subscriber implements Serializable {
    * @param email the subscriber's email address
    * @throws IllegalArgumentException if the email is not valid
    */
-  public Subscriber(String email) {
+  public Subscriber(Email email) {
     this("", "", email);
   }
 
@@ -72,12 +73,9 @@ public class Subscriber implements Serializable {
    * @throws IllegalArgumentException if the email is not valid or any of the parameters if
    *         {@code null}
    */
-  public Subscriber(String firstName, String lastName, String email) {
+  public Subscriber(String firstName, String lastName, Email email) {
     Object[] params = {firstName, lastName, email};
     Assert.noNullElements(params, "No parameter may be null!");
-    if (!Validation.isEmail(email)) {
-      throw new IllegalArgumentException("Must provide a valid email address, but was: " + email);
-    }
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
@@ -108,12 +106,8 @@ public class Subscriber implements Serializable {
 
   /**
    * @return the subsriber's email
-   * @throws IllegalArgumentException if the subscriber did not specify an email address
    */
-  public String getEmail() {
-    if (email == null) {
-      throw new IllegalStateException("No email address was specified!");
-    }
+  public Email getEmail() {
     return email;
   }
 
@@ -141,11 +135,7 @@ public class Subscriber implements Serializable {
    * @param email the new email address
    * @throws IllegalArgumentException if the email is {@code null} or invalid
    */
-  public void setEmail(String email) {
-    Assert.notNull(email, "Email may not be null!");
-    if (!Validation.isEmail(email)) {
-      throw new IllegalArgumentException("Must provide a valid email address, but was: " + email);
-    }
+  public void setEmail(Email email) {
     this.email = email;
   }
 

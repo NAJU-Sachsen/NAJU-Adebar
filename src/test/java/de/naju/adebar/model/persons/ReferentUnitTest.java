@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import com.google.common.collect.Iterables;
+import de.naju.adebar.model.Email;
 
 /**
  * Basic testing of the {@link ReferentProfile} class
@@ -16,7 +17,7 @@ public class ReferentUnitTest {
 
   @Before
   public void setUp() {
-    referent = new Person(new PersonId(), "Hans", "Wurst", "hw@web.de");
+    referent = new Person(new PersonId(), "Hans", "Wurst", Email.of("hw@web.de"));
     referent.makeReferent();
     this.qualification = new Qualification("Erste Hilfe Kurs",
         "Hat die Qualifikation, einen Erste-Hilfe Kurs zu leiten");

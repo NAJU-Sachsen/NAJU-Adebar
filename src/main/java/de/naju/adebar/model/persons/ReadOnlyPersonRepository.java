@@ -7,6 +7,7 @@ import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 import com.querydsl.core.types.Predicate;
 import de.naju.adebar.infrastructure.ReadOnlyRepository;
+import de.naju.adebar.model.Email;
 
 /**
  * Repository to provide read-only access to {@link Person} instances
@@ -82,7 +83,7 @@ public interface ReadOnlyPersonRepository
    * @param email the email
    * @return all persons with the given email address
    */
-  Iterable<Person> findByEmail(String email);
+  Iterable<Person> findByEmail(Email email);
 
   /**
    * @param firstName the first name
@@ -90,5 +91,5 @@ public interface ReadOnlyPersonRepository
    * @param email the email address
    * @return the matching person
    */
-  Person findByFirstNameAndLastNameAndEmail(String firstName, String lastName, String email);
+  Person findByFirstNameAndLastNameAndEmail(String firstName, String lastName, Email email);
 }

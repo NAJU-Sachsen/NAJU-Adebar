@@ -3,6 +3,7 @@ package de.naju.adebar.app.newsletter;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import de.naju.adebar.model.Email;
 import de.naju.adebar.model.newsletter.ExistingSubscriberException;
 import de.naju.adebar.model.newsletter.NoSuchSubscriberException;
 import de.naju.adebar.model.newsletter.Subscriber;
@@ -46,7 +47,7 @@ public class PersistentSubscriberManager implements SubscriberManager {
   }
 
   @Override
-  public Subscriber createSubscriber(String firstName, String lastName, String email) {
+  public Subscriber createSubscriber(String firstName, String lastName, Email email) {
     return saveSubscriber(new Subscriber(firstName, lastName, email));
   }
 
@@ -90,7 +91,7 @@ public class PersistentSubscriberManager implements SubscriberManager {
   }
 
   @Override
-  public Subscriber updateSubscriberEmail(Subscriber subscriber, String email) {
+  public Subscriber updateSubscriberEmail(Subscriber subscriber, Email email) {
     if (!email.equals(subscriber.getEmail())) {
       subscriber.setEmail(email);
       return subscriberRepo.save(subscriber);
@@ -104,7 +105,7 @@ public class PersistentSubscriberManager implements SubscriberManager {
   }
 
   @Override
-  public void deleteSubscriber(String email) {
+  public void deleteSubscriber(Email email) {
     Optional<Subscriber> subscriber = subscriberRepo.findByEmail(email);
     if (subscriber.isPresent()) {
       subscriberRepo.delete(subscriber.get());

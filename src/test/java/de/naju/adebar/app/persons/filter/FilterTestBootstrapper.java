@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import de.naju.adebar.model.Address;
+import de.naju.adebar.model.Email;
 import de.naju.adebar.model.persons.Gender;
 import de.naju.adebar.model.persons.JuleicaCard;
 import de.naju.adebar.model.persons.Person;
@@ -73,7 +74,8 @@ public class FilterTestBootstrapper {
     System.out.println(personRepo.findAll());
 
     // hans was already created as the application's admin
-    hans = personRepo.findByFirstNameAndLastNameAndEmail("Hans", "Wurst", "hans.wurst@web.de");
+    hans = personRepo.findByFirstNameAndLastNameAndEmail("Hans", "Wurst",
+        Email.of("hans.wurst@web.de"));
     hans.makeParticipant();
     hans.makeActivist();
     hans.updateAddress(hansAddress);
@@ -84,7 +86,7 @@ public class FilterTestBootstrapper {
         .updateJuleicaCard(new JuleicaCard(hansJuleicaExpiry));
 
     // @formatter:off
-    claus = personFactory.buildNew("Claus", "Störtebecker", "derkaeptn@meermensch.de")
+    claus = personFactory.buildNew("Claus", "Störtebecker", Email.of("derkaeptn@meermensch.de"))
         .specifyAddress(clausAddress)
         .makeParticipant()
           .specifyGender(Gender.MALE)
@@ -95,7 +97,7 @@ public class FilterTestBootstrapper {
           .done()
         .create();
 
-    berta = personFactory.buildNew("Berta", "Beate", "bb@gmx.net")
+    berta = personFactory.buildNew("Berta", "Beate", Email.of("bb@gmx.net"))
         .specifyAddress(bertaAddress)
         .makeParticipant()
           .specifyGender(Gender.FEMALE)
@@ -108,7 +110,7 @@ public class FilterTestBootstrapper {
           .specifyQualifications(Arrays.asList(bertaQualification1, bertaQualification2))
         .create();
 
-    fritz = personFactory.buildNew("Fritz", "Käse", "fritz_kaese@googlemail.com")
+    fritz = personFactory.buildNew("Fritz", "Käse", Email.of("fritz_kaese@googlemail.com"))
         .specifyAddress(fritzAddress)
         .makeParticipant()
           .specifyDateOfBirth(fritzDob)
@@ -116,7 +118,7 @@ public class FilterTestBootstrapper {
         .makeReferent()
         .create();
 
-    heinz = personFactory.buildNew("Heinz", "Meinz", "misterheinz@aol.com")
+    heinz = personFactory.buildNew("Heinz", "Meinz", Email.of("misterheinz@aol.com"))
         .specifyAddress(heinzAddress)
         .makeParticipant()
           .specifyGender(Gender.MALE)

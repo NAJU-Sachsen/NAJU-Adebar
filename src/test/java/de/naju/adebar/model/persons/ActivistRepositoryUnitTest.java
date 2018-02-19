@@ -1,6 +1,7 @@
 package de.naju.adebar.model.persons;
 
-import com.google.common.collect.Lists;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,12 +13,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.Arrays;
-import java.util.List;
+import com.google.common.collect.Lists;
+import de.naju.adebar.model.Email;
 
 /**
  * Basic testing of the {@link PersonRepository} and {@link ReadOnlyPersonRepository}
- * 
+ *
  * @author Rico Bergmann
  */
 @RunWith(SpringRunner.class)
@@ -38,11 +39,11 @@ public class ActivistRepositoryUnitTest {
   @Before
   public void setUp() {
     System.out.println("Saved persons: " + activistRepo.findAll());
-    hans = new Person(new PersonId(), "Hans", "Wurst", "hw@web.de");
+    hans = new Person(new PersonId(), "Hans", "Wurst", Email.of("hw@web.de"));
     hans.makeActivist();
-    berta = new Person(new PersonId(), "Berta", "Beate", "bb@gmx.net");
+    berta = new Person(new PersonId(), "Berta", "Beate", Email.of("bb@gmx.net"));
     berta.makeActivist();
-    claus = new Person(new PersonId(), "Claus", "Störtebecker", "caeptn@aol.com");
+    claus = new Person(new PersonId(), "Claus", "Störtebecker", Email.of("caeptn@aol.com"));
     claus.makeActivist();
     activists = Arrays.asList(hans, berta, claus);
     activistRepo.save(activists);

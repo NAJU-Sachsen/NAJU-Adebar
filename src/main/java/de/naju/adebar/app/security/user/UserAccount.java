@@ -18,9 +18,9 @@ import org.springframework.data.domain.AbstractAggregateRoot;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.Assert;
+import de.naju.adebar.model.Email;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.persons.PersonId;
-import de.naju.adebar.util.Validation;
 
 /**
  * A user account. Each account is created for an activist who thereby gets access to the
@@ -53,8 +53,8 @@ public class UserAccount extends AbstractAggregateRoot implements UserDetails {
   @Column(name = "lastName")
   private String lastName;
 
-  @Column(name = "email")
-  private String email;
+  @Embedded
+  private Email email;
 
   @Column(name = "readReleaseNotes")
   private boolean readLatestReleaseNotes;
@@ -128,7 +128,7 @@ public class UserAccount extends AbstractAggregateRoot implements UserDetails {
   /**
    * @return the person's email
    */
-  public String getEmail() {
+  public Email getEmail() {
     return email;
   }
 
@@ -179,13 +179,13 @@ public class UserAccount extends AbstractAggregateRoot implements UserDetails {
 
   /**
    * Sets the user's personal data
-   * 
+   *
    * @param firstName the person's first name
    * @param lastName the person's last name
    * @param email the person's last name
    * @return the updated account
    */
-  UserAccount updatePersonalInformation(String firstName, String lastName, String email) {
+  UserAccount updatePersonalInformation(String firstName, String lastName, Email email) {
     setFirstName(firstName);
     setLastName(lastName);
     setEmail(email);
@@ -195,7 +195,7 @@ public class UserAccount extends AbstractAggregateRoot implements UserDetails {
 
   /**
    * Sets the user's authorities
-   * 
+   *
    * @param authorities the authorities
    * @return the updated account
    */
@@ -207,7 +207,7 @@ public class UserAccount extends AbstractAggregateRoot implements UserDetails {
 
   /**
    * Sets the user's password
-   * 
+   *
    * @param password the new password
    * @return the updated account
    */
@@ -219,7 +219,7 @@ public class UserAccount extends AbstractAggregateRoot implements UserDetails {
 
   /**
    * Marks that the user read the latest release notes
-   * 
+   *
    * @return the updated account
    */
   UserAccount readReleaseNotes() {
@@ -230,7 +230,7 @@ public class UserAccount extends AbstractAggregateRoot implements UserDetails {
 
   /**
    * Notifies the user about the existence of new release notes
-   * 
+   *
    * @return the updated account
    */
   UserAccount notifyAboutNewReleaseNotes() {
@@ -252,7 +252,7 @@ public class UserAccount extends AbstractAggregateRoot implements UserDetails {
 
   /**
    * Sets the associated person. Just for JPA's sake
-   * 
+   *
    * @param associatedPerson the associated person
    */
   @SuppressWarnings("unused")
@@ -313,14 +313,13 @@ public class UserAccount extends AbstractAggregateRoot implements UserDetails {
   /**
    * @param email the email
    */
-  private void setEmail(String email) {
-    Assert.isTrue(Validation.isEmail(email), "Not a valid email address " + email);
+  private void setEmail(Email email) {
     this.email = email;
   }
 
   /**
    * Just for JPA
-   * 
+   *
    * @return whether the user has read the latest release notes
    */
   @SuppressWarnings("unused")
@@ -330,7 +329,7 @@ public class UserAccount extends AbstractAggregateRoot implements UserDetails {
 
   /**
    * Just for JPA
-   * 
+   *
    * @param readLatestReleaseNotes whether the user has read the latest release notes
    */
   private void setReadLatestReleaseNotes(boolean readLatestReleaseNotes) {
@@ -347,7 +346,7 @@ public class UserAccount extends AbstractAggregateRoot implements UserDetails {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see java.lang.Object#hashCode()
    */
   @Override
@@ -360,7 +359,7 @@ public class UserAccount extends AbstractAggregateRoot implements UserDetails {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override

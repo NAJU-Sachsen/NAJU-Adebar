@@ -1,13 +1,14 @@
 package de.naju.adebar.model.persons;
 
+import java.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import java.time.LocalDate;
+import de.naju.adebar.model.Email;
 
 /**
  * Basic testing of the {@link ActivistProfile} class
- * 
+ *
  * @author Rico Bergmann
  */
 public class ActivistUnitTest {
@@ -15,7 +16,7 @@ public class ActivistUnitTest {
 
   @Before
   public void setUp() {
-    hans = new Person(new PersonId(), "Hans", "Wurst", "hans@web.de");
+    hans = new Person(new PersonId(), "Hans", "Wurst", Email.of("hans@web.de"));
     hans.makeActivist();
   }
 

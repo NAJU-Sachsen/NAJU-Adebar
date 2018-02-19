@@ -27,6 +27,7 @@ import de.naju.adebar.app.persons.filter.predicate.PhoneNumberFilter;
 import de.naju.adebar.app.persons.filter.predicate.ReferentFilter;
 import de.naju.adebar.controller.forms.persons.FilterPersonForm;
 import de.naju.adebar.model.Address;
+import de.naju.adebar.model.Email;
 import de.naju.adebar.model.persons.Gender;
 import de.naju.adebar.model.persons.NabuMembershipInformation.MembershipStatus;
 import de.naju.adebar.model.persons.Qualification;
@@ -176,7 +177,7 @@ public class FilterPersonFormFilterExtractor {
     if (!hasEmailFilter(personForm)) {
       throw new IllegalStateException("No email filter was specified: " + personForm);
     }
-    return new EmailFilter(personForm.getEmail());
+    return new EmailFilter(Email.of(personForm.getEmail()));
   }
 
   /**

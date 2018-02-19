@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.stereotype.Service;
+import de.naju.adebar.model.Email;
 import de.naju.adebar.model.persons.Gender;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.test.mockups.PersonMockup;
@@ -65,14 +66,16 @@ public class TestData {
     persons = new HashMap<>(10);
     genders = new HashMap<>(10);
 
-    persons.put("hans", PersonMockup.mockupPerson("Hans", "Wurst", "hw@web.de"));
-    persons.put("berta", PersonMockup.mockupPerson("Berta", "Beate", "bbeate@gmx.net"));
-    persons.put("dieter", PersonMockup.mockupPerson("Dieter", "Dancer", "tanzbaer@gmx.de"));
+    persons.put("hans", PersonMockup.mockupPerson("Hans", "Wurst", Email.of("hw@web.de")));
+    persons.put("berta", PersonMockup.mockupPerson("Berta", "Beate", Email.of("bbeate@gmx.net")));
+    persons.put("dieter",
+        PersonMockup.mockupPerson("Dieter", "Dancer", Email.of("tanzbaer@gmx.de")));
     persons.put("fritz",
-        PersonMockup.mockupPerson("Fritz", "Fröhlich", "froehlich@googlemail.com"));
+        PersonMockup.mockupPerson("Fritz", "Fröhlich", Email.of("froehlich@googlemail.com")));
     persons.put("martha",
-        PersonMockup.mockupPerson("Marta", "Mächtig", "diemaechtigemarta@web.de"));
-    persons.put("nadine", PersonMockup.mockupPerson("Nadine", "Nett", "dienette@aol.com"));
+        PersonMockup.mockupPerson("Marta", "Mächtig", Email.of("diemaechtigemarta@web.de")));
+    persons.put("nadine",
+        PersonMockup.mockupPerson("Nadine", "Nett", Email.of("dienette@aol.com")));
 
     genders.put("hans", Gender.MALE);
     genders.put("berta", Gender.FEMALE);

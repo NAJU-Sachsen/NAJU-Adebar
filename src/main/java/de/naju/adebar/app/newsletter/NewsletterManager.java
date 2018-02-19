@@ -1,13 +1,14 @@
 package de.naju.adebar.app.newsletter;
 
+import org.springframework.stereotype.Service;
+import de.naju.adebar.model.Email;
 import de.naju.adebar.model.newsletter.Newsletter;
 import de.naju.adebar.model.newsletter.Subscriber;
-import org.springframework.stereotype.Service;
 import de.naju.adebar.model.persons.Person;
 
 /**
  * Service to take care of {@link Newsletter Newsletters} and more complex management operations
- * 
+ *
  * @author Rico Bergmann
  *
  */
@@ -16,7 +17,7 @@ public interface NewsletterManager {
 
   /**
    * Saves the given newsletter. It may or may not be saved already
-   * 
+   *
    * @param newsletter the newsletter to save
    * @return the saved newsletter. As its internal state (especially concrete implementations of
    *         interfaces) may differ after the save, this instance should be used for future
@@ -26,7 +27,7 @@ public interface NewsletterManager {
 
   /**
    * Creates a new newsletter
-   * 
+   *
    * @param name the newsletter's name
    * @return the freshly created newsletter instance
    */
@@ -34,14 +35,14 @@ public interface NewsletterManager {
 
   /**
    * Removes a newsletter
-   * 
+   *
    * @param id the newsletter's id
    */
   void deleteNewsletter(long id);
 
   /**
    * Adds a subscription to a newsletter
-   * 
+   *
    * @param subscriber the subscriber
    * @param newsletter the newsletter
    */
@@ -49,7 +50,7 @@ public interface NewsletterManager {
 
   /**
    * Subscribes a {@link Person} to a newsletter
-   * 
+   *
    * @param person the subscribing person
    * @param newsletter the newsletter to subscribe to
    */
@@ -57,7 +58,7 @@ public interface NewsletterManager {
 
   /**
    * Removes a subscription from a newsletter
-   * 
+   *
    * @param subscriber the subscriber to remove
    * @param newsletter the subscribed newsletter
    */
@@ -65,16 +66,16 @@ public interface NewsletterManager {
 
   /**
    * Removes a subscription from a newsletter
-   * 
+   *
    * @param email the email of the subscriber to remove
    * @param newsletter the subscribed newsletter
    */
-  void unsubscribe(String email, Newsletter newsletter);
+  void unsubscribe(Email email, Newsletter newsletter);
 
   /**
    * Signs the subscribed up to the given newsletters. This will remove the subscriptions from
    * newsletters that are not specified
-   * 
+   *
    * @param subscriber the subscriber to update
    * @param subscriptions the new subscriptions
    */

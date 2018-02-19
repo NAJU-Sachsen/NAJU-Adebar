@@ -1,12 +1,13 @@
 package de.naju.adebar.app.newsletter;
 
+import org.springframework.stereotype.Service;
+import de.naju.adebar.model.Email;
 import de.naju.adebar.model.newsletter.ExistingSubscriberException;
 import de.naju.adebar.model.newsletter.Subscriber;
-import org.springframework.stereotype.Service;
 
 /**
  * Service to take care of {@link Subscriber Subscribers} and more complex management operations
- * 
+ *
  * @author Rico Bergmann
  */
 @Service
@@ -29,7 +30,7 @@ public interface SubscriberManager {
    * It is important to remember that 'subscriber' usually applies to a {@link Subscriber} object
    * registered in the database and not to a person that subscribed to the specific newsletter.
    * </p>
-   * 
+   *
    * @param subscriber the subscriber to save
    * @return The saved subscriber object. It is very important to actually use this instance for
    *         future operations, as internal data may differ after saving the object.
@@ -41,7 +42,7 @@ public interface SubscriberManager {
   /**
    * Creates a new subscriber object. The same rules as in {@link #saveSubscriber(Subscriber)} are
    * applied.
-   * 
+   *
    * @param firstName the subscriber's first name, may be empty
    * @param lastName the subscriber's last name, may be empty
    * @param email the subscriber's email
@@ -49,11 +50,11 @@ public interface SubscriberManager {
    *         future operations, as internal data may differ after saving the object.
    * @see #saveSubscriber(Subscriber)
    */
-  Subscriber createSubscriber(String firstName, String lastName, String email);
+  Subscriber createSubscriber(String firstName, String lastName, Email email);
 
   /**
    * Replaces a subscriber's data
-   * 
+   *
    * @param oldSubscriber the current subscriber
    * @param newSubscriber the new data for the subscriber
    * @return The updated subscriber. It is very important to actually use this instance for future
@@ -63,7 +64,7 @@ public interface SubscriberManager {
 
   /**
    * Sets a subscriber's first name
-   * 
+   *
    * @param subscriber the subscriber
    * @param firstName the new first name
    * @return The updated subscriber. It is very important to actually use this instance for future
@@ -73,7 +74,7 @@ public interface SubscriberManager {
 
   /**
    * Sets a subscriber's last name
-   * 
+   *
    * @param subscriber the subscriber
    * @param lastName the new last name
    * @return The updated subscriber. It is very important to actually use this instance for future
@@ -83,26 +84,26 @@ public interface SubscriberManager {
 
   /**
    * Sets a subscriber's email
-   * 
+   *
    * @param subscriber the subscriber
    * @param email the new email
    * @return The updated subscriber. It is very important to actually use this instance for future
    *         operations, as internal data may differ after saving the object.
    */
-  Subscriber updateSubscriberEmail(Subscriber subscriber, String email);
+  Subscriber updateSubscriberEmail(Subscriber subscriber, Email email);
 
   /**
    * Removes a subscriber
-   * 
+   *
    * @param subscriber the subscriber to remove
    */
   void deleteSubscriber(Subscriber subscriber);
 
   /**
    * Removes a subscriber
-   * 
+   *
    * @param email the subscriber's email
    */
-  void deleteSubscriber(String email);
+  void deleteSubscriber(Email email);
 
 }

@@ -13,6 +13,7 @@ import com.google.common.collect.Lists;
 import de.naju.adebar.app.security.user.Roles;
 import de.naju.adebar.app.security.user.UserAccountManager;
 import de.naju.adebar.app.security.user.UserAccountRepository;
+import de.naju.adebar.model.Email;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.persons.PersonFactory;
 import de.naju.adebar.model.persons.PersonManager;
@@ -65,7 +66,7 @@ public class DatabaseInitializer {
     String firstName = environment.getProperty("adebar.admin.first-name");
     String lastName = environment.getProperty("adebar.admin.last-name");
     String email = environment.getProperty("adebar.admin.email");
-    return personFactory.buildNew(firstName, lastName, email).create();
+    return personFactory.buildNew(firstName, lastName, Email.of(email)).create();
   }
 
   private String loadUsernameFromProperties() {

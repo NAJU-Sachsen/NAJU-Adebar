@@ -1,14 +1,15 @@
 package de.naju.adebar.app.persons.filter.predicate;
 
 import com.querydsl.core.BooleanBuilder;
+import de.naju.adebar.model.Email;
 import de.naju.adebar.model.persons.QPerson;
 
 public class EmailFilter implements PersonFilter {
 
   private static final QPerson person = QPerson.person;
-  private String email;
+  private Email email;
 
-  public EmailFilter(String email) {
+  public EmailFilter(Email email) {
     this.email = email;
   }
 

@@ -1,5 +1,6 @@
 package de.naju.adebar.test.mockups;
 
+import de.naju.adebar.model.Email;
 import de.naju.adebar.model.persons.Gender;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.persons.PersonFactory;
@@ -14,14 +15,14 @@ public class PersonMockup {
     this.personFactory = new PersonFactory();
   }
 
-  public static Person mockupPerson(String firstName, String lastName, String email) {
+  public static Person mockupPerson(String firstName, String lastName, Email email) {
     if (instance == null) {
       initInstance();
     }
     return instance.personFactory.buildNew(firstName, lastName, email).create();
   }
 
-  public static Person mockupParticipant(String firstName, String lastName, String email,
+  public static Person mockupParticipant(String firstName, String lastName, Email email,
       Gender gender) {
     Person person = mockupPerson(firstName, lastName, email);
     person.makeParticipant().updateGender(gender);

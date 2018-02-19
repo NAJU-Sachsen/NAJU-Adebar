@@ -1,13 +1,14 @@
 package de.naju.adebar.model.newsletter;
 
-import de.naju.adebar.TestUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import de.naju.adebar.TestUtils;
+import de.naju.adebar.model.Email;
 
 /**
  * Basic testing of the {@link Newsletter} class
- * 
+ *
  * @author Rico Bergmann
  */
 public class NewsletterUnitTets {
@@ -17,9 +18,9 @@ public class NewsletterUnitTets {
   @Before
   public void setUp() {
     hifaNewsletter = new Newsletter("HIFA");
-    hans = new Subscriber("Hans", "Wurst", "hans.wurst@web.de");
-    berta = new Subscriber("Berta", "Beate", "bbeate@gmail.com");
-    claus = new Subscriber("cccclllaaus@gmx.net");
+    hans = new Subscriber("Hans", "Wurst", Email.of("hans.wurst@web.de"));
+    berta = new Subscriber("Berta", "Beate", Email.of("bbeate@gmail.com"));
+    claus = new Subscriber(Email.of("cccclllaaus@gmx.net"));
   }
 
   @Test(expected = IllegalArgumentException.class)
