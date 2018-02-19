@@ -10,6 +10,8 @@ import java.util.Arrays;
  */
 public class Arrays2 {
 
+  private Arrays2() {}
+
   /**
    * Searches for the given key in the array, using linear search.
    *
