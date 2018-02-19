@@ -2,16 +2,20 @@ package de.naju.adebar.controller.api;
 
 import java.util.LinkedList;
 import java.util.Optional;
-import de.naju.adebar.model.newsletter.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import de.naju.adebar.api.data.TechnicalSubscriberJSON;
+import de.naju.adebar.model.Email;
+import de.naju.adebar.model.newsletter.Newsletter;
+import de.naju.adebar.model.newsletter.NewsletterRepository;
+import de.naju.adebar.model.newsletter.Subscriber;
+import de.naju.adebar.model.newsletter.SubscriberRepository;
 
 /**
  * REST controller to access subscriber data
- * 
+ *
  * @author Rico Bergmann
  * @see <a href= "https://en.wikipedia.org/wiki/Representational_State_Transfer">REST Services</a>
  */
@@ -34,7 +38,7 @@ public class SubscriberController {
    */
   @RequestMapping("/subscriberDetails")
   public TechnicalSubscriberJSON sendTechnicalSubscriberDetails(
-      @RequestParam("email") String email) {
+      @RequestParam("email") Email email) {
     LinkedList<Long> subscribedNewsletters = new LinkedList<>();
     for (Newsletter newsletter : newsletterRepo.findBySubscribersEmail(email)) {
       subscribedNewsletters.add(newsletter.getId());
