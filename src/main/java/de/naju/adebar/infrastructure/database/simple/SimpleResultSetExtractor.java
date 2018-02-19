@@ -5,7 +5,6 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
 /**
@@ -21,7 +20,7 @@ class SimpleResultSetExtractor implements ResultSetExtractor<SimplifiedResultSet
    * @see org.springframework.jdbc.core.ResultSetExtractor#extractData(java.sql.ResultSet)
    */
   @Override
-  public SimplifiedResultSet extractData(ResultSet rs) throws SQLException, DataAccessException {
+  public SimplifiedResultSet extractData(ResultSet rs) throws SQLException {
     ResultSetMetaData tableInfo = rs.getMetaData();
     Iterable<String> columns = getTableColumns(tableInfo);
     SimplifiedResultSet resultSet = new SimplifiedResultSet(columns);
