@@ -1,5 +1,6 @@
 package de.naju.adebar.model;
 
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import org.springframework.util.Assert;
@@ -11,7 +12,9 @@ import de.naju.adebar.util.Validation;
  * @author Rico Bergmann
  */
 @Embeddable
-public class Email {
+public class Email implements Serializable {
+
+  private static final long serialVersionUID = 1714106666349190494L;
 
   @Column(name = "email")
   private String value;
