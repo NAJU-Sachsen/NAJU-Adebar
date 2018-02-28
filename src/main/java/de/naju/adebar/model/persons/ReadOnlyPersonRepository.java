@@ -2,8 +2,11 @@ package de.naju.adebar.model.persons;
 
 import java.util.List;
 import java.util.stream.Stream;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QueryDslPredicateExecutor;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 import com.querydsl.core.types.Predicate;
 import de.naju.adebar.infrastructure.ReadOnlyRepository;
@@ -15,8 +18,10 @@ import de.naju.adebar.model.Email;
  * @author Rico Bergmann
  */
 @Repository("ro_personRepo")
-public interface ReadOnlyPersonRepository
-    extends ReadOnlyRepository<Person, PersonId>, QueryDslPredicateExecutor<Person> {
+public interface ReadOnlyPersonRepository extends //
+    ReadOnlyRepository<Person, PersonId>, //
+    QueryDslPredicateExecutor<Person>, //
+    PagingAndSortingRepository<Person, PersonId> {
 
   /**
    * @return all non-archived persons
@@ -33,6 +38,9 @@ public interface ReadOnlyPersonRepository
    */
   @Query("SELECT p FROM person p WHERE p.id IN (SELECT personId FROM activist)")
   Iterable<Person> findAllActivists();
+
+  @Query("SELECT p FROM person p WHERE p.archived=0 ORDER BY p.lastName")
+  Page<Person> findAllPagedOrderByLastName(Pageable pageable);
 
   /**
    * @param id must not be {@code null}.

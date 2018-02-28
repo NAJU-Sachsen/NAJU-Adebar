@@ -1,8 +1,16 @@
 
+body {
+	background-color: #aaa;
+}
+
 main {
     width: 80%;
-    margin: 0 auto;
+    margin: 0 auto 15px auto;
     padding-bottom: 2em;
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 5px 5px 5px #999;
 }
 
 .status {
@@ -44,8 +52,150 @@ a {
     cursor: pointer;
 }
 
+.action-bar {
+  padding: 10px;
+  border: 1px solid #eee;
+  display: inline-block;
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+  background-color: #337ab7;
+}
+
+.scroll-horizontal {
+  display: flex;
+  height: 100%;
+  flex: 1 1 auto;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.scroll-item-1 {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  overflow: hidden;
+  width: 8.3%;
+}
+
+.scroll-item-2 {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  overflow: hidden;
+  width: 16.6%;
+}
+
+.scroll-item-3 {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  overflow: hidden;
+  width: 25%;
+}
+
+.scroll-item-4 {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  overflow: hidden;
+  width: 33%;
+}
+
+.scroll-item-5 {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  overflow: hidden;
+  width: 41.6%;
+}
+
+.scroll-item-6 {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  overflow: hidden;
+  width: 50%;
+}
+
+.scroll-item-7 {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  overflow: hidden;
+  width: 58.3%;
+}
+
+.scroll-item-8 {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  overflow: hidden;
+  width: 66.6%;
+}
+.scroll-item-9 {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  overflow: hidden;
+  width: 75%;
+}
+
+.scroll-item-10 {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  overflow: hidden;
+  width: 83.3%;
+}
+
+.scroll-item-11 {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  overflow: hidden;
+  width: 91.6%;
+}
+
+.scroll-item-12 {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  overflow: hidden;
+  width: 100%;
+}
+
 .address .street {
     margin-bottom: 5px;
+}
+
+.control-label-lg {
+  font-size: 1.2em;
+}
+
+.display-category {
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #eee;
+}
+
+.display-category:last-of-type {
+  border-bottom: none;
+}
+
+.category-nav {
+  margin-top: 35px;
 }
 
 fieldset.inline-options {
@@ -230,6 +380,40 @@ fieldset.inline-options label {
     display: inline;
 }
 
+.italic {
+  font-style: italic;
+}
+
+.bordered {
+  border: 1px solid #DDD;
+}
+
+.bordered.round {
+  border-radius: 15px;
+}
+
+@media (max-width: 767px) {
+  .height-md {
+    height: auto;
+  }
+}
+@media (min-width: 768px) and (max-width: 991px) {
+  .height-md {
+    height: 375px;
+  }
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+  .height-md {
+    height: 485px;
+  }
+}
+@media (min-width: 1200px) {
+  .height-md {
+    height: 585px;
+  }
+}
+
+
 .logout {
   display: block;
   margin: 0;
@@ -252,4 +436,16 @@ fieldset.inline-options label {
   color: #262626;
   background-color: #f5f5f5;
   text-decoration: none;
+}
+
+@media (min-device-width: 481px) {
+  .show-sm {
+    display: none !important;
+  }
+}
+
+@media (max-device-width: 480px) {
+  .hide-sm {
+    display: none !important;
+  }
 }

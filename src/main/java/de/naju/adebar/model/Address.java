@@ -104,18 +104,39 @@ public class Address {
   }
 
   /**
+   * @return the zip
+   */
+  public String getZip() {
+    return zip;
+  }
+
+  /**
+   * @return the city
+   */
+  public String getCity() {
+    return city;
+  }
+
+  /**
+   * @return the additional info. May be empty
+   */
+  public String getAdditionalInfo() {
+    return additionalInfo;
+  }
+
+  /**
+   * @return whether no field is set
+   */
+  public boolean empty() {
+    return street.isEmpty() && zip.isEmpty() && city.isEmpty() && additionalInfo.isEmpty();
+  }
+
+  /**
    * @param street the street to set
    */
   protected void setStreet(String street) {
     Assert.notNull(street, "Street may not be null!");
     this.street = street;
-  }
-
-  /**
-   * @return the zip
-   */
-  public String getZip() {
-    return zip;
   }
 
   /**
@@ -127,25 +148,11 @@ public class Address {
   }
 
   /**
-   * @return the city
-   */
-  public String getCity() {
-    return city;
-  }
-
-  /**
    * @param city the city to set
    */
   protected void setCity(String city) {
     Assert.notNull(city, "City may not be null!");
     this.city = city;
-  }
-
-  /**
-   * @return the additional info. May be empty
-   */
-  public String getAdditionalInfo() {
-    return additionalInfo;
   }
 
   /**

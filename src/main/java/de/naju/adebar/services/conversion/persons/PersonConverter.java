@@ -1,4 +1,4 @@
-package de.naju.adebar.infrastructure.formatters;
+package de.naju.adebar.services.conversion.persons;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.util.Assert;
