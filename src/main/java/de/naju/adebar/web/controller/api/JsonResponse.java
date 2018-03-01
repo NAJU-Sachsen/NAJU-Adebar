@@ -1,4 +1,4 @@
-package de.naju.adebar.controller.api;
+package de.naju.adebar.web.controller.api;
 
 /**
  * Basic response 'code' structure. Depending on the actual response, additional fields might be
@@ -15,10 +15,18 @@ public class JsonResponse {
 
   protected String status;
 
+  public static JsonResponse ok() {
+    return new JsonResponse(RETURN_OK);
+  }
+
+  public static JsonResponse status(String status) {
+    return new JsonResponse(status);
+  }
+
   /**
    * @param status the response status (e.g. 'error' or 'ok')
    */
-  public JsonResponse(String status) {
+  protected JsonResponse(String status) {
     this.status = status;
   }
 

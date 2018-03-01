@@ -1,4 +1,4 @@
-package de.naju.adebar.controller.api;
+package de.naju.adebar.web.controller.api;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -74,7 +74,7 @@ public class EventController {
       event.addReservationFor(description, slots, email);
       eventManager.updateEvent(eventId, event);
     } catch (BookedOutException e) {
-      return new OverbookedResponse(event.getRemainingCapacity());
+      return OverbookedResponse.withRemainingSlots(event.getRemainingCapacity());
     } catch (IllegalArgumentException e) {
       return new ErrorResponse(e.getMessage());
     }
@@ -102,7 +102,7 @@ public class EventController {
       event.updateReservation(id, new Reservation(description, slots, email));
       eventManager.updateEvent(eventId, event);
     } catch (BookedOutException e) {
-      return new OverbookedResponse(event.getRemainingCapacity());
+      return OverbookedResponse.withRemainingSlots(event.getRemainingCapacity());
     } catch (IllegalArgumentException e) {
       return new ErrorResponse(e.getMessage());
     }
@@ -129,7 +129,7 @@ public class EventController {
       return new ErrorResponse(e.getMessage());
     }
 
-    return new JsonResponse(JsonResponse.RETURN_OK);
+    return JsonResponse.ok();
   }
 
   /**
@@ -139,7 +139,7 @@ public class EventController {
    * @author Rico Bergmann
    *
    */
-  private class OverbookedResponse extends JsonResponse {
+  private static class OverbookedResponse extends JsonResponse {
     /**
      * Default String to indicate an overbooked event
      */
@@ -147,12 +147,16 @@ public class EventController {
 
     private int slotsAvailable;
 
+    public static OverbookedResponse withRemainingSlots(int slotsAvailable) {
+      return new OverbookedResponse(slotsAvailable);
+    }
+
     /**
      * Constructor to specify the number of available slots
      *
      * @param slotsAvailable the unused capacity
      */
-    public OverbookedResponse(int slotsAvailable) {
+    private OverbookedResponse(int slotsAvailable) {
       super(RETURN_OVERBOOKED);
       this.slotsAvailable = slotsAvailable;
     }
