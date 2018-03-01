@@ -25,11 +25,11 @@ import de.naju.adebar.app.persons.filter.predicate.NameFilter;
 import de.naju.adebar.app.persons.filter.predicate.PersonFilter;
 import de.naju.adebar.app.persons.filter.predicate.PhoneNumberFilter;
 import de.naju.adebar.app.persons.filter.predicate.ReferentFilter;
-import de.naju.adebar.controller.forms.persons.FilterPersonForm;
 import de.naju.adebar.model.Address;
 import de.naju.adebar.model.Email;
 import de.naju.adebar.model.persons.Gender;
 import de.naju.adebar.model.persons.NabuMembershipInformation.MembershipStatus;
+import de.naju.adebar.web.validation.persons.FilterPersonForm;
 import de.naju.adebar.model.persons.Qualification;
 import de.naju.adebar.model.persons.QualificationRepository;
 

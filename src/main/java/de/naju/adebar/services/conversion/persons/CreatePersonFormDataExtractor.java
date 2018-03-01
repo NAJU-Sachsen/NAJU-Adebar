@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import com.google.common.collect.Lists;
-import de.naju.adebar.controller.forms.persons.CreateParentForm;
-import de.naju.adebar.controller.forms.persons.CreatePersonForm;
 import de.naju.adebar.model.Address;
 import de.naju.adebar.model.Email;
 import de.naju.adebar.model.PhoneNumber;
@@ -29,6 +27,8 @@ import de.naju.adebar.model.persons.PersonFactory.ReferentBuilder;
 import de.naju.adebar.model.persons.Qualification;
 import de.naju.adebar.model.persons.QualificationRepository;
 import de.naju.adebar.util.Validation;
+import de.naju.adebar.web.validation.persons.CreateParentForm;
+import de.naju.adebar.web.validation.persons.CreatePersonForm;
 
 /**
  * Service to extract the necessary data from a 'create person' form

@@ -1,7 +1,7 @@
 package de.naju.adebar.services.conversion.chapter;
 
-import de.naju.adebar.controller.forms.chapter.ProjectForm;
 import de.naju.adebar.model.chapter.Project;
+import de.naju.adebar.web.validation.chapters.ProjectForm;
 import org.springframework.stereotype.Service;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;

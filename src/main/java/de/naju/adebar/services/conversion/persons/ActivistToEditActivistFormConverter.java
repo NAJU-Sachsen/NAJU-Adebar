@@ -9,11 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import com.google.common.collect.Streams;
-import de.naju.adebar.controller.forms.persons.EditActivistForm;
 import de.naju.adebar.model.chapter.LocalGroup;
 import de.naju.adebar.model.chapter.ReadOnlyLocalGroupRepository;
 import de.naju.adebar.model.persons.ActivistProfile;
 import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.web.validation.persons.EditActivistForm;
 
 /**
  * Service to convert an {@link Person activist} to a corresponding {@link EditActivistForm}

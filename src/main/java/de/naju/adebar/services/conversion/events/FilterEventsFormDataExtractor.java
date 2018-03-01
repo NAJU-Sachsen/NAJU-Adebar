@@ -19,8 +19,8 @@ import de.naju.adebar.app.events.filter.StartTimeFilter;
 import de.naju.adebar.app.filter.ComparableFilterType;
 import de.naju.adebar.app.filter.DateTimeFilterType;
 import de.naju.adebar.app.filter.MatchType;
-import de.naju.adebar.controller.forms.events.FilterEventsForm;
 import de.naju.adebar.model.Address;
+import de.naju.adebar.web.validation.events.FilterEventsForm;
 
 /**
  * Service to convert {@link FilterEventsForm} data to corresponding objects

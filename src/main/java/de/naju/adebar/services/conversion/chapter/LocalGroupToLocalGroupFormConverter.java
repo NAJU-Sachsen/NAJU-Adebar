@@ -1,7 +1,7 @@
 package de.naju.adebar.services.conversion.chapter;
 
-import de.naju.adebar.controller.forms.chapter.LocalGroupForm;
 import de.naju.adebar.model.chapter.LocalGroup;
+import de.naju.adebar.web.validation.chapters.LocalGroupForm;
 import org.springframework.stereotype.Service;
 import java.util.LinkedList;
 import java.util.List;

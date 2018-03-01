@@ -4,8 +4,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import org.springframework.stereotype.Service;
-import de.naju.adebar.controller.forms.persons.CreatePersonForm;
-import de.naju.adebar.controller.forms.persons.EditPersonForm;
 import de.naju.adebar.model.Address;
 import de.naju.adebar.model.Email;
 import de.naju.adebar.model.PhoneNumber;
@@ -13,6 +11,8 @@ import de.naju.adebar.model.persons.Gender;
 import de.naju.adebar.model.persons.NabuMembershipInformation;
 import de.naju.adebar.model.persons.ParticipantProfile;
 import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.web.validation.persons.CreatePersonForm;
+import de.naju.adebar.web.validation.persons.EditPersonForm;
 
 /**
  * Service to extract the necessary data from an 'edit person' form
