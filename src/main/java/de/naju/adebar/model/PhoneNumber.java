@@ -177,7 +177,7 @@ public class PhoneNumber {
   /**
    * @return the (now unified) phone number
    */
-  public String getNumber() {
+  public String getValue() {
     return value;
   }
 
@@ -185,7 +185,7 @@ public class PhoneNumber {
    * @param number the phone number. Just for JPA's sake.
    */
   @SuppressWarnings("unused")
-  private void setNumber(String number) {
+  private void setValue(String number) {
     assertValidNumber(number);
     this.value = normalizePhoneNumber(number);
   }

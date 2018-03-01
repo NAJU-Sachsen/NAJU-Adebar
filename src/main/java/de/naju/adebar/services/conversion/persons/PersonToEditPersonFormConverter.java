@@ -41,7 +41,7 @@ public class PersonToEditPersonFormConverter {
     personForm.setEmail(person.getEmail().getValue());
 
     if (person.hasPhoneNumber()) {
-      personForm.setPhoneNumber(person.getPhoneNumber().getNumber());
+      personForm.setPhoneNumber(person.getPhoneNumber().getValue());
     }
 
     if (person.hasAddress()) {
