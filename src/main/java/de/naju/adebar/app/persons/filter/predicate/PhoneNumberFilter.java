@@ -19,6 +19,6 @@ public class PhoneNumberFilter implements PersonFilter {
    */
   @Override
   public BooleanBuilder filter(BooleanBuilder input) {
-    return input.and(person.phoneNumber.number.eq(phoneNumber));
+    return input.and(person.phoneNumber.value.eq(phoneNumber));
   }
 }
