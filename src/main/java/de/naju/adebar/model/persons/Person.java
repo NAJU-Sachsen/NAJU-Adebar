@@ -553,9 +553,7 @@ public class Person {
    * @throws IllegalStateException if the person already is a camp participant
    */
   public ParticipantProfile makeParticipant() {
-    if (isParticipant()) {
-      throw new IllegalStateException("Person already is a participant");
-    }
+    assertMayBecomeParticipant();
     this.participantProfile = new ParticipantProfile(this);
     this.participant = true;
     return participantProfile;
@@ -575,9 +573,7 @@ public class Person {
    */
   public ParticipantProfile makeParticipant(Gender gender, LocalDate dateOfBirth,
       String eatingHabits, String healthImpairments) {
-    if (isParticipant()) {
-      throw new IllegalStateException("Person already is a participant");
-    }
+    assertMayBecomeParticipant();
     this.participantProfile =
         new ParticipantProfile(this, gender, dateOfBirth, eatingHabits, healthImpairments);
     this.participant = true;
@@ -593,9 +589,7 @@ public class Person {
    * @throws IllegalStateException if the person already is an activist
    */
   public ActivistProfile makeActivist() {
-    if (isActivist()) {
-      throw new IllegalStateException("Person already is an activist");
-    }
+    assertMayBecomeActivist();
     this.activistProfile = new ActivistProfile(this);
     this.activist = true;
 
@@ -613,9 +607,7 @@ public class Person {
    * @throws IllegalStateException if the person already is an activist
    */
   public ActivistProfile makeActivist(JuleicaCard juleica) {
-    if (isActivist()) {
-      throw new IllegalStateException("Person already is an activist");
-    }
+    assertMayBecomeActivist();
     this.activistProfile = new ActivistProfile(this, juleica);
     this.activist = true;
 
@@ -632,9 +624,7 @@ public class Person {
    * @throws IllegalStateException if the person already is a referent
    */
   public ReferentProfile makeReferent() {
-    if (isReferent()) {
-      throw new IllegalStateException("Person already is a referent");
-    }
+    assertMayBecomeReferent();
     this.referentProfile = new ReferentProfile(this);
     this.referent = true;
 
@@ -652,9 +642,7 @@ public class Person {
    * @throws IllegalStateException if the person already is a referent
    */
   public ReferentProfile makeReferent(Collection<Qualification> qualifications) {
-    if (isReferent()) {
-      throw new IllegalStateException("Person already is a referent");
-    }
+    assertMayBecomeReferent();
     this.referentProfile = new ReferentProfile(this, qualifications);
     this.referent = true;
 
@@ -766,6 +754,45 @@ public class Person {
   @AfterDomainEventPublication
   void clearEvents() {
     domainEvents.clear();
+  }
+
+  /**
+   * @throws IllegalStateException if the person is archived
+   */
+  private void assertNotArchived() {
+    if (isArchived()) {
+      throw new IllegalStateException("Person is archived");
+    }
+  }
+
+  /**
+   * @throws IllegalStateException if the person is a participant
+   */
+  private void assertMayBecomeParticipant() {
+    assertNotArchived();
+    if (isParticipant()) {
+      throw new IllegalStateException("Person already is a participant");
+    }
+  }
+
+  /**
+   * @throws IllegalStateException if the person is an activist
+   */
+  private void assertMayBecomeActivist() {
+    assertNotArchived();
+    if (isActivist()) {
+      throw new IllegalStateException("Person already is an activist");
+    }
+  }
+
+  /**
+   * @throws IllegalStateException if the person is a referent
+   */
+  private void assertMayBecomeReferent() {
+    assertNotArchived();
+    if (isReferent()) {
+      throw new IllegalStateException("Person already is a referent");
+    }
   }
 
   /**
