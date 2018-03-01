@@ -10,7 +10,9 @@ import de.naju.adebar.model.Email;
 import de.naju.adebar.model.PhoneNumber;
 
 /**
- * Factory to create {@link Person} instances. Using the Builder pattern.
+ * Factory to create {@link Person} instances. The factory just sets up everything to delegate the
+ * creation-process itself to a Builder.
+ *
  * <p>
  * Beware that the implementation of the builder is actually not stateless: <br>
  * When performing a call such as
