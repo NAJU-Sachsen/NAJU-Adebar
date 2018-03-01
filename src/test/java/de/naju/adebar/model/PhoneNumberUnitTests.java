@@ -54,7 +54,7 @@ public class PhoneNumberUnitTests {
   public void normalizesPhoneNumbersCorrectly() {
     for (int comparisonIdx = 0; comparisonIdx < rawNumbers.length; ++comparisonIdx) {
       PhoneNumber phoneNumber = PhoneNumber.of(rawNumbers[comparisonIdx]);
-      assertThat(phoneNumber.getNumber()) //
+      assertThat(phoneNumber.getValue()) //
           .describedAs("Phone number should be normalized") //
           .isEqualTo(normalizedNumbers[comparisonIdx]);
 
