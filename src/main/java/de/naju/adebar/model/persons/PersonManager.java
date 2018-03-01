@@ -3,6 +3,8 @@ package de.naju.adebar.model.persons;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 import de.naju.adebar.model.Email;
+import de.naju.adebar.model.persons.exceptions.NoReferentException;
+import de.naju.adebar.model.persons.qualifications.Qualification;
 
 /**
  * Service to take care of {@link Person Persons}

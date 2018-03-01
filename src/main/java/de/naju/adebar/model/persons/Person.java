@@ -27,6 +27,16 @@ import de.naju.adebar.model.Address;
 import de.naju.adebar.model.Email;
 import de.naju.adebar.model.PhoneNumber;
 import de.naju.adebar.model.events.Event;
+import de.naju.adebar.model.persons.details.Gender;
+import de.naju.adebar.model.persons.details.JuleicaCard;
+import de.naju.adebar.model.persons.events.AbstractPersonRelatedEvent;
+import de.naju.adebar.model.persons.events.NewActivistRegisteredEvent;
+import de.naju.adebar.model.persons.events.NewReferentRegisteredEvent;
+import de.naju.adebar.model.persons.events.PersonArchivedEvent;
+import de.naju.adebar.model.persons.events.PersonDataUpdatedEvent;
+import de.naju.adebar.model.persons.exceptions.ExistingParentException;
+import de.naju.adebar.model.persons.exceptions.ImpossibleKinshipRelationException;
+import de.naju.adebar.model.persons.qualifications.Qualification;
 
 /**
  * Abstraction of a person. No matter of its concrete role (camp participant, activist, ...) some

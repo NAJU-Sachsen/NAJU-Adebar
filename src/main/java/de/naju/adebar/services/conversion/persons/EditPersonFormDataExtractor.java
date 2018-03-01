@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 import de.naju.adebar.model.Address;
 import de.naju.adebar.model.Email;
 import de.naju.adebar.model.PhoneNumber;
-import de.naju.adebar.model.persons.Gender;
-import de.naju.adebar.model.persons.NabuMembershipInformation;
 import de.naju.adebar.model.persons.ParticipantProfile;
 import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.details.Gender;
+import de.naju.adebar.model.persons.details.NabuMembershipInformation;
 import de.naju.adebar.web.validation.persons.CreatePersonForm;
 import de.naju.adebar.web.validation.persons.EditPersonForm;
 

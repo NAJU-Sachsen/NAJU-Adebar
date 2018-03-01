@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import de.naju.adebar.model.Address;
 import de.naju.adebar.model.Email;
+import de.naju.adebar.model.persons.details.JuleicaCard;
 
 /**
  * Basic behavior testing for the {@link PersistentPersonManager} and its behavior on

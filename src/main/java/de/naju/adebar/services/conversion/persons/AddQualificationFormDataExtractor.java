@@ -1,7 +1,7 @@
 package de.naju.adebar.services.conversion.persons;
 
 import org.springframework.stereotype.Service;
-import de.naju.adebar.model.persons.Qualification;
+import de.naju.adebar.model.persons.qualifications.Qualification;
 import de.naju.adebar.web.validation.persons.AddQualificationForm;
 import de.naju.adebar.web.validation.persons.AddQualificationForm.AddType;
 

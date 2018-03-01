@@ -1,4 +1,4 @@
-package de.naju.adebar.model.persons;
+package de.naju.adebar.model.persons.details;
 
 /**
  * Abstraction of a gender. To be politically correct, we distinguish female, male and other

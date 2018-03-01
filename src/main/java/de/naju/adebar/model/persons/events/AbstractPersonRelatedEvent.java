@@ -1,8 +1,9 @@
-package de.naju.adebar.model.persons;
+package de.naju.adebar.model.persons.events;
 
 import java.util.Collection;
 import de.naju.adebar.model.ChangeSetEntry;
 import de.naju.adebar.model.EntityUpdatedEvent;
+import de.naju.adebar.model.persons.Person;
 
 /**
  * Base for all events which are raised by the {@link Person} aggregate
@@ -29,5 +30,5 @@ public abstract class AbstractPersonRelatedEvent extends EntityUpdatedEvent<Pers
   /**
    * @return whether an aggregate may publish multiple instances of this event at the same time
    */
-  abstract boolean aggregateMayContainMultipleInstances();
+  abstract public boolean aggregateMayContainMultipleInstances();
 }

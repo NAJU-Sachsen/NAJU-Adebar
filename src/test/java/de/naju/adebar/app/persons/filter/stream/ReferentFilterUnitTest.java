@@ -14,7 +14,7 @@ import de.naju.adebar.app.filter.FilterType;
 import de.naju.adebar.app.persons.filter.FilterTestBootstrapper;
 import de.naju.adebar.app.persons.filter.stream.ReferentFilter;
 import de.naju.adebar.model.persons.Person;
-import de.naju.adebar.model.persons.Qualification;
+import de.naju.adebar.model.persons.qualifications.Qualification;
 
 /**
  * Basic testing of the {@link ReferentFilter}

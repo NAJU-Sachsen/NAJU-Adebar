@@ -8,6 +8,10 @@ import org.springframework.util.Assert;
 import de.naju.adebar.model.Address;
 import de.naju.adebar.model.Email;
 import de.naju.adebar.model.PhoneNumber;
+import de.naju.adebar.model.persons.details.Gender;
+import de.naju.adebar.model.persons.details.JuleicaCard;
+import de.naju.adebar.model.persons.details.NabuMembershipInformation;
+import de.naju.adebar.model.persons.qualifications.Qualification;
 
 /**
  * Factory to create {@link Person} instances. The factory just sets up everything to delegate the

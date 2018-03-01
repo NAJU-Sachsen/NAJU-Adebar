@@ -1,4 +1,4 @@
-package de.naju.adebar.model.persons;
+package de.naju.adebar.model.persons.exceptions;
 
 /**
  * Exception to indicate that a parent is already connected to a person

@@ -5,6 +5,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import de.naju.adebar.model.Email;
+import de.naju.adebar.model.persons.details.JuleicaCard;
 
 /**
  * Basic testing of the {@link ActivistProfile} class

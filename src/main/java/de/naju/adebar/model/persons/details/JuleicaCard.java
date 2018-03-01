@@ -1,4 +1,4 @@
-package de.naju.adebar.model.persons;
+package de.naju.adebar.model.persons.details;
 
 import java.time.LocalDate;
 import javax.persistence.Column;

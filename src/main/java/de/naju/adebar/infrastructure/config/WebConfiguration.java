@@ -6,10 +6,10 @@ import org.springframework.util.Assert;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import de.naju.adebar.infrastructure.config.security.WebSecurityConfiguration;
-import de.naju.adebar.infrastructure.formatters.EventConverter;
-import de.naju.adebar.infrastructure.formatters.PersonConverter;
 import de.naju.adebar.model.events.ReadOnlyEventRepository;
 import de.naju.adebar.model.persons.ReadOnlyPersonRepository;
+import de.naju.adebar.services.conversion.events.EventConverter;
+import de.naju.adebar.services.conversion.persons.PersonConverter;
 
 /**
  * The general configuration of the web controllers.

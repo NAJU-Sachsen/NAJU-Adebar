@@ -10,6 +10,9 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 import org.springframework.util.Assert;
+import de.naju.adebar.model.persons.details.Gender;
+import de.naju.adebar.model.persons.details.NabuMembershipInformation;
+import de.naju.adebar.model.persons.events.PersonDataUpdatedEvent;
 
 /**
  * Every camp participant has to fill a registration form. The corresponding data will be collected

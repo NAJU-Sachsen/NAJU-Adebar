@@ -26,9 +26,9 @@ import javax.persistence.Transient;
 import org.javamoney.moneta.Money;
 import org.springframework.util.Assert;
 import de.naju.adebar.model.Address;
-import de.naju.adebar.model.persons.NoActivistException;
-import de.naju.adebar.model.persons.NoParticipantException;
 import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.exceptions.NoActivistException;
+import de.naju.adebar.model.persons.exceptions.NoParticipantException;
 
 /**
  * Abstraction of an event. It may be a regular camp or any other kind of event such as workshops or

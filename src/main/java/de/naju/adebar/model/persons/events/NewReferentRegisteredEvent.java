@@ -1,4 +1,7 @@
-package de.naju.adebar.model.persons;
+package de.naju.adebar.model.persons.events;
+
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.exceptions.NoReferentException;
 
 /**
  * Event raised when a person was registered as a referent.
@@ -29,7 +32,7 @@ public class NewReferentRegisteredEvent extends AbstractPersonRelatedEvent {
   }
 
   @Override
-  boolean aggregateMayContainMultipleInstances() {
+  public boolean aggregateMayContainMultipleInstances() {
     return false;
   }
 

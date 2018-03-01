@@ -5,8 +5,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import org.springframework.stereotype.Service;
 import de.naju.adebar.model.persons.ActivistProfile;
-import de.naju.adebar.model.persons.JuleicaCard;
 import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.details.JuleicaCard;
 import de.naju.adebar.web.validation.persons.EditActivistForm;
 
 /**

@@ -6,7 +6,7 @@ import de.naju.adebar.model.events.rooms.scheduling.Participant;
 import de.naju.adebar.model.events.rooms.scheduling.ParticipantListValidator;
 import de.naju.adebar.model.events.rooms.scheduling.Room;
 import de.naju.adebar.model.events.rooms.scheduling.RoomSpecification;
-import de.naju.adebar.model.persons.Gender;
+import de.naju.adebar.model.persons.details.Gender;
 
 /**
  * The implementation of the {@link SlackerParticipantListValidator}

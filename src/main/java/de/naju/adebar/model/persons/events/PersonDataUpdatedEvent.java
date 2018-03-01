@@ -1,8 +1,9 @@
-package de.naju.adebar.model.persons;
+package de.naju.adebar.model.persons.events;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import de.naju.adebar.model.ChangeSetEntry;
+import de.naju.adebar.model.persons.Person;
 
 /**
  * Event raised when a person's information was updated.
@@ -36,7 +37,7 @@ public class PersonDataUpdatedEvent extends AbstractPersonRelatedEvent {
 
   /**
    * Combines two events into one, retaining the original change set
-   * 
+   *
    * @param other the other event
    * @return the combined event
    */
@@ -46,7 +47,7 @@ public class PersonDataUpdatedEvent extends AbstractPersonRelatedEvent {
 
   /**
    * Combines two events into one, while also merging their change sets
-   * 
+   *
    * @param other the other event
    * @param changeset the additional change set
    * @return the combined event
@@ -74,7 +75,7 @@ public class PersonDataUpdatedEvent extends AbstractPersonRelatedEvent {
   }
 
   @Override
-  boolean aggregateMayContainMultipleInstances() {
+  public boolean aggregateMayContainMultipleInstances() {
     return false;
   }
 

@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import de.naju.adebar.model.Address;
 import de.naju.adebar.model.Email;
+import de.naju.adebar.model.persons.qualifications.Qualification;
 
 /**
  * Basic behavior testing of the {@link PersonManager} regarding {@link ReferentProfile}

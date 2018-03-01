@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import de.naju.adebar.model.Email;
+import de.naju.adebar.model.persons.exceptions.NoReferentException;
+import de.naju.adebar.model.persons.qualifications.Qualification;
+import de.naju.adebar.model.persons.qualifications.QualificationRepository;
 
 /**
  * A {@link PersonManager} that persists its data in a database

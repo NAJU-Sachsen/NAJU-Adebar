@@ -1,4 +1,6 @@
-package de.naju.adebar.model.persons;
+package de.naju.adebar.model.persons.events;
+
+import de.naju.adebar.model.persons.Person;
 
 /**
  * Event raised when a person was archived.
@@ -29,7 +31,7 @@ public class PersonArchivedEvent extends AbstractPersonRelatedEvent {
   }
 
   @Override
-  boolean aggregateMayContainMultipleInstances() {
+  public boolean aggregateMayContainMultipleInstances() {
     return false;
   }
 

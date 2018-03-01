@@ -1,4 +1,4 @@
-package de.naju.adebar.model.persons;
+package de.naju.adebar.model.persons.qualifications;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

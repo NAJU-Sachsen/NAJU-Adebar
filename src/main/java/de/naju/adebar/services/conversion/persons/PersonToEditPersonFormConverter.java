@@ -5,10 +5,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import org.springframework.stereotype.Service;
 import de.naju.adebar.model.Address;
-import de.naju.adebar.model.persons.NabuMembershipInformation.MembershipStatus;
 import de.naju.adebar.web.validation.persons.EditPersonForm;
 import de.naju.adebar.model.persons.ParticipantProfile;
 import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.details.NabuMembershipInformation.MembershipStatus;
 
 /**
  * Service to convert a {@link Person} to a corresponding {@link EditPersonForm}

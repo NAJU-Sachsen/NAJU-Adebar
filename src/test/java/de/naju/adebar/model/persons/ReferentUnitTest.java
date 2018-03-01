@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import com.google.common.collect.Iterables;
 import de.naju.adebar.model.Email;
+import de.naju.adebar.model.persons.qualifications.Qualification;
 
 /**
  * Basic testing of the {@link ReferentProfile} class

@@ -1,4 +1,8 @@
-package de.naju.adebar.model.persons;
+package de.naju.adebar.model.persons.exceptions;
+
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.PersonId;
+import de.naju.adebar.model.persons.ReferentProfile;
 
 /**
  * Exception to indicate that a person is not a referent but was treated as one.

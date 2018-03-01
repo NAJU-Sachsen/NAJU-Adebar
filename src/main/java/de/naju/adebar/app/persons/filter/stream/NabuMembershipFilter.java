@@ -2,8 +2,8 @@ package de.naju.adebar.app.persons.filter.stream;
 
 import java.util.stream.Stream;
 import de.naju.adebar.app.filter.FilterType;
-import de.naju.adebar.model.persons.NabuMembershipInformation;
 import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.details.NabuMembershipInformation;
 
 /**
  * @author Rico Bergmann

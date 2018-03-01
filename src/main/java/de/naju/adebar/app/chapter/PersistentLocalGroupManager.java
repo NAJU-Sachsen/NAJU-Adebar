@@ -22,8 +22,8 @@ import de.naju.adebar.model.chapter.Project;
 import de.naju.adebar.model.chapter.ProjectRepository;
 import de.naju.adebar.model.chapter.ReadOnlyLocalGroupRepository;
 import de.naju.adebar.model.newsletter.Newsletter;
-import de.naju.adebar.model.persons.NoActivistException;
 import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.exceptions.NoActivistException;
 import de.naju.adebar.util.Streams;
 
 /**

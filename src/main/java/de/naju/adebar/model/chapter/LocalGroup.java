@@ -26,8 +26,8 @@ import org.springframework.util.Assert;
 import de.naju.adebar.model.Address;
 import de.naju.adebar.model.events.Event;
 import de.naju.adebar.model.newsletter.Newsletter;
-import de.naju.adebar.model.persons.NoActivistException;
 import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.exceptions.NoActivistException;
 
 /**
  * Abstraction of a local group. Each group has a (very likely) unique set of members, i. e.

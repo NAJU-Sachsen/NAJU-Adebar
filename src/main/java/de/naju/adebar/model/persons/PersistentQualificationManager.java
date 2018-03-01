@@ -4,6 +4,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import de.naju.adebar.model.persons.qualifications.ExistingQualificationException;
+import de.naju.adebar.model.persons.qualifications.Qualification;
+import de.naju.adebar.model.persons.qualifications.QualificationManager;
+import de.naju.adebar.model.persons.qualifications.QualificationRepository;
 
 /**
  * A {@link QualificationManager} that persists the data in a database.

@@ -1,6 +1,6 @@
 package de.naju.adebar.web.validation.persons;
 
-import de.naju.adebar.model.persons.NabuMembershipInformation.MembershipStatus;
+import de.naju.adebar.model.persons.details.NabuMembershipInformation.MembershipStatus;
 
 /**
  * Model POJO for person data. The fields are set by Thymeleaf when the associated form is

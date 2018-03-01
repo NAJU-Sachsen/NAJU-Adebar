@@ -1,4 +1,8 @@
-package de.naju.adebar.model.persons;
+package de.naju.adebar.model.persons.exceptions;
+
+import de.naju.adebar.model.persons.ActivistProfile;
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.PersonId;
 
 /**
  * Exception to indicate that a person is not an activist but was treated as one

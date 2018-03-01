@@ -27,11 +27,11 @@ import de.naju.adebar.app.persons.filter.predicate.PhoneNumberFilter;
 import de.naju.adebar.app.persons.filter.predicate.ReferentFilter;
 import de.naju.adebar.model.Address;
 import de.naju.adebar.model.Email;
-import de.naju.adebar.model.persons.Gender;
-import de.naju.adebar.model.persons.NabuMembershipInformation.MembershipStatus;
+import de.naju.adebar.model.persons.details.Gender;
+import de.naju.adebar.model.persons.details.NabuMembershipInformation.MembershipStatus;
+import de.naju.adebar.model.persons.qualifications.Qualification;
+import de.naju.adebar.model.persons.qualifications.QualificationRepository;
 import de.naju.adebar.web.validation.persons.FilterPersonForm;
-import de.naju.adebar.model.persons.Qualification;
-import de.naju.adebar.model.persons.QualificationRepository;
 
 /**
  * Service to convert {@link FilterPersonForm} data to the corresponding objects

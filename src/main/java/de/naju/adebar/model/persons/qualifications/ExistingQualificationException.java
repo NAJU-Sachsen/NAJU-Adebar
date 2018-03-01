@@ -1,4 +1,4 @@
-package de.naju.adebar.model.persons;
+package de.naju.adebar.model.persons.qualifications;
 
 /**
  * Exception to indicate that a qualification with the same name already exists

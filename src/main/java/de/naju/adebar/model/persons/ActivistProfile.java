@@ -7,6 +7,8 @@ import javax.persistence.Embedded;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import org.springframework.util.Assert;
+import de.naju.adebar.model.persons.details.JuleicaCard;
+import de.naju.adebar.model.persons.events.PersonDataUpdatedEvent;
 
 /**
  * Activists are persons who contribute to events, e.g. organize them or work as counselors or
@@ -42,7 +44,7 @@ public class ActivistProfile extends AbstractProfile {
   /**
    * Convenience constructor to avoid creating a new profile and then setting its Juleica card
    * through a call to {@link #updateJuleicaCard(JuleicaCard)} right after.
-   * 
+   *
    * @param person the person to create the profile for
    * @param juleica the new juleica card
    */

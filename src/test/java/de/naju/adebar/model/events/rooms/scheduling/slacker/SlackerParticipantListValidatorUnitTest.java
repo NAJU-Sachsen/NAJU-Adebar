@@ -11,7 +11,7 @@ import de.naju.adebar.model.events.rooms.scheduling.Participant;
 import de.naju.adebar.model.events.rooms.scheduling.ParticipationTime;
 import de.naju.adebar.model.events.rooms.scheduling.RoomSpecification;
 import de.naju.adebar.model.events.rooms.scheduling.slacker.SlackerParticipantListValidator;
-import de.naju.adebar.model.persons.Gender;
+import de.naju.adebar.model.persons.details.Gender;
 
 public class SlackerParticipantListValidatorUnitTest {
 

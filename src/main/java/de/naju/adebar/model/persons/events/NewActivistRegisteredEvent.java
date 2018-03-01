@@ -1,4 +1,7 @@
-package de.naju.adebar.model.persons;
+package de.naju.adebar.model.persons.events;
+
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.exceptions.NoActivistException;
 
 /**
  * Event raised when a person was registered as activist.
@@ -29,7 +32,7 @@ public class NewActivistRegisteredEvent extends AbstractPersonRelatedEvent {
   }
 
   @Override
-  boolean aggregateMayContainMultipleInstances() {
+  public boolean aggregateMayContainMultipleInstances() {
     return false;
   }
 
