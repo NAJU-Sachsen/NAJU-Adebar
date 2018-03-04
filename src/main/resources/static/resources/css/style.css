@@ -185,7 +185,7 @@ a {
 }
 
 .display-category {
-  padding-bottom: 15px;
+  padding: 15px;
   margin-bottom: 15px;
   border-bottom: 2px solid #eee;
 }
@@ -253,6 +253,16 @@ fieldset.inline-options label {
 
 .calendar {
 	line-height: 1.2em;
+}
+
+.reset-style {
+  font-size: 1em;
+  font-style: normal;
+  text-decoration: none;
+}
+
+.reset-style.underline {
+  text-decoration: underline !important;
 }
 
 .jumbotron-cst {
