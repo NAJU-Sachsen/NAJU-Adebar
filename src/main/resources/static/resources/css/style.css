@@ -1,29 +1,35 @@
 
+html {
+  height: 100%;
+}
+
 body {
-	background-color: #aaa;
+  height: 100%;
+  background-color: #aaa;
 }
 
 main {
-    width: 80%;
-    margin: 0 auto 15px auto;
-    padding-bottom: 2em;
-    background-color: #fff;
-    padding: 15px;
-    border-radius: 15px;
-    box-shadow: 5px 5px 5px #999;
+  width: 80%;
+  min-height: 90%;
+  margin: 0 auto 15px auto;
+  padding-bottom: 2em;
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 15px;
+  box-shadow: 5px 5px 5px #999;
 }
 
 .status {
-    display: flex;
-    margin: 0.5em;
-    padding: 1em;
-    min-height: 4em;
-    border-radius: 5px;
-    align-items: center;
+  display: flex;
+  margin: 0.5em;
+  padding: 1em;
+  min-height: 4em;
+  border-radius: 5px;
+  align-items: center;
 }
 
 #status {
-    margin: 2em 15% 0 15%;
+  margin: 2em 15% 0 15%;
 }
 
 input[readonly] {
@@ -31,25 +37,25 @@ input[readonly] {
 }
 
 .status p {
-    margin: 0 auto;
+  margin: 0 auto;
 }
 
 .item-title {
-    display: inline-block;
-    width: 15%;
-    min-width: 100px;
+  display: inline-block;
+  width: 15%;
+  min-width: 100px;
 }
 
 ul.dropdown-menu.confirm-delete {
-    text-align: center;
+  text-align: center;
 }
 
 td {
-    padding-left: 1em !important;
+  padding-left: 1em !important;
 }
 
 a {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .action-bar {
@@ -451,10 +457,21 @@ fieldset.inline-options label {
   .show-sm {
     display: none !important;
   }
+  
+  .details-icon {
+    position: absolute;
+    top: 110px;
+    right: 250px;
+    font-size: 8em;
+  }
 }
 
 @media (max-device-width: 480px) {
   .hide-sm {
     display: none !important;
+  }
+  
+  .details-icon {
+    display: none;
   }
 }

@@ -1,4 +1,4 @@
-package de.naju.adebar.services.api;
+package de.naju.adebar.web.validation.persons;
 
 import org.springframework.stereotype.Service;
 import com.querydsl.core.BooleanBuilder;

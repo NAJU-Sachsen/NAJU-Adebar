@@ -33,36 +33,43 @@
 <!-- page specific content-->
 <main id="main">
 
-  <div class="row margin-top-lg margin-btm-lg">
-    <div class="col-md-4">
-        <h1>Personen-Übersicht</h1>
-    </div>
-    <div class="action-bar col-md-8">
-      <div class="row">
-        <form class="col-md-9" th:action="@{/beta/persons/search}">
-          <label for="person-search" class="sr-only">Suchen (Name, Stadt, Email o.ä.)</label>
-          <div class="input-group">
-            <input type="search" name="query" class="form-control" id="person-search" placeholder="Name, Stadt, E-Mail, ..." />
-            <div class="input-group-addon">
-              <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+  <header id="page-header">
+
+    <div class="row margin-top-lg margin-btm-lg">
+      <div class="col-md-4">
+          <h1>Personen-Übersicht</h1>
+      </div>
+      
+      <!-- menu -->
+      <div class="action-bar col-md-8">
+        <div class="row">
+          <form class="col-md-9" method="get" th:action="@{/beta/persons/search}">
+            <label for="person-search" class="sr-only">Suchen (Name, Stadt, Email o.ä.)</label>
+            <div class="input-group">
+              <input type="search" name="query" class="form-control" id="person-search" placeholder="Name, Stadt, E-Mail, ..." />
+              <div class="input-group-addon">
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+              </div>
+              <button type="submit" class="sr-only">Suche durchführen</button>
             </div>
-          </div>
-        </form>
-        <div class="col-md-3">
-          <div class="btn-group">
-            <a href="addPerson.html" class="btn btn-default" th:href="@{/beta/persons/add}">
-              <span class="glyphicon glyphicon-plus"></span>
-              Hinzufügen
-            </a>
-            <a href="filterPersons.html" class="btn btn-default" th:href="@{/beta/persons/filter}">
-              <span class="glyphicon glyphicon-filter"></span>
-              Filtern
-            </a>
+          </form>
+          <div class="col-md-3">
+            <div class="btn-group">
+              <a href="addPerson.html" class="btn btn-default" th:href="@{/beta/persons/add}">
+                <span class="glyphicon glyphicon-plus"></span>
+                Hinzufügen
+              </a>
+              <a href="filterPersons.html" class="btn btn-default" th:href="@{/beta/persons/filter}">
+                <span class="glyphicon glyphicon-filter"></span>
+                Filtern
+              </a>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  
+  </header>
 
   <div class="row display-category">
     <div class="table-responsive col-md-10 col-md-offset-1">
@@ -81,7 +88,7 @@
             <td class="col-md-5">
               <a href="mailto:frieda_frisch@web.de" th:href="${person.email} ? |mailto:${person.email}|" th:text="${person.email} ?: '---'">frieda_frisch@web.de</a>
             </td>
-            <td class="col-md-2" th:text="${person.address != null AND NOT person.address.street.empty} ? ${person.address.city} : '---'">
+            <td class="col-md-2" th:text="${person.address != null and not person.address.city.empty} ? ${person.address.city} : '---'">
               Entenhausen
             </td>
             <td class="col-md-1">
@@ -96,9 +103,9 @@
     </div>
   </div>
 
-  <div class="row display-category">
+  <div class="row display-category" th:if="${persons.hasNext()} or ${persons.hasPrevious()}">
     <nav class="clearfix col-md-12">
-      <ul class="pager" th:with="total = ${persons.totalPages}">
+      <ul class="pager" th:with="total = ${persons.totalPages}" th:unless="${param.query}">
         <li class="previous" th:if="${persons.hasPrevious()}">
           <a th:href="@{/beta/persons(page=${persons.previousPageable().pageNumber},size=${persons.size})}">
             <span aria-hidden="true">&larr;</span> Zurück
@@ -106,6 +113,18 @@
         </li>
         <li class="next" th:if="${persons.hasNext()}">
           <a th:href="@{/beta/persons(page=${persons.nextPageable().pageNumber},size=${persons.size})}">
+            Weiter <span aria-hidden="true">&rarr;</span>
+          </a>
+        </li>
+      </ul>
+      <ul class="pager" th:with="total = ${persons.totalPages}" th:if="${param.query}">
+        <li class="previous" th:if="${persons.hasPrevious()}">
+          <a th:href="@{/beta/persons/search(page=${persons.previousPageable().pageNumber},size=${persons.size},query=${param.query})}">
+            <span aria-hidden="true">&larr;</span> Zurück
+          </a>
+        </li>
+        <li class="next" th:if="${persons.hasNext()}">
+          <a th:href="@{/beta/persons/search(page=${persons.nextPageable().pageNumber},size=${persons.size},query=${param.query})}">
             Weiter <span aria-hidden="true">&rarr;</span>
           </a>
         </li>

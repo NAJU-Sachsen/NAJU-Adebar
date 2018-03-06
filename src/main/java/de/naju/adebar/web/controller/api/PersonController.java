@@ -16,12 +16,12 @@ import de.naju.adebar.api.forms.FilterPersonForm;
 import de.naju.adebar.api.util.DataFormatter;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.persons.PersonManager;
-import de.naju.adebar.services.api.PersonSearchPredicateCreator;
 import de.naju.adebar.services.conversion.persons.FilterToPredicateConverter;
+import de.naju.adebar.web.validation.persons.PersonSearchPredicateCreator;
 
 /**
  * REST controller to access person data.
- * 
+ *
  * @author Rico Bergmann
  * @see <a href= "https://en.wikipedia.org/wiki/Representational_State_Transfer">REST Services</a>
  */
@@ -48,7 +48,7 @@ public class PersonController {
 
   /**
    * Searches for persons whose name, address or email match the query given
-   * 
+   *
    * @param query
    * @return
    */
@@ -64,7 +64,7 @@ public class PersonController {
   /**
    * Performs a simplified search for persons with specific data. If a criteria should not be
    * included it may be left empty or even {@code null}
-   * 
+   *
    * @param firstName the person's first name if required
    * @param lastName the person's last name if required
    * @param city the person's address if required
@@ -88,7 +88,7 @@ public class PersonController {
   /**
    * Performs a simplified search for activists with specific data. If a criteria should not be
    * included it may be left empty or even {@code null}
-   * 
+   *
    * @param firstName the activist's first name if required
    * @param lastName the activist's last name if required
    * @param city the activist's address if required
@@ -112,12 +112,19 @@ public class PersonController {
 
   /**
    * Performs a full-fledged search for persons
-   * 
+   *
    * @param form form containing the search criteria
    * @return all matching persons
    */
-  @RequestMapping(value = "/search", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+  @RequestMapping(//
+      value = "/search", //
+      consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE,
+          MediaType.APPLICATION_JSON_UTF8_VALUE})
   public Iterable<SimplePersonJSON> filterPersons(FilterPersonForm form) {
+
+    // TODO: directly use predicate here
+    // return projection instead of some weird custom form
+
     dataFormatter.adjustFilterPersonForm(form);
 
     List<Person> matches =
