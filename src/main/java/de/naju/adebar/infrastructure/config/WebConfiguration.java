@@ -8,18 +8,20 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import de.naju.adebar.infrastructure.config.security.WebSecurityConfiguration;
 import de.naju.adebar.model.events.ReadOnlyEventRepository;
 import de.naju.adebar.model.persons.ReadOnlyPersonRepository;
+import de.naju.adebar.services.conversion.core.EmailConverter;
+import de.naju.adebar.services.conversion.core.PhoneNumberConverter;
 import de.naju.adebar.services.conversion.events.EventConverter;
 import de.naju.adebar.services.conversion.persons.PersonConverter;
 
 /**
  * The general configuration of the web controllers.
- * 
+ *
  * We will use this to register our login page and multiple formatters:
  * <ul>
  * <li>a {@link PersonConverter}</li>
  * <li>a {@link EventConverter}</li>
  * </ul>
- * 
+ *
  * @author Rico Bergmann
  *
  */
@@ -51,6 +53,8 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
   public void addFormatters(FormatterRegistry registry) {
     registry.addConverter(new PersonConverter(personRepo));
     registry.addConverter(new EventConverter(eventRepo));
+    registry.addConverter(new EmailConverter());
+    registry.addConverter(new PhoneNumberConverter());
   }
 
 }
