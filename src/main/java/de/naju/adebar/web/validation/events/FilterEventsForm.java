@@ -2,7 +2,7 @@ package de.naju.adebar.web.validation.events;
 
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
-import de.naju.adebar.web.validation.AddressForm;
+import de.naju.adebar.web.validation.core.AddressForm;
 
 /**
  * Model POJO for filtering events. The fields are set by Thymeleaf when the associated form is

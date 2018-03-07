@@ -3,7 +3,7 @@ package de.naju.adebar.web.validation.events;
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
 import javax.validation.constraints.NotNull;
-import de.naju.adebar.web.validation.AddressForm;
+import de.naju.adebar.web.validation.core.AddressForm;
 
 /**
  * Model POJO for events. The fields are set by Thymeleaf when the associated form is submitted.

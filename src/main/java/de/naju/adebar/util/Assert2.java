@@ -27,8 +27,23 @@ public class Assert2 {
   }
 
   /**
+   * Assert that none of the given arguments is {@code null}
+   *
+   * @param message the message to display if the assertion fails
+   * @param args the arguments to check
+   * @throws IllegalArgumentException if any of the arguments was {@code null}
+   */
+  public static void noNullArguments(String message, Object... args) {
+    for (Object arg : args) {
+      if (arg == null) {
+        reportFailure(message);
+      }
+    }
+  }
+
+  /**
    * Throws the {@link IllegalArgumentException} with a dedicated message
-   * 
+   *
    * @param msg the message
    */
   private static void reportFailure(String msg) {
