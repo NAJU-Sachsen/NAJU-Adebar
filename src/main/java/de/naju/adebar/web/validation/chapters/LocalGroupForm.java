@@ -2,7 +2,7 @@ package de.naju.adebar.web.validation.chapters;
 
 import java.util.List;
 import javax.validation.constraints.NotNull;
-import de.naju.adebar.web.validation.AddressForm;
+import de.naju.adebar.web.validation.core.AddressForm;
 
 /**
  * Model POJO for local groups. The fields are set by Thymeleaf when the associated form is
