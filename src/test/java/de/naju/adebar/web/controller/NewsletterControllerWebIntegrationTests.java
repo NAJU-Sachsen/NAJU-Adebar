@@ -1,4 +1,4 @@
-package de.naju.adebar.controller;
+package de.naju.adebar.web.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.hasItems;

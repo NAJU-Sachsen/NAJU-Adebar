@@ -1,4 +1,4 @@
-package de.naju.adebar.controller;
+package de.naju.adebar.web.controller;
 
 import static org.hamcrest.CoreMatchers.endsWith;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
