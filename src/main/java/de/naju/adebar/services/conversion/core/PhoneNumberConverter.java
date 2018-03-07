@@ -18,6 +18,9 @@ public class PhoneNumberConverter implements Converter<String, PhoneNumber> {
    */
   @Override
   public PhoneNumber convert(String source) {
+    if (source == null || source.isEmpty()) {
+      return null;
+    }
     return PhoneNumber.of(source);
   }
 

@@ -18,6 +18,9 @@ public class EmailConverter implements Converter<String, Email> {
    */
   @Override
   public Email convert(String source) {
+    if (source == null || source.isEmpty()) {
+      return null;
+    }
     return Email.of(source);
   }
 
