@@ -1,10 +1,10 @@
 package de.naju.adebar.web.validation.core;
 
+import de.naju.adebar.model.Address;
+import de.naju.adebar.web.validation.ValidatingEntityFormConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
-import de.naju.adebar.model.Address;
-import de.naju.adebar.web.validation.ValidatingEntityFormConverter;
 
 /**
  * Simple service to convert {@link Address} instances to their corresponding {@link AddressForm}
@@ -56,6 +56,9 @@ public class AddressFormConverter implements ValidatingEntityFormConverter<Addre
    */
   @Override
   public AddressForm toForm(Address entity) {
+    if (entity == null) {
+      return null;
+    }
     return new AddressForm(entity.getStreet(), entity.getZip(), entity.getCity());
   }
 

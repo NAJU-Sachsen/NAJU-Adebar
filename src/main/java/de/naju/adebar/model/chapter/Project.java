@@ -1,5 +1,8 @@
 package de.naju.adebar.model.chapter;
 
+import de.naju.adebar.model.events.Event;
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.exceptions.NoActivistException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
@@ -19,9 +22,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 import org.springframework.util.Assert;
-import de.naju.adebar.model.events.Event;
-import de.naju.adebar.model.persons.Person;
-import de.naju.adebar.model.persons.exceptions.NoActivistException;
 
 /**
  * Abstraction of a project
@@ -57,11 +57,15 @@ public class Project {
   private Person personInCharge;
 
   @ManyToMany(fetch = FetchType.LAZY)
-  @JoinTable(inverseJoinColumns = @JoinColumn(name = "contributorId"))
+  @JoinTable(name = "projectContributors", //
+      joinColumns = @JoinColumn(name = "projectId"), //
+      inverseJoinColumns = @JoinColumn(name = "contributorId"))
   private List<Person> contributors;
 
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  @JoinTable(inverseJoinColumns = @JoinColumn(name = "eventId"))
+  @JoinTable(name = "projectEvents", //
+      joinColumns = @JoinColumn(name = "projectId"), //
+      inverseJoinColumns = @JoinColumn(name = "eventId"))
   private List<Event> events;
 
   // constructors
@@ -113,7 +117,6 @@ public class Project {
   /**
    * Default constructor just for JPA's sake
    */
-  @SuppressWarnings("unused")
   private Project() {
     this.contributors = new LinkedList<>();
     this.events = new LinkedList<>();
@@ -124,6 +127,13 @@ public class Project {
    */
   public long getId() {
     return id;
+  }
+
+  /**
+   * @param id updates the project's primary key
+   */
+  protected void setId(long id) {
+    this.id = id;
   }
 
   /**
@@ -225,6 +235,13 @@ public class Project {
   }
 
   /**
+   * @param contributors the activists who contribute to the project
+   */
+  protected void setContributors(List<Person> contributors) {
+    this.contributors = contributors;
+  }
+
+  /**
    * @return the events that are hosted within the project
    */
   public Iterable<Event> getEvents() {
@@ -232,24 +249,10 @@ public class Project {
   }
 
   /**
-   * @param id updates the project's primary key
-   */
-  protected void setId(long id) {
-    this.id = id;
-  }
-
-  /**
    * @param events the events that are hosted within the project
    */
   protected void setEvents(List<Event> events) {
     this.events = events;
-  }
-
-  /**
-   * @param contributors the activists who contribute to the project
-   */
-  protected void setContributors(List<Person> contributors) {
-    this.contributors = contributors;
   }
 
   /**
@@ -283,7 +286,7 @@ public class Project {
 
   /**
    * @return the event that is about to take place next. If there is no next event {@code null} will
-   *         be returned
+   * be returned
    */
   @Transient
   public Event getNextEvent() {
@@ -331,7 +334,7 @@ public class Project {
   /**
    * @param event the event to add
    * @throws IllegalArgumentException if the event is already hosted by the project or if it is
-   *         {@code null}
+   * {@code null}
    */
   public void addEvent(Event event) {
     Assert.notNull(event, "Event to add may not be null: " + event);
@@ -350,26 +353,34 @@ public class Project {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o)
+    if (this == o) {
       return true;
-    if (o == null || getClass() != o.getClass())
+    }
+    if (o == null || getClass() != o.getClass()) {
       return false;
+    }
 
     Project project = (Project) o;
 
-    if (!name.equals(project.name))
+    if (!name.equals(project.name)) {
       return false;
-    if (startTime != null ? !startTime.equals(project.startTime) : project.startTime != null)
+    }
+    if (startTime != null ? !startTime.equals(project.startTime) : project.startTime != null) {
       return false;
-    if (endTime != null ? !endTime.equals(project.endTime) : project.endTime != null)
+    }
+    if (endTime != null ? !endTime.equals(project.endTime) : project.endTime != null) {
       return false;
-    if (!localGroup.equals(project.localGroup))
+    }
+    if (!localGroup.equals(project.localGroup)) {
       return false;
+    }
     if (personInCharge != null ? !personInCharge.equals(project.personInCharge)
-        : project.personInCharge != null)
+        : project.personInCharge != null) {
       return false;
-    if (!contributors.equals(project.contributors))
+    }
+    if (!contributors.equals(project.contributors)) {
       return false;
+    }
     return events.equals(project.events);
   }
 

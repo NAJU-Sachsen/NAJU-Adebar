@@ -1,13 +1,13 @@
 package de.naju.adebar.web.validation.persons;
 
-import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
-import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
-import de.naju.adebar.model.Address;
 import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.util.Assert2;
 import de.naju.adebar.web.validation.ValidatingEntityFormConverter;
 import de.naju.adebar.web.validation.core.AddressForm;
+import de.naju.adebar.web.validation.core.AddressFormConverter;
+import org.springframework.stereotype.Service;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
 
 /**
  * Simple service to apply the data from an {@link EditPersonForm} to {@link Person} objects.
@@ -18,17 +18,23 @@ import de.naju.adebar.web.validation.core.AddressForm;
 public class EditPersonFormConverter
     implements ValidatingEntityFormConverter<Person, EditPersonForm> {
 
-  private final ValidatingEntityFormConverter<Address, AddressForm> addressFormConverter;
+  private final AddressFormConverter addressFormConverter;
+  private final EditParticipantFormConverter participantFormConverter;
 
   /**
    * Full constructor
    *
    * @param addressFormConverter the converter to handle conversion of addresses
+   * @param participantFormConverter the converter to handle conversion of a {@link
+   *     de.naju.adebar.model.persons.ParticipantProfile}
    */
-  public EditPersonFormConverter(
-      ValidatingEntityFormConverter<Address, AddressForm> addressFormConverter) {
-    Assert.notNull(addressFormConverter, "The addressFormConverter may not be null");
+  public EditPersonFormConverter(AddressFormConverter addressFormConverter,
+      EditParticipantFormConverter participantFormConverter) {
+    Assert2.noNullArguments( //
+        "No argument may be null", addressFormConverter, participantFormConverter);
+
     this.addressFormConverter = addressFormConverter;
+    this.participantFormConverter = participantFormConverter;
   }
 
   /*
@@ -87,6 +93,8 @@ public class EditPersonFormConverter
         form.getPhoneNumber());
 
     entity.updateAddress(addressFormConverter.toEntity(form.getAddress()));
+    makeParticipantIfNecessary(entity, form.isParticipant());
+    applyParticipantFormIfPossible(form, entity);
   }
 
   /*
@@ -101,7 +109,35 @@ public class EditPersonFormConverter
         entity.getLastName(), //
         entity.getEmail(), //
         entity.getPhoneNumber(), //
-        addressFormConverter.toForm(entity.getAddress()));
+        addressFormConverter.toForm(entity.getAddress()), //
+        participantFormConverter.toForm(entity.getParticipantProfile()));
+  }
+
+  /**
+   * Turns a person into a participant if it should (and is not a participant already). However this
+   * will never turn a participant into a "non-participant"
+   *
+   * @param entity the person
+   * @param participant whether the person should be a participant
+   */
+  private void makeParticipantIfNecessary(Person entity, boolean participant) {
+    if (!entity.isParticipant() && participant) {
+      entity.makeParticipant();
+    }
+  }
+
+  /**
+   * If the person is a participant and the form contains participation information this will apply
+   * the data from it to the person.
+   *
+   * @param form the form
+   * @param entity the person
+   */
+  private void applyParticipantFormIfPossible(EditPersonForm form, Person entity) {
+    if (entity.isParticipant() && form.hasParticipantForm()) {
+      participantFormConverter
+          .applyFormToEntity(form.getParticipantForm(), entity.getParticipantProfile());
+    }
   }
 
 }
