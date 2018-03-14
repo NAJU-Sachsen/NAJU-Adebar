@@ -2,6 +2,7 @@ package de.naju.adebar.model.persons.details;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 
 /**
  * A person may be a club member of the NABU. For now we are just interested in its membership
@@ -12,22 +13,16 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class NabuMembershipInformation {
 
-  public enum MembershipStatus {
-    IS_MEMBER, NO_MEMBER, UNKNOWN
-  }
-
   private static final String NO_NABU_MEMBER_MSG = "Not a NABU member";
-
   @Column(name = "nabuMember")
   private boolean nabuMember;
-
   @Column(name = "membershipNumber", nullable = true)
   private String membershipNumber;
 
   /**
    * Creates some arbitrary information for a person that may or may not be a NABU member. Even if
    * the person is a NABU member, its membership number is unknown
-   * 
+   *
    * @param nabuMember whether the person is a NABU member
    */
   public NabuMembershipInformation(boolean nabuMember) {
@@ -50,14 +45,21 @@ public class NabuMembershipInformation {
   /**
    * Default constructor
    */
-  @SuppressWarnings("unused")
-  private NabuMembershipInformation() {}
+  private NabuMembershipInformation() {
+  }
 
   /**
    * @return whether the person is a NABU member
    */
   public boolean isNabuMember() {
     return nabuMember;
+  }
+
+  /**
+   * @param nabuMember whether the person is a NABU member
+   */
+  protected void setNabuMember(boolean nabuMember) {
+    this.nabuMember = nabuMember;
   }
 
   /**
@@ -70,6 +72,13 @@ public class NabuMembershipInformation {
     return membershipNumber;
   }
 
+  /**
+   * @param membershipNumber the membership number
+   */
+  protected void setMembershipNumber(String membershipNumber) {
+    this.membershipNumber = membershipNumber;
+  }
+
   public boolean hasMembershipNumber() {
     if (!isNabuMember()) {
       throw new IllegalStateException(NO_NABU_MEMBER_MSG);
@@ -78,25 +87,24 @@ public class NabuMembershipInformation {
   }
 
   /**
-   * @param nabuMember whether the person is a NABU member
+   * @return the membership status that is described by this instance. Will never be {@link
+   *     MembershipStatus#UNKNOWN}
    */
-  protected void setNabuMember(boolean nabuMember) {
-    this.nabuMember = nabuMember;
-  }
-
-  /**
-   * @param membershipNumber the membership number
-   */
-  protected void setMembershipNumber(String membershipNumber) {
-    this.membershipNumber = membershipNumber;
+  @Transient
+  public MembershipStatus getStatus() {
+    return nabuMember //
+        ? MembershipStatus.IS_MEMBER //
+        : MembershipStatus.NO_MEMBER;
   }
 
   @Override
   public boolean equals(Object o) {
-    if (this == o)
+    if (this == o) {
       return true;
-    if (o == null || getClass() != o.getClass())
+    }
+    if (o == null || getClass() != o.getClass()) {
       return false;
+    }
 
     NabuMembershipInformation that = (NabuMembershipInformation) o;
 
@@ -112,5 +120,9 @@ public class NabuMembershipInformation {
   @Override
   public String toString() {
     return "NabuMembership{" + "membershipNumber='" + membershipNumber + '\'' + '}';
+  }
+
+  public enum MembershipStatus {
+    IS_MEMBER, NO_MEMBER, UNKNOWN
   }
 }
