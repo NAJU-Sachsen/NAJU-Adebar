@@ -110,9 +110,12 @@ function loadTabContent(anchor) {
       // once the container is loaded, it should not be loaded again when its
       // tab is re-selected
       lazyContainer.classList.remove('lazy-load');
+
+      // the container may contain input elements which should be controlled by
+      // others. Therefore we need to re-initialize the form controls
+      initControlledInputs();
     });
   }
-
 }
 
 /**
