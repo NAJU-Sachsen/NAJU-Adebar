@@ -7,10 +7,10 @@ import java.util.List;
 import org.springframework.util.Assert;
 
 /**
- * The result set provides a description of the underlying relation as well as a number of
- * {@link SimplifiedTableRow SimplifiedTableRows} which represent the entries of the result set.
- * These rows do not necessarily have to have the same columns. However placing different rows in
- * the result set completely contradicts its sense.
+ * The result set provides a description of the underlying relation as well as a number of {@link
+ * SimplifiedTableRow SimplifiedTableRows} which represent the entries of the result set. These rows
+ * do not necessarily have to have the same columns. However placing different rows in the result
+ * set completely contradicts its sense.
  *
  * @author Rico Bergmann
  */
@@ -39,6 +39,13 @@ public class SimplifiedResultSet implements Iterable<SimplifiedTableRow> {
    */
   public Iterable<SimplifiedTableRow> getResultSet() {
     return Collections.unmodifiableList(resultSet);
+  }
+
+  /**
+   * @return the number of rows in the result set
+   */
+  public int getResultSetSize() {
+    return resultSet.size();
   }
 
   /**
