@@ -1,7 +1,5 @@
 package de.naju.adebar.web.validation.core;
 
-import javax.validation.constraints.NotNull;
-
 /**
  * Model POJO for addresses. For most use-cases a subclass should be used. The fields are set by
  * Thymeleaf when the associated form is submitted.
@@ -10,13 +8,8 @@ import javax.validation.constraints.NotNull;
  */
 public class AddressForm {
 
-  @NotNull
   private String street;
-
-  @NotNull
   private String zip;
-
-  @NotNull
   private String city;
 
   /**
@@ -35,27 +28,14 @@ public class AddressForm {
   /**
    * Default constructor
    */
-  public AddressForm() {}
+  public AddressForm() {
+  }
 
   /**
    * @return the street
    */
   public String getStreet() {
     return street;
-  }
-
-  /**
-   * @return the zip
-   */
-  public String getZip() {
-    return zip;
-  }
-
-  /**
-   * @return the city
-   */
-  public String getCity() {
-    return city;
   }
 
   /**
@@ -66,10 +46,24 @@ public class AddressForm {
   }
 
   /**
+   * @return the zip
+   */
+  public String getZip() {
+    return zip;
+  }
+
+  /**
    * @param zip the zip. May not be {@code null}
    */
   public void setZip(String zip) {
     this.zip = zip;
+  }
+
+  /**
+   * @return the city
+   */
+  public String getCity() {
+    return city;
   }
 
   /**
@@ -81,7 +75,7 @@ public class AddressForm {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see java.lang.Object#toString()
    */
   @Override

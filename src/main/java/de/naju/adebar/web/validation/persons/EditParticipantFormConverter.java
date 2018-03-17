@@ -58,6 +58,13 @@ public class EditParticipantFormConverter implements
   }
 
   @Override
+  public boolean isValid(EditParticipantForm form) {
+    return eatingHabitsContentLengthIsWithinRange(form) //
+        && healthImpairmentsContentLengthIsWithinRange(form) //
+        && remarksContentLengthIsWithinRange(form);
+  }
+
+  @Override
   public void applyFormToEntity(EditParticipantForm form, ParticipantProfile entity) {
     entity.updateProfile(form.getGender(), form.getDateOfBirth(), form.getEatingHabits(),
         form.getHealthImpairments());

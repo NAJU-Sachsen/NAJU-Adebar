@@ -67,6 +67,12 @@ public class EditPersonFormConverter
     addressFormConverter.validate(addressForm, errors);
   }
 
+  @Override
+  public boolean isValid(EditPersonForm form) {
+    return (form.getFirstName() != null && !form.getFirstName().isEmpty()) //
+        && (form.getLastName() != null && !form.getLastName().isEmpty());
+  }
+
   /*
    * (non-Javadoc)
    *

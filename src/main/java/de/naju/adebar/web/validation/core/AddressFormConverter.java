@@ -4,7 +4,6 @@ import de.naju.adebar.model.Address;
 import de.naju.adebar.web.validation.ValidatingEntityFormConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
 
 /**
  * Simple service to convert {@link Address} instances to their corresponding {@link AddressForm}
@@ -32,11 +31,16 @@ public class AddressFormConverter implements ValidatingEntityFormConverter<Addre
    */
   @Override
   public void validate(Object target, Errors errors) {
+    if (!supports(target.getClass())) {
+      throw new IllegalArgumentException("Validation not supported for class " + target.getClass());
+    }
 
-    // Just the default validation
-    ValidationUtils.rejectIfEmpty(errors, "street", "field.required");
-    ValidationUtils.rejectIfEmpty(errors, "zip", "field.required");
-    ValidationUtils.rejectIfEmpty(errors, "city", "field.required");
+    // if an AddressForm has no invalid configurations
+  }
+
+  @Override
+  public boolean isValid(AddressForm form) {
+    return form != null;
   }
 
   /*

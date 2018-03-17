@@ -24,6 +24,10 @@ public class EditActivistProfileConverter implements
 
   @Override
   public EditActivistProfileForm toForm(ActivistProfile entity) {
+    if (entity == null) {
+      return null;
+    }
+
     return new EditActivistProfileForm(entity.getJuleicaCard());
   }
 
@@ -35,6 +39,12 @@ public class EditActivistProfileConverter implements
   @Override
   public void validate(Object target, Errors errors) {
     // every form is valid
+  }
+
+  @Override
+  public boolean isValid(EditActivistProfileForm form) {
+    // every form is valid
+    return true;
   }
 
   @Override
