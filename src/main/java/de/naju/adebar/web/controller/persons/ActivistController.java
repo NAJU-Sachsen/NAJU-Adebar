@@ -77,6 +77,16 @@ public class ActivistController {
     return "persons/activistProfile :: profile";
   }
 
+  @PostMapping("/persons/{pid}/activist-profile/create")
+  public String createActivistProfile(@PathVariable("pid") PersonId personId,
+      RedirectAttributes redirAttr) {
+    Person person = personRepo.findById(personId)
+        .orElseThrow(() -> new IllegalArgumentException("No person with ID " + personId));
+    person.makeActivist();
+    personRepo.save(person);
+    return "redirect:/persons/" + personId;
+  }
+
   /**
    * Updates an activist profile according to the submitted data. Redirects to the person's details
    * page.
@@ -94,7 +104,7 @@ public class ActivistController {
     profileConverter.applyFormToEntity(form, activist.getActivistProfile());
     personRepo.save(activist);
 
-    redirAttr.addFlashAttribute("tab", "activist-referent");
+    redirAttr.addAttribute("tab", "activist-referent");
     return "redirect:/persons/" + personId;
   }
 
