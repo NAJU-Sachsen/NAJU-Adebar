@@ -1,4 +1,4 @@
-package de.naju.adebar.web.validation.persons;
+package de.naju.adebar.web.validation.persons.participant;
 
 import de.naju.adebar.documentation.DesignSmell;
 import de.naju.adebar.documentation.ddd.BusinessRule;

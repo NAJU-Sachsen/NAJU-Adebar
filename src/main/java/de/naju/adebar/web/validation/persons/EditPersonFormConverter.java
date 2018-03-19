@@ -5,6 +5,7 @@ import de.naju.adebar.util.Assert2;
 import de.naju.adebar.web.validation.ValidatingEntityFormConverter;
 import de.naju.adebar.web.validation.core.AddressForm;
 import de.naju.adebar.web.validation.core.AddressFormConverter;
+import de.naju.adebar.web.validation.persons.participant.EditParticipantFormConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;

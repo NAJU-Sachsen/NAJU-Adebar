@@ -1,8 +1,9 @@
-package de.naju.adebar.web.validation.persons;
+package de.naju.adebar.web.validation.persons.participant;
 
 import de.naju.adebar.model.persons.details.Gender;
 import de.naju.adebar.model.persons.details.NabuMembershipInformation;
 import de.naju.adebar.model.persons.details.NabuMembershipInformation.MembershipStatus;
+import de.naju.adebar.web.validation.persons.EditPersonForm;
 import java.time.LocalDate;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
