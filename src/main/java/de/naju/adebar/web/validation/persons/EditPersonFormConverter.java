@@ -64,8 +64,15 @@ public class EditPersonFormConverter
     ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName", "field.required");
     ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastName", "field.required");
 
-    AddressForm addressForm = ((EditPersonForm) target).getAddress();
-    addressFormConverter.validate(addressForm, errors);
+    EditPersonForm editPersonForm = (EditPersonForm) target;
+    try {
+      errors.pushNestedPath("address");
+      AddressForm addressForm = editPersonForm.getAddress();
+      ValidationUtils.invokeValidator(this.addressFormConverter, addressForm, errors);
+    } finally {
+      errors.popNestedPath();
+    }
+
   }
 
   @Override
