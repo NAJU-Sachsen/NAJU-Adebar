@@ -1,5 +1,12 @@
 package de.naju.adebar.web.controller;
 
+import de.naju.adebar.model.Email;
+import de.naju.adebar.model.newsletter.AlreadySubscribedException;
+import de.naju.adebar.model.newsletter.ExistingSubscriberException;
+import de.naju.adebar.model.newsletter.Newsletter;
+import de.naju.adebar.model.newsletter.Subscriber;
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.web.validation.newsletter.AddNewsletterForm;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,13 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import de.naju.adebar.model.Email;
-import de.naju.adebar.model.newsletter.AlreadySubscribedException;
-import de.naju.adebar.model.newsletter.ExistingSubscriberException;
-import de.naju.adebar.model.newsletter.Newsletter;
-import de.naju.adebar.model.newsletter.Subscriber;
-import de.naju.adebar.model.persons.Person;
-import de.naju.adebar.web.validation.newsletter.AddNewsletterForm;
 
 /**
  * Subscriber related controller mappings
@@ -82,7 +82,8 @@ public class SubscriberController {
   @RequestMapping(value = "/newsletters/{nid}/subscribe", method = RequestMethod.POST)
   public String subscribe(@PathVariable("nid") Long newsletterId,
       @ModelAttribute("newSubscriber") Subscriber subscriber, RedirectAttributes redirAttr) {
-    Newsletter newsletter = repositories.newsletters.findOne(newsletterId);
+    Newsletter newsletter = repositories.newsletters.findById(newsletterId)
+        .orElseThrow(() -> new IllegalArgumentException("No newsletter with ID " + newsletterId));
 
     try {
       subscriber = managers.subscribers.saveSubscriber(subscriber);
@@ -109,7 +110,8 @@ public class SubscriberController {
   @RequestMapping(value = "/newsletters/{nid}/subscribe-person")
   public String subscribePerson(@PathVariable("nid") Long newsletterId,
       @RequestParam("person-id") String personId, RedirectAttributes redirAttr) {
-    Newsletter newsletter = repositories.newsletters.findOne(newsletterId);
+    Newsletter newsletter = repositories.newsletters.findById(newsletterId)
+        .orElseThrow(() -> new IllegalArgumentException("No newsletter with ID " + newsletterId));
     Person person =
         managers.persons.findPerson(personId).orElseThrow(IllegalArgumentException::new);
 
@@ -135,7 +137,8 @@ public class SubscriberController {
   @RequestMapping(value = "/newsletters/{nid}/unsubscribe", method = RequestMethod.POST)
   public String unsubscribe(@PathVariable("nid") Long newsletterId,
       @RequestParam("email") Email email, RedirectAttributes redirAttr) {
-    Newsletter newsletter = repositories.newsletters.findOne(newsletterId);
+    Newsletter newsletter = repositories.newsletters.findById(newsletterId)
+        .orElseThrow(() -> new IllegalArgumentException("No newsletter with ID " + newsletterId));
 
     managers.newsletters.unsubscribe(email, newsletter);
 
@@ -161,7 +164,7 @@ public class SubscriberController {
     try {
       Subscriber subscriber = managers.subscribers.createSubscriber(firstName, lastName, email);
       managers.newsletters.updateSubscriptions(subscriber,
-          repositories.newsletters.findAll(newsletters));
+          repositories.newsletters.findAllById(newsletters));
       redirAttr.addFlashAttribute("subscriberCreated", true);
     } catch (ExistingSubscriberException e) {
       redirAttr.addFlashAttribute("emailExists", true);
@@ -193,7 +196,7 @@ public class SubscriberController {
       subscriber = managers.subscribers.updateSubscriberLastName(subscriber, lastName);
       subscriber = managers.subscribers.updateSubscriberEmail(subscriber, email);
       managers.newsletters.updateSubscriptions(subscriber,
-          repositories.newsletters.findAll(newsletterIds));
+          repositories.newsletters.findAllById(newsletterIds));
 
       redirAttr.addFlashAttribute("tab", SUBSCRIBERS);
       redirAttr.addFlashAttribute("subscriberUpdated", true);

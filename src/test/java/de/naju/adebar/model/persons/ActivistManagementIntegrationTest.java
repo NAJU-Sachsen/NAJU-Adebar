@@ -1,5 +1,8 @@
 package de.naju.adebar.model.persons;
 
+import de.naju.adebar.model.Address;
+import de.naju.adebar.model.Email;
+import de.naju.adebar.model.persons.details.JuleicaCard;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,13 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-import de.naju.adebar.model.Address;
-import de.naju.adebar.model.Email;
-import de.naju.adebar.model.persons.details.JuleicaCard;
 
 /**
- * Basic behavior testing for the {@link PersistentPersonManager} and its behavior on
- * {@link ActivistProfile} instances
+ * Basic behavior testing for the {@link PersistentPersonManager} and its behavior on {@link
+ * ActivistProfile} instances
  *
  * @author Rico Bergmann
  */
@@ -45,7 +45,7 @@ public class ActivistManagementIntegrationTest {
   @Test
   public void testSaveActivist() {
     Assert.assertTrue(claus.toString() + " should have been saved!",
-        activistRepo.exists(claus.getId()));
+        activistRepo.existsById(claus.getId()));
   }
 
   @Test

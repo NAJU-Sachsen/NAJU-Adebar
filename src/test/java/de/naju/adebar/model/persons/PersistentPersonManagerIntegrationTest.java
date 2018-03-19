@@ -1,5 +1,8 @@
 package de.naju.adebar.model.persons;
 
+import de.naju.adebar.model.Address;
+import de.naju.adebar.model.Email;
+import de.naju.adebar.model.persons.details.Gender;
 import java.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Before;
@@ -9,9 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-import de.naju.adebar.model.Address;
-import de.naju.adebar.model.Email;
-import de.naju.adebar.model.persons.details.Gender;
 
 /**
  * Basic testing of the {@link PersistentPersonManager}
@@ -64,8 +64,9 @@ public class PersistentPersonManagerIntegrationTest {
     berta = personManager.savePerson(berta);
 
     Assert.assertTrue(claus.toString() + " should have been saved!",
-        personRepo.exists(claus.getId()));
-    Assert.assertTrue(berta.toString() + " should have been saved!", personRepo.exists(bertaId));
+        personRepo.existsById(claus.getId()));
+    Assert
+        .assertTrue(berta.toString() + " should have been saved!", personRepo.existsById(bertaId));
   }
 
   @Test
@@ -73,7 +74,7 @@ public class PersistentPersonManagerIntegrationTest {
     Person heinz =
         personManager.createPerson("Heinz", "Der Heinz", Email.of("heeeiiiinnnzzzzz@gmail.com"));
     Assert.assertTrue(heinz.toString() + " should have been saved!",
-        personRepo.exists(heinz.getId()));
+        personRepo.existsById(heinz.getId()));
   }
 
   @Test

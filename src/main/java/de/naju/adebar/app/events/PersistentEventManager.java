@@ -1,5 +1,12 @@
 package de.naju.adebar.app.events;
 
+import com.google.common.collect.Lists;
+import de.naju.adebar.app.IdUpdateFailedException;
+import de.naju.adebar.model.events.Event;
+import de.naju.adebar.model.events.EventFactory;
+import de.naju.adebar.model.events.EventId;
+import de.naju.adebar.model.events.EventRepository;
+import de.naju.adebar.model.events.ReadOnlyEventRepository;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
@@ -10,13 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import com.google.common.collect.Lists;
-import de.naju.adebar.app.IdUpdateFailedException;
-import de.naju.adebar.model.events.Event;
-import de.naju.adebar.model.events.EventFactory;
-import de.naju.adebar.model.events.EventId;
-import de.naju.adebar.model.events.EventRepository;
-import de.naju.adebar.model.events.ReadOnlyEventRepository;
 
 /**
  * A {@link EventManager} that persists its data in a database
@@ -87,7 +87,8 @@ public class PersistentEventManager implements EventManager {
         .of(currentTime.getYear(), currentTime.getMonth(), currentTime.getDayOfMonth(), 0, 0)
         .minusMinutes(1);
     Iterable<Event> currentEventsIterable =
-        repository().findByStartTimeBeforeAndEndTimeAfterOrderByStartTime(currentTime, yesterdaysLastMoment);
+        repository().findByStartTimeBeforeAndEndTimeAfterOrderByStartTime(currentTime,
+            yesterdaysLastMoment);
     List<Event> currentEvents = Lists.newLinkedList(currentEventsIterable);
 
     for (Event e : currentEvents) {
@@ -101,8 +102,7 @@ public class PersistentEventManager implements EventManager {
 
   @Override
   public Optional<Event> findEvent(String id) {
-    EventId eventId = new EventId(id);
-    return eventRepo.exists(eventId) ? Optional.of(eventRepo.findOne(eventId)) : Optional.empty();
+    return eventRepo.findById(new EventId(id));
   }
 
   @Override

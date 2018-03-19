@@ -1,11 +1,15 @@
 package de.naju.adebar.web.controller;
 
+import de.naju.adebar.app.chapter.LocalGroupManager;
 import de.naju.adebar.app.newsletter.NewsletterDataProcessor;
 import de.naju.adebar.app.newsletter.NewsletterManager;
 import de.naju.adebar.model.chapter.LocalGroup;
-import de.naju.adebar.app.chapter.LocalGroupManager;
-import de.naju.adebar.model.newsletter.*;
+import de.naju.adebar.model.newsletter.Newsletter;
+import de.naju.adebar.model.newsletter.NewsletterRepository;
+import de.naju.adebar.model.newsletter.Subscriber;
+import de.naju.adebar.model.newsletter.SubscriberRepository;
 import de.naju.adebar.web.validation.newsletter.AddNewsletterForm;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,16 +17,16 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import java.util.Optional;
 
 /**
  * Newsletter related controller mappings
- * 
+ *
  * @author Rico Bergmann
  * @see Newsletter
  */
 @Controller
 public class NewsletterController {
+
   private NewsletterRepository newsletterRepo;
   private SubscriberRepository subscriberRepo;
   private NewsletterManager newsletterManager;
@@ -42,7 +46,7 @@ public class NewsletterController {
 
   /**
    * Displays the newsletter overview
-   * 
+   *
    * @param model model to display the data in
    * @return the newsletters' overview view
    */
@@ -63,7 +67,7 @@ public class NewsletterController {
 
   /**
    * Creates a new newsletter
-   * 
+   *
    * @param form the posted newsletter data
    * @param redirAttr attributes for the view to display some result information
    * @return the newsletter overview view
@@ -85,14 +89,15 @@ public class NewsletterController {
 
   /**
    * Displays detailed information for a specific newsletter
-   * 
+   *
    * @param newsletterId the newsletter's id
    * @param model model to display the data in
    * @return the newsletter detail view
    */
   @RequestMapping("/newsletters/{nid}")
   public String newsletterDetails(@PathVariable("nid") Long newsletterId, Model model) {
-    Newsletter newsletter = newsletterRepo.findOne(newsletterId);
+    Newsletter newsletter = newsletterRepo.findById(newsletterId)
+        .orElseThrow(() -> new IllegalArgumentException("No newsletter with ID " + newsletterId));
 
     model.addAttribute("newsletter", newsletter);
     model.addAttribute("recipients", dataProcessor.getSubscriberEmails(newsletter));
@@ -112,7 +117,7 @@ public class NewsletterController {
 
   /**
    * Removes a newsletter
-   * 
+   *
    * @param newsletterId the newsletter's id
    * @param redirAttr attributes for the view to display some result information
    * @return the newsletter overview view
@@ -120,7 +125,8 @@ public class NewsletterController {
   @RequestMapping("/newsletters/{nid}/delete")
   public String deleteNewsletter(@PathVariable("nid") Long newsletterId,
       RedirectAttributes redirAttr) {
-    Newsletter newsletter = newsletterRepo.findOne(newsletterId);
+    Newsletter newsletter = newsletterRepo.findById(newsletterId)
+        .orElseThrow(() -> new IllegalArgumentException("No newsletter with ID " + newsletterId));
 
     localGroupManager.repository().findByNewslettersContains(newsletter)
         .ifPresent(l -> localGroupManager.removeNewsletter(l, newsletter));

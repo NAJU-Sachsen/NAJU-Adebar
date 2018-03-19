@@ -1,5 +1,7 @@
 package de.naju.adebar.model.newsletter;
 
+import de.naju.adebar.app.newsletter.PersistentNewsletterManager;
+import de.naju.adebar.model.Email;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,8 +12,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-import de.naju.adebar.app.newsletter.PersistentNewsletterManager;
-import de.naju.adebar.model.Email;
 
 /**
  * Basic behavior testing for the {@link PersistentNewsletterManager}
@@ -68,7 +68,7 @@ public class NewsletterIntegrationTest {
     newsletterManager.subscribe(hans, hifaNewsletter);
     newsletterManager.deleteNewsletter(hifaNewsletter.getId());
     Assert.assertFalse(String.format("%s should be deleted", hans),
-        subscriberRepo.exists(hans.getId()));
+        subscriberRepo.existsById(hans.getId()));
   }
 
   /**
@@ -79,7 +79,7 @@ public class NewsletterIntegrationTest {
     newsletterManager.subscribe(hans, hifaNewsletter);
     newsletterManager.unsubscribe(hans, hifaNewsletter);
     Assert.assertFalse(String.format("%s should be deleted", hans),
-        subscriberRepo.exists(hans.getId()));
+        subscriberRepo.existsById(hans.getId()));
   }
 
 }

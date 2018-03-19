@@ -30,7 +30,7 @@ public class ActivistController {
   private final EditActivistProfileConverter profileConverter;
 
   /**
-   * Full constructor
+   * Full constructor.
    *
    * @param personRepo repository containing the person instances. This is necessary to update
    *     persons if their activist profiles are being edited.
@@ -48,7 +48,7 @@ public class ActivistController {
   }
 
   /**
-   * Renders the fragment containing the activist template.
+   * Renders the activist details fragment for a specific person.
    *
    * @param profileId the ID of the person to display.
    * @param model model to put the data to render into
@@ -61,7 +61,7 @@ public class ActivistController {
 
     // We may not request the profile directly as parameter, because the person may not be an
     // activist.
-    ActivistProfile activistProfile = activistRepo.findOne(profileId);
+    ActivistProfile activistProfile = activistRepo.findById(profileId).orElse(null);
 
     // If the profile is not present (because the person is no activist) we will add null, which is
     // fine as well.
@@ -77,24 +77,27 @@ public class ActivistController {
     return "persons/activistProfile :: profile";
   }
 
+  /**
+   * Turns the given person into an activist.
+   *
+   * @param person the person
+   * @return a redirection to the person's detail page
+   */
   @PostMapping("/persons/{pid}/activist-profile/create")
-  public String createActivistProfile(@PathVariable("pid") PersonId personId,
+  public String createActivistProfile(@PathVariable("pid") Person person,
       RedirectAttributes redirAttr) {
-    Person person = personRepo.findById(personId)
-        .orElseThrow(() -> new IllegalArgumentException("No person with ID " + personId));
     person.makeActivist();
     personRepo.save(person);
-    return "redirect:/persons/" + personId;
+    return "redirect:/persons/" + person.getId();
   }
 
   /**
-   * Updates an activist profile according to the submitted data. Redirects to the person's details
-   * page.
+   * Updates an activist profile according to the submitted data.
    *
    * @param personId the ID of the profile to update
    * @param form the form containing the updated activist data
    * @param redirAttr attributes to put in the modal after redirection
-   * @return redirection code to the person details page.
+   * @return a redirection to the person details page
    */
   @PostMapping("/persons/{pid}/activist-profile/update")
   public String updateActivistProfile(@PathVariable("pid") PersonId personId,

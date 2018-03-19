@@ -1,5 +1,9 @@
 package de.naju.adebar.app.security.user;
 
+import de.naju.adebar.app.news.ReleaseNotesPublishedEvent;
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.PersonId;
+import de.naju.adebar.model.persons.events.PersonDataUpdatedEvent;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -12,16 +16,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import de.naju.adebar.app.news.ReleaseNotesPublishedEvent;
-import de.naju.adebar.model.persons.Person;
-import de.naju.adebar.model.persons.PersonId;
-import de.naju.adebar.model.persons.events.PersonDataUpdatedEvent;
 
 /**
  * A {@link UserAccountManager} that persists its data in a database
  *
  * @author Rico Bergmann
- *
  */
 @Service
 public class PersistentUserAccountManager implements UserAccountManager {
@@ -68,8 +67,7 @@ public class PersistentUserAccountManager implements UserAccountManager {
 
   @Override
   public Optional<UserAccount> find(String userName) {
-    UserAccount account = accountRepo.findOne(userName);
-    return account != null ? Optional.of(account) : Optional.empty();
+    return accountRepo.findById(userName);
   }
 
   @Override
@@ -87,12 +85,12 @@ public class PersistentUserAccountManager implements UserAccountManager {
     if (!usernameExists(username)) {
       throw new UsernameNotFoundException(USERNAME_NOT_FOUND_MSG + username);
     }
-    accountRepo.delete(username);
+    accountRepo.deleteById(username);
   }
 
   @Override
   public boolean usernameExists(String username) {
-    return accountRepo.exists(username);
+    return accountRepo.existsById(username);
   }
 
   @Override
@@ -145,7 +143,7 @@ public class PersistentUserAccountManager implements UserAccountManager {
   public void notifyAboutNewReleaseNotes(ReleaseNotesPublishedEvent event) {
     Iterable<UserAccount> accounts = accountRepo.findAll();
     accounts.forEach(UserAccount::notifyAboutNewReleaseNotes);
-    accountRepo.save(accounts);
+    accountRepo.saveAll(accounts);
   }
 
   @Override
@@ -156,7 +154,7 @@ public class PersistentUserAccountManager implements UserAccountManager {
 
   /**
    * Sets the personal data of the user account
-   * 
+   *
    * @param account the account to update
    * @param person the person whose data should be used
    */

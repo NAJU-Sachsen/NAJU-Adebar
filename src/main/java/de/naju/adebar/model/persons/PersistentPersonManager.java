@@ -1,5 +1,9 @@
 package de.naju.adebar.model.persons;
 
+import de.naju.adebar.model.Email;
+import de.naju.adebar.model.persons.exceptions.NoReferentException;
+import de.naju.adebar.model.persons.qualifications.Qualification;
+import de.naju.adebar.model.persons.qualifications.QualificationRepository;
 import java.util.Arrays;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,10 +11,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-import de.naju.adebar.model.Email;
-import de.naju.adebar.model.persons.exceptions.NoReferentException;
-import de.naju.adebar.model.persons.qualifications.Qualification;
-import de.naju.adebar.model.persons.qualifications.QualificationRepository;
 
 /**
  * A {@link PersonManager} that persists its data in a database
@@ -68,7 +68,7 @@ public class PersistentPersonManager implements PersonManager {
 
   @Override
   public Person updatePerson(Person person) {
-    if (!personRepo.exists(person.getId())) {
+    if (!personRepo.existsById(person.getId())) {
       throw new IllegalArgumentException("Person was not persisted before " + person);
     }
 
@@ -100,11 +100,8 @@ public class PersistentPersonManager implements PersonManager {
     }
     Qualification qualificationToAdd;
 
-    if (qualificationRepo.exists(qualification.getName())) {
-      qualificationToAdd = qualificationRepo.findOne(qualification.getName());
-    } else {
-      qualificationToAdd = qualification;
-    }
+    qualificationToAdd = qualificationRepo.findById(qualification.getName()).orElse(qualification);
+
     person.getReferentProfile().addQualification(qualificationToAdd);
     updatePerson(person);
   }

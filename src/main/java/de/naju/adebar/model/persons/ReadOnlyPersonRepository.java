@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.querydsl.QueryDslPredicateExecutor;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Repository;
 @Repository("ro_personRepo")
 public interface ReadOnlyPersonRepository extends //
     ReadOnlyRepository<Person, PersonId>, //
-    QueryDslPredicateExecutor<Person>, //
+    QuerydslPredicateExecutor<Person>, //
     PagingAndSortingRepository<Person, PersonId> {
 
   /**
@@ -54,7 +54,6 @@ public interface ReadOnlyPersonRepository extends //
    * @param id must not be {@code null}.
    * @return the person with that ID. This person is not archived
    */
-  @Override
   @Query("SELECT p FROM person p WHERE p.id=?1 AND p.archived=0")
   Person findOne(PersonId id);
 
@@ -62,6 +61,7 @@ public interface ReadOnlyPersonRepository extends //
    * @param id the must not be {code null}
    * @return the person with that ID. The person may not be archived.
    */
+  @Override
   @Query("SELECT p FROM person p WHERE  p.id=?1 AND p.archived=0")
   Optional<Person> findById(PersonId id);
 
@@ -118,4 +118,7 @@ public interface ReadOnlyPersonRepository extends //
    * @return the matching person
    */
   Person findByFirstNameAndLastNameAndEmail(String firstName, String lastName, Email email);
+
+  @Override
+  boolean existsById(PersonId id);
 }

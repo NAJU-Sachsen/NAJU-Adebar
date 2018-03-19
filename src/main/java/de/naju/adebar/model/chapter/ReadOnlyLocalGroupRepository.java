@@ -2,14 +2,14 @@ package de.naju.adebar.model.chapter;
 
 import de.naju.adebar.infrastructure.ReadOnlyRepository;
 import de.naju.adebar.model.events.Event;
-import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.newsletter.Newsletter;
-import org.springframework.stereotype.Repository;
+import de.naju.adebar.model.persons.Person;
 import java.util.Optional;
+import org.springframework.stereotype.Repository;
 
 /**
  * A repository that provides read-only access to the saved local groups
- * 
+ *
  * @author Rico Bergmann
  */
 @Repository("ro_localGroupRepo")
@@ -30,7 +30,7 @@ public interface ReadOnlyLocalGroupRepository extends ReadOnlyRepository<LocalGr
   /**
    * @param newsletter the newsletter to query for
    * @return an optional containing the local group with that newsletter, otherwise the optional is
-   *         empty
+   *     empty
    */
   Optional<LocalGroup> findByNewslettersContains(Newsletter newsletter);
 
