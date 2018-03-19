@@ -121,90 +121,19 @@
       </section>
     </div>
 
-    <section id="events" class="tab-pane" role="tabpanel"
+    <section id="events" class="display-category tab-pane" role="tabpanel"
              th:if="${tab == 'events'}" th:classappend="${tab == 'events'} ? 'active'">
       
       <div th:replace="persons/events :: timeline"></div>
       
     </section>
 
-    <section id="newsletters" class="tab-pane" role="tabpanel"
+    <section id="newsletters" class="display-category tab-pane" role="tabpanel"
              th:if="${tab == 'newsletters'}"
              th:classappend="${tab == 'newsletters'} ? 'active'">
-      <h2>Newsletter</h2>
-
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-md-10 col-md-offset-1">
-
-            <!-- subscription dialog -->
-            <div class="row clearfix margin-btm">
-              <div class="pull-right">
-                <button type="button" class="btn btn-default">Newsletter abonnieren</button>
-              </div>
-            </div>
-
-            <!-- newsletter table -->
-            <div class="row margin-btm">
-              <div class="table-responsive">
-                <table class="table table-striped table-hover">
-                  <thead>
-                  <tr class="row">
-                    <th class="col-md-1">
-                      <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip"
-                            data-placement="bottom"
-                            data-title="Wähle hier Newsletter zum abbestellen aus"></span>
-                    </th>
-                    <th class="col-md-5">Name</th>
-                    <th class="col-md-4">Zugehörigkeit</th>
-                    <th class="col-md-2">Details</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr class="row">
-                    <td class="col-md-1">
-                      <input type="checkbox"/>
-                    </td>
-                    <td class="col-md-5">NAJU Allgemein</td>
-                    <td class="col-md-4">
-                      <a href="localGroupDetails.html">NAJU Sachsen</a>
-                    </td>
-                    <td class="col-md-2">
-                      <a href="newsletterDetails.html">
-                        <span class="glyphicon glyphicon-new-window"></span>
-                      </a>
-                    </td>
-                  </tr>
-                  <tr class="row">
-                    <td class="col-md-1">
-                      <input type="checkbox"/>
-                    </td>
-                    <td class="col-md-5">Bergwiesen-Pflegeprojekte im Erzgebirge</td>
-                    <td class="col-md-4">
-                      <a href="localGroupDetails.html">NAJU Sachsen</a>
-                    </td>
-                    <td class="col-md-2">
-                      <a href="newsletterDetails.html">
-                        <span class="glyphicon glyphicon-new-window"></span>
-                      </a>
-                    </td>
-                  </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <div class="row clearfix">
-              <div class="pull-right">
-                <button type="button" class="btn btn-danger"><em
-                    class="reset-style underline">42</em> Newsletter abbestellen
-                </button>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
+      
+      <div th:replace="persons/subscribedNewsletters :: newsletters"></div>
+      
 
     </section>
 
