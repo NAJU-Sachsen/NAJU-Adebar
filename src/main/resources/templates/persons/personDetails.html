@@ -222,6 +222,12 @@
         th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 <script type="text/javascript" src="../../static/resources/js/bootstrap-select.min.js"
         th:src="@{/resources/js/bootstrap-select.min.js}"></script>
+
+<script type="text/javascript" src="../../static/resources/js/list.min.js"
+        th:src="@{/resources/js/list.min.js}" th:if="${tab == 'events'}"></script>
+<script type="text/javascript" src="../../static/resources/js/list.fuzzysearch.min.js"
+        th:src="@{/resources/js/list.fuzzysearch.min.js}" th:if="${tab == 'events'}"></script>
+
 <script src="../../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
 <script src="../../static/resources/js/formControls.js"
         th:src="@{/resources/js/formControls.js}"></script>
@@ -235,6 +241,22 @@
     modal.modal('show');
     modal.find(`#${tab}`).tab('show');
   });
+</script>
+
+<script type="text/javascript" th:if="${tab == 'events'}">
+  const fuzzyOptions = {
+    searchClass: "fuzzy-search",
+    location: 0,
+    distance: 150,
+    threshold: 0.4,
+    multiSearch: true
+  };
+  const eventOptions = {
+    listClass: "events",
+    valueNames: ['name', 'time', 'place', 'belonging'],
+    plugins: [ListFuzzySearch(fuzzyOptions)]
+  };
+  new List('add-participations-dialog', eventOptions);
 </script>
 
 </body>

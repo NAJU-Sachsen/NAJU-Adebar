@@ -52,7 +52,7 @@
     <!-- events -->
     <div id="overview" class="tab-pane active container-fluid" role="tabpanel">
 
-      <section id="activist" class="display-category" th:fragment="timeline">
+      <section id="timeline" class="display-category">
 
         <div th:fragment="timeline">
 
@@ -90,7 +90,8 @@
                                     <div class="col-md-8 col-md-offset-1">
                                       <label for="event-filter" class="control-label">Suche</label>
                                       <div class="input-group">
-                                        <input type="search" id="event-filter" class="form-control"
+                                        <input type="search" id="event-filter"
+                                               class="form-control fuzzy-search"
                                                placeholder="Nach Veranstaltung suchen"/>
                                         <span class="input-group-addon">
                                           <span class="glyphicon glyphicon-search"></span>
@@ -112,7 +113,7 @@
                                     <th class="col-md-3">Ort</th>
                                   </tr>
                                   </thead>
-                                  <tbody th:remove="all-but-first">
+                                  <tbody class="events" th:remove="all-but-first">
                                   <tr class="row propagate-click action-cursor"
                                       data-propagation-target=":checkbox"
                                       th:each="event : ${futureEvents}">
@@ -120,8 +121,9 @@
                                       <input type="checkbox" name="event-ids"
                                              th:value="${event.id}"/>
                                     </td>
-                                    <td class="col-md-3" th:text="${event.name}">Wildniscamp</td>
-                                    <td class="col-md-2">
+                                    <td class="col-md-3 name" th:text="${event.name}">Wildniscamp
+                                    </td>
+                                    <td class="col-md-2 belonging">
                                       <a href="../localGroupDetails.html"
                                          class="label label-default"
                                          th:if="${event.forLocalGroup}"
@@ -137,11 +139,12 @@
                                         NAJU Dresden
                                       </a>
                                     </td>
-                                    <td class="col-md-3"
+                                    <td class="col-md-3 time"
                                         th:text="${{#time.formatTimeSpan(event.getStartTime(), event.getEndTime())}}">
                                       04.-09.06.
                                     </td>
-                                    <td class="col-md-3" th:text="${event.place.city}">Dachsenberg
+                                    <td class="col-md-3 place" th:text="${event.place.city}">
+                                      Dachsenberg
                                     </td>
                                   </tr>
                                   <tr class="row propagate-click"
