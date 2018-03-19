@@ -92,6 +92,10 @@ public class EditPersonFormConverter
    */
   @Override
   public void applyFormToEntity(EditPersonForm form, Person entity) {
+    if (!isValid(form)) {
+      throw new IllegalArgumentException("Form is invalid " + form);
+    }
+
     entity.updateInformation( //
         form.getFirstName(), //
         form.getLastName(), //

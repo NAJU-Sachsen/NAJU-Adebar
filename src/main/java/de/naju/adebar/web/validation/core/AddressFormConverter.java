@@ -50,6 +50,9 @@ public class AddressFormConverter implements ValidatingEntityFormConverter<Addre
    */
   @Override
   public Address toEntity(AddressForm form) {
+    if (!isValid(form)) {
+      throw new IllegalArgumentException("Form is not valid " + form);
+    }
     return new Address(form.getStreet(), form.getZip(), form.getCity());
   }
 

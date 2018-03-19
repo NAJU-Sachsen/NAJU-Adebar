@@ -16,8 +16,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+/**
+ * Handles all requests directly related to persons. This includes displaying their details,
+ * searching and creating profiles, etc.
+ *
+ * @author Rico Bergmann
+ */
 @Controller
 public class PersonController {
 
@@ -25,6 +30,14 @@ public class PersonController {
   private final PersonSearchPredicateCreator searchPredicateCreator;
   private final EditPersonFormConverter editPersonFormConverter;
 
+  /**
+   * Full constructor. No parameter may be {@code null}
+   *
+   * @param personRepo repository containing all available persons
+   * @param predicateCreator service to create a search predicate from a query
+   * @param editPersonFormConverter service to convert a {@link EditPersonForm} to a
+   *     corresponding {@link Person} and vice-versa
+   */
   public PersonController(PersonRepository personRepo, //
       PersonSearchPredicateCreator predicateCreator, //
       EditPersonFormConverter editPersonFormConverter) {
@@ -37,12 +50,33 @@ public class PersonController {
     this.editPersonFormConverter = editPersonFormConverter;
   }
 
+  /**
+   * Renders a list of all persons
+   *
+   * @param model model to put the data to render into
+   * @param pageable the requested page. As there may be quite many, will not display all
+   *     persons at once but rather show them in smaller slices. Navigation will be offered to move
+   *     to the next/previous slice.
+   * @return the person overview template
+   */
   @GetMapping("/persons")
   public String showAllPersons(Model model, @PageableDefault(size = 20) Pageable pageable) {
     model.addAttribute("persons", personRepo.findAllPagedOrderByLastName(pageable));
     return "persons/overview";
   }
 
+  /**
+   * Renders a list of all persons matching a search criteria.
+   *
+   * <p> Persons will match the query if either their first name, last name, e-mail address or the
+   * city they live in matches.
+   *
+   * @param query the search query
+   * @param pageable the requested result page. As with {@link #showAllPersons(Model, Pageable)}
+   *     the result will not be presented all at once.
+   * @param model model to put the data to render into
+   * @return the person overview template, adapted to the search
+   */
   @GetMapping("/persons/search")
   public String searchPersons(@RequestParam("query") String query,
       @PageableDefault(size = 20) Pageable pageable, Model model) {
@@ -52,42 +86,53 @@ public class PersonController {
     return "persons/overview";
   }
 
+  /**
+   * Renders the template to add new persons to the database
+   *
+   * @param model model to put the data to render into
+   * @return the add person template
+   */
   @GetMapping("/persons/add")
   public String showAddPersonView(Model model) {
 
     return "persons/addPerson";
   }
 
-  @PostMapping("/persons/add")
-  public String addPerson(RedirectAttributes redirAttr) {
-    Person person = null;
-    return "redirect:/persons/" + person.getId();
-  }
-
+  /**
+   * Renders the template to filter persons
+   *
+   * @param model model to put the data to render into
+   * @return the filter persons template
+   */
   @GetMapping("/persons/filter")
   public String filterPersons(Model model) {
     return "persons/overview";
   }
 
+  /**
+   * Renders the details page for a specific person
+   *
+   * @param person the person to display
+   * @param model model to put the data to render into
+   * @return the person detail page
+   */
   @GetMapping("/persons/{pid}")
   public String showPersonDetailsOverview(@PathVariable("pid") Person person, Model model) {
 
+    model.addAttribute("tab", "general");
     model.addAttribute("person", person);
     model.addAttribute("editPersonForm", editPersonFormConverter.toForm(person));
-
-    if (!model.containsAttribute("tab")) {
-      // The tab becomes the section of the template which will be displayed initially.
-      // It may already be set if we are being redirected so we only add it if it is not present.
-      // Otherwise another part of the template will be displayed.
-      // E.g. if the activist profile was edited, tab="activist" will be set before the redirect. As
-      // we leave the tab untouched, the activist profile-view will become active in the template,
-      // resulting in a nicer user-experience
-      model.addAttribute("tab", "general");
-    }
 
     return "persons/personDetails";
   }
 
+  /**
+   * Edits the data of a specific person according to the submitted form
+   *
+   * @param person the person to update
+   * @param data the data to use for the update
+   * @return the person detail page
+   */
   @PostMapping("/persons/{pid}/update")
   public String updatePersonalInformation(@PathVariable("pid") Person person,
       @ModelAttribute("editPersonForm") EditPersonForm data) {

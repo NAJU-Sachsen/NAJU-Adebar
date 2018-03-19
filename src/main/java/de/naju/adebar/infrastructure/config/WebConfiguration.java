@@ -1,10 +1,5 @@
 package de.naju.adebar.infrastructure.config;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.format.FormatterRegistry;
-import org.springframework.util.Assert;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import de.naju.adebar.infrastructure.config.security.WebSecurityConfiguration;
 import de.naju.adebar.model.events.ReadOnlyEventRepository;
 import de.naju.adebar.model.persons.ReadOnlyPersonRepository;
@@ -12,18 +7,19 @@ import de.naju.adebar.services.conversion.core.EmailConverter;
 import de.naju.adebar.services.conversion.core.PhoneNumberConverter;
 import de.naju.adebar.services.conversion.events.EventConverter;
 import de.naju.adebar.services.conversion.persons.PersonConverter;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.format.FormatterRegistry;
+import org.springframework.util.Assert;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 /**
  * The general configuration of the web controllers.
  *
- * We will use this to register our login page and multiple formatters:
- * <ul>
- * <li>a {@link PersonConverter}</li>
- * <li>a {@link EventConverter}</li>
- * </ul>
+ * We will use this to register our login page and multiple formatters: <ul> <li>a {@link
+ * PersonConverter}</li> <li>a {@link EventConverter}</li> </ul>
  *
  * @author Rico Bergmann
- *
  */
 @Configuration
 public class WebConfiguration extends WebMvcConfigurerAdapter {

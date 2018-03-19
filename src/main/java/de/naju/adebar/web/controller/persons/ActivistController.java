@@ -9,8 +9,7 @@ import de.naju.adebar.util.Assert2;
 import de.naju.adebar.web.validation.persons.activist.EditActivistProfileConverter;
 import de.naju.adebar.web.validation.persons.activist.EditActivistProfileForm;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,8 +20,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  *
  * @author Rico Bergmann
  * @see ActivistProfile
+ * @see ActivistReferentController
  */
 @Controller
+@Transactional
 public class ActivistController {
 
   private final PersonRepository personRepo;
@@ -48,36 +49,6 @@ public class ActivistController {
   }
 
   /**
-   * Renders the activist details fragment for a specific person.
-   *
-   * @param profileId the ID of the person to display.
-   * @param model model to put the data to render into
-   * @return the fragment code for the activist profile. Rendering will be handled by Spring and
-   *     Thymeleaf
-   */
-  @GetMapping("/persons/{pid}/activist-profile")
-  public String showActivistDetails(@PathVariable("pid") PersonId profileId,
-      Model model) {
-
-    // We may not request the profile directly as parameter, because the person may not be an
-    // activist.
-    ActivistProfile activistProfile = activistRepo.findById(profileId).orElse(null);
-
-    // If the profile is not present (because the person is no activist) we will add null, which is
-    // fine as well.
-    model.addAttribute("activist", activistProfile);
-
-    // As the activist may not be presents, we need to add the person's ID, too.
-    // This is necessary to submit the form to actually make the person an activist to the right
-    // path.
-    model.addAttribute("personId", profileId);
-
-    model.addAttribute("editActivistForm", profileConverter.toForm(activistProfile));
-
-    return "persons/activistProfile :: profile";
-  }
-
-  /**
    * Turns the given person into an activist.
    *
    * @param person the person
@@ -87,8 +58,7 @@ public class ActivistController {
   public String createActivistProfile(@PathVariable("pid") Person person,
       RedirectAttributes redirAttr) {
     person.makeActivist();
-    personRepo.save(person);
-    return "redirect:/persons/" + person.getId();
+    return "redirect:/persons/" + person.getId() + "/activist-referent";
   }
 
   /**
@@ -105,10 +75,7 @@ public class ActivistController {
       RedirectAttributes redirAttr) {
     Person activist = personRepo.findOne(personId);
     profileConverter.applyFormToEntity(form, activist.getActivistProfile());
-    personRepo.save(activist);
-
-    redirAttr.addAttribute("tab", "activist-referent");
-    return "redirect:/persons/" + personId;
+    return "redirect:/persons/" + personId + "/activist-referent";
   }
 
 }

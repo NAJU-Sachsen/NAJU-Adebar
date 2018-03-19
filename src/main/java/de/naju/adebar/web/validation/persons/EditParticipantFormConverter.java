@@ -66,6 +66,10 @@ public class EditParticipantFormConverter implements
 
   @Override
   public void applyFormToEntity(EditParticipantForm form, ParticipantProfile entity) {
+    if (!isValid(form)) {
+      throw new IllegalArgumentException("Form is invalid " + form);
+    }
+
     entity.updateProfile(form.getGender(), form.getDateOfBirth(), form.getEatingHabits(),
         form.getHealthImpairments());
     entity.updateRemarks(form.getRemarks());

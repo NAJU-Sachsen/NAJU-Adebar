@@ -246,6 +246,18 @@ fieldset.inline-options label {
   margin-top: 15px;
 }
 
+.margin-right-sm {
+  margin-right: 3px;
+}
+
+.margin-right {
+  margin-right: 8px;
+}
+
+.margin-right-lg {
+  margin-right: 15px;
+}
+
 .margin-btm-sm {
   margin-bottom: 3px;
 }
@@ -399,6 +411,20 @@ fieldset.inline-options label {
 
 .list-group-minimalistic .list-group-item:nth-of-type(2n) {
   background-color: #f9f9f9;
+}
+
+.modal.modal-tabbed .modal-dialog .modal-content .modal-header {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.modal.modal-tabbed .modal-dialog .modal-content .modal-body {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.block {
+  display: block;
 }
 
 .inline {

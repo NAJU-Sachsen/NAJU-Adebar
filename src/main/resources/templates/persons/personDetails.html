@@ -49,22 +49,31 @@
     </div>
 
     <ul class="nav nav-tabs category-nav" role="tablist" th:fragment="navigation">
-      <li role="presentation" th:classappend="${tab == 'general'} ? 'active'">
-        <a href="#overview" class="tab-controller" aria-controls="general" role="tab"
-           data-toggle="tab">Allgemeine Infos</a>
+      <li role="presentation"
+          th:classappend="${tab == 'general'} ? 'active'">
+        <a href="#overview" class="tab-controller" th:href="@{/persons/{id}(id=${person.id})}">
+          Allgemeine Infos
+        </a>
       </li>
-      <li role="presentation" th:classappend="${tab == 'activist-referent'} ? 'active'">
+      <li role="presentation"
+          th:classappend="${tab == 'activist-referent'} ? 'active'">
         <a href="#activist-referent" class="tab-controller"
-           aria-controls="activist-referent" role="tab" data-toggle="tab">Aktiven +
-          Referenteninfos</a>
+           th:href="@{/persons/{id}/activist-referent(id=${person.id})}">
+          Aktiven + Referenteninfos
+        </a>
       </li>
-      <li role="presentation" th:classappend="${tab == 'events'} ? 'active'">
-        <a href="#events" class="tab-controller" aria-controls="events" role="tab"
-           data-toggle="tab">Veranstaltungsteilnahmen</a>
+      <li role="presentation"
+          th:classappend="${tab == 'events'} ? 'active'">
+        <a href="#events" class="tab-controller" th:href="@{/persons/{id}/events(id=${person.id})}">
+          Veranstaltungsteilnahmen
+        </a>
       </li>
-      <li role="presentation" th:classappend="${tab == 'newsletters'} ? 'active'">
-        <a href="#newsletters" class="tab-controller" aria-controls="newsletters"
-           role="tab" data-toggle="tab">Newsletter</a>
+      <li role="presentation"
+          th:classappend="${tab == 'newsletters'} ? 'active'">
+        <a href="#newsletters" class="tab-controller"
+           th:href="@{/persons/{id}/newsletters(id=${person.id})}">
+          Newsletter
+        </a>
       </li>
     </ul>
   </header>
@@ -72,15 +81,15 @@
   <article class="tab-content">
 
     <!-- general and family relationship -->
-    <div id="overview" class="tab-pane active container-fluid" role="tabpanel">
+    <div id="overview" class="tab-pane container-fluid" th:if="${tab == 'general'}"
+         th:classappend="${tab == 'general'} ? 'active'">
 
       <section id="general" class="display-category"
                th:replace="persons/personDetailsOverview :: general">
 
       </section>
 
-      <section class="lazy-load display-category" id="family-relations"
-               th:attr="data-load=@{/persons/{pid}/family-relations(pid=${person.id})}"
+      <section class="display-category" id="family-relations"
                th:if="false">
         <div class="row">
           <h2>Verwandschaft</h2>
@@ -94,23 +103,26 @@
     </div>
 
     <!-- activist and referent -->
-    <div id="activist-referent" class="tab-pane container-fluid" role="tabpanel">
+    <div id="activist-referent" class="tab-pane container-fluid"
+         th:if="${tab == 'activist-referent'}"
+         th:classappend="${tab == 'activist-referent'} ? 'active'">
 
       <!-- activist profile -->
-      <section class="lazy-load display-category" id="activist"
-               th:attr="data-load=@{/persons/{id}/activist-profile(id=${person.id})}">
+      <section class="display-category" id="activist"
+               th:replace="persons/activistProfile :: profile">
       </section>
 
       <!-- referent profile -->
-      <section class="lazy-load display-category" id="referent"
-               th:attr="data-load=@{/persons/{id}/referent-profile(id=${person.id})}">
+      <section class="display-category" id="referent"
+               th:replace="persons/referentProfile :: profile">
         <div class="row">
           <h2>Referierenden-Infos</h2>
         </div>
       </section>
     </div>
 
-    <section id="events" class="tab-pane" role="tabpanel">
+    <section id="events" class="tab-pane" role="tabpanel"
+             th:if="${tab == 'events'}" th:classappend="${tab == 'events'} ? 'active'">
       <h2>Veranstaltungs-Timeline</h2>
 
       <div class="container-fluid">
@@ -189,7 +201,9 @@
 
     </section>
 
-    <section id="newsletters" class="tab-pane" role="tabpanel">
+    <section id="newsletters" class="tab-pane" role="tabpanel"
+             th:if="${tab == 'newsletters'}"
+             th:classappend="${tab == 'newsletters'} ? 'active'">
       <h2>Newsletter</h2>
 
       <div class="container-fluid">
@@ -286,5 +300,15 @@
         th:src="@{/resources/js/formControls.js}"></script>
 <script src="../../static/resources/js/personDetails.js"
         th:src="@{/resources/js/personDetails.js}"></script>
+
+<script th:if="${param.form != null and param.form[0] == 'add-qualification'}" th:inline="javascript">
+  $(document).ready(() => {
+    const modal = $('#add-qualification-dialog');
+    const tab = [[${param.tab != null} ? ${param.tab[0]} : '']];
+    modal.modal('show');
+    modal.find(`#${tab}`).tab('show');
+  });
+</script>
+
 </body>
 </html>

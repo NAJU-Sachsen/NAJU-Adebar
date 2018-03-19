@@ -49,6 +49,10 @@ public class EditActivistProfileConverter implements
 
   @Override
   public void applyFormToEntity(EditActivistProfileForm form, ActivistProfile entity) {
+    if (!isValid(form)) {
+      throw new IllegalArgumentException("Form is not valid " + form);
+    }
+
     JuleicaCard newCard = form.isJuleica() //
         ? new JuleicaCard(form.getJuleicaExpiryDate()) //
         : null;

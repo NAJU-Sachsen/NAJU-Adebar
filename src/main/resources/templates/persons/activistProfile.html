@@ -52,7 +52,7 @@
     <!-- general and relationship -->
     <div id="overview" class="tab-pane active container-fluid" role="tabpanel">
 
-      <!-- general -->
+      <!-- activist profile -->
       <section id="activist" class="display-category" th:fragment="profile">
 
         <div class="row category-header">
@@ -107,6 +107,7 @@
 
         </div>
 
+        <!-- activist view -->
         <div class="row" th:if="${activist}">
           <div class="table-responsive">
             <table class="table">
@@ -125,7 +126,7 @@
                   <span class="glyphicon glyphicon-map-marker"></span> Ortsgruppen
                 </th>
                 <td class="col-md-10" th:remove="all-but-first">
-                  <a href="#" class="label label-default"
+                  <a href="#" class="label label-default margin-right-sm"
                      th:each="chapter : ${activist.localGroups}" th:text="${chapter.name}"
                      th:href="@{/localGroups/{id}(id=${chapter.id})}">NAJU Sachsen</a>
                   <a href="#" class="label label-default">NAJU Dresden</a>
@@ -162,13 +163,16 @@
           </div>
         </div>
 
-        <div th:unless="${activist}">
+        <!-- no activist view -->
+        <div class="row" th:unless="${activist}">
           Die Person ist uns bisher nicht als Aktive*r bekannt.
-          <button type="button" class="btn btn-link btn-inline" data-toggle="modal"
-                  data-target="#make-activist-modal">
-            <span class="glyphicon glyphicon-arrow-right"></span>
-            Jetzt als Aktive*n registrieren
-          </button>
+          <div>
+            <button type="button" class="btn btn-link no-padding" data-toggle="modal"
+                    data-target="#make-activist-modal">
+              <span class="glyphicon glyphicon-arrow-right"></span>
+              Jetzt als Aktive*n registrieren
+            </button>
+          </div>
           <div class="modal fade" id="make-activist-modal">
             <div class="modal-dialog">
               <div class="modal-content">
