@@ -1,5 +1,9 @@
 package de.naju.adebar.model.events;
 
+import de.naju.adebar.model.Address;
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.exceptions.NoActivistException;
+import de.naju.adebar.model.persons.exceptions.NoParticipantException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
@@ -25,10 +29,6 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Transient;
 import org.javamoney.moneta.Money;
 import org.springframework.util.Assert;
-import de.naju.adebar.model.Address;
-import de.naju.adebar.model.persons.Person;
-import de.naju.adebar.model.persons.exceptions.NoActivistException;
-import de.naju.adebar.model.persons.exceptions.NoParticipantException;
 
 /**
  * Abstraction of an event. It may be a regular camp or any other kind of event such as workshops or
@@ -39,36 +39,24 @@ import de.naju.adebar.model.persons.exceptions.NoParticipantException;
 @Entity(name = "event")
 public class Event {
 
-  public enum EventStatus {
-    PLANNED, RUNNING, PAST, CANCELLED
-  }
-
   private static final String START_TIME_AFTER_END_TIME = "Start time may not be after end time";
   private static final String PERSON_NOT_IN_TO_CONTACT_LIST =
       "Person is not registered as 'should be contacted': ";
-
   @EmbeddedId
   @Column(name = "id")
   private EventId id;
-
   @Column(name = "name")
   private String name;
-
   @Column(name = "startTime")
   private LocalDateTime startTime;
-
   @Column(name = "endTime")
   private LocalDateTime endTime;
-
   @Column(name = "minParticipantAge")
   private int minimumParticipantAge;
-
   @Column(name = "intParticipationFee")
   private Money internalParticipationFee;
-
   @Column(name = "extParticipationFee")
   private Money externalParticipationFee;
-
   @Embedded
   @AttributeOverrides({
       @AttributeOverride(name = "street", column = @Column(name = "locationStreet")),
@@ -76,24 +64,19 @@ public class Event {
       @AttributeOverride(name = "city", column = @Column(name = "locationCity")),
       @AttributeOverride(name = "additionalInfo", column = @Column(name = "locationHints"))})
   private Address place;
-
   @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinTable(name = "counselors", inverseJoinColumns = @JoinColumn(name = "counselorId"))
   private List<Person> counselors;
-
   @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinTable(name = "eventOrganizers", inverseJoinColumns = @JoinColumn(name = "organizerId"))
   private List<Person> organizers;
-
   @ElementCollection(fetch = FetchType.LAZY)
   @CollectionTable(name = "eventToContact", joinColumns = @JoinColumn(name = "eventId"))
   @MapKeyJoinColumn(name = "personId")
   @Column(name = "contactInfo")
   private Map<Person, String> personsToContact;
-
   @ElementCollection(fetch = FetchType.LAZY)
   private List<Lecture> lectures;
-
   @OneToOne(cascade = CascadeType.ALL)
   @PrimaryKeyJoinColumn
   private ParticipantsList participantsList;
@@ -126,16 +109,23 @@ public class Event {
   /**
    * Default constructor just for JPA's sake. Not to be used from outside, hence {@code private}.
    */
-  @SuppressWarnings("unused")
-  private Event() {}
-
-  // getter and setter
+  private Event() {
+  }
 
   /**
    * @return the event's ID (= primary key)
    */
   public EventId getId() {
     return id;
+  }
+
+  // getter and setter
+
+  /**
+   * @param id the event's id
+   */
+  protected void setId(EventId id) {
+    this.id = id;
   }
 
   /**
@@ -188,7 +178,7 @@ public class Event {
   /**
    * @param endTime the time the event ends
    * @throws IllegalArgumentException if the start time is after the end time or the end time is
-   *         {@code null}
+   *     {@code null}
    */
   public void setEndTime(LocalDateTime endTime) {
     Assert.notNull(endTime, "End time may not be null");
@@ -201,6 +191,14 @@ public class Event {
       Assert.isTrue(!endTime.isBefore(startTime), START_TIME_AFTER_END_TIME);
     }
     this.endTime = endTime;
+  }
+
+  /**
+   * @return whether the event takes place in the future
+   */
+  @Transient
+  public boolean isProspective() {
+    return LocalDateTime.now().isAfter(startTime);
   }
 
   /**
@@ -312,7 +310,7 @@ public class Event {
 
   /**
    * @return the persons who participate in the event but have not sent the "real" participation
-   *         form yet
+   *     form yet
    */
   @Transient
   public Iterable<Person> getParticipantsWithFormNotReceived() {
@@ -328,10 +326,17 @@ public class Event {
 
   /**
    * @return the activists who take care of the event - i. e. are in attendance when the event takes
-   *         place
+   *     place
    */
   public Iterable<Person> getCounselors() {
     return counselors;
+  }
+
+  /**
+   * @param counselors the counselors of the event
+   */
+  protected void setCounselors(List<Person> counselors) {
+    this.counselors = counselors;
   }
 
   /**
@@ -342,11 +347,26 @@ public class Event {
   }
 
   /**
-   * @return all persons that should be contacted for the event, in a map as
-   *         {@code person -> remark}
+   * @param organizers the event's organizers
+   */
+  protected void setOrganizers(List<Person> organizers) {
+    this.organizers = organizers;
+  }
+
+  /**
+   * @return all persons that should be contacted for the event, in a map as {@code person ->
+   *     remark}
    */
   public Map<Person, String> getPersonsToContact() {
     return Collections.unmodifiableMap(personsToContact);
+  }
+
+  /**
+   * @param personsToContact all persons that should be contacted for the event, in a map as
+   *     {@code person -> remark}
+   */
+  protected void setPersonsToContact(Map<Person, String> personsToContact) {
+    this.personsToContact = personsToContact;
   }
 
   /**
@@ -357,10 +377,18 @@ public class Event {
   }
 
   /**
+   * @param lectures the lectures held on the event
+   */
+  protected void setLectures(List<Lecture> lectures) {
+    this.lectures = lectures;
+  }
+
+  /**
    * A read-only map (participant -> participationInfo). Beware: all write-operations will result in
    * an {@link UnsupportedOperationException}!
    *
    * @return information about each participant
+   *
    * @see ParticipationInfo
    */
   @Transient
@@ -376,42 +404,6 @@ public class Event {
     return participantsList.getWaitingList();
   }
 
-  /**
-   * @param id the event's id
-   */
-  protected void setId(EventId id) {
-    this.id = id;
-  }
-
-  /**
-   * @param lectures the lectures held on the event
-   */
-  protected void setLectures(List<Lecture> lectures) {
-    this.lectures = lectures;
-  }
-
-  /**
-   * @param counselors the counselors of the event
-   */
-  protected void setCounselors(List<Person> counselors) {
-    this.counselors = counselors;
-  }
-
-  /**
-   * @param organizers the event's organizers
-   */
-  protected void setOrganizers(List<Person> organizers) {
-    this.organizers = organizers;
-  }
-
-  /**
-   * @param personsToContact all persons that should be contacted for the event, in a map as
-   *        {@code person -> remark}
-   */
-  protected void setPersonsToContact(Map<Person, String> personsToContact) {
-    this.personsToContact = personsToContact;
-  }
-
   protected ParticipantsList getParticipantsList() {
     return participantsList;
   }
@@ -423,8 +415,6 @@ public class Event {
     this.participantsList = participantsList;
   }
 
-  // "advanced" getter
-
   /**
    * @return the number of participants
    */
@@ -432,6 +422,8 @@ public class Event {
   public int getParticipantsCount() {
     return participantsList.getParticipantsCount();
   }
+
+  // "advanced" getter
 
   /**
    * @return {@code true} if an participant limit was specified, {@code false} otherwise
@@ -467,7 +459,8 @@ public class Event {
   /**
    * @param person the person to check
    * @return {@code true} if the person may participate in the event regarding to age-restrictions,
-   *         {@code false} otherwise
+   *     {@code false} otherwise
+   *
    * @throws IllegalArgumentException if the person is no camp participant
    */
   @Transient
@@ -524,8 +517,6 @@ public class Event {
     return participantsList.getWaitingListSpotFor(person);
   }
 
-  // modification methods
-
   /**
    * Updates start and end time simultaneously. Useful to prevent contract violations that would
    * occur when doing the same through a sequential call to the related setters
@@ -533,7 +524,7 @@ public class Event {
    * @param startTime
    * @param endTime
    * @throws IllegalArgumentException if {@code startTime < endTime} or one of the parameters is
-   *         {@code null}
+   *     {@code null}
    */
   public void updateTimePeriod(LocalDateTime startTime, LocalDateTime endTime) {
     Assert.notNull(startTime, "Start time may not be null!");
@@ -542,6 +533,8 @@ public class Event {
     this.startTime = startTime;
     this.endTime = endTime;
   }
+
+  // modification methods
 
   /**
    * Adds a new participant
@@ -843,7 +836,8 @@ public class Event {
 
   /**
    * @param lecture the lecture to add
-   * @throws IllegalArgumentException if <strong>exactly</strong> this lecture is already being held
+   * @throws IllegalArgumentException if <strong>exactly</strong> this lecture is already being
+   *     held
    * @see Lecture
    */
   public void addLecture(Lecture lecture) {
@@ -878,27 +872,32 @@ public class Event {
     lectures.remove(lecture);
   }
 
-  // overridden from Object
-
   @Override
   public int hashCode() {
     return id.hashCode();
   }
 
+  // overridden from Object
+
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
+    if (this == obj) {
       return true;
-    if (obj == null)
+    }
+    if (obj == null) {
       return false;
-    if (!(obj instanceof Event))
+    }
+    if (!(obj instanceof Event)) {
       return false;
+    }
     Event other = (Event) obj;
     if (id == null) {
-      if (other.id != null)
+      if (other.id != null) {
         return false;
-    } else if (!id.equals(other.id))
+      }
+    } else if (!id.equals(other.id)) {
       return false;
+    }
     return true;
   }
 
@@ -907,5 +906,9 @@ public class Event {
     return "Event [id=" + id + ", name=" + name + ", startTime=" + startTime + ", endTime="
         + endTime + ", participantsCount=" + getParticipantsCount() + ", bookedOut=" + isBookedOut()
         + "]";
+  }
+
+  public enum EventStatus {
+    PLANNED, RUNNING, PAST, CANCELLED
   }
 }
