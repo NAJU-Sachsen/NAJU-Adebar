@@ -123,82 +123,9 @@
 
     <section id="events" class="tab-pane" role="tabpanel"
              th:if="${tab == 'events'}" th:classappend="${tab == 'events'} ? 'active'">
-      <h2>Veranstaltungs-Timeline</h2>
-
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-md-5 col-md-push-7">
-            <div class="row margin-btm">
-              <div class="col-md-5">
-                <button type="button" class="btn btn-primary">
-                  <span class="glyphicon glyphicon-plus"></span>
-                  Teilnahme hinzufügen
-                </button>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-5">
-                <div class="panel panel-default">
-                  <div class="panel-heading">
-                    <h3 class="panel-title">Springe zu:</h3>
-                  </div>
-                  <div class="list-group">
-                    <a href="#events-2018" class="list-group-item"><span
-                        class="glyphicon glyphicon-chevron-right"></span> 2018</a>
-                    <a href="#events-2017" class="list-group-item"><span
-                        class="glyphicon glyphicon-chevron-right"></span> 2017</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-7 col-md-pull-5">
-            <div class="row">
-              <p class="alert col-md-6">
-                <em>Jane Doe</em> hat an folgenden Veranstaltungen teilgenommen:
-              </p>
-            </div>
-            <div class="row">
-              <div id="event-participation-timeline" class="timeline">
-                <div class="timeline-group-wrapper">
-                  <div class="timeline-group">
-                    <h4 id="events-2018">2018</h4>
-                  </div>
-                </div>
-                <div class="timeline-entry-wrapper">
-                  <div class="timeline-entry">
-                    <span class="glyphicon glyphicon-road" data-toggle="tooltip"
-                          data-placement="bottom" title="zukünftige Veranstaltung!"></span>
-                    <a href="eventDetails.html">Paddelcamp</a> (07.-14.07.)
-                  </div>
-                </div>
-                <div class="timeline-entry-wrapper">
-                  <div class="timeline-entry">
-                    <span class="glyphicon"></span>
-                    <a href="eventDetails.html">Himmelfahrtscamp</a> (14.-19.05.)
-                  </div>
-                </div>
-                <div class="timeline-group-wrapper">
-                  <div class="timeline-group">
-                    <h4 id="events-2017">2017</h4>
-                  </div>
-                </div>
-                <div class="timeline-entry-wrapper">
-                  <div class="timeline-entry">
-                    <a href="eventDetails.html">Ideenwerkstatt</a> (21.-23.10.)
-                  </div>
-                </div>
-                <div class="timeline-entry-wrapper">
-                  <div class="timeline-entry">
-                    <a href="eventDetails.html">Bergwiesencamp</a> (25.07.-14.08.)
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
+      
+      <div th:replace="persons/events :: timeline"></div>
+      
     </section>
 
     <section id="newsletters" class="tab-pane" role="tabpanel"

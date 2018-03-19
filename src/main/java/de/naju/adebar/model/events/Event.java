@@ -1,6 +1,8 @@
 package de.naju.adebar.model.events;
 
 import de.naju.adebar.model.Address;
+import de.naju.adebar.model.chapter.LocalGroup;
+import de.naju.adebar.model.chapter.Project;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.persons.exceptions.NoActivistException;
 import de.naju.adebar.model.persons.exceptions.NoParticipantException;
@@ -23,6 +25,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -34,29 +37,40 @@ import org.springframework.util.Assert;
  * Abstraction of an event. It may be a regular camp or any other kind of event such as workshops or
  * presentations. Maybe there will be more precise classes for the different event-types one day..
  *
+ * <p> Events may be automatically sorted according to their start date, i.e. the event that takes
+ * place earlier is considered "less".
+ *
  * @author Rico Bergmann
  */
 @Entity(name = "event")
-public class Event {
+public class Event implements Comparable<Event> {
 
   private static final String START_TIME_AFTER_END_TIME = "Start time may not be after end time";
   private static final String PERSON_NOT_IN_TO_CONTACT_LIST =
       "Person is not registered as 'should be contacted': ";
+
   @EmbeddedId
   @Column(name = "id")
   private EventId id;
+
   @Column(name = "name")
   private String name;
+
   @Column(name = "startTime")
   private LocalDateTime startTime;
+
   @Column(name = "endTime")
   private LocalDateTime endTime;
+
   @Column(name = "minParticipantAge")
   private int minimumParticipantAge;
+
   @Column(name = "intParticipationFee")
   private Money internalParticipationFee;
+
   @Column(name = "extParticipationFee")
   private Money externalParticipationFee;
+
   @Embedded
   @AttributeOverrides({
       @AttributeOverride(name = "street", column = @Column(name = "locationStreet")),
@@ -64,22 +78,39 @@ public class Event {
       @AttributeOverride(name = "city", column = @Column(name = "locationCity")),
       @AttributeOverride(name = "additionalInfo", column = @Column(name = "locationHints"))})
   private Address place;
+
   @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinTable(name = "counselors", inverseJoinColumns = @JoinColumn(name = "counselorId"))
   private List<Person> counselors;
+
   @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinTable(name = "eventOrganizers", inverseJoinColumns = @JoinColumn(name = "organizerId"))
   private List<Person> organizers;
+
   @ElementCollection(fetch = FetchType.LAZY)
   @CollectionTable(name = "eventToContact", joinColumns = @JoinColumn(name = "eventId"))
   @MapKeyJoinColumn(name = "personId")
   @Column(name = "contactInfo")
   private Map<Person, String> personsToContact;
+
   @ElementCollection(fetch = FetchType.LAZY)
   private List<Lecture> lectures;
+
   @OneToOne(cascade = CascadeType.ALL)
   @PrimaryKeyJoinColumn
   private ParticipantsList participantsList;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinTable(name = "localGroupEvents", //
+      joinColumns = @JoinColumn(name = "eventId"), //
+      inverseJoinColumns = @JoinColumn(name = "localGroupId"))
+  private LocalGroup localGroup;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinTable(name = "projectEvents", //
+      joinColumns = @JoinColumn(name = "eventId"), //
+      inverseJoinColumns = @JoinColumn(name = "projectId"))
+  private Project project;
 
   /**
    * Simplified constructor initializing the most important data
@@ -198,7 +229,7 @@ public class Event {
    */
   @Transient
   public boolean isProspective() {
-    return LocalDateTime.now().isAfter(startTime);
+    return startTime.isAfter(LocalDateTime.now());
   }
 
   /**
@@ -872,12 +903,65 @@ public class Event {
     lectures.remove(lecture);
   }
 
+  /**
+   * @return the local group the event belongs to
+   */
+  public LocalGroup getLocalGroup() {
+    return localGroup;
+  }
+
+  /**
+   * @param localGroup the local group the event belongs to
+   */
+  private void setLocalGroup(LocalGroup localGroup) {
+    this.localGroup = localGroup;
+  }
+
+  /**
+   * @return whether the event belongs to a local group
+   */
+  @Transient
+  public boolean isForLocalGroup() {
+    return localGroup != null;
+  }
+
+  /**
+   * @return the project the event belongs to
+   */
+  public Project getProject() {
+    return project;
+  }
+
+  /**
+   * @param project the project the event belongs to
+   */
+  private void setProject(Project project) {
+    this.project = project;
+  }
+
+  /**
+   * @return whether the event belongs to a project
+   */
+  @Transient
+  public boolean isForProject() {
+    return project != null;
+  }
+
+  @Override
+  public int compareTo(Event other) {
+    int cmpStartTime = this.startTime.compareTo(other.startTime);
+
+    if (cmpStartTime != 0) {
+      return cmpStartTime;
+    }
+
+    return this.endTime.compareTo(other.endTime);
+  }
+
   @Override
   public int hashCode() {
     return id.hashCode();
   }
-
-  // overridden from Object
 
   @Override
   public boolean equals(Object obj) {
