@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta th:name="_csrf" th:value="${_csrf.token}"/>
+  <title>Jane Doe | Adebar</title>
+  <link rel="stylesheet" type="text/css" href="../../static/resources/css/bootstrap.min.css"
+        th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+
+  <link rel="stylesheet" type="text/css" href="../../static/resources/css/style.css"
+        th:href="@{/resources/css/style.css}"/>
+  <link rel="stylesheet" type="text/css" href="../../static/resources/css/personDetails.css"
+        th:href="@{/resources/css/personDetails.css}"/>
+</head>
+<body>
+
+<!-- central navigation -->
+<nav th:replace="navigation :: topNav(page='persons')"></nav>
+
+<!-- page specific content-->
+<main id="main">
+
+  <a href="persons.html">
+    <span class="glyphicon glyphicon-chevron-left"></span>
+    Zurück zur Übersicht
+  </a>
+
+  <h1>Profil von Jane Doe</h1>
+
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active">
+      <a href="#overview" class="tab-controller" aria-controls="general" role="tab"
+         data-toggle="tab">Allgemeine Infos</a>
+    </li>
+    <li role="presentation">
+      <a href="#activist-referent" class="tab-controller" aria-controls="activist-referent"
+         role="tab" data-toggle="tab">Aktiven + Referenteninfos</a>
+    </li>
+    <li role="presentation">
+      <a href="#events" class="tab-controller" aria-controls="events" role="tab" data-toggle="tab">Teilgenommene
+        Veranstaltungen</a>
+    </li>
+    <li role="presentation">
+      <a href="#newsletters" class="tab-controller" aria-controls="newsletters" role="tab"
+         data-toggle="tab">Newsletter</a>
+    </li>
+  </ul>
+
+  <article class="tab-content">
+
+    <!-- newsletters -->
+    <div id="overview" class="tab-pane active container-fluid" role="tabpanel">
+
+      <section id="newsletters" class="display-category">
+
+        <div th:fragment="newsletters">
+
+          <h2>Newsletter</h2>
+
+          <div class="container-fluid" th:if="${false}">
+            <div class="row">
+              <div class="col-md-10 col-md-offset-1">
+
+                <!-- subscription dialog -->
+                <div class="row clearfix margin-btm">
+                  <div class="pull-right">
+                    <button type="button" class="btn btn-default">Newsletter abonnieren</button>
+                  </div>
+                </div>
+
+                <!-- newsletter table -->
+                <div class="row margin-btm">
+                  <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                      <thead>
+                      <tr class="row">
+                        <th class="col-md-1">
+                      <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip"
+                            data-placement="bottom"
+                            data-title="Wähle hier Newsletter zum abbestellen aus"></span>
+                        </th>
+                        <th class="col-md-5">Name</th>
+                        <th class="col-md-4">Zugehörigkeit</th>
+                        <th class="col-md-2">Details</th>
+                      </tr>
+                      </thead>
+                      <tbody th:remove="all-but-first">
+                      <tr class="row" th:each="newsletter : ${subscribedNewsletters}">
+                        <td class="col-md-1">
+                          <input type="checkbox"/>
+                        </td>
+                        <td class="col-md-5" th:text="${newsletter.name}">NAJU Allgemein</td>
+                        <td class="col-md-4">
+                          <a href="localGroupDetails.html">NAJU Sachsen</a>
+                        </td>
+                        <td class="col-md-2">
+                          <a href="newsletterDetails.html">
+                            <span class="glyphicon glyphicon-new-window"></span>
+                          </a>
+                        </td>
+                      </tr>
+                      <tr class="row">
+                        <td class="col-md-1">
+                          <input type="checkbox"/>
+                        </td>
+                        <td class="col-md-5">Bergwiesen-Pflegeprojekte im Erzgebirge</td>
+                        <td class="col-md-4">
+                          <a href="localGroupDetails.html">NAJU Sachsen</a>
+                        </td>
+                        <td class="col-md-2">
+                          <a href="newsletterDetails.html">
+                            <span class="glyphicon glyphicon-new-window"></span>
+                          </a>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div class="row clearfix">
+                  <div class="pull-right">
+                    <button type="button" class="btn btn-danger"><em
+                        class="reset-style underline">42</em> Newsletter abbestellen
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="alert alert-info">
+            Bis auf Weiteres bitte die Funktionalität unter
+            <a th:href="@{/newsletters}">
+              <span class="glyphicon glyphicon-new-window"></span>
+              Newsletter
+            </a> nutzen.
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </article>
+
+</main>
+
+<form id="logout-user" method="POST" th:action="@{/logout}">
+  <input type="hidden" name="csrf" th:value="csrf"/>
+</form>
+
+<script type="text/javascript" src="../../static/resources/js/jquery.min.js"
+        th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript" src="../../static/resources/js/bootstrap.min.js"
+        th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script type="text/javascript" src="../../static/resources/js/bootstrap-select.min.js"
+        th:src="@{/resources/js/bootstrap-select.min.js}"></script>
+<script src="../../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
+<script src="../../static/resources/js/formControls.js"
+        th:src="@{/resources/js/formControls.js}"></script>
+<script src="../../static/resources/js/personDetails.js"
+        th:src="@{/resources/js/personDetails.js}"></script>
+</body>
+</html>
