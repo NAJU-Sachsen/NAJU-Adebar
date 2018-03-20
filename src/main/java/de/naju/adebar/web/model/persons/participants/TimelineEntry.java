@@ -1,4 +1,4 @@
-package de.naju.adebar.web.validation.persons.participant;
+package de.naju.adebar.web.model.persons.participants;
 
 import com.google.common.collect.Sets;
 import de.naju.adebar.model.events.Event;
@@ -11,7 +11,7 @@ import org.springframework.util.Assert;
 /**
  * Simple wrapper for a number of events taking place in the same year
  */
-public class TimelineEntry implements Comparable<TimelineEntry> {
+class TimelineEntry implements Comparable<TimelineEntry> {
 
   private Year year;
   private SortedSet<Event> events;

@@ -87,18 +87,6 @@ public class PersonController {
   }
 
   /**
-   * Renders the template to add new persons to the database
-   *
-   * @param model model to put the data to render into
-   * @return the add person template
-   */
-  @GetMapping("/persons/add")
-  public String showAddPersonView(Model model) {
-
-    return "persons/addPerson";
-  }
-
-  /**
    * Renders the template to filter persons
    *
    * @param model model to put the data to render into

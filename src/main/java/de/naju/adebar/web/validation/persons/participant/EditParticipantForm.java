@@ -3,6 +3,7 @@ package de.naju.adebar.web.validation.persons.participant;
 import de.naju.adebar.model.persons.details.Gender;
 import de.naju.adebar.model.persons.details.NabuMembershipInformation;
 import de.naju.adebar.model.persons.details.NabuMembershipInformation.MembershipStatus;
+import de.naju.adebar.web.validation.AbstractForm;
 import de.naju.adebar.web.validation.persons.EditPersonForm;
 import java.time.LocalDate;
 import org.hibernate.validator.constraints.Length;
@@ -13,7 +14,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  *
  * @author Rico Bergmann
  */
-public class EditParticipantForm {
+public class EditParticipantForm extends AbstractForm {
 
   /**
    * The maximum number of characters in the textarea-fields
@@ -179,6 +180,54 @@ public class EditParticipantForm {
    */
   public void setRemarks(String remarks) {
     this.remarks = remarks;
+  }
+
+  /**
+   * @return whether the form contains information about the person's gender
+   */
+  public boolean hasGender() {
+    return gender != null;
+  }
+
+  /**
+   * @return whether the form contains information about the person's date of birth
+   */
+  public boolean hasDateOfBirth() {
+    return dateOfBirth != null;
+  }
+
+  /**
+   * @return whether the form contains information about the person's eating habits
+   */
+  public boolean hasEatingHabits() {
+    return eatingHabits != null && !eatingHabits.isEmpty();
+  }
+
+  /**
+   * @return whether the form contains information about health impairments of the person
+   */
+  public boolean hasHealthImpairments() {
+    return healthImpairments != null && !healthImpairments.isEmpty();
+  }
+
+  /**
+   * @return whether the form contains information about the person's nabu membership
+   */
+  public boolean hasNabuMembershipInformation() {
+    return nabuMember != null;
+  }
+
+  /**
+   * @return whether the person contains additional remarks
+   */
+  public boolean hasRemarks() {
+    return remarks != null && !remarks.isEmpty();
+  }
+
+  @Override
+  public boolean hasData() {
+    return hasGender() || hasDateOfBirth() || hasEatingHabits() || hasHealthImpairments()
+        || hasNabuMembershipInformation() || hasRemarks();
   }
 
   @Override

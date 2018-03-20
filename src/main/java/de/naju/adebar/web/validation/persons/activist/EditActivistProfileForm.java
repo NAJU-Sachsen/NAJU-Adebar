@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
- * POJO representation of the information inside an {@link EditActivistProfileForm}
+ * POJO representation of the information inside the 'edit activist' form
  *
  * @author Rico Bergmann
  */

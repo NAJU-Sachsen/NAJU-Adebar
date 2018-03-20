@@ -6,7 +6,7 @@ import de.naju.adebar.model.events.Event;
 import de.naju.adebar.model.events.EventRepository;
 import de.naju.adebar.model.events.QEvent;
 import de.naju.adebar.model.persons.Person;
-import de.naju.adebar.web.validation.persons.participant.ParticipationTimeline;
+import de.naju.adebar.web.model.persons.participants.ParticipationTimeline;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;

@@ -36,7 +36,7 @@ public interface ReadOnlyEventRepository extends //
    * @param time the time to query for
    * @return all events which start after the specified time
    */
-  Iterable<Event> findByStartTimeIsAfter(LocalDateTime time);
+  List<Event> findByStartTimeIsAfter(LocalDateTime time);
 
   /**
    * @param time the time to query for

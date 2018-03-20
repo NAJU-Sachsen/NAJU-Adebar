@@ -1,15 +1,17 @@
 package de.naju.adebar.infrastructure.config;
 
 import de.naju.adebar.infrastructure.config.security.WebSecurityConfiguration;
+import de.naju.adebar.model.chapter.ReadOnlyLocalGroupRepository;
 import de.naju.adebar.model.events.ReadOnlyEventRepository;
 import de.naju.adebar.model.persons.ReadOnlyPersonRepository;
+import de.naju.adebar.services.conversion.chapter.LocalGroupConverter;
 import de.naju.adebar.services.conversion.core.EmailConverter;
 import de.naju.adebar.services.conversion.core.PhoneNumberConverter;
 import de.naju.adebar.services.conversion.events.EventConverter;
 import de.naju.adebar.services.conversion.persons.PersonConverter;
+import de.naju.adebar.util.Assert2;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
-import org.springframework.util.Assert;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -26,12 +28,14 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 
   private final ReadOnlyPersonRepository personRepo;
   private final ReadOnlyEventRepository eventRepo;
+  private final ReadOnlyLocalGroupRepository localGroupRepo;
 
-  public WebConfiguration(ReadOnlyPersonRepository personRepo, ReadOnlyEventRepository eventRepo) {
-    Assert.notNull(personRepo, "Person repository may not be null");
-    Assert.notNull(eventRepo, "Event repository may not be null");
+  public WebConfiguration(ReadOnlyPersonRepository personRepo, ReadOnlyEventRepository eventRepo,
+      ReadOnlyLocalGroupRepository localGroupRepo) {
+    Assert2.noNullArguments("No parameter may be null", personRepo, eventRepo, localGroupRepo);
     this.personRepo = personRepo;
     this.eventRepo = eventRepo;
+    this.localGroupRepo = localGroupRepo;
   }
 
   /**
@@ -49,6 +53,7 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
   public void addFormatters(FormatterRegistry registry) {
     registry.addConverter(new PersonConverter(personRepo));
     registry.addConverter(new EventConverter(eventRepo));
+    registry.addConverter(new LocalGroupConverter(localGroupRepo));
     registry.addConverter(new EmailConverter());
     registry.addConverter(new PhoneNumberConverter());
   }

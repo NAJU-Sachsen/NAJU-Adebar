@@ -1,4 +1,4 @@
-package de.naju.adebar.web.validation.persons.participant;
+package de.naju.adebar.web.model.persons.participants;
 
 import de.naju.adebar.model.events.Event;
 import de.naju.adebar.model.persons.Person;
