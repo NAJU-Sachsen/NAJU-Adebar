@@ -1,3 +1,18 @@
+function propagateClick(target) {
+  $(target, this).trigger('click');
+}
+
+function initPropagationNodes() {
+  $('.propagate-click').click(function (event) {
+    if (event.target.tagName.toLowerCase() === 'input') {
+      return;
+    }
+    const elem = $(event.target).closest('.propagate-click');
+    const target = elem.data('propagation-target');
+    propagateClick(elem.find(target));
+  });
+}
+
 function updateInputs(category, active) {
   if (category.hasClass('toggle-category')) {
     const toggleOption = active ? 'show' : 'hide';
@@ -129,5 +144,6 @@ function initControlledInputs() {
       initCategory(category);
     });
     initControlledInputs();
+    initPropagationNodes();
   });
 })();
