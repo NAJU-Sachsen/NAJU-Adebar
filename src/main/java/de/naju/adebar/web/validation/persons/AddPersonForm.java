@@ -26,8 +26,8 @@ public class AddPersonForm {
   @NotEmpty
   private String lastName;
 
-  private Email email;
-  private PhoneNumber phone;
+  private String email;
+  private String phone;
   private AddressForm address;
   private boolean activist;
   private AddActivistForm activistForm;
@@ -49,8 +49,8 @@ public class AddPersonForm {
       PhoneNumber phone, AddressForm address) {
     this.firstName = firstName;
     this.lastName = lastName;
-    this.email = email;
-    this.phone = phone;
+    this.email = email.getValue();
+    this.phone = phone.getValue();
     this.address = address;
   }
 
@@ -91,28 +91,28 @@ public class AddPersonForm {
   /**
    * @return the person's email address
    */
-  public Email getEmail() {
+  public String getEmail() {
     return email;
   }
 
   /**
    * @param email the person's email address
    */
-  public void setEmail(Email email) {
+  public void setEmail(String email) {
     this.email = email;
   }
 
   /**
    * @return the person's phone number
    */
-  public PhoneNumber getPhone() {
+  public String getPhone() {
     return phone;
   }
 
   /**
    * @param phone the person's phone number
    */
-  public void setPhone(PhoneNumber phone) {
+  public void setPhone(String phone) {
     this.phone = phone;
   }
 
@@ -155,7 +155,6 @@ public class AddPersonForm {
    * @param activistForm the activist-related data
    */
   public void setActivistForm(AddActivistForm activistForm) {
-    this.activist = activistForm != null;
     this.activistForm = activistForm;
   }
 
@@ -184,7 +183,6 @@ public class AddPersonForm {
    * @param participantForm the participation-related data
    */
   public void setParticipantForm(AddParticipantForm participantForm) {
-    this.participant = participantForm != null;
     this.participantForm = participantForm;
   }
 
@@ -213,7 +211,6 @@ public class AddPersonForm {
    * @param referentForm the referent-related data
    */
   public void setReferentForm(AddReferentForm referentForm) {
-    this.referent = referentForm != null;
     this.referentForm = referentForm;
   }
 

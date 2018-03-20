@@ -31,7 +31,7 @@
 <nav th:replace="navigation :: topNav(page='persons')"></nav>
 
 <!-- page specific content-->
-<main id="main">
+<main id="main" th:object="${form}">
 
   <div class="modal fade" id="confirm-abort" tabindex="-1" role="document">
     <div class="modal-dialog" role="document">
@@ -56,6 +56,9 @@
       <h1>Neue Person hinzufügen</h1>
     </div>
     <div class="col-md-8 clearfix">
+      <div class="alert alert-warning pull-left" th:if="${#fields.hasAnyErrors()}">
+        Einige Eingaben sind ungültig, bitte überprüfe und korrigiere sie!
+      </div>
       <div class="pull-right">
         <button type="button" class="btn btn-default" data-toggle="modal"
                 data-target="#confirm-abort">Abbrechen
@@ -66,8 +69,7 @@
   </div>
 
   <!-- the form -->
-  <form id="add-person" class="row display-category" method="post" th:action="@{/persons/add}"
-        th:object="${form}">
+  <form id="add-person" class="row display-category" method="post" th:action="@{/persons/add}">
 
     <!-- general info -->
     <div class="col-md-4">
@@ -76,53 +78,84 @@
           <h2 class="panel-title">Allgemein</h2>
         </div>
         <div class="panel-body">
-          <div class="form-group">
+          <div class="form-group" th:classappend="${#fields.hasErrors('firstName')} ? 'has-error'">
             <label for="first-name" class="control-label">Vorname</label>
             <input type="text" class="form-control" id="first-name" required="required"
                    placeholder="erforderlich" th:field="*{firstName}"/>
+            <p class="help-block" th:if="${#fields.hasErrors('firstName')}"
+               th:errors="*{firstName}">
+              Erforderlich
+            </p>
           </div>
-          <div class="form-group">
+          <div class="form-group" th:classappend="${#fields.hasErrors('lastName')} ? 'has-error'">
             <label for="last-name" class="control-label">Nachname</label>
             <input type="text" class="form-control" id="last-name" required="required"
                    placeholder="erforderlich" th:field="*{lastName}"/>
+            <p class="help-block" th:if="${#fields.hasErrors('lastName')}"
+               th:errors="*{lastName}">
+              Erforderlich
+            </p>
           </div>
-          <div class="form-group">
+          <div class="form-group" th:classappend="${#fields.hasErrors('email')} ? 'has-error'">
             <label for="email" class="control-label">E-Mail</label>
             <div class="input-group">
               <input type="email" class="form-control" id="email" th:field="*{email}"/>
               <span class="input-group-addon">optional</span>
             </div>
+            <p class="help-block" th:if="${#fields.hasErrors('email')}"
+               th:errors="*{email}">
+              Keine gültige E-Mail Adresse
+            </p>
           </div>
-          <div class="form-group">
+          <div class="form-group" th:classappend="${#fields.hasErrors('phone')} ? 'has-error'">
             <label for="phone" class="control-label">Telefon</label>
             <div class="input-group">
               <input type="tel" class="form-control" id="phone"
                      placeholder="Bitte als '0123 45678901' eingeben" th:field="*{phone}"/>
               <span class="input-group-addon">optional</span>
             </div>
+            <p class="help-block" th:if="${#fields.hasErrors('phone')}"
+               th:errors="*{phone}">
+              Keine gültige Telefonnummer
+            </p>
           </div>
           <hr/>
-          <div class="form-group">
+          <div class="form-group"
+               th:classappend="${#fields.hasErrors('address.street')} ? 'has-error'">
             <label for="address_street" class="control-label">Straße</label>
             <div class="input-group">
               <input type="text" class="form-control" id="address_street"
                      th:field="*{address.street}"/>
               <span class="input-group-addon">optional</span>
             </div>
+            <p class="help-block" th:if="${#fields.hasErrors('address.street')}"
+               th:errors="*{address.street}">
+              Ungültige Eingabe
+            </p>
           </div>
-          <div class="form-group">
+          <div class="form-group"
+               th:classappend="${#fields.hasErrors('address.zip')} ? 'has-error'">
             <label for="address_zip" class="control-label">PLZ</label>
             <div class="input-group">
               <input type="text" class="form-control" id="address_zip" th:field="*{address.zip}"/>
               <span class="input-group-addon">optional</span>
             </div>
+            <p class="help-block" th:if="${#fields.hasErrors('address.zip')}"
+               th:errors="*{address.zip}">
+              Ungültige Eingabe
+            </p>
           </div>
-          <div class="form-group">
+          <div class="form-group"
+               th:classappend="${#fields.hasErrors('address.city')} ? 'has-error'">
             <label for="address_city" class="control-label">Stadt</label>
             <div class="input-group">
               <input type="text" class="form-control" id="address_city" th:field="*{address.city}"/>
               <span class="input-group-addon">optional</span>
             </div>
+            <p class="help-block" th:if="${#fields.hasErrors('address.city')}"
+               th:errors="*{address.city}">
+              Ungültige Eingabe
+            </p>
           </div>
         </div>
       </div>
@@ -139,7 +172,8 @@
           <h2 class="hidden">Teilnahme-Profil</h2>
         </div>
         <div class="panel-body form-category-content">
-          <div class="form-group">
+          <div class="form-group"
+               th:classappend="${#fields.hasErrors('participantForm.gender')} ? 'has-error'">
             <label for="gender" class="control-label">Geschlecht</label>
             <fieldset id="gender" class="radio">
               <label>
@@ -152,15 +186,26 @@
                 <input type="radio" value="OTHER" th:field="*{participantForm.gender}"/> anderes
               </label>
             </fieldset>
+            <p class="help-block" th:if="${#fields.hasErrors('participantForm.gender')}"
+               th:errors="*{participantForm.gender}">
+              Ungültige Eingabe
+            </p>
           </div>
-          <div class="form-group">
+          <div class="form-group"
+               th:classappend="${#fields.hasErrors('participantForm.dateOfBirth')} ? 'has-error'">
             <label for="date-of-birth" class="control-label">Geburtsdatum</label>
             <input type="date" class="form-control" id="date-of-birth"
                    th:field="*{participantForm.dateOfBirth}"/>
+            <p class="help-block" th:if="${#fields.hasErrors('participantForm.dateOfBirth')}"
+               th:errors="*{participantForm.dateOfBirth}">
+              Ungültige Eingabe
+            </p>
           </div>
-          <div class="form-group">
+          <div class="form-group"
+               th:classappend="${#fields.hasErrors('participantForm.eatingHabits')} ? 'has-error'">
             <label for="eating-habits" class="control-label">Ernährung</label>
-            <div id="eating-habits-default-display">
+            <div id="eating-habits-default-display"
+                 th:unless="${#fields.hasErrors('participantForm.eatingHabits')}">
               <div>
                 <select class="selectpicker" id="eating-habits-select" data-width="auto">
                   <option value="" selected="selected">konventionell</option>
@@ -172,23 +217,34 @@
                       data-target="#eating-habits-container">Weitere Ernährungsarten/-hinweise
               </button>
             </div>
-            <div class="collapse" id="eating-habits-container">
+            <div class="collapse" id="eating-habits-container"
+                 th:class="${#fields.hasErrors('participantForm.eatingHabits')} ? '' : 'collapse'">
               <textarea class="form-control" id="eating-habits"
                         placeholder="vegetarisch, vegan o.ä. Unverträglichkeiten, ..."
                         th:field="*{participantForm.eatingHabits}"></textarea>
             </div>
+            <p class="help-block" th:if="${#fields.hasErrors('participantForm.eatingHabits')}"
+               th:errors="*{participantForm.eatingHabits}">
+              Ungültige Eingabe
+            </p>
           </div>
-          <div class="form-group">
+          <div class="form-group"
+               th:classappend="${#fields.hasErrors('participantForm.healthImpairments')} ? 'has-error'">
             <label for="health-impairments" class="control-label">Allergien o.ä.</label>
             <textarea class="form-control" id="health-impairments"
                       placeholder="Heuschnupfen, o.ä."
                       th:field="*{participantForm.healthImpairments}"></textarea>
+            <p class="help-block" th:if="${#fields.hasErrors('participantForm.healthImpairments')}"
+               th:errors="*{participantForm.healthImpairments}">
+              Ungültige Eingabe
+            </p>
           </div>
           <p class="help-block">
             Allergien, die sich auf die Ernährung der/des Teilnehmenden beziehen bitte unter
             "Ernährung" eintragen.
           </p>
-          <div class="form-group">
+          <div class="form-group"
+               th:classappend="${#fields.hasErrors('participantForm.nabuMember') or #fields.hasErrors('participantForm.nabuMembershipNumber')} ? 'has-error'">
             <label for="nabu-membership" class="control-label">NABU-Mitgliedschaft</label>
             <div class="input-group">
               <select class="selectpicker" data-width="auto"
@@ -202,15 +258,30 @@
                      placeholder="Mitgliedsnummer" data-controlled-by="#nabu-membership-toggler"
                      th:field="*{participantForm.nabuMembershipNumber}"/>
             </div>
+            <p class="help-block" th:if="${#fields.hasErrors('participantForm.nabuMember')}"
+               th:errors="*{participantForm.nabuMember}">
+              Ungültige Eingabe
+            </p>
+            <p class="help-block"
+               th:if="${#fields.hasErrors('participantForm.nabuMembershipNumber')}"
+               th:errors="*{participantForm.nabuMembershipNumber}">
+              Ungültige Eingabe
+            </p>
           </div>
           <hr/>
-          <div class="form-group">
+          <div class="form-group"
+               th:classappend="${#fields.hasErrors('participantForm.remarks')} ? 'has-error'">
             <label for="remarks" class="control-label">Bemerkungen</label>
             <textarea class="form-control" id="remarks"
                       th:field="*{participantForm.remarks}"></textarea>
+            <p class="help-block" th:if="${#fields.hasErrors('participantForm.remarks')}"
+               th:errors="*{participantForm.remarks}">
+              Ungültige Eingabe
+            </p>
           </div>
           <hr/>
-          <div class="form-group">
+          <div class="form-group"
+               th:classappend="${#fields.hasErrors('participantForm.events')} ? 'has-error'">
             <label for="events" class="control-label">Veranstaltungen</label>
             <div>
               <select class="selectpicker" id="events" multiple="multiple" data-live-search="true"
@@ -233,6 +304,10 @@
                 </optgroup>
               </select>
             </div>
+            <p class="help-block" th:if="${#fields.hasErrors('participantForm.events')}"
+               th:errors="*{participantForm.events}">
+              Ungültige Eingabe
+            </p>
           </div>
         </div>
       </div>
@@ -254,21 +329,35 @@
                 <h2 class="hidden">Aktiven-Details</h2>
               </div>
               <div class="panel-body form-category-content">
-                <div class="form-group">
+                <div class="form-group"
+                     th:classappend="${#fields.hasErrors('activistForm.juleica')} ? 'has-error'">
                   <label for="juleica-card" class="control-label">Juleica</label>
                   <div class="checkbox">
-                    <label><input type="checkbox" id="juleica-toggler"
-                                  th:field="*{activistForm.juleica}"/> die Person hat eine
-                      Juleica</label>
+                    <label>
+                      <input type="checkbox" id="juleica-toggler"
+                             th:field="*{activistForm.juleica}"/>
+                      die Person hat eine Juleica
+                    </label>
                   </div>
+                  <p class="help-block" th:if="${#fields.hasErrors('activistForm.juleica')}"
+                     th:errors="*{activistForm.juleica}">
+                    Ungültige Eingabe
+                  </p>
                 </div>
-                <div class="form-group">
+                <div class="form-group"
+                     th:classappend="${#fields.hasErrors('activistForm.juleicaExpiryDate')} ? 'has-error'">
                   <label for="juleica-card" class="control-label">Ablaufdatum</label>
                   <input type="date" class="form-control" id="juleica-card"
                          data-controlled-by="#juleica-toggler"
                          th:field="*{activistForm.juleicaExpiryDate}"/>
+                  <p class="help-block"
+                     th:if="${#fields.hasErrors('activistForm.juleicaExpiryDate')}"
+                     th:errors="*{activistForm.juleicaExpiryDate}">
+                    Ungültige Eingabe
+                  </p>
                 </div>
-                <div class="form-group">
+                <div class="form-group"
+                     th:classappend="${#fields.hasErrors('activistForm.juleicaLevel')} ? 'has-error'">
                   <label for="juleica-level" class="control-label">Stufe</label>
                   <fieldset id="juleica-level">
                     <div class="radio">
@@ -284,9 +373,14 @@
                       </label>
                     </div>
                   </fieldset>
+                  <p class="help-block" th:if="${#fields.hasErrors('activistForm.juleicaLevel')}"
+                     th:errors="*{activistForm.juleicaLevel}">
+                    Ungültige Eingabe
+                  </p>
                 </div>
                 <hr/>
-                <div class="form-group">
+                <div class="form-group"
+                     th:classappend="${#fields.hasErrors('activistForm.localGroups')} ? 'has-error'">
                   <label for="local-groups" class="control-label">Ortsgruppen</label>
                   <div>
                     <select class="selectpicker" id="local-groups" multiple="multiple"
@@ -300,6 +394,10 @@
                       <option>NAJU Freiberg</option>
                     </select>
                   </div>
+                  <p class="help-block" th:if="${#fields.hasErrors('activistForm.localGroups')}"
+                     th:errors="*{activistForm.localGroups}">
+                    Ungültige Eingabe
+                  </p>
                 </div>
               </div>
             </div>
@@ -327,7 +425,8 @@
                     <span class="input-group-addon">z.Z. noch nicht unterstützt 😣</span>
                   </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group"
+                     th:classappend="${#fields.hasErrors('referentForm.qualifications')} ? 'has-error'">
                   <label for="qualifications" class="control-label">Qualifikationen</label>
                   <div>
                     <select class="selectpicker" id="qualifications" multiple="multiple"
@@ -346,6 +445,11 @@
                       <option>Mammalogie</option>
                       <option>Botanik</option>
                     </select>
+                    <p class="help-block"
+                       th:if="${#fields.hasErrors('referentForm.qualifications')}"
+                       th:errors="*{referentForm.qualifications}">
+                      Ungültige Eingabe
+                    </p>
                   </div>
                   <p class="help-block">
                     Neue Qualifikationen können im Referent*innen-Profil jederzeit hinzugefügt

@@ -5,9 +5,9 @@ import de.naju.adebar.documentation.ddd.BusinessRule;
 import de.naju.adebar.model.persons.ParticipantProfile;
 import de.naju.adebar.model.persons.details.NabuMembershipInformation;
 import de.naju.adebar.web.validation.ValidatingEntityFormConverter;
-import java.time.Duration;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
+import java.time.Period;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 
@@ -42,12 +42,12 @@ public class EditParticipantFormConverter implements
   }
 
   @Override
-  public boolean supports(Class<?> clazz) {
-    return EditParticipantForm.class.equals(clazz);
+  public boolean supports(@NonNull Class<?> clazz) {
+    return EditParticipantForm.class.isAssignableFrom(clazz);
   }
 
   @Override
-  public void validate(Object target, Errors errors) {
+  public void validate(Object target, @NonNull Errors errors) {
     if (!supports(target.getClass())) {
       throw new IllegalArgumentException(
           "Validation is not supported for instances of " + target.getClass());
@@ -146,10 +146,10 @@ public class EditParticipantFormConverter implements
     }
 
     LocalDate now = LocalDate.now();
-    Duration timeDifference = Duration.between(form.getDateOfBirth(), now);
+    Period timeDifference = Period.between(form.getDateOfBirth(), now);
 
     // if the person is of legal age, no gender is needed
-    if (timeDifference.get(ChronoUnit.YEARS) >= ParticipantProfile.LEGAL_AGE) {
+    if (timeDifference.getYears() >= ParticipantProfile.LEGAL_AGE) {
       return true;
     }
 

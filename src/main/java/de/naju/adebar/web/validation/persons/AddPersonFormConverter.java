@@ -1,9 +1,12 @@
 package de.naju.adebar.web.validation.persons;
 
 import com.google.common.collect.Lists;
+import de.naju.adebar.model.Email;
+import de.naju.adebar.model.PhoneNumber;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.persons.PersonFactory;
 import de.naju.adebar.model.persons.PersonFactory.PersonBuilder;
+import de.naju.adebar.util.Validation;
 import de.naju.adebar.web.validation.ValidatingEntityFormConverter;
 import de.naju.adebar.web.validation.core.AddressForm;
 import de.naju.adebar.web.validation.core.AddressFormConverter;
@@ -65,7 +68,9 @@ public class AddPersonFormConverter implements
       return false;
     }
 
-    return addressFormIsValid(form) //
+    return emailIsValid(form) //
+        && phoneIsValid(form) //   
+        && addressFormIsValid(form) //
         && activistFormIsValid(form) //
         && participantFormIsValid(form) //
         && referentFormIsValid(form);
@@ -77,9 +82,12 @@ public class AddPersonFormConverter implements
       throw new IllegalArgumentException("Form is invalid: " + form);
     }
 
+    Email email = generateEmail(form);
+    PhoneNumber phone = generatePhoneNumber(form);
+
     PersonBuilder builder = personFactory
-        .buildNew(form.getFirstName(), form.getLastName(), form.getEmail());
-    builder.specifyPhoneNumber(form.getPhone());
+        .buildNew(form.getFirstName(), form.getLastName(), email);
+    builder.specifyPhoneNumber(phone);
     builder.specifyAddress(addressFormConverter.toEntity(form.getAddress()));
 
     Person person = builder.create();
@@ -134,10 +142,51 @@ public class AddPersonFormConverter implements
     ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastName", "field.required");
 
     AddPersonForm form = (AddPersonForm) target;
-    validateAddressForm(form, errors);
-    validateActivistForm(form, errors);
-    validateParticipantForm(form, errors);
-    validateReferentForm(form, errors);
+    validateEmail(form, errors);
+    validatePhone(form, errors);
+
+    if (form.getAddress() != null) {
+      validateAddressForm(form, errors);
+    }
+
+    if (form.isActivist()) {
+      validateActivistForm(form, errors);
+    }
+
+    if (form.isParticipant()) {
+      validateParticipantForm(form, errors);
+    }
+
+    if (form.isReferent()) {
+      validateReferentForm(form, errors);
+    }
+
+  }
+
+  private Email generateEmail(AddPersonForm form) {
+    if (form.getEmail() == null || form.getEmail().isEmpty()) {
+      return null;
+    }
+    return Email.of(form.getEmail());
+  }
+
+  private PhoneNumber generatePhoneNumber(AddPersonForm form) {
+    if (form.getPhone() == null || form.getPhone().isEmpty()) {
+      return null;
+    }
+    return PhoneNumber.of(form.getPhone());
+  }
+
+  private void validateEmail(AddPersonForm form, Errors errors) {
+    if (!emailIsValid(form)) {
+      errors.rejectValue("email", "email.invalid");
+    }
+  }
+
+  private void validatePhone(AddPersonForm form, Errors errors) {
+    if (!phoneIsValid(form)) {
+      errors.rejectValue("phone", "phone.invalid");
+    }
   }
 
   /**
@@ -163,7 +212,7 @@ public class AddPersonFormConverter implements
    */
   private void validateActivistForm(AddPersonForm form, Errors errors) {
     try {
-      errors.pushNestedPath("activist");
+      errors.pushNestedPath("activistForm");
       ValidationUtils.invokeValidator(activistFormConverter, form.getActivistForm(), errors);
     } finally {
       errors.popNestedPath();
@@ -178,7 +227,7 @@ public class AddPersonFormConverter implements
    */
   private void validateParticipantForm(AddPersonForm form, Errors errors) {
     try {
-      errors.pushNestedPath("participant");
+      errors.pushNestedPath("participantForm");
       ValidationUtils.invokeValidator(participantFormConverter, form.getParticipantForm(), errors);
     } finally {
       errors.popNestedPath();
@@ -193,11 +242,23 @@ public class AddPersonFormConverter implements
    */
   private void validateReferentForm(AddPersonForm form, Errors errors) {
     try {
-      errors.pushNestedPath("referent");
+      errors.pushNestedPath("referentForm");
       ValidationUtils.invokeValidator(referentFormConverter, form.getReferentForm(), errors);
     } finally {
       errors.popNestedPath();
     }
+  }
+
+  private boolean emailIsValid(AddPersonForm form) {
+    return form.getEmail() == null //
+        || form.getEmail().isEmpty() //
+        || Validation.isEmail(form.getEmail());
+  }
+
+  private boolean phoneIsValid(AddPersonForm form) {
+    return form.getPhone() == null //
+        || form.getPhone().isEmpty() //
+        || Validation.isPhoneNumber(form.getPhone());
   }
 
   /**

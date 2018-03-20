@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  * Handles the creation of new person instances from the 'add person' template
@@ -91,7 +92,7 @@ public class AddPersonController {
   @PostMapping("/persons/add")
   @Transactional
   public String addPerson(@ModelAttribute("form") @Valid AddPersonForm form, Errors errors,
-      Model model) {
+      Model model, RedirectAttributes redirAttr) {
 
     if (errors.hasErrors()) {
       model.addAttribute("form", form);
@@ -111,7 +112,7 @@ public class AddPersonController {
    *
    * @param binder the binder
    */
-  @InitBinder("addPersonForm")
+  @InitBinder("form")
   protected void initBinders(WebDataBinder binder) {
     binder.addValidators(personFormConverter);
   }
