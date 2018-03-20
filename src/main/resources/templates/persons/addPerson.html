@@ -33,6 +33,7 @@
 <!-- page specific content-->
 <main id="main" th:object="${form}">
 
+  <!-- cancel confirmation dialog -->
   <div class="modal fade" id="confirm-abort" tabindex="-1" role="document">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -51,6 +52,91 @@
     </div>
   </div>
 
+  <!-- similar persons dialog -->
+  <div class="modal fade" id="similar-persons" tabindex="-1" role="dialog"
+       th:if="${similarPersons}">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Ähnliche Personen</h2>
+        </div>
+        <div class="modal-body">
+          <p>
+            Es existieren bereits Personen mit einem ähnlichen Namen in der Datenbank, bitte
+            überprüfe, ob die Person vielleicht schon existiert:
+          </p>
+
+          <div class="panel panel-default" th:each="person : ${similarPersons}">
+            <div class="panel-heading">
+              <h3 class="panel-title" th:inline="text">
+                [[${person.name}]]
+                <span class="glyphicon glyphicon-tent" data-toggle="tooltip"
+                      data-placement="bottom"
+                      data-title="Campteilnehmer*in"
+                      th:if="${person.participant}"></span>
+                <span class="glyphicon glyphicon-wrench" data-toggle="tooltip"
+                      data-placement="bottom"
+                      data-title="Aktive*r" th:if="${person.activist}"></span>
+                <span class="glyphicon glyphicon-blackboard" data-toggle="tooltip"
+                      data-placement="bottom" data-title="Referent*in" data-container="body"
+                      th:if="${person.referent}"></span>
+                <span class="glyphicon glyphicon-briefcase" data-toggle="tooltip"
+                      data-placement="bottom" data-title="Geschäftskontakt" th:if="false"></span>
+                <span class="glyphicon glyphicon-baby-formula" data-toggle="tooltip"
+                      data-placement="bottom" data-title="Elternteil"
+                      th:if="false"></span>
+              </h3>
+            </div>
+            <table class="table">
+              <thead></thead>
+              <tbody>
+              <tr class="row">
+                <th class="col-md-4">E-Mail</th>
+                <td class="col-md-8">
+                  <a href="mailto:maxie.muster@web.de" th:href="|mailto:${person.email}|"
+                     th:if="${person.email}">
+                    maxie.muster@web.de
+                  </a>
+                  <span th:unless="${person.email}">keine Angabe</span>
+                </td>
+              </tr>
+              <tr class="row">
+                <th class="col-md-4">Telefon</th>
+                <td class="col-md-8" th:text="${person.phoneNumber} ?: 'keine Angabe'">
+                  0123 4567890
+                </td>
+              </tr>
+              <tr class="row">
+                <th class="col-md-4">Stadt</th>
+                <td class="col-md-8"
+                    th:text="${person.address != null and not person.address.city.isEmpty()} ? ${person.address.city} : 'keine Angabe'">
+                  Entenhausen
+                </td>
+              </tr>
+              </tbody>
+            </table>
+            <div class="panel-footer">
+              <a href="personDetails.html" th:href="@{/persons/{id}(id=${person.id})}">
+                <span class="glyphicon glyphicon-new-window"></span>
+                Zum Profil <strong>(Daten werden verworfen)</strong>
+              </a>
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <a href="overview.html" class="btn btn-default" th:href="@{/persons}">OK, zurück zur
+            Personen-Übersicht
+          </a>
+          <button type="submit" form="add-person" class="btn btn-primary">
+            Ja, wirklich hinzufügen
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- controls -->
   <div class="row display-category">
     <div class="col-md-4">
       <h1>Neue Person hinzufügen</h1>
@@ -466,6 +552,7 @@
 
   </form>
 
+  <!-- controls -->
   <div class="row display-category">
     <div class="pull-right">
       <button type="button" class="btn btn-default" data-toggle="modal"
@@ -486,5 +573,10 @@
         th:src="@{/resources/js/formControls.js}"></script>
 <script src="../../static/resources/js/addPerson.js"
         th:src="@{/resources/js/addPerson.js}"></script>
+
+<script type="text/javascript" th:if="${similarPersons}">
+  $('#similar-persons').modal('show');
+</script>
+
 </body>
 </html>

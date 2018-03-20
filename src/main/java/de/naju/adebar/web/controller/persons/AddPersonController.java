@@ -1,9 +1,11 @@
 package de.naju.adebar.web.controller.persons;
 
+import com.querydsl.core.BooleanBuilder;
 import de.naju.adebar.model.chapter.LocalGroupRepository;
 import de.naju.adebar.model.events.EventRepository;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.persons.PersonRepository;
+import de.naju.adebar.model.persons.QPerson;
 import de.naju.adebar.model.persons.qualifications.QualificationRepository;
 import de.naju.adebar.util.Assert2;
 import de.naju.adebar.web.model.persons.participants.EventCollection;
@@ -11,6 +13,7 @@ import de.naju.adebar.web.model.persons.participants.EventCollection.EventCollec
 import de.naju.adebar.web.validation.persons.AddPersonForm;
 import de.naju.adebar.web.validation.persons.AddPersonFormConverter;
 import java.time.LocalDateTime;
+import java.util.List;
 import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +34,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class AddPersonController {
 
+  private static final QPerson person = QPerson.person;
   private final PersonRepository personRepo;
   private final EventRepository eventRepo;
   private final LocalGroupRepository localGroupRepo;
@@ -94,12 +98,23 @@ public class AddPersonController {
   public String addPerson(@ModelAttribute("form") @Valid AddPersonForm form, Errors errors,
       Model model, RedirectAttributes redirAttr) {
 
+    // check n° 1: form has no errors
     if (errors.hasErrors()) {
       model.addAttribute("form", form);
       return showAddPersonView(model);
     }
 
     Person person = personFormConverter.toEntity(form);
+
+    // check n° 2: there are no similar persons yet
+    List<Person> similarPersons = checkForSimilarPersons(person);
+    if (!similarPersons.isEmpty()) {
+      model.addAttribute("similarPersons", similarPersons);
+      model.addAttribute("form", form);
+      return showAddPersonView(model);
+    }
+
+    // everything seems fine, finish saving the new person
     addToEventsIfNecessary(person, form);
     addToLocalGroupsIfNecessary(person, form);
     personRepo.save(person);
@@ -167,6 +182,20 @@ public class AddPersonController {
           }
         });
     return builder.done();
+  }
+
+  /**
+   * Searches for persons with a similar name like the given one
+   *
+   * @param newPerson the person to compare
+   * @return all persons with a similar name
+   */
+  private List<Person> checkForSimilarPersons(Person newPerson) {
+    BooleanBuilder predicate = new BooleanBuilder();
+    predicate //
+        .and(person.firstName.containsIgnoreCase(newPerson.getFirstName())) //
+        .and(person.lastName.containsIgnoreCase(newPerson.getLastName()));
+    return personRepo.findAll(predicate);
   }
 
 }
