@@ -1,5 +1,18 @@
 package de.naju.adebar.web.controller;
 
+import de.naju.adebar.app.events.EventDataProcessor.EventType;
+import de.naju.adebar.app.events.filter.EventFilterBuilder;
+import de.naju.adebar.model.chapter.LocalGroup;
+import de.naju.adebar.model.chapter.Project;
+import de.naju.adebar.model.events.BookedOutException;
+import de.naju.adebar.model.events.Event;
+import de.naju.adebar.model.events.ExistingParticipantException;
+import de.naju.adebar.model.events.ParticipationInfo;
+import de.naju.adebar.model.events.PersonIsTooYoungException;
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.web.validation.events.EventForm;
+import de.naju.adebar.web.validation.events.EventForm.Belonging;
+import de.naju.adebar.web.validation.events.FilterEventsForm;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,26 +27,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import de.naju.adebar.app.events.EventDataProcessor.EventType;
-import de.naju.adebar.app.events.filter.EventFilterBuilder;
-import de.naju.adebar.model.chapter.LocalGroup;
-import de.naju.adebar.model.chapter.Project;
-import de.naju.adebar.model.events.BookedOutException;
-import de.naju.adebar.model.events.Event;
-import de.naju.adebar.model.events.ExistingParticipantException;
-import de.naju.adebar.model.events.ParticipationInfo;
-import de.naju.adebar.model.events.PersonIsTooYoungException;
-import de.naju.adebar.model.persons.Person;
-import de.naju.adebar.web.validation.events.EventForm;
-import de.naju.adebar.web.validation.events.FilterEventsForm;
-import de.naju.adebar.web.validation.events.EventForm.Belonging;
+
+// FIXME: create a ParticipationManager to take care of adding participants, turning persons into participants, etc.
 
 /**
  * Event related controller mappings
  *
  * @author Rico Bergmann
  * @see Event
- *
  */
 @Controller
 public class EventController {
@@ -258,6 +259,11 @@ public class EventController {
       Person person = managers.persons.findPerson(id).orElseThrow(IllegalArgumentException::new);
 
       try {
+        if (!person.isParticipant()) {
+          person.makeParticipant();
+          managers.persons.savePerson(person);
+        }
+
         event.addParticipant(person);
         managers.events.updateEvent(eventId, event);
         addedParticipants.add(person);
@@ -316,6 +322,11 @@ public class EventController {
           managers.persons.findPerson(personId).orElseThrow(IllegalArgumentException::new);
 
       try {
+        if (!person.isParticipant()) {
+          person.makeParticipant();
+          managers.persons.savePerson(person);
+        }
+
         event.addParticipantIgnoreAge(person);
         managers.events.updateEvent(eventId, event);
         addedParticipants.add(person);
@@ -343,8 +354,8 @@ public class EventController {
    * @param eventId the id of the event the person participates in
    * @param personId the id of the person whose information should be updated
    * @param feePayed whether the participation fee was payed
-   * @param formReceived whether the legally binding participation form was already sent from the
-   *        person
+   * @param formReceived whether the legally binding participation form was already sent from
+   *     the person
    * @param remarks remarks regarding the participation
    * @param redirAttr attributes for the view to display some result information
    * @return the event's detail view
