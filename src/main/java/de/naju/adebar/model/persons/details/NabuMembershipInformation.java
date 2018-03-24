@@ -66,9 +66,6 @@ public class NabuMembershipInformation {
    * @return the membership number
    */
   public String getMembershipNumber() {
-    if (!isNabuMember()) {
-      throw new IllegalStateException(NO_NABU_MEMBER_MSG);
-    }
     return membershipNumber;
   }
 
