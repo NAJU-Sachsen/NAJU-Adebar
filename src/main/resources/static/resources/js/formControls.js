@@ -103,11 +103,22 @@ function updateControlledInput(controller, input) {
     active = !active;
   }
 
-  if (input.prop('tagName').toLowerCase() === 'input') {
-    input.prop('disabled', !active);
-  } else {
-    updateInputs(input, active);
+  const inputTag = input.prop('tagName').toLowerCase();
+  switch (inputTag) {
+    case 'input':
+    case 'select':
+    case 'textarea':
+    case 'button':
+      input.prop('disabled', !active);
+      break;
+    default:
+      updateInputs(input, active);
   }
+
+  if (input.hasClass('selectpicker')) {
+    input.selectpicker('refresh');
+  }
+
 }
 
 function initControlledInputs() {
@@ -119,10 +130,6 @@ function initControlledInputs() {
           controller = controller.closest('select');
         }
 
-        if (controller.data('handler-registered')) {
-          return;
-        }
-
         const handler = () => updateControlledInput(controller, targetInput);
 
         // register the handler for textual changes as well as "normal" ones
@@ -130,10 +137,6 @@ function initControlledInputs() {
 
         // initialize the controlled input according to the controller's state
         updateControlledInput(controller, targetInput);
-
-        // mark the controller as initialized to prevent re-attaching the same
-        // handler to it
-        controller[0].dataset.handlerRegistered = 'true';
       });
 }
 
