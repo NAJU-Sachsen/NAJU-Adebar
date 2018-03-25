@@ -90,8 +90,9 @@
           <td class="col-md-3" th:text="${person.name}">Frieda Frisch</td>
           <td class="col-md-5">
             <a href="mailto:frieda_frisch@web.de"
-               th:href="${person.email} ? |mailto:${person.email}|"
-               th:text="${person.email} ?: '---'">frieda_frisch@web.de</a>
+               th:href="|mailto:${person.email}|"
+               th:text="${person.email}" th:if="${person.email}">frieda_frisch@web.de</a>
+            <span th:unless="${person.email}">---it</span>
           </td>
           <td class="col-md-2"
               th:text="${person.address != null and not person.address.city.empty} ? ${person.address.city} : '---'">
