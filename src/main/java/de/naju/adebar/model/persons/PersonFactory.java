@@ -8,9 +8,15 @@ import org.springframework.util.Assert;
 import de.naju.adebar.model.Address;
 import de.naju.adebar.model.Email;
 import de.naju.adebar.model.PhoneNumber;
+import de.naju.adebar.model.persons.details.Gender;
+import de.naju.adebar.model.persons.details.JuleicaCard;
+import de.naju.adebar.model.persons.details.NabuMembershipInformation;
+import de.naju.adebar.model.persons.qualifications.Qualification;
 
 /**
- * Factory to create {@link Person} instances. Using the Builder pattern.
+ * Factory to create {@link Person} instances. The factory just sets up everything to delegate the
+ * creation-process itself to a Builder.
+ *
  * <p>
  * Beware that the implementation of the builder is actually not stateless: <br>
  * When performing a call such as

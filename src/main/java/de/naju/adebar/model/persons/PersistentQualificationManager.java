@@ -1,5 +1,9 @@
 package de.naju.adebar.model.persons;
 
+import de.naju.adebar.model.persons.qualifications.ExistingQualificationException;
+import de.naju.adebar.model.persons.qualifications.Qualification;
+import de.naju.adebar.model.persons.qualifications.QualificationManager;
+import de.naju.adebar.model.persons.qualifications.QualificationRepository;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +16,7 @@ import org.springframework.util.Assert;
  */
 @Service
 public class PersistentQualificationManager implements QualificationManager {
+
   private QualificationRepository qualificationRepo;
 
   @Autowired
@@ -22,7 +27,7 @@ public class PersistentQualificationManager implements QualificationManager {
 
   @Override
   public Qualification createQualification(String name, String description) {
-    if (qualificationRepo.exists(name)) {
+    if (qualificationRepo.existsById(name)) {
       throw new ExistingQualificationException(
           "Qualification with name " + name + " already exists!");
     }
@@ -31,13 +36,12 @@ public class PersistentQualificationManager implements QualificationManager {
 
   @Override
   public Optional<Qualification> findQualification(String name) {
-    Qualification qualification = qualificationRepo.findOne(name);
-    return qualification == null ? Optional.empty() : Optional.of(qualification);
+    return qualificationRepo.findById(name);
   }
 
   @Override
   public boolean hasQualification(String name) {
-    return qualificationRepo.exists(name);
+    return qualificationRepo.existsById(name);
   }
 
   @Override

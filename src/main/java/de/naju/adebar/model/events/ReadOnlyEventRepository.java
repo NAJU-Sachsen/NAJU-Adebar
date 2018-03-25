@@ -1,19 +1,24 @@
 package de.naju.adebar.model.events;
 
+import com.querydsl.core.types.Predicate;
 import de.naju.adebar.infrastructure.ReadOnlyRepository;
 import de.naju.adebar.model.persons.Person;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.stream.Stream;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+import org.springframework.stereotype.Repository;
 
 /**
  * A repository that provides read-only access to the saved events
- * 
+ *
  * @author Rico Bergmann
  */
 @Repository("ro_eventRepo")
-public interface ReadOnlyEventRepository extends ReadOnlyRepository<Event, EventId> {
+public interface ReadOnlyEventRepository extends // 
+    ReadOnlyRepository<Event, EventId>,
+    QuerydslPredicateExecutor<Event> {
 
   /**
    * @return all events ordered by their start time
@@ -21,10 +26,17 @@ public interface ReadOnlyEventRepository extends ReadOnlyRepository<Event, Event
   Iterable<Event> findAllByOrderByStartTime();
 
   /**
+   * @param predicate predicate to match the events to
+   * @return all events which matched the predicate
+   */
+  @Override
+  List<Event> findAll(Predicate predicate);
+
+  /**
    * @param time the time to query for
    * @return all events which start after the specified time
    */
-  Iterable<Event> findByStartTimeIsAfter(LocalDateTime time);
+  List<Event> findByStartTimeIsAfter(LocalDateTime time);
 
   /**
    * @param time the time to query for
@@ -40,7 +52,8 @@ public interface ReadOnlyEventRepository extends ReadOnlyRepository<Event, Event
 
   /**
    * @param time the time to query for
-   * @return all events which end before the specified time, ordered by their start time (descending)
+   * @return all events which end before the specified time, ordered by their start time
+   *     (descending)
    */
   Iterable<Event> findByEndTimeBeforeOrderByStartTimeDesc(LocalDateTime time);
 
@@ -57,7 +70,8 @@ public interface ReadOnlyEventRepository extends ReadOnlyRepository<Event, Event
    * @param timeAfter the later time
    * @return all events that take place within the given interval, odered by their start time
    */
-  Iterable<Event> findByStartTimeBeforeAndEndTimeAfterOrderByStartTime(LocalDateTime timeBefore, LocalDateTime timeAfter);
+  Iterable<Event> findByStartTimeBeforeAndEndTimeAfterOrderByStartTime(LocalDateTime timeBefore,
+      LocalDateTime timeAfter);
 
   /**
    * @param person the participant to query for

@@ -1,5 +1,7 @@
 package de.naju.adebar.model.persons;
 
+import com.google.common.collect.Lists;
+import de.naju.adebar.model.Email;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.Assert;
@@ -13,8 +15,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-import com.google.common.collect.Lists;
-import de.naju.adebar.model.Email;
 
 /**
  * Basic testing of the {@link PersonRepository} and {@link ReadOnlyPersonRepository}
@@ -27,6 +27,7 @@ import de.naju.adebar.model.Email;
 @Rollback
 @Component
 public class ActivistRepositoryUnitTest {
+
   @Autowired
   @Qualifier("personRepo")
   private PersonRepository activistRepo;
@@ -46,7 +47,7 @@ public class ActivistRepositoryUnitTest {
     claus = new Person(new PersonId(), "Claus", "Störtebecker", Email.of("caeptn@aol.com"));
     claus.makeActivist();
     activists = Arrays.asList(hans, berta, claus);
-    activistRepo.save(activists);
+    activistRepo.saveAll(activists);
   }
 
   @Test

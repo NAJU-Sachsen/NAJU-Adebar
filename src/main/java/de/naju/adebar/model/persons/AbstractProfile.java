@@ -3,6 +3,7 @@ package de.naju.adebar.model.persons;
 import java.util.Optional;
 import javax.persistence.Transient;
 import org.springframework.util.Assert;
+import de.naju.adebar.model.persons.events.AbstractPersonRelatedEvent;
 
 /**
  * Base class for all profiles. Takes care of the event propagation to the {@link Person}

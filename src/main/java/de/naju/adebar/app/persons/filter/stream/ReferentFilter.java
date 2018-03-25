@@ -5,7 +5,7 @@ import java.util.stream.Stream;
 import com.google.common.collect.Lists;
 import de.naju.adebar.app.filter.FilterType;
 import de.naju.adebar.model.persons.Person;
-import de.naju.adebar.model.persons.Qualification;
+import de.naju.adebar.model.persons.qualifications.Qualification;
 
 /**
  * Filter for persons depending on their referent status. It features two constructors depending on

@@ -1,11 +1,23 @@
 package de.naju.adebar.model.persons;
 
+import de.naju.adebar.documentation.infrastructure.JpaOnly;
+import de.naju.adebar.model.chapter.LocalGroup;
+import de.naju.adebar.model.chapter.Project;
+import de.naju.adebar.model.persons.details.JuleicaCard;
+import de.naju.adebar.model.persons.events.PersonDataUpdatedEvent;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import org.springframework.util.Assert;
 
 /**
@@ -28,6 +40,18 @@ public class ActivistProfile extends AbstractProfile {
       @AttributeOverride(name = "level", column = @Column(name = "juleicaLevel"))})
   private JuleicaCard juleicaCard;
 
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(name = "localGroupMembers", //
+      joinColumns = @JoinColumn(name = "memberId"), //
+      inverseJoinColumns = @JoinColumn(name = "localGroupId"))
+  private List<LocalGroup> localGroups;
+
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(name = "projectContributors", //
+      joinColumns = @JoinColumn(name = "contributorId"), //
+      inverseJoinColumns = @JoinColumn(name = "projectId"))
+  private List<Project> projects;
+
   /**
    * Each activist profile has to be created in terms of an existing person.
    *
@@ -42,7 +66,7 @@ public class ActivistProfile extends AbstractProfile {
   /**
    * Convenience constructor to avoid creating a new profile and then setting its Juleica card
    * through a call to {@link #updateJuleicaCard(JuleicaCard)} right after.
-   * 
+   *
    * @param person the person to create the profile for
    * @param juleica the new juleica card
    */
@@ -56,8 +80,9 @@ public class ActivistProfile extends AbstractProfile {
   /**
    * Default constructor just for JPA's sake
    */
-  @SuppressWarnings("unused")
-  private ActivistProfile() {}
+  @JpaOnly
+  private ActivistProfile() {
+  }
 
   /**
    * @return the ID of the person to whom this profile belongs
@@ -67,11 +92,27 @@ public class ActivistProfile extends AbstractProfile {
   }
 
   /**
+   * @param personId the ID of the person to whom this profile belongs.
+   */
+  @JpaOnly
+  private void setPersonId(PersonId personId) {
+    this.personId = personId;
+  }
+
+  /**
    * @return the activist's Juleica card. May be {@code null} if the person does not have a Juleica
-   *         card
+   *     card
    */
   public JuleicaCard getJuleicaCard() {
     return juleicaCard;
+  }
+
+  /**
+   * @param juleicaCard the activist's Juleica card. May be {@code null} if the person does not
+   *     have a Juleica card
+   */
+  protected void setJuleicaCard(JuleicaCard juleicaCard) {
+    this.juleicaCard = juleicaCard;
   }
 
   /**
@@ -83,13 +124,43 @@ public class ActivistProfile extends AbstractProfile {
 
   /**
    * @return {@code true} if the activist's Juleica card is valid (i.e. not expired), {@code false}
-   *         otherwise
+   *     otherwise
    */
   public boolean hasValidJuleica() {
     if (!hasJuleica()) {
       return false;
     }
     return juleicaCard.isValid();
+  }
+
+  /**
+   * @return the local groups the person is active
+   */
+  public Collection<LocalGroup> getLocalGroups() {
+    return Collections.unmodifiableList(localGroups);
+  }
+
+  /**
+   * @param localGroups the local groups the person is active in
+   */
+  @JpaOnly
+  private void setLocalGroups(List<LocalGroup> localGroups) {
+    this.localGroups = localGroups;
+  }
+
+  /**
+   * @return the projects the person is active in
+   */
+  public Collection<Project> getProjects() {
+    return Collections.unmodifiableList(projects);
+  }
+
+  /**
+   * @param projects the projects the person is active in
+   */
+  @JpaOnly
+  private void setProjects(List<Project> projects) {
+    this.projects = projects;
   }
 
   /**
@@ -107,28 +178,14 @@ public class ActivistProfile extends AbstractProfile {
     return this;
   }
 
-  /**
-   * @param juleicaCard the activist's Juleica card. May be {@code null} if the person does not have
-   *        a Juleica card
-   */
-  protected void setJuleicaCard(JuleicaCard juleicaCard) {
-    this.juleicaCard = juleicaCard;
-  }
-
-  /**
-   * @param personId the ID of the person to whom this profile belongs.
-   */
-  @SuppressWarnings("unused")
-  private void setPersonId(PersonId personId) {
-    this.personId = personId;
-  }
-
   @Override
   public boolean equals(Object o) {
-    if (this == o)
+    if (this == o) {
       return true;
-    if (o == null || getClass() != o.getClass())
+    }
+    if (o == null || getClass() != o.getClass()) {
       return false;
+    }
 
     ActivistProfile profile = (ActivistProfile) o;
 

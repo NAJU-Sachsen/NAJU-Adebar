@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta th:name="_csrf" th:value="${_csrf.token}"/>
+  <title>Jane Doe | Adebar</title>
+  <link rel="stylesheet" type="text/css" href="../../static/resources/css/bootstrap.min.css"
+        th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+
+  <link rel="stylesheet" type="text/css" href="../../static/resources/css/style.css"
+        th:href="@{/resources/css/style.css}"/>
+  <link rel="stylesheet" type="text/css" href="../../static/resources/css/personDetails.css"
+        th:href="@{/resources/css/personDetails.css}"/>
+</head>
+<body>
+
+<!-- central navigation -->
+<nav th:replace="navigation :: topNav(page='persons')"></nav>
+
+<!-- page specific content-->
+<main id="main">
+
+  <a href="persons.html">
+    <span class="glyphicon glyphicon-chevron-left"></span>
+    Zurück zur Übersicht
+  </a>
+
+  <h1>Profil von Jane Doe</h1>
+
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active">
+      <a href="#overview" class="tab-controller" aria-controls="general" role="tab"
+         data-toggle="tab">Allgemeine Infos</a>
+    </li>
+    <li role="presentation">
+      <a href="#activist-referent" class="tab-controller" aria-controls="activist-referent"
+         role="tab" data-toggle="tab">Aktiven + Referenteninfos</a>
+    </li>
+    <li role="presentation">
+      <a href="#events" class="tab-controller" aria-controls="events" role="tab" data-toggle="tab">Teilgenommene
+        Veranstaltungen</a>
+    </li>
+    <li role="presentation">
+      <a href="#newsletters" class="tab-controller" aria-controls="newsletters" role="tab"
+         data-toggle="tab">Newsletter</a>
+    </li>
+  </ul>
+
+  <article class="tab-content">
+    
+    <div id="activist-profile" class="tab-pane active container-fluid" role="tabpanel">
+
+      <!-- activist profile -->
+      <section id="activist" class="display-category" th:fragment="profile">
+
+        <div class="row category-header">
+          <h2 class="col-md-10">Aktiven-Profil</h2>
+
+          <div class="col-md-2 category-menu" th:if="${activist}">
+            <button type="button" class="btn btn-default btn-sm pull-right" data-toggle="modal"
+                    data-target="#edit-activist-dialog">
+              <span class="glyphicon glyphicon-pencil"></span> Anpassen
+            </button>
+            <div class="modal fade" id="edit-activist-dialog" tabindex="-1" role="dialog">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title">Profil bearbeiten</h3>
+                  </div>
+                  <div class="modal-body">
+                    <form id="edit-activist" method="post"
+                          th:action="@{/persons/{id}/activist-profile/update(id=${personId})}"
+                          th:object="${editActivistForm}">
+                      <div class="form-group">
+                        <label for="edit-has-juleica" class="control-label">Juleica-Karte</label>
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" id="edit-has-juleica" th:field="*{juleica}"/>
+                            die Person hat eine Juleica
+                          </label>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="edit-juleica-expiry" class="control-label">Ablaufdatum</label>
+                        <input type="date" class="form-control" id="edit-juleica-expiry"
+                               placeholder="Format: TT.MM.JJJJ"
+                               data-controlled-by="#edit-has-juleica"
+                               th:field="*{juleicaExpiryDate}"/>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                      Abbrechen
+                    </button>
+                    <button type="submit" form="edit-activist" class="btn btn-primary">
+                      Aktualisieren
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- activist view -->
+        <div class="row" th:if="${activist}">
+          <div class="table-responsive">
+            <table class="table">
+              <thead></thead>
+              <tbody>
+              <tr class="row">
+                <th class="col-md-2">
+                  <span class="glyphicon glyphicon-tree-deciduous"></span> Aktive*r
+                </th>
+                <td class="col-md-10">
+                  die Person ist als Aktive*r registriert
+                </td>
+              </tr>
+              <tr class="row">
+                <th class="col-md-2">
+                  <span class="glyphicon glyphicon-map-marker"></span> Ortsgruppen
+                </th>
+                <td class="col-md-10" th:remove="all-but-first">
+                  <a href="#" class="label label-default margin-right-sm"
+                     th:each="chapter : ${activist.localGroups}" th:text="${chapter.name}"
+                     th:href="@{/localGroups/{id}(id=${chapter.id})}">NAJU Sachsen</a>
+                  <a href="#" class="label label-default">NAJU Dresden</a>
+                </td>
+              </tr>
+              <tr class="row">
+                <th class="col-md-2">
+                  <span class="glyphicon glyphicon-credit-card"></span> Juleica
+                </th>
+                <td class="col-md-10">
+                    <span th:if="${activist.hasJuleica() and activist.hasValidJuleica()}"
+                          th:inline="text">
+                      läuft am [[${{activist.juleicaCard.expiryDate}}]] ab
+                    </span>
+                  <span th:if="${activist.hasJuleica() and not activist.hasValidJuleica()}"
+                        th:inline="text">
+                      lief am [[${{activist.juleicaCard.expiryDate}}]] ab
+                    </span>
+                  <span th:unless="${activist.hasJuleica()}">keine Juleica vorhanden</span>
+                </td>
+              </tr>
+              <tr class="row">
+                <th class="col-md-2">
+                  <span class="glyphicon glyphicon-wrench"></span> Projekte
+                </th>
+                <td class="col-md-10" th:remove="all-but-first">
+                  <a href="#" class="label label-default" th:each="project : ${activist.projects}"
+                     th:text="${project.name}" th:href="@{/projects/{id}(id=${project.id})}">Puppenstuben
+                    gesucht!</a>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- no activist view -->
+        <div class="row" th:unless="${activist}">
+          Die Person ist uns bisher nicht als Aktive*r bekannt.
+          <div>
+            <button type="button" class="btn btn-link no-padding" data-toggle="modal"
+                    data-target="#make-activist-modal">
+              <span class="glyphicon glyphicon-arrow-right"></span>
+              Jetzt als Aktive*n registrieren
+            </button>
+          </div>
+          <div class="modal fade" id="make-activist-modal">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h3 class="modal-title">Aktive*n registrieren</h3>
+                </div>
+                <div class="modal-body">
+                  <form id="create-activist" method="post"
+                        th:action="@{/persons/{id}/activist-profile/create(id=${personId})}">
+                    <div class="form-group">
+                      <label for="juleica-card" class="control-label">Juleica-Karte</label>
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" id="juleica-card"/>
+                          die Person hat eine Juleica
+                        </label>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="juleica-expiry-date" class="control-label">Ablaufdatum</label>
+                      <input type="date" class="form-control" id="juleica-expiry-date"
+                             data-controlled-by="#juleica-card"/>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">
+                    Abbrechen
+                  </button>
+                  <button type="submit" form="create-activist" class="btn btn-primary">
+                    Speichern
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+
+  </article>
+
+</main>
+
+<form id="logout-user" method="POST" th:action="@{/logout}">
+  <input type="hidden" name="csrf" th:value="csrf"/>
+</form>
+
+<script type="text/javascript" src="../../static/resources/js/jquery.min.js"
+        th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript" src="../../static/resources/js/bootstrap.min.js"
+        th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script type="text/javascript" src="../../static/resources/js/bootstrap-select.min.js"
+        th:src="@{/resources/js/bootstrap-select.min.js}"></script>
+<script src="../../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
+<script src="../../static/resources/js/formControls.js"
+        th:src="@{/resources/js/formControls.js}"></script>
+<script src="../../static/resources/js/personDetails.js"
+        th:src="@{/resources/js/personDetails.js}"></script>
+</body>
+</html>

@@ -8,14 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import de.naju.adebar.model.Address;
 import de.naju.adebar.model.Email;
-import de.naju.adebar.model.persons.Gender;
-import de.naju.adebar.model.persons.JuleicaCard;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.persons.PersonFactory;
 import de.naju.adebar.model.persons.PersonManager;
 import de.naju.adebar.model.persons.PersonRepository;
-import de.naju.adebar.model.persons.Qualification;
-import de.naju.adebar.model.persons.QualificationRepository;
+import de.naju.adebar.model.persons.details.Gender;
+import de.naju.adebar.model.persons.details.JuleicaCard;
+import de.naju.adebar.model.persons.qualifications.Qualification;
+import de.naju.adebar.model.persons.qualifications.QualificationRepository;
 
 /**
  * @author Rico Bergmann

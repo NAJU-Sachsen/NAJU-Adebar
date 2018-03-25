@@ -32,7 +32,7 @@ public class PhoneNumber {
   @Column(name = "phone")
   @Access(AccessType.PROPERTY) // we currently need property based access to ensure the
                                // normalization of old phone numbers (which were just plain strings)
-  private String number;
+  private String value;
 
   /**
    * Creates a new phone number
@@ -165,7 +165,7 @@ public class PhoneNumber {
    */
   private PhoneNumber(String number) {
     assertValidNumber(number);
-    this.number = normalizePhoneNumber(number);
+    this.value = normalizePhoneNumber(number);
 
   }
 
@@ -177,17 +177,17 @@ public class PhoneNumber {
   /**
    * @return the (now unified) phone number
    */
-  public String getNumber() {
-    return number;
+  public String getValue() {
+    return value;
   }
 
   /**
    * @param number the phone number. Just for JPA's sake.
    */
   @SuppressWarnings("unused")
-  private void setNumber(String number) {
+  private void setValue(String number) {
     assertValidNumber(number);
-    this.number = normalizePhoneNumber(number);
+    this.value = normalizePhoneNumber(number);
   }
 
   /**
@@ -195,7 +195,7 @@ public class PhoneNumber {
    */
   @Transient
   public boolean isInInternationalFormat() {
-    return isInInternationalFormat(number);
+    return isInInternationalFormat(value);
   }
 
   /**
@@ -217,16 +217,16 @@ public class PhoneNumber {
       return false;
     }
     PhoneNumber that = (PhoneNumber) o;
-    return Objects.equals(number, that.number);
+    return Objects.equals(value, that.value);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(number);
+    return Objects.hash(value);
   }
 
   @Override
   public String toString() {
-    return number;
+    return value;
   }
 }

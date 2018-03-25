@@ -1,5 +1,10 @@
 package de.naju.adebar.app.chapter;
 
+import de.naju.adebar.app.IdUpdateFailedException;
+import de.naju.adebar.model.chapter.LocalGroup;
+import de.naju.adebar.model.chapter.Project;
+import de.naju.adebar.model.chapter.ProjectRepository;
+import de.naju.adebar.model.chapter.ReadOnlyProjectRepository;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -7,11 +12,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import de.naju.adebar.app.IdUpdateFailedException;
-import de.naju.adebar.model.chapter.LocalGroup;
-import de.naju.adebar.model.chapter.Project;
-import de.naju.adebar.model.chapter.ProjectRepository;
-import de.naju.adebar.model.chapter.ReadOnlyProjectRepository;
 
 /**
  * A {@link ProjectManager} that persists its data in a database
@@ -20,6 +20,7 @@ import de.naju.adebar.model.chapter.ReadOnlyProjectRepository;
  */
 @Service
 public class PersistentProjectManager implements ProjectManager {
+
   private ProjectRepository projectRepo;
   private ReadOnlyProjectRepository roRepo;
   private LocalGroupManager localGroupManager;
@@ -66,8 +67,7 @@ public class PersistentProjectManager implements ProjectManager {
 
   @Override
   public Optional<Project> findProject(long id) {
-    Project project = projectRepo.findOne(id);
-    return project != null ? Optional.of(project) : Optional.empty();
+    return projectRepo.findById(id);
   }
 
   @Override

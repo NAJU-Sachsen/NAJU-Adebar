@@ -1,7 +1,7 @@
 package de.naju.adebar.model.events.rooms.scheduling;
 
-import de.naju.adebar.model.persons.Gender;
 import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.details.Gender;
 
 /**
  * Value object to describe a room. Each room consists of a certain amount of beds which could maybe

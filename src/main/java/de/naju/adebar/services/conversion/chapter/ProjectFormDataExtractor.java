@@ -1,26 +1,27 @@
 package de.naju.adebar.services.conversion.chapter;
 
-import de.naju.adebar.controller.forms.chapter.ProjectForm;
 import de.naju.adebar.model.chapter.LocalGroup;
 import de.naju.adebar.model.chapter.Project;
 import de.naju.adebar.model.chapter.ReadOnlyLocalGroupRepository;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.persons.PersonManager;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
+import de.naju.adebar.web.validation.chapters.ProjectForm;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Locale;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 /**
  * Service to extract the necessary data from an 'add project group' form
- * 
+ *
  * @author Rico Bergmann
  */
 @Service
 public class ProjectFormDataExtractor {
+
   private DateTimeFormatter dateTimeFormatter;
   private PersonManager personManager;
   private ReadOnlyLocalGroupRepository localGroupRepo;
@@ -41,7 +42,9 @@ public class ProjectFormDataExtractor {
    * @return the {@link Project} object described by the form
    */
   public Project extractProject(ProjectForm projectForm) {
-    LocalGroup localGroup = localGroupRepo.findOne(projectForm.getLocalGroupId());
+    LocalGroup localGroup = localGroupRepo.findById(projectForm.getLocalGroupId()).orElseThrow(
+        () -> new IllegalArgumentException(
+            "No local group with ID " + projectForm.getLocalGroupId()));
 
     Project project = new Project(projectForm.getName(), localGroup);
 

@@ -12,6 +12,9 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.MapKey;
 import org.springframework.util.Assert;
+import de.naju.adebar.model.persons.events.PersonDataUpdatedEvent;
+import de.naju.adebar.model.persons.qualifications.ExistingQualificationException;
+import de.naju.adebar.model.persons.qualifications.Qualification;
 import de.naju.adebar.util.Maps;
 
 /**

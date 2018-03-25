@@ -1,13 +1,5 @@
 package de.naju.adebar.app.chapter;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
 import de.naju.adebar.model.Address;
 import de.naju.adebar.model.Email;
 import de.naju.adebar.model.chapter.Board;
@@ -16,6 +8,14 @@ import de.naju.adebar.model.chapter.LocalGroupRepository;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.persons.PersonFactory;
 import de.naju.adebar.model.persons.PersonManager;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Rico Bergmann
@@ -46,7 +46,7 @@ public class PersistentLocalGroupManagerIntegrationTest {
   @Test
   public void testSave() {
     najuSn = localGroupManager.saveLocalGroup(najuSn);
-    Assert.assertTrue("Group should have been saved", localGroupRepo.exists(najuSn.getId()));
+    Assert.assertTrue("Group should have been saved", localGroupRepo.existsById(najuSn.getId()));
   }
 
   @Test

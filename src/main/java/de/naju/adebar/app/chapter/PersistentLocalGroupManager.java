@@ -1,16 +1,5 @@
 package de.naju.adebar.app.chapter;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 import com.google.common.collect.Lists;
 import de.naju.adebar.app.IdUpdateFailedException;
 import de.naju.adebar.model.Address;
@@ -22,9 +11,20 @@ import de.naju.adebar.model.chapter.Project;
 import de.naju.adebar.model.chapter.ProjectRepository;
 import de.naju.adebar.model.chapter.ReadOnlyLocalGroupRepository;
 import de.naju.adebar.model.newsletter.Newsletter;
-import de.naju.adebar.model.persons.NoActivistException;
 import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.exceptions.NoActivistException;
 import de.naju.adebar.util.Streams;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 /**
  * A {@link LocalGroupManager} that persists its data in a database
@@ -100,7 +100,7 @@ public class PersistentLocalGroupManager implements LocalGroupManager {
 
   @Override
   public Optional<LocalGroup> findLocalGroup(long id) {
-    return localGroupRepo.exists(id) ? Optional.of(localGroupRepo.findOne(id)) : Optional.empty();
+    return localGroupRepo.findById(id);
   }
 
   @Override

@@ -1,10 +1,10 @@
 package de.naju.adebar.services.conversion.chapter;
 
-import de.naju.adebar.controller.forms.chapter.LocalGroupForm;
 import de.naju.adebar.model.Address;
 import de.naju.adebar.model.chapter.LocalGroup;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.persons.PersonManager;
+import de.naju.adebar.web.validation.chapters.LocalGroupForm;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;

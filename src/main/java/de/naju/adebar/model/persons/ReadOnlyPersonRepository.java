@@ -1,13 +1,17 @@
 package de.naju.adebar.model.persons;
 
-import java.util.List;
-import java.util.stream.Stream;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.querydsl.QueryDslPredicateExecutor;
-import org.springframework.stereotype.Repository;
 import com.querydsl.core.types.Predicate;
 import de.naju.adebar.infrastructure.ReadOnlyRepository;
 import de.naju.adebar.model.Email;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
 
 /**
  * Repository to provide read-only access to {@link Person} instances
@@ -15,8 +19,10 @@ import de.naju.adebar.model.Email;
  * @author Rico Bergmann
  */
 @Repository("ro_personRepo")
-public interface ReadOnlyPersonRepository
-    extends ReadOnlyRepository<Person, PersonId>, QueryDslPredicateExecutor<Person> {
+public interface ReadOnlyPersonRepository extends //
+    ReadOnlyRepository<Person, PersonId>, //
+    QuerydslPredicateExecutor<Person>, //
+    PagingAndSortingRepository<Person, PersonId> {
 
   /**
    * @return all non-archived persons
@@ -25,6 +31,9 @@ public interface ReadOnlyPersonRepository
   @Query("SELECT p FROM person p WHERE p.archived=0")
   Iterable<Person> findAll();
 
+  /**
+   * @return all non-archived persons
+   */
   @Query("SELECT p FROM person p WHERE p.archived=0 ORDER BY p.lastName")
   Iterable<Person> findAllOrderByLastName();
 
@@ -35,12 +44,26 @@ public interface ReadOnlyPersonRepository
   Iterable<Person> findAllActivists();
 
   /**
+   * @param pageable the pageable to put the result into
+   * @return all non-archived persons
+   */
+  @Query("SELECT p FROM person p WHERE p.archived=0 ORDER BY p.lastName")
+  Page<Person> findAllPagedOrderByLastName(Pageable pageable);
+
+  /**
    * @param id must not be {@code null}.
    * @return the person with that ID. This person is not archived
    */
-  @Override
   @Query("SELECT p FROM person p WHERE p.id=?1 AND p.archived=0")
   Person findOne(PersonId id);
+
+  /**
+   * @param id the must not be {code null}
+   * @return the person with that ID. The person may not be archived.
+   */
+  @Override
+  @Query("SELECT p FROM person p WHERE  p.id=?1 AND p.archived=0")
+  Optional<Person> findById(PersonId id);
 
   /**
    * @return the first 25 non-archived persons, ordered by their last name
@@ -62,6 +85,9 @@ public interface ReadOnlyPersonRepository
   @Query("SELECT p FROM person p WHERE p.id=?1")
   Person findEntry(PersonId id);
 
+  /**
+   * @return all non-archived persons
+   */
   @Query("SELECT p FROM person p WHERE p.archived=0")
   Stream<Person> streamAll();
 
@@ -92,4 +118,7 @@ public interface ReadOnlyPersonRepository
    * @return the matching person
    */
   Person findByFirstNameAndLastNameAndEmail(String firstName, String lastName, Email email);
+
+  @Override
+  boolean existsById(PersonId id);
 }

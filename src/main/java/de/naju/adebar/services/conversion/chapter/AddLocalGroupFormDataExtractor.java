@@ -1,8 +1,8 @@
 package de.naju.adebar.services.conversion.chapter;
 
-import de.naju.adebar.controller.forms.chapter.AddLocalGroupForm;
 import de.naju.adebar.model.chapter.LocalGroup;
 import de.naju.adebar.model.persons.PersonManager;
+import de.naju.adebar.web.validation.chapters.AddLocalGroupForm;
 import de.naju.adebar.model.newsletter.Newsletter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

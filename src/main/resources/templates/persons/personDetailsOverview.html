@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta th:name="_csrf" th:value="${_csrf.token}"/>
+  <title>Jane Doe | Adebar</title>
+  <link rel="stylesheet" type="text/css" href="../../static/resources/css/bootstrap.min.css"
+        th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+  <link rel="stylesheet" href="../../static/resources/css/bootstrap-select.min.css"
+        th:href="@{/resources/css/bootstrap-select.min.css}"/>
+
+  <link rel="stylesheet" type="text/css" href="../../static/resources/css/style.css"
+        th:href="@{/resources/css/style.css}"/>
+  <link rel="stylesheet" type="text/css" href="../../static/resources/css/personDetails.css"
+        th:href="@{/resources/css/personDetails.css}"/>
+</head>
+<body>
+
+<!-- central navigation -->
+<nav th:replace="navigation :: topNav(page='persons')"></nav>
+
+<!-- page specific content-->
+<main id="main">
+
+  <a href="persons.html">
+    <span class="glyphicon glyphicon-chevron-left"></span>
+    Zurück zur Übersicht
+  </a>
+
+  <h1>Profil von Jane Doe</h1>
+
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active">
+      <a href="#overview" class="tab-controller" aria-controls="general" role="tab"
+         data-toggle="tab">Allgemeine Infos</a>
+    </li>
+    <li role="presentation">
+      <a href="#activist-referent" class="tab-controller" aria-controls="activist-referent"
+         role="tab" data-toggle="tab">Aktiven + Referenteninfos</a>
+    </li>
+    <li role="presentation">
+      <a href="#events" class="tab-controller" aria-controls="events" role="tab" data-toggle="tab">
+        Veranstaltungsteilnahmen
+      </a>
+    </li>
+    <li role="presentation">
+      <a href="#newsletters" class="tab-controller" aria-controls="newsletters" role="tab"
+         data-toggle="tab">Newsletter</a>
+    </li>
+  </ul>
+
+  <article class="tab-content">
+
+    <!-- general and relationship -->
+    <div id="overview" class="tab-pane active container-fluid" role="tabpanel">
+
+      <!-- general -->
+      <section id="general" class="display-category" th:fragment="general">
+
+        <div class="row category-header">
+
+          <h2 class="col-md-10">Allgemeine Infos</h2>
+
+          <div class="col-md-2 category-menu">
+
+            <button type="button" class="btn btn-default btn-sm pull-right" data-toggle="modal"
+                    data-target="#edit-person-dialog">
+              <span class="glyphicon glyphicon-pencil"></span> Anpassen
+            </button>
+            <div class="modal fade" id="edit-person-dialog" tabindex="-1" role="dialog">
+              <div class="modal-dialog" role="document"
+                   th:classappend="${editPersonForm.participant} ? 'modal-lg'">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title">Profil bearbeiten</h3>
+                  </div>
+                  <div class="modal-body">
+                    <form id="edit-person" method="post" class="container-fluid"
+                          th:action="@{/persons/{id}/update(id=${person.id})}"
+                          th:object="${editPersonForm}">
+                      <div class="col-md-6" th:class="*{participant} ? 'col-md-6' : 'col-md-12'">
+                        <div class="form-group">
+                          <label for="edit-first-name" class="control-label">Vorname</label>
+                          <input type="text" class="form-control" id="edit-first-name" value="Jane"
+                                 required="required" placeholder="erforderlich"
+                                 th:field="*{firstName}"/>
+                        </div>
+                        <div class="form-group">
+                          <label for="edit-last-name" class="control-label">Nachname</label>
+                          <input type="text" class="form-control" id="edit-last-name" value="Doe"
+                                 required="required" placeholder="erforderlich"
+                                 th:field="*{lastName}"/>
+                        </div>
+                        <div class="form-group">
+                          <label for="edit-email" class="control-label">E-Mail</label>
+                          <div class="input-group">
+                            <input type="text" class="form-control" id="edit-email"
+                                   value="jane.doe@mail.com" th:field="*{email}"/>
+                            <span class="input-group-addon">optional</span>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="edit-phone" class="control-label">Telefon (privat)</label>
+                          <div class="input-group">
+                            <input type="tel" class="form-control" id="edit-phone"
+                                   value="0123 45678901" th:field="*{phoneNumber}"/>
+                            <span class="input-group-addon">optional</span>
+                          </div>
+                          <p class="help-block">
+                            Für Eltern und "Business-Kontakte" können weitere Telefonnummern in den
+                            entsprechenden Abschnitten hinterlegt werden.
+                          </p>
+                        </div>
+                        <hr/>
+                        <div class="form-group">
+                          <label for="edit-address-street" class="control-label">Straße</label>
+                          <div class="input-group">
+                            <input type="text" name="address_street" class="form-control"
+                                   id="edit-address-street" value="Hauptstraße 3"
+                                   th:field="*{address.street}"/>
+                            <span class="input-group-addon">optional</span>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="edit-address-zip" class="control-label">Postleitzahl</label>
+                          <div class="input-group">
+                            <input type="text" class="form-control" id="edit-address-zip"
+                                   value="09876" th:field="*{address.zip}"/>
+                            <span class="input-group-addon">optional</span>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="edit-address-city" class="control-label">Stadt</label>
+                          <div class="input-group">
+                            <input type="text" class="form-control" id="edit-address-city"
+                                   value="Entehausen" th:field="*{address.city}"/>
+                            <span class="input-group-addon">optional</span>
+                          </div>
+                        </div>
+                        <hr/>
+                        <div class="form-group" th:unless="*{participant}">
+                          <label for="participant" class="control-label">Veranstaltungen</label>
+                          <div class="checkbox">
+                            <label>
+                              <input type="checkbox" id="participant" th:field="*{participant}"/>
+                              die Person nimmt an Veranstaltungen teil
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6" th:if="*{participant}">
+                        <input type="hidden" th:field="*{participant}"/>
+                        <div class="form-group">
+                          <label for="edit-gender" class="control-label">Geschlecht</label>
+                          <fieldset id="edit-gender" class="radio">
+                            <label>
+                              <input type="radio" name="gender" value="FEMALE"
+                                     th:field="*{participantForm.gender}"/> weiblich
+                            </label>
+                            <label>
+                              <input type="radio" name="gender" value="MALE"
+                                     th:field="*{participantForm.gender}"/> männlich
+                            </label>
+                            <label>
+                              <input type="radio" name="gender" value="OTHER"
+                                     th:field="*{participantForm.gender}"/> anderes
+                            </label>
+                          </fieldset>
+                        </div>
+                        <div class="form-group">
+                          <label for="edit-date-of-birth" class="control-label">Geburtsdatum</label>
+                          <input type="date" id="edit-date-of-birth" class="form-control"
+                                 placeholder="Format: TT.MM.JJJJ"
+                                 th:field="*{participantForm.dateOfBirth}"/>
+                        </div>
+                        <p class="help-block">
+                          Für minderjährige Teilnehmer*innen muss das Geschlecht angegeben werden.
+                          Andernfalls ist es optional.
+                        </p>
+                        <hr/>
+                        <div class="form-group">
+                          <label for="edit-eating-habits" class="control-label">Ernährung</label>
+                          <div id="edit-eating-habits-default-display">
+                            <div>
+                              <select class="selectpicker" id="edit-eating-habits-select"
+                                      data-width="auto">
+                                <option value="" selected="selected">konventionell</option>
+                                <option value="vegetarisch">vegetarisch</option>
+                                <option value="vegan">vegan</option>
+                              </select>
+                            </div>
+                            <button class="btn btn-link" id="edit-eating-habits-toggle"
+                                    type="button">
+                              Weitere Ernährungsarten/-hinweise
+                            </button>
+                          </div>
+                          <div class="collapse" id="eating-habits-container">
+                            <textarea id="edit-eating-habits" class="form-control" maxlength="511"
+                                      placeholder="vegetarisch, vegan o.ä. Unverträglichkeiten, ..."
+                                      th:field="*{participantForm.eatingHabits}"></textarea>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="edit-health-impairments" class="control-label">
+                            Allergien, o.ä.
+                          </label>
+                          <textarea id="edit-health-impairments" class="form-control"
+                                    maxlength="511"
+                                    placeholder="Heuschnupfen o.ä."
+                                    th:field="*{participantForm.healthImpairments}"></textarea>
+                        </div>
+                        <p class="help-block">
+                          Allergien, die sich auf die Ernährung der/des Teilnehmenden beziehen bitte
+                          unter <span class="italic">"Ernährung"</span> eintragen.
+                        </p>
+                        <hr/>
+                        <div class="form-group">
+                          <label for="edit-nabu-membership" class="control-label">
+                            NABU-Mitgliedschaft
+                          </label>
+                          <div class="input-group" id="edit-nabu-membership">
+                            <select class="selectpicker" data-width="auto"
+                                    th:field="*{participantForm.nabuMember}">
+                              <option value="UNKNOWN" selected="selected">
+                                unbekannt
+                              </option>
+                              <option value="IS_MEMBER" id="nabu-membership-toggler">
+                                Mitglied
+                              </option>
+                              <option value="NO_MEMBER">
+                                kein Mitglied
+                              </option>
+                            </select>
+                            <label for="nabu-membership" class="sr-only">Mitgliedsnummer</label>
+                            <input type="text" class="form-control" id="nabu-membership"
+                                   placeholder="Mitgliedsnummer"
+                                   data-controlled-by="#nabu-membership-toggler"
+                                   th:field="*{participantForm.nabuMembershipNumber}"/>
+                          </div>
+                        </div>
+                        <hr/>
+                        <div class="form-group">
+                          <label for="edit-remarks" class="control-label">Bemerkungen</label>
+                          <textarea class="form-control" id="edit-remarks" maxlength="511"
+                                    placeholder="Alles, was sonst noch wichtig ist"
+                                    th:field="*{participantForm.remarks}"></textarea>
+                        </div>
+                        <p class="help-block">
+                          Die <span class="italic">"Bemerkungen"</span> sollten nicht verwendet
+                          werden, um Informationen zu Veranstaltungsteilnahmen, Organisationen etc.
+                          abzuspeichern. Dazu gibt es Veranstaltungen usw., bei denen ihr die
+                          Informationen hinterlegen könnt.
+                        </p>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                      Abbrechen
+                    </button>
+                    <button type="submit" form="edit-person" class="btn btn-primary">
+                      Aktualisieren
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="row">
+          <div class="table-responsive" th:classappend="${false} ? 'col-md-8' : 'col-md-12'">
+            <table class="table">
+              <thead></thead>
+
+              <!-- general data -->
+              <tbody>
+              <tr class="row">
+                <th class="col-md-2">
+                  <span class="glyphicon glyphicon-user"></span> Name
+                </th>
+                <td class="col-md-10" th:text="${person.name}">Jane Doe</td>
+              </tr>
+              <tr class="row">
+                <th class="col-md-2">
+                  <span class="glyphicon glyphicon-envelope"></span> E-Mail
+                </th>
+                <td class="col-md-10">
+                  <a href="mailto:jane.doe@mail.com" th:href="|mailto:${person.email}|"
+                     th:text="${person.email}" th:if="${person.email}">jane.doe@mail.com</a>
+                  <span th:unless="${person.email}">keine Angabe</span>
+                </td>
+              </tr>
+              <tr class="row">
+                <th class="col-md-2">
+                  <span class="glyphicon glyphicon-phone"></span> Telefon (privat)
+                </th>
+                <td class="col-md-10" th:text="${person.phoneNumber} ?: 'keine Angabe'">0123
+                  45678901
+                </td>
+              </tr>
+              <tr class="row">
+                <th class="col-md-2">
+                  <span class="glyphicon glyphicon-home"></span> Adresse
+                </th>
+                <td class="col-md-10" th:with="address=${person.address}" th:inline="text">
+                  [[${address != null AND NOT address.empty()} ? |${address.street} ${address.zip}
+                  ${address.city}| : 'keine Angabe']]
+                  <small th:if="${NOT address.empty()}">(
+                    <a href="http://www.openstreetmap.org/search?query=Hauptstraße 3, 09876 Entenhausen"
+                       th:href="${address} ? |https://www.openstreetmap.org/search?query=${address.street} ${address.zip} ${address.city}|">
+                      <span class="glyphicon glyphicon-map-marker"></span>
+                      wo ist das?
+                    </a>)
+                  </small>
+                </td>
+              </tr>
+              </tbody>
+
+              <!-- participant profile -->
+              <tbody th:if="${person.participantProfile}"
+                     th:with="participantProfile = ${person.participantProfile}">
+              <tr class="row">
+                <th class="col-md-2">
+                  <span class="glyphicon glyphicon-calendar"></span> Geburtsdatum
+                </th>
+                <td class="col-md-10" th:text="${{participantProfile.dateOfBirth}}">11.02.2034</td>
+              </tr>
+              <tr class="row">
+                <th class="col-md-2">
+                  <span class="glyphicon glyphicon-cutlery"></span> Ernährung
+                </th>
+                <td class="col-md-10" th:text="${participantProfile.eatingHabits}">
+                  vegetarisch, vegan und mit vieeel Fleisch
+                </td>
+              </tr>
+              <tr class="row">
+                <th class="col-md-2">
+                  <span class="glyphicon glyphicon-bed"></span> Allergien
+                </th>
+                <td class="col-md-10" th:text="${participantProfile.healthImpairments}">
+                  Schnupfen, Husten und ganz viele Auas
+                </td>
+              </tr>
+              <tr class="row">
+                <th class="col-md-2">
+                  <span class="glyphicon glyphicon-tree-deciduous"></span> NABU-Mitgliedschaft
+                </th>
+                <td class="col-md-10">
+                  <span th:if="${participantProfile.nabuMembershipUnknown}">unbekannt</span>
+                  <div th:unless="${participantProfile.nabuMembershipUnknown}">
+                    <span th:if="${participantProfile.nabuMember}" th:inline="text"
+                          th:with="nabu = ${participantProfile.nabuMembership}">
+                      ja (Mitgliedsnummer [[${nabu.hasMembershipNumber()} ? ${nabu.membershipNumber} : 'unbekannt']])
+                    </span>
+                    <span th:unless="${participantProfile.nabuMember}">kein Mitglied</span>
+                  </div>
+                </td>
+              </tr>
+              <tr class="row">
+                <th class="col-md-2">
+                  <span class="glyphicon glyphicon-grain"></span> Bemerkungen
+                </th>
+                <td class="col-md-10" th:text="${participantProfile.remarks}">So Zeug</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- business contact -->
+          <div class="col-md-4" th:if="${false}">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">Kontakt-Informationen</h3>
+              </div>
+              <table class="table">
+                <tr class="row">
+                  <th class="col-md-5">
+                    <span class="glyphicon glyphicon-briefcase"></span> Unternehmen
+                  </th>
+                  <td class="col-md-7">
+                    <a href="overview.html?company=Ghostbusters">Ghostbusters</a>
+                  </td>
+                </tr>
+                <tr class="row">
+                  <th class="col-md-5">
+                    <span class="glyphicon glyphicon-earphone"></span> Telefon
+                    <small>(geschäftlich)</small>
+                  </th>
+                  <td class="col-md-7">
+                    0123 45678901
+                  </td>
+                </tr>
+                <tr class="row">
+                  <th class="col-md-5">
+                    <span class="glyphicon glyphicon-envelope"></span> E-Mail
+                    <small>(geschäftlich)</small>
+                  </th>
+                  <td class="col-md-7">
+                    <a href="mailto:jane.doe@dpt.company.com" th:href="|mailto:${person.email}|"
+                       th:text="${person.email}">jane.doe@dpt.company.com</a>
+                  </td>
+                </tr>
+                <tr class="row">
+                  <th class="col-md-5">
+                    <span class="glyphicon glyphicon-home"></span> Abteilung
+                  </th>
+                  <td class="col-md-7">
+                    <a href="overview.html">Super secret</a>
+                  </td>
+                </tr>
+                <tr class="row">
+                  <th class="col-md-5">
+                    <span class="glyphicon glyphicon-time"></span> Bürozeiten
+                  </th>
+                  <td class="col-md-7">
+                    Mo./Di. 09:00-11:00
+                  </td>
+                </tr>
+              </table>
+              <div class="panel-footer">
+                Ms. Doe arbeitet an super geheimen Entwicklungen von super tollen Sachen.
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </article>
+
+</main>
+
+<form id="logout-user" method="POST" th:action="@{/logout}">
+  <input type="hidden" name="csrf" th:value="csrf"/>
+</form>
+
+<script type="text/javascript" src="../../static/resources/js/jquery.min.js"
+        th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript" src="../../static/resources/js/bootstrap.min.js"
+        th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script src="../../static/resources/js/bootstrap-select.min.js"
+        th:src="@{/resources/js/bootstrap-select.min.js}"></script>
+<script src="../../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
+<script src="../../static/resources/js/formControls.js"
+        th:src="@{/resources/js/formControls.js}"></script>
+<script src="../../static/resources/js/personDetails.js"
+        th:src="@{/resources/js/personDetails.js}"></script>
+</body>
+</html>

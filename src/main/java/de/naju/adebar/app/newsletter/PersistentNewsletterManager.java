@@ -1,10 +1,5 @@
 package de.naju.adebar.app.newsletter;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.google.common.collect.Iterables;
 import de.naju.adebar.model.Email;
 import de.naju.adebar.model.newsletter.AlreadySubscribedException;
@@ -15,6 +10,11 @@ import de.naju.adebar.model.newsletter.NoSuchSubscriberException;
 import de.naju.adebar.model.newsletter.Subscriber;
 import de.naju.adebar.model.newsletter.SubscriberRepository;
 import de.naju.adebar.model.persons.Person;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * A {@link NewsletterManager} that persists the data in a database
@@ -23,6 +23,7 @@ import de.naju.adebar.model.persons.Person;
  */
 @Service
 public class PersistentNewsletterManager implements NewsletterManager {
+
   private static final int INITIAL_NEWSLETTER_COUNT = 15;
 
   private NewsletterRepository newsletterRepo;
@@ -49,7 +50,8 @@ public class PersistentNewsletterManager implements NewsletterManager {
 
   @Override
   public void deleteNewsletter(long id) {
-    Newsletter newsletter = newsletterRepo.findOne(id);
+    Newsletter newsletter = newsletterRepo.findById(id)
+        .orElseThrow(() -> new IllegalArgumentException("No newsletter with ID " + id));
     LinkedList<Subscriber> subscribers = new LinkedList<>();
     newsletter.getSubscribers().forEach(subscribers::add);
     for (Subscriber subscriber : subscribers) {
@@ -78,12 +80,12 @@ public class PersistentNewsletterManager implements NewsletterManager {
     if (!subscriberRepo.findByEmail(person.getEmail()).isPresent()) {
       subscriber = subscriberRepo.save(subscriber);
     } else {
-      if (!subscriberRepo.findOne(subscriber.getId()).equals(subscriber)) {
+      if (!subscriberRepo.findById(subscriber.getId()).orElse(null).equals(subscriber)) {
         throw new ExistingSubscriberException(
             String.format(
                 "There is already a subscriber with this email address, but different data: "
                     + "existing: %s new: %s",
-                subscriberRepo.findOne(subscriber.getId()), subscriber),
+                subscriberRepo.findById(subscriber.getId()).orElse(null), subscriber),
             subscriber);
       }
     }
@@ -95,11 +97,11 @@ public class PersistentNewsletterManager implements NewsletterManager {
   @Override
   public void updateSubscriptions(Subscriber subscriber, Iterable<Newsletter> newSubscriptions) {
     ArrayList<Newsletter> subscriptions = new ArrayList<>(INITIAL_NEWSLETTER_COUNT); // we will
-                                                                                     // store the
-                                                                                     // newsletters
-                                                                                     // to
-                                                                                     // deal with
-                                                                                     // here
+    // store the
+    // newsletters
+    // to
+    // deal with
+    // here
     newSubscriptions.forEach(subscriptions::add);
 
     // remove old subscriptions

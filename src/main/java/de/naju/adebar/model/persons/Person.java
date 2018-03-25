@@ -27,6 +27,17 @@ import de.naju.adebar.model.Address;
 import de.naju.adebar.model.Email;
 import de.naju.adebar.model.PhoneNumber;
 import de.naju.adebar.model.events.Event;
+import de.naju.adebar.model.persons.details.Gender;
+import de.naju.adebar.model.persons.details.JuleicaCard;
+import de.naju.adebar.model.persons.events.AbstractPersonRelatedEvent;
+import de.naju.adebar.model.persons.events.NewActivistRegisteredEvent;
+import de.naju.adebar.model.persons.events.NewReferentRegisteredEvent;
+import de.naju.adebar.model.persons.events.PersonArchivedEvent;
+import de.naju.adebar.model.persons.events.PersonDataUpdatedEvent;
+import de.naju.adebar.model.persons.exceptions.ArchivedPersonException;
+import de.naju.adebar.model.persons.exceptions.ExistingParentException;
+import de.naju.adebar.model.persons.exceptions.ImpossibleKinshipRelationException;
+import de.naju.adebar.model.persons.qualifications.Qualification;
 
 /**
  * Abstraction of a person. No matter of its concrete role (camp participant, activist, ...) some
@@ -147,27 +158,10 @@ public class Person {
   }
 
   /**
-   * @param id the person's unique ID
-   */
-  @SuppressWarnings("unused")
-  private void setId(PersonId id) {
-    this.id = id;
-  }
-
-  /**
    * @return the person's first name
    */
   public String getFirstName() {
     return firstName;
-  }
-
-  /**
-   * @param firstName the person's first name
-   * @throws IllegalArgumentException if the new name is empty or {@code null}
-   */
-  protected void setFirstName(String firstName) {
-    Assert.hasText(firstName, "First name may not be null nor empty, but was: " + firstName);
-    this.firstName = firstName;
   }
 
   /**
@@ -178,26 +172,10 @@ public class Person {
   }
 
   /**
-   * @param lastName the person's last name
-   * @throws IllegalArgumentException if the new name is empty or {@code null}
-   */
-  protected void setLastName(String lastName) {
-    Assert.hasText(lastName, "Last name may not be null nor empty, but was: " + lastName);
-    this.lastName = lastName;
-  }
-
-  /**
    * @return the person's email address
    */
   public Email getEmail() {
     return email;
-  }
-
-  /**
-   * @param email the person's email address, may be {@code null}
-   */
-  protected void setEmail(Email email) {
-    this.email = email;
   }
 
   /**
@@ -208,13 +186,6 @@ public class Person {
   }
 
   /**
-   * @param phoneNumber the person's phone number. May be {@code null}.
-   */
-  protected void setPhoneNumber(PhoneNumber phoneNumber) {
-    this.phoneNumber = phoneNumber;
-  }
-
-  /**
    * @return the person's address. May be {@code null}.
    */
   public Address getAddress() {
@@ -222,28 +193,10 @@ public class Person {
   }
 
   /**
-   * @param address the person's address. May be {@code null}.
-   */
-  protected void setAddress(Address address) {
-    this.address = address;
-  }
-
-  /**
    * @return {@code true} if the person is a camp participant, or {@code false} otherwise
    */
   public boolean isParticipant() {
     return participant;
-  }
-
-  /**
-   * Setter just for JPA's sake. Private to enforce consistency with the state of the
-   * {@link #participantProfile}
-   *
-   * @param participant whether the person is a participant
-   */
-  @SuppressWarnings("unused")
-  private void setParticipant(boolean participant) {
-    this.participant = participant;
   }
 
   /**
@@ -255,31 +208,10 @@ public class Person {
   }
 
   /**
-   * @param participantProfile the participant profile of the person. May be {@code null} if the
-   *        person is not a camp participant.
-   */
-  protected void setParticipantProfile(ParticipantProfile participantProfile) {
-    this.participant = participantProfile != null;
-    this.participantProfile = participantProfile;
-    participantProfile.provideRelatedPerson(this);
-  }
-
-  /**
    * @return {@code true} if the person is an activist, or {@code false} otherwise
    */
   public boolean isActivist() {
     return activist;
-  }
-
-  /**
-   * Setter just for JPA's sake. Private to enforce consistency with the state of the
-   * {@link #activistProfile}
-   *
-   * @param participant whether the person is a participant
-   */
-  @SuppressWarnings("unused")
-  private void setActivist(boolean activist) {
-    this.activist = activist;
   }
 
   /**
@@ -291,31 +223,10 @@ public class Person {
   }
 
   /**
-   * @param activistProfile the activist profile of the person. May be {@code null} if the person is
-   *        not an activist.
-   */
-  protected void setActivistProfile(ActivistProfile activistProfile) {
-    this.activist = activistProfile != null;
-    this.activistProfile = activistProfile;
-    activistProfile.provideRelatedPerson(this);
-  }
-
-  /**
    * @return {@code true} if the person is a referent, or {@code false} otherwise
    */
   public boolean isReferent() {
     return referent;
-  }
-
-  /**
-   * Setter just for JPA's sake. Private to enforce consistency with the state of the
-   * {@link #referentProfile}
-   *
-   * @param participant whether the person is a participant
-   */
-  @SuppressWarnings("unused")
-  private void setReferent(boolean referent) {
-    this.referent = referent;
   }
 
   /**
@@ -327,31 +238,10 @@ public class Person {
   }
 
   /**
-   * @param referentProfile the referent profile of the person. May be {@code null} if the person is
-   *        not a referent.
-   */
-  protected void setReferentProfile(ReferentProfile referentProfile) {
-    this.referent = referentProfile != null;
-    this.referentProfile = referentProfile;
-    referentProfile.provideRelatedPerson(this);
-  }
-
-  /**
    * @return the person's parents
    */
   public Iterable<Person> getParentProfiles() {
     return parents;
-  }
-
-  /**
-   * @param parentProfiles the person's parents
-   */
-  protected void setParentProfiles(List<Person> parentProfiles) {
-    if (parentProfiles == null) {
-      this.parents = new ArrayList<>(MAX_PARENT_PROFILES);
-    } else {
-      this.parents = parentProfiles;
-    }
   }
 
   /**
@@ -362,27 +252,10 @@ public class Person {
   }
 
   /**
-   * @param archived whether the person is still to be used
-   */
-  @SuppressWarnings("unused")
-  private void setArchived(boolean archived) {
-    this.archived = archived;
-  }
-
-  /**
    * @return all the events this person attended as participant
    */
   public Collection<Event> getParticipatingEvents() {
     return Collections.unmodifiableList(participatingEvents);
-  }
-
-  /**
-   * @param participatingEvents all the events this person attended as participant
-   */
-  @SuppressWarnings("unused")
-  private void setParticipatingEvents(List<Event> participatingEvents) {
-    Assert.notNull(participatingEvents, "Events may not be null");
-    this.participatingEvents = participatingEvents;
   }
 
   /**
@@ -553,9 +426,7 @@ public class Person {
    * @throws IllegalStateException if the person already is a camp participant
    */
   public ParticipantProfile makeParticipant() {
-    if (isParticipant()) {
-      throw new IllegalStateException("Person already is a participant");
-    }
+    assertMayBecomeParticipant();
     this.participantProfile = new ParticipantProfile(this);
     this.participant = true;
     return participantProfile;
@@ -575,9 +446,7 @@ public class Person {
    */
   public ParticipantProfile makeParticipant(Gender gender, LocalDate dateOfBirth,
       String eatingHabits, String healthImpairments) {
-    if (isParticipant()) {
-      throw new IllegalStateException("Person already is a participant");
-    }
+    assertMayBecomeParticipant();
     this.participantProfile =
         new ParticipantProfile(this, gender, dateOfBirth, eatingHabits, healthImpairments);
     this.participant = true;
@@ -593,9 +462,7 @@ public class Person {
    * @throws IllegalStateException if the person already is an activist
    */
   public ActivistProfile makeActivist() {
-    if (isActivist()) {
-      throw new IllegalStateException("Person already is an activist");
-    }
+    assertMayBecomeActivist();
     this.activistProfile = new ActivistProfile(this);
     this.activist = true;
 
@@ -613,9 +480,7 @@ public class Person {
    * @throws IllegalStateException if the person already is an activist
    */
   public ActivistProfile makeActivist(JuleicaCard juleica) {
-    if (isActivist()) {
-      throw new IllegalStateException("Person already is an activist");
-    }
+    assertMayBecomeActivist();
     this.activistProfile = new ActivistProfile(this, juleica);
     this.activist = true;
 
@@ -632,9 +497,7 @@ public class Person {
    * @throws IllegalStateException if the person already is a referent
    */
   public ReferentProfile makeReferent() {
-    if (isReferent()) {
-      throw new IllegalStateException("Person already is a referent");
-    }
+    assertMayBecomeReferent();
     this.referentProfile = new ReferentProfile(this);
     this.referent = true;
 
@@ -652,9 +515,7 @@ public class Person {
    * @throws IllegalStateException if the person already is a referent
    */
   public ReferentProfile makeReferent(Collection<Qualification> qualifications) {
-    if (isReferent()) {
-      throw new IllegalStateException("Person already is a referent");
-    }
+    assertMayBecomeReferent();
     this.referentProfile = new ReferentProfile(this, qualifications);
     this.referent = true;
 
@@ -669,9 +530,7 @@ public class Person {
    * @return the archived person
    */
   public Person archive() {
-    if (archived) {
-      throw new IllegalStateException("Person is already archived " + this);
-    }
+    assertNotArchived();
     anonymiseProfile();
     anonymiseAddress();
     archived = true;
@@ -728,6 +587,86 @@ public class Person {
   }
 
   /**
+   * @param firstName the person's first name
+   * @throws IllegalArgumentException if the new name is empty or {@code null}
+   */
+  protected void setFirstName(String firstName) {
+    Assert.hasText(firstName, "First name may not be null nor empty, but was: " + firstName);
+    this.firstName = firstName;
+  }
+
+  /**
+   * @param lastName the person's last name
+   * @throws IllegalArgumentException if the new name is empty or {@code null}
+   */
+  protected void setLastName(String lastName) {
+    Assert.hasText(lastName, "Last name may not be null nor empty, but was: " + lastName);
+    this.lastName = lastName;
+  }
+
+  /**
+   * @param email the person's email address, may be {@code null}
+   */
+  protected void setEmail(Email email) {
+    this.email = email;
+  }
+
+  /**
+   * @param phoneNumber the person's phone number. May be {@code null}.
+   */
+  protected void setPhoneNumber(PhoneNumber phoneNumber) {
+    this.phoneNumber = phoneNumber;
+  }
+
+  /**
+   * @param address the person's address. May be {@code null}.
+   */
+  protected void setAddress(Address address) {
+    this.address = address;
+  }
+
+  /**
+   * @param participantProfile the participant profile of the person. May be {@code null} if the
+   *        person is not a camp participant.
+   */
+  protected void setParticipantProfile(ParticipantProfile participantProfile) {
+    this.participant = participantProfile != null;
+    this.participantProfile = participantProfile;
+    participantProfile.provideRelatedPerson(this);
+  }
+
+  /**
+   * @param activistProfile the activist profile of the person. May be {@code null} if the person is
+   *        not an activist.
+   */
+  protected void setActivistProfile(ActivistProfile activistProfile) {
+    this.activist = activistProfile != null;
+    this.activistProfile = activistProfile;
+    activistProfile.provideRelatedPerson(this);
+  }
+
+  /**
+   * @param referentProfile the referent profile of the person. May be {@code null} if the person is
+   *        not a referent.
+   */
+  protected void setReferentProfile(ReferentProfile referentProfile) {
+    this.referent = referentProfile != null;
+    this.referentProfile = referentProfile;
+    referentProfile.provideRelatedPerson(this);
+  }
+
+  /**
+   * @param parentProfiles the person's parents
+   */
+  protected void setParentProfiles(List<Person> parentProfiles) {
+    if (parentProfiles == null) {
+      this.parents = new ArrayList<>(MAX_PARENT_PROFILES);
+    } else {
+      this.parents = parentProfiles;
+    }
+  }
+
+  /**
    * @param event saves an event for publishing
    */
   void registerEvent(AbstractPersonRelatedEvent event) {
@@ -766,6 +705,103 @@ public class Person {
   @AfterDomainEventPublication
   void clearEvents() {
     domainEvents.clear();
+  }
+
+  /**
+   * @param id the person's unique ID
+   */
+  @SuppressWarnings("unused")
+  private void setId(PersonId id) {
+    this.id = id;
+  }
+
+  /**
+   * Setter just for JPA's sake. Private to enforce consistency with the state of the
+   * {@link #participantProfile}
+   *
+   * @param participant whether the person is a participant
+   */
+  @SuppressWarnings("unused")
+  private void setParticipant(boolean participant) {
+    this.participant = participant;
+  }
+
+  /**
+   * Setter just for JPA's sake. Private to enforce consistency with the state of the
+   * {@link #activistProfile}
+   *
+   * @param participant whether the person is a participant
+   */
+  @SuppressWarnings("unused")
+  private void setActivist(boolean activist) {
+    this.activist = activist;
+  }
+
+  /**
+   * Setter just for JPA's sake. Private to enforce consistency with the state of the
+   * {@link #referentProfile}
+   *
+   * @param participant whether the person is a participant
+   */
+  @SuppressWarnings("unused")
+  private void setReferent(boolean referent) {
+    this.referent = referent;
+  }
+
+  /**
+   * @param archived whether the person is still to be used
+   */
+  @SuppressWarnings("unused")
+  private void setArchived(boolean archived) {
+    this.archived = archived;
+  }
+
+  /**
+   * @param participatingEvents all the events this person attended as participant
+   */
+  @SuppressWarnings("unused")
+  private void setParticipatingEvents(List<Event> participatingEvents) {
+    Assert.notNull(participatingEvents, "Events may not be null");
+    this.participatingEvents = participatingEvents;
+  }
+
+  /**
+   * @throws ArchivedPersonException if the person is archived
+   */
+  private void assertNotArchived() {
+    if (isArchived()) {
+      throw new ArchivedPersonException(this);
+    }
+  }
+
+  /**
+   * @throws IllegalStateException if the person is a participant
+   */
+  private void assertMayBecomeParticipant() {
+    assertNotArchived();
+    if (isParticipant()) {
+      throw new IllegalStateException("Person already is a participant");
+    }
+  }
+
+  /**
+   * @throws IllegalStateException if the person is an activist
+   */
+  private void assertMayBecomeActivist() {
+    assertNotArchived();
+    if (isActivist()) {
+      throw new IllegalStateException("Person already is an activist");
+    }
+  }
+
+  /**
+   * @throws IllegalStateException if the person is a referent
+   */
+  private void assertMayBecomeReferent() {
+    assertNotArchived();
+    if (isReferent()) {
+      throw new IllegalStateException("Person already is a referent");
+    }
   }
 
   /**

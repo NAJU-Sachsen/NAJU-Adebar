@@ -3,8 +3,8 @@ package de.naju.adebar.services.conversion.events;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import org.springframework.stereotype.Service;
-import de.naju.adebar.controller.forms.events.EventForm;
 import de.naju.adebar.model.events.Event;
+import de.naju.adebar.web.validation.events.EventForm;
 
 /**
  * Service to convert an {@link Event} to a corresponding {@link EventForm}

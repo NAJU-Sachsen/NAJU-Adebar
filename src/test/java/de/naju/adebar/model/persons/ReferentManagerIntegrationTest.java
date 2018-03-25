@@ -1,5 +1,8 @@
 package de.naju.adebar.model.persons;
 
+import de.naju.adebar.model.Address;
+import de.naju.adebar.model.Email;
+import de.naju.adebar.model.persons.qualifications.Qualification;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-import de.naju.adebar.model.Address;
-import de.naju.adebar.model.Email;
 
 /**
  * Basic behavior testing of the {@link PersonManager} regarding {@link ReferentProfile}
@@ -46,7 +47,8 @@ public class ReferentManagerIntegrationTest {
   @Test
   public void testSaveReferent() {
     personManager.savePerson(claus);
-    Assert.assertTrue(claus.toString() + " should have been saved!", referentRepo.exists(clausId));
+    Assert.assertTrue(claus.toString() + " should have been saved!",
+        referentRepo.existsById(clausId));
   }
 
   @Test
@@ -65,6 +67,6 @@ public class ReferentManagerIntegrationTest {
     personManager.savePerson(berta);
 
     Assert.assertFalse(berta.toString() + " is not an activist",
-        referentRepo.exists(berta.getId()));
+        referentRepo.existsById(berta.getId()));
   }
 }

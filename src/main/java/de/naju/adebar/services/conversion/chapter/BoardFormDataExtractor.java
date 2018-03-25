@@ -3,10 +3,10 @@ package de.naju.adebar.services.conversion.chapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import de.naju.adebar.controller.forms.chapter.BoardForm;
 import de.naju.adebar.model.chapter.Board;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.persons.PersonManager;
+import de.naju.adebar.web.validation.chapters.BoardForm;
 
 /**
  * Service to extract the necessary data from a board form

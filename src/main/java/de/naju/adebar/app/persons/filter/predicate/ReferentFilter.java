@@ -4,7 +4,7 @@ import java.util.List;
 import com.querydsl.core.BooleanBuilder;
 import de.naju.adebar.app.filter.FilterType;
 import de.naju.adebar.model.persons.QPerson;
-import de.naju.adebar.model.persons.Qualification;
+import de.naju.adebar.model.persons.qualifications.Qualification;
 
 public class ReferentFilter implements PersonFilter {
 

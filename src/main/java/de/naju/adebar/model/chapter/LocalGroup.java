@@ -1,5 +1,10 @@
 package de.naju.adebar.model.chapter;
 
+import de.naju.adebar.model.Address;
+import de.naju.adebar.model.events.Event;
+import de.naju.adebar.model.newsletter.Newsletter;
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.exceptions.NoActivistException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
@@ -23,11 +28,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 import org.springframework.util.Assert;
-import de.naju.adebar.model.Address;
-import de.naju.adebar.model.events.Event;
-import de.naju.adebar.model.newsletter.Newsletter;
-import de.naju.adebar.model.persons.NoActivistException;
-import de.naju.adebar.model.persons.Person;
 
 /**
  * Abstraction of a local group. Each group has a (very likely) unique set of members, i. e.
@@ -55,15 +55,20 @@ public class LocalGroup {
   private Address address;
 
   @ManyToMany(cascade = CascadeType.ALL)
-  @JoinTable(inverseJoinColumns = @JoinColumn(name = "memberId"))
+  @JoinTable(name = "localGroupMembers", //
+      joinColumns = @JoinColumn(name = "localGroupId"), //
+      inverseJoinColumns = @JoinColumn(name = "memberId"))
   private List<Person> members;
 
   @ManyToMany(cascade = CascadeType.ALL)
-  @JoinTable(inverseJoinColumns = @JoinColumn(name = "personId"))
+  @JoinTable(name = "localGroupContactPersons", //
+      joinColumns = @JoinColumn(name = "localGroupId"), //
+      inverseJoinColumns = @JoinColumn(name = "personId"))
   private List<Person> contactPersons;
 
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  @JoinTable(name = "localGroupEvents", joinColumns = @JoinColumn(name = "localGroupId"),
+  @JoinTable(name = "localGroupEvents", //
+      joinColumns = @JoinColumn(name = "localGroupId"), //
       inverseJoinColumns = @JoinColumn(name = "eventId"))
   private List<Event> events;
 
@@ -74,7 +79,9 @@ public class LocalGroup {
   private Board board;
 
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  @JoinTable(inverseJoinColumns = @JoinColumn(name = "newsletterId"))
+  @JoinTable(name = "localGroupNewsletters", //
+      joinColumns = @JoinColumn(name = "localGroupId"), //
+      inverseJoinColumns = @JoinColumn(name = "newsletterId"))
   private Set<Newsletter> newsletters;
 
   @Column(name = "nabuGroup")
@@ -104,7 +111,8 @@ public class LocalGroup {
   /**
    * Default constructor for JPA
    */
-  protected LocalGroup() {}
+  protected LocalGroup() {
+  }
 
   // basic getter and setter
 
@@ -275,7 +283,7 @@ public class LocalGroup {
   /**
    * @param name the project's name
    * @return an optional if the local group organizes a project with that name. Otherwise the
-   *         optional is empty
+   * optional is empty
    */
   @Transient
   public Optional<Project> getProject(String name) {
@@ -299,7 +307,7 @@ public class LocalGroup {
 
   /**
    * @return {@code true} if the local group has at least one contact person, {@code false}
-   *         otherwise
+   * otherwise
    */
   public boolean hasContactPersons() {
     return !contactPersons.isEmpty();
@@ -333,8 +341,8 @@ public class LocalGroup {
 
   /**
    * @param activist the activist to check
-   * @return {@code true} if the activist is registered as contributor to the chapter or
-   *         {@code false} otherwise
+   * @return {@code true} if the activist is registered as contributor to the chapter or {@code
+   * false} otherwise
    */
   public boolean isMember(Person activist) {
     return members.contains(activist);
@@ -352,7 +360,7 @@ public class LocalGroup {
   /**
    * @param event the event to be hosted by the local group
    * @throws IllegalArgumentException if the event is {@code null} or already hosted by the local
-   *         group
+   * group
    */
   public void addEvent(Event event) {
     Assert.notNull(event, "Event to add may not be null!");
@@ -365,7 +373,7 @@ public class LocalGroup {
   /**
    * @param project the project to be organized by the local group
    * @throws IllegalArgumentException if the project is {@code null} or already organized by the
-   *         local group
+   * local group
    * @throws IllegalStateException if the project is already hosted by another chapter
    */
   public void addProject(Project project) {
@@ -393,7 +401,7 @@ public class LocalGroup {
 
   /**
    * @param newsletter the newsletter to remove from the chapter, if the local group actually has
-   *        such a newsletter
+   * such a newsletter
    */
   public void removeNewsletter(Newsletter newsletter) {
     newsletters.remove(newsletter);

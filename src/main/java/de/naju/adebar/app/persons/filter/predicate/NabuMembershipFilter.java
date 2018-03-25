@@ -1,8 +1,8 @@
 package de.naju.adebar.app.persons.filter.predicate;
 
 import com.querydsl.core.BooleanBuilder;
-import de.naju.adebar.model.persons.NabuMembershipInformation.MembershipStatus;
 import de.naju.adebar.model.persons.QPerson;
+import de.naju.adebar.model.persons.details.NabuMembershipInformation.MembershipStatus;
 
 public class NabuMembershipFilter implements PersonFilter {
 
