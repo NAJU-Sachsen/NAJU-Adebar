@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
@@ -90,18 +91,22 @@ public class AddPersonController {
    *
    * @param form the filled add person form
    * @param errors validation errors within the form
-   * @param model model to put the form into if validation failed or other errors occurred
    * @return a redirection to the new person's profile page
    */
   @PostMapping("/persons/add")
   @Transactional
-  public String addPerson(@ModelAttribute("form") @Valid AddPersonForm form, Errors errors,
-      Model model, RedirectAttributes redirAttr) {
+  public String addPerson(@ModelAttribute("form") @Valid AddPersonForm form, //
+      @RequestParam(value = "return-action", defaultValue = "") String returnAction, //
+      @RequestParam(value = "return-to", defaultValue = "") String returnPath, //
+      Errors errors, RedirectAttributes redirAttr) {
+
+    boolean success = true;
 
     // check n° 1: form has no errors
     if (errors.hasErrors()) {
-      model.addAttribute("form", form);
-      return showAddPersonView(model);
+      redirAttr.addFlashAttribute("form", form);
+      redirAttr.addFlashAttribute(errors);
+      success = false;
     }
 
     Person person = personFormConverter.toEntity(form);
@@ -109,9 +114,24 @@ public class AddPersonController {
     // check n° 2: there are no similar persons yet
     List<Person> similarPersons = checkForSimilarPersons(person);
     if (!similarPersons.isEmpty()) {
-      model.addAttribute("similarPersons", similarPersons);
-      model.addAttribute("form", form);
-      return showAddPersonView(model);
+      redirAttr.addFlashAttribute("similarPersons", similarPersons);
+      redirAttr.addFlashAttribute("form", form);
+      success = false;
+    }
+
+    // if something did not go as expected, we will cancel adding the person and instead redirect
+    // to the add person form. Depending on the kind of problem, the model has already been filled
+    // for us accordingly
+    if (!success) {
+      if (!returnAction.isEmpty()) {
+        redirAttr.addAttribute("return-action", returnAction);
+      }
+
+      if (!returnPath.isEmpty()) {
+        redirAttr.addAttribute("return-to", returnPath);
+      }
+
+      return "redirect:/persons/add";
     }
 
     // everything seems fine, finish saving the new person
@@ -119,6 +139,13 @@ public class AddPersonController {
     addToLocalGroupsIfNecessary(person, form);
     personRepo.save(person);
 
+    if (!returnAction.isEmpty()) {
+      redirAttr.addAttribute("do", returnAction);
+    }
+
+    if (!returnPath.isEmpty()) {
+      return "redirect:" + returnPath;
+    }
     return "redirect:/persons/" + person.getId();
   }
 

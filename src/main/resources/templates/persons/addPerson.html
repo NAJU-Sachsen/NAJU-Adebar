@@ -157,6 +157,11 @@
   <!-- the form -->
   <form id="add-person" class="row display-category" method="post" th:action="@{/persons/add}">
 
+    <input type="hidden" name="return-to" th:value="${#request.getParameter('return-to')}"
+           th:if="${#request.getParameter('return-to') != null}"/>
+    <input type="hidden" name="return-action" th:value="${#request.getParameter('return-action')}"
+           th:if="${#request.getParameter('return-action') != null}"/>
+
     <!-- general info -->
     <div class="col-md-4">
       <div class="panel panel-primary">
