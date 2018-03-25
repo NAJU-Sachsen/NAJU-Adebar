@@ -44,5 +44,5 @@ public interface ReadOnlyLocalGroupRepository extends ReadOnlyRepository<LocalGr
    * @param event the event to query for
    * @return an optional containing the local group which hosts the event, if such a group exists
    */
-  Optional<LocalGroup> findByEventsContains(Event event);
+  Optional<LocalGroup> findFirstByEventsContaining(Event event);
 }

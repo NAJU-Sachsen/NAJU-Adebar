@@ -1,5 +1,10 @@
 package de.naju.adebar.app.events;
 
+import de.naju.adebar.app.chapter.LocalGroupManager;
+import de.naju.adebar.app.chapter.ProjectManager;
+import de.naju.adebar.model.chapter.LocalGroup;
+import de.naju.adebar.model.chapter.Project;
+import de.naju.adebar.model.events.Event;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -7,11 +12,6 @@ import java.util.Map;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import de.naju.adebar.app.chapter.LocalGroupManager;
-import de.naju.adebar.app.chapter.ProjectManager;
-import de.naju.adebar.model.chapter.LocalGroup;
-import de.naju.adebar.model.chapter.Project;
-import de.naju.adebar.model.events.Event;
 
 /**
  * Service to conveniently access {@link Event} instances and to collect data about them
@@ -21,16 +21,8 @@ import de.naju.adebar.model.events.Event;
 @Service
 public class EventDataProcessor {
 
-  /**
-   * Simple classification of the dates events take place
-   */
-  public enum EventType {
-    ALL, RUNNING, FUTURE, PAST
-  }
-
   private static final int FIRST_TIME_SLICE = 0;
   private static final long ONE_DAY = 1;
-
   private EventManager eventManager;
   private LocalGroupManager localGroupManager;
   private ProjectManager projectManager;
@@ -53,7 +45,8 @@ public class EventDataProcessor {
     Iterable<Event> events = fetchEvents(eventType);
 
     for (Event event : events) {
-      Optional<LocalGroup> localGroup = localGroupManager.repository().findByEventsContains(event);
+      Optional<LocalGroup> localGroup = localGroupManager.repository()
+          .findFirstByEventsContaining(event);
       localGroup.ifPresent(l -> belonging.put(event, l));
     }
 
@@ -67,7 +60,8 @@ public class EventDataProcessor {
   public Map<Event, LocalGroup> getLocalGroupBelonging(Iterable<Event> events) {
     Map<Event, LocalGroup> belonging = new HashMap<>();
     for (Event event : events) {
-      Optional<LocalGroup> localGroup = localGroupManager.repository().findByEventsContains(event);
+      Optional<LocalGroup> localGroup = localGroupManager.repository()
+          .findFirstByEventsContaining(event);
       localGroup.ifPresent(l -> belonging.put(event, l));
     }
     return belonging;
@@ -114,7 +108,7 @@ public class EventDataProcessor {
         events = eventManager.repository().findAll();
         break;
       case RUNNING:
-        events = eventManager.repository().findByStartTimeIsBeforeAndEndTimeIsAfter(now, now);
+        events = eventManager.findOngoingEvents();
         break;
       case FUTURE:
         events = eventManager.repository().findByStartTimeIsAfter(now);
@@ -131,7 +125,7 @@ public class EventDataProcessor {
    * @return {@code true} if the event belongs to a local group, {@code false} otherwise
    */
   public boolean eventBelongsToLocalGroup(Event event) {
-    return localGroupManager.repository().findByEventsContains(event).isPresent();
+    return localGroupManager.repository().findFirstByEventsContaining(event).isPresent();
   }
 
   /**
@@ -159,6 +153,13 @@ public class EventDataProcessor {
       adjusted = adjusted.plusDays(ONE_DAY);
     }
     return adjusted;
+  }
+
+  /**
+   * Simple classification of the dates events take place
+   */
+  public enum EventType {
+    ALL, RUNNING, FUTURE, PAST
   }
 
 }
