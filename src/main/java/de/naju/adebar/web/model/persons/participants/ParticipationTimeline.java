@@ -72,6 +72,13 @@ public class ParticipationTimeline implements Iterable<TimelineEntry> {
   }
 
   /**
+   * @return whether the timeline contains entries or not
+   */
+  public boolean isEmpty() {
+    return participationEntries.isEmpty();
+  }
+
+  /**
    * Places an event in the sort tree
    *
    * @param sortTree the sort tree
