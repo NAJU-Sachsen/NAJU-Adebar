@@ -184,7 +184,7 @@
                 </div>
 
                 <!-- timeline anchors -->
-                <div class="row">
+                <div class="row" th:if="${participationTimeline}">
                   <div class="col-md-5">
                     <div class="panel panel-default">
                       <div class="panel-heading">
@@ -208,15 +208,15 @@
               </div>
               <div class="col-md-7 col-md-pull-5">
 
-                <div class="row">
-                  <p class="alert col-md-6">
+                <div class="row" th:if="${participationTimeline}">
+                  <p class="">
                     <em th:text="${person.name}">Jane Doe</em> hat an folgenden Veranstaltungen
                     teilgenommen:
                   </p>
                 </div>
 
                 <!-- timeline -->
-                <div class="row">
+                <div class="row" th:if="${participationTimeline}">
                   <div id="event-participation-timeline" class="timeline" th:remove="all-but-first">
                     <div class="timeline-year" th:each="entry : ${participationTimeline}">
                       <div class="timeline-group-wrapper">
@@ -262,6 +262,10 @@
                       </div>
                     </div>
                   </div>
+                </div>
+
+                <div class="row margin-top-lg" th:unless="${participationTimeline}">
+                  Bisher hat die Person noch an keinen Veranstaltungen teilgenommen.
                 </div>
 
               </div>
