@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta th:name="_csrf" th:value="${_csrf.token}"/>
+  <title>Jane Doe | Adebar</title>
+  <link rel="stylesheet" type="text/css" href="../../static/resources/css/bootstrap.min.css"
+        th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+
+  <link rel="stylesheet" type="text/css" href="../../static/resources/css/style.css"
+        th:href="@{/resources/css/style.css}"/>
+  <link rel="stylesheet" type="text/css" href="../../static/resources/css/personDetails.css"
+        th:href="@{/resources/css/personDetails.css}"/>
+</head>
+<body>
+
+<!-- central navigation -->
+<nav th:replace="navigation :: topNav(page='persons')"></nav>
+
+<!-- page specific content-->
+<main id="main">
+
+  <a href="persons.html">
+    <span class="glyphicon glyphicon-chevron-left"></span>
+    Zurück zur Übersicht
+  </a>
+
+  <h1>Profil von Jane Doe</h1>
+
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active">
+      <a href="#overview" class="tab-controller" aria-controls="general" role="tab"
+         data-toggle="tab">Allgemeine Infos</a>
+    </li>
+    <li role="presentation">
+      <a href="#activist-referent" class="tab-controller" aria-controls="activist-referent"
+         role="tab" data-toggle="tab">Aktiven + Referenteninfos</a>
+    </li>
+    <li role="presentation">
+      <a href="#events" class="tab-controller" aria-controls="events" role="tab" data-toggle="tab">Teilgenommene
+        Veranstaltungen</a>
+    </li>
+    <li role="presentation">
+      <a href="#newsletters" class="tab-controller" aria-controls="newsletters" role="tab"
+         data-toggle="tab">Newsletter</a>
+    </li>
+  </ul>
+
+  <article class="tab-content">
+
+    <!-- general and relationship -->
+    <div id="overview" class="tab-pane active container-fluid" role="tabpanel">
+
+      <!-- activist profile -->
+      <section id="family-relations" class="display-category" th:fragment="graph">
+
+        <div class="row category-header">
+          <h2 class="col-md-10">Verwandschaft</h2>
+        </div>
+
+        <div class="container" th:if="${false}">
+          <div id="family-relations-graph"></div>
+        </div>
+
+        <!-- parents and siblings -->
+        <div class="row">
+
+          <!-- parents -->
+          <div class="col-md-6">
+
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">Eltern</h3>
+              </div>
+
+              <table class="table" th:unless="${relatives.parents.empty}">
+                <thead></thead>
+                <tbody>
+                <tr class="row" th:each="parent : ${relatives.parents}">
+                  <td class="col-md-3" th:text="${parent.name}">
+                    Max Muster
+                  </td>
+                  <td class="col-md-5">
+                    <span class="glyphicon glyphicon-envelope"></span>
+                    <a href="mailto:max.muster@web.de" th:href="|mailto:${parent.email}|"
+                       th:text="${parent.email}" th:if="${parent.email}">
+                      max.muster@web.de
+                    </a>
+                    <span th:unless="${parent.email}">unbekannt</span>
+                  </td>
+                  <td class="col-md-3" th:inline="text">
+                    <span class="glyphicon glyphicon-phone"></span>
+                    [[${parent.phoneNumber} ?: 'unbekannt']]
+                  </td>
+                  <td class="col-md-1">
+                    <a href="personDetailsOverview.html"
+                       th:href="@{/persons/{id}(id=${parent.id})}">
+                      <span class="glyphicon glyphicon-new-window"></span>
+                    </a>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+
+              <div class="panel-body" th:if="${relatives.parents.empty}">
+                Keine Angaben
+              </div>
+
+              <div class="panel-footer">
+                <button type="button" class="btn btn-default btn-sm" data-toggle="modal"
+                        data-target="#add-parent-dialog">
+                  Hinzufügen
+                </button>
+              </div>
+
+              <!-- add parent -->
+              <div class="modal fade modal-tabbed" id="add-parent-dialog" tabindex="-1"
+                   role="dialog">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Elternteil hinzufügen</h4>
+                    </div>
+
+                    <div class="modal-body">
+                      <div class="container-fluid">
+
+                        <ul class="nav nav-tabs" role="tablist">
+                          <li role="presentation" class="active">
+                            <a href="#parent-existing-person" id="add-parent-show-existing"
+                               role="tab" data-toggle="tab">
+                              Auswählen
+                            </a>
+                          </li>
+                          <li role="presentation">
+                            <a href="#parent-new-person" id="add-parent-show-new" role="tab"
+                               data-toggle="tab">
+                              Erstellen
+                            </a>
+                          </li>
+                        </ul>
+
+                        <form id="add-parent" class="tab-content"
+                              method="post"
+                              th:object="${addParentForm}"
+                              th:action="@{/persons/{id}/relatives/parents/add(id=${person.id})}">
+                          <input type="hidden" id="#add-parent-type"/>
+
+                          <!-- existing person -->
+                          <div role="tabpanel" class="tab-pane active"
+                               id="parent-existing-person">
+                            <div class="container-fluid margin-top-lg person-search-container">
+                              <div class="row">
+                                <div class="col-md-3 no-margin-btm margin-top">
+                                  <label for="parent-search" class="control-label">
+                                    Person suchen:
+                                  </label>
+                                </div>
+                                <div class="col-md-7">
+                                  <input type="search"
+                                         class="form-control" id="parent-search"
+                                         name="person-search-query"
+                                         placeholder="Name, E-Mail, Telefon oder Adresse"
+                                         th:value="${param.do != null and param.do[0] == 'add-parent'} ? ${param.search}"/>
+                                  <input type="hidden" name="return-action" value="add-parent"/>
+                                  <input type="hidden" name="return-tab"
+                                         value="add-parent-show-existing"/>
+                                </div>
+                                <div class="col-md-2">
+                                  <button type="submit" class="btn btn-primary"
+                                          formmethod="get"
+                                          th:formaction="@{/persons/{id}/relatives/search(id=${person.id})}">
+                                    Los
+                                  </button>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <p class="col-md-12 help-block">
+                                  Es kann sein, dass die Suche aktuell Probleme mit Umlauten hat. In
+                                  so einem Fall bitte einfach nur den Vornamen oder Nachnamen
+                                  verwenden.
+                                </p>
+                              </div>
+                              <hr/>
+                              <div class="panel panel-default"
+                                   th:if="${param.do != null and param.do[0] == 'add-parent' and matchingPersons != null and not matchingPersons.empty}">
+                                <div class="panel-heading">
+                                  <h5 class="panel-title">Ergebnisse</h5>
+                                </div>
+                                <ul class="list-group">
+                                  <li class="list-group-item"
+                                      th:each="match : ${matchingPersons}" th:inline="text">
+                                    <div class="radio">
+                                      <label>
+                                        <input type="radio" name="person-id"
+                                               th:value="${match.id}" th:field="*{existingPerson}"/>
+                                        [[${match.name}]]
+                                        <small>[[${match.email}]] [[${match.phoneNumber}]]</small>
+                                      </label>
+                                    </div>
+                                  </li>
+                                </ul>
+                              </div>
+
+                              <div class="alert alert-info"
+                                   th:unless="${param.do != null and param.do[0] == 'add-parent' and matchingPersons != null}">
+                                Bitte nach der gewünschten Person suchen
+                              </div>
+
+                              <div class="alert alert-info"
+                                   th:if="${param.do != null and param.do[0] == 'add-parent' and matchingPersons != null  and matchingPersons.empty}">
+                                Keine Übereinstimmungen
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- new person -->
+                          <div role="tabpanel" class="tab-pane margin-top-lg"
+                               id="parent-new-person">
+                            <div class="form-group"
+                                 th:classappend="${#fields.hasErrors('newFirstName')} ? 'has-error'">
+                              <label for="new-parent-first-name"
+                                     class="control-label">Vorname</label>
+                              <input type="text" id="new-parent-first-name" class="form-control"
+                                     placeholder="Vorname" th:field="*{newFirstName}"/>
+                              <p class="help-block" th:if="${#fields.hasErrors('newFirstName')}"
+                                 th:errors="*{newFirstName}">Erforderlich</p>
+                            </div>
+                            <div class="form-group"
+                                 th:classappend="${#fields.hasErrors('newLastName')} ? 'has-error'">
+                              <label for="new-parent-last-name"
+                                     class="control-label">Nachname</label>
+                              <input type="text" id="new-parent-last-name" class="form-control"
+                                     placeholder="Vorname" th:field="*{newLastName}"/>
+                              <p class="help-block" th:if="${#fields.hasErrors('newLastName')}"
+                                 th:errors="*{newLastName}">Erforderlich</p>
+                            </div>
+                            <div class="form-group"
+                                 th:classappend="${#fields.hasErrors('newEmail')} ? 'has-error'">
+                              <label for="new-parent-email"
+                                     class="control-label">E-Mail Adresse</label>
+                              <div class="input-group">
+                                <input type="text" id="new-parent-email" class="form-control"
+                                       placeholder="Vorname" th:field="*{newEmail}"/>
+                                <span class="input-group-addon">optional</span>
+                              </div>
+                              <p class="help-block" th:if="${#fields.hasErrors('newEmail')}"
+                                 th:errors="*{newEmail}">Erforderlich</p>
+                            </div>
+                            <div class="form-group"
+                                 th:classappend="${#fields.hasErrors('newPhone')} ? 'has-error'">
+                              <label for="new-parent-phone"
+                                     class="control-label">Telefon (privat)</label>
+                              <div class="input-group">
+                                <input type="text" id="new-parent-phone" class="form-control"
+                                       placeholder="Vorname" th:field="*{newPhone}"/>
+                                <span class="input-group-addon">optional</span>
+                              </div>
+                              <p class="help-block" th:if="${#fields.hasErrors('newPhone')}"
+                                 th:errors="*{newPhone}">Erforderlich</p>
+                            </div>
+                            <hr/>
+                            <div class="form-group">
+                              <label for="new-sibling-retain-address"
+                                     class="control-label">Adresse</label>
+                              <div class="checkbox">
+                                <label><input type="checkbox" id="new-sibling-retain-address"
+                                              th:field="*{newRetainAddress}"/>
+                                  Adresse des Kindes übernehmen</label>
+                              </div>
+                            </div>
+                            <hr/>
+                            <p class="help-block">
+                              Stimmen E-Mail Adresse und Telefonnummer?
+                            </p>
+                          </div>
+
+                        </form>
+                      </div>
+                    </div>
+
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">
+                        Abbrechen
+                      </button>
+                      <button type="submit" class="btn btn-primary" form="add-parent">
+                        Hinzufügen
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- siblings -->
+          <div class="col-md-4">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">Geschwister</h3>
+              </div>
+
+              <div class="list-group" th:unless="${relatives.siblings.empty}">
+                <a href="personDetails.html" class="list-group-item"
+                   th:each="sibling : ${relatives.siblings}"
+                   th:href="@{/persons/{id}(id=${sibling.id})}" th:text="${sibling.name}">
+                  Maxie Muster
+                </a>
+              </div>
+
+              <div class="panel-body" th:if="${relatives.siblings.empty}">
+                Keine Angaben
+              </div>
+
+              <div class="panel-footer">
+                <button type="button" class="btn btn-default btn-sm" data-toggle="modal"
+                        data-target="#add-sibling-dialog">Hinzufügen
+                </button>
+              </div>
+
+              <!-- add sibling -->
+              <div class="modal fade modal-tabbed" id="add-sibling-dialog" tabindex="-1"
+                   role="dialog">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Geschwister hinzufügen</h4>
+                    </div>
+
+                    <div class="modal-body">
+                      <div class="container-fluid">
+
+                        <ul class="nav nav-tabs" role="tablist">
+                          <li role="presentation" class="active">
+                            <a href="#sibling-existing-person" id="add-sibling-show-existing"
+                               role="tab" data-toggle="tab">
+                              Auswählen
+                            </a>
+                          </li>
+                          <li role="presentation">
+                            <a href="#sibling-new-person" id="add-sibling-show-new" role="tab"
+                               data-toggle="tab">
+                              Erstellen
+                            </a>
+                          </li>
+                        </ul>
+
+                        <form id="add-sibling" class="tab-content"
+                              method="post"
+                              th:object="${addSiblingForm}"
+                              th:action="@{/persons/{id}/relatives/siblings/add(id=${person.id})}">
+                          <input type="hidden" id="#add-sibling-type"/>
+
+                          <!-- existing person -->
+                          <div role="tabpanel" class="tab-pane active"
+                               id="sibling-existing-person">
+                            <div class="container-fluid margin-top-lg person-search-container">
+                              <div class="row">
+                                <div class="col-md-3 no-margin-btm margin-top">
+                                  <label for="parent-search" class="control-label">
+                                    Person suchen:
+                                  </label>
+                                </div>
+                                <div class="col-md-7">
+                                  <input type="search"
+                                         class="form-control" id="sibling-search"
+                                         name="person-search-query"
+                                         placeholder="Name, E-Mail, Telefon oder Adresse"
+                                         th:value="${param.do != null and param.do[0] == 'add-sibling'} ? ${param.search}"/>
+                                  <input type="hidden" name="return-action" value="add-sibling"/>
+                                  <input type="hidden" name="return-tab"
+                                         value="add-sibling-show-existing"/>
+                                </div>
+                                <div class="col-md-2">
+                                  <button type="submit" class="btn btn-primary"
+                                          formmethod="get"
+                                          th:formaction="@{/persons/{id}/relatives/search(id=${person.id})}">
+                                    Los
+                                  </button>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <p class="col-md-12 help-block">
+                                  Es kann sein, dass die Suche aktuell Probleme mit Umlauten hat. In
+                                  so einem Fall bitte einfach nur den Vornamen oder Nachnamen
+                                  verwenden.
+                                </p>
+                              </div>
+                              <hr/>
+                              <div class="panel panel-default"
+                                   th:if="${param.do != null and param.do[0] == 'add-sibling' and matchingPersons != null and not matchingPersons.empty}">
+                                <div class="panel-heading">
+                                  <h5 class="panel-title">Ergebnisse</h5>
+                                </div>
+                                <ul class="list-group">
+                                  <li class="list-group-item"
+                                      th:each="match : ${matchingPersons}" th:inline="text">
+                                    <div class="radio">
+                                      <label>
+                                        <input type="radio" name="person-id"
+                                               th:value="${match.id}" th:field="*{existingPerson}"/>
+                                        [[${match.name}]]
+                                        <span class="glyphicon glyphicon-tent" data-toggle="tooltip"
+                                              data-placement="bottom"
+                                              data-title="Campteilnehmer*in" data-container="body"
+                                              th:if="${match.participant}"></span>
+                                        <span class="glyphicon glyphicon-wrench"
+                                              data-toggle="tooltip" data-placement="bottom"
+                                              data-title="Aktive*r" data-container="body"
+                                              th:if="${match.activist}"></span>
+                                        <span class="glyphicon glyphicon-blackboard"
+                                              data-toggle="tooltip"
+                                              data-placement="bottom" data-title="Referent*in"
+                                              data-container="body"
+                                              th:if="${match.referent}"></span>
+                                        <span class="glyphicon glyphicon-briefcase"
+                                              data-toggle="tooltip"
+                                              data-placement="bottom" data-title="Geschäftskontakt"
+                                              data-container="body"
+                                              th:if="false"></span>
+                                        <span class="glyphicon glyphicon-baby-formula"
+                                              data-toggle="tooltip"
+                                              data-placement="bottom" data-title="Elternteil"
+                                              data-container="body"
+                                              th:if="false"></span>
+                                        <small
+                                            th:if="${match.participant and match.participantProfile.dateOfBirth != null}">
+                                          Alter: [[${match.participantProfile.calculateAge()}]]
+                                        </small>
+                                      </label>
+                                    </div>
+                                  </li>
+                                </ul>
+                              </div>
+
+                              <div class="alert alert-info"
+                                   th:unless="${param.do != null and param.do[0] == 'add-sibling' and matchingPersons != null}">
+                                Bitte nach der gewünschten Person suchen
+                              </div>
+
+                              <div class="alert alert-info"
+                                   th:if="${param.do != null and param.do[0] == 'add-sibling' and matchingPersons != null  and matchingPersons.empty}">
+                                Keine Übereinstimmungen
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- new person -->
+                          <div role="tabpanel" class="tab-pane margin-top-lg"
+                               id="sibling-new-person">
+                            <div class="form-group"
+                                 th:classappend="${#fields.hasErrors('newFirstName')} ? 'has-error'">
+                              <label for="new-sibling-first-name"
+                                     class="control-label">Vorname</label>
+                              <input type="text" id="new-sibling-first-name" class="form-control"
+                                     placeholder="Vorname" th:field="*{newFirstName}"/>
+                              <p class="help-block" th:if="${#fields.hasErrors('newFirstName')}"
+                                 th:errors="*{newFirstName}">Erforderlich</p>
+                            </div>
+                            <div class="form-group"
+                                 th:classappend="${#fields.hasErrors('newLastName')} ? 'has-error'">
+                              <label for="new-sibling-last-name"
+                                     class="control-label">Nachname</label>
+                              <input type="text" id="new-sibling-last-name" class="form-control"
+                                     placeholder="Vorname" th:field="*{newLastName}"/>
+                              <p class="help-block" th:if="${#fields.hasErrors('newLastName')}"
+                                 th:errors="*{newLastName}">Erforderlich</p>
+                            </div>
+                            <div class="form-group"
+                                 th:classappend="${#fields.hasErrors('newDateOfBirth')} ? 'has-error'">
+                              <label for="new-sibling-date-of-birth"
+                                     class="control-label">Geburtsdatum</label>
+                              <input type="date" id="new-sibling-date-of-birth" class="form-control"
+                                     placeholder="Format: TT.MM.YYYY" th:field="*{newDateOfBirth}"/>
+                              <p class="help-block" th:if="${#fields.hasErrors('newDateOfBirth')}"
+                                 th:errors="*{newDateOfBirth}">Erforderlich</p>
+                            </div>
+                            <div class="form-group"
+                                 th:classappend="${#fields.hasErrors('newGender')} ? 'has-error'">
+                              <label for="new-sibling-gender"
+                                     class="control-label">Geschlecht</label>
+                              <fieldset id="new-sibling-gender" class="radio">
+                                <label>
+                                  <input type="radio" name="gender" value="FEMALE"
+                                         th:field="*{newGender}"/> weiblich
+                                </label>
+                                <label>
+                                  <input type="radio" name="gender" value="MALE"
+                                         th:field="*{newGender}"/> männlich
+                                </label>
+                                <label>
+                                  <input type="radio" name="gender" value="OTHER"
+                                         th:field="*{newGender}"/> anderes
+                                </label>
+                              </fieldset>
+                              <p class="help-block" th:if="${#fields.hasErrors('newGender')}"
+                                 th:errors="*{newGender}">Erforderlich</p>
+                            </div>
+                            <hr/>
+                            <div class="form-group">
+                              <label for="new-sibling-retain-address"
+                                     class="control-label">Adresse</label>
+                              <div class="checkbox">
+                                <label>
+                                  <input type="checkbox" id="new-sibling-retain-address"
+                                         th:field="*{newRetainAddress}"/>
+                                  Adresse des Elternteils übernehmen
+                                </label>
+                              </div>
+                            </div>
+                            <hr/>
+                            <p class="help-block">
+                              Stimmt das Geburtsdatum?
+                            </p>
+                            <p class="help-block">
+                              Für Minderjährige muss das Geschlecht angegeben werden.
+                            </p>
+                          </div>
+
+                        </form>
+
+                        <hr/>
+                        <p class="help-block">
+                          Beachte bitte, dass für Geschwister jeweils die Eltern bekannt sein
+                          müssen!
+                        </p>
+
+                      </div>
+                    </div>
+
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">
+                        Abbrechen
+                      </button>
+                      <button type="submit" class="btn btn-primary" form="add-sibling">
+                        Hinzufügen
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+        <!-- children -->
+        <div class="row"
+             th:unless="${relatives.person.participant and relatives.person.participantProfile.ofMinorAge}">
+
+          <div class="col-md-4">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">Kinder</h3>
+              </div>
+
+              <div class="list-group" th:unless="${relatives.children.empty}">
+                <a href="personDetails.html" class="list-group-item"
+                   th:each="child : ${relatives.children}"
+                   th:href="@{/persons/{id}(id=${child.id})}" th:text="${child.name}">
+                  Maxie Muster
+                </a>
+              </div>
+
+              <div class="panel-body" th:if="${relatives.children.empty}">
+                Keine Angaben
+              </div>
+
+              <div class="panel-footer">
+                <button type="button" class="btn btn-default btn-sm" data-toggle="modal"
+                        data-target="#add-child-dialog">Hinzufügen
+                </button>
+              </div>
+
+              <!-- add child -->
+              <div class="modal fade modal-tabbed" id="add-child-dialog" tabindex="-1"
+                   role="dialog">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Kind hinzufügen</h4>
+                    </div>
+
+                    <div class="modal-body">
+                      <div class="container-fluid">
+
+                        <ul class="nav nav-tabs" role="tablist">
+                          <li role="presentation" class="active">
+                            <a href="#child-existing-person" id="add-child-show-existing"
+                               role="tab" data-toggle="tab">
+                              Auswählen
+                            </a>
+                          </li>
+                          <li role="presentation">
+                            <a href="#child-new-person" id="add-child-show-new" role="tab"
+                               data-toggle="tab">
+                              Erstellen
+                            </a>
+                          </li>
+                        </ul>
+
+                        <form id="add-child" class="tab-content"
+                              method="post"
+                              th:object="${addChildForm}"
+                              th:action="@{/persons/{id}/relatives/children/add(id=${person.id})}">
+                          <input type="hidden" id="#add-child-type"/>
+
+                          <!-- existing person -->
+                          <div role="tabpanel" class="tab-pane active"
+                               id="child-existing-person">
+                            <div class="container-fluid margin-top-lg person-search-container">
+                              <div class="row">
+                                <div class="col-md-3 no-margin-btm margin-top">
+                                  <label for="parent-search" class="control-label">
+                                    Person suchen:
+                                  </label>
+                                </div>
+                                <div class="col-md-7">
+                                  <input type="search"
+                                         class="form-control" id="child-search"
+                                         name="person-search-query"
+                                         placeholder="Name, E-Mail, Telefon oder Adresse"
+                                         th:value="${param.do != null and param.do[0] == 'add-child'} ? ${param.search}"/>
+                                  <input type="hidden" name="return-action" value="add-child"/>
+                                  <input type="hidden" name="return-tab"
+                                         value="add-child-show-existing"/>
+                                </div>
+                                <div class="col-md-2">
+                                  <button type="submit" class="btn btn-primary"
+                                          formmethod="get"
+                                          th:formaction="@{/persons/{id}/relatives/search(id=${person.id})}">
+                                    Los
+                                  </button>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <p class="col-md-12 help-block">
+                                  Es kann sein, dass die Suche aktuell Probleme mit Umlauten hat. In
+                                  so einem Fall bitte einfach nur den Vornamen oder Nachnamen
+                                  verwenden.
+                                </p>
+                              </div>
+                              <hr/>
+                              <div class="panel panel-default"
+                                   th:if="${param.do != null and param.do[0] == 'add-child' and matchingPersons != null and not matchingPersons.empty}">
+                                <div class="panel-heading">
+                                  <h5 class="panel-title">Ergebnisse</h5>
+                                </div>
+                                <ul class="list-group">
+                                  <li class="list-group-item"
+                                      th:each="match : ${matchingPersons}" th:inline="text">
+                                    <div class="radio">
+                                      <label>
+                                        <input type="radio" name="person-id"
+                                               th:value="${match.id}" th:field="*{existingPerson}"/>
+                                        [[${match.name}]]
+                                        <span class="glyphicon glyphicon-tent" data-toggle="tooltip"
+                                              data-placement="bottom"
+                                              data-title="Campteilnehmer*in" data-container="body"
+                                              th:if="${match.participant}"></span>
+                                        <span class="glyphicon glyphicon-wrench"
+                                              data-toggle="tooltip" data-placement="bottom"
+                                              data-title="Aktive*r" data-container="body"
+                                              th:if="${match.activist}"></span>
+                                        <span class="glyphicon glyphicon-blackboard"
+                                              data-toggle="tooltip"
+                                              data-placement="bottom" data-title="Referent*in"
+                                              data-container="body"
+                                              th:if="${match.referent}"></span>
+                                        <span class="glyphicon glyphicon-briefcase"
+                                              data-toggle="tooltip"
+                                              data-placement="bottom" data-title="Geschäftskontakt"
+                                              data-container="body"
+                                              th:if="false"></span>
+                                        <span class="glyphicon glyphicon-baby-formula"
+                                              data-toggle="tooltip"
+                                              data-placement="bottom" data-title="Elternteil"
+                                              data-container="body"
+                                              th:if="false"></span>
+                                        <small
+                                            th:if="${match.participant and match.participantProfile.dateOfBirth != null}">
+                                          Alter: [[${match.participantProfile.calculateAge()}]]
+                                        </small>
+                                      </label>
+                                    </div>
+                                  </li>
+                                </ul>
+                              </div>
+
+                              <div class="alert alert-info"
+                                   th:unless="${param.do != null and param.do[0] == 'add-child' and matchingPersons != null}">
+                                Bitte nach der gewünschten Person suchen
+                              </div>
+
+                              <div class="alert alert-info"
+                                   th:if="${param.do != null and param.do[0] == 'add-child' and matchingPersons != null  and matchingPersons.empty}">
+                                Keine Übereinstimmungen
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- new person -->
+                          <div role="tabpanel" class="tab-pane margin-top-lg"
+                               id="child-new-person">
+                            <div class="form-group"
+                                 th:classappend="${#fields.hasErrors('newFirstName')} ? 'has-error'">
+                              <label for="new-child-first-name"
+                                     class="control-label">Vorname</label>
+                              <input type="text" id="new-child-first-name" class="form-control"
+                                     placeholder="Vorname" th:field="*{newFirstName}"/>
+                              <p class="help-block" th:if="${#fields.hasErrors('newFirstName')}"
+                                 th:errors="*{newFirstName}">Erforderlich</p>
+                            </div>
+                            <div class="form-group"
+                                 th:classappend="${#fields.hasErrors('newLastName')} ? 'has-error'">
+                              <label for="new-child-last-name"
+                                     class="control-label">Nachname</label>
+                              <input type="text" id="new-child-last-name" class="form-control"
+                                     placeholder="Vorname" th:field="*{newLastName}"/>
+                              <p class="help-block" th:if="${#fields.hasErrors('newLastName')}"
+                                 th:errors="*{newLastName}">Erforderlich</p>
+                            </div>
+                            <div class="form-group"
+                                 th:classappend="${#fields.hasErrors('newDateOfBirth')} ? 'has-error'">
+                              <label for="new-child-date-of-birth"
+                                     class="control-label">Geburtsdatum</label>
+                              <input type="date" id="new-child-date-of-birth"
+                                     class="form-control"
+                                     placeholder="Format: TT.MM.YYYY" th:field="*{newDateOfBirth}"/>
+                              <p class="help-block" th:if="${#fields.hasErrors('newDateOfBirth')}"
+                                 th:errors="*{newDateOfBirth}">Erforderlich</p>
+                            </div>
+                            <div class="form-group"
+                                 th:classappend="${#fields.hasErrors('newGender')} ? 'has-error'">
+                              <label for="new-child-gender"
+                                     class="control-label">Geschlecht</label>
+                              <fieldset id="new-child-gender" class="radio">
+                                <label>
+                                  <input type="radio" name="gender" value="FEMALE"
+                                         th:field="*{newGender}"/> weiblich
+                                </label>
+                                <label>
+                                  <input type="radio" name="gender" value="MALE"
+                                         th:field="*{newGender}"/> männlich
+                                </label>
+                                <label>
+                                  <input type="radio" name="gender" value="OTHER"
+                                         th:field="*{newGender}"/> anderes
+                                </label>
+                              </fieldset>
+                              <p class="help-block" th:if="${#fields.hasErrors('newGender')}"
+                                 th:errors="*{newGender}">Erforderlich</p>
+                            </div>
+                            <hr/>
+                            <div class="form-group">
+                              <label for="new-child-retain-address"
+                                     class="control-label">Adresse</label>
+                              <div class="checkbox">
+                                <label>
+                                  <input type="checkbox" id="new-child-retain-address"
+                                         th:field="*{newRetainAddress}"/>
+                                  Adresse des Elternteils übernehmen
+                                </label>
+                              </div>
+                            </div>
+                            <hr/>
+                            <p class="help-block">
+                              Stimmt das Geburtsdatum?
+                            </p>
+                            <p class="help-block">
+                              Für Minderjährige muss das Geschlecht angegeben werden.
+                            </p>
+                          </div>
+
+                        </form>
+
+
+                      </div>
+                    </div>
+
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">
+                        Abbrechen
+                      </button>
+                      <button type="submit" class="btn btn-primary" form="add-child">
+                        Hinzufügen
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </article>
+
+</main>
+
+<form id="logout-user" method="POST" th:action="@{/logout}">
+  <input type="hidden" name="csrf" th:value="csrf"/>
+</form>
+
+<script type="text/javascript" src="../../static/resources/js/jquery.min.js"
+        th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript" src="../../static/resources/js/bootstrap.min.js"
+        th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script type="text/javascript" src="../../static/resources/js/bootstrap-select.min.js"
+        th:src="@{/resources/js/bootstrap-select.min.js}"></script>
+<script type="text/javascript" src="../../static/resources/js/cytoscape.min.js"
+        th:src="@{/webjars/cytoscape/cytoscape.min.js}"></script>
+<script src="../../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
+<script src="../../static/resources/js/formControls.js"
+        th:src="@{/resources/js/formControls.js}"></script>
+<script src="../../static/resources/js/personDetails.js"
+        th:src="@{/resources/js/personDetails.js}"></script>
+<script src="../../static/resources/js/familyRelationsGraph.js"
+        th:src="@{/resources/js/familyRelationsGraph.js}"></script>
+</body>
+</html>

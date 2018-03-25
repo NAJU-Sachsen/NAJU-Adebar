@@ -3,10 +3,13 @@ package de.naju.adebar.web.controller.persons;
 import com.querydsl.core.types.Predicate;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.persons.PersonRepository;
+import de.naju.adebar.model.persons.family.VitalRecord;
 import de.naju.adebar.util.Assert2;
 import de.naju.adebar.web.validation.persons.EditPersonForm;
 import de.naju.adebar.web.validation.persons.EditPersonFormConverter;
 import de.naju.adebar.web.validation.persons.PersonSearchPredicateCreator;
+import de.naju.adebar.web.validation.persons.participant.SimplifiedAddParticipantForm;
+import de.naju.adebar.web.validation.persons.relatives.AddParentForm;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
@@ -29,6 +32,7 @@ public class PersonController {
   private final PersonRepository personRepo;
   private final PersonSearchPredicateCreator searchPredicateCreator;
   private final EditPersonFormConverter editPersonFormConverter;
+  private final VitalRecord vitalRecord;
 
   /**
    * Full constructor. No parameter may be {@code null}
@@ -40,14 +44,16 @@ public class PersonController {
    */
   public PersonController(PersonRepository personRepo, //
       PersonSearchPredicateCreator predicateCreator, //
-      EditPersonFormConverter editPersonFormConverter) {
+      EditPersonFormConverter editPersonFormConverter, // 
+      VitalRecord vitalRecord) {
 
     Assert2.noNullArguments("No parameter may be null", //
-        personRepo, predicateCreator, editPersonFormConverter);
+        personRepo, predicateCreator, editPersonFormConverter, vitalRecord);
 
     this.personRepo = personRepo;
     this.searchPredicateCreator = predicateCreator;
     this.editPersonFormConverter = editPersonFormConverter;
+    this.vitalRecord = vitalRecord;
   }
 
   /**
@@ -89,16 +95,18 @@ public class PersonController {
   /**
    * Renders the template to filter persons
    *
-   * @param model model to put the data to render into
    * @return the filter persons template
    */
   @GetMapping("/persons/filter")
-  public String filterPersons(Model model) {
+  public String filterPersons() {
     return "persons/overview";
   }
 
   /**
-   * Renders the details page for a specific person
+   * Renders the details page for a specific person.
+   *
+   * <p> This includes general information, the participant profile (if applicable) as well as
+   * information about relatives
    *
    * @param person the person to display
    * @param model model to put the data to render into
@@ -110,6 +118,24 @@ public class PersonController {
     model.addAttribute("tab", "general");
     model.addAttribute("person", person);
     model.addAttribute("editPersonForm", editPersonFormConverter.toForm(person));
+
+    // depending on the page we come from, a form for the person's relatives may already be present
+    // (if we got redirected due to an error when processing the form). To ensure the correct
+    // workings of the validation messages in the template, we will not add the form in that case
+
+    if (!model.containsAttribute("addParentForm")) {
+      model.addAttribute("addParentForm", new AddParentForm(person));
+    }
+
+    if (!model.containsAttribute("addSiblingForm")) {
+      model.addAttribute("addSiblingForm", new SimplifiedAddParticipantForm(person));
+    }
+
+    if (!model.containsAttribute("addChildrenForm")) {
+      model.addAttribute("addChildForm", new SimplifiedAddParticipantForm(person));
+    }
+
+    model.addAttribute("relatives", vitalRecord.findRelativesOf(person));
 
     return "persons/personDetails";
   }

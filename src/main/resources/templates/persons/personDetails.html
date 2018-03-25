@@ -14,7 +14,7 @@
         th:href="@{/resources/css/style.css}"/>
   <link rel="stylesheet" type="text/css" href="../../static/resources/css/personDetails.css"
         th:href="@{/resources/css/personDetails.css}"/>
-  <link rel="stylesheet" type="text/css" href="../static/resources/css/timeline.css"
+  <link rel="stylesheet" type="text/css" href="../../static/resources/css/timeline.css"
         th:href="@{/resources/css/timeline.css}"/>
 
   <link rel="stylesheet" type="text/css" href="../../static/resources/css/bootstrap-select.min.css"
@@ -29,9 +29,11 @@
 <main id="main">
 
   <header id="page-header">
-    <a href="persons.html">
+    <a href="overview.html" th:href="@{/persons}">
       <span class="glyphicon glyphicon-chevron-left"></span>
-      Zurück zur Übersicht
+      Zurück zur Personen-Übersicht
+      <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom"
+            data-title="Bald kommt man hier zur letzten Seite zurück"></span>
     </a>
 
     <h1 th:text="|Profil von ${person.name}|">Profil von Jane Doe</h1>
@@ -90,7 +92,7 @@
       </section>
 
       <section class="display-category" id="family-relations"
-               th:if="false">
+               th:replace="persons/familyRelations :: graph">
         <div class="row">
           <h2>Verwandschaft</h2>
         </div>
@@ -162,6 +164,30 @@
         th:src="@{/resources/js/formControls.js}"></script>
 <script src="../../static/resources/js/personDetails.js"
         th:src="@{/resources/js/personDetails.js}"></script>
+
+<script th:if="${param.do != null and param.do[0] == 'add-parent'}" th:inline="javascript">
+  $(document).ready(() => {
+    const modal = $('#add-parent-dialog');
+    const tab = [[${param.tab != null} ? ${param.tab[0]} : '']];
+    modal.modal('show').find(`#${tab}`).tab('show');
+  });
+</script>
+
+<script th:if="${param.do != null and param.do[0] == 'add-sibling'}" th:inline="javascript">
+  $(document).ready(() => {
+    const modal = $('#add-sibling-dialog');
+    const tab = [[${param.tab != null} ? ${param.tab[0]} : '']];
+    modal.modal('show').find(`#${tab}`).tab('show');
+  });
+</script>
+
+<script th:if="${param.do != null and param.do[0] == 'add-child'}" th:inline="javascript">
+  $(document).ready(() => {
+    const modal = $('#add-child-dialog');
+    const tab = [[${param.tab != null} ? ${param.tab[0]} : '']];
+    modal.modal('show').find(`#${tab}`).tab('show');
+  });
+</script>
 
 <script th:if="${param.form != null and param.form[0] == 'add-qualification'}" th:inline="javascript">
   $(document).ready(() => {
