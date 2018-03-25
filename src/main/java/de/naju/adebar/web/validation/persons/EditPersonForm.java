@@ -38,8 +38,8 @@ public class EditPersonForm {
       AddressForm address, EditParticipantForm participantForm) {
     this.firstName = firstName;
     this.lastName = lastName;
-    this.email = email.getValue();
-    this.phoneNumber = phoneNumber.getValue();
+    this.email = email != null ? email.getValue() : null;
+    this.phoneNumber = phoneNumber != null ? phoneNumber.getValue() : null;
     this.address = address;
     this.participant = participantForm != null;
     this.participantForm = participantForm;
