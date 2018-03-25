@@ -4,7 +4,6 @@ import de.naju.adebar.model.Email;
 import de.naju.adebar.model.PhoneNumber;
 import de.naju.adebar.web.validation.core.AddressForm;
 import de.naju.adebar.web.validation.persons.participant.EditParticipantForm;
-import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * POJO representation of the edit person form
@@ -13,14 +12,12 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 public class EditPersonForm {
 
-  @NotEmpty
   private String firstName;
 
-  @NotEmpty
   private String lastName;
 
-  private Email email;
-  private PhoneNumber phoneNumber;
+  private String email;
+  private String phoneNumber;
   private AddressForm address;
   private boolean participant;
 
@@ -41,8 +38,8 @@ public class EditPersonForm {
       AddressForm address, EditParticipantForm participantForm) {
     this.firstName = firstName;
     this.lastName = lastName;
-    this.email = email;
-    this.phoneNumber = phoneNumber;
+    this.email = email.getValue();
+    this.phoneNumber = phoneNumber.getValue();
     this.address = address;
     this.participant = participantForm != null;
     this.participantForm = participantForm;
@@ -85,29 +82,43 @@ public class EditPersonForm {
   /**
    * @return the person's email
    */
-  public Email getEmail() {
+  public String getEmail() {
     return email;
   }
 
   /**
    * @param email the person's email
    */
-  public void setEmail(Email email) {
+  public void setEmail(String email) {
     this.email = email;
+  }
+
+  /**
+   * @return whether the form contains an email address (which may however be invalid)
+   */
+  public boolean hasEmail() {
+    return email != null && !email.isEmpty();
   }
 
   /**
    * @return the person's phone number
    */
-  public PhoneNumber getPhoneNumber() {
+  public String getPhoneNumber() {
     return phoneNumber;
   }
 
   /**
    * @param phoneNumber the person's phone number
    */
-  public void setPhoneNumber(PhoneNumber phoneNumber) {
+  public void setPhoneNumber(String phoneNumber) {
     this.phoneNumber = phoneNumber;
+  }
+
+  /**
+   * @return whether the form contains a phone number (which may however be invalid)
+   */
+  public boolean hasPhoneNUmber() {
+    return phoneNumber != null && !phoneNumber.isEmpty();
   }
 
   /**

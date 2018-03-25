@@ -1,11 +1,16 @@
 package de.naju.adebar.web.validation.persons;
 
+import de.naju.adebar.model.Email;
+import de.naju.adebar.model.PhoneNumber;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.util.Assert2;
+import de.naju.adebar.util.Validation;
 import de.naju.adebar.web.validation.ValidatingEntityFormConverter;
 import de.naju.adebar.web.validation.core.AddressForm;
 import de.naju.adebar.web.validation.core.AddressFormConverter;
+import de.naju.adebar.web.validation.persons.participant.EditParticipantForm;
 import de.naju.adebar.web.validation.persons.participant.EditParticipantFormConverter;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
@@ -44,8 +49,8 @@ public class EditPersonFormConverter
    * @see org.springframework.validation.Validator#supports(java.lang.Class)
    */
   @Override
-  public boolean supports(Class<?> clazz) {
-    return EditPersonFormConverter.class.equals(clazz);
+  public boolean supports(@NonNull Class<?> clazz) {
+    return EditPersonForm.class.isAssignableFrom(clazz);
   }
 
   /*
@@ -55,7 +60,7 @@ public class EditPersonFormConverter
    * org.springframework.validation.Errors)
    */
   @Override
-  public void validate(Object target, Errors errors) {
+  public void validate(Object target, @NonNull Errors errors) {
     if (!supports(target.getClass())) {
       throw new IllegalArgumentException(
           "Validation is not supported for instances of " + target.getClass());
@@ -65,6 +70,16 @@ public class EditPersonFormConverter
     ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastName", "field.required");
 
     EditPersonForm editPersonForm = (EditPersonForm) target;
+
+    if (editPersonForm.hasEmail() && !Validation.isEmail(editPersonForm.getEmail())) {
+      errors.rejectValue("email", "email.invalid");
+    }
+
+    if (editPersonForm.hasPhoneNUmber() && !Validation
+        .isPhoneNumber(editPersonForm.getPhoneNumber())) {
+      errors.rejectValue("phoneNumber", "phone.invalid");
+    }
+
     try {
       errors.pushNestedPath("address");
       AddressForm addressForm = editPersonForm.getAddress();
@@ -73,12 +88,38 @@ public class EditPersonFormConverter
       errors.popNestedPath();
     }
 
+    if (editPersonForm.hasParticipantForm()) {
+      try {
+        errors.pushNestedPath("participantForm");
+        EditParticipantForm participantForm = editPersonForm.getParticipantForm();
+        ValidationUtils.invokeValidator(this.participantFormConverter, participantForm, errors);
+      } finally {
+        errors.popNestedPath();
+      }
+    }
+
   }
 
   @Override
   public boolean isValid(EditPersonForm form) {
-    return (form.getFirstName() != null && !form.getFirstName().isEmpty()) //
-        && (form.getLastName() != null && !form.getLastName().isEmpty());
+    if (form.getFirstName() == null || form.getFirstName().isEmpty()) {
+      return false;
+    }
+
+    if (form.getLastName() == null || form.getLastName().isEmpty()) {
+      return false;
+    }
+
+    if (form.hasEmail() && !Validation.isEmail(form.getEmail())) {
+      return false;
+    }
+
+    if (form.hasPhoneNUmber() && !Validation.isPhoneNumber(form.getPhoneNumber())) {
+      return false;
+    }
+
+    return !form.hasParticipantForm() || participantFormConverter
+        .isValid(form.getParticipantForm());
   }
 
   /*
@@ -104,11 +145,14 @@ public class EditPersonFormConverter
       throw new IllegalArgumentException("Form is invalid " + form);
     }
 
+    Email email = form.hasEmail() ? Email.of(form.getEmail()) : null;
+    PhoneNumber phone = form.hasPhoneNUmber() ? PhoneNumber.of(form.getPhoneNumber()) : null;
+
     entity.updateInformation( //
         form.getFirstName(), //
         form.getLastName(), //
-        form.getEmail(), //
-        form.getPhoneNumber());
+        email, //
+        phone);
 
     entity.updateAddress(addressFormConverter.toEntity(form.getAddress()));
     makeParticipantIfNecessary(entity, form.isParticipant());

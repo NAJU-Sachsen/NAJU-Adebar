@@ -81,40 +81,53 @@
                           th:action="@{/persons/{id}/update(id=${person.id})}"
                           th:object="${editPersonForm}">
                       <div class="col-md-6" th:class="*{participant} ? 'col-md-6' : 'col-md-12'">
-                        <div class="form-group">
+                        <div class="form-group"
+                             th:classappend="${#fields.hasErrors('firstName')} ? 'has-error'">
                           <label for="edit-first-name" class="control-label">Vorname</label>
                           <input type="text" class="form-control" id="edit-first-name" value="Jane"
                                  required="required" placeholder="erforderlich"
                                  th:field="*{firstName}"/>
+                          <p class="help-block" th:if="${#fields.hasErrors('firstName')}"
+                             th:errors="*{firstName}">Erforderlich</p>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group"
+                             th:classappend="${#fields.hasErrors('lastName')} ? 'has-error'">
                           <label for="edit-last-name" class="control-label">Nachname</label>
                           <input type="text" class="form-control" id="edit-last-name" value="Doe"
                                  required="required" placeholder="erforderlich"
                                  th:field="*{lastName}"/>
+                          <p class="help-block" th:if="${#fields.hasErrors('lastName')}"
+                             th:errors="*{lastName}">Erforderlich</p>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group"
+                             th:classappend="${#fields.hasErrors('email')} ? 'has-error'">
                           <label for="edit-email" class="control-label">E-Mail</label>
                           <div class="input-group">
                             <input type="text" class="form-control" id="edit-email"
                                    value="jane.doe@mail.com" th:field="*{email}"/>
                             <span class="input-group-addon">optional</span>
                           </div>
+                          <p class="help-block" th:if="${#fields.hasErrors('email')}"
+                             th:errors="*{email}">Erforderlich</p>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group"
+                             th:classappend="${#fields.hasErrors('phoneNumber')} ? 'has-error'">
                           <label for="edit-phone" class="control-label">Telefon (privat)</label>
                           <div class="input-group">
                             <input type="tel" class="form-control" id="edit-phone"
                                    value="0123 45678901" th:field="*{phoneNumber}"/>
                             <span class="input-group-addon">optional</span>
                           </div>
+                          <p class="help-block" th:if="${#fields.hasErrors('phoneNumber')}"
+                             th:errors="*{phoneNumber}">Erforderlich</p>
                           <p class="help-block">
                             Für Eltern und "Business-Kontakte" können weitere Telefonnummern in den
                             entsprechenden Abschnitten hinterlegt werden.
                           </p>
                         </div>
                         <hr/>
-                        <div class="form-group">
+                        <div class="form-group"
+                             th:classappend="${#fields.hasErrors('address.street')} ? 'has-error'">
                           <label for="edit-address-street" class="control-label">Straße</label>
                           <div class="input-group">
                             <input type="text" name="address_street" class="form-control"
@@ -122,25 +135,34 @@
                                    th:field="*{address.street}"/>
                             <span class="input-group-addon">optional</span>
                           </div>
+                          <p class="help-block" th:if="${#fields.hasErrors('address.street')}"
+                             th:errors="*{address.street}">Erforderlich</p>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group"
+                             th:classappend="${#fields.hasErrors('address.zip')} ? 'has-error'">
                           <label for="edit-address-zip" class="control-label">Postleitzahl</label>
                           <div class="input-group">
                             <input type="text" class="form-control" id="edit-address-zip"
                                    value="09876" th:field="*{address.zip}"/>
                             <span class="input-group-addon">optional</span>
                           </div>
+                          <p class="help-block" th:if="${#fields.hasErrors('address.zip')}"
+                             th:errors="*{address.zip}">Erforderlich</p>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group"
+                             th:classappend="${#fields.hasErrors('address.city')} ? 'has-error'">
                           <label for="edit-address-city" class="control-label">Stadt</label>
                           <div class="input-group">
                             <input type="text" class="form-control" id="edit-address-city"
                                    value="Entehausen" th:field="*{address.city}"/>
                             <span class="input-group-addon">optional</span>
                           </div>
+                          <p class="help-block" th:if="${#fields.hasErrors('address.city')}"
+                             th:errors="*{address.city}">Erforderlich</p>
                         </div>
                         <hr/>
-                        <div class="form-group" th:unless="*{participant}">
+                        <div class="form-group" th:unless="*{participant}"
+                             th:classappend="${#fields.hasErrors('participant')} ? 'has-error'">
                           <label for="participant" class="control-label">Veranstaltungen</label>
                           <div class="checkbox">
                             <label>
@@ -148,11 +170,14 @@
                               die Person nimmt an Veranstaltungen teil
                             </label>
                           </div>
+                          <p class="help-block" th:if="${#fields.hasErrors('participant')}"
+                             th:errors="*{participant}">Erforderlich</p>
                         </div>
                       </div>
                       <div class="col-md-6" th:if="*{participant}">
                         <input type="hidden" th:field="*{participant}"/>
-                        <div class="form-group">
+                        <div class="form-group"
+                             th:classappend="${#fields.hasErrors('participantForm.gender')} ? 'has-error'">
                           <label for="edit-gender" class="control-label">Geschlecht</label>
                           <fieldset id="edit-gender" class="radio">
                             <label>
@@ -168,19 +193,27 @@
                                      th:field="*{participantForm.gender}"/> anderes
                             </label>
                           </fieldset>
+                          <p class="help-block"
+                             th:if="${#fields.hasErrors('participantForm.gender')}"
+                             th:errors="*{participantForm.gender}">Erforderlich</p>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group"
+                             th:classappend="${#fields.hasErrors('participantForm.dateOfBirth')} ? 'has-error'">
                           <label for="edit-date-of-birth" class="control-label">Geburtsdatum</label>
                           <input type="date" id="edit-date-of-birth" class="form-control"
                                  placeholder="Format: TT.MM.JJJJ"
                                  th:field="*{participantForm.dateOfBirth}"/>
+                          <p class="help-block"
+                             th:if="${#fields.hasErrors('participantForm.dateOfBirth')}"
+                             th:errors="*{participantForm.dateOfBirth}">Erforderlich</p>
                         </div>
                         <p class="help-block">
                           Für minderjährige Teilnehmer*innen muss das Geschlecht angegeben werden.
                           Andernfalls ist es optional.
                         </p>
                         <hr/>
-                        <div class="form-group">
+                        <div class="form-group"
+                             th:classappend="${#fields.hasErrors('participantForm.eatingHabits')} ? 'has-error'">
                           <label for="edit-eating-habits" class="control-label">Ernährung</label>
                           <div id="edit-eating-habits-default-display">
                             <div>
@@ -201,8 +234,12 @@
                                       placeholder="vegetarisch, vegan o.ä. Unverträglichkeiten, ..."
                                       th:field="*{participantForm.eatingHabits}"></textarea>
                           </div>
+                          <p class="help-block"
+                             th:if="${#fields.hasErrors('participantForm.eatingHabits')}"
+                             th:errors="*{participantForm.eatingHabits}">Erforderlich</p>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group"
+                             th:classappend="${#fields.hasErrors('participantForm.healthImpairments')} ? 'has-error'">
                           <label for="edit-health-impairments" class="control-label">
                             Allergien, o.ä.
                           </label>
@@ -210,13 +247,17 @@
                                     maxlength="511"
                                     placeholder="Heuschnupfen o.ä."
                                     th:field="*{participantForm.healthImpairments}"></textarea>
+                          <p class="help-block"
+                             th:if="${#fields.hasErrors('participantForm.healthImpairments')}"
+                             th:errors="*{participantForm.healthImpairments}">Erforderlich</p>
                         </div>
                         <p class="help-block">
                           Allergien, die sich auf die Ernährung der/des Teilnehmenden beziehen bitte
                           unter <span class="italic">"Ernährung"</span> eintragen.
                         </p>
                         <hr/>
-                        <div class="form-group">
+                        <div class="form-group"
+                             th:classappend="${#fields.hasErrors('participantForm.nabuMember') or #fields.hasErrors('participantForm.nabuMembershipNumber')} ? 'has-error'">
                           <label for="edit-nabu-membership" class="control-label">
                             NABU-Mitgliedschaft
                           </label>
@@ -238,14 +279,24 @@
                                    placeholder="Mitgliedsnummer"
                                    data-controlled-by="#nabu-membership-toggler"
                                    th:field="*{participantForm.nabuMembershipNumber}"/>
+                            <p class="help-block"
+                               th:if="${#fields.hasErrors('participantForm.nabuMember')}"
+                               th:errors="*{participantForm.nabuMember}">Erforderlich</p>
+                            <p class="help-block"
+                               th:if="${#fields.hasErrors('participantForm.nabuMembershipNumber')}"
+                               th:errors="*{participantForm.nabuMembershipNumber}">Erforderlich</p>
                           </div>
                         </div>
                         <hr/>
-                        <div class="form-group">
+                        <div class="form-group"
+                             th:classappend="${#fields.hasErrors('participantForm.remarks')} ? 'has-error'">
                           <label for="edit-remarks" class="control-label">Bemerkungen</label>
                           <textarea class="form-control" id="edit-remarks" maxlength="511"
                                     placeholder="Alles, was sonst noch wichtig ist"
                                     th:field="*{participantForm.remarks}"></textarea>
+                          <p class="help-block"
+                             th:if="${#fields.hasErrors('participantForm.remarks')}"
+                             th:errors="*{participantForm.remarks}">Erforderlich</p>
                         </div>
                         <p class="help-block">
                           Die <span class="italic">"Bemerkungen"</span> sollten nicht verwendet
