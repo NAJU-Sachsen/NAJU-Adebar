@@ -109,10 +109,10 @@ public class AddPersonController {
       success = false;
     }
 
-    Person person = personFormConverter.toEntity(form);
+    Person newPerson = personFormConverter.toEntity(form);
 
     // check n° 2: there are no similar persons yet
-    List<Person> similarPersons = checkForSimilarPersons(person);
+    List<Person> similarPersons = checkForPersonsSimilarTo(newPerson);
     if (!similarPersons.isEmpty()) {
       redirAttr.addFlashAttribute("similarPersons", similarPersons);
       redirAttr.addFlashAttribute("form", form);
@@ -135,9 +135,9 @@ public class AddPersonController {
     }
 
     // everything seems fine, finish saving the new person
-    addToEventsIfNecessary(person, form);
-    addToLocalGroupsIfNecessary(person, form);
-    personRepo.save(person);
+    addToEventsIfNecessary(newPerson, form);
+    addToLocalGroupsIfNecessary(newPerson, form);
+    personRepo.save(newPerson);
 
     if (!returnAction.isEmpty()) {
       redirAttr.addAttribute("do", returnAction);
@@ -146,7 +146,7 @@ public class AddPersonController {
     if (!returnPath.isEmpty()) {
       return "redirect:" + returnPath;
     }
-    return "redirect:/persons/" + person.getId();
+    return "redirect:/persons/" + newPerson.getId();
   }
 
   /**
@@ -218,7 +218,7 @@ public class AddPersonController {
    * @param newPerson the person to compare
    * @return all persons with a similar name
    */
-  private List<Person> checkForSimilarPersons(Person newPerson) {
+  private List<Person> checkForPersonsSimilarTo(Person newPerson) {
     BooleanBuilder predicate = new BooleanBuilder();
     predicate //
         .and(person.firstName.containsIgnoreCase(newPerson.getFirstName())) //

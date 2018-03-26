@@ -62,7 +62,7 @@ public class ParticipationController {
 
     List<Event> futureEvents = eventRepo.findAll(futureEventsWithout(person));
     futureEvents = futureEvents.stream() //
-        .filter(event -> !event.isBookedOut()) //
+        .filter(e -> !e.isBookedOut()) //
         .collect(Collectors.toList());
 
     model.addAttribute("futureEvents", futureEvents);
@@ -82,7 +82,7 @@ public class ParticipationController {
   public String addParticipantToEvents(@PathVariable("id") Person person, @RequestParam("event-ids")
       List<Event> events) {
 
-    events.forEach(event -> event.addParticipant(person));
+    events.forEach(e -> e.addParticipant(person));
 
     return "redirect:/persons/" + person.getId() + "/events";
   }

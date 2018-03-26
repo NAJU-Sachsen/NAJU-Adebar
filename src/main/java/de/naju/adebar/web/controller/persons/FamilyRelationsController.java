@@ -37,6 +37,7 @@ public class FamilyRelationsController {
   private static final QPerson person = QPerson.person;
   private static final String FIRST_NAME_LAST_NAME_REGEX =
       "^(?<firstName>[a-zA-ZöÖäÄüÜß]+) (?<lastName>[a-zA-ZöÖäÄüÜß]+)$";
+  private static final String REDIRECT_PERSON_DETAILS = "redirect:/persons/";
 
   private final PersonRepository personRepo;
   private final VitalRecord vitalRecord;
@@ -108,7 +109,7 @@ public class FamilyRelationsController {
       redirAttr.addAttribute("tab", returnTab);
     }
 
-    return "redirect:/persons/" + personId;
+    return REDIRECT_PERSON_DETAILS + personId;
   }
 
   /**
@@ -143,7 +144,7 @@ public class FamilyRelationsController {
       redirAttr.addAttribute("do", "add-parent");
       redirAttr.addAttribute("tab", "add-parent-show-new");
 
-      return "redirect:/persons/" + person.getId();
+      return REDIRECT_PERSON_DETAILS + person.getId();
     }
 
     Person parent = addParentFormConverter.toEntity(form);
@@ -161,7 +162,7 @@ public class FamilyRelationsController {
 
     vitalRecord.addParentTo(person, parent);
 
-    return "redirect:/persons/" + person.getId();
+    return REDIRECT_PERSON_DETAILS + person.getId();
   }
 
   /**
@@ -187,7 +188,7 @@ public class FamilyRelationsController {
       redirAttr.addFlashAttribute("addSiblingForm", form);
       redirAttr.addAttribute("do", "add-sibling");
       redirAttr.addAttribute("tab", "add-sibling-show-new");
-      return "redirect:/persons/" + person.getId();
+      return REDIRECT_PERSON_DETAILS + person.getId();
     }
 
     Person sibling = simplifiedAddParticipantFormConverter.toEntity(form);
@@ -202,7 +203,7 @@ public class FamilyRelationsController {
 
     vitalRecord.addSiblingTo(person, sibling);
 
-    return "redirect:/persons/" + person.getId();
+    return REDIRECT_PERSON_DETAILS + person.getId();
   }
 
   /**
@@ -228,7 +229,7 @@ public class FamilyRelationsController {
       redirAttr.addFlashAttribute("addChildForm", form);
       redirAttr.addAttribute("do", "add-child");
       redirAttr.addAttribute("tab", "add-child-show-new");
-      return "redirect:/persons/" + person.getId();
+      return REDIRECT_PERSON_DETAILS + person.getId();
     }
 
     Person child = simplifiedAddParticipantFormConverter.toEntity(form);
@@ -243,7 +244,7 @@ public class FamilyRelationsController {
 
     vitalRecord.addChildTo(person, child);
 
-    return "redirect:/persons/" + person.getId();
+    return REDIRECT_PERSON_DETAILS + person.getId();
   }
 
   /**
@@ -289,8 +290,8 @@ public class FamilyRelationsController {
     // it is important to use the values of phone number and email here instead of their wrapper
     // classes as the query may not be a valid email/phone number. Wrapping them by default would
     // result in an exception in that case.
-    predicate.and(
-        person.firstName.containsIgnoreCase(query).or(person.lastName.containsIgnoreCase(query))
+    predicate.and( //
+        person.firstName.containsIgnoreCase(query).or(person.lastName.containsIgnoreCase(query)) //
             .or(person.phoneNumber.value.eq(query)).or(person.email.value.eq(query)));
 
     return predicate;
