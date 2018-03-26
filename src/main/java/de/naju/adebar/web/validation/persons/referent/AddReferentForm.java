@@ -1,16 +1,16 @@
 package de.naju.adebar.web.validation.persons.referent;
 
+import java.util.List;
 import de.naju.adebar.model.persons.qualifications.Qualification;
 import de.naju.adebar.web.validation.AbstractForm;
 import de.naju.adebar.web.validation.persons.AddPersonForm;
-import java.util.List;
 
 /**
  * POJO representation of the referent-related data of the {@link AddPersonForm}
  *
  * @author Rico Bergmann
  */
-public class AddReferentForm extends AbstractForm {
+public class AddReferentForm implements AbstractForm {
 
   private List<Qualification> qualifications;
 
@@ -26,8 +26,7 @@ public class AddReferentForm extends AbstractForm {
   /**
    * Default constructor
    */
-  public AddReferentForm() {
-  }
+  public AddReferentForm() {}
 
   /**
    * @return the referent's qualifications
@@ -39,8 +38,7 @@ public class AddReferentForm extends AbstractForm {
   /**
    * @param qualifications the referent's qualifications
    */
-  public void setQualifications(
-      List<Qualification> qualifications) {
+  public void setQualifications(List<Qualification> qualifications) {
     this.qualifications = qualifications;
   }
 
@@ -51,9 +49,7 @@ public class AddReferentForm extends AbstractForm {
 
   @Override
   public String toString() {
-    return "AddReferentForm [" +
-        "qualifications=" + qualifications +
-        ']';
+    return "AddReferentForm [" + "qualifications=" + qualifications + ']';
   }
 
 }

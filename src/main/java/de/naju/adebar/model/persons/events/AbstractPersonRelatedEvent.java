@@ -30,5 +30,5 @@ public abstract class AbstractPersonRelatedEvent extends EntityUpdatedEvent<Pers
   /**
    * @return whether an aggregate may publish multiple instances of this event at the same time
    */
-  abstract public boolean aggregateMayContainMultipleInstances();
+  public abstract boolean aggregateMayContainMultipleInstances();
 }

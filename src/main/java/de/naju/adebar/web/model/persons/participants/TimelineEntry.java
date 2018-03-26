@@ -1,12 +1,12 @@
 package de.naju.adebar.web.model.persons.participants;
 
-import com.google.common.collect.Sets;
-import de.naju.adebar.model.events.Event;
 import java.time.Year;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.SortedSet;
 import org.springframework.util.Assert;
+import com.google.common.collect.Sets;
+import de.naju.adebar.model.events.Event;
 
 /**
  * Simple wrapper for a number of events taking place in the same year
@@ -19,7 +19,8 @@ class TimelineEntry implements Comparable<TimelineEntry> {
   /**
    * Full constructor.
    *
-   * <p> The constraint that all events have to take place in the same year is not enforced although
+   * <p>
+   * The constraint that all events have to take place in the same year is not enforced although
    * putting events from different years into the same entry completely contradicts the meaning and
    * sense of the wrapper.
    *
@@ -65,10 +66,38 @@ class TimelineEntry implements Comparable<TimelineEntry> {
   }
 
   @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((events == null) ? 0 : events.hashCode());
+    result = prime * result + ((year == null) ? 0 : year.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    TimelineEntry other = (TimelineEntry) obj;
+    if (events == null) {
+      if (other.events != null)
+        return false;
+    } else if (!events.equals(other.events))
+      return false;
+    if (year == null) {
+      if (other.year != null)
+        return false;
+    } else if (!year.equals(other.year))
+      return false;
+    return true;
+  }
+
+  @Override
   public String toString() {
-    return "TimelineEntry [" +
-        "year=" + year +
-        ", events=" + events +
-        ']';
+    return "TimelineEntry [" + "year=" + year + ", events=" + events + ']';
   }
 }

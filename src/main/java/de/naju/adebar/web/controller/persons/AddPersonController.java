@@ -1,17 +1,5 @@
 package de.naju.adebar.web.controller.persons;
 
-import com.querydsl.core.BooleanBuilder;
-import de.naju.adebar.model.chapter.LocalGroupRepository;
-import de.naju.adebar.model.events.EventRepository;
-import de.naju.adebar.model.persons.Person;
-import de.naju.adebar.model.persons.PersonRepository;
-import de.naju.adebar.model.persons.QPerson;
-import de.naju.adebar.model.persons.qualifications.QualificationRepository;
-import de.naju.adebar.util.Assert2;
-import de.naju.adebar.web.model.persons.participants.EventCollection;
-import de.naju.adebar.web.model.persons.participants.EventCollection.EventCollectionBuilder;
-import de.naju.adebar.web.validation.persons.AddPersonForm;
-import de.naju.adebar.web.validation.persons.AddPersonFormConverter;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.validation.Valid;
@@ -26,6 +14,18 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.querydsl.core.BooleanBuilder;
+import de.naju.adebar.model.chapter.LocalGroupRepository;
+import de.naju.adebar.model.events.EventRepository;
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.PersonRepository;
+import de.naju.adebar.model.persons.QPerson;
+import de.naju.adebar.model.persons.qualifications.QualificationRepository;
+import de.naju.adebar.util.Assert2;
+import de.naju.adebar.web.model.persons.participants.EventCollection;
+import de.naju.adebar.web.model.persons.participants.EventCollection.EventCollectionBuilder;
+import de.naju.adebar.web.validation.persons.AddPersonForm;
+import de.naju.adebar.web.validation.persons.AddPersonFormConverter;
 
 /**
  * Handles the creation of new person instances from the 'add person' template
@@ -162,11 +162,12 @@ public class AddPersonController {
   /**
    * If the new person is a participant and it should attend an event right away, this method will
    * take care of exactly that.
+   * <p>
+   * This method must run in a transactional context in order to persist its changed
    *
    * @param person the new person
    * @param form form possibly containing the events to attend
    */
-  @Transactional
   protected void addToEventsIfNecessary(Person person, AddPersonForm form) {
     if (!form.isParticipant() || !form.getParticipantForm().hasEvents()) {
       return;
@@ -177,11 +178,12 @@ public class AddPersonController {
   /**
    * If the new person is an activist and it is part of local groups, this method will take care of
    * creating this connection.
+   * <p>
+   * This method must run in a transactional context in order to persist its changed
    *
    * @param person the new person
    * @param form form possibly containing the local groups the person should be part of
    */
-  @Transactional
   protected void addToLocalGroupsIfNecessary(Person person, AddPersonForm form) {
     if (!form.isActivist() || !form.getActivistForm().hasLocalGroups()) {
       return;
@@ -198,8 +200,7 @@ public class AddPersonController {
   private EventCollection createEventCollection() {
     EventCollectionBuilder builder = EventCollection.newCollection();
     eventRepo.findByStartTimeIsAfter(LocalDateTime.now()).stream()
-        .filter(event -> !event.isBookedOut())
-        .forEach(event -> {
+        .filter(event -> !event.isBookedOut()).forEach(event -> {
           if (event.isForLocalGroup()) {
             builder.appendFor(event.getLocalGroup(), event);
           } else if (event.isForProject()) {

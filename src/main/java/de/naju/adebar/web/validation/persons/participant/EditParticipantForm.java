@@ -1,25 +1,25 @@
 package de.naju.adebar.web.validation.persons.participant;
 
+import java.time.LocalDate;
+import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
 import de.naju.adebar.model.persons.details.Gender;
 import de.naju.adebar.model.persons.details.NabuMembershipInformation;
 import de.naju.adebar.model.persons.details.NabuMembershipInformation.MembershipStatus;
 import de.naju.adebar.web.validation.AbstractForm;
 import de.naju.adebar.web.validation.persons.EditPersonForm;
-import java.time.LocalDate;
-import org.hibernate.validator.constraints.Length;
-import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * POJO representation of the participant information inside an {@link EditPersonForm}
  *
  * @author Rico Bergmann
  */
-public class EditParticipantForm extends AbstractForm {
+public class EditParticipantForm implements AbstractForm {
 
   /**
    * The maximum number of characters in the textarea-fields
    */
-  public static int MAX_STRING_LENGTH = 511;
+  public static final int MAX_STRING_LENGTH = 511;
 
   private Gender gender;
 
@@ -78,8 +78,7 @@ public class EditParticipantForm extends AbstractForm {
   /**
    * Default constructor
    */
-  public EditParticipantForm() {
-  }
+  public EditParticipantForm() {}
 
   /**
    * @return the participant's gender
@@ -147,8 +146,7 @@ public class EditParticipantForm extends AbstractForm {
   /**
    * @param nabuMember the participant's NABU membership status
    */
-  public void setNabuMember(
-      MembershipStatus nabuMember) {
+  public void setNabuMember(MembershipStatus nabuMember) {
     this.nabuMember = nabuMember;
   }
 
@@ -160,11 +158,10 @@ public class EditParticipantForm extends AbstractForm {
   }
 
   /**
-   * @param nabuMembershipNumber the participant's NABU membership number. May be {@code null}
-   *     if the participant is no NABU member.
+   * @param nabuMembershipNumber the participant's NABU membership number. May be {@code null} if
+   *        the participant is no NABU member.
    */
-  public void setNabuMembershipNumber(
-      String nabuMembershipNumber) {
+  public void setNabuMembershipNumber(String nabuMembershipNumber) {
     this.nabuMembershipNumber = nabuMembershipNumber;
   }
 
@@ -232,14 +229,9 @@ public class EditParticipantForm extends AbstractForm {
 
   @Override
   public String toString() {
-    return "EditParticipantForm [" +
-        "gender=" + gender +
-        ", dateOfBirth=" + dateOfBirth +
-        ", eatingHabits='" + eatingHabits + '\'' +
-        ", healthImpairments='" + healthImpairments + '\'' +
-        ", nabuMember=" + nabuMember +
-        ", nabuMembershipNumber='" + nabuMembershipNumber + '\'' +
-        ", remarks='" + remarks + '\'' +
-        ']';
+    return "EditParticipantForm [" + "gender=" + gender + ", dateOfBirth=" + dateOfBirth
+        + ", eatingHabits='" + eatingHabits + '\'' + ", healthImpairments='" + healthImpairments
+        + '\'' + ", nabuMember=" + nabuMember + ", nabuMembershipNumber='" + nabuMembershipNumber
+        + '\'' + ", remarks='" + remarks + '\'' + ']';
   }
 }

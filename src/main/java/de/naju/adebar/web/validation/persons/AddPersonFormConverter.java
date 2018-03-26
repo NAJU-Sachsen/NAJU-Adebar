@@ -1,5 +1,9 @@
 package de.naju.adebar.web.validation.persons;
 
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
 import com.google.common.collect.Lists;
 import de.naju.adebar.model.Email;
 import de.naju.adebar.model.PhoneNumber;
@@ -16,17 +20,13 @@ import de.naju.adebar.web.validation.persons.participant.AddParticipantForm;
 import de.naju.adebar.web.validation.persons.participant.AddParticipantFormConverter;
 import de.naju.adebar.web.validation.persons.referent.AddReferentForm;
 import de.naju.adebar.web.validation.persons.referent.AddReferentFormConverter;
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Service;
-import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
 
 /**
  * Simple service to apply the data from an {@link AddPersonForm} to {@link Person} instances
  */
 @Service
-public class AddPersonFormConverter implements
-    ValidatingEntityFormConverter<Person, AddPersonForm> {
+public class AddPersonFormConverter
+    implements ValidatingEntityFormConverter<Person, AddPersonForm> {
 
   private final AddressFormConverter addressFormConverter;
   private final AddActivistFormConverter activistFormConverter;
@@ -43,12 +43,10 @@ public class AddPersonFormConverter implements
    * @param referentFormConverter converter for the {@link AddReferentForm}
    * @param personFactory service to create the {@link Person} instances
    */
-  public AddPersonFormConverter(
-      AddressFormConverter addressFormConverter,
+  public AddPersonFormConverter(AddressFormConverter addressFormConverter,
       AddActivistFormConverter activistFormConverter,
       AddParticipantFormConverter participantFormConverter,
-      AddReferentFormConverter referentFormConverter,
-      PersonFactory personFactory) {
+      AddReferentFormConverter referentFormConverter, PersonFactory personFactory) {
     this.addressFormConverter = addressFormConverter;
     this.activistFormConverter = activistFormConverter;
     this.participantFormConverter = participantFormConverter;
@@ -64,12 +62,14 @@ public class AddPersonFormConverter implements
 
     if (form.getFirstName() == null || form.getFirstName().isEmpty()) {
       return false;
-    } else if (form.getLastName() == null || form.getLastName().isEmpty()) {
+    }
+
+    if (form.getLastName() == null || form.getLastName().isEmpty()) {
       return false;
     }
 
     return emailIsValid(form) //
-        && phoneIsValid(form) //   
+        && phoneIsValid(form) //
         && addressFormIsValid(form) //
         && activistFormIsValid(form) //
         && participantFormIsValid(form) //
@@ -85,8 +85,7 @@ public class AddPersonFormConverter implements
     Email email = generateEmail(form);
     PhoneNumber phone = generatePhoneNumber(form);
 
-    PersonBuilder builder = personFactory
-        .buildNew(form.getFirstName(), form.getLastName(), email);
+    PersonBuilder builder = personFactory.buildNew(form.getFirstName(), form.getLastName(), email);
     builder.specifyPhoneNumber(phone);
     builder.specifyAddress(addressFormConverter.toEntity(form.getAddress()));
 
@@ -282,8 +281,8 @@ public class AddPersonFormConverter implements
    * @return whether the {@link AddParticipantForm} inside the form is valid
    */
   private boolean participantFormIsValid(AddPersonForm form) {
-    return form.getParticipantForm() == null || participantFormConverter
-        .isValid(form.getParticipantForm());
+    return form.getParticipantForm() == null
+        || participantFormConverter.isValid(form.getParticipantForm());
   }
 
   /**
