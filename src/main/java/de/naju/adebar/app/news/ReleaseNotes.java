@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import org.springframework.data.domain.AbstractAggregateRoot;
 import org.springframework.util.Assert;
+import de.naju.adebar.documentation.infrastructure.JpaOnly;
 
 /**
  * Abstraction of release notes. A release note consists of a description of what was changed and
@@ -16,7 +17,7 @@ import org.springframework.util.Assert;
  * @author Rico Bergmann
  */
 @Entity(name = "releaseNews")
-public class ReleaseNotes extends AbstractAggregateRoot {
+public class ReleaseNotes extends AbstractAggregateRoot<ReleaseNotes> {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -65,6 +66,7 @@ public class ReleaseNotes extends AbstractAggregateRoot {
   /**
    * Default constructor just for JPA
    */
+  @JpaOnly
   private ReleaseNotes() {
   }
 
@@ -139,6 +141,7 @@ public class ReleaseNotes extends AbstractAggregateRoot {
   /**
    * @return the ID. Just for JPA's sake
    */
+  @JpaOnly
   private long getId() {
     return id;
   }
@@ -146,6 +149,7 @@ public class ReleaseNotes extends AbstractAggregateRoot {
   /**
    * @param id the ID. Just for JPA's sake
    */
+  @JpaOnly
   private void setId(long id) {
     this.id = id;
   }

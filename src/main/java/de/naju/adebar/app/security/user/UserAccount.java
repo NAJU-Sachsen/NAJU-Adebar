@@ -32,7 +32,7 @@ import de.naju.adebar.model.persons.PersonId;
  * @author Rico Bergmann
  */
 @Entity(name = "userAccount")
-public class UserAccount extends AbstractAggregateRoot implements UserDetails {
+public class UserAccount extends AbstractAggregateRoot<UserAccount> implements UserDetails {
 
   private static final long serialVersionUID = 756690351442752594L;
 

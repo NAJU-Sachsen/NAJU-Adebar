@@ -1,8 +1,5 @@
 package de.naju.adebar.model.chapter;
 
-import de.naju.adebar.model.events.Event;
-import de.naju.adebar.model.persons.Person;
-import de.naju.adebar.model.persons.exceptions.NoActivistException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
@@ -22,6 +19,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 import org.springframework.util.Assert;
+import de.naju.adebar.documentation.infrastructure.JpaOnly;
+import de.naju.adebar.model.events.Event;
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.exceptions.NoActivistException;
 
 /**
  * Abstraction of a project
@@ -117,6 +118,7 @@ public class Project {
   /**
    * Default constructor just for JPA's sake
    */
+  @JpaOnly
   private Project() {
     this.contributors = new LinkedList<>();
     this.events = new LinkedList<>();
@@ -286,7 +288,7 @@ public class Project {
 
   /**
    * @return the event that is about to take place next. If there is no next event {@code null} will
-   * be returned
+   *         be returned
    */
   @Transient
   public Event getNextEvent() {
@@ -334,7 +336,7 @@ public class Project {
   /**
    * @param event the event to add
    * @throws IllegalArgumentException if the event is already hosted by the project or if it is
-   * {@code null}
+   *         {@code null}
    */
   public void addEvent(Event event) {
     Assert.notNull(event, "Event to add may not be null: " + event);

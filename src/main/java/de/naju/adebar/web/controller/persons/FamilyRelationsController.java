@@ -1,5 +1,18 @@
 package de.naju.adebar.web.controller.persons;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.validation.Valid;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import de.naju.adebar.model.persons.Person;
@@ -12,21 +25,6 @@ import de.naju.adebar.web.validation.persons.participant.SimplifiedAddParticipan
 import de.naju.adebar.web.validation.persons.participant.SimplifiedAddParticipantFormConverter;
 import de.naju.adebar.web.validation.persons.relatives.AddParentForm;
 import de.naju.adebar.web.validation.persons.relatives.AddParentFormConverter;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import javax.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  * Handles all updates to family relations
@@ -36,9 +34,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class FamilyRelationsController {
 
-  private static final Logger log = LoggerFactory.getLogger(FamilyRelationsController.class);
   private static final QPerson person = QPerson.person;
-  private static final String FIRST_NAME_LAST_NAME_REGEX = "^(?<firstName>[a-zA-ZöÖäÄüÜß]+) (?<lastName>[a-zA-ZöÖäÄüÜß]+)$";
+  private static final String FIRST_NAME_LAST_NAME_REGEX =
+      "^(?<firstName>[a-zA-ZöÖäÄüÜß]+) (?<lastName>[a-zA-ZöÖäÄüÜß]+)$";
 
   private final PersonRepository personRepo;
   private final VitalRecord vitalRecord;
@@ -49,18 +47,18 @@ public class FamilyRelationsController {
    * Full constructor
    *
    * @param personRepo repository containing all persons
-   * @param vitalRecord service to retain information about family relations as well as to
-   *     update them
+   * @param vitalRecord service to retain information about family relations as well as to update
+   *        them
    * @param addParentFormConverter service to convert an {@link AddParentForm} to new persons
-   * @param simplifiedAddParticipantFormConverter service to convert a {@link
-   *     SimplifiedAddParticipantForm} to new persons. This is necessary to handle the creation of
-   *     children instances correctly.
+   * @param simplifiedAddParticipantFormConverter service to convert a
+   *        {@link SimplifiedAddParticipantForm} to new persons. This is necessary to handle the
+   *        creation of children instances correctly.
    */
   public FamilyRelationsController(PersonRepository personRepo, VitalRecord vitalRecord,
       AddParentFormConverter addParentFormConverter,
       SimplifiedAddParticipantFormConverter simplifiedAddParticipantFormConverter) {
-    Assert2.noNullArguments("No parameter may be null",
-        personRepo, vitalRecord, addParentFormConverter, simplifiedAddParticipantFormConverter);
+    Assert2.noNullArguments("No parameter may be null", personRepo, vitalRecord,
+        addParentFormConverter, simplifiedAddParticipantFormConverter);
     this.personRepo = personRepo;
     this.vitalRecord = vitalRecord;
     this.addParentFormConverter = addParentFormConverter;
@@ -70,26 +68,28 @@ public class FamilyRelationsController {
   /**
    * Searches for all potential relatives of a person.
    *
-   * <p> The search will try to recognize queries containing the first name as well as the last name
-   * of person and act accordingly.
+   * <p>
+   * The search will try to recognize queries containing the first name as well as the last name of
+   * person and act accordingly.
    *
-   * <p> We use this method because the persons that may match the query have to fulfill custom
-   * constraints which are not present in the default search as specified in the {@link
-   * PersonController} or the JSON API controllers
+   * <p>
+   * We use this method because the persons that may match the query have to fulfill custom
+   * constraints which are not present in the default search as specified in the
+   * {@link PersonController} or the JSON API controllers
    *
-   * @param personId the ID of the person from which should be searched. This person will never
-   *     be part of the result set (which makes sense as persons may never be parents, siblings or
-   *     children of themselves)
+   * @param personId the ID of the person from which should be searched. This person will never be
+   *        part of the result set (which makes sense as persons may never be parents, siblings or
+   *        children of themselves)
    * @param query the query. May either be the person's name, email or phone number
    * @param returnAction what to do after the results have been displayed (will most likely be
-   *     evaluated by some client-side JavaScript)
-   * @param returnTab the tab to display after the results have been displayed. May be left out
-   *     if not appropriate.
-   * @param redirAttr the attributes to use in the model after redirection as well as GET
-   *     parameters for the resulting URI
+   *        evaluated by some client-side JavaScript)
+   * @param returnTab the tab to display after the results have been displayed. May be left out if
+   *        not appropriate.
+   * @param redirAttr the attributes to use in the model after redirection as well as GET parameters
+   *        for the resulting URI
    * @return a redirection to the detail page of the person the search was issued from. Correct
-   *     evaluation and rendering of the resulting view will be handled through the return action as
-   *     well as the redirection attributes
+   *         evaluation and rendering of the resulting view will be handled through the return
+   *         action as well as the redirection attributes
    */
   @GetMapping("/persons/{id}/relatives/search")
   public String searchPersons(@PathVariable("id") PersonId personId,
@@ -98,8 +98,8 @@ public class FamilyRelationsController {
       @RequestParam(value = "return-tab", defaultValue = "") String returnTab,
       RedirectAttributes redirAttr) {
 
-    redirAttr.addFlashAttribute(
-        "matchingPersons", personRepo.findAll(createSearchPredicate(personId, query)));
+    redirAttr.addFlashAttribute("matchingPersons",
+        personRepo.findAll(createSearchPredicate(personId, query)));
 
     redirAttr.addAttribute("search", query);
     redirAttr.addAttribute("do", returnAction);
@@ -114,12 +114,11 @@ public class FamilyRelationsController {
   /**
    * Adds a parent to the current person
    *
-   * @param person person to "receive" the parent, automatically retained from the requested
-   *     URI
+   * @param person person to "receive" the parent, automatically retained from the requested URI
    * @param form form containing the data about the new parent
    * @param errors validation errors for the form
-   * @param redirAttr attributes to use in the model after redirection as well as GET parameters
-   *     for the resulting url
+   * @param redirAttr attributes to use in the model after redirection as well as GET parameters for
+   *        the resulting url
    * @return a redirection to the person's detail page
    */
   @PostMapping("/persons/{id}/relatives/parents/add")
@@ -132,8 +131,8 @@ public class FamilyRelationsController {
       // by passing the errors as flash attribute (with a cryptic attribute name) they will actually
       // be retained even after redirection and therefore be available in the template used after
       // redirection
-      redirAttr.addFlashAttribute(
-          "org.springframework.validation.BindingResult.addParentForm", errors);
+      redirAttr.addFlashAttribute("org.springframework.validation.BindingResult.addParentForm",
+          errors);
 
       // retaining the errors however only works if we retain the form with the bad data as well
       redirAttr.addFlashAttribute("addParentForm", form);
@@ -166,26 +165,25 @@ public class FamilyRelationsController {
   }
 
   /**
-   * Adds a sibling to the current person. Basically works the same as {@link #addParent(Person,
-   * AddParentForm, BindingResult, RedirectAttributes)} just with siblings.
+   * Adds a sibling to the current person. Basically works the same as
+   * {@link #addParent(Person, AddParentForm, BindingResult, RedirectAttributes)} just with
+   * siblings.
    *
-   * @param person person to "receive" the sibling, automatically retained from the requested
-   *     URI
+   * @param person person to "receive" the sibling, automatically retained from the requested URI
    * @param form form containing the data about the new parent
    * @param errors validation errors for the form
-   * @param redirAttr attributes to use in the model after redirection as well as GET parameters
-   *     for the resulting url
+   * @param redirAttr attributes to use in the model after redirection as well as GET parameters for
+   *        the resulting url
    * @return a redirection to the person's detail page
    */
   @PostMapping("/persons/{id}/relatives/siblings/add")
   public String addSibling(@PathVariable("id") Person person,
       @ModelAttribute("addSiblingForm") @Valid SimplifiedAddParticipantForm form,
-      BindingResult errors,
-      RedirectAttributes redirAttr) {
+      BindingResult errors, RedirectAttributes redirAttr) {
 
     if (errors.hasErrors()) {
-      redirAttr.addFlashAttribute(
-          "org.springframework.validation.BindingResult.addSiblingForm", errors);
+      redirAttr.addFlashAttribute("org.springframework.validation.BindingResult.addSiblingForm",
+          errors);
       redirAttr.addFlashAttribute("addSiblingForm", form);
       redirAttr.addAttribute("do", "add-sibling");
       redirAttr.addAttribute("tab", "add-sibling-show-new");
@@ -208,25 +206,25 @@ public class FamilyRelationsController {
   }
 
   /**
-   * Adds a child to the current person. Basically works the same as {@link #addParent(Person,
-   * AddParentForm, BindingResult, RedirectAttributes)} just with siblings.
+   * Adds a child to the current person. Basically works the same as
+   * {@link #addParent(Person, AddParentForm, BindingResult, RedirectAttributes)} just with
+   * siblings.
    *
    * @param person the parent-to-be, automatically retained from the requested URI
    * @param form form containing the data about the new parent
    * @param errors validation errors for the form
-   * @param redirAttr attributes to use in the model after redirection as well as GET parameters
-   *     for the resulting url
+   * @param redirAttr attributes to use in the model after redirection as well as GET parameters for
+   *        the resulting url
    * @return a redirection to the person's detail page
    */
   @PostMapping("/persons/{id}/relatives/children/add")
   public String addChild(@PathVariable("id") Person person,
       @ModelAttribute("addChildForm") @Valid SimplifiedAddParticipantForm form,
-      BindingResult errors,
-      RedirectAttributes redirAttr) {
+      BindingResult errors, RedirectAttributes redirAttr) {
 
     if (errors.hasErrors()) {
-      redirAttr.addFlashAttribute(
-          "org.springframework.validation.BindingResult.addChildForm", errors);
+      redirAttr.addFlashAttribute("org.springframework.validation.BindingResult.addChildForm",
+          errors);
       redirAttr.addFlashAttribute("addChildForm", form);
       redirAttr.addAttribute("do", "add-child");
       redirAttr.addAttribute("tab", "add-child-show-new");
@@ -251,8 +249,8 @@ public class FamilyRelationsController {
   /**
    * Registers the validator for the {@link AddParentForm}
    *
-   * @param binder the binder to take care of mapping the data in a web request to the
-   *     corresponding Java classes
+   * @param binder the binder to take care of mapping the data in a web request to the corresponding
+   *        Java classes
    */
   @InitBinder("addParentForm")
   protected void initBinderForAddParentForm(WebDataBinder binder) {
@@ -262,8 +260,8 @@ public class FamilyRelationsController {
   /**
    * Registers the validator for the {@link SimplifiedAddParticipantForm}
    *
-   * @param binder the binder to take care of mapping the data in a web request to the
-   *     corresponding Java classes
+   * @param binder the binder to take care of mapping the data in a web request to the corresponding
+   *        Java classes
    */
   @InitBinder("addSiblingForm")
   protected void initBinderForSimplifiedAddParticipantForm(WebDataBinder binder) {
@@ -291,10 +289,9 @@ public class FamilyRelationsController {
     // it is important to use the values of phone number and email here instead of their wrapper
     // classes as the query may not be a valid email/phone number. Wrapping them by default would
     // result in an exception in that case.
-    predicate.and(person.firstName.containsIgnoreCase(query)
-        .or(person.lastName.containsIgnoreCase(query))
-        .or(person.phoneNumber.value.eq(query))
-        .or(person.email.value.eq(query)));
+    predicate.and(
+        person.firstName.containsIgnoreCase(query).or(person.lastName.containsIgnoreCase(query))
+            .or(person.phoneNumber.value.eq(query)).or(person.email.value.eq(query)));
 
     return predicate;
   }

@@ -1,12 +1,5 @@
 package de.naju.adebar.web.controller.persons;
 
-import de.naju.adebar.model.persons.Person;
-import de.naju.adebar.model.persons.PersonRepository;
-import de.naju.adebar.model.persons.ReferentProfile;
-import de.naju.adebar.model.persons.qualifications.Qualification;
-import de.naju.adebar.util.Assert2;
-import de.naju.adebar.web.validation.persons.referent.AddQualificationForm;
-import de.naju.adebar.web.validation.persons.referent.AddQualificationFormConverter;
 import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +12,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.ReferentProfile;
+import de.naju.adebar.model.persons.qualifications.Qualification;
+import de.naju.adebar.web.validation.persons.referent.AddQualificationForm;
+import de.naju.adebar.web.validation.persons.referent.AddQualificationFormConverter;
 
 /**
  * Handles all requests related to referent profiles of persons as well as their lifecycle.
@@ -31,25 +29,20 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Transactional
 public class ReferentController {
 
-  private final PersonRepository personRepo;
   private final AddQualificationFormConverter addQualificationFormConverter;
-  private WebDataBinder binder;
 
   /**
    * Full constructor.
    *
    * @param personRepo repository containing all available persons. This is necessary to make a
-   *     person a referent.
-   * @param addQualificationFormConverter service to convert an {@link AddQualificationForm} to
-   *     a corresponding {@link Qualification} and vice-versa.
+   *        person a referent.
+   * @param addQualificationFormConverter service to convert an {@link AddQualificationForm} to a
+   *        corresponding {@link Qualification} and vice-versa.
    */
-  public ReferentController(PersonRepository personRepo,
-      AddQualificationFormConverter addQualificationFormConverter) {
+  public ReferentController(AddQualificationFormConverter addQualificationFormConverter) {
 
-    Assert2.noNullArguments("No parameter may be null", //
-        personRepo, addQualificationFormConverter);
+    Assert.notNull(addQualificationFormConverter, "addQualificationFormConverter may not be null");
 
-    this.personRepo = personRepo;
     this.addQualificationFormConverter = addQualificationFormConverter;
   }
 
@@ -65,8 +58,7 @@ public class ReferentController {
   @PostMapping("/persons/{pid}/referent-profile/qualifications/add")
   public String addQualification(@PathVariable("pid") Person person,
       @ModelAttribute("addQualificationForm") @Valid AddQualificationForm form,
-      BindingResult result,
-      RedirectAttributes redirAttr) {
+      BindingResult result, RedirectAttributes redirAttr) {
 
     Assert.isTrue(person.isReferent(), "Person must be a referent " + person);
 

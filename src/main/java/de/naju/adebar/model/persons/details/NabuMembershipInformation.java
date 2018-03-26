@@ -3,6 +3,7 @@ package de.naju.adebar.model.persons.details;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Transient;
+import de.naju.adebar.documentation.infrastructure.JpaOnly;
 
 /**
  * A person may be a club member of the NABU. For now we are just interested in its membership
@@ -45,8 +46,8 @@ public class NabuMembershipInformation {
   /**
    * Default constructor
    */
-  private NabuMembershipInformation() {
-  }
+  @JpaOnly
+  private NabuMembershipInformation() {}
 
   /**
    * @return whether the person is a NABU member
@@ -84,8 +85,8 @@ public class NabuMembershipInformation {
   }
 
   /**
-   * @return the membership status that is described by this instance. Will never be {@link
-   *     MembershipStatus#UNKNOWN}
+   * @return the membership status that is described by this instance. Will never be
+   *         {@link MembershipStatus#UNKNOWN}
    */
   @Transient
   public MembershipStatus getStatus() {

@@ -56,7 +56,6 @@
     <dependency>
       <groupId>com.querydsl</groupId>
       <artifactId>querydsl-jpa</artifactId>
-      <version>4.1.4</version>
     </dependency>
 
     <!-- Security -->
@@ -69,7 +68,6 @@
     <dependency>
       <groupId>javax.money</groupId>
       <artifactId>money-api</artifactId>
-      <version>1.0.1</version>
     </dependency>
 
     <dependency>

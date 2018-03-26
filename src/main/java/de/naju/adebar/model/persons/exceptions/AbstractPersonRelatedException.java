@@ -9,6 +9,8 @@ import de.naju.adebar.model.persons.PersonId;
  */
 public abstract class AbstractPersonRelatedException extends RuntimeException {
 
+  private static final long serialVersionUID = -4638575221246619942L;
+
   private final PersonId id;
   private final String name;
 
@@ -38,8 +40,8 @@ public abstract class AbstractPersonRelatedException extends RuntimeException {
    * @param id the ID of the person
    * @param name the person's name
    */
-  protected AbstractPersonRelatedException(String message, Throwable cause,
-      PersonId id, String name) {
+  protected AbstractPersonRelatedException(String message, Throwable cause, PersonId id,
+      String name) {
     super(message, cause);
     this.id = id;
     this.name = name;
@@ -65,8 +67,7 @@ public abstract class AbstractPersonRelatedException extends RuntimeException {
    * @param name the person's name
    */
   protected AbstractPersonRelatedException(String message, Throwable cause,
-      boolean enableSuppression,
-      boolean writableStackTrace, PersonId id, String name) {
+      boolean enableSuppression, boolean writableStackTrace, PersonId id, String name) {
     super(message, cause, enableSuppression, writableStackTrace);
     this.id = id;
     this.name = name;
@@ -81,7 +82,7 @@ public abstract class AbstractPersonRelatedException extends RuntimeException {
 
   /**
    * @return the name of the person that caused the exception. Just to display a prettier error
-   *     message
+   *         message
    */
   public String getName() {
     return name;

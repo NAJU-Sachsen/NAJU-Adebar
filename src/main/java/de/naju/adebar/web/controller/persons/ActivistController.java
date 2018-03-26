@@ -1,7 +1,6 @@
 package de.naju.adebar.web.controller.persons;
 
 import de.naju.adebar.model.persons.ActivistProfile;
-import de.naju.adebar.model.persons.ActivistProfileRepository;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.persons.PersonId;
 import de.naju.adebar.model.persons.PersonRepository;
@@ -27,7 +26,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class ActivistController {
 
   private final PersonRepository personRepo;
-  private final ActivistProfileRepository activistRepo;
   private final EditActivistProfileConverter profileConverter;
 
   /**
@@ -40,11 +38,10 @@ public class ActivistController {
    * @param profileConverter service to convert an {@link ActivistProfile} to a corresponding
    *     {@link EditActivistProfileForm} instance and vice-versa.
    */
-  public ActivistController(PersonRepository personRepo, ActivistProfileRepository activistRepo,
+  public ActivistController(PersonRepository personRepo,
       EditActivistProfileConverter profileConverter) {
-    Assert2.noNullArguments("No parameter may be null", personRepo, activistRepo, profileConverter);
+    Assert2.noNullArguments("No parameter may be null", personRepo, profileConverter);
     this.personRepo = personRepo;
-    this.activistRepo = activistRepo;
     this.profileConverter = profileConverter;
   }
 
