@@ -68,6 +68,8 @@
                     data-target="#edit-person-dialog">
               <span class="glyphicon glyphicon-pencil"></span> Anpassen
             </button>
+
+            <!-- edit person dialog -->
             <div class="modal fade" id="edit-person-dialog" tabindex="-1" role="dialog">
               <div class="modal-dialog" role="document"
                    th:classappend="${editPersonForm.participant} ? 'modal-lg'">
@@ -120,10 +122,32 @@
                           </div>
                           <p class="help-block" th:if="${#fields.hasErrors('phoneNumber')}"
                              th:errors="*{phoneNumber}">Erforderlich</p>
-                          <p class="help-block">
-                            Für Eltern und "Business-Kontakte" können weitere Telefonnummern in den
-                            entsprechenden Abschnitten hinterlegt werden.
+                          <p class="help-block" th:unless="${person.parent}">
+                            Für Eltern und "Business-Kontakte" können weitere Telefonnummern
+                            hinterlegt werden.
                           </p>
+                        </div>
+                        <div class="form-group" th:if="${person.parent}"
+                             th:classappend="${#fields.hasErrors('parentForm.workPhone')} ? 'has-error'">
+                          <label for="edit-work-phone" class="control-label">Telefon (Arbeit)</label>
+                          <div class="input-group">
+                            <input type="tel" class="form-control" id="edit-work-phone"
+                                   value="0123 45678901" th:field="*{parentForm.workPhone}"/>
+                            <span class="input-group-addon">optional</span>
+                          </div>
+                          <p class="help-block" th:if="${#fields.hasErrors('parentForm.workPhone')}"
+                             th:errors="*{parentForm.workPhone}">Erforderlich</p>
+                        </div>
+                        <div class="form-group" th:if="${person.parent}"
+                             th:classappend="${#fields.hasErrors('parentForm.landlinePhone')} ? 'has-error'">
+                          <label for="edit-landline-phone" class="control-label">Telefon (Arbeit)</label>
+                          <div class="input-group">
+                            <input type="tel" class="form-control" id="edit-landline-phone"
+                                   value="0123 45678901" th:field="*{parentForm.landlinePhone}"/>
+                            <span class="input-group-addon">optional</span>
+                          </div>
+                          <p class="help-block" th:if="${#fields.hasErrors('parentForm.landlinePhone')}"
+                             th:errors="*{parentForm.landlinePhone}">Erforderlich</p>
                         </div>
                         <hr/>
                         <div class="form-group"
@@ -351,6 +375,22 @@
                   <span class="glyphicon glyphicon-phone"></span> Telefon (privat)
                 </th>
                 <td class="col-md-10" th:text="${person.phoneNumber} ?: 'keine Angabe'">0123
+                  45678901
+                </td>
+              </tr>
+              <tr class="row" th:if="${person.parent}">
+                <th class="col-md-2">
+                  <span class="glyphicon glyphicon-earphone"></span> Telefon (Arbeit)
+                </th>
+                <td class="col-md-10" th:text="${person.parentProfile.workPhone} ?: 'keine Angabe'">
+                  0123 45678901
+                </td>
+              </tr>
+              <tr class="row" th:if="${person.parent}">
+                <th class="col-md-2">
+                  <span class="glyphicon glyphicon-phone-alt"></span> Telefon (Festnetz)
+                </th>
+                <td class="col-md-10" th:text="${person.parentProfile.landlinePhone} ?: 'keine Angabe'">0123
                   45678901
                 </td>
               </tr>

@@ -31,6 +31,7 @@ import de.naju.adebar.model.persons.details.Gender;
 import de.naju.adebar.model.persons.details.JuleicaCard;
 import de.naju.adebar.model.persons.events.AbstractPersonRelatedEvent;
 import de.naju.adebar.model.persons.events.NewActivistRegisteredEvent;
+import de.naju.adebar.model.persons.events.NewParentRegisteredEvent;
 import de.naju.adebar.model.persons.events.NewReferentRegisteredEvent;
 import de.naju.adebar.model.persons.events.PersonArchivedEvent;
 import de.naju.adebar.model.persons.events.PersonDataUpdatedEvent;
@@ -49,6 +50,7 @@ import de.naju.adebar.model.persons.qualifications.Qualification;
  * @see ParticipantProfile
  * @see ActivistProfile
  * @see ReferentProfile
+ * @see ParentProfile
  */
 @Entity(name = "person")
 public class Person {
@@ -92,6 +94,9 @@ public class Person {
   @Column(name = "referent")
   private boolean referent;
 
+  @Column(name = "parent")
+  private boolean parent;
+
   @PrimaryKeyJoinColumn
   @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private ParticipantProfile participantProfile;
@@ -103,6 +108,10 @@ public class Person {
   @PrimaryKeyJoinColumn
   @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private ReferentProfile referentProfile;
+
+  @PrimaryKeyJoinColumn
+  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  private ParentProfile parentProfile;
 
   @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinTable(name = "parents", joinColumns = @JoinColumn(name = "child"),
@@ -146,7 +155,9 @@ public class Person {
   }
 
   /**
-   * Default constructor for JPA's sake
+   * Default constructor for JPA's sake.
+   * <p>
+   * It is however not private to provide support for Javassist enhancements
    */
   Person() {}
 
@@ -238,9 +249,24 @@ public class Person {
   }
 
   /**
+   * @return whether the person is a parent
+   */
+  public boolean isParent() {
+    return parent;
+  }
+
+  /**
+   * @return parent-relation information about the person. If it is not a parent, {@code null} will
+   *         be returned. This is different from {@link #getParents()}!
+   */
+  public ParentProfile getParentProfile() {
+    return parentProfile;
+  }
+
+  /**
    * @return the person's parents
    */
-  public Iterable<Person> getParentProfiles() {
+  public Iterable<Person> getParents() {
     return parents;
   }
 
@@ -524,6 +550,42 @@ public class Person {
   }
 
   /**
+   * Registers the person as parent of somebody.
+   * <p>
+   * Be sure to save the person in order to persist the profile.
+   * 
+   * @return the new parent profile
+   * @throws IllegalStateException if the person already is a parent
+   */
+  public ParentProfile makeParent() {
+    assertMayBecomeParent();
+    this.parentProfile = new ParentProfile(this);
+    this.parent = true;
+
+    registerEvent(NewParentRegisteredEvent.forPerson(this));
+    return parentProfile;
+  }
+
+  /**
+   * Registers the person as parent of somebody.
+   * <p>
+   * Be sure to save the person in order to persist the profile.
+   * 
+   * @param landlinePhone the parent's phone number at home
+   * @param workPhone the parent's phone number at work
+   * @return the new parent profile
+   * @throws IllegalStateException if the person already is a parent
+   */
+  public ParentProfile makeParent(PhoneNumber landlinePhone, PhoneNumber workPhone) {
+    assertMayBecomeParent();
+    this.parentProfile = new ParentProfile(this, landlinePhone, workPhone);
+    this.parent = true;
+
+    registerEvent(NewParentRegisteredEvent.forPerson(this));
+    return parentProfile;
+  }
+
+  /**
    * Marks the person as "archived" - it should not be modified any further. However this is not
    * being enforced.
    *
@@ -549,13 +611,17 @@ public class Person {
    * @throws ImpossibleKinshipRelationException if parent and child are the same person. No cycle
    *         checks in the relationship graph are being performed yet.
    */
-  public Person connectParentProfile(Person parent) {
+  public Person connectParent(Person parent) {
     if (!parentProfileMayBeConnected()) {
       throw new IllegalStateException("No more parent profile may be connected");
     } else if (parents.contains(parent)) {
       throw new ExistingParentException(String.format("Parent: %s; child: %s", parent, this));
     } else if (this.equals(parent)) {
       throw new ImpossibleKinshipRelationException(FOR_PERSON_MSG + this);
+    }
+
+    if (!parent.isParent()) {
+      parent.makeParent();
     }
 
     parents.add(parent);
@@ -573,7 +639,7 @@ public class Person {
    * @return the person without its parent
    * @throws IllegalArgumentException if the given parent is not known to be one
    */
-  public Person disconnectParentProfile(Person parent) {
+  public Person disconnectParent(Person parent) {
     if (parents.remove(parent)) {
       throw new IllegalArgumentException("No connection with parent " + parent);
     }
@@ -656,13 +722,23 @@ public class Person {
   }
 
   /**
-   * @param parentProfiles the person's parents
+   * @param parentProfile the parent profile of the person. May be {@code null} if the person is no
+   *        parent.
    */
-  protected void setParentProfiles(List<Person> parentProfiles) {
-    if (parentProfiles == null) {
+  protected void setParentProfile(ParentProfile parentProfile) {
+    this.parent = parentProfile != null;
+    this.parentProfile = parentProfile;
+    parentProfile.provideRelatedPerson(this);
+  }
+
+  /**
+   * @param parents the person's parents
+   */
+  protected void setParents(List<Person> parents) {
+    if (parents == null) {
       this.parents = new ArrayList<>(MAX_PARENT_PROFILES);
     } else {
-      this.parents = parentProfiles;
+      this.parents = parents;
     }
   }
 
@@ -801,6 +877,16 @@ public class Person {
     assertNotArchived();
     if (isReferent()) {
       throw new IllegalStateException("Person already is a referent");
+    }
+  }
+
+  /**
+   * @throws IllegalStateException if the person is a parent
+   */
+  private void assertMayBecomeParent() {
+    assertNotArchived();
+    if (isParent()) {
+      throw new IllegalStateException("Person is already registered as parent");
     }
   }
 

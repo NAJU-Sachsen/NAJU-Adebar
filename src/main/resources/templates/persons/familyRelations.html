@@ -251,16 +251,40 @@
                                  th:errors="*{newEmail}">Erforderlich</p>
                             </div>
                             <div class="form-group"
-                                 th:classappend="${#fields.hasErrors('newPhone')} ? 'has-error'">
-                              <label for="new-parent-phone"
+                                 th:classappend="${#fields.hasErrors('newPrivatePhone')} ? 'has-error'">
+                              <label for="new-parent-private-phone"
                                      class="control-label">Telefon (privat)</label>
                               <div class="input-group">
-                                <input type="text" id="new-parent-phone" class="form-control"
-                                       placeholder="Vorname" th:field="*{newPhone}"/>
+                                <input type="text" id="new-parent-private-phone" class="form-control"
+                                       placeholder="Telefon" th:field="*{newPrivatePhone}"/>
                                 <span class="input-group-addon">optional</span>
                               </div>
-                              <p class="help-block" th:if="${#fields.hasErrors('newPhone')}"
-                                 th:errors="*{newPhone}">Erforderlich</p>
+                              <p class="help-block" th:if="${#fields.hasErrors('newPrivatePhone')}"
+                                 th:errors="*{newPrivatePhone}">Erforderlich</p>
+                            </div>
+                            <div class="form-group"
+                                 th:classappend="${#fields.hasErrors('newWorkPhone')} ? 'has-error'">
+                              <label for="new-parent-work-phone"
+                                     class="control-label">Telefon (Arbeit)</label>
+                              <div class="input-group">
+                                <input type="text" id="new-parent-work-phone" class="form-control"
+                                       placeholder="Telefon" th:field="*{newWorkPhone}"/>
+                                <span class="input-group-addon">optional</span>
+                              </div>
+                              <p class="help-block" th:if="${#fields.hasErrors('newWorkPhone')}"
+                                 th:errors="*{newWorkPhone}">Erforderlich</p>
+                            </div>
+                            <div class="form-group"
+                                 th:classappend="${#fields.hasErrors('newLandlinePhone')} ? 'has-error'">
+                              <label for="new-parent-landline-phone"
+                                     class="control-label">Telefon (Festnetz)</label>
+                              <div class="input-group">
+                                <input type="text" id="new-parent-landline-phone" class="form-control"
+                                       placeholder="Telefon" th:field="*{newLandlinePhone}"/>
+                                <span class="input-group-addon">optional</span>
+                              </div>
+                              <p class="help-block" th:if="${#fields.hasErrors('newLandlinePhone')}"
+                                 th:errors="*{newLandlinePhone}">Erforderlich</p>
                             </div>
                             <hr/>
                             <div class="form-group">

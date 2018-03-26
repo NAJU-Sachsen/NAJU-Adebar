@@ -1,5 +1,10 @@
 package de.naju.adebar.web.validation.persons.relatives;
 
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
 import de.naju.adebar.model.Email;
 import de.naju.adebar.model.PhoneNumber;
 import de.naju.adebar.model.persons.Person;
@@ -7,11 +12,6 @@ import de.naju.adebar.model.persons.PersonFactory;
 import de.naju.adebar.util.Validation;
 import de.naju.adebar.web.validation.NewOrExistingEntityForm.SubmittedData;
 import de.naju.adebar.web.validation.NewOrExistingValidatingEntityFormConverter;
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
-import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
 
 /**
  * Service to convert an {@link AddParentForm} to {@link Person} instances. Note that this converter
@@ -20,7 +20,7 @@ import org.springframework.validation.ValidationUtils;
  * @author Rico Bergmann
  */
 @Service
-public class AddParentFormConverter implements
+public class AddParentFormConverter implements //
     NewOrExistingValidatingEntityFormConverter<Person, AddParentForm> {
 
   private final PersonFactory personFactory;
@@ -65,8 +65,16 @@ public class AddParentFormConverter implements
       errors.rejectValue("newEmail", "email.phone");
     }
 
-    if (form.hasNewPhone() && !Validation.isPhoneNumber(form.getNewPhone())) {
-      errors.rejectValue("newPhone", "phone.invalid");
+    if (form.hasNewPrivatePhone() && !Validation.isPhoneNumber(form.getNewPrivatePhone())) {
+      errors.rejectValue("newPrivatePhone", "phone.invalid");
+    }
+
+    if (form.hasNewWorkPhone() && !Validation.isPhoneNumber(form.getNewWorkPhone())) {
+      errors.rejectValue("newWorkPhone", "phone.invalid");
+    }
+
+    if (form.hasNewLandlinePhone() && !Validation.isPhoneNumber(form.getNewLandlinePhone())) {
+      errors.rejectValue("newLandlinePhone", "phone.invalid");
     }
 
   }
@@ -86,15 +94,22 @@ public class AddParentFormConverter implements
     }
 
     Email email = form.hasNewEmail() ? Email.of(form.getNewEmail()) : null;
-    PhoneNumber phone = form.hasNewPhone() ? PhoneNumber.of(form.getNewPhone()) : null;
+    PhoneNumber privatePhone = form.hasNewPrivatePhone() //
+        ? PhoneNumber.of(form.getNewPrivatePhone()) //
+        : null;
+    PhoneNumber workPhone = form.hasNewWorkPhone() ? PhoneNumber.of(form.getNewWorkPhone()) : null;
+    PhoneNumber landlinePhone = form.hasNewLandlinePhone() //
+        ? PhoneNumber.of(form.getNewLandlinePhone()) //
+        : null;
 
-    return personFactory
-        .buildNew(
-            form.getNewFirstName(),
-            form.getNewLastName(),
-            email)
-        .specifyPhoneNumber(phone)
+    //@formatter:off
+    return personFactory.buildNew(form.getNewFirstName(), form.getNewLastName(), email)
+          .specifyPhoneNumber(privatePhone) //
+        .makeParent() //
+          .specifyLandlinePhone(landlinePhone) //
+          .specifyWorkPhone(workPhone) //
         .create();
+    //@formatter:on
   }
 
   @Override
@@ -111,14 +126,20 @@ public class AddParentFormConverter implements
       return false;
     }
 
-    if (form.getNewEmail() != null
-        && !form.getNewEmail().isEmpty()
+    if (form.getNewEmail() != null && !form.getNewEmail().isEmpty()
         && !Validation.isEmail(form.getNewEmail())) {
       return false;
     }
 
-    if (form.getNewPhone() != null && !form.getNewPhone().isEmpty() && !Validation
-        .isPhoneNumber(form.getNewPhone())) {
+    if (form.hasNewPrivatePhone() && !Validation.isPhoneNumber(form.getNewPrivatePhone())) {
+      return false;
+    }
+
+    if (form.hasNewWorkPhone() && !Validation.isPhoneNumber(form.getNewWorkPhone())) {
+      return false;
+    }
+
+    if (form.hasNewLandlinePhone() && !Validation.isPhoneNumber(form.getNewLandlinePhone())) {
       return false;
     }
 

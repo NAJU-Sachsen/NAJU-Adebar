@@ -1,10 +1,10 @@
 package de.naju.adebar.model.persons.family;
 
+import java.util.List;
+import org.springframework.stereotype.Service;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.persons.PersonRepository;
 import de.naju.adebar.util.Assert2;
-import java.util.List;
-import org.springframework.stereotype.Service;
 
 /**
  * A {@link VitalRecord} that operates on a database.
@@ -39,13 +39,21 @@ class PersistentVitalRecord implements VitalRecord {
 
   @Override
   public void addChildTo(Person parent, Person theChild) {
-    theChild.connectParentProfile(parent);
+    if (!parent.isParent()) {
+      parent.makeParent();
+    }
+
+    theChild.connectParent(parent);
     personRepo.save(theChild);
   }
 
   @Override
   public void addParentTo(Person child, Person theParent) {
-    child.connectParentProfile(theParent);
+    if (!theParent.isParent()) {
+      theParent.makeParent();
+    }
+
+    child.connectParent(theParent);
     personRepo.save(child);
   }
 
@@ -53,8 +61,8 @@ class PersistentVitalRecord implements VitalRecord {
   public void addSiblingTo(Person person, Person theSibling) {
     familyRelationsRepo //
         .findParentsOf(person) //
-        .forEach(theSibling::connectParentProfile);
+        .forEach(theSibling::connectParent);
     personRepo.save(theSibling);
   }
-  
+
 }

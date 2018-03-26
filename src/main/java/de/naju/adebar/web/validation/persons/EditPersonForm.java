@@ -4,6 +4,7 @@ import de.naju.adebar.model.Email;
 import de.naju.adebar.model.PhoneNumber;
 import de.naju.adebar.web.validation.core.AddressForm;
 import de.naju.adebar.web.validation.persons.participant.EditParticipantForm;
+import de.naju.adebar.web.validation.persons.relatives.EditParentProfileForm;
 
 /**
  * POJO representation of the edit person form
@@ -22,6 +23,7 @@ public class EditPersonForm {
   private boolean participant;
 
   private EditParticipantForm participantForm;
+  private EditParentProfileForm parentForm;
 
   /**
    * Full constructor
@@ -31,11 +33,11 @@ public class EditPersonForm {
    * @param email the person's email
    * @param phoneNumber the person's phone number
    * @param address the person's address
-   * @param participantForm the person's participant form. May be {@code null} if the person is
-   *     no participant
+   * @param participantForm the person's participant form. May be {@code null} if the person is no
+   *        participant
    */
   public EditPersonForm(String firstName, String lastName, Email email, PhoneNumber phoneNumber,
-      AddressForm address, EditParticipantForm participantForm) {
+      AddressForm address, EditParticipantForm participantForm, EditParentProfileForm parentForm) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email != null ? email.getValue() : null;
@@ -43,13 +45,13 @@ public class EditPersonForm {
     this.address = address;
     this.participant = participantForm != null;
     this.participantForm = participantForm;
+    this.parentForm = parentForm;
   }
 
   /**
    * Default constructor
    */
-  public EditPersonForm() {
-  }
+  public EditPersonForm() {}
 
   /**
    * @return the person's first name
@@ -164,23 +166,44 @@ public class EditPersonForm {
   }
 
   /**
-   * @param participantForm the person's participant form. May be {@code null} if the person is
-   *     no participant
+   * @param participantForm the person's participant form. May be {@code null} if the person is no
+   *        participant
    */
   public void setParticipantForm(EditParticipantForm participantForm) {
     this.participantForm = participantForm;
   }
 
+  /**
+   * @return whether the form contains parent-related information
+   */
+  public boolean hasParentForm() {
+    return parentForm != null;
+  }
+
+  /**
+   * @return the person's parent form. May be {@code null} if the person is no parent of nobody.
+   */
+  public EditParentProfileForm getParentForm() {
+    return parentForm;
+  }
+
+  /**
+   * @param parentForm the person's parent form. May be {@code null} if the person is no parent.
+   */
+  public void setParentForm(EditParentProfileForm parentForm) {
+    this.parentForm = parentForm;
+  }
+
   /*
    * (non-Javadoc)
-   *
+   * 
    * @see java.lang.Object#toString()
    */
   @Override
   public String toString() {
     return "EditPersonForm [firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
         + ", phoneNumber=" + phoneNumber + ", address=" + address + ", participant=" + participant
-        + ", participantForm=" + participantForm + "]";
+        + ", participantForm=" + participantForm + ", parentForm=" + parentForm + "]";
   }
 
 }

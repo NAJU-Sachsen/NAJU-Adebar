@@ -29,6 +29,9 @@ import de.naju.adebar.model.persons.qualifications.Qualification;
  *
  * {@code newBuilder == builder} will hold true afterwards. <br>
  * The fact that a builder-instance is returned after each call is just for a more convenient usage.
+ * <p>
+ * Also note that calling a {@code makeXYZ()} more than once may lead to undefined behavior whereas
+ * calling {@code specifyXYZ()} will usually override the first call.
  *
  *
  * @author Rico Bergmann
@@ -153,6 +156,16 @@ public class PersonFactory {
     }
 
     /**
+     * Makes the person parent of somebody
+     * 
+     * @return the builder to use for further calls
+     */
+    public ParentBuilder makeParent() {
+      person.makeParent();
+      return new ParentBuilder(this);
+    }
+
+    /**
      * Transacts the creation
      *
      * @return the new {@link Person} instance
@@ -266,7 +279,7 @@ public class PersonFactory {
     }
 
     /**
-     * Sets the person's nabu membership information
+     * Sets the person's NABU membership information
      *
      * @param nabuMembership the information
      * @return the builder to use for further calls
@@ -334,6 +347,42 @@ public class PersonFactory {
      */
     public ReferentBuilder specifyQualifications(List<Qualification> qualifications) {
       parentBuilder.currentBuild().getReferentProfile().setQualifications(qualifications);
+      return this;
+    }
+
+  }
+
+  /**
+   * Builder for the person's {@link ParentProfile}
+   */
+  public class ParentBuilder extends AbstractProfileBuilder {
+
+    /**
+     * @param delegatingBuilder the delegating builder
+     */
+    private ParentBuilder(PersonBuilder delegatingBuilder) {
+      super(delegatingBuilder);
+    }
+
+    /**
+     * Sets the parent's phone number at work
+     * 
+     * @param workPhone the phone number
+     * @return the builder to use for further calls
+     */
+    public ParentBuilder specifyWorkPhone(PhoneNumber workPhone) {
+      parentBuilder.currentBuild().getParentProfile().setWorkPhone(workPhone);
+      return this;
+    }
+
+    /**
+     * Sets the parent's phone number at home
+     * 
+     * @param landlinePhone the phone number
+     * @return the builder to use for further calls
+     */
+    public ParentBuilder specifyLandlinePhone(PhoneNumber landlinePhone) {
+      parentBuilder.currentBuild().getParentProfile().setLandlinePhone(landlinePhone);
       return this;
     }
 

@@ -17,7 +17,9 @@ public class AddParentForm implements NewOrExistingEntityForm {
   private String newFirstName;
   private String newLastName;
   private String newEmail;
-  private String newPhone;
+  private String newPrivatePhone;
+  private String newWorkPhone;
+  private String newLandlinePhone;
   private boolean newRetainAddress;
 
   /**
@@ -28,14 +30,13 @@ public class AddParentForm implements NewOrExistingEntityForm {
   public AddParentForm(Person person) {
     this.newLastName = person.getLastName();
     this.newEmail = person.hasEmail() ? person.getEmail().getValue() : null;
-    this.newPhone = person.hasPhoneNumber() ? person.getPhoneNumber().getValue() : null;
+    this.newPrivatePhone = person.hasPhoneNumber() ? person.getPhoneNumber().getValue() : null;
   }
 
   /**
    * Default constructor
    */
-  public AddParentForm() {
-  }
+  public AddParentForm() {}
 
   /**
    * @return the existing person
@@ -81,7 +82,7 @@ public class AddParentForm implements NewOrExistingEntityForm {
 
   /**
    * @return the new person's email. We may not return an {@link de.naju.adebar.model.Email}
-   *     instance here, as the email may still need to be validated and hence may be invalid.
+   *         instance here, as the email may still need to be validated and hence may be invalid.
    */
   public String getNewEmail() {
     return newEmail;
@@ -96,34 +97,76 @@ public class AddParentForm implements NewOrExistingEntityForm {
 
   /**
    * @return whether the form contains data for an email address (although this address may
-   *     potentially be invalid)
+   *         potentially be invalid)
    */
   public boolean hasNewEmail() {
     return newEmail != null && !newEmail.isEmpty();
   }
 
   /**
-   * @return the new person's phone number. We may not return an {@link de.naju.adebar.model.PhoneNumber}
-   *     instance here, as the phone number may still need to be validated and hence may be
-   *     invalid.
+   * @return the new person's phone number. We may not return an
+   *         {@link de.naju.adebar.model.PhoneNumber} instance here, as the phone number may still
+   *         need to be validated and hence may be invalid.
    */
-  public String getNewPhone() {
-    return newPhone;
+  public String getNewPrivatePhone() {
+    return newPrivatePhone;
   }
 
   /**
    * @param newPhone the new person's phone number
    */
-  public void setNewPhone(String newPhone) {
-    this.newPhone = newPhone;
+  public void setNewPrivatePhone(String newPhone) {
+    this.newPrivatePhone = newPhone;
   }
 
   /**
    * @return whether the form contains data for a phone number (although this may potentially be
-   *     invalid)
+   *         invalid)
    */
-  public boolean hasNewPhone() {
-    return newPhone != null && !newPhone.isEmpty();
+  public boolean hasNewPrivatePhone() {
+    return newPrivatePhone != null && !newPrivatePhone.isEmpty();
+  }
+
+  /**
+   * @return the new parent's phone number at work
+   */
+  public String getNewWorkPhone() {
+    return newWorkPhone;
+  }
+
+  /**
+   * @param newWorkPhone the new parent's phone number at work
+   */
+  public void setNewWorkPhone(String newWorkPhone) {
+    this.newWorkPhone = newWorkPhone;
+  }
+
+  /**
+   * @return whether the parent has a special phone number at work
+   */
+  public boolean hasNewWorkPhone() {
+    return newWorkPhone != null && !newWorkPhone.isEmpty();
+  }
+
+  /**
+   * @return the new parent's phone number at home
+   */
+  public String getNewLandlinePhone() {
+    return newLandlinePhone;
+  }
+
+  /**
+   * @param newLandlinePhone the new parent's phone number at home
+   */
+  public void setNewLandlinePhone(String newLandlinePhone) {
+    this.newLandlinePhone = newLandlinePhone;
+  }
+
+  /**
+   * @return whether the parent has a special phone number at home
+   */
+  public boolean hasNewLandlinePhone() {
+    return newLandlinePhone != null && !newLandlinePhone.isEmpty();
   }
 
   /**
@@ -147,13 +190,10 @@ public class AddParentForm implements NewOrExistingEntityForm {
 
   @Override
   public String toString() {
-    return "AddParentForm [" +
-        "existingPerson=" + existingPerson +
-        ", newFirstName='" + newFirstName + '\'' +
-        ", newLastName='" + newLastName + '\'' +
-        ", newEmail='" + newEmail + '\'' +
-        ", newPhone='" + newPhone + '\'' +
-        ", newRetainAddress=" + newRetainAddress +
-        ']';
+    return "AddParentForm [existingPerson=" + existingPerson + ", newFirstName=" + newFirstName
+        + ", newLastName=" + newLastName + ", newEmail=" + newEmail + ", newPrivatePhone="
+        + newPrivatePhone + ", newWorkPhone=" + newWorkPhone + ", newLandlinePhone="
+        + newLandlinePhone + ", newRetainAddress=" + newRetainAddress + "]";
   }
+
 }
