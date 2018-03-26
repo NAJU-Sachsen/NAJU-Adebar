@@ -286,6 +286,7 @@
                th:classappend="${#fields.hasErrors('participantForm.dateOfBirth')} ? 'has-error'">
             <label for="date-of-birth" class="control-label">Geburtsdatum</label>
             <input type="date" class="form-control" id="date-of-birth"
+                   placeholder="Format: TT.MM.JJJJ"
                    th:field="*{participantForm.dateOfBirth}"/>
             <p class="help-block" th:if="${#fields.hasErrors('participantForm.dateOfBirth')}"
                th:errors="*{participantForm.dateOfBirth}">
