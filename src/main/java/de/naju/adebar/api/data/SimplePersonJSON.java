@@ -1,10 +1,10 @@
 package de.naju.adebar.api.data;
 
+import de.naju.adebar.model.Address;
+import de.naju.adebar.model.persons.Person;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
-import de.naju.adebar.model.Address;
-import de.naju.adebar.model.persons.Person;
 
 /**
  * JSON-object for persons in simplified form. In contrast to the normal {@link Person} these
@@ -14,6 +14,7 @@ import de.naju.adebar.model.persons.Person;
  * @author Rico Bergmann
  */
 public class SimplePersonJSON {
+
   private static final String DATE_FORMAT = "dd.MM.yyyy";
   private static final String ADDRESS_COMPONENT_SEPARATOR = " ";
   private static final int ADDRESS_COMPONENTS = 5;
@@ -32,7 +33,7 @@ public class SimplePersonJSON {
   public SimplePersonJSON(Person person) {
     this.id = person.getId().toString();
     this.name = person.getName();
-    this.email = person.getEmail().getValue();
+    this.email = person.hasEmail() ? person.getEmail().getValue() : "";
     this.address = formatAddress(person.getAddress());
 
     if (person.isParticipant()) {
