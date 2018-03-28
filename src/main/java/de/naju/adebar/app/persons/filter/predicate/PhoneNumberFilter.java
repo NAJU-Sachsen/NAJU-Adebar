@@ -1,14 +1,15 @@
 package de.naju.adebar.app.persons.filter.predicate;
 
 import com.querydsl.core.BooleanBuilder;
+import de.naju.adebar.model.PhoneNumber;
 import de.naju.adebar.model.persons.QPerson;
 
 public class PhoneNumberFilter implements PersonFilter {
 
   private static final QPerson person = QPerson.person;
-  private String phoneNumber;
+  private PhoneNumber phoneNumber;
 
-  public PhoneNumberFilter(String phoneNumber) {
+  public PhoneNumberFilter(PhoneNumber phoneNumber) {
     this.phoneNumber = phoneNumber;
   }
 
@@ -19,6 +20,9 @@ public class PhoneNumberFilter implements PersonFilter {
    */
   @Override
   public BooleanBuilder filter(BooleanBuilder input) {
-    return input.and(person.phoneNumber.value.eq(phoneNumber));
+    return input.and(person.phoneNumber.eq(phoneNumber)
+        .or(person.parent.isTrue().and(person.parentProfile.workPhone.eq(phoneNumber)))
+        .or(person.parent.isTrue().and(person.parentProfile.landlinePhone.eq(phoneNumber))));
   }
+
 }
