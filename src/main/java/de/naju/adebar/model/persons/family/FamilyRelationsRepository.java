@@ -27,18 +27,18 @@ interface FamilyRelationsRepository extends
    * @param parent the person to query for. May never be {@code null}
    * @return all registered children of the person
    */
-  @Query("SELECT p FROM person p JOIN  p.parents ps WHERE ps = ?1")
+  @Query("SELECT p FROM person p JOIN p.parents ps WHERE ps = ?1")
   List<Person> findChildrenOf(Person parent);
 
   /**
    * @param person the person to query for. May never be {@code null}
    * @return all registered siblings of the person
    */
-  @Query(value = "SELECT sib.* "
+  @Query(value = "SELECT DISTINCT sib.* "
       + "FROM person sib"
       + "  JOIN parents p ON sib.id = p.child "
       + "WHERE p.parent IN ( "
-      + "  SELECT par.parent "
+      + "  SELECT DISTINCT par.parent "
       + "  FROM person p "
       + "    JOIN parents par"
       + "      ON p.id = par.child"
