@@ -1,5 +1,14 @@
 package de.naju.adebar.web.controller.persons;
 
+import de.naju.adebar.app.search.persons.PersonSearchServer;
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.PersonRepository;
+import de.naju.adebar.model.persons.family.VitalRecord;
+import de.naju.adebar.util.Assert2;
+import de.naju.adebar.web.validation.persons.EditPersonForm;
+import de.naju.adebar.web.validation.persons.EditPersonFormConverter;
+import de.naju.adebar.web.validation.persons.participant.SimplifiedAddParticipantForm;
+import de.naju.adebar.web.validation.persons.relatives.AddParentForm;
 import javax.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -14,16 +23,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import com.querydsl.core.types.Predicate;
-import de.naju.adebar.model.persons.Person;
-import de.naju.adebar.model.persons.PersonRepository;
-import de.naju.adebar.model.persons.family.VitalRecord;
-import de.naju.adebar.util.Assert2;
-import de.naju.adebar.web.validation.persons.EditPersonForm;
-import de.naju.adebar.web.validation.persons.EditPersonFormConverter;
-import de.naju.adebar.web.validation.persons.PersonSearchPredicateCreator;
-import de.naju.adebar.web.validation.persons.participant.SimplifiedAddParticipantForm;
-import de.naju.adebar.web.validation.persons.relatives.AddParentForm;
 
 /**
  * Handles all requests directly related to persons. This includes displaying their details,
@@ -38,7 +37,7 @@ public class PersonController {
   private static final String EDIT_PERSON_FORM = "editPersonForm";
 
   private final PersonRepository personRepo;
-  private final PersonSearchPredicateCreator searchPredicateCreator;
+  private final PersonSearchServer searchServer;
   private final EditPersonFormConverter editPersonFormConverter;
   private final VitalRecord vitalRecord;
 
@@ -46,20 +45,20 @@ public class PersonController {
    * Full constructor. No parameter may be {@code null}
    *
    * @param personRepo repository containing all available persons
-   * @param predicateCreator service to create a search predicate from a query
-   * @param editPersonFormConverter service to convert a {@link EditPersonForm} to a corresponding
-   *        {@link Person} and vice-versa
+   * @param searchServer service to search persons based on queries
+   * @param editPersonFormConverter service to convert a {@link EditPersonForm} to a
+   *     corresponding {@link Person} and vice-versa
    */
   public PersonController(PersonRepository personRepo, //
-      PersonSearchPredicateCreator predicateCreator, //
+      PersonSearchServer searchServer, //
       EditPersonFormConverter editPersonFormConverter, //
       VitalRecord vitalRecord) {
 
     Assert2.noNullArguments("No parameter may be null", //
-        personRepo, predicateCreator, editPersonFormConverter, vitalRecord);
+        personRepo, searchServer, editPersonFormConverter, vitalRecord);
 
     this.personRepo = personRepo;
-    this.searchPredicateCreator = predicateCreator;
+    this.searchServer = searchServer;
     this.editPersonFormConverter = editPersonFormConverter;
     this.vitalRecord = vitalRecord;
   }
@@ -68,9 +67,9 @@ public class PersonController {
    * Renders a list of all persons
    *
    * @param model model to put the data to render into
-   * @param pageable the requested page. As there may be quite many, will not display all persons at
-   *        once but rather show them in smaller slices. Navigation will be offered to move to the
-   *        next/previous slice.
+   * @param pageable the requested page. As there may be quite many, will not display all
+   *     persons at once but rather show them in smaller slices. Navigation will be offered to move
+   *     to the next/previous slice.
    * @return the person overview template
    */
   @GetMapping("/persons")
@@ -81,22 +80,20 @@ public class PersonController {
 
   /**
    * Renders a list of all persons matching a search criteria.
-   *
    * <p>
    * Persons will match the query if either their first name, last name, e-mail address or the city
    * they live in matches.
    *
    * @param query the search query
-   * @param pageable the requested result page. As with {@link #showAllPersons(Model, Pageable)} the
-   *        result will not be presented all at once.
+   * @param pageable the requested result page. As with {@link #showAllPersons(Model, Pageable)}
+   *     the result will not be presented all at once.
    * @param model model to put the data to render into
    * @return the person overview template, adapted to the search
    */
   @GetMapping("/persons/search")
   public String searchPersons(@RequestParam("query") String query,
       @PageableDefault(size = 20) Pageable pageable, Model model) {
-    Predicate predicate = searchPredicateCreator.createPredicate(query.trim());
-    model.addAttribute("persons", personRepo.findAll(predicate, pageable));
+    model.addAttribute("persons", searchServer.runQuery(query.trim(), pageable));
 
     return PERSON_OVERVIEW_TEMPLATE;
   }
@@ -113,7 +110,6 @@ public class PersonController {
 
   /**
    * Renders the details page for a specific person.
-   *
    * <p>
    * This includes general information, the participant profile (if applicable) as well as
    * information about relatives
