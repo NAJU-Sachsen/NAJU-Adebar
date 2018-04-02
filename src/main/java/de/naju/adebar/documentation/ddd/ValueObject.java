@@ -7,13 +7,14 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Encapsulates a specification of a workflow or decision-procedure inherent to the domain.
+ * Instances of the class do not possess an own identity. Instead they are solely distinguished by
+ * the values of their attributes.
  *
  * @author Rico Bergmann
  */
 @Documented
 @Retention(RetentionPolicy.SOURCE)
-@Target({ElementType.METHOD, ElementType.TYPE})
-public @interface BusinessRule {
+@Target({ElementType.ANNOTATION_TYPE, ElementType.TYPE, ElementType.TYPE_PARAMETER})
+public @interface ValueObject {
 
 }
