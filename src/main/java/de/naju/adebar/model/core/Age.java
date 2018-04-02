@@ -7,6 +7,7 @@ import java.time.Period;
 import java.util.Objects;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Transient;
 import org.springframework.lang.NonNull;
@@ -26,6 +27,7 @@ public class Age implements Comparable<Age> {
    */
   public static final Age LEGAL_AGE = Age.of(18);
 
+  @Column(name = "age")
   private int value;
 
   /**
@@ -91,6 +93,7 @@ public class Age implements Comparable<Age> {
   /**
    * @param value the age
    */
+  @JpaOnly
   private void setValue(int value) {
     Assert.isTrue(value >= 0, "Value may not be negative");
     this.value = value;
