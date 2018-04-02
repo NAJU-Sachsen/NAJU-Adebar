@@ -1,5 +1,7 @@
 package de.naju.adebar.model;
 
+import de.naju.adebar.documentation.ddd.ValueObject;
+import de.naju.adebar.documentation.infrastructure.JpaOnly;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import org.springframework.util.Assert;
@@ -12,6 +14,7 @@ import org.springframework.util.Assert;
  *
  * @author Rico Bergmann
  */
+@ValueObject
 @Embeddable
 public class Address {
 
@@ -28,31 +31,6 @@ public class Address {
 
   @Column(name = "hints")
   private String additionalInfo;
-
-  /**
-   * Creates a new address
-   *
-   * @param street the street, may not be empty
-   * @param zip the zip, must be 5 characters long
-   * @param city the city, may not be empty
-   * @return the address
-   */
-  public static Address of(String street, String zip, String city) {
-    return new Address(street, zip, city);
-  }
-
-  /**
-   * Creates a new address
-   *
-   * @param street the street, may not be empty
-   * @param zip the zip, must be 5 characters long
-   * @param city the city, may not be empty
-   * @param additionalInfo the additional info, may be empty but not {@code null}
-   * @return the address
-   */
-  public static Address of(String street, String zip, String city, String additionalInfo) {
-    return new Address(street, zip, city, additionalInfo);
-  }
 
   /**
    * Simplified constructor
@@ -97,6 +75,31 @@ public class Address {
   }
 
   /**
+   * Creates a new address
+   *
+   * @param street the street, may not be empty
+   * @param zip the zip, must be 5 characters long
+   * @param city the city, may not be empty
+   * @return the address
+   */
+  public static Address of(String street, String zip, String city) {
+    return new Address(street, zip, city);
+  }
+
+  /**
+   * Creates a new address
+   *
+   * @param street the street, may not be empty
+   * @param zip the zip, must be 5 characters long
+   * @param city the city, may not be empty
+   * @param additionalInfo the additional info, may be empty but not {@code null}
+   * @return the address
+   */
+  public static Address of(String street, String zip, String city, String additionalInfo) {
+    return new Address(street, zip, city, additionalInfo);
+  }
+
+  /**
    * @return the street
    */
   public String getStreet() {
@@ -104,39 +107,19 @@ public class Address {
   }
 
   /**
+   * @param street the street to set
+   */
+  @JpaOnly
+  protected void setStreet(String street) {
+    Assert.notNull(street, "Street may not be null!");
+    this.street = street;
+  }
+
+  /**
    * @return the zip
    */
   public String getZip() {
     return zip;
-  }
-
-  /**
-   * @return the city
-   */
-  public String getCity() {
-    return city;
-  }
-
-  /**
-   * @return the additional info. May be empty
-   */
-  public String getAdditionalInfo() {
-    return additionalInfo;
-  }
-
-  /**
-   * @return whether no field is set
-   */
-  public boolean empty() {
-    return street.isEmpty() && zip.isEmpty() && city.isEmpty() && additionalInfo.isEmpty();
-  }
-
-  /**
-   * @param street the street to set
-   */
-  protected void setStreet(String street) {
-    Assert.notNull(street, "Street may not be null!");
-    this.street = street;
   }
 
   /**
@@ -148,19 +131,42 @@ public class Address {
   }
 
   /**
+   * @return the city
+   */
+  public String getCity() {
+    return city;
+  }
+
+  /**
    * @param city the city to set
    */
+  @JpaOnly
   protected void setCity(String city) {
     Assert.notNull(city, "City may not be null!");
     this.city = city;
   }
 
   /**
+   * @return the additional info. May be empty
+   */
+  public String getAdditionalInfo() {
+    return additionalInfo;
+  }
+
+  /**
    * @param additionalInfo the additional info to set
    */
+  @JpaOnly
   protected void setAdditionalInfo(String additionalInfo) {
     Assert.notNull(additionalInfo, "Additional info may not be null!");
     this.additionalInfo = additionalInfo;
+  }
+
+  /**
+   * @return whether no field is set
+   */
+  public boolean empty() {
+    return street.isEmpty() && zip.isEmpty() && city.isEmpty() && additionalInfo.isEmpty();
   }
 
   /*

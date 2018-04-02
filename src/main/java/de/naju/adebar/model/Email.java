@@ -1,16 +1,18 @@
 package de.naju.adebar.model;
 
+import de.naju.adebar.documentation.ddd.ValueObject;
+import de.naju.adebar.util.Validation;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import org.springframework.util.Assert;
-import de.naju.adebar.util.Validation;
 
 /**
  * Wrapper for email addresses
  *
  * @author Rico Bergmann
  */
+@ValueObject
 @Embeddable
 public class Email implements Serializable {
 
@@ -18,17 +20,6 @@ public class Email implements Serializable {
 
   @Column(name = "email")
   private String value;
-
-  /**
-   * Creates a new email-address
-   *
-   * @param email the raw address
-   * @return an email value-object
-   * @throws IllegalArgumentException if the email is not valid
-   */
-  public static Email of(String email) {
-    return new Email(email);
-  }
 
   /**
    * "Full" constructor
@@ -46,6 +37,18 @@ public class Email implements Serializable {
   private Email() {}
 
   /**
+   * Creates a new email-address
+   *
+   * @param email the raw address
+   * @return an email value-object
+   *
+   * @throws IllegalArgumentException if the email is not valid
+   */
+  public static Email of(String email) {
+    return new Email(email);
+  }
+
+  /**
    * @return the email address
    */
   public String getValue() {
@@ -57,7 +60,6 @@ public class Email implements Serializable {
    *
    * @param email the email address
    */
-  @SuppressWarnings("unused")
   private void setValue(String email) {
     Assert.isTrue(Validation.isEmail(email), "Not a valid email: " + email);
     this.value = email.toLowerCase();
@@ -83,18 +85,23 @@ public class Email implements Serializable {
    */
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
+    if (this == obj) {
       return true;
-    if (obj == null)
+    }
+    if (obj == null) {
       return false;
-    if (getClass() != obj.getClass())
+    }
+    if (getClass() != obj.getClass()) {
       return false;
+    }
     Email other = (Email) obj;
     if (value == null) {
-      if (other.value != null)
+      if (other.value != null) {
         return false;
-    } else if (!value.equals(other.value))
+      }
+    } else if (!value.equals(other.value)) {
       return false;
+    }
     return true;
   }
 

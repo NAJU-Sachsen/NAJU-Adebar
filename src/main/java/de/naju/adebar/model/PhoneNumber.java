@@ -1,27 +1,25 @@
 package de.naju.adebar.model;
 
+import de.naju.adebar.documentation.ddd.ValueObject;
+import de.naju.adebar.util.Validation;
 import java.util.Objects;
-import javax.persistence.Access;
-import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Transient;
 import org.springframework.util.Assert;
-import de.naju.adebar.util.Validation;
 
 /**
  * Abstraction of a phone number. Basically just a wrapper for some String.
- *
  * <p>
  * Each instance will try to unify the way the phone number is being represented - independently of
  * the format it as input.
- *
  * <p>
  * Upon creation some basic sanity checks on the credibility of the phone number will be created,
  * however those may not give complete accuracy.
  *
  * @author Rico Bergmann
  */
+@ValueObject
 @Embeddable
 public class PhoneNumber {
 
@@ -30,15 +28,32 @@ public class PhoneNumber {
   public static final int DIALING_CODE_LENGTH = 4;
 
   @Column(name = "phone")
-  @Access(AccessType.PROPERTY) // we currently need property based access to ensure the
-                               // normalization of old phone numbers (which were just plain strings)
   private String value;
+
+  /**
+   * Just the constructor, nothing special about it.
+   *
+   * @param number the number
+   * @throws IllegalArgumentException if the phone number is not valid
+   */
+  private PhoneNumber(String number) {
+    assertValidNumber(number);
+    this.value = normalizePhoneNumber(number);
+
+  }
+
+  /**
+   * Default constructor just for JPA's sake
+   */
+  private PhoneNumber() {
+  }
 
   /**
    * Creates a new phone number
    *
    * @param number the phone number
    * @return the wrapped number
+   *
    * @throws IllegalArgumentException if the phone number is not valid
    */
   public static PhoneNumber of(String number) {
@@ -51,6 +66,7 @@ public class PhoneNumber {
    *
    * @param rawNumber the number to format
    * @return the normalized number
+   *
    * @throws IllegalArgumentException if the phone number is malformed
    */
   public static String normalizePhoneNumber(String rawNumber) {
@@ -83,7 +99,7 @@ public class PhoneNumber {
    * Inserts a separator between dialing and phone number.
    *
    * @param digitOnlyNumber the number to modify. It may only contain digits and optionally a
-   *        leading '{@code +}' character
+   *     leading '{@code +}' character
    * @return the pretty formatted number
    */
   private static StringBuilder insertFillerInto(StringBuilder digitOnlyNumber) {
@@ -100,9 +116,8 @@ public class PhoneNumber {
   /**
    * Checks, whether a character is just "filler" or actually part of the phone number itself.
    *
-   * <p>
-   * Although the parameters seem a bit weird, it is necessary to provide both the number and the
-   * character as the importance of a character depends on its context (e.g. a plus-symbol
+   * <p> Although the parameters seem a bit weird, it is necessary to provide both the number and
+   * the character as the importance of a character depends on its context (e.g. a plus-symbol
    * ('{@code +}') is necessary if it appears as first digit but otherwise it is invalid. As each
    * character may appear multiple times, it is also necessary to know the exact position rather
    * than just the character by itself.
@@ -150,29 +165,13 @@ public class PhoneNumber {
   /**
    * @param number the number to check
    * @return whether it is in international format
+   *
    * @see #isInInternationalFormat()
    */
   @Transient
   private static boolean isInInternationalFormat(CharSequence number) {
     return number.length() > 0 && number.charAt(0) == '+';
   }
-
-  /**
-   * Just the constructor, nothing special about it.
-   *
-   * @param number the number
-   * @throws IllegalArgumentException if the phone number is not valid
-   */
-  private PhoneNumber(String number) {
-    assertValidNumber(number);
-    this.value = normalizePhoneNumber(number);
-
-  }
-
-  /**
-   * Default constructor just for JPA's sake
-   */
-  private PhoneNumber() {}
 
   /**
    * @return the (now unified) phone number
@@ -184,7 +183,6 @@ public class PhoneNumber {
   /**
    * @param number the phone number. Just for JPA's sake.
    */
-  @SuppressWarnings("unused")
   private void setValue(String number) {
     assertValidNumber(number);
     this.value = normalizePhoneNumber(number);
