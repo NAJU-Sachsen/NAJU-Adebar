@@ -1,7 +1,8 @@
 package de.naju.adebar.services.conversion.core;
 
-import org.springframework.core.convert.converter.Converter;
 import de.naju.adebar.model.Email;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.lang.NonNull;
 
 /**
  * Converter used to automatically provide required {@link Email} instances when a String is given
@@ -17,13 +18,11 @@ public class EmailConverter implements Converter<String, Email> {
    * @see org.springframework.core.convert.converter.Converter#convert(java.lang.Object)
    */
   @Override
-  public Email convert(String source) {
-    if (source == null || source.isEmpty()) {
+  public Email convert(@NonNull String source) {
+    if (source.isEmpty()) {
       return null;
     }
     return Email.of(source);
   }
-
-
 
 }

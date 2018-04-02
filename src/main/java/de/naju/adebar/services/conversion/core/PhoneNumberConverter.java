@@ -1,7 +1,8 @@
 package de.naju.adebar.services.conversion.core;
 
-import org.springframework.core.convert.converter.Converter;
 import de.naju.adebar.model.PhoneNumber;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.lang.NonNull;
 
 /**
  * Converter used to automatically provide required {@link PhoneNumber} instances when a String is
@@ -17,8 +18,8 @@ public class PhoneNumberConverter implements Converter<String, PhoneNumber> {
    * @see org.springframework.core.convert.converter.Converter#convert(java.lang.Object)
    */
   @Override
-  public PhoneNumber convert(String source) {
-    if (source == null || source.isEmpty()) {
+  public PhoneNumber convert(@NonNull String source) {
+    if (source.isEmpty()) {
       return null;
     }
     return PhoneNumber.of(source);

@@ -1,19 +1,20 @@
 package de.naju.adebar.infrastructure.config;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.format.FormatterRegistry;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import de.naju.adebar.infrastructure.config.security.WebSecurityConfiguration;
 import de.naju.adebar.model.chapter.ReadOnlyLocalGroupRepository;
 import de.naju.adebar.model.events.ReadOnlyEventRepository;
 import de.naju.adebar.model.persons.ReadOnlyPersonRepository;
 import de.naju.adebar.services.conversion.chapter.LocalGroupConverter;
+import de.naju.adebar.services.conversion.core.AgeConverter;
 import de.naju.adebar.services.conversion.core.EmailConverter;
 import de.naju.adebar.services.conversion.core.PhoneNumberConverter;
 import de.naju.adebar.services.conversion.events.EventConverter;
 import de.naju.adebar.services.conversion.persons.PersonConverter;
 import de.naju.adebar.util.Assert2;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.format.FormatterRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * The general configuration of the web controllers.
@@ -59,6 +60,7 @@ public class WebConfiguration implements WebMvcConfigurer {
     registry.addConverter(new LocalGroupConverter(localGroupRepo));
     registry.addConverter(new EmailConverter());
     registry.addConverter(new PhoneNumberConverter());
+    registry.addConverter(new AgeConverter());
   }
 
 }
