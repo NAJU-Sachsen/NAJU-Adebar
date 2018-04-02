@@ -8,6 +8,7 @@ import java.util.Objects;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 import org.springframework.lang.NonNull;
 import org.springframework.util.Assert;
 
@@ -98,6 +99,7 @@ public class Age implements Comparable<Age> {
   /**
    * @return whether the age is considered of legal age in Germany.
    */
+  @Transient
   public boolean isOfLegalAge() {
     return LEGAL_AGE.compareTo(this) <= -1;
   }
