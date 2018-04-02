@@ -1,5 +1,8 @@
 package de.naju.adebar.model.persons;
 
+import de.naju.adebar.documentation.infrastructure.JpaOnly;
+import de.naju.adebar.model.core.PhoneNumber;
+import de.naju.adebar.model.persons.events.PersonDataUpdatedEvent;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -7,13 +10,10 @@ import javax.persistence.Embedded;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import org.springframework.util.Assert;
-import de.naju.adebar.documentation.infrastructure.JpaOnly;
-import de.naju.adebar.model.PhoneNumber;
-import de.naju.adebar.model.persons.events.PersonDataUpdatedEvent;
 
 /**
  * Special information about parents - mainly extra phone numbers - will be stored here.
- * 
+ *
  * @author Rico Bergmann
  */
 @Entity(name = "parent")
@@ -35,7 +35,7 @@ public class ParentProfile extends AbstractProfile {
    * Each parent profile has to be created in terms of an existing person.
    * <p>
    * Note that this does not actually check, if the person is parent of somebody.
-   * 
+   *
    * @param person the parent to create the profile for
    */
   ParentProfile(Person person) {
@@ -48,7 +48,7 @@ public class ParentProfile extends AbstractProfile {
    * Each parent profile has to be created in terms of an existing person.
    * <p>
    * Note that this does not actually check, if the person is parent of somebody.
-   * 
+   *
    * @param person the parent to create the profile for
    * @param landlinePhone the parent's phone number at home
    * @param workPhone the parent's phone number at work
@@ -75,6 +75,14 @@ public class ParentProfile extends AbstractProfile {
   }
 
   /**
+   * @param id the ID of the person this profile belongs to
+   */
+  @JpaOnly
+  private void setId(PersonId id) {
+    this.id = id;
+  }
+
+  /**
    * @return the parent's phone number at home. If none is specified, {@code null} will be returned.
    */
   public PhoneNumber getLandlinePhone() {
@@ -82,10 +90,24 @@ public class ParentProfile extends AbstractProfile {
   }
 
   /**
+   * @param landlinePhone the parent's phone number at home
+   */
+  protected void setLandlinePhone(PhoneNumber landlinePhone) {
+    this.landlinePhone = landlinePhone;
+  }
+
+  /**
    * @return the parent's phone number at work. If none is specified, {@code null} will be returned.
    */
   public PhoneNumber getWorkPhone() {
     return workPhone;
+  }
+
+  /**
+   * @param workPhone the parent's phone number at work
+   */
+  protected void setWorkPhone(PhoneNumber workPhone) {
+    this.workPhone = workPhone;
   }
 
   /**
@@ -104,7 +126,7 @@ public class ParentProfile extends AbstractProfile {
 
   /**
    * Replaces the current landline phone number
-   * 
+   *
    * @param landline the new phone number. May also be {@code null} if no number exists.
    * @return the profile for the new phone number
    */
@@ -119,7 +141,7 @@ public class ParentProfile extends AbstractProfile {
 
   /**
    * Replaces the current work phone number
-   * 
+   *
    * @param workPhone the new phone number. May also be {@code null} if no number exists.
    * @return the profile for the new number
    */
@@ -132,31 +154,9 @@ public class ParentProfile extends AbstractProfile {
     return this;
   }
 
-  /**
-   * @param landlinePhone the parent's phone number at home
-   */
-  protected void setLandlinePhone(PhoneNumber landlinePhone) {
-    this.landlinePhone = landlinePhone;
-  }
-
-  /**
-   * @param workPhone the parent's phone number at work
-   */
-  protected void setWorkPhone(PhoneNumber workPhone) {
-    this.workPhone = workPhone;
-  }
-
-  /**
-   * @param id the ID of the person this profile belongs to
-   */
-  @JpaOnly
-  private void setId(PersonId id) {
-    this.id = id;
-  }
-
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see java.lang.Object#hashCode()
    */
   @Override
@@ -169,29 +169,34 @@ public class ParentProfile extends AbstractProfile {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
+    if (this == obj) {
       return true;
-    if (obj == null)
+    }
+    if (obj == null) {
       return false;
-    if (getClass() != obj.getClass())
+    }
+    if (getClass() != obj.getClass()) {
       return false;
+    }
     ParentProfile other = (ParentProfile) obj;
     if (id == null) {
-      if (other.id != null)
+      if (other.id != null) {
         return false;
-    } else if (!id.equals(other.id))
+      }
+    } else if (!id.equals(other.id)) {
       return false;
+    }
     return true;
   }
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see java.lang.Object#toString()
    */
   @Override

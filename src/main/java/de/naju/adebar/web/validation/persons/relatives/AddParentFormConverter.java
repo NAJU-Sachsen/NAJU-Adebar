@@ -1,17 +1,17 @@
 package de.naju.adebar.web.validation.persons.relatives;
 
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
-import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
-import de.naju.adebar.model.Email;
-import de.naju.adebar.model.PhoneNumber;
+import de.naju.adebar.model.core.Email;
+import de.naju.adebar.model.core.PhoneNumber;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.persons.PersonFactory;
 import de.naju.adebar.util.Validation;
 import de.naju.adebar.web.validation.NewOrExistingEntityForm.SubmittedData;
 import de.naju.adebar.web.validation.NewOrExistingValidatingEntityFormConverter;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
 
 /**
  * Service to convert an {@link AddParentForm} to {@link Person} instances. Note that this converter

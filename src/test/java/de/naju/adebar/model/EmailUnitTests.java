@@ -2,6 +2,8 @@ package de.naju.adebar.model;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+
+import de.naju.adebar.model.core.Email;
 import org.junit.Test;
 
 public class EmailUnitTests {

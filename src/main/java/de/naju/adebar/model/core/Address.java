@@ -1,4 +1,4 @@
-package de.naju.adebar.model;
+package de.naju.adebar.model.core;
 
 import de.naju.adebar.documentation.ddd.ValueObject;
 import de.naju.adebar.documentation.infrastructure.JpaOnly;

@@ -8,7 +8,7 @@ import de.naju.adebar.app.persons.filter.stream.AddressFilter;
 import de.naju.adebar.app.persons.filter.stream.NameFilter;
 import de.naju.adebar.app.persons.filter.stream.PersonFilter;
 import de.naju.adebar.app.persons.filter.stream.ReferentFilter;
-import de.naju.adebar.model.Address;
+import de.naju.adebar.model.core.Address;
 import java.util.ArrayList;
 import org.springframework.stereotype.Service;
 

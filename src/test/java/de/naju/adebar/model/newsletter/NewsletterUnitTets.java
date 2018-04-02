@@ -1,10 +1,10 @@
 package de.naju.adebar.model.newsletter;
 
+import de.naju.adebar.TestUtils;
+import de.naju.adebar.model.core.Email;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import de.naju.adebar.TestUtils;
-import de.naju.adebar.model.Email;
 
 /**
  * Basic testing of the {@link Newsletter} class
@@ -12,6 +12,7 @@ import de.naju.adebar.model.Email;
  * @author Rico Bergmann
  */
 public class NewsletterUnitTets {
+
   private Newsletter hifaNewsletter;
   private Subscriber hans, berta, claus;
 

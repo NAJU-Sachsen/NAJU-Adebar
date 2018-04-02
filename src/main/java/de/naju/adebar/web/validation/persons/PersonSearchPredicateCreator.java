@@ -2,8 +2,8 @@ package de.naju.adebar.web.validation.persons;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
-import de.naju.adebar.model.Email;
-import de.naju.adebar.model.PhoneNumber;
+import de.naju.adebar.model.core.Email;
+import de.naju.adebar.model.core.PhoneNumber;
 import de.naju.adebar.model.persons.PersonId;
 import de.naju.adebar.model.persons.QPerson;
 import de.naju.adebar.util.Validation;
@@ -101,6 +101,7 @@ public class PersonSearchPredicateCreator {
      *
      * @param query the query
      * @return the predicate
+     *
      * @throws IllegalStateException if the generator is not applicable for the given type of
      *     query
      */

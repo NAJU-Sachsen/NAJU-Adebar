@@ -2,7 +2,7 @@ package de.naju.adebar.model.persons;
 
 import com.querydsl.core.types.Predicate;
 import de.naju.adebar.infrastructure.ReadOnlyRepository;
-import de.naju.adebar.model.Email;
+import de.naju.adebar.model.core.Email;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;

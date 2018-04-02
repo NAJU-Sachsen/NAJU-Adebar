@@ -1,7 +1,7 @@
 package de.naju.adebar.web.validation.persons;
 
-import de.naju.adebar.model.Email;
-import de.naju.adebar.model.PhoneNumber;
+import de.naju.adebar.model.core.Email;
+import de.naju.adebar.model.core.PhoneNumber;
 import de.naju.adebar.web.validation.core.AddressForm;
 import de.naju.adebar.web.validation.persons.activist.AddActivistForm;
 import de.naju.adebar.web.validation.persons.participant.AddParticipantForm;

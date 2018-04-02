@@ -1,5 +1,8 @@
 package de.naju.adebar.app.security.user;
 
+import de.naju.adebar.model.core.Email;
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.PersonId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -18,9 +21,6 @@ import org.springframework.data.domain.AbstractAggregateRoot;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.Assert;
-import de.naju.adebar.model.Email;
-import de.naju.adebar.model.persons.Person;
-import de.naju.adebar.model.persons.PersonId;
 
 /**
  * A user account. Each account is created for an activist who thereby gets access to the
@@ -94,7 +94,6 @@ public class UserAccount extends AbstractAggregateRoot<UserAccount> implements U
   /**
    * Default constructor just for JPA's sake
    */
-  @SuppressWarnings("unused")
   private UserAccount() {}
 
   /**
@@ -105,6 +104,16 @@ public class UserAccount extends AbstractAggregateRoot<UserAccount> implements U
   }
 
   /**
+   * Sets the associated person. Just for JPA's sake
+   *
+   * @param associatedPerson the associated person
+   */
+  private void setAssociatedPerson(PersonId associatedPerson) {
+    Assert.notNull(associatedPerson, "Associated person may not null");
+    this.associatedPerson = associatedPerson;
+  }
+
+  /**
    * @return the person's first name
    */
   public String getFirstName() {
@@ -112,10 +121,26 @@ public class UserAccount extends AbstractAggregateRoot<UserAccount> implements U
   }
 
   /**
+   * @param firstName the first name
+   */
+  private void setFirstName(String firstName) {
+    Assert.hasText(firstName, "First name may not be empty");
+    this.firstName = firstName;
+  }
+
+  /**
    * @return the person's last name
    */
   public String getLastName() {
     return lastName;
+  }
+
+  /**
+   * @param lastName the last name
+   */
+  private void setLastName(String lastName) {
+    Assert.hasText(lastName, "Last name may not be empty");
+    this.lastName = lastName;
   }
 
   /**
@@ -132,9 +157,28 @@ public class UserAccount extends AbstractAggregateRoot<UserAccount> implements U
     return email;
   }
 
+  /**
+   * @param email the email
+   */
+  private void setEmail(Email email) {
+    this.email = email;
+  }
+
   @Override
   public Collection<SimpleGrantedAuthority> getAuthorities() {
     return authorities;
+  }
+
+  /**
+   * Updates the authorities
+   *
+   * @param authorities the new authorities
+   */
+  private void setAuthorities(List<SimpleGrantedAuthority> authorities) {
+    if (authorities == null) {
+      this.authorities = new ArrayList<>();
+    }
+    this.authorities = authorities;
   }
 
   @Override
@@ -142,9 +186,39 @@ public class UserAccount extends AbstractAggregateRoot<UserAccount> implements U
     return password.getValue();
   }
 
+  /**
+   * Updates the password
+   *
+   * @param password the new password
+   */
+  private void setPassword(String password) {
+    Assert.hasText(password, "New password may not be empty");
+    this.password = new Password(password);
+  }
+
+  /**
+   * Updates the password
+   *
+   * @param password the new password
+   */
+  private void setPassword(Password password) {
+    Assert.notNull(password, "New password may not be null");
+    this.password = password;
+  }
+
   @Override
   public String getUsername() {
     return username;
+  }
+
+  /**
+   * Sets the username. Just for JPA's sake
+   *
+   * @param username the username
+   */
+  private void setUsername(String username) {
+    Assert.hasText(username, "User name may not be empty");
+    this.username = username;
   }
 
   @Override
@@ -165,6 +239,13 @@ public class UserAccount extends AbstractAggregateRoot<UserAccount> implements U
   @Override
   public boolean isEnabled() {
     return enabled;
+  }
+
+  /**
+   * @param enabled whether the account is enabled
+   */
+  private void setEnabled(boolean enabled) {
+    this.enabled = enabled;
   }
 
   /**
@@ -240,89 +321,10 @@ public class UserAccount extends AbstractAggregateRoot<UserAccount> implements U
   }
 
   /**
-   * Sets the username. Just for JPA's sake
-   *
-   * @param username the username
-   */
-  @SuppressWarnings("unused")
-  private void setUsername(String username) {
-    Assert.hasText(username, "User name may not be empty");
-    this.username = username;
-  }
-
-  /**
-   * Sets the associated person. Just for JPA's sake
-   *
-   * @param associatedPerson the associated person
-   */
-  @SuppressWarnings("unused")
-  private void setAssociatedPerson(PersonId associatedPerson) {
-    Assert.notNull(associatedPerson, "Associated person may not null");
-    this.associatedPerson = associatedPerson;
-  }
-
-  /**
-   * Updates the password
-   *
-   * @param password the new password
-   */
-  @SuppressWarnings("unused")
-  private void setPassword(String password) {
-    Assert.hasText(password, "New password may not be empty");
-    this.password = new Password(password);
-  }
-
-  /**
-   * Updates the password
-   *
-   * @param password the new password
-   */
-  private void setPassword(Password password) {
-    Assert.notNull(password, "New password may not be null");
-    this.password = password;
-  }
-
-  /**
-   * Updates the authorities
-   *
-   * @param authorities the new authorities
-   */
-  private void setAuthorities(List<SimpleGrantedAuthority> authorities) {
-    if (authorities == null) {
-      this.authorities = new ArrayList<>();
-    }
-    this.authorities = authorities;
-  }
-
-  /**
-   * @param firstName the first name
-   */
-  private void setFirstName(String firstName) {
-    Assert.hasText(firstName, "First name may not be empty");
-    this.firstName = firstName;
-  }
-
-  /**
-   * @param lastName the last name
-   */
-  private void setLastName(String lastName) {
-    Assert.hasText(lastName, "Last name may not be empty");
-    this.lastName = lastName;
-  }
-
-  /**
-   * @param email the email
-   */
-  private void setEmail(Email email) {
-    this.email = email;
-  }
-
-  /**
    * Just for JPA
    *
    * @return whether the user has read the latest release notes
    */
-  @SuppressWarnings("unused")
   private boolean isReadLatestReleaseNotes() {
     return readLatestReleaseNotes;
   }
@@ -334,14 +336,6 @@ public class UserAccount extends AbstractAggregateRoot<UserAccount> implements U
    */
   private void setReadLatestReleaseNotes(boolean readLatestReleaseNotes) {
     this.readLatestReleaseNotes = readLatestReleaseNotes;
-  }
-
-  /**
-   * @param enabled whether the account is enabled
-   */
-  @SuppressWarnings("unused")
-  private void setEnabled(boolean enabled) {
-    this.enabled = enabled;
   }
 
   /*
@@ -364,18 +358,23 @@ public class UserAccount extends AbstractAggregateRoot<UserAccount> implements U
    */
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
+    if (this == obj) {
       return true;
-    if (obj == null)
+    }
+    if (obj == null) {
       return false;
-    if (getClass() != obj.getClass())
+    }
+    if (getClass() != obj.getClass()) {
       return false;
+    }
     UserAccount other = (UserAccount) obj;
     if (username == null) {
-      if (other.username != null)
+      if (other.username != null) {
         return false;
-    } else if (!username.equals(other.username))
+      }
+    } else if (!username.equals(other.username)) {
       return false;
+    }
     return true;
   }
 

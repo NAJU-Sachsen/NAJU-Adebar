@@ -1,9 +1,9 @@
 package de.naju.adebar.app.newsletter;
 
-import org.springframework.stereotype.Service;
-import de.naju.adebar.model.Email;
+import de.naju.adebar.model.core.Email;
 import de.naju.adebar.model.newsletter.ExistingSubscriberException;
 import de.naju.adebar.model.newsletter.Subscriber;
+import org.springframework.stereotype.Service;
 
 /**
  * Service to take care of {@link Subscriber Subscribers} and more complex management operations
@@ -33,9 +33,10 @@ public interface SubscriberManager {
    *
    * @param subscriber the subscriber to save
    * @return The saved subscriber object. It is very important to actually use this instance for
-   *         future operations, as internal data may differ after saving the object.
+   *     future operations, as internal data may differ after saving the object.
+   *
    * @throws ExistingSubscriberException if a subscriber does already exist and may not be
-   *         harmonized with the new data
+   *     harmonized with the new data
    */
   Subscriber saveSubscriber(Subscriber subscriber);
 
@@ -47,7 +48,8 @@ public interface SubscriberManager {
    * @param lastName the subscriber's last name, may be empty
    * @param email the subscriber's email
    * @return The saved subscriber object. It is very important to actually use this instance for
-   *         future operations, as internal data may differ after saving the object.
+   *     future operations, as internal data may differ after saving the object.
+   *
    * @see #saveSubscriber(Subscriber)
    */
   Subscriber createSubscriber(String firstName, String lastName, Email email);
@@ -58,7 +60,7 @@ public interface SubscriberManager {
    * @param oldSubscriber the current subscriber
    * @param newSubscriber the new data for the subscriber
    * @return The updated subscriber. It is very important to actually use this instance for future
-   *         operations, as internal data may differ after saving the object.
+   *     operations, as internal data may differ after saving the object.
    */
   Subscriber updateSubscriber(Subscriber oldSubscriber, Subscriber newSubscriber);
 
@@ -68,7 +70,7 @@ public interface SubscriberManager {
    * @param subscriber the subscriber
    * @param firstName the new first name
    * @return The updated subscriber. It is very important to actually use this instance for future
-   *         operations, as internal data may differ after saving the object.
+   *     operations, as internal data may differ after saving the object.
    */
   Subscriber updateSubscriberFirstName(Subscriber subscriber, String firstName);
 
@@ -78,7 +80,7 @@ public interface SubscriberManager {
    * @param subscriber the subscriber
    * @param lastName the new last name
    * @return The updated subscriber. It is very important to actually use this instance for future
-   *         operations, as internal data may differ after saving the object.
+   *     operations, as internal data may differ after saving the object.
    */
   Subscriber updateSubscriberLastName(Subscriber subscriber, String lastName);
 
@@ -88,7 +90,7 @@ public interface SubscriberManager {
    * @param subscriber the subscriber
    * @param email the new email
    * @return The updated subscriber. It is very important to actually use this instance for future
-   *         operations, as internal data may differ after saving the object.
+   *     operations, as internal data may differ after saving the object.
    */
   Subscriber updateSubscriberEmail(Subscriber subscriber, Email email);
 

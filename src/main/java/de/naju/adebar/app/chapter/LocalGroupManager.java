@@ -1,15 +1,15 @@
 package de.naju.adebar.app.chapter;
 
-import java.util.Optional;
-import org.springframework.stereotype.Service;
-import de.naju.adebar.model.Address;
 import de.naju.adebar.model.chapter.Board;
 import de.naju.adebar.model.chapter.LocalGroup;
 import de.naju.adebar.model.chapter.Project;
 import de.naju.adebar.model.chapter.ReadOnlyLocalGroupRepository;
+import de.naju.adebar.model.core.Address;
 import de.naju.adebar.model.newsletter.Newsletter;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.persons.exceptions.NoActivistException;
+import java.util.Optional;
+import org.springframework.stereotype.Service;
 
 /**
  * Service to take care of {@link LocalGroup local groups}
@@ -25,7 +25,7 @@ public interface LocalGroupManager {
    *
    * @param localGroup the chapter to save
    * @return the saved chapter. As its internal state may differ after the save, this instance
-   *         should be used for future operations
+   *     should be used for future operations
    */
   LocalGroup saveLocalGroup(LocalGroup localGroup);
 
@@ -49,9 +49,9 @@ public interface LocalGroupManager {
   LocalGroup updateLocalGroup(long id, LocalGroup newLocalGroup);
 
   /**
-   * Changes the state of a saved local group. In difference to
-   * {@link #updateLocalGroup(long, LocalGroup)} this does only modify "static" information, such as
-   * name and address, but leaves "dynamic" fields like events and projects untouched
+   * Changes the state of a saved local group. In difference to {@link #updateLocalGroup(long,
+   * LocalGroup)} this does only modify "static" information, such as name and address, but leaves
+   * "dynamic" fields like events and projects untouched
    *
    * @param id the identifier of the local group to update
    * @param localGroupData the local groups "static" data to adopt
@@ -114,6 +114,7 @@ public interface LocalGroupManager {
    * @param localGroup the local group
    * @param project the project
    * @return the persisted project
+   *
    * @throws IllegalStateException if the project is already hosted by another group
    */
   Project addProjectToLocalGroup(LocalGroup localGroup, Project project);

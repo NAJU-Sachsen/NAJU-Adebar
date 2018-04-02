@@ -1,12 +1,7 @@
 package de.naju.adebar.app.newsletter;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.google.common.collect.Iterables;
-import de.naju.adebar.model.Email;
+import de.naju.adebar.model.core.Email;
 import de.naju.adebar.model.newsletter.AlreadySubscribedException;
 import de.naju.adebar.model.newsletter.ExistingSubscriberException;
 import de.naju.adebar.model.newsletter.Newsletter;
@@ -15,6 +10,11 @@ import de.naju.adebar.model.newsletter.NoSuchSubscriberException;
 import de.naju.adebar.model.newsletter.Subscriber;
 import de.naju.adebar.model.newsletter.SubscriberRepository;
 import de.naju.adebar.model.persons.Person;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * A {@link NewsletterManager} that persists the data in a database

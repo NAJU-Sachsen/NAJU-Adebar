@@ -1,10 +1,10 @@
 package de.naju.adebar.web.validation.persons.relatives;
 
-import de.naju.adebar.model.PhoneNumber;
+import de.naju.adebar.model.core.PhoneNumber;
 
 /**
  * POJO representation of the parent related information in the 'edit person' form
- * 
+ *
  * @author Rico Bergmann
  */
 public class EditParentProfileForm {
@@ -14,11 +14,11 @@ public class EditParentProfileForm {
 
   /**
    * Full constructor
-   * 
-   * @param workPhone the parent's phone number at work. May be {@code null} if the parent does not
-   *        have one
-   * @param landlinePhone the parent's phone number at home. May be {@code null} if the parent does
-   *        not have one
+   *
+   * @param workPhone the parent's phone number at work. May be {@code null} if the parent does
+   *     not have one
+   * @param landlinePhone the parent's phone number at home. May be {@code null} if the parent
+   *     does not have one
    */
   public EditParentProfileForm(PhoneNumber workPhone, PhoneNumber landlinePhone) {
     this.workPhone = workPhone != null ? workPhone.getValue() : null;
@@ -38,8 +38,8 @@ public class EditParentProfileForm {
   }
 
   /**
-   * @param workPhone the parent's phone number at work. May be {@code null} if the parent does not
-   *        have one.
+   * @param workPhone the parent's phone number at work. May be {@code null} if the parent does
+   *     not have one.
    */
   public void setWorkPhone(String workPhone) {
     this.workPhone = workPhone;
@@ -60,8 +60,8 @@ public class EditParentProfileForm {
   }
 
   /**
-   * @param landlinePhone the parent's phone number at home. May be {@code null} if the parent does
-   *        not have one.
+   * @param landlinePhone the parent's phone number at home. May be {@code null} if the parent
+   *     does not have one.
    */
   public void setLandlinePhone(String landlinePhone) {
     this.landlinePhone = landlinePhone;
@@ -76,7 +76,7 @@ public class EditParentProfileForm {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see java.lang.Object#toString()
    */
   @Override

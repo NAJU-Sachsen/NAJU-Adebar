@@ -1,7 +1,7 @@
 package de.naju.adebar.web.validation.persons;
 
-import de.naju.adebar.model.Email;
-import de.naju.adebar.model.PhoneNumber;
+import de.naju.adebar.model.core.Email;
+import de.naju.adebar.model.core.PhoneNumber;
 import de.naju.adebar.web.validation.core.AddressForm;
 import de.naju.adebar.web.validation.persons.participant.EditParticipantForm;
 import de.naju.adebar.web.validation.persons.relatives.EditParentProfileForm;
@@ -33,8 +33,8 @@ public class EditPersonForm {
    * @param email the person's email
    * @param phoneNumber the person's phone number
    * @param address the person's address
-   * @param participantForm the person's participant form. May be {@code null} if the person is no
-   *        participant
+   * @param participantForm the person's participant form. May be {@code null} if the person is
+   *     no participant
    */
   public EditPersonForm(String firstName, String lastName, Email email, PhoneNumber phoneNumber,
       AddressForm address, EditParticipantForm participantForm, EditParentProfileForm parentForm) {
@@ -166,8 +166,8 @@ public class EditPersonForm {
   }
 
   /**
-   * @param participantForm the person's participant form. May be {@code null} if the person is no
-   *        participant
+   * @param participantForm the person's participant form. May be {@code null} if the person is
+   *     no participant
    */
   public void setParticipantForm(EditParticipantForm participantForm) {
     this.participantForm = participantForm;
@@ -188,7 +188,8 @@ public class EditPersonForm {
   }
 
   /**
-   * @param parentForm the person's parent form. May be {@code null} if the person is no parent.
+   * @param parentForm the person's parent form. May be {@code null} if the person is no
+   *     parent.
    */
   public void setParentForm(EditParentProfileForm parentForm) {
     this.parentForm = parentForm;
@@ -196,7 +197,7 @@ public class EditPersonForm {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see java.lang.Object#toString()
    */
   @Override

@@ -1,7 +1,7 @@
 package de.naju.adebar.model.persons;
 
-import de.naju.adebar.model.Address;
-import de.naju.adebar.model.Email;
+import de.naju.adebar.model.core.Address;
+import de.naju.adebar.model.core.Email;
 import de.naju.adebar.model.persons.details.Gender;
 import java.time.LocalDate;
 import org.junit.Assert;

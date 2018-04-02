@@ -1,16 +1,15 @@
 package de.naju.adebar.app.newsletter;
 
-import org.springframework.stereotype.Service;
-import de.naju.adebar.model.Email;
+import de.naju.adebar.model.core.Email;
 import de.naju.adebar.model.newsletter.Newsletter;
 import de.naju.adebar.model.newsletter.Subscriber;
 import de.naju.adebar.model.persons.Person;
+import org.springframework.stereotype.Service;
 
 /**
  * Service to take care of {@link Newsletter Newsletters} and more complex management operations
  *
  * @author Rico Bergmann
- *
  */
 @Service
 public interface NewsletterManager {
@@ -20,8 +19,7 @@ public interface NewsletterManager {
    *
    * @param newsletter the newsletter to save
    * @return the saved newsletter. As its internal state (especially concrete implementations of
-   *         interfaces) may differ after the save, this instance should be used for future
-   *         operations
+   *     interfaces) may differ after the save, this instance should be used for future operations
    */
   Newsletter saveNewsletter(Newsletter newsletter);
 

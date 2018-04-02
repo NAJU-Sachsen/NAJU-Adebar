@@ -1,15 +1,15 @@
 package de.naju.adebar.web.validation.persons.relatives;
 
-import org.springframework.stereotype.Service;
-import org.springframework.validation.Errors;
-import de.naju.adebar.model.PhoneNumber;
+import de.naju.adebar.model.core.PhoneNumber;
 import de.naju.adebar.model.persons.ParentProfile;
 import de.naju.adebar.web.validation.ValidatingEntityFormConverter;
+import org.springframework.stereotype.Service;
+import org.springframework.validation.Errors;
 
 /**
  * Simple service to apply the data from an {@link EditParentProfileForm} to {@link ParentProfile}
  * objects.
- * 
+ *
  * @author Rico Bergmann
  */
 @Service

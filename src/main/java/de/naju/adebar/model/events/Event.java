@@ -1,5 +1,12 @@
 package de.naju.adebar.model.events;
 
+import de.naju.adebar.documentation.infrastructure.JpaOnly;
+import de.naju.adebar.model.chapter.LocalGroup;
+import de.naju.adebar.model.chapter.Project;
+import de.naju.adebar.model.core.Address;
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.exceptions.NoActivistException;
+import de.naju.adebar.model.persons.exceptions.NoParticipantException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
@@ -26,13 +33,6 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Transient;
 import org.javamoney.moneta.Money;
 import org.springframework.util.Assert;
-import de.naju.adebar.documentation.infrastructure.JpaOnly;
-import de.naju.adebar.model.Address;
-import de.naju.adebar.model.chapter.LocalGroup;
-import de.naju.adebar.model.chapter.Project;
-import de.naju.adebar.model.persons.Person;
-import de.naju.adebar.model.persons.exceptions.NoActivistException;
-import de.naju.adebar.model.persons.exceptions.NoParticipantException;
 
 /**
  * Abstraction of an event. It may be a regular camp or any other kind of event such as workshops or
@@ -211,7 +211,7 @@ public class Event implements Comparable<Event> {
   /**
    * @param endTime the time the event ends
    * @throws IllegalArgumentException if the start time is after the end time or the end time is
-   *         {@code null}
+   *     {@code null}
    */
   public void setEndTime(LocalDateTime endTime) {
     Assert.notNull(endTime, "End time may not be null");
@@ -343,7 +343,7 @@ public class Event implements Comparable<Event> {
 
   /**
    * @return the persons who participate in the event but have not sent the "real" participation
-   *         form yet
+   *     form yet
    */
   @Transient
   public Iterable<Person> getParticipantsWithFormNotReceived() {
@@ -359,7 +359,7 @@ public class Event implements Comparable<Event> {
 
   /**
    * @return the activists who take care of the event - i. e. are in attendance when the event takes
-   *         place
+   *     place
    */
   public Iterable<Person> getCounselors() {
     return counselors;
@@ -396,7 +396,7 @@ public class Event implements Comparable<Event> {
 
   /**
    * @param personsToContact all persons that should be contacted for the event, in a map as
-   *        {@code person -> remark}
+   *     {@code person -> remark}
    */
   protected void setPersonsToContact(Map<Person, String> personsToContact) {
     this.personsToContact = personsToContact;
@@ -492,7 +492,7 @@ public class Event implements Comparable<Event> {
   /**
    * @param person the person to check
    * @return {@code true} if the person may participate in the event regarding to age-restrictions,
-   *         {@code false} otherwise
+   *     {@code false} otherwise
    *
    * @throws IllegalArgumentException if the person is no camp participant
    */
@@ -557,7 +557,7 @@ public class Event implements Comparable<Event> {
    * @param startTime
    * @param endTime
    * @throws IllegalArgumentException if {@code startTime < endTime} or one of the parameters is
-   *         {@code null}
+   *     {@code null}
    */
   public void updateTimePeriod(LocalDateTime startTime, LocalDateTime endTime) {
     Assert.notNull(startTime, "Start time may not be null!");
@@ -869,7 +869,8 @@ public class Event implements Comparable<Event> {
 
   /**
    * @param lecture the lecture to add
-   * @throws IllegalArgumentException if <strong>exactly</strong> this lecture is already being held
+   * @throws IllegalArgumentException if <strong>exactly</strong> this lecture is already being
+   *     held
    * @see Lecture
    */
   public void addLecture(Lecture lecture) {

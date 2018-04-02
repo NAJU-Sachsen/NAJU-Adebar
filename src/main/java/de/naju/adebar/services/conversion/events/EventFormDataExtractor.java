@@ -1,11 +1,12 @@
 package de.naju.adebar.services.conversion.events;
 
-import de.naju.adebar.model.Address;
+import static de.naju.adebar.web.validation.events.EventForm.CURRENCY_UNIT;
+
+import de.naju.adebar.model.core.Address;
 import de.naju.adebar.model.events.Event;
 import de.naju.adebar.model.events.EventFactory;
 import de.naju.adebar.web.validation.events.EventForm;
 import de.naju.adebar.web.validation.events.EventForm.Belonging;
-import static de.naju.adebar.web.validation.events.EventForm.CURRENCY_UNIT;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

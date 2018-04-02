@@ -1,15 +1,16 @@
 package de.naju.adebar.model.persons;
 
+import de.naju.adebar.model.core.Email;
 import java.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import de.naju.adebar.model.Email;
 
 /**
  * @author Rico Bergmann
  */
 public class ParticipantUnitTest {
+
   private Person hans;
 
   @Before

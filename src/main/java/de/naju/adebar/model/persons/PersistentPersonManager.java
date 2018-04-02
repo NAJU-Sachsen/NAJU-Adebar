@@ -1,6 +1,6 @@
 package de.naju.adebar.model.persons;
 
-import de.naju.adebar.model.Email;
+import de.naju.adebar.model.core.Email;
 import de.naju.adebar.model.persons.exceptions.NoReferentException;
 import de.naju.adebar.model.persons.qualifications.Qualification;
 import de.naju.adebar.model.persons.qualifications.QualificationRepository;

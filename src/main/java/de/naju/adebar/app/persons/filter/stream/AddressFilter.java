@@ -1,9 +1,9 @@
 package de.naju.adebar.app.persons.filter.stream;
 
-import java.util.stream.Stream;
 import de.naju.adebar.app.filter.MatchType;
-import de.naju.adebar.model.Address;
+import de.naju.adebar.model.core.Address;
 import de.naju.adebar.model.persons.Person;
+import java.util.stream.Stream;
 
 /**
  * Filter for persons depending on their addresses.
@@ -17,8 +17,8 @@ public class AddressFilter implements PersonFilter {
 
   /**
    * @param address the address to query for
-   * @param matchType the way the address should be treated, i.e. whether the address has to match
-   *        exactly or whether only specified fields should be considered
+   * @param matchType the way the address should be treated, i.e. whether the address has to
+   *     match exactly or whether only specified fields should be considered
    * @throws IllegalArgumentException if {@code matchType \u2209 {EXACT, IF_DEFINED}}
    */
   public AddressFilter(Address address, MatchType matchType) {

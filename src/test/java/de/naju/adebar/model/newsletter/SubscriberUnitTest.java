@@ -1,8 +1,8 @@
 package de.naju.adebar.model.newsletter;
 
+import de.naju.adebar.model.core.Email;
 import org.junit.Assert;
 import org.junit.Test;
-import de.naju.adebar.model.Email;
 
 /**
  * Basic testing of the {@link Subscriber} class

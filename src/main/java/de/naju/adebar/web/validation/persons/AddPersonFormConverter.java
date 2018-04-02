@@ -1,12 +1,8 @@
 package de.naju.adebar.web.validation.persons;
 
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Service;
-import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
 import com.google.common.collect.Lists;
-import de.naju.adebar.model.Email;
-import de.naju.adebar.model.PhoneNumber;
+import de.naju.adebar.model.core.Email;
+import de.naju.adebar.model.core.PhoneNumber;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.persons.PersonFactory;
 import de.naju.adebar.model.persons.PersonFactory.PersonBuilder;
@@ -20,6 +16,10 @@ import de.naju.adebar.web.validation.persons.participant.AddParticipantForm;
 import de.naju.adebar.web.validation.persons.participant.AddParticipantFormConverter;
 import de.naju.adebar.web.validation.persons.referent.AddReferentForm;
 import de.naju.adebar.web.validation.persons.referent.AddReferentFormConverter;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
 
 /**
  * Simple service to apply the data from an {@link AddPersonForm} to {@link Person} instances

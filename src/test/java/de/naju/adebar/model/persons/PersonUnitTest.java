@@ -1,18 +1,19 @@
 package de.naju.adebar.model.persons;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
+import de.naju.adebar.model.core.Address;
+import de.naju.adebar.model.core.Email;
+import de.naju.adebar.model.core.PhoneNumber;
+import de.naju.adebar.model.persons.details.Gender;
+import de.naju.adebar.model.persons.details.JuleicaCard;
+import de.naju.adebar.model.persons.exceptions.ArchivedPersonException;
+import de.naju.adebar.model.persons.qualifications.Qualification;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collection;
 import org.junit.Before;
 import org.junit.Test;
-import de.naju.adebar.model.Address;
-import de.naju.adebar.model.Email;
-import de.naju.adebar.model.PhoneNumber;
-import de.naju.adebar.model.persons.details.Gender;
-import de.naju.adebar.model.persons.details.JuleicaCard;
-import de.naju.adebar.model.persons.exceptions.ArchivedPersonException;
-import de.naju.adebar.model.persons.qualifications.Qualification;
 
 /**
  * Basic testing of the {@link Person} class

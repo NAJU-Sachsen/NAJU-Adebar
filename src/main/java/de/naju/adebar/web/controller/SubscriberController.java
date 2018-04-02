@@ -1,6 +1,6 @@
 package de.naju.adebar.web.controller;
 
-import de.naju.adebar.model.Email;
+import de.naju.adebar.model.core.Email;
 import de.naju.adebar.model.newsletter.AlreadySubscribedException;
 import de.naju.adebar.model.newsletter.ExistingSubscriberException;
 import de.naju.adebar.model.newsletter.Newsletter;

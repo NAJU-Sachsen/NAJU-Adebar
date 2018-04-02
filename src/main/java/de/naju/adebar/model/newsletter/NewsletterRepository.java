@@ -1,8 +1,8 @@
 package de.naju.adebar.model.newsletter;
 
+import de.naju.adebar.model.core.Email;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import de.naju.adebar.model.Email;
 
 /**
  * Repository to access {@link Newsletter}
@@ -31,7 +31,6 @@ public interface NewsletterRepository extends CrudRepository<Newsletter, Long> {
   Iterable<Newsletter> findBySubscribersEmail(Email email);
 
   /**
-   *
    * @param id the subscriber's id
    * @return all newsletters that the subscriber signed up to
    */

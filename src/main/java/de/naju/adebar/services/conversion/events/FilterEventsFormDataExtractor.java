@@ -1,13 +1,5 @@
 package de.naju.adebar.services.conversion.events;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import org.javamoney.moneta.Money;
-import org.springframework.stereotype.Service;
 import de.naju.adebar.app.events.filter.AddressFilter;
 import de.naju.adebar.app.events.filter.EndTimeFilter;
 import de.naju.adebar.app.events.filter.EventFilter;
@@ -19,8 +11,16 @@ import de.naju.adebar.app.events.filter.StartTimeFilter;
 import de.naju.adebar.app.filter.ComparableFilterType;
 import de.naju.adebar.app.filter.DateTimeFilterType;
 import de.naju.adebar.app.filter.MatchType;
-import de.naju.adebar.model.Address;
+import de.naju.adebar.model.core.Address;
 import de.naju.adebar.web.validation.events.FilterEventsForm;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import org.javamoney.moneta.Money;
+import org.springframework.stereotype.Service;
 
 /**
  * Service to convert {@link FilterEventsForm} data to corresponding objects
@@ -52,6 +52,7 @@ public class FilterEventsFormDataExtractor {
   /**
    * @param eventsForm form containing the data to extract
    * @return the filter encoded by the form
+   *
    * @throws IllegalStateException if the form does not contain data for such a filter
    */
   public AddressFilter extractAddressFilter(FilterEventsForm eventsForm) {
@@ -74,6 +75,7 @@ public class FilterEventsFormDataExtractor {
   /**
    * @param eventsForm form containing the data to extract
    * @return the filter encoded by the form
+   *
    * @throws IllegalStateException if the form does not contain data for such a filter
    */
   public EndTimeFilter extractEndTimeFilter(FilterEventsForm eventsForm) {
@@ -95,6 +97,7 @@ public class FilterEventsFormDataExtractor {
   /**
    * @param eventsForm form containing the data to extract
    * @return the filter encoded by the form
+   *
    * @throws IllegalStateException if the form does not contain data for such a filter
    */
   public MinimumParticipantAgeFilter extractMinimumParticipantAgeFilter(
@@ -116,6 +119,7 @@ public class FilterEventsFormDataExtractor {
   /**
    * @param eventsForm form containing the data to extract
    * @return the filter encoded by the form
+   *
    * @throws IllegalStateException if the form does not contain data for such a filter
    */
   public NameFilter extractNameFilter(FilterEventsForm eventsForm) {
@@ -136,6 +140,7 @@ public class FilterEventsFormDataExtractor {
   /**
    * @param eventsForm form containing the data to extract
    * @return the filter encoded by the form
+   *
    * @throws IllegalStateException if the form does not contain data for such a filter
    */
   public ParticipantsLimitFilter extractParticipantsLimitFilter(FilterEventsForm eventsForm) {
@@ -157,6 +162,7 @@ public class FilterEventsFormDataExtractor {
   /**
    * @param eventsForm form containing the data to extract
    * @return the filter encoded by the form
+   *
    * @throws IllegalStateException if the form does not contain data for such a filter
    */
   public ParticipationFeeFilter extractParticipationFeeFilter(FilterEventsForm eventsForm) {
@@ -190,6 +196,7 @@ public class FilterEventsFormDataExtractor {
   /**
    * @param eventsForm form containing the data to extract
    * @return the filter encoded by the form
+   *
    * @throws IllegalStateException if the form does not contain data for such a filter
    */
   public StartTimeFilter extractStartTimeFilter(FilterEventsForm eventsForm) {
@@ -207,20 +214,27 @@ public class FilterEventsFormDataExtractor {
    */
   public Iterable<EventFilter> extractAllFilters(FilterEventsForm eventsForm) {
     List<EventFilter> filters = new LinkedList<>();
-    if (hasAddressFilter(eventsForm))
+    if (hasAddressFilter(eventsForm)) {
       filters.add(extractAddressFilter(eventsForm));
-    if (hasEndTimeFilter(eventsForm))
+    }
+    if (hasEndTimeFilter(eventsForm)) {
       filters.add(extractEndTimeFilter(eventsForm));
-    if (hasMinimumParticipantAgeFilter(eventsForm))
+    }
+    if (hasMinimumParticipantAgeFilter(eventsForm)) {
       filters.add(extractMinimumParticipantAgeFilter(eventsForm));
-    if (hasNameFilter(eventsForm))
+    }
+    if (hasNameFilter(eventsForm)) {
       filters.add(extractNameFilter(eventsForm));
-    if (hasParticipantsLimitFilter(eventsForm))
+    }
+    if (hasParticipantsLimitFilter(eventsForm)) {
       filters.add(extractParticipantsLimitFilter(eventsForm));
-    if (hasParticipationFeeFilter(eventsForm))
+    }
+    if (hasParticipationFeeFilter(eventsForm)) {
       filters.add(extractParticipationFeeFilter(eventsForm));
-    if (hasStartTimeFilter(eventsForm))
+    }
+    if (hasStartTimeFilter(eventsForm)) {
       filters.add(extractStartTimeFilter(eventsForm));
+    }
     return filters;
   }
 }

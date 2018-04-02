@@ -1,11 +1,11 @@
 package de.naju.adebar.model.persons;
 
+import com.google.common.collect.Iterables;
+import de.naju.adebar.model.core.Email;
+import de.naju.adebar.model.persons.qualifications.Qualification;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import com.google.common.collect.Iterables;
-import de.naju.adebar.model.Email;
-import de.naju.adebar.model.persons.qualifications.Qualification;
 
 /**
  * Basic testing of the {@link ReferentProfile} class
@@ -13,6 +13,7 @@ import de.naju.adebar.model.persons.qualifications.Qualification;
  * @author Rico Bergmann
  */
 public class ReferentUnitTest {
+
   private Person referent;
   private Qualification qualification;
 

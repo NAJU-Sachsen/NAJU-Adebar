@@ -1,6 +1,6 @@
 package de.naju.adebar.web.validation.core;
 
-import de.naju.adebar.model.Address;
+import de.naju.adebar.model.core.Address;
 import de.naju.adebar.web.validation.ValidatingEntityFormConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;

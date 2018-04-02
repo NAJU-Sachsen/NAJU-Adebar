@@ -1,5 +1,6 @@
 package de.naju.adebar.model.newsletter;
 
+import de.naju.adebar.model.core.Email;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -7,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import org.springframework.util.Assert;
-import de.naju.adebar.model.Email;
 
 /**
  * Abstraction of person that subscribed to a newsletter.
@@ -21,7 +21,6 @@ import de.naju.adebar.model.Email;
  * </p>
  *
  * @author Rico Bergmann
- *
  */
 @Entity(name = "subscriber")
 public class Subscriber implements Serializable {
@@ -71,7 +70,7 @@ public class Subscriber implements Serializable {
    * @param lastName the subsriber's last name
    * @param email the subsriber's email
    * @throws IllegalArgumentException if the email is not valid or any of the parameters if
-   *         {@code null}
+   *     {@code null}
    */
   public Subscriber(String firstName, String lastName, Email email) {
     Object[] params = {firstName, lastName, email};
@@ -91,27 +90,21 @@ public class Subscriber implements Serializable {
   }
 
   /**
+   * Updates the subscriber's id (= primary key). As this method should only be called by Spring, it
+   * is {@code protected}
+   *
+   * @param id the new id
+   */
+  protected void setId(long id) {
+    this.id = id;
+  }
+
+  /**
    * @return the subsriber's first name
    */
   public String getFirstName() {
     return firstName;
   }
-
-  /**
-   * @return the subscriber's last name
-   */
-  public String getLastName() {
-    return lastName;
-  }
-
-  /**
-   * @return the subsriber's email
-   */
-  public Email getEmail() {
-    return email;
-  }
-
-  // default setter
 
   /**
    * @param firstName the new first name
@@ -120,6 +113,15 @@ public class Subscriber implements Serializable {
   public void setFirstName(String firstName) {
     Assert.notNull(firstName, "First name may not be null!");
     this.firstName = firstName;
+  }
+
+  // default setter
+
+  /**
+   * @return the subscriber's last name
+   */
+  public String getLastName() {
+    return lastName;
   }
 
   /**
@@ -132,21 +134,18 @@ public class Subscriber implements Serializable {
   }
 
   /**
+   * @return the subsriber's email
+   */
+  public Email getEmail() {
+    return email;
+  }
+
+  /**
    * @param email the new email address
    * @throws IllegalArgumentException if the email is {@code null} or invalid
    */
   public void setEmail(Email email) {
     this.email = email;
-  }
-
-  /**
-   * Updates the subscriber's id (= primary key). As this method should only be called by Spring, it
-   * is {@code protected}
-   *
-   * @param id the new id
-   */
-  protected void setId(long id) {
-    this.id = id;
   }
 
   // "advanced" getters

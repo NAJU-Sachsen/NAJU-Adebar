@@ -1,13 +1,13 @@
 package de.naju.adebar.app.newsletter;
 
-import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import de.naju.adebar.model.Email;
+import de.naju.adebar.model.core.Email;
 import de.naju.adebar.model.newsletter.ExistingSubscriberException;
 import de.naju.adebar.model.newsletter.NoSuchSubscriberException;
 import de.naju.adebar.model.newsletter.Subscriber;
 import de.naju.adebar.model.newsletter.SubscriberRepository;
+import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * A {@link SubscriberManager} that persists the data in a database
@@ -16,6 +16,7 @@ import de.naju.adebar.model.newsletter.SubscriberRepository;
  */
 @Service
 public class PersistentSubscriberManager implements SubscriberManager {
+
   private SubscriberRepository subscriberRepo;
 
   @Autowired

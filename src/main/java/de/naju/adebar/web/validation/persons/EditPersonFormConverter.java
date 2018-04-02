@@ -1,11 +1,7 @@
 package de.naju.adebar.web.validation.persons;
 
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Service;
-import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
-import de.naju.adebar.model.Email;
-import de.naju.adebar.model.PhoneNumber;
+import de.naju.adebar.model.core.Email;
+import de.naju.adebar.model.core.PhoneNumber;
 import de.naju.adebar.model.persons.ParentProfile;
 import de.naju.adebar.model.persons.ParticipantProfile;
 import de.naju.adebar.model.persons.Person;
@@ -18,6 +14,10 @@ import de.naju.adebar.web.validation.persons.participant.EditParticipantForm;
 import de.naju.adebar.web.validation.persons.participant.EditParticipantFormConverter;
 import de.naju.adebar.web.validation.persons.relatives.EditParentProfileForm;
 import de.naju.adebar.web.validation.persons.relatives.EditParentProfileFormConverter;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
 
 /**
  * Simple service to apply the data from an {@link EditPersonForm} to {@link Person} objects.
@@ -36,8 +36,8 @@ public class EditPersonFormConverter implements //
    * Full constructor
    *
    * @param addressFormConverter the converter to handle conversion of addresses
-   * @param participantFormConverter the converter to handle conversion of a
-   *        {@link ParticipantProfile}
+   * @param participantFormConverter the converter to handle conversion of a {@link
+   *     ParticipantProfile}
    * @param parentFormConverter the converter to handle conversion of a {@link ParentProfile}
    */
   public EditPersonFormConverter(AddressFormConverter addressFormConverter,
@@ -232,7 +232,7 @@ public class EditPersonFormConverter implements //
   /**
    * If the person is a parent and the form contains parent related information this will apply the
    * data from it to the person.
-   * 
+   *
    * @param form the form
    * @param entity the person
    */

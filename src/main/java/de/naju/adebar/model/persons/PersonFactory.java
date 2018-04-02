@@ -1,25 +1,25 @@
 package de.naju.adebar.model.persons;
 
+import de.naju.adebar.model.core.Address;
+import de.naju.adebar.model.core.Email;
+import de.naju.adebar.model.core.PhoneNumber;
+import de.naju.adebar.model.persons.details.Gender;
+import de.naju.adebar.model.persons.details.JuleicaCard;
+import de.naju.adebar.model.persons.details.NabuMembershipInformation;
+import de.naju.adebar.model.persons.qualifications.Qualification;
 import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import de.naju.adebar.model.Address;
-import de.naju.adebar.model.Email;
-import de.naju.adebar.model.PhoneNumber;
-import de.naju.adebar.model.persons.details.Gender;
-import de.naju.adebar.model.persons.details.JuleicaCard;
-import de.naju.adebar.model.persons.details.NabuMembershipInformation;
-import de.naju.adebar.model.persons.qualifications.Qualification;
 
 /**
  * Factory to create {@link Person} instances. The factory just sets up everything to delegate the
  * creation-process itself to a Builder.
  *
  * <p>
- * Beware that the implementation of the builder is actually not stateless: <br>
- * When performing a call such as
+ * Beware that the implementation of the builder is actually not stateless: <br> When performing a
+ * call such as
  *
  * <pre>
  * {@code
@@ -27,12 +27,11 @@ import de.naju.adebar.model.persons.qualifications.Qualification;
  * }
  * </pre>
  *
- * {@code newBuilder == builder} will hold true afterwards. <br>
- * The fact that a builder-instance is returned after each call is just for a more convenient usage.
+ * {@code newBuilder == builder} will hold true afterwards. <br> The fact that a builder-instance is
+ * returned after each call is just for a more convenient usage.
  * <p>
  * Also note that calling a {@code makeXYZ()} more than once may lead to undefined behavior whereas
  * calling {@code specifyXYZ()} will usually override the first call.
- *
  *
  * @author Rico Bergmann
  * @see <a href="https://en.wikipedia.org/wiki/Builder_pattern">Builder pattern</a>
@@ -75,6 +74,7 @@ public class PersonFactory {
    * instance.
    */
   public class PersonBuilder {
+
     private Person person;
 
     /**
@@ -157,7 +157,7 @@ public class PersonFactory {
 
     /**
      * Makes the person parent of somebody
-     * 
+     *
      * @return the builder to use for further calls
      */
     public ParentBuilder makeParent() {
@@ -190,11 +190,12 @@ public class PersonFactory {
    * @see <a href="https://en.wikipedia.org/wiki/Fluent_interface">About Fluent interfaces</a>
    */
   public abstract class AbstractProfileBuilder {
+
     protected PersonBuilder parentBuilder;
 
     /**
-     * @param parentBuilder the builder which started the person's creation. This one is especially
-     *        important to get back to the caller.
+     * @param parentBuilder the builder which started the person's creation. This one is
+     *     especially important to get back to the caller.
      * @throws IllegalArgumentException if the {@code parentBuilder} is null
      */
     protected AbstractProfileBuilder(PersonBuilder parentBuilder) {
@@ -215,6 +216,7 @@ public class PersonFactory {
      * Marks the profile creation as done and terminates the whole creation right away.
      *
      * @return the person
+     *
      * @see PersonBuilder#create()
      */
     public Person create() {
@@ -366,7 +368,7 @@ public class PersonFactory {
 
     /**
      * Sets the parent's phone number at work
-     * 
+     *
      * @param workPhone the phone number
      * @return the builder to use for further calls
      */
@@ -377,7 +379,7 @@ public class PersonFactory {
 
     /**
      * Sets the parent's phone number at home
-     * 
+     *
      * @param landlinePhone the phone number
      * @return the builder to use for further calls
      */

@@ -1,6 +1,6 @@
 package de.naju.adebar.model.chapter;
 
-import de.naju.adebar.model.Address;
+import de.naju.adebar.model.core.Address;
 import de.naju.adebar.model.events.Event;
 import de.naju.adebar.model.newsletter.Newsletter;
 import de.naju.adebar.model.persons.Person;
@@ -283,7 +283,7 @@ public class LocalGroup {
   /**
    * @param name the project's name
    * @return an optional if the local group organizes a project with that name. Otherwise the
-   * optional is empty
+   *     optional is empty
    */
   @Transient
   public Optional<Project> getProject(String name) {
@@ -292,7 +292,7 @@ public class LocalGroup {
 
   /**
    * @return {@code true} if a board is specified (i.e. different from {@code null}) or {@code
-   * false} otherwise
+   *     false} otherwise
    */
   public boolean hasBoard() {
     return board != null;
@@ -307,7 +307,7 @@ public class LocalGroup {
 
   /**
    * @return {@code true} if the local group has at least one contact person, {@code false}
-   * otherwise
+   *     otherwise
    */
   public boolean hasContactPersons() {
     return !contactPersons.isEmpty();
@@ -342,7 +342,7 @@ public class LocalGroup {
   /**
    * @param activist the activist to check
    * @return {@code true} if the activist is registered as contributor to the chapter or {@code
-   * false} otherwise
+   *     false} otherwise
    */
   public boolean isMember(Person activist) {
     return members.contains(activist);
@@ -359,8 +359,8 @@ public class LocalGroup {
 
   /**
    * @param event the event to be hosted by the local group
-   * @throws IllegalArgumentException if the event is {@code null} or already hosted by the local
-   * group
+   * @throws IllegalArgumentException if the event is {@code null} or already hosted by the
+   *     local group
    */
   public void addEvent(Event event) {
     Assert.notNull(event, "Event to add may not be null!");
@@ -373,7 +373,7 @@ public class LocalGroup {
   /**
    * @param project the project to be organized by the local group
    * @throws IllegalArgumentException if the project is {@code null} or already organized by the
-   * local group
+   *     local group
    * @throws IllegalStateException if the project is already hosted by another chapter
    */
   public void addProject(Project project) {
@@ -400,8 +400,8 @@ public class LocalGroup {
   }
 
   /**
-   * @param newsletter the newsletter to remove from the chapter, if the local group actually has
-   * such a newsletter
+   * @param newsletter the newsletter to remove from the chapter, if the local group actually
+   *     has such a newsletter
    */
   public void removeNewsletter(Newsletter newsletter) {
     newsletters.remove(newsletter);

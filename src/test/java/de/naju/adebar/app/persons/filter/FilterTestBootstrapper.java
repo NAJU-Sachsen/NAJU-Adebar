@@ -1,13 +1,7 @@
 package de.naju.adebar.app.persons.filter;
 
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
-import org.junit.Before;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import de.naju.adebar.model.Address;
-import de.naju.adebar.model.Email;
+import de.naju.adebar.model.core.Address;
+import de.naju.adebar.model.core.Email;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.persons.PersonFactory;
 import de.naju.adebar.model.persons.PersonManager;
@@ -16,6 +10,12 @@ import de.naju.adebar.model.persons.details.Gender;
 import de.naju.adebar.model.persons.details.JuleicaCard;
 import de.naju.adebar.model.persons.qualifications.Qualification;
 import de.naju.adebar.model.persons.qualifications.QualificationRepository;
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
+import org.junit.Before;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Rico Bergmann

@@ -1,7 +1,7 @@
 package de.naju.adebar.app.persons.filter.predicate;
 
 import com.querydsl.core.BooleanBuilder;
-import de.naju.adebar.model.PhoneNumber;
+import de.naju.adebar.model.core.PhoneNumber;
 import de.naju.adebar.model.persons.QPerson;
 
 public class PhoneNumberFilter implements PersonFilter {

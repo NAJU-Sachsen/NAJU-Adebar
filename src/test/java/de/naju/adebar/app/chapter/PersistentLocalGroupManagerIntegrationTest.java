@@ -1,10 +1,10 @@
 package de.naju.adebar.app.chapter;
 
-import de.naju.adebar.model.Address;
-import de.naju.adebar.model.Email;
 import de.naju.adebar.model.chapter.Board;
 import de.naju.adebar.model.chapter.LocalGroup;
 import de.naju.adebar.model.chapter.LocalGroupRepository;
+import de.naju.adebar.model.core.Address;
+import de.naju.adebar.model.core.Email;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.persons.PersonFactory;
 import de.naju.adebar.model.persons.PersonManager;

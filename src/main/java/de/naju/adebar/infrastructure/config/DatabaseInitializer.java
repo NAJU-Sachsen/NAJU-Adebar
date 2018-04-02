@@ -1,5 +1,13 @@
 package de.naju.adebar.infrastructure.config;
 
+import com.google.common.collect.Lists;
+import de.naju.adebar.app.security.user.Roles;
+import de.naju.adebar.app.security.user.UserAccountManager;
+import de.naju.adebar.app.security.user.UserAccountRepository;
+import de.naju.adebar.model.core.Email;
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.PersonFactory;
+import de.naju.adebar.model.persons.PersonManager;
 import java.util.Arrays;
 import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
@@ -9,14 +17,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
-import com.google.common.collect.Lists;
-import de.naju.adebar.app.security.user.Roles;
-import de.naju.adebar.app.security.user.UserAccountManager;
-import de.naju.adebar.app.security.user.UserAccountRepository;
-import de.naju.adebar.model.Email;
-import de.naju.adebar.model.persons.Person;
-import de.naju.adebar.model.persons.PersonFactory;
-import de.naju.adebar.model.persons.PersonManager;
 
 @PropertySource("classpath:startup.properties")
 @Component

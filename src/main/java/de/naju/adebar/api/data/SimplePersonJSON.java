@@ -1,6 +1,6 @@
 package de.naju.adebar.api.data;
 
-import de.naju.adebar.model.Address;
+import de.naju.adebar.model.core.Address;
 import de.naju.adebar.model.persons.Person;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

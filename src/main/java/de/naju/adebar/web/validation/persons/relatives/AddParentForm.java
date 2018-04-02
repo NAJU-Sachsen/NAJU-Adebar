@@ -1,5 +1,7 @@
 package de.naju.adebar.web.validation.persons.relatives;
 
+import de.naju.adebar.model.core.Email;
+import de.naju.adebar.model.core.PhoneNumber;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.web.validation.NewOrExistingEntityForm;
 
@@ -81,8 +83,8 @@ public class AddParentForm implements NewOrExistingEntityForm {
   }
 
   /**
-   * @return the new person's email. We may not return an {@link de.naju.adebar.model.Email}
-   *         instance here, as the email may still need to be validated and hence may be invalid.
+   * @return the new person's email. We may not return an {@link Email} instance here, as the email
+   *     may still need to be validated and hence may be invalid.
    */
   public String getNewEmail() {
     return newEmail;
@@ -97,16 +99,15 @@ public class AddParentForm implements NewOrExistingEntityForm {
 
   /**
    * @return whether the form contains data for an email address (although this address may
-   *         potentially be invalid)
+   *     potentially be invalid)
    */
   public boolean hasNewEmail() {
     return newEmail != null && !newEmail.isEmpty();
   }
 
   /**
-   * @return the new person's phone number. We may not return an
-   *         {@link de.naju.adebar.model.PhoneNumber} instance here, as the phone number may still
-   *         need to be validated and hence may be invalid.
+   * @return the new person's phone number. We may not return an {@link PhoneNumber} instance here,
+   *     as the phone number may still need to be validated and hence may be invalid.
    */
   public String getNewPrivatePhone() {
     return newPrivatePhone;
@@ -121,7 +122,7 @@ public class AddParentForm implements NewOrExistingEntityForm {
 
   /**
    * @return whether the form contains data for a phone number (although this may potentially be
-   *         invalid)
+   *     invalid)
    */
   public boolean hasNewPrivatePhone() {
     return newPrivatePhone != null && !newPrivatePhone.isEmpty();

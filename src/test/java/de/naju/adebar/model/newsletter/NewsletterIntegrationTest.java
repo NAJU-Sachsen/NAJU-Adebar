@@ -1,7 +1,7 @@
 package de.naju.adebar.model.newsletter;
 
 import de.naju.adebar.app.newsletter.PersistentNewsletterManager;
-import de.naju.adebar.model.Email;
+import de.naju.adebar.model.core.Email;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

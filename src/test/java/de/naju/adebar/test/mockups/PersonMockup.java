@@ -1,6 +1,6 @@
 package de.naju.adebar.test.mockups;
 
-import de.naju.adebar.model.Email;
+import de.naju.adebar.model.core.Email;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.persons.PersonFactory;
 import de.naju.adebar.model.persons.details.Gender;

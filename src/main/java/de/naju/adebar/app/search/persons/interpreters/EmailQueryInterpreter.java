@@ -2,7 +2,7 @@ package de.naju.adebar.app.search.persons.interpreters;
 
 import com.querydsl.core.BooleanBuilder;
 import de.naju.adebar.app.search.persons.PersonQueryInterpreter;
-import de.naju.adebar.model.Email;
+import de.naju.adebar.model.core.Email;
 import de.naju.adebar.model.persons.QPerson;
 import de.naju.adebar.util.Validation;
 import java.util.Optional;

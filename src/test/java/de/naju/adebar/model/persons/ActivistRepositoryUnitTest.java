@@ -1,7 +1,7 @@
 package de.naju.adebar.model.persons;
 
 import com.google.common.collect.Lists;
-import de.naju.adebar.model.Email;
+import de.naju.adebar.model.core.Email;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.Assert;

@@ -1,11 +1,11 @@
 package de.naju.adebar.model.persons;
 
+import de.naju.adebar.model.core.Email;
+import de.naju.adebar.model.persons.details.JuleicaCard;
 import java.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import de.naju.adebar.model.Email;
-import de.naju.adebar.model.persons.details.JuleicaCard;
 
 /**
  * Basic testing of the {@link ActivistProfile} class
@@ -13,6 +13,7 @@ import de.naju.adebar.model.persons.details.JuleicaCard;
  * @author Rico Bergmann
  */
 public class ActivistUnitTest {
+
   private Person hans;
 
   @Before
