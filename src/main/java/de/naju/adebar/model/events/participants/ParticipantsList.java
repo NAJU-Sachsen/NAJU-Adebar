@@ -1,5 +1,11 @@
-package de.naju.adebar.model.events;
+package de.naju.adebar.model.events.participants;
 
+import de.naju.adebar.model.events.BookedOutException;
+import de.naju.adebar.model.events.Event;
+import de.naju.adebar.model.events.EventId;
+import de.naju.adebar.model.events.ExistingReservationException;
+import de.naju.adebar.model.events.Reservation;
+import de.naju.adebar.model.persons.Person;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -21,16 +27,14 @@ import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.OrderColumn;
 import javax.persistence.Transient;
 import org.springframework.util.Assert;
-import de.naju.adebar.model.persons.Person;
 
 /**
  * The participants (and reservations) of an {@link Event} will be stored here
  *
  * @author Rico Bergmann
- *
  */
 @Entity(name = "participantsList")
-class ParticipantsList {
+public class ParticipantsList {
 
   private static final int WAITING_LIST_HEAD = 0;
 
@@ -83,7 +87,6 @@ class ParticipantsList {
   /**
    * Default constructor just for JPA's sake
    */
-  @SuppressWarnings("unused")
   private ParticipantsList() {}
 
   // getter and setter
@@ -93,6 +96,13 @@ class ParticipantsList {
    */
   public EventId getEvent() {
     return event;
+  }
+
+  /**
+   * @param event the event this list was created for
+   */
+  protected void setEvent(EventId event) {
+    this.event = event;
   }
 
   /**
@@ -117,10 +127,24 @@ class ParticipantsList {
   }
 
   /**
+   * @param participants
+   */
+  protected void setParticipants(Map<Person, ParticipationInfo> participants) {
+    this.participants = participants;
+  }
+
+  /**
    * @return the reservations
    */
   public Iterable<Reservation> getReservations() {
     return reservations;
+  }
+
+  /**
+   * @param reservations the reservations
+   */
+  protected void setReservations(List<Reservation> reservations) {
+    this.reservations = reservations;
   }
 
   /**
@@ -135,28 +159,6 @@ class ParticipantsList {
    */
   public void setWaitingList(List<Person> waitingList) {
     this.waitingList = waitingList;
-  }
-
-  /**
-   * @param event the event this list was created for
-   */
-  protected void setEvent(EventId event) {
-    this.event = event;
-  }
-
-  /**
-   *
-   * @param participants
-   */
-  protected void setParticipants(Map<Person, ParticipationInfo> participants) {
-    this.participants = participants;
-  }
-
-  /**
-   * @param reservations the reservations
-   */
-  protected void setReservations(List<Reservation> reservations) {
-    this.reservations = reservations;
   }
 
   // query methods
@@ -185,6 +187,7 @@ class ParticipantsList {
 
   /**
    * @return the number of reservations (which is <b>not</b> the number of slots reserved!)
+   *
    * @see #getReservedSlotsCount()
    */
   @Transient
@@ -194,6 +197,7 @@ class ParticipantsList {
 
   /**
    * @return the total number of slots that were reserved throughout all reservations
+   *
    * @see #getReservationsCount()
    */
   @Transient
@@ -217,7 +221,7 @@ class ParticipantsList {
 
   /**
    * @return the persons who participate in the event but have not sent the "real" participation
-   *         form yet
+   *     form yet
    */
   @Transient
   public Iterable<Person> getParticipantsWithFormNotReceived() {
@@ -389,7 +393,8 @@ class ParticipantsList {
    * Adds a new reservation
    *
    * @param reservation the reservation
-   * @throws ExistingReservationException if there already is a reservation with that description
+   * @throws ExistingReservationException if there already is a reservation with that
+   *     description
    */
   public void addReservation(Reservation reservation) {
     if (hasReservation(reservation.getDescription())) {
@@ -419,7 +424,7 @@ class ParticipantsList {
    * Updates a reservation
    *
    * @param description the description (= ID) of the reservation
-   * @param newData the new data to use
+   * @param newReservation the new data to use
    */
   public void updateReservation(String description, Reservation newReservation) {
     Reservation currentReservation = getReservationFor(description);
@@ -493,18 +498,23 @@ class ParticipantsList {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
+    if (this == obj) {
       return true;
-    if (obj == null)
+    }
+    if (obj == null) {
       return false;
-    if (!(obj instanceof ParticipantsList))
+    }
+    if (!(obj instanceof ParticipantsList)) {
       return false;
+    }
     ParticipantsList other = (ParticipantsList) obj;
     if (event == null) {
-      if (other.event != null)
+      if (other.event != null) {
         return false;
-    } else if (!event.equals(other.event))
+      }
+    } else if (!event.equals(other.event)) {
       return false;
+    }
     return true;
   }
 

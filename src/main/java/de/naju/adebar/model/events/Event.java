@@ -4,6 +4,11 @@ import de.naju.adebar.documentation.infrastructure.JpaOnly;
 import de.naju.adebar.model.chapter.LocalGroup;
 import de.naju.adebar.model.chapter.Project;
 import de.naju.adebar.model.core.Address;
+import de.naju.adebar.model.core.Age;
+import de.naju.adebar.model.events.participants.ExistingParticipantException;
+import de.naju.adebar.model.events.participants.ParticipantsList;
+import de.naju.adebar.model.events.participants.ParticipationInfo;
+import de.naju.adebar.model.events.participants.PersonIsTooYoungException;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.persons.exceptions.NoActivistException;
 import de.naju.adebar.model.persons.exceptions.NoParticipantException;
@@ -65,7 +70,7 @@ public class Event implements Comparable<Event> {
   private LocalDateTime endTime;
 
   @Column(name = "minParticipantAge")
-  private int minimumParticipantAge;
+  private Age minimumParticipantAge;
 
   @Column(name = "intParticipationFee")
   private Money internalParticipationFee;
@@ -255,7 +260,7 @@ public class Event implements Comparable<Event> {
   /**
    * @return the age which new participants must be at least
    */
-  public int getMinimumParticipantAge() {
+  public Age getMinimumParticipantAge() {
     return minimumParticipantAge;
   }
 
@@ -263,9 +268,7 @@ public class Event implements Comparable<Event> {
    * @param minimumParticipantAge the age which new participants must be at least
    * @throws IllegalArgumentException if the minimum participant age is negative
    */
-  public void setMinimumParticipantAge(int minimumParticipantAge) {
-    Assert.isTrue(minimumParticipantAge >= 0,
-        "Minimum participant age must not be negative but was: " + minimumParticipantAge);
+  public void setMinimumParticipantAge(Age minimumParticipantAge) {
     this.minimumParticipantAge = minimumParticipantAge;
   }
 
@@ -489,6 +492,11 @@ public class Event implements Comparable<Event> {
     return participantsList.hasReservations();
   }
 
+  @Transient
+  public boolean hasMinimumParticipantAge() {
+    return minimumParticipantAge != null;
+  }
+
   /**
    * @param person the person to check
    * @return {@code true} if the person may participate in the event regarding to age-restrictions,
@@ -502,8 +510,10 @@ public class Event implements Comparable<Event> {
       throw new IllegalArgumentException("Person is not a camp participant: " + person);
     } else if (!person.getParticipantProfile().hasDateOfBirth()) {
       return true;
+    } else if (!hasMinimumParticipantAge()) {
+      return true;
     }
-    return person.getParticipantProfile().calculateAge() >= minimumParticipantAge;
+    return !person.getParticipantProfile().calculateAge().isYoungerThan(minimumParticipantAge);
   }
 
   /**

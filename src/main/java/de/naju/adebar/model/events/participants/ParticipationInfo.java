@@ -1,11 +1,11 @@
-package de.naju.adebar.model.events;
+package de.naju.adebar.model.events.participants;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 /**
  * Meta-data needed for the participating persons
- * 
+ *
  * @author Rico Bergmann
  */
 @Embeddable
@@ -64,8 +64,8 @@ public class ParticipationInfo {
   }
 
   /**
-   * @param registrationFormReceived whether the registration form (featuring signature, etc.) was
-   *        received
+   * @param registrationFormReceived whether the registration form (featuring signature, etc.)
+   *     was received
    */
   public void setRegistrationFormFilled(boolean registrationFormReceived) {
     this.registrationFormFilled = registrationFormReceived;

@@ -12,6 +12,7 @@ import de.naju.adebar.app.filter.ComparableFilterType;
 import de.naju.adebar.app.filter.DateTimeFilterType;
 import de.naju.adebar.app.filter.MatchType;
 import de.naju.adebar.model.core.Address;
+import de.naju.adebar.model.core.Age;
 import de.naju.adebar.web.validation.events.FilterEventsForm;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -105,7 +106,7 @@ public class FilterEventsFormDataExtractor {
     if (!hasMinimumParticipantAgeFilter(eventsForm)) {
       throw new IllegalStateException("No minimum participant age filter specified");
     }
-    return new MinimumParticipantAgeFilter(eventsForm.getParticipantsAge());
+    return new MinimumParticipantAgeFilter(Age.of(eventsForm.getParticipantsAge()));
   }
 
   /**

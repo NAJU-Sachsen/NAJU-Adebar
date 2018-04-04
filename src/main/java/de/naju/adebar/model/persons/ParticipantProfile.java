@@ -1,7 +1,6 @@
 package de.naju.adebar.model.persons;
 
 import java.time.LocalDate;
-import java.time.Period;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -12,6 +11,7 @@ import javax.persistence.Transient;
 import org.springframework.util.Assert;
 import de.naju.adebar.documentation.ddd.BusinessRule;
 import de.naju.adebar.documentation.infrastructure.JpaOnly;
+import de.naju.adebar.model.core.Age;
 import de.naju.adebar.model.persons.details.Gender;
 import de.naju.adebar.model.persons.details.NabuMembershipInformation;
 import de.naju.adebar.model.persons.events.PersonDataUpdatedEvent;
@@ -210,14 +210,14 @@ public class ParticipantProfile extends AbstractProfile {
 
   /**
    * @return the age of the person
+   *
    * @throws IllegalStateException if the person has no date of birth specified
    */
-  public int calculateAge() {
+  public Age calculateAge() {
     if (!hasDateOfBirth()) {
       throw new IllegalStateException("No date of birth specified");
     }
-    Period age = Period.between(dateOfBirth, LocalDate.now());
-    return age.getYears();
+    return Age.forDateOfBirth(dateOfBirth);
   }
 
   /**
@@ -343,9 +343,7 @@ public class ParticipantProfile extends AbstractProfile {
    * @return whether the date describes an under-aged person
    */
   private boolean personWithBirthdayIsMinor(LocalDate date) {
-    LocalDate now = LocalDate.now();
-    Period timeDifference = Period.between(date, now);
-    return timeDifference.getYears() < LEGAL_AGE;
+    return !Age.forDateOfBirth(date).isOfLegalAge();
   }
 
   /**

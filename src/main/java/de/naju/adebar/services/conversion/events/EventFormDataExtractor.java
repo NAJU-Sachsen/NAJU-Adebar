@@ -3,6 +3,7 @@ package de.naju.adebar.services.conversion.events;
 import static de.naju.adebar.web.validation.events.EventForm.CURRENCY_UNIT;
 
 import de.naju.adebar.model.core.Address;
+import de.naju.adebar.model.core.Age;
 import de.naju.adebar.model.events.Event;
 import de.naju.adebar.model.events.EventFactory;
 import de.naju.adebar.web.validation.events.EventForm;
@@ -49,7 +50,7 @@ public class EventFormDataExtractor {
     event.setPlace(address);
 
     if (eventForm.hasParticipantsAge()) {
-      event.setMinimumParticipantAge(Integer.parseInt(eventForm.getParticipantsAge()));
+      event.setMinimumParticipantAge(Age.of(Integer.parseInt(eventForm.getParticipantsAge())));
     }
 
     if (eventForm.hasParticipantsLimit()) {

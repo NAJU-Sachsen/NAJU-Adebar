@@ -1,10 +1,10 @@
 package de.naju.adebar.services.conversion.events;
 
+import de.naju.adebar.model.events.Event;
+import de.naju.adebar.web.validation.events.EventForm;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import org.springframework.stereotype.Service;
-import de.naju.adebar.model.events.Event;
-import de.naju.adebar.web.validation.events.EventForm;
 
 /**
  * Service to convert an {@link Event} to a corresponding {@link EventForm}
@@ -41,6 +41,9 @@ public class EventToEventFormConverter {
 
     String participantsLimit = event.getParticipantsLimit() == Integer.MAX_VALUE ? null
         : Integer.toString(event.getParticipantsLimit());
+    String minimumParticipantAge =
+        event.hasMinimumParticipantAge() ? event.getMinimumParticipantAge().toString() : null;
+
     String internalFee = event.getInternalParticipationFee() == null ? null
         : event.getInternalParticipationFee().getNumberStripped().toPlainString();
     String externalFee = event.getExternalParticipationFee() == null ? null
@@ -50,7 +53,7 @@ public class EventToEventFormConverter {
         new EventForm(event.getName(), dateTimeFormatter.format(event.getStartTime()),
             dateTimeFormatter.format(event.getEndTime()), street, zip, city);
     eventForm.setParticipationInfo(participantsLimit,
-        Integer.toString(event.getMinimumParticipantAge()), internalFee, externalFee);
+        minimumParticipantAge, internalFee, externalFee);
     return eventForm;
   }
 
