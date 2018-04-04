@@ -1,11 +1,12 @@
-package de.naju.adebar.model.events;
+package de.naju.adebar.model.events.participants;
 
 /**
  * Exception to indicate that a person already participates in an event
- * 
+ *
  * @author Rico Bergmann
  */
 public class ExistingParticipantException extends RuntimeException {
+
   private static final long serialVersionUID = 1370585756956834005L;
 
   public ExistingParticipantException() {}
