@@ -15,11 +15,20 @@ public class Room {
   private final Gender gender;
 
   /**
+   * Creates a new room for participants of any gender
+   *
+   * @param bedsCount the number of beds in the room
+   */
+  public Room(int bedsCount) {
+    this(bedsCount, null);
+  }
+
+  /**
    * Creates a new room. If the {@code gender} is {@code null} the room will accept participants of
    * any gender.
    *
-   * @param bedsCount
-   * @param gender
+   * @param bedsCount the number of beds in the room
+   * @param gender the gender that persons who sleep in the room must have
    */
   public Room(int bedsCount, Gender gender) {
     this.bedsCount = bedsCount;

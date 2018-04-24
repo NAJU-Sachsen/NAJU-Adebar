@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Stream;
 import org.springframework.util.Assert;
 import de.naju.adebar.model.persons.details.Gender;
 
@@ -15,7 +16,7 @@ import de.naju.adebar.model.persons.details.Gender;
  */
 public class RoomSpecification implements Iterable<Room> {
 
-  private List<Room> rooms;
+  protected List<Room> rooms;
 
   /**
    * Creates a new specification. Nothing special about it.
@@ -35,10 +36,45 @@ public class RoomSpecification implements Iterable<Room> {
   }
 
   /**
+   * Creates a new specification based on the given rooms
+   *
+   * @param rooms the rooms
+   */
+  protected RoomSpecification(List<Room> rooms) {
+    Assert.notNull(rooms, "rooms may not be null");
+    Assert.noNullElements(rooms.toArray(), "No room may be null");
+    this.rooms = new ArrayList<>(rooms);
+  }
+
+  /**
    * @return the rooms
    */
   public Collection<Room> getRooms() {
     return Collections.unmodifiableCollection(rooms);
+  }
+
+  /**
+   * Calculates the total number of beds available for a certain gender
+   *
+   * @param gender the gender. May be {@code null} to search for rooms where the gender does not
+   *        matter.
+   * @return the total capacity of all matching rooms
+   */
+  public int getTotalBedsFor(Gender gender) {
+    Stream<Room> roomsStream = rooms.stream();
+
+    if (gender == null) {
+      return roomsStream //
+          .filter(r -> r.getGender() == null) //
+          .mapToInt(Room::getBedsCount) //
+          .sum();
+    } else {
+      return roomsStream //
+          .filter(r -> gender.equals(r.getGender())) //
+          .mapToInt(Room::getBedsCount) //
+          .sum();
+    }
+
   }
 
   /**
@@ -55,7 +91,7 @@ public class RoomSpecification implements Iterable<Room> {
 
   /**
    * Adds a new room to the specification
-   * 
+   *
    * @param room the room
    * @return the specification for easy method chaining
    */

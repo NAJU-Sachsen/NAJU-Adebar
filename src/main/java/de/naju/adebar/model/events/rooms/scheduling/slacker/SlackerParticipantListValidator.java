@@ -1,7 +1,9 @@
 package de.naju.adebar.model.events.rooms.scheduling.slacker;
 
+import org.springframework.util.Assert;
 import de.naju.adebar.model.events.rooms.scheduling.Participant;
 import de.naju.adebar.model.events.rooms.scheduling.ParticipantListValidator;
+import de.naju.adebar.model.events.rooms.scheduling.RegisteredParticipants;
 import de.naju.adebar.model.events.rooms.scheduling.RoomSpecification;
 
 /**
@@ -10,11 +12,13 @@ import de.naju.adebar.model.events.rooms.scheduling.RoomSpecification;
  * The Slacker scheduler will basically life up to his name: it will only perform as few work as
  * possible. Therefore even though some kind of schedule may exist according to the slacker, it may
  * actually not be of much use in practical scenarios - resulting in an usually terrible assessment.
+ * </p>
  * <h2>Here is how it works:</h2>
  * <p>
  * For each day the slacker will compare the number of participants {@code P} of a specific gender
  * to the number of beds available for that gender. As soon as {@code P} exceeds this number, the
  * scheduler will return "unschedulable".
+ * </p>
  * <h2>Why this approach may be bad in some scenarios:</h2>
  * <p>
  * As already stated above, the slacker may find a theoretically existing schedule which is of no
@@ -35,16 +39,14 @@ public class SlackerParticipantListValidator implements ParticipantListValidator
   private SlackerParticipantListValidatorImpl slackerImpl;
 
   @Override
-  public boolean isSchedulable(RoomSpecification rooms, Iterable<Participant> participants) {
+  public boolean isSchedulable(RoomSpecification rooms, RegisteredParticipants participants) {
     updateSlackerImplementationIfNecessary(rooms, participants);
     return slackerImpl.isSchedulable();
   }
 
   @Override
   public int assessScheduleReliablity() {
-    if (slackerImpl == null) {
-      throw new IllegalStateException("No schedule has been provided");
-    }
+    Assert.notNull(slackerImpl, "No schedule has been provided");
     return slackerImpl.assessScheduleReliablity();
   }
 

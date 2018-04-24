@@ -1,23 +1,16 @@
-package de.naju.adebar.model.events.rooms.scheduling.slacker;
+package de.naju.adebar.model.events.rooms.scheduling.greedy;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.Timeout;
 import de.naju.adebar.model.events.rooms.scheduling.AbstractParticipantsListValidatorTest;
+import de.naju.adebar.model.events.rooms.scheduling.ExtendedRoomSpecification;
 import de.naju.adebar.model.events.rooms.scheduling.RegisteredParticipants;
 import de.naju.adebar.model.events.rooms.scheduling.RoomSpecification;
 import de.naju.adebar.model.persons.details.Gender;
 
-public class SlackerParticipantListValidatorUnitTest extends AbstractParticipantsListValidatorTest {
+public class GreedyParticipantListValidatorUnitTest extends AbstractParticipantsListValidatorTest {
 
-  /*
-   * Slackers should work quickly o_O
-   *
-   * If they are that lazy, they should at least be done quickly
-   */
-  @Rule
-  public Timeout timeoutRule = Timeout.millis(1500L);
+  private GreedyParticipantListValidator validator = new GreedyParticipantListValidator();
 
   /*
    * @formatter:off
@@ -37,15 +30,13 @@ public class SlackerParticipantListValidatorUnitTest extends AbstractParticipant
    * @formatter:on
    */
 
-  private SlackerParticipantListValidator slacker = new SlackerParticipantListValidator();
-
   @Test
   public void detectsSchedulableSpecifications() {
     RoomSpecification spec = new RoomSpecification(2) //
         .addRoom(1, Gender.MALE) //
         .addRoom(2, Gender.FEMALE);
     RegisteredParticipants participants = RegisteredParticipants.of(hans, dieter, martha, nadine);
-    assertThat(slacker.isSchedulable(spec, participants)).isTrue();
+    assertThat(validator.isSchedulable(spec, participants)).isTrue();
   }
 
   @Test
@@ -55,17 +46,40 @@ public class SlackerParticipantListValidatorUnitTest extends AbstractParticipant
         .addRoom(1, Gender.MALE);
     RegisteredParticipants participants =
         RegisteredParticipants.of(hans, dieter, fritz, martha, nadine);
-    assertThat(slacker.isSchedulable(spec, participants)).isFalse();
+    assertThat(validator.isSchedulable(spec, participants)).isFalse();
   }
 
   @Test
-  public void handlesPersonsWithMultipleParticipationTimesCorrectly() {
-    RoomSpecification spec = new RoomSpecification(2) //
-        .addRoom(2, Gender.FEMALE) //
-        .addRoom(1, Gender.MALE);
+  public void usesFlexRoomsCorrectly() {
+    ExtendedRoomSpecification spec = new ExtendedRoomSpecification(2) //
+        .addRoom(1, Gender.FEMALE) //
+        .addRoom(1, Gender.MALE) //
+        .addFlexRoom(1) //
+        .addFlexRoom(2);
     RegisteredParticipants participants =
-        RegisteredParticipants.of(hans, martha, dieter, nadine, fritz);
-    assertThat(slacker.isSchedulable(spec, participants)).isTrue();
+        RegisteredParticipants.of(hans, dieter, fritz, martha, nadine);
+    assertThat(validator.isSchedulableWithExtendedSpec(spec, participants)).isTrue();
+  }
+
+  @Test
+  public void usesFallbackRoomsCorrectly() {
+    ExtendedRoomSpecification spec = new ExtendedRoomSpecification(2) //
+        .addRoom(1, Gender.FEMALE) //
+        .addRoom(1, Gender.MALE) //
+        .addFallbackRoom(2);
+    RegisteredParticipants participants =
+        RegisteredParticipants.of(hans, dieter, fritz, martha, nadine);
+    assertThat(validator.isSchedulableWithExtendedSpec(spec, participants)).isTrue();
+  }
+
+  @Test
+  public void detectsUnschedulableSpecificationsWithFlexRooms() {
+    ExtendedRoomSpecification spec = new ExtendedRoomSpecification(2) //
+        .addRoom(1, Gender.FEMALE) //
+        .addFlexRoom(1);
+    RegisteredParticipants participants =
+        RegisteredParticipants.of(hans, dieter, fritz, martha, nadine);
+    assertThat(validator.isSchedulableWithExtendedSpec(spec, participants)).isFalse();
   }
 
 }

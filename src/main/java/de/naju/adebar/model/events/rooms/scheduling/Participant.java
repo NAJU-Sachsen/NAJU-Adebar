@@ -5,6 +5,7 @@ import java.util.TreeMap;
 import org.springframework.util.Assert;
 import com.google.common.collect.Lists;
 import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.details.Gender;
 
 /**
  * Value object encapsulating a {@link Person} as well as its participation times.
@@ -57,6 +58,21 @@ public class Participant {
    */
   public Person getPerson() {
     return person;
+  }
+
+  /**
+   * @return the participant's gender - just for convenience
+   */
+  public Gender getGender() {
+    return person.getParticipantProfile().getGender();
+  }
+
+  /**
+   * @return the first night the participant attends the event
+   */
+  public int getFirstNight() {
+    return participationTimes.values().stream() //
+        .mapToInt(ParticipationTime::getFirstNight).min().orElse(0);
   }
 
   /**
@@ -142,8 +158,9 @@ public class Participant {
    */
   @Override
   public String toString() {
-    return "Participant [person=" + person + ", participationTimes=" + participationTimes.values()
-        + "]";
+    return "Participant [person=" + person.getName() + ", gender="
+        + person.getParticipantProfile().getGender() + ", participationTimes="
+        + participationTimes.values() + "]";
   }
 
 }
