@@ -1,8 +1,5 @@
 package de.naju.adebar.app.security.user;
 
-import de.naju.adebar.model.core.Email;
-import de.naju.adebar.model.persons.Person;
-import de.naju.adebar.model.persons.PersonId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -21,6 +18,10 @@ import org.springframework.data.domain.AbstractAggregateRoot;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.Assert;
+import de.naju.adebar.documentation.infrastructure.JpaOnly;
+import de.naju.adebar.model.core.Email;
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.PersonId;
 
 /**
  * A user account. Each account is created for an activist who thereby gets access to the
@@ -94,6 +95,7 @@ public class UserAccount extends AbstractAggregateRoot<UserAccount> implements U
   /**
    * Default constructor just for JPA's sake
    */
+  @JpaOnly
   private UserAccount() {}
 
   /**
@@ -108,6 +110,7 @@ public class UserAccount extends AbstractAggregateRoot<UserAccount> implements U
    *
    * @param associatedPerson the associated person
    */
+  @JpaOnly
   private void setAssociatedPerson(PersonId associatedPerson) {
     Assert.notNull(associatedPerson, "Associated person may not null");
     this.associatedPerson = associatedPerson;
@@ -191,6 +194,7 @@ public class UserAccount extends AbstractAggregateRoot<UserAccount> implements U
    *
    * @param password the new password
    */
+  @JpaOnly
   private void setPassword(String password) {
     Assert.hasText(password, "New password may not be empty");
     this.password = new Password(password);
@@ -216,6 +220,7 @@ public class UserAccount extends AbstractAggregateRoot<UserAccount> implements U
    *
    * @param username the username
    */
+  @JpaOnly
   private void setUsername(String username) {
     Assert.hasText(username, "User name may not be empty");
     this.username = username;
@@ -244,6 +249,7 @@ public class UserAccount extends AbstractAggregateRoot<UserAccount> implements U
   /**
    * @param enabled whether the account is enabled
    */
+  @JpaOnly
   private void setEnabled(boolean enabled) {
     this.enabled = enabled;
   }
@@ -325,6 +331,7 @@ public class UserAccount extends AbstractAggregateRoot<UserAccount> implements U
    *
    * @return whether the user has read the latest release notes
    */
+  @JpaOnly
   private boolean isReadLatestReleaseNotes() {
     return readLatestReleaseNotes;
   }

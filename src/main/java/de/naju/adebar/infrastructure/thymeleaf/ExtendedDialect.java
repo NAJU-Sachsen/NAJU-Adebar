@@ -45,6 +45,7 @@ public class ExtendedDialect extends AbstractDialect implements IExpressionObjec
       expressionObjects.put("cstStrings", new StringsFormatter());
       expressionObjects.put("iterables", new IterableUtility());
       expressionObjects.put("objects", new ObjectUtility());
+      expressionObjects.put("email", new EmailFormatter());
     }
 
     @Override

@@ -19,16 +19,16 @@ function updateInputs(category, active) {
     category.find('.form-category-content').collapse(toggleOption);
   }
   category.find(
-      'input:not([data-controlled-by]):not(.form-category-controller)').prop(
+      'input:not([data-controlled-by]):not(.form-category-controller):not(.ignore-control)').prop(
       'disabled', !active);
   category.find(
-      'button:not([data-controlled-by]):not(.form-category-controller)').prop(
+      'button:not([data-controlled-by]):not(.form-category-controller):not(.ignore-control)').prop(
       'disabled', !active);
   category.find(
-      'select:not([data-controlled-by]):not(.form-category-controller)').prop(
-      'disabled', !active);
+      'select:not([data-controlled-by]):not(.form-category-controller):not(.ignore-control)')
+  .prop('disabled', !active);
   category.find(
-      'textarea:not([data-controlled-by]):not(.form-category-controller)').prop(
+      'textarea:not([data-controlled-by]):not(.form-category-controller):not(.ignore-control)').prop(
       'disabled', !active);
   category.find('.form-category-content').toggleClass('disabled', !active);
   category.find('select.selectpicker').selectpicker('refresh');
@@ -93,7 +93,7 @@ function updateControlledInput(controller, input) {
           === selectBox.find(':selected').get(0);
       break;
     case 'input':
-      const checkbox = controller.is(':checkbox');
+      const checkbox = controller.is(':checkbox') || controller.is(':radio');
       active = (checkbox && controller.prop('checked')) || (!checkbox
           && controller.val());
       break;
@@ -115,6 +115,16 @@ function updateControlledInput(controller, input) {
       updateInputs(input, active);
   }
 
+  if (input.data('displayToggle')) {
+    const inputToToggle = input.hasClass('selectpicker') ? input.closest(
+        '.bootstrap-select') : input;
+    if (active) {
+      inputToToggle.closest('.bootstrap-select').show();
+    } else {
+      inputToToggle.closest('.bootstrap-select').hide();
+    }
+  }
+
   if (input.hasClass('selectpicker')) {
     input.selectpicker('refresh');
   }
@@ -126,22 +136,26 @@ function initControlledInputs() {
       function (idx, input) {
         const targetInput = $(input);
         let controller = $(input.dataset.controlledBy);
+
         if (controller.prop('tagName').toLowerCase() === 'option') {
           controller = controller.closest('select');
         }
 
         const handler = () => updateControlledInput(controller, targetInput);
 
-        // register the handler for textual changes as well as "normal" ones
-        controller.keyup(handler).change(handler);
-
-        // initialize the controlled input according to the controller's state
+        controller.keyup(handler).change(handler).bind('fc-deselect', handler);
         updateControlledInput(controller, targetInput);
       });
 }
 
 (function () {
   $(document).ready(function () {
+
+    $('input[type="radio"]').bind('click', function () {
+      $('input[name="' + $(this).attr('name') + '"]').not($(this))
+      .trigger('fc-deselect');
+    });
+
     initToggledCategories();
     $('.form-category').each(function (idx, category) {
       initCategory(category);

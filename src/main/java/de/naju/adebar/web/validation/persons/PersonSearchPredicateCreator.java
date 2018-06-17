@@ -2,6 +2,7 @@ package de.naju.adebar.web.validation.persons;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
+import de.naju.adebar.app.persons.search.PersonSearchServer;
 import de.naju.adebar.model.core.Email;
 import de.naju.adebar.model.core.PhoneNumber;
 import de.naju.adebar.model.persons.PersonId;
@@ -18,19 +19,58 @@ import org.springframework.stereotype.Service;
  * Service to create database query predicates for searches
  *
  * @author Rico Bergmann
- * @deprecated the {@link de.naju.adebar.app.search.persons.PersonSearchServer} should be used
- *     instead
+ * @deprecated the {@link PersonSearchServer} should be used instead
  */
 @Service
 @Deprecated
 public class PersonSearchPredicateCreator {
 
-  private static final QPerson person = QPerson.person;
+  /**
+   * Service to perform the actual query creation
+   *
+   * @author Rico Bergmann
+   */
+  private interface PredicateCreator {
 
+    /**
+     * Creates the predicate
+     *
+     * @param query the query
+     * @return the predicate
+     *
+     * @throws IllegalStateException if the generator is not applicable for the given type of
+     *     query
+     */
+    BooleanBuilder generatePredicate(String query);
+
+    /**
+     * Checks, whether the generator may generate a predicate from the given query. This must not
+     * always be the case, e.g. when the query is expected to be formatted in a certain way.
+     *
+     * @param query the query to check
+     * @return whether the generator works for the query
+     */
+    boolean isApplicable(String query);
+
+    /**
+     * Asserts that the given query is applicable for the query
+     *
+     * @param query the query
+     * @throws IllegalStateException if the query is not applicable
+     */
+    default void assertApplicable(String query) {
+      if (!isApplicable(query)) {
+        throw new IllegalArgumentException(String.format("%s is not applicable for query '%s'",
+            this.getClass().getSimpleName(), query));
+      }
+    }
+
+  }
+
+  private static final QPerson person = QPerson.person;
   private static final String FIRST_NAME_LAST_NAME_REGEX =
       "^(?<firstName>([a-zA-ZöÖüÜäÄß]+(\\w*-?\\w*[a-zA-ZöÖüÜäÄß])?)+) (?<lastName>(von |zu )?([a-zA-ZöÖüÜäÄß]+(\\s*(-\\s*)?[a-zA-ZöÖüÜäÄß]+)?)+)$";
   private static final String NAME_REGEX = "^([a-zA-ZöÖüÜäÄß]+(\\s*(-\\s*)?[a-zA-ZöÖüÜäÄß]+)?)+$";
-
   private final List<PredicateCreator> predicateCreators;
 
   public PersonSearchPredicateCreator() {
@@ -86,49 +126,6 @@ public class PersonSearchPredicateCreator {
     }
 
     return predicate;
-  }
-
-
-  /**
-   * Service to perform the actual query creation
-   *
-   * @author Rico Bergmann
-   */
-  private interface PredicateCreator {
-
-    /**
-     * Creates the predicate
-     *
-     * @param query the query
-     * @return the predicate
-     *
-     * @throws IllegalStateException if the generator is not applicable for the given type of
-     *     query
-     */
-    BooleanBuilder generatePredicate(String query);
-
-    /**
-     * Checks, whether the generator may generate a predicate from the given query. This must not
-     * always be the case, e.g. when the query is expected to be formatted in a certain way.
-     *
-     * @param query the query to check
-     * @return whether the generator works for the query
-     */
-    boolean isApplicable(String query);
-
-    /**
-     * Asserts that the given query is applicable for the query
-     *
-     * @param query the query
-     * @throws IllegalStateException if the query is not applicable
-     */
-    default void assertApplicable(String query) {
-      if (!isApplicable(query)) {
-        throw new IllegalArgumentException(String.format("%s is not applicable for query '%s'",
-            this.getClass().getSimpleName(), query));
-      }
-    }
-
   }
 
   /**

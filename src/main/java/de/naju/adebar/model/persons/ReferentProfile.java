@@ -1,5 +1,9 @@
 package de.naju.adebar.model.persons;
 
+import de.naju.adebar.model.persons.events.PersonDataUpdatedEvent;
+import de.naju.adebar.model.persons.qualifications.ExistingQualificationException;
+import de.naju.adebar.model.persons.qualifications.Qualification;
+import de.naju.adebar.util.Maps2;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -12,10 +16,6 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.MapKey;
 import org.springframework.util.Assert;
-import de.naju.adebar.model.persons.events.PersonDataUpdatedEvent;
-import de.naju.adebar.model.persons.qualifications.ExistingQualificationException;
-import de.naju.adebar.model.persons.qualifications.Qualification;
-import de.naju.adebar.util.Maps;
 
 /**
  * Referents are persons who can give lectures or host field trips and the like.
@@ -54,14 +54,13 @@ public class ReferentProfile extends AbstractProfile {
   ReferentProfile(Person person, Collection<Qualification> qualifications) {
     Assert.notNull(person, "Id may not be null");
     this.personId = person.getId();
-    this.qualifications = Maps.fromCollection(qualifications, Qualification::getName);
+    this.qualifications = Maps2.fromCollection(qualifications, Qualification::getName);
     provideRelatedPerson(person);
   }
 
   /**
    * Private constructor just for JPA's sake
    */
-  @SuppressWarnings("unused")
   private ReferentProfile() {}
 
   /**
@@ -91,6 +90,7 @@ public class ReferentProfile extends AbstractProfile {
   /**
    * @param qualification the qualification to apply to the person
    * @return the updated profile
+   *
    * @throws IllegalArgumentException if the qualification is {@code null}
    * @throws ExistingQualificationException if the referent already has such a qualification
    */
@@ -110,6 +110,7 @@ public class ReferentProfile extends AbstractProfile {
   /**
    * @param qualification the qualification to withdraw
    * @return the updated profile
+   *
    * @throws IllegalArgumentException if the referent does not have such a qualification
    */
   public ReferentProfile removeQualification(Qualification qualification) {
@@ -134,26 +135,8 @@ public class ReferentProfile extends AbstractProfile {
   /**
    * @param personId the ID of the person to whom this profile belongs.
    */
-  @SuppressWarnings("unused")
   private void setPersonId(PersonId personId) {
     this.personId = personId;
-  }
-
-  /*
-   * (non-Javadoc)
-   *
-   * @see java.lang.Object#equals(Object)
-   */
-  @Override
-  public boolean equals(Object o) {
-    if (this == o)
-      return true;
-    if (o == null || getClass() != o.getClass())
-      return false;
-
-    ReferentProfile profile = (ReferentProfile) o;
-
-    return personId.equals(profile.personId);
   }
 
   /*
@@ -164,6 +147,25 @@ public class ReferentProfile extends AbstractProfile {
   @Override
   public int hashCode() {
     return personId.hashCode();
+  }
+
+  /*
+   * (non-Javadoc)
+   *
+   * @see java.lang.Object#equals(Object)
+   */
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    ReferentProfile profile = (ReferentProfile) o;
+
+    return personId.equals(profile.personId);
   }
 
   /*

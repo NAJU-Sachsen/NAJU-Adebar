@@ -2,12 +2,18 @@ package de.naju.adebar.model.events;
 
 import com.querydsl.core.types.Predicate;
 import de.naju.adebar.infrastructure.ReadOnlyRepository;
+import de.naju.adebar.model.chapter.LocalGroup;
 import de.naju.adebar.model.persons.Person;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -16,9 +22,14 @@ import org.springframework.stereotype.Repository;
  * @author Rico Bergmann
  */
 @Repository("ro_eventRepo")
-public interface ReadOnlyEventRepository extends // 
-    ReadOnlyRepository<Event, EventId>,
-    QuerydslPredicateExecutor<Event> {
+public interface ReadOnlyEventRepository extends //
+    ReadOnlyRepository<Event, EventId>, //
+    QuerydslPredicateExecutor<Event>, //
+    PagingAndSortingRepository<Event, EventId> {
+
+  @Override
+  @NonNull
+  Optional<Event> findById(@NonNull EventId id);
 
   /**
    * @return all events ordered by their start time
@@ -30,13 +41,16 @@ public interface ReadOnlyEventRepository extends //
    * @return all events which matched the predicate
    */
   @Override
-  List<Event> findAll(Predicate predicate);
+  @NonNull
+  List<Event> findAll(@NonNull Predicate predicate);
 
   /**
    * @param time the time to query for
    * @return all events which start after the specified time
    */
   List<Event> findByStartTimeIsAfter(LocalDateTime time);
+
+  List<Event> findByStartTimeIsAfterAndParticipantsListBookedOutIsFalse(LocalDateTime time);
 
   /**
    * @param time the time to query for
@@ -83,17 +97,28 @@ public interface ReadOnlyEventRepository extends //
    * @param activist the activist to query for
    * @return all events in which the activist participated as counsellor
    */
-  Iterable<Event> findByCounselorsContains(Person activist);
+  Iterable<Event> findByOrganizationInfoCounselorsContains(Person activist);
 
   /**
    * @param activist the activist to query for
    * @return all events in which the activist participated as organizer
    */
-  Iterable<Event> findByOrganizersContains(Person activist);
+  Iterable<Event> findByOrganizationInfoOrganizersContains(Person activist);
+
+  @Query(value = "SELECT e.* FROM event e JOIN event_reservations r ON e.id = r.event_id WHERE r.id = ?1", nativeQuery = true)
+  Optional<Event> findByReservation(long id);
+
+  List<Event> findByLocalGroup(LocalGroup localGroup);
 
   /**
    * @return all persisted events as a stream
    */
   @Query("select e from event e")
   Stream<Event> streamAll();
+
+  Page<Event> findAllPagedByEndTimeIsBeforeOrderByStartTime(LocalDateTime time,
+      Pageable pageable);
+
+  Page<Event> findAllPagedByEndTimeIsAfterOrderByStartTime(LocalDateTime time, Pageable pageable);
+
 }

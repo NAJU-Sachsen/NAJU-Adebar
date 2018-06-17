@@ -1,0 +1,2032 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta th:name="_csrf" th:value="${_csrf.token}"/>
+  <title>Bergwiesencamp | Adebar</title>
+  <link rel="stylesheet" type="text/css" href="../../static/resources/css/bootstrap.min.css"
+        th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+  <link rel="stylesheet" href="../../static/resources/css/bootstrap-select.min.css"
+        th:href="@{/resources/css/bootstrap-select.min.css}"/>
+
+  <link rel="stylesheet" type="text/css" href="../../static/resources/css/style.css"
+        th:href="@{/resources/css/style.css}"/>
+</head>
+<body>
+
+<!--/*@thymesVar id="event" type="de.naju.adebar.model.events.Event"*/-->
+<!--/*@thymesVar id="participationReport" type="de.naju.adebar.web.model.events.participation.ParticipationReport"*/-->
+<!--/*@thymesVar id="#time" type="de.naju.adebar.infrastructure.thymeleaf.TimeFormatter"*/-->
+<!--/*@thymesVar id="#email" type="de.naju.adebar.infrastructure.thymeleaf.EmailFormatter"*/-->
+<!--/*@thymesVar id="processingService" type="de.naju.adebar.app.events.processing.EventDataProcessingService"*/-->
+<!--/*@thymesVar id="addParticipants" type="de.naju.adebar.web.validation.events.participation.AddParticipantsForm"*/-->
+<!--/*@thymesVar id="editParticipantForm" type="de.naju.adebar.web.validation.events.participation.AddParticipantsForm.AddParticipantForm"*/-->
+<!--/*@thymesVar id="addReservationForm" type="de.naju.adebar.web.validation.events.participation.ReservationForm"*/-->
+<!--/*@thymesVar id="editReservationForm" type="de.naju.adebar.web.validation.events.participation.ReservationForm"*/-->
+<!--/*@thymesVar id="applyWaitingListEntryForm" type="de.naju.adebar.web.validation.events.participation.AddParticipantsForm.AddParticipantForm"*/-->
+
+<!-- central navigation -->
+<nav th:replace="navigation :: topNav(page='events')"></nav>
+
+<!-- page specific content-->
+<main id="main">
+
+  <a href="overview.html">
+    <span class="glyphicon glyphicon-chevron-left"></span>
+    Zurück zur Übersicht
+  </a>
+
+  <h1>Bergwiesencamp
+    <small>(28.07. - 11.08.18)</small>
+  </h1>
+
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active">
+      <a href="#overview" class="tab-controller" aria-controls="general" role="tab"
+         data-toggle="tab">Übersicht</a>
+    </li>
+    <li role="presentation">
+      <a href="#participants" class="tab-controller" aria-controls="participants"
+         role="tab" data-toggle="tab">Teilnehmende</a>
+    </li>
+    <li role="presentation">
+      <a href="#organization" class="tab-controller" aria-controls="organization" role="tab"
+         data-toggle="tab">
+        Organisation
+      </a>
+    </li>
+    <li role="presentation">
+      <a href="#accommodation" class="tab-controller" aria-controls="accommodation" role="tab"
+         data-toggle="tab">Unterbringung</a>
+    </li>
+  </ul>
+
+  <article class="tab-content">
+
+    <!-- participants -->
+    <div id="participants-list" class="tab-pane active container-fluid" role="tabpanel">
+
+
+      <section id="content" class="display-category" th:fragment="list"
+               th:with="participantsList = ${event.participantsList}">
+
+        <!-- the header -->
+        <div class="row category-header category-menu">
+
+          <h2 class="col-md-5 category-title" id="participants">
+            Teilnehmende
+            <button type="button" class="btn btn-link btn-inline margin-left"
+                    id="toggle-all-participants"
+                    th:if="${param.view != null and param.view[0] == 'detailed'} and ${participantsList.hasParticipants()}">
+              alle ein-/ausklappen
+            </button>
+
+          </h2>
+
+          <!-- failed participations -->
+          <div class="modal fade" id="failed-participations"
+               th:if="${participationReport != null and participationReport.failed}">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h3 class="modal-title">Da ist was schief gegangen...</h3>
+                </div>
+                <div class="modal-body">
+                  <p>
+                    Einige Teilnehmende konnten nicht hinzugefügt werden.
+                    Eventuell ist in der ausgewählten Zeit kein passender Platz mehr frei oder
+                    der/die Teilnehmende ist noch zu jung.
+                  </p>
+                  <p>
+                    Beachte bitte auch, dass <strong>Teilnehmende, für die kein Geschlecht angegeben
+                    ist, nie in Betten eingeteilt werden können, wenn die Unterbringung näher
+                    spezifiziert ist.</strong>
+                  </p>
+
+                  <form id="add-failed-participants" class="panel panel-danger" method="post"
+                        th:action="@{/events/{id}/participants/add/ignore-age(id=${event.id})}">
+                    <div class="panel-heading">
+                      <h4 class="panel-title">Betroffene Personen:</h4>
+                    </div>
+                    <ul class="list-group list-group-hover" th:remove="all-but-first">
+                      <li class="list-group-item" th:inline="text"
+                          th:each="entry : ${participationReport.failedParticipations}">
+                        [[${entry.participant.name}]]
+                        <small class="margin-left" th:if="${entry.result.name() == 'TOO_YOUNG'}">
+                          <span class="glyphicon glyphicon-baby-formula"></span>
+                          zu jung
+                        </small>
+                        <small class="margin-left" th:if="${entry.result.name() == 'BOOKED_OUT'}">
+                          <span class="glyphicon glyphicon-bed"></span>
+                          kein Platz
+                        </small>
+                        <div class="pull-right" th:if="${entry.result.name() == 'TOO_YOUNG'}">
+                          <div class="checkbox-inline">
+                            <label>
+                              <input type="checkbox"
+                                     id="toggle-include-failed-participant-123435465765"
+                                     th:id="|toggle-include-failed-participant-${entry.participant.id}|"/>
+                              trotzdem hinzufügen
+                            </label>
+                          </div>
+                          <div
+                              th:attrappend="data-controlled-by=|#toggle-include-failed-participant-${entry.participant.id}|">
+                            <input type="hidden" name="additionalParticipants"
+                                   th:value="${entry.participant.id}"/>
+                            <input type="hidden" name="additionalFormSent"
+                                   th:value="${entry.registrationInfo.formSent}"/>
+                            <input type="hidden" name="additionalFormFilled"
+                                   th:value="${entry.registrationInfo.formFilled}"/>
+                            <input type="hidden" name="additionalFeePayed"
+                                   th:value="${entry.registrationInfo.feePayed}"/>
+                            <input type="hidden" name="additionalArrival"
+                                   th:value="${entry.registrationInfo.arrival}"/>
+                            <input type="hidden" name="additionalDeparture"
+                                   th:value="${entry.registrationInfo.departure}"/>
+                            <input type="hidden" name="additionalMayGoHomeSingly"
+                                   th:value="${entry.registrationInfo.mayGoHomeSingly}"/>
+                            <input type="hidden" name="additionalFirstNight"
+                                   th:value="${entry.registrationInfo.firstNight}"/>
+                            <input type="hidden" name="additionalLastNight"
+                                   th:value="${entry.registrationInfo.lastNight}"/>
+                            <input type="hidden" name="additionalRemarks"
+                                   th:value="${entry.registrationInfo.remarks}"/>
+                          </div>
+                        </div>
+                      </li>
+                      <li class="list-group-item">
+                        Heinz Dieter
+                        <small class="margin-left">
+                          <span class="glyphicon glyphicon-bed"></span>
+                          kein Platz
+                        </small>
+                      </li>
+                      <li class="list-group-item">
+                        John Doe
+                        <small class="margin-left">
+                          <span class="glyphicon glyphicon-baby-formula"></span>
+                          zu jung
+                        </small>
+                        <div class="pull-right">
+                          <div class="checkbox-inline">
+                            <label>
+                              <input type="checkbox"/>
+                              trotzdem hinzufügen
+                            </label>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </form>
+
+                  <div class="alert alert-warning">
+                    Aktuell kann die Adebar vereinzelt falsch einschätzen, ob eine Veranstaltung
+                    ausgebucht ist. Das heißt, eine Person lässt sich nicht als Teilnehmer*in
+                    hinzufügen, obwohl eigentlich noch genug Platz ist (es wird allerdings nie der
+                    Fall sein, das eine Person als Teilnehmer*in hinzugefügt werden kann, obwohl
+                    kein Platz mehr ist). Das Problem tritt auf, wenn mehrere Reserve-Zimmer oder
+                    flexible Zimmer verfügbar sind. Ich kümmere mich schnellstmöglich um eine
+                    Behebung.
+                  </div>
+
+                </div>
+                <div class="modal-footer">
+                  <button type="submit" form="add-failed-participants" class="btn btn-primary">
+                    OK
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-7">
+
+            <!-- action menu -->
+            <div class="pull-right category-menu-content"
+                 th:if="${participantsList.hasParticipants()}">
+
+              <div class="form-inline inline-block margin-right-lg"
+                   th:if="${param.view != null and param.view[0] == 'detailed'}">
+                <div class="input-group">
+                  <input type="search" class="form-control search" placeholder="Suchen..."/>
+                  <span class="input-group-addon">
+                  <span class="glyphicon glyphicon-search"></span>
+                </span>
+                </div>
+              </div>
+
+              <button type="button" class="btn btn-default btn-sm margin-right-lg"
+                      data-toggle="modal"
+                      data-target="#add-participant-dialog" th:unless="${event.bookedOut}">
+                <span class="glyphicon glyphicon-plus"></span> Hinzufügen
+              </button>
+
+              <div class="btn-group btn-group-sm margin-right-lg">
+
+                <a href="mailto:" class="btn btn-default"
+                   th:href="${#email.mailtoBcc(processingService.getParticipantEmailAddresses(event))}">
+                  <span class="glyphicon glyphicon-envelope"></span>
+                  E-Mail senden
+                </a>
+                <button type="button" class="btn btn-default dropdown-toggle"
+                        data-toggle="dropdown">
+                  <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href="mailto:"
+                       th:href="${#email.mailtoBcc(processingService.getEmailAddressesOfParticpantsWithoutSentRegistrationForm(event))}">
+                      Anmeldeformular noch nicht gesendet
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#"
+                       th:href="${#email.mailtoBcc(processingService.getEmailAddressesOfParticipantsWithoutSignedRegistrationForm(event))}">
+                      Anmeldeformular noch nicht ausgefüllt
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#"
+                       th:href="${#email.mailtoBcc(processingService.getEmailAddressesOfParticipantsWithoutPayment(event))}">
+                      Teilnahmebeitrag noch nicht überwiesen
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
+              <button type="button" class="btn btn-default btn-sm margin-right-lg"
+                      data-toggle="tooltip" data-placement="bottom"
+                      data-title="Kommt bald wieder">
+                <span class="glyphicon glyphicon-print"></span>
+                Drucken
+              </button>
+
+              <div class="btn-group btn-group-sm">
+                <a href="#" class="btn btn-default"
+                   th:href="@{/events/{id}/participants(id=${event.id}, view='condensed')}">
+                  <span class="glyphicon glyphicon-th-large"></span>
+                  Übersicht
+                </a>
+                <a href="#" type="button" class="btn btn-default"
+                   th:href="@{/events/{id}/participants(id=${event.id}, view='detailed')}">
+                  <span class="glyphicon glyphicon-list"></span>
+                  Details
+                </a>
+
+              </div>
+            </div>
+
+            <!-- add participant dialog -->
+            <div class="modal fade modal-tabbed" id="add-participant-dialog" tabindex="-1"
+                 role="dialog" th:unless="${event.bookedOut}">
+              <div class="modal-dialog modal-lg" role="document">
+                <form id="add-participant" method="post" class="modal-content"
+                      th:object="${addParticipants}"
+                      th:action="@{/events/{id}/participants/add/done(id=${event.id})}">
+
+                  <input type="hidden" name="return-action" value="add-participant"/>
+
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title">Teilnehmer*in hinzufügen</h3>
+                  </div>
+
+                  <div class="modal-body">
+                    <div class="container-fluid">
+
+                      <div class="row">
+                        <div class="jumbotron padding-md">
+                          <div class="container">
+                            <div class="row">
+                              <div class="col-md-7"
+                                   th:classappend="${param.search == null} ? 'strong'">
+                                <span class="badge">1.</span> Teilnehmende*n suchen
+                              </div>
+                              <div class="col-md-5"
+                                   th:classappend="${param.search != null} ? 'strong'">
+                                <span class="badge">2.</span> weitere Infos angeben
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+
+                        <!-- person search -->
+                        <div class="col-md-8">
+
+                          <div class="container-fluid person-search-container">
+                            <div class="row">
+                              <div class="col-md-4 no-margin-btm margin-top">
+                                <label for="participant-search" class="control-label">
+                                  Person suchen:
+                                </label>
+                              </div>
+                              <div class="col-md-6">
+                                <input type="search"
+                                       class="form-control" id="participant-search"
+                                       name="person-search-query"
+                                       placeholder="Name, E-Mail, Telefon od. Adresse"
+                                       th:value="${param.do != null and param.do[0] == 'add-participant'} ? ${param.search}"/>
+                              </div>
+                              <div class="col-md-2">
+                                <button type="submit" class="btn btn-primary"
+                                        formmethod="post"
+                                        th:formaction="@{/events/{id}/participants/search(id=${event.id})}">
+                                  Los
+                                </button>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <p class="col-md-12 help-block">
+                                Es kann sein, dass die Suche aktuell Probleme mit Umlauten hat.
+                                In so einem Fall bitte einfach nur den Vornamen oder Nachnamen
+                                verwenden.
+                              </p>
+                            </div>
+                            <hr/>
+                            <div class="panel panel-default"
+                                 th:if="${param.do != null and param.do[0] == 'add-participant' and matchingPersons != null and not matchingPersons.empty and newPerson == null}">
+                              <div class="panel-heading">
+                                <h5 class="panel-title">Ergebnisse</h5>
+                              </div>
+                              <ul class="list-group">
+                                <li class="list-group-item"
+                                    th:each="match : ${matchingPersons}" th:inline="text">
+                                  <div class="radio">
+                                    <label>
+                                      <input type="radio" name="participant"
+                                             th:value="${match.id}"/>
+                                      [[${match.name}]]
+                                      <small>[[${match.email}]] [[${match.phoneNumber}]]</small>
+                                    </label>
+                                  </div>
+                                </li>
+                                <li class="list-group-item">
+                                  <a href="../persons/addPerson.html?return-action=add-participant&return-to=../events/participants.html"
+                                     th:href="@{/persons/add(return-action='add-participant', return-to='/events/' + ${event.id} + '/participants')}">
+                                    <span class="glyphicon glyphicon-plus margin-left"></span>
+                                    Person erstellen
+                                  </a>
+                                </li>
+                              </ul>
+                            </div>
+
+                            <!-- no search -->
+                            <div class="alert alert-info"
+                                 th:unless="${param.do != null and param.do[0] == 'add-participant' and (matchingPersons != null or newPerson != null)}">
+                              Bitte nach der gewünschten Person suchen
+                            </div>
+
+                            <!-- returned from adding a new person -->
+                            <div class="panel panel-default"
+                                 th:if="${param.do != null and param.do[0] == 'add-participant' and matchingPersons == null and newPerson != null}">
+                              <div class="panel-heading">
+                                <h5 class="panel-title">Ergebnisse</h5>
+                              </div>
+                              <ul class="list-group">
+                                <li class="list-group-item" th:inline="text">
+                                  <div class="radio">
+                                    <label>
+                                      <input type="radio" name="participant" checked="checked"
+                                             th:value="${newPerson.id}"/>
+                                      [[${newPerson.name}]]
+                                      <small>
+                                        [[${newPerson.email}]] [[${newPerson.phoneNumber}]]
+                                      </small>
+                                    </label>
+                                  </div>
+                                </li>
+                              </ul>
+                            </div>
+
+                            <!-- no matches -->
+                            <div class="alert alert-info"
+                                 th:if="${param.do != null and param.do[0] == 'add-participant' and matchingPersons != null  and matchingPersons.empty}">
+                              <p>
+                                Keine Übereinstimmungen
+                              </p>
+                              <a href="../persons/addPerson.html?return-action=add-participant&return-to=../events/participants.html"
+                                 th:href="@{/persons/add(return-action='add-participant', return-to='/events/' + ${event.id} + '/participants')}">
+                                <span class="glyphicon glyphicon-arrow-right"></span>
+                                Person erstellen
+                              </a>
+
+                            </div>
+
+                          </div>
+
+                        </div>
+
+                        <!-- registration info -->
+                        <div class="col-md-4 modal-body-column">
+                          <div class="form-group margin-top-lg">
+
+                            <label for="new-participant-form-and-fee" class="control-label">
+                              Anmeldeformular
+                            </label>
+
+                            <div id="new-participant-form-and-fee">
+
+                              <div class="checkbox">
+                                <label>
+                                  <input type="checkbox" checked="checked"
+                                         data-controlled-by="#new-participant-form-filled"
+                                         data-invert-control="true" th:field="*{formSent}"/>
+                                  Anmeldeformular versendet
+                                </label>
+                              </div>
+                              <div class="checkbox">
+                                <label>
+                                  <input type="checkbox" id="new-participant-form-filled"
+                                         th:field="*{formFilled}"/>
+                                  Anmeldeformular ausgefüllt
+                                </label>
+                              </div>
+                              <div class="checkbox">
+                                <label>
+                                  <input type="checkbox" th:field="*{feePayed}"/>
+                                  Teilnahmebeitrag bezahlt
+                                </label>
+                              </div>
+                            </div>
+
+                          </div>
+                          <div class="form-group">
+                            <label for="new-participant-arrival" class="control-label">
+                              Anreise
+                            </label>
+                            <div>
+                              <select class="selectpicker" id="new-participant-arrival"
+                                      th:remove="all-but-first" th:field="*{arrival}">
+                                <option th:each="opt : ${event.participationInfo.arrivalOptions}"
+                                        th:value="${opt.description}" th:text="${opt.description}">
+                                  gemeinsam ab DD
+                                </option>
+                                <option>gemeinsam ab C</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label for="new-participant-departure" class="control-label">
+                              Abreise
+                            </label>
+                            <div>
+                              <select class="selectpicker" id="new-participant-departure"
+                                      th:remove="all-but-first" th:field="*{departure}">
+                                <option th:each="opt : ${event.participationInfo.arrivalOptions}"
+                                        th:value="${opt.description}" th:text="${opt.description}">
+                                  gemeinsam nach DD
+                                </option>
+                                <option>gemeinsam nach C</option>
+                              </select>
+                            </div>
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" th:field="*{mayGoHomeSingly}"/> darf alleine
+                                nach Hause
+                              </label>
+                            </div>
+                          </div>
+
+                          <div th:if="${event.participationInfo.flexibleParticipationTimesEnabled}">
+                            <hr/>
+
+                            <div class="form-group">
+                              <label for="new-participant-participation-start-time"
+                                     class="control-label">
+                                Erste Übernachtung
+                              </label>
+                              <input type="date" class="form-control"
+                                     id="new-participant-participation-start-time"
+                                     th:field="*{firstNight}"
+                                     th:min="${#temporals.format(event.startTime, 'yyyy-MM-dd')}"
+                                     th:max="${#temporals.format(event.endTime.minusDays(1), 'yyyy-MM-dd')}"/>
+                            </div>
+                            <div class="form-group">
+                              <label for="new-participant-participation-end-time"
+                                     class="control-label">
+                                Letzte Übernachtung
+                              </label>
+                              <input type="date" class="form-control"
+                                     id="new-participant-participation-end-time"
+                                     th:min="${#temporals.format(event.startTime, 'yyyy-MM-dd')}"
+                                     th:max="${#temporals.format(event.endTime.minusDays(1), 'yyyy-MM-dd')}"
+                                     th:field="*{lastNight}"/>
+                            </div>
+                          </div>
+
+                          <hr/>
+                          <div class="form-group">
+                            <label for="new-participant-remarks" class="control-label">
+                              Sonstiges
+                            </label>
+                            <textarea class="form-control" id="new-participant-remarks"
+                                      placeholder="Was ist sonst noch für *diese* Teilnahme wichtig?"
+                                      th:field="*{remarks}"></textarea>
+                          </div>
+
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="modal-footer">
+                    <div class="container-fluid">
+                      <div class="row">
+                        <div class="col-md-6 modal-footer-text" th:if="*{hasParticipants()}">
+                          Neue Teilnehmende:
+                          <div class="inline" th:remove="all-but-first">
+                            <div class="inline-block" th:each="newParticipant : *{participants}">
+                              <div class="label label-default margin-right-sm new-participant"
+                                   th:inline="text">
+                                [[${newParticipant.participant.name}]]
+                                <input type="hidden" name="additionalParticipants"
+                                       th:value="${newParticipant.participant.id}"/>
+                                <input type="hidden" name="additionalFormSent"
+                                       th:value="${newParticipant.formSent}"/>
+                                <input type="hidden" name="additionalFormFilled"
+                                       th:value="${newParticipant.formFilled}"/>
+                                <input type="hidden" name="additionalFeePayed"
+                                       th:value="${newParticipant.feePayed}"/>
+                                <input type="hidden" name="additionalArrival"
+                                       th:value="${newParticipant.arrival}"/>
+                                <input type="hidden" name="additionalDeparture"
+                                       th:value="${newParticipant.departure}"/>
+                                <input type="hidden" name="additionalMayGoHomeSingly"
+                                       th:value="${newParticipant.mayGoHomeSingly}"/>
+                                <input type="hidden" name="additionalFirstNight"
+                                       th:value="${newParticipant.firstNight}"/>
+                                <input type="hidden" name="additionalLastNight"
+                                       th:value="${newParticipant.lastNight}"/>
+                                <input type="hidden" name="additionalRemarks"
+                                       th:value="${newParticipant.remarks}"/>
+                                <button type="button" class="btn btn-link new-participant-remove">
+                                  <span class="glyphicon glyphicon-remove-sign"></span>
+                                </button>
+                              </div>
+                            </div>
+                            <div class="inline-block">
+                              <div class="label label-default margin-right-sm new-participant">
+                                Jane Doe
+                                <button type="button" class="btn btn-link new-participant-remove">
+                                  <span class="glyphicon glyphicon-remove-sign"></span>
+                                </button>
+                              </div>
+                            </div>
+                            <div class="inline-block">
+                              <div class="label label-default margin-right-sm new-participant">
+                                Hans Wurst
+                                <button type="button" class="btn btn-link new-participant-remove">
+                                  <span class="glyphicon glyphicon-remove-sign"></span>
+                                </button>
+                              </div>
+                            </div>
+                            <div class="inline-block">
+                              <div class="label label-default margin-right-sm new-participant">
+                                Franzi Freundlich
+                                <button type="button" class="btn btn-link new-participant-remove">
+                                  <span class="glyphicon glyphicon-remove-sign"></span>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+
+                        </div>
+
+
+                        <div class="col-md-6"
+                             th:classappend="not *{hasParticipants()} ? 'col-md-offset-6'">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">
+                            Abbrechen
+                          </button>
+
+                          <button type="submit" form="add-participant"
+                                  th:formaction="@{/events/{id}/participants/add/continue(id=${event.id})}"
+                                  class="btn btn-default">
+                            Weitere*n hinzufügen
+                          </button>
+
+                          <button type="submit" form="add-participant" class="btn btn-primary">
+                            Hinzufügen
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </form>
+
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <a href="#reservations-waiting-list" class="margin-left">
+              <span class="glyphicon glyphicon-arrow-right"></span>
+              zu Reservierungen + Warteliste
+            </a>
+          </div>
+        </div>
+
+        <div class="margin-top-lg">
+
+          <!-- participants overview -->
+          <div class="sub-category" id="participants-reservations-waiting-list"
+               th:if="${param.view == null or param.view[0] == 'condensed'} and ${participantsList.hasParticipants()}">
+
+            <section class="row" id="participants-overview">
+
+              <div class="col-md-12">
+                <div class="table-responsive">
+                  <table class="table table-striped table-hover">
+                    <thead>
+                    <tr class="row">
+                      <th class="col-md-2">Name</th>
+                      <th class="col-md-1">Alter im Camp</th>
+                      <th class="col-md-1" th:unless="${participantsList.hasAccommodationInfo()}">
+                        Wohnort
+                      </th>
+                      <th class="col-md-1">Anreise</th>
+                      <th class="col-md-1">Formular versendet?</th>
+                      <th class="col-md-1">Formular ausgefüllt?</th>
+                      <th class="col-md-1">TNB bezahlt?</th>
+                      <th class="col-md-1" th:if="${participantsList.hasAccommodationInfo()}">
+                        Teilnahmezeitraum
+                      </th>
+                      <th class="col-md-3">Bemerkungen</th>
+                      <th class="col-md-1"></th>
+                    </tr>
+                    </thead>
+                    <tbody th:remove="all-but-first">
+                    <tr class="row participant-info" th:each="participant : ${participantsList}"
+                        th:with="participationDetails = ${participantsList.getParticipationDetailsFor(participant)}"
+                        th:attrappend="data-participant=${participant.id}">
+                      <td th:inline="text"
+                          th:classappend="${not participant.hasOwnOrParentsEmail()} ? 'text-danger'">
+                        [[${participant.name}]]
+                        <small th:unless="${participant.hasOwnOrParentsEmail()}"
+                               data-toggle="tooltip"
+                               data-placement="bottom" data-container="body"
+                               data-title="Weder für den/die Teilnehmende, noch für die Eltern ist eine E-Mail Addresse hinterlegt. E-Mails werden an ihn/sie nicht versendet werden!">
+                          <span class="glyphicon glyphicon-warning-sign"></span>
+                        </small>
+
+                        <small class="text-warning"
+                               th:if="${participant.participantProfile.hasBirthDayWithin(event.startTime.toLocalDate(), event.endTime.toLocalDate())}"
+                               data-toggle="tooltip" data-placement="bottom" data-container="body"
+                               data-title="Geburtstag während des Camps!">
+                          <span class="glyphicon glyphicon-gift"></span>
+                        </small>
+
+                      </td>
+                      <td th:text="${participant.participantProfile.hasDateOfBirth()} ? ${participant.participantProfile.calculateAge()} : ''">
+                        22.11.1999
+                      </td>
+                      <td th:unless="${participantsList.hasAccommodationInfo()}"
+                          th:text="${participant.address.city} ?: 'unbekannt'">
+                        Entenhausen
+                      </td>
+                      <td class="arrival"
+                          th:attrappend="data-arrival-option=${participationDetails.arrivalOption}"
+                          th:text="${participationDetails.arrivalOption} ?: 'keine Angabe'">ab
+                        Dresden
+                      </td>
+                      <td class="form-sent text-center"
+                          th:attrappend="data-form-sent=${participationDetails.registrationFormSent}">
+                        <span class="glyphicon glyphicon-ok text-success"
+                              th:if="${participationDetails.registrationFormSent}"></span>
+                        <span class="glyphicon glyphicon-remove text-danger"
+                              th:unless="${participationDetails.registrationFormSent}"></span>
+                      </td>
+                      <td class="form-filled text-center"
+                          th:attrappend="data-form-filled=${participationDetails.registrationFormFilled}">
+                        <span class="glyphicon glyphicon-ok text-success"
+                              th:if="${participationDetails.registrationFormFilled}"></span>
+                        <span class="glyphicon glyphicon-remove text-danger"
+                              th:unless="${participationDetails.registrationFormFilled}"></span>
+                      </td>
+                      <td class="fee-payed text-center"
+                          th:attrappend="data-fee-payed=${participationDetails.participationFeePayed}">
+                        <span class="glyphicon glyphicon-ok text-success"
+                              th:if="${participationDetails.participationFeePayed}"></span>
+                        <span class="glyphicon glyphicon-remove text-danger"
+                              th:unless="${participationDetails.participationFeePayed}"></span>
+                      </td>
+                      <td class="participation-time"
+                          th:if="${event.participationInfo.flexibleParticipationTimesEnabled}"
+                          th:text="${#time.formatTimeSpan(event.startTime, participationDetails.participationTime)}"
+                          th:attrappend="data-first-night=${#time.formatNightAsHtml(event.startTime, participationDetails.participationTime.firstNight)}, data-last-night=${#time.formatNightAsHtml(event.startTime, participationDetails.participationTime.lastNight)}">
+                        28.07. - 04.08.18
+                      </td>
+                      <td class="remarks" th:text="${participationDetails.remarks}">
+                        Lorem Ipsum et dolor sit amet
+                      </td>
+                      <td>
+                        <div class="btn-group btn-group-xs">
+                          <a href="../persons/personDetails.html" class="btn btn-default"
+                             data-toggle="tooltip" data-title="Profil anzeigen"
+                             data-placement="bottom"
+                             data-container="body" th:href="@{/persons/{id}(id=${participant.id})}">
+                            <span class="glyphicon glyphicon-new-window"></span>
+                          </a>
+                          <span class="btn btn-default" data-toggle="tooltip"
+                                data-title="Bearbeiten"
+                                data-placement="bottom"
+                                data-container="body" style="height: 22px;">
+                            <button class="btn btn-no-style" data-toggle="modal"
+                                    data-target="#edit-participant-dialog">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                          </span>
+                        </div>
+                        <div class="departure go-home-singly hidden"
+                             th:attrappend="data-departure-option=${participationDetails.departureOption}, data-go-home-singly=${participationDetails.mayGoHomeSingly}"></div>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+
+                </div>
+
+              </div>
+
+            </section>
+
+          </div>
+
+          <!-- details view -->
+          <div class="row participants-details-list sub-category" id="participants-details"
+               th:if="${param.view != null and param.view[0] == 'detailed'} and ${participantsList.hasParticipants()}">
+
+            <div class="col-md-6 participant-details" th:each="participant : ${participantsList}">
+
+              <div class="panel panel-default panel-border-strong panel-highlight participant-info"
+                   th:attrappend="data-participant=${participant.id}">
+
+                <div class="panel-heading">
+                  <h3 class="panel-title collapse-toggler participant-name" th:inline="text"
+                      data-toggle="collapse"
+                      data-target="#participant-details-12345" aria-expanded="true"
+                      th:attr="data-target=|#participant-details-${participant.id}|">
+                    [[${participant.name}]]
+                    <span class="glyphicon glyphicon-wrench" data-toggle="tooltip"
+                          data-placement="bottom" data-title="Aktive*r" data-container="body"
+                          th:if="${participant.activist}"></span>
+                    <span class="glyphicon glyphicon-blackboard" data-toggle="tooltip"
+                          data-placement="bottom" data-title="Referent*in" data-container="body"
+                          th:if="${participant.referent}"></span>
+                    <span class="glyphicon glyphicon-briefcase" data-toggle="tooltip"
+                          data-placement="bottom" data-title="Geschäftskontakt"
+                          data-container="body"
+                          th:if="false"></span>
+                    <span class="glyphicon glyphicon-baby-formula" data-toggle="tooltip"
+                          data-placement="bottom" data-title="Elternteil" data-container="body"
+                          th:if="false"></span>
+                  </h3>
+                </div>
+
+                <div class="collapse in participant-details-content" id="participant-details-12345"
+                     th:id="|participant-details-${participant.id}|">
+
+                  <!-- person and participant details -->
+                  <div class="table-responsive">
+                    <table class="table">
+                      <thead></thead>
+                      <tbody>
+                      <tr class="row">
+                        <th class="col-md-3">
+                          <span class="glyphicon glyphicon-envelope"></span>
+                          E-Mail
+                        </th>
+                        <td class="col-md-9"
+                            th:classappend="${not participant.hasOwnOrParentsEmail()} ? 'text-danger'">
+                          <a href="mailto:jane.doe@mail.com"
+                             th:href="|mailto:${participant.ownOrParentsEmail}|"
+                             th:text="${participant.ownOrParentsEmail}"
+                             th:if="${participant.ownOrParentsEmail}">jane.doe@mail.com</a>
+                          <span th:unless="${participant.hasOwnOrParentsEmail()}"
+                                data-toggle="tooltip"
+                                data-placement="bottom" data-container="body"
+                                data-title="Weder für den/die Teilnehmende, noch für die Eltern ist eine E-Mail Addresse hinterlegt. E-Mails werden an ihn/sie nicht versendet werden!">
+                          keine Angabe
+                          <span class="glyphicon glyphicon-warning-sign"></span>
+                        </span>
+                        </td>
+                      </tr>
+                      <tr class="row">
+                        <th class="col-md-3">
+                          <span class="glyphicon glyphicon-phone"></span>
+                          Telefon (privat)
+                        </th>
+                        <td class="col-md-9" th:text="${participant.phoneNumber} ?: 'keine Angabe'">
+                          01234 567890
+                        </td>
+                      </tr>
+                      <tr class="row">
+                        <th class="col-md-3">
+                          <span class="glyphicon glyphicon-home"></span>
+                          Adresse
+                        </th>
+                        <td class="col-md-9 participant-address"
+                            th:with="address = ${participant.address}"
+                            th:inline="text">
+                          [[${address != null AND NOT address.empty()} ? |${address.street}
+                          ${address.zip}
+                          ${address.city}| : 'keine Angabe']]
+                          <small th:if="${NOT address.empty()}">(
+                            <a href="http://www.openstreetmap.org/search?query=Hauptstraße 3, 09876 Entenhausen"
+                               th:href="${address} ? |https://www.openstreetmap.org/search?query=${address.street} ${address.zip} ${address.city}|">
+                              <span class="glyphicon glyphicon-map-marker"></span>
+                              wo ist das?
+                            </a>)
+                          </small>
+                        </td>
+                      </tr>
+                      </tbody>
+
+                      <tbody th:with="participantProfile = ${participant.participantProfile}">
+                      <tr class="row">
+                        <th class="col-md-3">
+                          <span class="glyphicon glyphicon-calendar"></span> Geburtsdatum
+                        </th>
+                        <td class="col-md-9" th:inline="text"
+                            th:classappend="${participant.participantProfile.hasBirthDayWithin(event.startTime.toLocalDate(), event.endTime.toLocalDate())} ? 'text-warning'">
+                          [[${participantProfile.hasDateOfBirth()} ?
+                          ${{participantProfile.dateOfBirth}} : 'keine Angabe']]
+
+                          <small th:if="${participantProfile.hasDateOfBirth()}">
+                            (Alter im Camp:
+                            [[${participantProfile.calculateAgeOn(event.startTime.toLocalDate())}]])
+                          </small>
+
+                          <small data-toggle="tooltip" data-placement="bottom" data-container="body"
+                                 data-title="Geburtstag während des Camps!"
+                                 th:if="${participant.participantProfile.hasBirthDayWithin(event.startTime.toLocalDate(), event.endTime.toLocalDate())}">
+                            <span class="glyphicon glyphicon-gift"></span>
+                          </small>
+
+                        </td>
+                      </tr>
+                      <tr class="row">
+                        <th class="col-md-3 participant-eating-habit">
+                          <span class="glyphicon glyphicon-cutlery"></span> Ernährung
+                        </th>
+                        <td class="col-md-9"
+                            th:text="${participantProfile.eatingHabits} ?: 'konventionell'">
+                          vegetarisch, vegan und mit vieeel Fleisch
+                        </td>
+                      </tr>
+                      <tr class="row">
+                        <th class="col-md-3">
+                          <span class="glyphicon glyphicon-bed"></span> Allergien
+                        </th>
+                        <td class="col-md-9" th:text="${participantProfile.healthImpairments}">
+                          Schnupfen, Husten und ganz viele Auas
+                        </td>
+                      </tr>
+                      <tr class="row">
+                        <th class="col-md-3">
+                          <span class="glyphicon glyphicon-tree-deciduous"></span>
+                          NABU-Mitgliedschaft
+                        </th>
+                        <td class="col-md-9">
+                          <span th:if="${participantProfile.nabuMembershipUnknown}">unbekannt</span>
+                          <div th:unless="${participantProfile.nabuMembershipUnknown}">
+                            <span th:if="${participantProfile.nabuMember}" th:inline="text"
+                                  th:with="nabu = ${participantProfile.nabuMembership}">
+                              ja (Mitgliedsnummer [[${nabu.hasMembershipNumber()} ? ${nabu.membershipNumber} : 'unbekannt']])
+                            </span>
+                            <span th:unless="${participantProfile.nabuMember}">kein Mitglied</span>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr class="row">
+                        <th class="col-md-3">
+                          <span class="glyphicon glyphicon-grain"></span> Bemerkungen
+                        </th>
+                        <td class="col-md-9"
+                            th:utext="${#strings.replace( #strings.escapeXml( participantProfile.remarks ),T(java.lang.System).getProperty('line.separator'),'&lt;br /&gt;')}">
+                          So Zeug
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <!-- parents -->
+                  <div th:if="${participant.hasParents()}">
+
+                    <h4 class="panel-category-title">Eltern:</h4>
+
+                    <div class="table-responsive">
+                      <table class="table">
+                        <thead>
+                        <tr class="row">
+                          <th class="col-md-3">
+                            <span class="glyphicon glyphicon-user"></span> Name
+                          </th>
+                          <th class="col-md-3">
+                            <span class="glyphicon glyphicon-phone"></span> Privat
+                          </th>
+                          <th class="col-md-3">
+                            <span class="glyphicon glyphicon-earphone"></span> Festnetz
+                          </th>
+                          <th class="col-md-3">
+                            <span class="glyphicon glyphicon-phone-alt"></span> Arbeit
+                          </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="row" th:each="parent : ${participant.parents}">
+                          <td class="col-md-3" th:inline="text">
+                            [[${parent.name}]]
+                            <a href="../persons/personDetails.html"
+                               th:href="@{/persons/{id}(id=${parent.id})}">
+                              <span class="glyphicon glyphicon-new-window"></span>
+                            </a>
+                          </td>
+                          <td class="col-md-3"
+                              th:text="${parent.phoneNumber} ?: 'keine Angabe'"></td>
+                          <td class="col-md-3"
+                              th:text="${parent.parentProfile.landlinePhone}  ?: 'keine Angabe'"></td>
+                          <td class="col-md-3"
+                              th:text="${parent.parentProfile.workPhone}  ?: 'keine Angabe'"></td>
+                        </tr>
+                        </tbody>
+                      </table>
+                    </div>
+
+                  </div>
+
+                  <!-- registration info -->
+                  <div>
+                    <div class="clearfix panel-category-title">
+                      <div class="pull-left">
+                        <h4>Teilnahme-Details</h4>
+                      </div>
+                      <div class="pull-right">
+                        <button type="button" class="btn btn-fancy btn-sm" data-toggle="modal"
+                                data-target="#edit-participant-dialog">
+                          <span class="glyphicon glyphicon-pencil"></span>
+                          Anpassen
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="table-responsive">
+                      <table class="table"
+                             th:with="participationDetails = ${participantsList.getParticipationDetailsFor(participant)}">
+                        <thead></thead>
+                        <tbody>
+                        <tr class="row">
+                          <th class="col-md-5">
+                            <span class="glyphicon glyphicon-send"></span>
+                            Anmeldedatum
+                          </th>
+                          <td class="col-md-7" th:text="${{participationDetails.registrationDate}}">
+                            10.11.2012
+                          </td>
+                        </tr>
+                        <tr class="row">
+                          <th class="col-md-5">
+                            <span class="glyphicon glyphicon-share"></span>
+                            Anmeldeformular gesendet
+                          </th>
+                          <td class="col-md-7 form-sent"
+                              th:attrappend="data-form-sent=${participationDetails.registrationFormSent}">
+                          <span class="glyphicon glyphicon-ok text-success"
+                                th:if="${participationDetails.registrationFormSent}"></span>
+                            <span class="glyphicon glyphicon-remove text-danger"
+                                  th:unless="${participationDetails.registrationFormSent}"></span>
+                          </td>
+                        </tr>
+                        <tr class="row">
+                          <th class="col-md-5">
+                            <span class="glyphicon glyphicon-edit"></span>
+                            Anmeldeformular ausgefüllt
+                          </th>
+                          <td class="col-md-7 form-filled"
+                              th:attrappend="data-form-filled=${participationDetails.registrationFormFilled}">
+                          <span class="glyphicon glyphicon-ok text-success"
+                                th:if="${participationDetails.registrationFormFilled}"></span>
+                            <span class="glyphicon glyphicon-remove text-danger"
+                                  th:unless="${participationDetails.registrationFormFilled}"></span>
+                          </td>
+                        </tr>
+                        <tr class="row">
+                          <th class="col-md-5">
+                            <span class="glyphicon glyphicon-eur"></span>
+                            Teilnahmebeitrag bezahlt
+                          </th>
+                          <td class="col-md-7 fee-payed"
+                              th:attrappend="data-fee-payed=${participationDetails.participationFeePayed}">
+                          <span class="glyphicon glyphicon-ok text-success"
+                                th:if="${participationDetails.participationFeePayed}"></span>
+                            <span class="glyphicon glyphicon-remove text-danger"
+                                  th:unless="${participationDetails.participationFeePayed}"></span>
+                          </td>
+                        </tr>
+                        <tr class="row">
+                          <th class="col-md-5">
+                            <span class="glyphicon glyphicon-plane"></span>
+                            An- und Abreise
+                          </th>
+                          <td class="col-md-7 participant-arrival-departure arrival departure go-home-singly"
+                              th:attrappend="data-arrival-option=${participationDetails.arrivalOption}, data-departure-option=${participationDetails.departureOption}, data-go-home-singly=${participationDetails.mayGoHomeSingly}"
+                              th:inline="text">
+                            von <strong>[[${participationDetails.arrivalOption}]]</strong>;
+                            nach <strong>[[${participationDetails.departureOption}]]</strong>
+                            ([[${participationDetails.mayGoHomeSingly} ? 'darf selbstständig nach
+                            Hause' : 'wird abgeholt']])
+                          </td>
+                        </tr>
+                        <tr class="row"
+                            th:if="${event.participationInfo.flexibleParticipationTimesEnabled}">
+                          <th class="col-md-5">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                            Teilnahmezeitraum
+                          </th>
+                          <td class="col-md-7 participation-time"
+                              th:attrappend="data-first-night=${#time.formatNightAsHtml(event.startTime, participationDetails.participationTime.firstNight)}, data-last-night=${#time.formatNightAsHtml(event.startTime, participationDetails.participationTime.lastNight)}"
+                              th:text="${#time.formatTimeSpan(event.startTime, participationDetails.participationTime)}">
+                            21.-27.04.18
+                          </td>
+                        </tr>
+                        <tr class="row">
+                          <th class="col-md-3">
+                            <span class="glyphicon glyphicon-grain"></span>
+                            Bermerkungen
+                          </th>
+                          <td class="col-md-9 remarks"
+                              th:utext="${#strings.replace( #strings.escapeXml( participationDetails.remarks ),T(java.lang.System).getProperty('line.separator'),'&lt;br /&gt;')}">
+                            Wichtige Infos
+                          </td>
+                        </tr>
+                        </tbody>
+                      </table>
+                    </div>
+
+                  </div>
+
+                </div>
+
+                <div class="panel-footer">
+                  <a href="../persons/personDetails.html"
+                     th:href="@{/persons/{id}(id=${participant.id})}">
+                    <span class="glyphicon glyphicon-new-window"></span> Zum Profil
+                  </a>
+                  <a href="#event-title" class="margin-left">
+                    <span class="glyphicon glyphicon-arrow-up"></span>
+                    nach oben
+                  </a>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- no participants view -->
+          <div class="row sub-category" th:unless="${participantsList.hasParticipants()}">
+            Zur Zeit gibt es noch keine Anmeldungen.
+            <div>
+              <button type="button" class="btn btn-link no-padding" data-toggle="modal"
+                      data-target="#add-participant-dialog" th:disabled="${event.bookedOut}">
+                <span class="glyphicon glyphicon-arrow-right"></span>
+                Erste Anmeldung hinzufügen
+              </button>
+            </div>
+          </div>
+
+          <!-- edit participant dialog -->
+          <div class="modal fade" id="edit-participant-dialog" tabindex="-1">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h3 class="modal-title">Anpassen</h3>
+                </div>
+
+                <div class="modal-body">
+                  <form method="post" id="edit-participant" th:object="${editParticipantForm}"
+                        th:action="@{/events/{id}/participants/update(id=${event.id})}">
+                    <input type="hidden" id="edit-participant-id" th:field="*{participant}"/>
+
+                    <div class="form-group">
+                      <label for="edit-participant-form"
+                             class="control-label">Anmeldeformular</label>
+                      <div id="edit-participant-form">
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" id="edit-participant-form-sent"
+                                   data-controlled-by="#edit-participant-form-filled"
+                                   data-invert-control="true" th:field="*{formSent}"/>
+                            Anmeldeformular versendet
+                          </label>
+                        </div>
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" id="edit-participant-form-filled"
+                                   th:field="*{formFilled}"/>
+                            Anmeldeformular ausgefüllt
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="edit-participant-fee-payed"
+                             class="control-label">Teilnahmebeitrag</label>
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" id="edit-participant-fee-payed"
+                                 th:field="*{feePayed}"/>
+                          Teilnahmebeitrag bezahlt
+                        </label>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="edit-participant-arrival" class="control-label">Anreise</label>
+                      <div>
+                        <select class="selectpicker" id="edit-participant-arrival"
+                                th:remove="all-but-first" th:field="*{arrival}">
+                          <option th:each="opt : ${event.participationInfo.arrivalOptions}"
+                                  th:value="${opt.description}" th:text="${opt.description}">Dresden
+                          </option>
+                          <option>Chemnitz</option>
+                          <option>selbstständig</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="edit-participant-departure" class="control-label">Abreise</label>
+                      <div>
+                        <select class="selectpicker" id="edit-participant-departure"
+                                th:remove="all-but-first" th:field="*{departure}">
+                          <option th:each="opt : ${event.participationInfo.arrivalOptions}"
+                                  th:value="${opt.description}" th:text="${opt.description}">Dresden
+                          </option>
+                          <option>Chemnitz</option>
+                          <option>selbstständig</option>
+                        </select>
+                      </div>
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" id="edit-participant-may-go-home-singly"
+                                 th:field="*{mayGoHomeSingly}"/>
+                          darf selbstständig nach Hause
+                        </label>
+                      </div>
+                    </div>
+
+                    <div th:if="${event.participationInfo.flexibleParticipationTimesEnabled}">
+                      <hr/>
+
+                      <div class="form-group">
+                        <label for="edit-participant-first-night" class="control-label">Erste
+                          Übernachtung</label>
+                        <input type="date" class="form-control" id="edit-participant-first-night"
+                               th:min="${#temporals.format(event.startTime, 'yyyy-MM-dd')}"
+                               th:max="${#temporals.format(event.endTime.minusDays(1), 'yyyy-MM-dd')}"
+                               th:field="*{firstNight}"/>
+                      </div>
+                      <div class="form-group">
+                        <label for="edit-participant-last-night" class="control-label">Letzte
+                          Übernachtung</label>
+                        <input type="date" class="form-control" id="edit-participant-last-night"
+                               th:min="${#temporals.format(event.startTime, 'yyyy-MM-dd')}"
+                               th:max="${#temporals.format(event.endTime.minusDays(1), 'yyyy-MM-dd')}"
+                               th:field="*{lastNight}"/>
+                      </div>
+                    </div>
+
+                    <hr/>
+
+                    <div class="form-group">
+                      <label for="edit-participant-remarks"
+                             class="control-label">Anmerkungen</label>
+                      <textarea class="form-control" id="edit-participant-remarks"
+                                placeholder="Was ist sonst noch wichtig?"
+                                th:field="*{remarks}"></textarea>
+                      <p class="help-block">
+                        Die Anmerkungen sollten sich auf diese spezifische Veranstaltungs-Teilnahme
+                        beziehen. Für allgemeine Bemerkungen gibt es ein entsprechendes Feld im
+                        Profil der/des Teilnehmenden.
+                      </p>
+                    </div>
+                  </form>
+                </div>
+
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">
+                    Verwerfen
+                  </button>
+
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-danger dropdown-toggle"
+                            data-toggle="dropdown">
+                      Abmelden
+                      <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li>
+                        <button type="submit" form="edit-participant"
+                                th:formaction="@{/events/{id}/participants/remove(id=${event.id})}">
+                          Wirklich abmelden
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <button type="submit" form="edit-participant" class="btn btn-primary">
+                    Aktualisieren
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- edit participant failed dialog -->
+          <div class="modal modal-error fade" id="edit-participant-failed-dialog"
+               tabindex="-1"
+               th:if="${#httpServletRequest.getParameter('update-participation') == 'failed'}">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-body">
+                  <p>
+                    <strong>
+                      Informationen konnten nicht aktualisiert werden, da die Person im angegebenen
+                      Zeitraum nicht untergebracht werden konnte.
+                    </strong>
+                  </p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">
+                    OK, schade
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- reservations and waiting list -->
+          <div class="row sub-category" id="reservations-waiting-list">
+            <div class="container-fluid">
+              <div class="row">
+
+                <!-- reservations -->
+                <section class="col-md-6">
+                  <h3>Reservierungen</h3>
+
+                  <!-- the reservations -->
+                  <div class="table-responsive table-border-outside"
+                       th:if="${participantsList.hasReservations()}">
+                    <table class="table table-hover">
+                      <tbody th:remove="all-but-first">
+                      <tr class="row reservation"
+                          th:each="reservation : ${participantsList.reservations}">
+                        <td class="col-md-4">
+                          <span class="glyphicon glyphicon-comment margin-right"></span>
+                          <span class="description" th:text="${reservation.description}"></span>
+                        </td>
+                        <td class="col-md-2">
+                          <span class="glyphicon glyphicon-bed margin-right"></span>
+                          <span class="slots" th:text="${reservation.numberOfSlots}"></span>
+                        </td>
+                        <td class="col-md-4">
+                          <span class="glyphicon glyphicon-envelope margin-right"></span>
+                          <a class="contact" href="mailto:" th:if="${reservation.hasContactEmail()}"
+                             th:href="|mailto:${reservation.contactEmail}|"
+                             th:text="${reservation.contactEmail}"></a>
+                          [[${reservation.hasContactEmail()} ? '' : 'keine Angabe']]
+                        </td>
+                        <td class="col-md-2">
+                          <div class="hidden">
+                            <form method="post" th:id="|delete-reservation-${reservation.id}|"
+                                  th:action="@{/events/{id}/reservations/remove(id=${event.id})}">
+                              <input type="hidden" name="reservation-id"
+                                     th:value="${reservation.id}"/>
+                            </form>
+                          </div>
+
+                          <div class="pull-right">
+                            <div class="btn-group btn-group-xs">
+                              <span class="btn btn-default" data-toggle="tooltip"
+                                    data-title="Reservierung anpassen"
+                                    data-placement="bottom"
+                                    data-container="body" style="height: 22px;">
+                                <button class="btn btn-no-style" data-toggle="modal"
+                                        data-target="#edit-reservation-dialog"
+                                        th:attrappend="data-reservation=${reservation.id}">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </button>
+                              </span>
+                              <button type="submit" class="btn btn-danger"
+                                      data-toggle="tooltip" data-placement="bottom"
+                                      data-container="body" data-title="Reservierung löschen"
+                                      th:form="|delete-reservation-${reservation.id}|">
+                                <span class="glyphicon glyphicon-trash"></span>
+                              </button>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <!-- no reservations -->
+                  <div th:unless="${participantsList.hasReservations()}">
+                    Zur Zeit gibt es keine Reservierungen.
+                    <div>
+                      <button type="button" class="btn btn-link no-padding" data-toggle="modal"
+                              data-target="#add-reservation-dialog">
+                        <span class="glyphicon glyphicon-arrow-right"></span>
+                        Reservierung erstellen
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- edit reservations menu -->
+                  <div class="clearfix margin-top-lg"
+                       th:if="${event.participantsList.hasReservations()}">
+                    <div class="pull-right">
+
+                      <div class="btn-group btn-group-sm margin-right">
+                        <button type="button" class="btn btn-default" data-toggle="modal"
+                                data-target="#add-reservation-dialog">
+                          <span class="glyphicon glyphicon-plus"></span>
+                          Hinzufügen
+                        </button>
+                        <button type="button" class="btn btn-default" data-toggle="modal"
+                                data-target="#confirm-clear-waiting-list-dialog">
+                          <span class="glyphicon glyphicon-trash"></span>
+                          Alle löschen
+                        </button>
+                      </div>
+
+                      <div class="modal fade" id="confirm-clear-reservations-dialog" tabindex="-1">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-body">
+                              <form method="post" id="confirm-clear-reservations"
+                                    th:action="@{/events/{id}/reservations/clear(id=${event.id})}">
+                                <p>
+                                  Alle Reservierungen werden gelöscht.
+                                  <strong>Dies kann nicht rückgängig gemacht werden!</strong>
+                                </p>
+                              </form>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-default" data-dismiss="modal">
+                                Lieber doch nicht
+                              </button>
+                              <button type="submit" form="confirm-clear-waiting-list"
+                                      class="btn btn-danger">
+                                Mach' schon
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <a href="mailto:" class="btn btn-default btn-sm"
+                         th:href="${#email.mailtoBcc(processingService.getEmailAddressesFromReservations(event))}">
+                        <span class="glyphicon glyphicon-envelope"></span>
+                        E-Mail an alle
+                      </a>
+
+                    </div>
+                  </div>
+
+                  <hr/>
+                  <p class="help-block">
+                    Bitte beachte, dass Reservierungen bei der Berechnung der freien Plätze nicht
+                    berücksichtigt werden können.
+                  </p>
+
+                  <!-- add reservation dialog -->
+                  <div class="modal fade" id="add-reservation-dialog" tabindex="-1">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                          <h4 class="modal-title">Reservierung erstellen</h4>
+                        </div>
+                        <div class="modal-body">
+                          <form method="post" id="add-reservation" th:object="${addReservationForm}"
+                                th:action="@{/events/{id}/reservations/add(id=${event.id})}">
+                            <div class="form-group">
+                              <label for="add-reservation-description" class="control-label">
+                                Beschreibung
+                              </label>
+                              <input type="text" class="form-control"
+                                     id="add-reservation-description" required="required"
+                                     placeholder="Für wen ist die Reservierung?"
+                                     th:field="*{description}"/>
+                            </div>
+                            <div class="form-group">
+                              <label for="add-reservation-slots" class="control-label">
+                                Plätze
+                              </label>
+                              <input type="number" min="1" value="1" required="required"
+                                     class="form-control"
+                                     id="add-reservation-slots"
+                                     th:max="${event.participantsList.hasParticipantsLimit()} ? ${event.participantsList.participantsLimit}"
+                                     th:field="*{slots}"/>
+                            </div>
+                            <div class="form-group">
+                              <label for="add-reservation-contact-email" class="control-label">
+                                Kontakt
+                              </label>
+                              <div class="input-group">
+                                <input type="email" class="form-control"
+                                       id="add-reservation-contact-email"
+                                       placeholder="E-Mail Adresse" th:field="*{contactEmail}"/>
+                                <span class="input-group-addon">
+                                  optional
+                                </span>
+                              </div>
+                            </div>
+                          </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">
+                            Abbrechen
+                          </button>
+                          <button type="submit" form="add-reservation" class="btn btn-primary">
+                            Speichern
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- edit reservation dialog -->
+                  <div class="modal fade" id="edit-reservation-dialog" tabindex="-1"
+                       th:if="${participantsList.hasReservations()}">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                          <h4 class="modal-title">Reservierung aktualisieren</h4>
+                        </div>
+                        <div class="modal-body">
+                          <form method="post" id="edit-reservation"
+                                th:object="${editReservationForm}"
+                                th:action="@{/events/{id}/reservations/update(id=${event.id})}">
+                            <input type="hidden" id="edit-reservation-id" name="reservation-id"/>
+
+                            <div class="form-group">
+                              <label for="edit-reservation-description" class="control-label">
+                                Beschreibung
+                              </label>
+                              <input type="text" class="form-control"
+                                     id="edit-reservation-description" required="required"
+                                     placeholder="Für wen ist die Reservierung?"
+                                     th:field="*{description}"/>
+                            </div>
+                            <div class="form-group">
+                              <label for="edit-reservation-slots" class="control-label">
+                                Plätze
+                              </label>
+                              <input type="number" min="1" value="1" required="required"
+                                     class="form-control"
+                                     id="edit-reservation-slots"
+                                     th:max="${event.participantsList.hasParticipantsLimit()} ? ${event.participantsList.participantsLimit}"
+                                     th:field="*{slots}"/>
+                            </div>
+                            <div class="form-group">
+                              <label for="edit-reservation-contact-email" class="control-label">
+                                Kontakt
+                              </label>
+                              <div class="input-group">
+                                <input type="email" class="form-control"
+                                       id="edit-reservation-contact-email"
+                                       placeholder="E-Mail Adresse" th:field="*{contactEmail}"/>
+                                <span class="input-group-addon">
+                                  optional
+                                </span>
+                              </div>
+                            </div>
+                          </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">
+                            Abbrechen
+                          </button>
+                          <button type="submit" form="edit-reservation" class="btn btn-primary">
+                            Speichern
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </section>
+
+                <!-- waiting list -->
+                <section class="col-md-5 col-md-offset-1">
+
+                  <h3>Warteliste</h3>
+
+                  <!-- waiting list entries -->
+                  <ul class="list-group list-group-hover"
+                      th:if="${event.participantsList.hasWaitingList()}"
+                      th:remove="all-but-first">
+                    <li class="list-group-item no-badge-realign"
+                        th:each="person, stat : ${event.participantsList.waitingList}">
+                      <span class="badge badge-readjust-vertical margin-right"
+                            th:text="${stat.count}">
+                        1
+                      </span>
+                      <a href="../persons/personDetails.html"
+                         th:href="@{/persons/{id}(id=${person.id})}" th:text="${person.name}">
+                        Hans Wurst
+                      </a>
+
+                      <div class="hidden">
+                        <form method="post" th:id="|drop-waiting-list-${person.id}|"
+                              th:action="@{/events/{id}/waiting-list/drop(id=${event.id})}">
+                          <input type="hidden" name="person-id" th:value="${person.id}"/>
+                        </form>
+                      </div>
+
+                      <div class="pull-right">
+                        <small class="margin-right-lg margin-left-lg"
+                               th:if="${person.hasOwnOrParentsEmail()}">
+                          <span class="glyphicon glyphicon-envelope"></span>
+                          <a href="mailto:hans.wurst@web.de"
+                             th:href="|mailto:${person.ownOrParentsEmail}|"
+                             th:text="${person.ownOrParentsEmail}">hans.wurst@web.de</a>
+                        </small>
+
+                        <div class="btn-group btn-group-xs">
+                          <span class="btn btn-default" data-toggle="tooltip"
+                                data-title="Als Teilnehmende*n hinzufügen"
+                                data-placement="bottom"
+                                data-container="body" style="height: 22px;">
+                            <button class="btn btn-no-style" data-toggle="modal"
+                                    data-target="#apply-waiting-list-dialog"
+                                    th:attrappend="data-person=${person.id}">
+                                <span class="glyphicon glyphicon-chevron-up"></span>
+                            </button>
+                          </span>
+                          <button type="submit" class="btn btn-danger"
+                                  data-toggle="tooltip"
+                                  data-placement="bottom" data-container="body"
+                                  data-title="Von der Liste löschen"
+                                  th:form="|drop-waiting-list-${person.id}|">
+                            <span class="glyphicon glyphicon-trash"></span>
+                          </button>
+                        </div>
+                      </div>
+
+                    </li>
+                    <li class="list-group-item no-badge-realign">
+                          <span class="badge badge-readjust-vertical margin-right">
+                            2
+                          </span>
+                      <a href="../persons/personDetails.html">Jane Doe</a>
+
+                      <div class="pull-right">
+                        <small class="margin-right-lg margin-left-lg">
+                          <span class="glyphicon glyphicon-envelope"></span>
+                          <a href="mailto:jane.doe@mail.com">jane.doe@mail.com</a>
+                        </small>
+
+                        <div class="btn-group btn-group-xs">
+                          <button type="button" class="btn btn-default" data-toggle="tooltip"
+                                  data-placement="bottom" data-container="body"
+                                  data-title="Als Teilnehmende*n hinzufügen">
+                            <span class="glyphicon glyphicon-chevron-up"></span>
+                          </button>
+                          <button type="button" class="btn btn-danger" data-toggle="tooltip"
+                                  data-placement="bottom" data-container="body"
+                                  data-title="Von der Liste löschen">
+                            <span class="glyphicon glyphicon-trash"></span>
+                          </button>
+                        </div>
+                      </div>
+
+                    </li>
+                    <li class="list-group-item no-badge-realign">
+                          <span class="badge badge-readjust-vertical margin-right">
+                            3
+                          </span>
+                      <a href="../persons/personDetails.html">Frieda Freundlich</a>
+
+                      <div class="pull-right">
+                        <small class="margin-right-lg margin-left-lg">
+                          <span class="glyphicon glyphicon-envelope"></span>
+                          <a href="mailto:freundlich@gmx.net">freundlich@gmx.net</a>
+                        </small>
+
+                        <div class="btn-group btn-group-xs">
+                          <button type="button" class="btn btn-default" data-toggle="tooltip"
+                                  data-placement="bottom" data-container="body"
+                                  data-title="Als Teilnehmende*n hinzufügen">
+                            <span class="glyphicon glyphicon-chevron-up"></span>
+                          </button>
+                          <button type="button" class="btn btn-danger" data-toggle="tooltip"
+                                  data-placement="bottom" data-container="body"
+                                  data-title="Von der Liste löschen">
+                            <span class="glyphicon glyphicon-trash"></span>
+                          </button>
+                        </div>
+                      </div>
+
+                    </li>
+                    <li class="list-group-item no-badge-realign">
+                          <span class="badge badge-readjust-vertical margin-right">
+                            4
+                          </span>
+                      <a href="../persons/personDetails.html">Klaus Klücklich</a>
+
+                      <div class="pull-right">
+                        <small class="margin-right-lg margin-left-lg">
+                          <span class="glyphicon glyphicon-envelope"></span>
+                          <a href="mailto:kkluecklich@aol.com">kkluecklich@aol.com</a>
+                        </small>
+
+                        <div class="btn-group btn-group-xs">
+                          <button type="button" class="btn btn-default" data-toggle="tooltip"
+                                  data-placement="bottom" data-container="body"
+                                  data-title="Als Teilnehmende*n hinzufügen">
+                            <span class="glyphicon glyphicon-chevron-up"></span>
+                          </button>
+                          <button type="button" class="btn btn-danger" data-toggle="tooltip"
+                                  data-placement="bottom" data-container="body"
+                                  data-title="Von der Liste löschen">
+                            <span class="glyphicon glyphicon-trash"></span>
+                          </button>
+                        </div>
+                      </div>
+
+                    </li>
+                  </ul>
+
+                  <!-- edit waiting list menu -->
+                  <div class="clearfix" th:if="${event.participantsList.hasWaitingList()}">
+                    <div class="pull-right">
+
+                      <div class="btn-group btn-group-sm margin-right">
+                        <button type="button" class="btn btn-default" data-toggle="modal"
+                                data-target="#add-waiting-list-dialog">
+                          <span class="glyphicon glyphicon-plus"></span>
+                          Hinzufügen
+                        </button>
+                        <button type="button" class="btn btn-default" data-toggle="modal"
+                                data-target="#confirm-clear-waiting-list-dialog">
+                          <span class="glyphicon glyphicon-trash"></span>
+                          Liste leeren
+                        </button>
+                      </div>
+
+                      <div class="modal fade" id="confirm-clear-waiting-list-dialog" tabindex="-1">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-body">
+                              <form method="post" id="confirm-clear-waiting-list"
+                                    th:action="@{/events/{id}/waiting-list/clear(id=${event.id})}">
+                                <p>
+                                  Die Warteliste wird geleert.
+                                  <strong>Dies kann nicht rückgängig gemacht werden!</strong>
+                                </p>
+                              </form>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-default" data-dismiss="modal">
+                                Lieber doch nicht
+                              </button>
+                              <button type="submit" form="confirm-clear-waiting-list"
+                                      class="btn btn-danger">
+                                Mach' schon
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <a href="mailto:" class="btn btn-default btn-sm"
+                         th:href="${#email.mailtoBcc(processingService.getEmailAddressesFromWaitingList(event))}">
+                        <span class="glyphicon glyphicon-envelope"></span>
+                        E-Mail an alle
+                      </a>
+
+                    </div>
+                  </div>
+
+                  <!-- no waiting list -->
+                  <div th:unless="${event.participantsList.hasWaitingList()}">
+                    Zur Zeit gibt es noch keine Einträge.
+                    <div>
+                      <button type="button" class="btn btn-link no-padding" data-toggle="modal"
+                              data-target="#add-waiting-list-dialog">
+                        <span class="glyphicon glyphicon-arrow-right"></span>
+                        Person auf die Warteliste setzen
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- add waiting list entry dialog -->
+                  <div class="modal fade" id="add-waiting-list-dialog" tabindex="-1">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                          <h4 class="modal-title">Hinzufügen</h4>
+                        </div>
+
+                        <div class="modal-body">
+                          <form class="container-fluid margin-top-lg person-search-container"
+                                id="add-waiting-list" method="post"
+                                th:action="@{/events/{id}/waiting-list/add(id=${event.id})}">
+                            <div class="row">
+                              <div class="col-md-3 no-margin-btm margin-top">
+                                <label for="waiting-list-search" class="control-label">
+                                  Person suchen:
+                                </label>
+                              </div>
+                              <div class="col-md-7">
+                                <input type="search"
+                                       class="form-control" id="waiting-list-search"
+                                       name="person-search-query"
+                                       placeholder="Name, E-Mail, Telefon oder Adresse"
+                                       th:value="${param.do != null and param.do[0] == 'add-waiting-list'} ? ${param.search}"/>
+                                <input type="hidden" name="return-action" value="add-waiting-list"/>
+                              </div>
+                              <div class="col-md-2">
+                                <button type="submit" class="btn btn-primary"
+                                        formmethod="get"
+                                        th:formaction="@{/events/{id}/participants/waiting-list/search(id=${event.id})}">
+                                  Los
+                                </button>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <p class="col-md-12 help-block">
+                                Es kann sein, dass die Suche aktuell Probleme mit Umlauten
+                                hat. In
+                                so einem Fall bitte einfach nur den Vornamen oder Nachnamen
+                                verwenden.
+                              </p>
+                            </div>
+                            <hr/>
+                            <div class="panel panel-default"
+                                 th:if="${param.do != null and param.do[0] == 'add-waiting-list' and matchingPersons != null and not matchingPersons.empty}">
+                              <div class="panel-heading">
+                                <h5 class="panel-title">Ergebnisse</h5>
+                              </div>
+                              <ul class="list-group">
+                                <li class="list-group-item"
+                                    th:each="match : ${matchingPersons}" th:inline="text">
+                                  <div class="radio">
+                                    <label>
+                                      <input type="radio" name="person-id"
+                                             th:value="${match.id}"/>
+                                      [[${match.name}]]
+                                      <small>[[${match.email}]] [[${match.phoneNumber}]]
+                                      </small>
+                                    </label>
+                                  </div>
+                                </li>
+                              </ul>
+                            </div>
+
+                            <div class="alert alert-info"
+                                 th:unless="${param.do != null and param.do[0] == 'add-waiting-list' and matchingPersons != null}">
+                              Bitte nach der gewünschten Person suchen
+                            </div>
+
+                            <div class="alert alert-info"
+                                 th:if="${param.do != null and param.do[0] == 'add-waiting-list' and matchingPersons != null  and matchingPersons.empty}">
+                              Keine Übereinstimmungen
+                            </div>
+                          </form>
+                        </div>
+
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">
+                            Abbrechen
+                          </button>
+                          <button type="submit" form="add-waiting-list" class="btn btn-primary">
+                            Hinzufügen
+                          </button>
+                        </div>
+
+                      </div>
+
+                    </div>
+                  </div>
+
+                  <!-- apply waiting list entry dialog -->
+                  <div class="modal fade" id="apply-waiting-list-dialog" tabindex="-1"
+                       th:if="${event.participantsList.hasWaitingList()}">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                          <h4 class="modal-title">Als Teilnehmende*n hinzufügen</h4>
+                        </div>
+                        <form method="post" id="apply-waiting-list" class="modal-body"
+                              th:action="@{/events/{id}/waiting-list/apply(id=${event.id})}"
+                              th:object="${applyWaitingListEntryForm}">
+                          <p class="help-block">
+                            Die ausgewählte Person wird von der Warteliste entfernt und als
+                            Teilnehmende*r hinzufgefügt.
+                          </p>
+
+                          <input type="hidden" name="participant" id="apply-waiting-list-person"/>
+
+                          <div class="form-group">
+
+                            <label for="apply-waiting-list-form-and-fee" class="control-label">
+                              Anmeldeformular
+                            </label>
+
+                            <div id="apply-waiting-list-form-and-fee">
+
+                              <div class="checkbox">
+                                <label>
+                                  <input type="checkbox" checked="checked"
+                                         data-controlled-by="#apply-waiting-list-form-filled"
+                                         data-invert-control="true" th:field="*{formSent}"/>
+                                  Anmeldeformular versendet
+                                </label>
+                              </div>
+                              <div class="checkbox">
+                                <label>
+                                  <input type="checkbox" id="apply-waiting-list-form-filled"
+                                         th:field="*{formFilled}"/>
+                                  Anmeldeformular ausgefüllt
+                                </label>
+                              </div>
+                              <div class="checkbox">
+                                <label>
+                                  <input type="checkbox" th:field="*{feePayed}"/>
+                                  Teilnahmebeitrag bezahlt
+                                </label>
+                              </div>
+                            </div>
+
+                          </div>
+                          <div class="form-group">
+                            <label for="apply-waiting-list-arrival" class="control-label">
+                              Anreise
+                            </label>
+                            <div>
+                              <select class="selectpicker" id="apply-waiting-list-arrival"
+                                      th:remove="all-but-first" th:field="*{arrival}">
+                                <option th:each="opt : ${event.participationInfo.arrivalOptions}"
+                                        th:value="${opt.description}" th:text="${opt.description}">
+                                  gemeinsam ab DD
+                                </option>
+                                <option>gemeinsam ab C</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label for="apply-waiting-list-departure" class="control-label">
+                              Abreise
+                            </label>
+                            <div>
+                              <select class="selectpicker" id="apply-waiting-list-departure"
+                                      th:remove="all-but-first" th:field="*{departure}">
+                                <option th:each="opt : ${event.participationInfo.arrivalOptions}"
+                                        th:value="${opt.description}" th:text="${opt.description}">
+                                  gemeinsam nach DD
+                                </option>
+                                <option>gemeinsam nach C</option>
+                              </select>
+                            </div>
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" th:field="*{mayGoHomeSingly}"/>
+                                darf alleine nach Hause
+                              </label>
+                            </div>
+                          </div>
+
+                          <div th:if="${event.participationInfo.flexibleParticipationTimesEnabled}">
+                            <hr/>
+
+                            <div class="form-group">
+                              <label for="apply-waiting-list-participation-start-time"
+                                     class="control-label">
+                                Erste Übernachtung
+                              </label>
+                              <input type="date" class="form-control"
+                                     id="apply-waiting-list-participation-start-time"
+                                     th:min="${#temporals.format(event.startTime, 'yyyy-MM-dd')}"
+                                     th:max="${#temporals.format(event.endTime.minusDays(1), 'yyyy-MM-dd')}"
+                                     th:field="*{firstNight}"/>
+                            </div>
+                            <div class="form-group">
+                              <label for="apply-waiting-list-participation-end-time"
+                                     class="control-label">
+                                Letzte Übernachtung
+                              </label>
+                              <input type="date" class="form-control"
+                                     id="apply-waiting-list-participation-end-time"
+                                     th:min="${#temporals.format(event.startTime, 'yyyy-MM-dd')}"
+                                     th:max="${#temporals.format(event.endTime.minusDays(1), 'yyyy-MM-dd')}"
+                                     th:field="*{lastNight}"/>
+                            </div>
+                          </div>
+
+                          <hr/>
+
+                          <div class="form-group">
+                            <label for="apply-waiting-list-remarks" class="control-label">
+                              Sonstiges
+                            </label>
+                            <textarea class="form-control" id="apply-waiting-list-remarks"
+                                      placeholder="Was ist sonst noch für *diese* Teilnahme wichtig?"
+                                      th:field="*{remarks}"></textarea>
+                          </div>
+
+                        </form>
+
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">
+                            Abbrechen
+                          </button>
+
+                          <button type="submit" form="apply-waiting-list"
+                                  class="btn btn-primary">
+                            Hinzufügen
+                          </button>
+
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- apply waiting list entry error dialog  -->
+                  <div class="modal modal-error fade" id="apply-waiting-list-error-dialog"
+                       tabindex="-1"
+                       th:if="${#httpServletRequest.getParameter('apply-waiting-list') == 'failed'} and ${failure != null}">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-body">
+                          <p>
+                            <strong>
+                              Die Person konnte nicht als Teilnehmende*r hinzugefügt werden, da sie
+                              [[${failure.name() == 'TOO_YOUNG'} ? 'zu jung ist']]
+                              [[${failure.name() == 'BOOKED_OUT'} ? 'nicht untergebracht werden
+                              konnte']]
+                            </strong>
+                          </p>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">
+                            OK, schade
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </section>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </article>
+
+</main>
+
+<form id="logout-user" method="POST" th:action="@{/logout}">
+  <input type="hidden" name="csrf" th:value="csrf"/>
+</form>
+
+<script type="text/javascript" src="../../static/resources/js/jquery.min.js"
+        th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript" src="../../static/resources/js/bootstrap.min.js"
+        th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script src="../../static/resources/js/bootstrap-select.min.js"
+        th:src="@{/resources/js/bootstrap-select.min.js}"></script>
+<script src="../../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
+<script src="../../static/resources/js/formControls.js"
+        th:src="@{/resources/js/formControls.js}"></script>
+
+</body>
+</html>

@@ -8,11 +8,20 @@ body {
   background-color: #aaa;
 }
 
+@media screen and (min-width: 780px) {
+  body {
+    background-image: url('/resources/img/fancy_owls.png');
+    background-position: right bottom;
+    background-repeat: no-repeat;
+    background-size: 190px;
+    background-attachment: fixed;
+  }
+}
+
 main {
   width: 80%;
   min-height: 90%;
   margin: 70px auto 15px auto;
-  padding-bottom: 2em;
   background-color: #fff;
   padding: 15px;
   border-radius: 15px;
@@ -56,6 +65,14 @@ td {
 
 a {
   cursor: pointer;
+}
+
+.strong {
+  font-weight: 700;
+}
+
+.popover {
+  max-width: 100%;
 }
 
 .action-bar {
@@ -182,6 +199,54 @@ a {
   width: 100%;
 }
 
+.max-col-1 {
+  max-width: 8.3%;
+}
+
+.max-col-2 {
+  max-width: 16.6%;
+}
+
+.max-col-3 {
+  max-width: 25%;
+}
+
+.max-col-4 {
+  max-width: 33.3%;
+}
+
+.max-col-5 {
+  max-width: 41.6%;
+}
+
+.max-col-6 {
+  max-width: 50%;
+}
+
+.max-col-7 {
+  max-width: 58.3%;
+}
+
+.max-col-8 {
+  max-width: 66.6%;
+}
+
+.max-col-9 {
+  max-width: 75%;
+}
+
+.max-col-10 {
+  max-width: 83.3%;
+}
+
+.max-col-11 {
+  max-width: 91.6%;
+}
+
+.max-col-12 {
+  max-width: 100%;
+}
+
 .address .street {
   margin-bottom: 5px;
 }
@@ -190,9 +255,48 @@ a {
   font-size: 1.2em;
 }
 
+.btn.btn-fancy {
+  color: #24292e;
+  background-color: #eff3f6;
+  background-image: linear-gradient(-180deg, #fafbfc 0%, #eff3f6 90%);
+  border: 1px solid rgba(27, 31, 35, 0.2);
+}
+
+.btn.btn-fancy:hover {
+  background-color: #e6ebf1;
+  background-image: linear-gradient(-180deg, #f0f3f6 0%, #e6ebf1 90%);
+  background-position: -.5em;
+  border-color: rgba(27, 31, 35, 0.35);
+}
+
+.btn.btn-danger.btn-fancy {
+  color: #cb2431;
+  background-color: #fafbfc;
+  background-image: linear-gradient(-180deg, #fafbfc 0%, #eff3f6 90%);
+}
+
+.btn.btn-danger.btn-fancy:hover {
+  color: #fff;
+  background-color: #cb2431;
+  background-image: linear-gradient(-180deg, #de4450 0%, #cb2431 90%);
+  border-color: rgba(27, 31, 35, 0.5);
+}
+
 .btn.btn-inline {
   padding: 0;
   vertical-align: baseline;
+}
+
+.btn.btn-no-style {
+  font-size: inherit;
+  border: none;
+  background: transparent;
+  margin: 0;
+  padding: 0;
+}
+
+.badge.badge-readjust-vertical {
+  margin-top: -3px;
 }
 
 .action-cursor {
@@ -205,6 +309,16 @@ a {
   border-bottom: 2px solid #eee;
 }
 
+.category-menu .category-menu-content {
+  padding: 10px;
+  display: inline-block;
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+  background-color: #337ab7;
+  margin-right: -45px;
+  margin-bottom: 15px;
+}
+
 .display-category .category-header .category-menu {
   margin-top: 25px;
 }
@@ -215,6 +329,15 @@ a {
 
 .category-nav {
   margin-top: 35px;
+}
+
+.display-category .sub-category {
+  padding-bottom: 35px;
+  border-bottom: 2px solid #eee;
+}
+
+.display-category .sub-category:last-of-type {
+  border-bottom: none;
 }
 
 fieldset.inline-options {
@@ -230,12 +353,94 @@ fieldset.inline-options label {
   border-radius: 0 !important;
 }
 
-.no-padding-left {
-  padding-left: 0;
+.padding-sm {
+  padding: 3px;
+}
+
+.padding-md {
+  padding: 8px;
+}
+
+.padding-lg {
+  padding: 15px;
 }
 
 .no-padding {
   padding: 0;
+}
+
+.padding-top-sm {
+  padding-top: 3px;
+}
+
+.padding-top {
+  padding-top: 8px;
+}
+
+/* LEGACY */
+.padding-top-xl {
+  padding-top: 15px;
+}
+
+.padding-top-lg {
+  padding-top: 15px;
+}
+
+.no-padding-top {
+  padding-top: 0;
+}
+
+.padding-right-sm {
+  padding-right: 3px;
+}
+
+.padding-right {
+  padding-right: 8px;
+}
+
+.padding-right-lg {
+  padding-right: 15px;
+}
+
+.no-padding-right {
+  padding-right: 0;
+}
+
+.padding-btm-sm {
+  padding-bottom: 3px;
+}
+
+.padding-btm {
+  padding-bottom: 8px;
+}
+
+.padding-btm-lg {
+  padding-bottom: 15px;
+}
+
+.no-padding-btm {
+  padding-bottom: 0;
+}
+
+.padding-left-sm {
+  padding-left: 3px;
+}
+
+.padding-left {
+  padding-left: 8px;
+}
+
+/* LEGACY */
+.padding-left-xl {
+  padding-left: 15px;
+}
+
+.padding-left-lg {
+  padding-left: 15px;
+}
+
+.no-padding-left {
+  padding-left: 0;
 }
 
 .margin-top-sm {
@@ -274,6 +479,18 @@ fieldset.inline-options label {
   margin-bottom: 15px;
 }
 
+.margin-left-sm {
+  margin-left: 3px;
+}
+
+.margin-left {
+  margin-left: 8px;
+}
+
+.margin-left-lg {
+  margin-left: 15px;
+}
+
 .no-margin-btm {
   margin-bottom: 0;
 }
@@ -303,6 +520,24 @@ fieldset.inline-options label {
   text-align: center;
 }
 
+.dropdown-menu li button {
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: 400;
+  line-height: 1.42857143;
+  color: #333;
+  white-space: nowrap;
+  background-color: inherit;
+  border: none;
+}
+
+.dropdown-menu li:hover button {
+  color: #262626;
+  text-decoration: none;
+  background-color: #f5f5f5;
+}
+
 .dropdown-menu-lg {
   width: 30em;
   left: 50%;
@@ -313,6 +548,27 @@ fieldset.inline-options label {
 
 .panel-title small {
   font-size: 0.9em;
+}
+
+.panel .panel-category-title {
+  padding: 15px 15px 0 15px;
+  border-top: 1px solid #999;
+}
+
+.panel.panel-border-strong {
+  border-color: #999;
+}
+
+.panel.panel-highlight {
+  box-shadow: 5px 5px 5px #bbb;
+}
+
+.panel.panel-highlight:hover {
+  box-shadow: 10px 10px 10px #999;
+}
+
+.panel.panel-highlight.panel-border-strong:hover {
+  border-color: #666;
 }
 
 .qualification-list small {
@@ -342,18 +598,43 @@ fieldset.inline-options label {
   margin-left: 1em;
 }
 
-.list-group-hover .list-group-item {
+.list-group .list-group-item.no-badge-realign .badge {
+  float: none;
+}
+
+.list-group.list-group-hover .list-group-item {
   color: #555;
 }
 
-.list-group-hover .list-group-item:hover {
+.list-group.list-group-hover .list-group-item:hover {
   color: #555;
   text-decoration: none;
   background-color: #f5f5f5;
 }
 
-.list-group-item-interactive {
+.list-group .list-group-item.list-group-item-interactive {
   cursor: pointer;
+}
+
+.list-group.list-group-stand-out .list-group-item {
+  border-top: 2px solid #ddd;
+}
+
+.list-group.list-group-stand-out .list-group-item:first-of-type {
+  border-top: 1px solid #ddd;
+}
+
+.table-border-outside {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.table-border-outside .table tr:first-of-type td {
+  border: none;
+}
+
+.table-border-outside .table {
+  margin-bottom: 0;
 }
 
 .collapse-label:after {
@@ -363,6 +644,23 @@ fieldset.inline-options label {
 
 .collapse-label.collapsed:after {
   content: " \e080";
+}
+
+.collapse-toggler {
+  cursor: pointer;
+}
+
+.collapse-toggler[aria-expanded="false"]::before {
+  font-family: "Glyphicons Halflings";
+  content: "\e080";
+  box-sizing: border-box;
+}
+
+.collapse-toggler[aria-expanded="true"]::before {
+  font-family: "Glyphicons Halflings";
+  content: "\e114";
+  box-sizing: border-box;
+  vertical-align: sub;
 }
 
 .no-decoration {
@@ -378,6 +676,14 @@ fieldset.inline-options label {
 
 .panel-menu .panel-title .badge {
   margin-top: -3px;
+}
+
+.checkbox label {
+  cursor: pointer;
+}
+
+.checkbox-inline label {
+  cursor: pointer;
 }
 
 .hover-primary:hover {
@@ -425,6 +731,38 @@ fieldset.inline-options label {
 .modal.modal-tabbed .modal-dialog .modal-content .modal-body {
   padding-right: 0;
   padding-left: 0;
+}
+
+.modal-footer .modal-footer-text {
+  text-align: left;
+}
+
+.modal-body .modal-body-column {
+  border-left: 1px solid #eee;
+}
+
+.modal.modal-error .modal-dialog .modal-content {
+  border-color: #a94442;
+}
+
+.modal.modal-error .modal-dialog .modal-content .modal-header {
+  border-color: #a94442;
+}
+
+.modal.modal-error .modal-dialog .modal-content .modal-footer {
+  border-color: #a94442;
+}
+
+.label button.btn-link {
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 0;
+  padding-right: 0;
+  color: #fff;
+}
+
+.label button.btn-link:hover {
+  color: #444;
 }
 
 .block {
@@ -491,6 +829,10 @@ fieldset.inline-options label {
   background-color: transparent;
   border: 0;
   white-space: nowrap;
+  inline-size: available;
+  inline-size: -webkit-fill-available;
+  inline-size: -moz-available;
+  text-align: left;
 }
 
 .logout button[type="submit"]:hover {
@@ -511,6 +853,11 @@ fieldset.inline-options label {
     font-size: 8em;
     color: #ccc;
   }
+
+  .details-icon.details-icon-danger {
+    color: #a94442;
+  }
+
 }
 
 @media (max-device-width: 480px) {

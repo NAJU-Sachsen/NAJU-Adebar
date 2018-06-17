@@ -1,14 +1,14 @@
 package de.naju.adebar.model.events.rooms.scheduling;
 
+import com.google.common.collect.Lists;
+import de.naju.adebar.model.persons.details.Gender;
+import de.naju.adebar.util.IntTriple;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.springframework.util.Assert;
-import com.google.common.collect.Lists;
-import de.naju.adebar.model.persons.details.Gender;
-import de.naju.adebar.util.IntTriple;
 
 /**
  * Wrapper for the persons which should attend an event.
@@ -59,6 +59,10 @@ public class RegisteredParticipants implements Iterable<Participant> {
     return Collections.unmodifiableList(participants);
   }
 
+  public Participant getParticipant(int idx) {
+    return participants.get(idx);
+  }
+
   /**
    * @return the first night any of the participants attends the event
    */
@@ -99,7 +103,8 @@ public class RegisteredParticipants implements Iterable<Participant> {
    * Filters for all participants with a certain gender which attend the event on a certain night
    *
    * @param night the night
-   * @param gender the gender. May be {@code null} to filter for all participants with no gender
+   * @param gender the gender. May be {@code null} to filter for all participants with no
+   *     gender
    * @return all matching participants
    */
   public List<Participant> getParticipantsWithGenderOn(int night, Gender gender) {
@@ -121,7 +126,7 @@ public class RegisteredParticipants implements Iterable<Participant> {
    * @return the gender
    */
   public Gender getGenderOfMajorityOfParticipantsAfter(int index) {
-    List<Participant> remainder = participants.subList(index, participants.size() - 1);
+    List<Participant> remainder = participants.subList(index, participants.size());
 
     // we will store the number of participants with the gender in a triple (int, int, int) where
     // the first component contains the number of female participants, the second is for the male
@@ -143,7 +148,7 @@ public class RegisteredParticipants implements Iterable<Participant> {
                   throw new AssertionError(g);
               }
             }, //
-            (t1, t2) -> t1.add(t2));
+            IntTriple::add);
 
     switch (combined.max()) {
       case FIRST:
@@ -160,7 +165,7 @@ public class RegisteredParticipants implements Iterable<Participant> {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see java.lang.Iterable#iterator()
    */
   @Override
@@ -170,7 +175,7 @@ public class RegisteredParticipants implements Iterable<Participant> {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see java.lang.Object#toString()
    */
   @Override

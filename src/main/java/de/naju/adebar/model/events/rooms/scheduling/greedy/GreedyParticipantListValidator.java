@@ -1,7 +1,5 @@
 package de.naju.adebar.model.events.rooms.scheduling.greedy;
 
-import java.util.Arrays;
-import org.springframework.stereotype.Service;
 import de.naju.adebar.model.events.rooms.scheduling.ExtendedRoomSpecification;
 import de.naju.adebar.model.events.rooms.scheduling.Participant;
 import de.naju.adebar.model.events.rooms.scheduling.ParticipantListValidator;
@@ -11,16 +9,19 @@ import de.naju.adebar.model.events.rooms.scheduling.RoomSpecification;
 import de.naju.adebar.model.events.rooms.scheduling.slacker.SlackerParticipantListValidator;
 import de.naju.adebar.model.persons.details.Gender;
 import de.naju.adebar.util.Arrays2;
+import java.util.Arrays;
+import java.util.function.Function;
+import org.springframework.stereotype.Service;
 
 /**
- * A greedy implementation of the {@link ParticipantListValidator} capable of handling
- * {@link ExtendedRoomSpecification}
+ * A greedy implementation of the {@link ParticipantListValidator} capable of handling {@link
+ * ExtendedRoomSpecification}
  *
- * Basically, the {@code GreedyValidator} may be seen as an extension of the idea behind the
- * {@link SlackerParticipantListValidator}. For each day, it will check whether there are at least
- * as many beds available, as participants registered for that night. If there is no schedule
- * available using the fixed rooms, the scheduler will try to use the flexible rooms step by step
- * and the fallback rooms as a last resort.
+ * Basically, the {@code GreedyValidator} may be seen as an extension of the idea behind the {@link
+ * SlackerParticipantListValidator}. For each day, it will check whether there are at least as many
+ * beds available, as participants registered for that night. If there is no schedule available
+ * using the fixed rooms, the scheduler will try to use the flexible rooms step by step and the
+ * fallback rooms as a last resort.
  *
  * @author Rico Bergmann
  */
@@ -32,13 +33,28 @@ public class GreedyParticipantListValidator implements ParticipantListValidator 
   private int[] otherRooms;
   private int errIdx;
 
+  /*
+   * (non-Javadoc)
+   *
+   * @see
+   * de.naju.adebar.model.events.rooms.scheduling.ParticipantListValidator#isSchedulable(de.naju.
+   * adebar.model.events.rooms.scheduling.RoomSpecification,
+   * de.naju.adebar.model.events.rooms.scheduling.RegisteredParticipants)
+   */
   @Override
   public boolean isSchedulable(RoomSpecification rooms, RegisteredParticipants participants) {
     return isSchedulableWithExtendedSpec(new ExtendedRoomSpecification(rooms), participants);
   }
 
+  /*
+   * (non-Javadoc)
+   *
+   * @see
+   * de.naju.adebar.model.events.rooms.scheduling.ParticipantListValidator#assessScheduleReliability(
+   * )
+   */
   @Override
-  public int assessScheduleReliablity() {
+  public int assessScheduleReliability() {
     if (errIdx > -1) {
       return HIGH_RELIABILITY;
     }
@@ -51,6 +67,11 @@ public class GreedyParticipantListValidator implements ParticipantListValidator 
     return NORMAL_RELIABILITY;
   }
 
+  /*
+   * (non-Javadoc)
+   *
+   * @see de.naju.adebar.model.events.rooms.scheduling.ParticipantListValidator#errorIndex()
+   */
   @Override
   public int errorIndex() {
     return errIdx;
@@ -74,7 +95,7 @@ public class GreedyParticipantListValidator implements ParticipantListValidator 
 
     while (rooms.hasFlexRooms()) {
       Room newRoom = rooms.getFlexRoomWithLargestCapacity().get();
-      Gender roomsToExtend = participants.getGenderOfMajorityOfParticipantsAfter(errIdx);
+      Gender roomsToExtend = participants.getParticipant(errIdx).getGender();
       rooms = rooms.createSpecificationWithFlexRoom(newRoom, roomsToExtend);
       extendRooms(newRoom.getBedsCount(), roomsToExtend);
 
@@ -86,7 +107,7 @@ public class GreedyParticipantListValidator implements ParticipantListValidator 
 
     while (rooms.hasFallbackRooms()) {
       Room newRoom = rooms.getFallbackRoomWithLargestCapacity().get();
-      Gender roomsToExtend = participants.getGenderOfMajorityOfParticipantsAfter(errIdx);
+      Gender roomsToExtend = participants.getParticipant(errIdx).getGender();
       rooms = rooms.createSpecificationWithFallbackRoom(newRoom, roomsToExtend);
       extendRooms(newRoom.getBedsCount(), roomsToExtend);
 
@@ -98,31 +119,42 @@ public class GreedyParticipantListValidator implements ParticipantListValidator 
     return false;
   }
 
+  /*
+   * (non-Javadoc)
+   *
+   * @see de.naju.adebar.model.events.rooms.scheduling.ParticipantListValidator#isBookedOut()
+   */
+  @Override
+  public boolean isBookedOut() {
+    Function<Integer, Boolean> predicate = i -> i == 0;
+    return Arrays2.allMatch(femaleRooms, predicate) && Arrays2.allMatch(maleRooms, predicate)
+        && Arrays2.allMatch(otherRooms, predicate);
+  }
+
   /**
    * Occupies as many beds as possible until all participants have been allotted or no beds are
    * available any more.
    * <p>
-   * In that case {@link #errorIndex()} will contain the index of the participant from
-   * {@code ParticipantsLimitFilter.getParticipants()} which could not be accommodated. The
-   * algorithm guarantees that all other participants with a larger index have not been housed as
-   * well.
+   * In that case {@link #errorIndex()} will contain the index of the participant from {@code
+   * ParticipantsLimitFilter.getParticipants()} which could not be accommodated. The algorithm
+   * guarantees that all other participants with a larger index have not been housed as well.
    * <p>
-   * To do its work, the algorithm will decrease the values in {@link #femaleRooms},
-   * {@link #maleRooms} and {@link #otherRooms}.
+   * To do its work, the algorithm will decrease the values in {@link #femaleRooms}, {@link
+   * #maleRooms} and {@link #otherRooms}.
    *
    * @param participants all participants
-   * @param firstParticipantIdx the first participant to check, the algorithm will start with it and
-   *        continue with all participants with larger index
+   * @param firstParticipantIdx the first participant to check, the algorithm will start with it
+   *     and continue with all participants with larger index
    * @param firstNight the participation first night - this is important to readjust the
-   *        participation nights to array indexes
+   *     participation nights to array indexes
    * @return whether all participants could be successfully housed
    */
   protected boolean fillOccupationAsFarAsPossible(RegisteredParticipants participants,
       int firstParticipantIdx, int firstNight) {
-    int currParticipant = 0;
+    int currParticipant = firstParticipantIdx;
 
     for (Participant participant : participants.getParticipants().subList(firstParticipantIdx,
-        participants.getParticipants().size() - 1)) {
+        participants.getParticipants().size())) {
       int[] roomArr;
       switch (participant.getGender()) {
         case FEMALE:
@@ -164,7 +196,7 @@ public class GreedyParticipantListValidator implements ParticipantListValidator 
 
   /**
    * Increases the capacity of the rooms allotted to some gender
-   * 
+   *
    * @param capacity the additional capacity
    * @param gender the gender
    */

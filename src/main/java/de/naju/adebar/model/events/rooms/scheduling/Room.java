@@ -1,7 +1,12 @@
 package de.naju.adebar.model.events.rooms.scheduling;
 
+import de.naju.adebar.documentation.infrastructure.JpaOnly;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.persons.details.Gender;
+import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Transient;
 
 /**
  * Value object to describe a room. Each room consists of a certain amount of beds which could maybe
@@ -9,10 +14,13 @@ import de.naju.adebar.model.persons.details.Gender;
  *
  * @author Rico Bergmann
  */
+@Embeddable
 public class Room {
 
-  private final int bedsCount;
-  private final Gender gender;
+  private int bedsCount;
+
+  @Enumerated(value = EnumType.STRING)
+  private Gender gender;
 
   /**
    * Creates a new room for participants of any gender
@@ -35,6 +43,9 @@ public class Room {
     this.gender = gender;
   }
 
+  @JpaOnly
+  private Room() {}
+
   /**
    * @return the number of beds in the room
    */
@@ -52,6 +63,7 @@ public class Room {
   /**
    * @return whether the room supports persons of any gender
    */
+  @Transient
   public boolean isUnisex() {
     return gender == null;
   }
@@ -70,6 +82,16 @@ public class Room {
    */
   public boolean accepts(Person participant) {
     return accepts(participant.getParticipantProfile().getGender());
+  }
+
+  @JpaOnly
+  private void setBedsCount(int bedsCount) {
+    this.bedsCount = bedsCount;
+  }
+
+  @JpaOnly
+  private void setGender(Gender gender) {
+    this.gender = gender;
   }
 
   /*
@@ -93,17 +115,22 @@ public class Room {
    */
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
+    if (this == obj) {
       return true;
-    if (obj == null)
+    }
+    if (obj == null) {
       return false;
-    if (getClass() != obj.getClass())
+    }
+    if (getClass() != obj.getClass()) {
       return false;
+    }
     Room other = (Room) obj;
-    if (bedsCount != other.bedsCount)
+    if (bedsCount != other.bedsCount) {
       return false;
-    if (gender != other.gender)
+    }
+    if (gender != other.gender) {
       return false;
+    }
     return true;
   }
 

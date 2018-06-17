@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import org.springframework.util.Assert;
+import de.naju.adebar.model.support.AbstractDomainEvent;
 
 /**
  * Base class for '{@code update}' events raised by aggregates.
@@ -20,11 +21,11 @@ import org.springframework.util.Assert;
  * @author Rico Bergmann
  * @param <E> the kind of entity which was updated
  */
-public abstract class EntityUpdatedEvent<E> {
+public abstract class EntityUpdatedEvent<E> extends AbstractDomainEvent {
 
-  private final E entity;
-  private final LocalDateTime timestamp;
-  private Set<ChangeSetEntry> changeset;
+  protected final E entity;
+  protected final LocalDateTime timestamp;
+  protected Set<ChangeSetEntry> changeset;
 
   /**
    * Creates a new event with an empty change set
@@ -82,7 +83,7 @@ public abstract class EntityUpdatedEvent<E> {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see java.lang.Object#hashCode()
    */
   @Override
@@ -96,7 +97,7 @@ public abstract class EntityUpdatedEvent<E> {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override

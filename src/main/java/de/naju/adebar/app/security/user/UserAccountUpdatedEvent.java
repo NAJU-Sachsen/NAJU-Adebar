@@ -24,4 +24,9 @@ public class UserAccountUpdatedEvent extends EntityUpdatedEvent<UserAccount> {
     super(account, changeset);
   }
 
+  @Override
+  public boolean aggregateMayContainMultipleInstances() {
+    return false;
+  }
+
 }

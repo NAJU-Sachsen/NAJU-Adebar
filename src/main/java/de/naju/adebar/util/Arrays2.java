@@ -267,6 +267,15 @@ public class Arrays2 {
     }
   }
 
+  public static boolean allMatch(int[] arr, Function<Integer, Boolean> predicate) {
+    for (int i = 0; i < arr.length; ++i) {
+      if (!predicate.apply(arr[i])) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   /**
    * Checks, whether all the elements of an array match a predicate within a certain range
    *

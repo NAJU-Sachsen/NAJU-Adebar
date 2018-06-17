@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta th:name="_csrf" th:content="${_csrf.token}"/>
+  <title>Veranstaltungen | Adebar</title>
+
+
+  <link rel="stylesheet" type="text/css" href="../../static/resources/css/bootstrap.min.css"
+        th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+  <link rel="stylesheet" type="text/css" href="../../static/resources/css/style.css"
+        th:href="@{/resources/css/style.css}"/>
+</head>
+<body>
+
+<!-- central navigation -->
+<nav th:replace="navigation :: topNav(page='events')"></nav>
+
+<!-- page specific content-->
+<main id="main">
+
+  <header id="page-header">
+
+    <div class="row margin-top-lg margin-btm-lg">
+      <div class="col-md-4">
+        <h1>Vergangene Veranstaltungen</h1>
+      </div>
+
+      <!-- menu -->
+      <div class="action-bar col-md-8">
+        <div class="row">
+          <form id="event-search" class="col-md-9" method="get" th:action="@{/events/search}">
+            <label for="event-search" class="sr-only">Suchen (Name, Datum, Ort)</label>
+            <div class="input-group">
+              <input type="search" name="query" class="form-control" id="search"
+                     placeholder="Name, Datum, Ort ..." th:value="${param.query}"/>
+              <div class="input-group-addon">
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+              </div>
+            </div>
+          </form>
+          <button type="submit" form="event-search" class="sr-only">Suche durchführen</button>
+          <div class="col-md-3">
+            <div class="btn-group">
+              <a href="addEvent.html" class="btn btn-default" th:href="@{/events/add}">
+                <span class="glyphicon glyphicon-plus"></span>
+                Hinzufügen
+              </a>
+              <a href="filterEvents.html" class="btn btn-default" disabled="disabled"
+                 data-toggle="tooltip" data-placement="bottom"
+                 data-title="Funktioniert bald wieder.. Versprochen!"
+                 th:href="@{/events/filter}">
+                <span class="glyphicon glyphicon-filter"></span>
+                <span class="hide-sm">Filtern</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </header>
+
+  <div class="row display-category">
+
+    <div class="table-responsive col-md-12" th:if="${events.hasContent()}">
+      <table class="table table-striped table-hover">
+        <thead></thead>
+        <tbody th:remove="all-but-first">
+        <tr class="row" th:each="event : ${events}">
+          <td class="col-md-1">
+            <span class="glyphicon glyphicon-time" data-toggle="tooltip" data-placement="bottom"
+                  data-title="laufende Veranstaltung" data-container="body"
+                  th:if="${event.ongoing}"></span>
+          </td>
+          <td class="col-md-3 strong" th:inline="text">
+            [[${event.name}]]
+          </td>
+          <td class="col-md-2"
+              th:text="${#time.formatTimeSpan(event.getStartTime(), event.getEndTime())}">
+            28.07.-11.08.18
+          </td>
+          <td class="col-md-2">
+            <a class="label label-default"
+               th:if="${event.forLocalGroup}"
+               th:text="${event.localGroup.name}"
+               th:href="@{/localGroups/{id}(id=${event.localGroup.id})}">
+              NAJU Sachsen
+            </a>
+          </td>
+          <td class="col-md-3" th:text="${event.place.city}">Oberwiesenthal</td>
+          <td class="col-md-1">
+            <a href="eventDetails.html" th:href="@{/events/{id}(id=${event.id})}">
+              <span class="glyphicon glyphicon-new-window"></span>
+              <span class="sr-only">Details</span>
+            </a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col-md-10 col-md-offset-1 margin-top-lg" th:unless="${events.hasContent()}">
+      <div class="alert alert-info text-center">
+        Keine Veranstaltungen gefunden
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row display-category" th:if="${events.hasNext()} or ${events.hasPrevious()}">
+    <nav class="clearfix col-md-12">
+      <ul class="pager" th:with="total = ${events.totalPages}" th:unless="${param.query}">
+        <li class="previous" th:if="${events.hasPrevious()}">
+          <a th:href="@{/events/past(page=${events.previousPageable().pageNumber},size=${events.size})}">
+            <span aria-hidden="true">&larr;</span> Zurück
+          </a>
+        </li>
+        <li>
+          <a th:href="@{/events}">Zu den aktuellen Veranstaltungen</a>
+        </li>
+        <li class="next" th:if="${events.hasNext()}">
+          <a th:href="@{/events/past(page=${events.nextPageable().pageNumber},size=${events.size})}">
+            Weiter <span aria-hidden="true">&rarr;</span>
+          </a>
+        </li>
+      </ul>
+      <ul class="pager" th:with="total = ${events.totalPages}" th:if="${param.query}">
+        <li class="previous" th:if="${events.hasPrevious()}">
+          <a th:href="@{/events/search(page=${events.previousPageable().pageNumber},size=${events.size},query=${param.query})}">
+            <span aria-hidden="true">&larr;</span> Zurück
+          </a>
+        </li>
+        <li>
+          <a th:href="@{/events/past}">Ältere Veranstaltungen anzeigen</a>
+        </li>
+        <li class="next" th:if="${events.hasNext()}">
+          <a th:href="@{/events/search(page=${events.nextPageable().pageNumber},size=${events.size},query=${param.query})}">
+            Weiter <span aria-hidden="true">&rarr;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+</main>
+<script type="text/javascript" src="../../static/resources/js/jquery.min.js"
+        th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript" src="../../static/resources/js/bootstrap.min.js"
+        th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script src="../../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
+</body>
+</html>

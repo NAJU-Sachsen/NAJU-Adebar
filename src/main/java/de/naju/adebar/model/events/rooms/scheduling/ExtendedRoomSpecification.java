@@ -1,14 +1,19 @@
 package de.naju.adebar.model.events.rooms.scheduling;
 
+import de.naju.adebar.documentation.infrastructure.JpaOnly;
+import de.naju.adebar.model.persons.details.Gender;
+import de.naju.adebar.util.Lists2;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import javax.persistence.CollectionTable;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import org.springframework.util.Assert;
-import de.naju.adebar.model.persons.details.Gender;
-import de.naju.adebar.util.Lists2;
 
 /**
  * The {@code ExtendedRoomSpecification} not only provides a list of fixed rooms but also more
@@ -22,9 +27,15 @@ import de.naju.adebar.util.Lists2;
  *
  * @author Rico Bergmann
  */
+@Entity
 public class ExtendedRoomSpecification extends RoomSpecification {
 
+  @ElementCollection
+  @CollectionTable(name = "accommodationFlexRooms", joinColumns = @JoinColumn(name = "specId"))
   private List<Room> flexRooms;
+
+  @ElementCollection
+  @CollectionTable(name = "accommodationFallbackRooms", joinColumns = @JoinColumn(name = "specId"))
   private List<Room> fallbackRooms;
 
   /**
@@ -39,8 +50,8 @@ public class ExtendedRoomSpecification extends RoomSpecification {
    * Creates a new empty specification with hints on how many rooms it will likely contain. This is
    * no hard limit and may be altered later on.
    *
-   * @param roomCount the initial number of rooms. This does not affect flexible rooms, nor fallback
-   *        rooms
+   * @param roomCount the initial number of rooms. This does not affect flexible rooms, nor
+   *     fallback rooms
    */
   public ExtendedRoomSpecification(int roomCount) {
     super(roomCount);
@@ -92,15 +103,10 @@ public class ExtendedRoomSpecification extends RoomSpecification {
 
   /**
    * @return the flex room with the largest capacity if there is any. If there are multiple such
-   *         rooms, any room may be returned.
+   *     rooms, any room may be returned.
    */
   public Optional<Room> getFlexRoomWithLargestCapacity() {
-    return flexRooms.stream().sorted(new Comparator<Room>() {
-      @Override
-      public int compare(Room r1, Room r2) {
-        return Integer.compare(r1.getBedsCount(), r2.getBedsCount());
-      }
-    }).findFirst();
+    return flexRooms.stream().max(Comparator.comparingInt(Room::getBedsCount));
   }
 
   /**
@@ -124,7 +130,7 @@ public class ExtendedRoomSpecification extends RoomSpecification {
 
   /**
    * @return the fallback room with the largest capacity if there is any. If there are multiple such
-   *         rooms, any room may be returned.
+   *     rooms, any room may be returned.
    */
   public Optional<Room> getFallbackRoomWithLargestCapacity() {
     return fallbackRooms.stream().sorted(new Comparator<Room>() {
@@ -170,7 +176,7 @@ public class ExtendedRoomSpecification extends RoomSpecification {
    * @param flexRoom the flex room
    * @param gender the gender
    * @return the resulting specification. This will be a new {@code ExtendedRoomSpecification}
-   *         instance
+   *     instance
    */
   public ExtendedRoomSpecification createSpecificationWithFlexRoom(Room flexRoom, Gender gender) {
     Room newRoom = new Room(flexRoom.getBedsCount(), gender);
@@ -185,7 +191,7 @@ public class ExtendedRoomSpecification extends RoomSpecification {
    * @param fallbackRoom the fallback room
    * @param gender the gender
    * @return the resulting specification. This will be a new {@code ExtendedRoomSpecification}
-   *         instance
+   *     instance
    */
   public ExtendedRoomSpecification createSpecificationWithFallbackRoom(Room fallbackRoom,
       Gender gender) {
@@ -193,6 +199,34 @@ public class ExtendedRoomSpecification extends RoomSpecification {
     List<Room> newRooms = Lists2.addToCopy(this.rooms, newRoom);
     List<Room> newFallbackRooms = Lists2.removeOnCopy(this.fallbackRooms, fallbackRoom);
     return new ExtendedRoomSpecification(newRooms, this.flexRooms, newFallbackRooms);
+  }
+
+  @JpaOnly
+  private void setFlexRooms(List<Room> flexRooms) {
+    this.flexRooms = flexRooms;
+  }
+
+  @JpaOnly
+  private void setFallbackRooms(List<Room> fallbackRooms) {
+    this.fallbackRooms = fallbackRooms;
+  }
+
+  @Override
+  public int getTotalBeds() {
+    return super.getTotalBeds() //
+        + flexRooms.stream().mapToInt(Room::getBedsCount).sum() //
+        + fallbackRooms.stream().mapToInt(Room::getBedsCount).sum();
+  }
+
+  /*
+   * (non-Javadoc)
+   *
+   * @see de.naju.adebar.model.events.rooms.scheduling.RoomSpecification#addRoom(int,
+   * de.naju.adebar.model.persons.details.Gender)
+   */
+  @Override
+  public ExtendedRoomSpecification addRoom(int bedsCount, Gender gender) {
+    return (ExtendedRoomSpecification) super.addRoom(bedsCount, gender);
   }
 
   /*
@@ -210,12 +244,12 @@ public class ExtendedRoomSpecification extends RoomSpecification {
   /*
    * (non-Javadoc)
    *
-   * @see de.naju.adebar.model.events.rooms.scheduling.RoomSpecification#addRoom(int,
-   * de.naju.adebar.model.persons.details.Gender)
+   * @see
+   * de.naju.adebar.model.events.rooms.scheduling.RoomSpecification#withExtraSpaceForCounselors()
    */
   @Override
-  public ExtendedRoomSpecification addRoom(int bedsCount, Gender gender) {
-    return (ExtendedRoomSpecification) super.addRoom(bedsCount, gender);
+  public ExtendedRoomSpecification withExtraSpaceForCounselors() {
+    return (ExtendedRoomSpecification) super.withExtraSpaceForCounselors();
   }
 
   /*
@@ -239,29 +273,36 @@ public class ExtendedRoomSpecification extends RoomSpecification {
    */
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
+    if (this == obj) {
       return true;
-    if (!super.equals(obj))
+    }
+    if (!super.equals(obj)) {
       return false;
-    if (getClass() != obj.getClass())
+    }
+    if (getClass() != obj.getClass()) {
       return false;
+    }
     ExtendedRoomSpecification other = (ExtendedRoomSpecification) obj;
     if (fallbackRooms == null) {
-      if (other.fallbackRooms != null)
+      if (other.fallbackRooms != null) {
         return false;
-    } else if (!fallbackRooms.equals(other.fallbackRooms))
+      }
+    } else if (!fallbackRooms.equals(other.fallbackRooms)) {
       return false;
+    }
     if (flexRooms == null) {
-      if (other.flexRooms != null)
+      if (other.flexRooms != null) {
         return false;
-    } else if (!flexRooms.equals(other.flexRooms))
+      }
+    } else if (!flexRooms.equals(other.flexRooms)) {
       return false;
+    }
     return true;
   }
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.naju.adebar.model.events.rooms.scheduling.RoomSpecification#toString()
    */
   @Override

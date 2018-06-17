@@ -1,5 +1,8 @@
 package de.naju.adebar.model.chapter;
 
+import de.naju.adebar.model.events.Event;
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.exceptions.NoActivistException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
@@ -19,10 +22,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 import org.springframework.util.Assert;
-import de.naju.adebar.documentation.infrastructure.JpaOnly;
-import de.naju.adebar.model.events.Event;
-import de.naju.adebar.model.persons.Person;
-import de.naju.adebar.model.persons.exceptions.NoActivistException;
 
 /**
  * Abstraction of a project
@@ -118,8 +117,7 @@ public class Project {
   /**
    * Default constructor just for JPA's sake
    */
-  @JpaOnly
-  private Project() {
+  Project() {
     this.contributors = new LinkedList<>();
     this.events = new LinkedList<>();
   }
@@ -288,7 +286,7 @@ public class Project {
 
   /**
    * @return the event that is about to take place next. If there is no next event {@code null} will
-   *         be returned
+   *     be returned
    */
   @Transient
   public Event getNextEvent() {
@@ -302,7 +300,8 @@ public class Project {
    * @param person the activist to add
    * @throws IllegalArgumentException if the activist is {@code null}
    * @throws NoActivistException if the person is no activist
-   * @throws ExistingContributorException if the activist does already contribute to the project
+   * @throws ExistingContributorException if the activist does already contribute to the
+   *     project
    */
   public void addContributor(Person person) {
     Assert.notNull(person, "Activist to add may not be null!");
@@ -336,12 +335,18 @@ public class Project {
   /**
    * @param event the event to add
    * @throws IllegalArgumentException if the event is already hosted by the project or if it is
-   *         {@code null}
+   *     {@code null}
    */
   public void addEvent(Event event) {
     Assert.notNull(event, "Event to add may not be null: " + event);
     Assert.isTrue(!hasEvent(event), "Event is already hosted ");
     events.add(event);
+  }
+
+  public void removeEvent(Event event) {
+    Assert.notNull(event, "event may not be null");
+    Assert.isTrue(hasEvent(event), "Project has no event " + event);
+    events.remove(event);
   }
 
   /**
@@ -351,6 +356,18 @@ public class Project {
   @Transient
   public boolean hasEvent(Event event) {
     return events.contains(event);
+  }
+
+  @Override
+  public int hashCode() {
+    int result = name.hashCode();
+    result = 31 * result + (startTime != null ? startTime.hashCode() : 0);
+    result = 31 * result + (endTime != null ? endTime.hashCode() : 0);
+    result = 31 * result + localGroup.hashCode();
+    result = 31 * result + (personInCharge != null ? personInCharge.hashCode() : 0);
+    result = 31 * result + contributors.hashCode();
+    result = 31 * result + events.hashCode();
+    return result;
   }
 
   @Override
@@ -384,17 +401,5 @@ public class Project {
       return false;
     }
     return events.equals(project.events);
-  }
-
-  @Override
-  public int hashCode() {
-    int result = name.hashCode();
-    result = 31 * result + (startTime != null ? startTime.hashCode() : 0);
-    result = 31 * result + (endTime != null ? endTime.hashCode() : 0);
-    result = 31 * result + localGroup.hashCode();
-    result = 31 * result + (personInCharge != null ? personInCharge.hashCode() : 0);
-    result = 31 * result + contributors.hashCode();
-    result = 31 * result + events.hashCode();
-    return result;
   }
 }

@@ -57,8 +57,7 @@ public class AddPersonForm {
   /**
    * Default constructor
    */
-  public AddPersonForm() {
-  }
+  public AddPersonForm() {}
 
   /**
    * @return the person's first name

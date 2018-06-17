@@ -1,5 +1,13 @@
 package de.naju.adebar.services.conversion.events;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import org.javamoney.moneta.Money;
+import org.springframework.stereotype.Service;
 import de.naju.adebar.app.events.filter.AddressFilter;
 import de.naju.adebar.app.events.filter.EndTimeFilter;
 import de.naju.adebar.app.events.filter.EventFilter;
@@ -13,15 +21,8 @@ import de.naju.adebar.app.filter.DateTimeFilterType;
 import de.naju.adebar.app.filter.MatchType;
 import de.naju.adebar.model.core.Address;
 import de.naju.adebar.model.core.Age;
+import de.naju.adebar.model.core.Capacity;
 import de.naju.adebar.web.validation.events.FilterEventsForm;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import org.javamoney.moneta.Money;
-import org.springframework.stereotype.Service;
 
 /**
  * Service to convert {@link FilterEventsForm} data to corresponding objects
@@ -148,7 +149,7 @@ public class FilterEventsFormDataExtractor {
     if (!hasParticipantsLimitFilter(eventsForm)) {
       throw new IllegalStateException("No participants limit filter specified");
     }
-    return new ParticipantsLimitFilter(eventsForm.getParticipantsLimit(),
+    return new ParticipantsLimitFilter(Capacity.of(eventsForm.getParticipantsLimit()),
         ComparableFilterType.valueOf(eventsForm.getParticipantsLimitFilterType()));
   }
 

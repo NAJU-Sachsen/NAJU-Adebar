@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta th:name="_csrf" th:value="${_csrf.token}"/>
+  <title>Bergwiesencamp | Adebar</title>
+  <link rel="stylesheet" type="text/css" href="../../static/resources/css/bootstrap.min.css"
+        th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+  <link rel="stylesheet" href="../../static/resources/css/bootstrap-select.min.css"
+        th:href="@{/resources/css/bootstrap-select.min.css}"/>
+
+  <link rel="stylesheet" type="text/css" href="../../static/resources/css/style.css"
+        th:href="@{/resources/css/style.css}"/>
+</head>
+<body>
+
+<!--/*@thymesVar id="event" type="de.naju.adebar.model.events.Event"*/-->
+<!--/*@thymesVar id="localGroups" type="java.lang.Iterable<de.naju.adebar.model.chapter.LocalGroup>"*/-->
+<!--/*@thymesVar id="projects" type="java.lang.Iterable<de.naju.adebar.model.chapter.Project>"*/-->
+<!--/*@thymesVar id="eventForm" type="de.naju.adebar.web.validation.events.EditEventForm"*/-->
+
+<!-- central navigation -->
+<nav th:replace="navigation :: topNav(page='events')"></nav>
+
+<!-- page specific content-->
+<main id="main">
+
+  <a href="overview.html">
+    <span class="glyphicon glyphicon-chevron-left"></span>
+    Zurück zur Übersicht
+  </a>
+
+  <h1>Bergwiesencamp
+    <small>(28.07. - 11.08.18)</small>
+  </h1>
+
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active">
+      <a href="#overview" class="tab-controller" aria-controls="general" role="tab"
+         data-toggle="tab">Übersicht</a>
+    </li>
+    <li role="presentation">
+      <a href="#participants" class="tab-controller" aria-controls="participants"
+         role="tab" data-toggle="tab">Teilnehmende</a>
+    </li>
+    <li role="presentation">
+      <a href="#organization" class="tab-controller" aria-controls="organization" role="tab"
+         data-toggle="tab">
+        Organisation
+      </a>
+    </li>
+    <li role="presentation">
+      <a href="#accommodation" class="tab-controller" aria-controls="accommodation" role="tab"
+         data-toggle="tab">Unterbringung</a>
+    </li>
+  </ul>
+
+  <article class="tab-content">
+
+    <!-- general and relationship -->
+    <div id="overview" class="tab-pane active container-fluid" role="tabpanel">
+
+      <!-- general -->
+      <section id="general" class="display-category" th:fragment="general">
+
+        <div class="row category-header">
+
+          <h2 class="col-md-10">Übersicht</h2>
+
+          <div class="col-md-2 category-menu">
+
+            <button type="button" class="btn btn-default btn-sm pull-right" data-toggle="modal"
+                    data-target="#edit-event-dialog">
+              <span class="glyphicon glyphicon-pencil"></span> Anpassen
+            </button>
+
+            <!-- edit person dialog -->
+            <div class="modal fade" id="edit-event-dialog" tabindex="-1" role="dialog">
+              <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title" th:text="|${event.name} bearbeiten|"></h3>
+                  </div>
+                  <div class="modal-body">
+                    <form id="edit-event" class="container-fluid" method="post"
+                          th:object="${eventForm}"
+                          th:action="@{/events/{id}/update(id=${event.id})}">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="edit-event-name" class="control-label">
+                              Name
+                            </label>
+                            <input type="text" class="form-control" id="edit-event-name"
+                                   required="required" th:field="*{name}"/>
+                          </div>
+                          <div class="form-group">
+                            <label for="edit-event-start-date" class="control-label">
+                              Beginn
+                            </label>
+                            <input type="date" class="form-control" id="edit-event-start-date"
+                                   required="required" th:field="*{startDate}"/>
+                          </div>
+                          <div class="form-group">
+                            <label for="edit-event-end-date" class="control-label">
+                              Ende
+                            </label>
+                            <input type="date" class="form-control" id="edit-event-end-date"
+                                   required="required" th:field="*{endDate}"/>
+                          </div>
+                          <hr/>
+                          <div class="form-group">
+                            <div class="checkbox">
+                              <label>
+                                <input type="checkbox" id="edit-event-uses-time"
+                                       th:field="*{useEventTime}"/>
+                                Startzeit und Ende für die Veranstaltung angeben
+                              </label>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label for="edit-event-start-time" class="control-label">
+                              Startzeit
+                            </label>
+                            <input type="time" class="form-control" id="edit-event-start-time"
+                                   data-controlled-by="#edit-event-uses-time"
+                                   th:disabled="not *{useEventTime}"
+                                   th:field="*{startTime}"/>
+                          </div>
+                          <div class="form-group">
+                            <label for="edit-event-end-time" class="control-label">
+                              Endzeit
+                            </label>
+                            <input type="time" class="form-control" id="edit-event-end-time"
+                                   data-controlled-by="#edit-event-uses-time"
+                                   th:disabled="not *{useEventTime}"
+                                   th:field="*{endTime}"/>
+                          </div>
+                          <hr/>
+                          <div class="form-group">
+                            <label for="edit-event-street" class="control-label">
+                              Straße
+                            </label>
+                            <div class="input-group">
+                              <input type="text" class="form-control" id="edit-event-street"
+                                     th:field="*{place.street}"/>
+                              <span class="input-group-addon">optional</span>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label for="edit-event-zip" class="control-label">
+                              PLZ
+                            </label>
+                            <div class="input-group">
+                              <input type="text" class="form-control" id="edit-event-zip"
+                                     th:field="*{place.zip}"/>
+                              <span class="input-group-addon">optional</span>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label for="edit-event-city" class="control-label">
+                              Ort
+                            </label>
+                            <div class="input-group">
+                              <input type="text" class="form-control" id="edit-event-city"
+                                     th:field="*{place.city}"/>
+                              <span class="input-group-addon">optional</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="edit-event-participants-limit" class="control-label">
+                              Teilnehmenden-Limit
+                            </label>
+                            <div class="input-group">
+                              <input type="number" min="1" class="form-control"
+                                     id="edit-event-participants-limit"
+                                     th:disabled="${event.participantsList.hasAccommodationInfo()}"
+                                     th:field="*{participationInfo.participantsLimit}"/>
+                              <span class="input-group-addon">optional</span>
+                            </div>
+                            <p class="help-block">
+                              Wenn für die Veranstaltung
+                              <a href="accommodationDetails.html"
+                                 th:href="@{/events/{id}/accommodation(id=${event.id})}">
+                                Informationen zur Unterbringung
+                              </a> vorliegen, ist das Teilnehmenden-Limit deaktiviert.
+                            </p>
+                            <p class="help-block">
+                              Eine Verringerung des Teilnehmeden-Limits kann zu unerwarteten
+                              Effekten führen, wenn dadurch weniger Plätze zur Verfügung stehen,
+                              als Teilnehmende bereits angemeldet sind.
+                              <strong>Mit äußerster Vorsicht zu genießen!</strong>
+                            </p>
+                          </div>
+                          <div class="form-group">
+                            <label for="edit-event-min-participants-age" class="control-label">
+                              Teilnehmendenalter
+                            </label>
+                            <div class="input-group">
+                              <input type="number" min="6" max="18" class="form-control"
+                                     id="edit-event-min-participants-age"
+                                     th:field="*{participationInfo.minParticipantAge}"/>
+                              <span class="input-group-addon">optional</span>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label for="edit-event-ext-participation-fee" class="control-label">
+                              Teilnahmebeitrag (nicht-Mitglieder)
+                            </label>
+                            <div class="input-group">
+                              <input type="number" min="0" class="form-control"
+                                     id="edit-event-ext-participation-fee"
+                                     th:field="*{participationInfo.extParticipationFee}"/>
+                              <span class="input-group-addon">optional</span>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label for="edit-event-int-participation-fee" class="control-label">
+                              Teilnahmebeitrag (NABU-Mitglieder)
+                            </label>
+                            <div class="input-group">
+                              <input type="number" min="0" class="form-control"
+                                     id="edit-event-int-participation-fee"
+                                     th:field="*{participationInfo.intParticipationFee}"/>
+                              <span class="input-group-addon">optional</span>
+                            </div>
+                          </div>
+                          <hr/>
+                          <div class="form-group">
+                            <label for="edit-event-arrival-opts" class="control-label">
+                              Anreise
+                            </label>
+
+                            <ul class="list-group" id="edit-event-arrival-opts"
+                                th:remove="all-but-first">
+                              <li class="list-group-item"
+                                  th:each="arrival : *{participationInfo.arrivalOptions}"
+                                  th:inline="text">
+                                [[${arrival.description}]]
+                                <input type="hidden" name="participationInfo.arrivalOptions"
+                                       value="selbstständig"
+                                       th:value="${arrival.description}"/>
+                                <button type="button"
+                                        class="btn btn-danger btn-xs pull-right remove-arrival-opt">
+                                  <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                              </li>
+                              <li class="list-group-item">
+                                Dresden
+                                <button type="button"
+                                        class="btn btn-danger btn-xs pull-right remove-arrival-opt">
+                                  <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                              </li>
+                              <li class="list-group-item">
+                                Chemnitz
+                                <button type="button"
+                                        class="btn btn-danger btn-xs pull-right remove-arrival-opt">
+                                  <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                              </li>
+                            </ul>
+
+                            <div class="clearfix">
+                              <div class="form-inline pull-right">
+                                <label for="arrival-opt" class="control-label margin-right">Neue
+                                  Option:</label>
+                                <input type="text" class="form-control" id="arrival-opt"
+                                       placeholder="Option"/>
+                                <button type="button" class="btn btn-default btn-sm"
+                                        id="add-arrival-opt">
+                                  <span class="glyphicon glyphicon-plus"></span>
+                                  Hinzufügen
+                                </button>
+                              </div>
+                            </div>
+
+                          </div>
+                          <hr/>
+                          <div class="form-group"
+                               th:classappend="${#fields.hasErrors('belonging')} ? 'has-error'">
+                            <label for="edit-event-belonging"
+                                   class="control-label">Zugehörigkeit</label>
+                            <div id="edit-event-belonging">
+                              <label class="radio-inline">
+                                <input type="radio" value="LOCAL_GROUP"
+                                       id="edit-event-belonging-select-local-group"
+                                       name="belonging-select" checked="checked"
+                                       th:field="*{belonging}"/>
+                                Ortsgruppe
+                              </label>
+                              <label class="radio-inline">
+                                <input type="radio" value="PROJECT"
+                                       id="edit-event-belonging-select-project"
+                                       name="belonging-select" th:field="*{belonging}"/>
+                                Projekt
+                              </label>
+                            </div>
+                            <p class="help-block"
+                               th:if="${#fields.hasErrors('belonging')}"
+                               th:errors="*{belonging}">
+                              Erforderlich
+                            </p>
+                          </div>
+                          <div class="form-group"
+                               th:classappend="${#fields.hasErrors('localGroup') or #fields.hasErrors('project')} ? 'has-error'">
+                            <label for="edit-event-belonging-selection" class="control-label">Auswählen</label>
+                            <div id="edit-event-belonging-selection">
+                              <label for="edit-event-belonging-local-group" class="sr-only">
+                                Zugehörig zu einer Ortsgruppe
+                              </label>
+                              <select class="selectpicker" id="edit-event-belonging-local-group"
+                                      data-live-search="true"
+                                      data-controlled-by="#edit-event-belonging-select-local-group"
+                                      data-display-toggle="true" th:remove="all-but-first"
+                                      th:field="*{localGroup}">
+                                <option th:each="chapter : ${localGroups}" th:value="${chapter.id}"
+                                        th:text="${chapter.name}">NAJU Sachsen
+                                </option>
+                                <option>NAJU Dresden</option>
+                                <option>NAJU Freiberg</option>
+                              </select>
+                              <label for="edit-event-belonging-project" class="sr-only">
+                                Zugehörig zu einem Projekt
+                              </label>
+                              <select class="selectpicker" id="edit-event-belonging-project"
+                                      data-controlled-by="#edit-event-belonging-select-project"
+                                      data-display-toggle="true" th:remove="all-but-first"
+                                      th:field="*{project}">
+                                <option data-subtext="NAJU Dresden" th:each="project : ${projects}"
+                                        th:value="${project.id}" th:text="${project.name}"
+                                        th:attr="data-subtext=${project.localGroup.name}">
+                                  Puppenstuben gesucht!
+                                </option>
+                                <option data-subtext="NAJU Dresden">Waldläufer</option>
+                              </select>
+                            </div>
+                            <p class="help-block"
+                               th:if="${#fields.hasErrors('localGroup')}"
+                               th:errors="*{localGroup}">
+                              Erforderlich
+                            </p>
+                            <p class="help-block"
+                               th:if="${#fields.hasErrors('project')}"
+                               th:errors="*{project}">
+                              Erforderlich
+                            </p>
+                          </div>
+
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                      Abbrechen
+                    </button>
+                    <button type="submit" form="edit-event" class="btn btn-primary">
+                      Aktualisieren
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="row">
+          <div class="table-responsive col-md-12">
+            <table class="table">
+              <thead></thead>
+
+              <!-- general data -->
+              <tbody
+                  th:with="participantsList = ${event.participantsList}, participationInfo = ${event.participationInfo}">
+              <tr class="row">
+                <th class="col-md-2">
+                  <span class="glyphicon glyphicon-calendar"></span> Zeitraum
+                </th>
+                <td class="col-md-10"
+                    th:text="${#time.formatTimeSpan(event.getStartTime(), event.getEndTime())}">
+                  09.-13.05.18
+                </td>
+              </tr>
+              <tr class="row">
+                <th class="col-md-2">
+                  <span class="glyphicon glyphicon-map-marker"></span> Ort
+                </th>
+                <td class="col-md-10" th:with="address=${event.place}" th:inline="text">
+                  [[${address != null AND NOT address.empty()} ? |${address.street} ${address.zip}
+                  ${address.city}| : 'keine Angabe']]
+                  <small th:if="${NOT address.empty()}">(
+                    <a href="http://www.openstreetmap.org/search?query=Hauptstraße 3, 09876 Entenhausen"
+                       th:href="${address} ? |https://www.openstreetmap.org/search?query=${address.street} ${address.zip} ${address.city}|">
+                      <span class="glyphicon glyphicon-map-marker"></span>
+                      wo ist das?
+                    </a>)
+                  </small>
+                </td>
+              </tr>
+              <tr class="row">
+                <th class="col-md-2">
+                  <span class="glyphicon glyphicon-bed"></span> Teilnehmenden-Limit
+                </th>
+                <td class="col-md-10"
+                    th:text="${participantsList.hasParticipantsLimit() ? participantsList.participantsLimit : 'unbegrenzt'}">
+                  35
+                </td>
+              </tr>
+              <tr class="row">
+                <th class="col-md-2">
+                  <span class="glyphicon glyphicon-user"></span> Anmeldungen
+                </th>
+                <td class="col-md-10" th:inline="text">
+                  [[${participantsList.participantsCount}]]
+                  <span class="text-warning"
+                        th:if="${participantsList.bookedOut}"> - <strong>ausgebucht!</strong></span>
+                </td>
+              </tr>
+              <tr class="row">
+                <th class="col-md-2">
+                  <span class="glyphicon glyphicon-ice-lolly-tasted"></span>
+                  Min. Teilnehmenden-Alter
+                </th>
+                <td class="col-md-10"
+                    th:text="${participationInfo.hasMinimumParticipantAge() ? participationInfo.minimumParticipantAge : 'keines'}">
+                  12
+                </td>
+              </tr>
+              <tr class="row">
+                <th class="col-md-2">
+                  <span class="glyphicon glyphicon-piggy-bank"></span>
+                  Teilnahmebeitrag
+                </th>
+                <td class="col-md-10">
+                  <span th:if="${participationInfo.hasInternalParticipationFee()}"
+                        th:text="|${#money.format(participationInfo.internalParticipationFee)} (NAJU-Mitglieder) |">
+                    35€ (NAJU-Mitlgieder)
+                  </span>
+                  <span th:if="${participationInfo.hasExternalParticipationFee()}"
+                        th:text="|${#money.format(participationInfo.getExternalParticipationFee())} (nicht-Mitglieder)|">
+                    35€ (nicht-Mitglieder)
+                  </span>
+                  <span
+                      th:unless="${participationInfo.hasInternalParticipationFee()} or ${participationInfo.hasExternalParticipationFee()}">
+                    kostenlos
+                  </span>
+                </td>
+              </tr>
+              <tr class="row" th:if="${participationInfo.hasArrivalOptions()}">
+                <th class="col-md-2">
+                  <span class="glyphicon glyphicon-plane"></span> Anreise
+                </th>
+                <td class="col-md-10">
+                  <ul class="padding-left" th:remove="all-but-first">
+                    <li th:each="arrivalOptions : ${participationInfo.arrivalOptions}"
+                        th:text="${arrivalOptions}">Chemnitz
+                    </li>
+                    <li>Dresden</li>
+                    <li>Freiberg</li>
+                  </ul>
+                </td>
+              </tr>
+              <tr class="row">
+                <th class="col-md-2" th:inline="text">
+                  <span class="glyphicon glyphicon-link"></span>
+                  [[${event.forLocalGroup} ? 'zugehörige Ortsgruppe']]
+                  [[${event.forProject} ? 'zugehöriges Projekt']]
+                </th>
+                <td class="col-md-10">
+                  <a href="../projectDetails.html" class="label label-default"
+                     th:if="${event.forLocalGroup}"
+                     th:href="@{/localGroups/{id}(id=${event.localGroup.id})}"
+                     th:text="${event.localGroup.name}">NAJU Dresden</a>
+                  <a href="../projectDetails.html" class="label label-info"
+                     th:if="${event.forProject}"
+                     th:href="@{/projects/{id}(id=${event.project.id})}"
+                     th:text="${event.project.name}">Puppenstuben gesucht!</a>
+                </td>
+              </tr>
+              </tbody>
+
+            </table>
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </article>
+
+</main>
+
+<form id="logout-user" method="POST" th:action="@{/logout}">
+  <input type="hidden" name="csrf" th:value="csrf"/>
+</form>
+
+<script type="text/javascript" src="../../static/resources/js/jquery.min.js"
+        th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript" src="../../static/resources/js/bootstrap.min.js"
+        th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script src="../../static/resources/js/bootstrap-select.min.js"
+        th:src="@{/resources/js/bootstrap-select.min.js}"></script>
+<script src="../../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
+
+</body>
+</html>

@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import javax.persistence.AttributeOverride;
@@ -370,6 +371,12 @@ public class LocalGroup {
     events.add(event);
   }
 
+  public void removeEvent(Event event) {
+    Assert.notNull(event, "event may not be null");
+    Assert.isTrue(events.contains(event), "Local group has no such event: " + event);
+    events.remove(event);
+  }
+
   /**
    * @param project the project to be organized by the local group
    * @throws IllegalArgumentException if the project is {@code null} or already organized by the
@@ -410,6 +417,12 @@ public class LocalGroup {
   // overridden from Object
 
   @Override
+  public int hashCode() {
+
+    return Objects.hash(id);
+  }
+
+  @Override
   public boolean equals(Object o) {
     if (this == o) {
       return true;
@@ -417,32 +430,8 @@ public class LocalGroup {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-
     LocalGroup that = (LocalGroup) o;
-
-    if (that.id != 0 && this.id != 0) {
-      return that.id == this.id;
-    }
-
-    if (!name.equals(that.name)) {
-      return false;
-    }
-    if (!address.equals(that.address)) {
-      return false;
-    }
-    if (!members.equals(that.members)) {
-      return false;
-    }
-    return board != null ? board.equals(that.board) : that.board == null;
-  }
-
-  @Override
-  public int hashCode() {
-    int result = name.hashCode();
-    result = 31 * result + address.hashCode();
-    result = 31 * result + members.hashCode();
-    result = 31 * result + (board != null ? board.hashCode() : 0);
-    return result;
+    return id == that.id;
   }
 
   @Override

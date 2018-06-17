@@ -10,7 +10,7 @@ package de.naju.adebar.app.filter;
  * {@link #matching(Comparable, Comparable)} method checks, if two elements conform to the relation
  * imposed by the enumeration value (i. e. are elements of the set formed by the relation).
  * </p>
- * 
+ *
  * @author Rico Bergmann
  * @see Comparable
  */
@@ -34,7 +34,12 @@ public enum ComparableFilterType {
      */
     @Override
     public <T extends Comparable<T>> boolean matching(T offset, T toCheck) {
-      return toCheck.compareTo(offset) < 0;
+      if (offset != null && toCheck != null) {
+        return toCheck.compareTo(offset) < 0;
+      } else if (offset == null && toCheck == null) {
+        return true;
+      }
+      return false;
     }
   },
 
@@ -56,7 +61,12 @@ public enum ComparableFilterType {
      */
     @Override
     public <T extends Comparable<T>> boolean matching(T offset, T toCheck) {
-      return toCheck.compareTo(offset) == 0;
+      if (offset != null && toCheck != null) {
+        return toCheck.compareTo(offset) == 0;
+      } else if (offset == null && toCheck == null) {
+        return true;
+      }
+      return false;
     }
   },
 
@@ -78,7 +88,12 @@ public enum ComparableFilterType {
      */
     @Override
     public <T extends Comparable<T>> boolean matching(T offset, T toCheck) {
-      return toCheck.compareTo(offset) > 0;
+      if (offset != null && toCheck != null) {
+        return toCheck.compareTo(offset) > 0;
+      } else if (offset == null && toCheck == null) {
+        return true;
+      }
+      return false;
     }
   },
 
@@ -96,13 +111,18 @@ public enum ComparableFilterType {
      */
     @Override
     public <T extends Comparable<T>> boolean matching(T offset, T toCheck) {
-      return toCheck.compareTo(offset) <= 0;
+      if (offset != null && toCheck != null) {
+        return toCheck.compareTo(offset) <= 0;
+      } else if (offset == null && toCheck == null) {
+        return true;
+      }
+      return false;
     }
   },
 
   /**
    * Variation of the basic {@code ≤} order: {@code a ≥ b}
-   * 
+   *
    * <p>
    * This may be derived from {@code ≤} like so: {@code (a ≥ b ⇔ ¬(a ≤ b) ⋁ (a = b))}
    * </p>
@@ -118,13 +138,18 @@ public enum ComparableFilterType {
      */
     @Override
     public <T extends Comparable<T>> boolean matching(T offset, T toCheck) {
-      return toCheck.compareTo(offset) >= 0;
+      if (offset != null && toCheck != null) {
+        return toCheck.compareTo(offset) >= 0;
+      } else if (offset == null && toCheck == null) {
+        return true;
+      }
+      return false;
     }
   };
 
   /**
    * Compares two objects
-   * 
+   *
    * @param offset the objects to use as an "offset", one may think of this object as the "fixed
    *        part" of the comparison, <strong>everything else will be compared to this
    *        object</strong>
@@ -135,4 +160,5 @@ public enum ComparableFilterType {
    * @return {@code true} if the object toCheck applies to the demanded relation
    */
   public abstract <T extends Comparable<T>> boolean matching(T offset, T toCheck);
+
 }

@@ -9,7 +9,18 @@ import org.springframework.util.Assert;
  */
 public class Assert2 {
 
-  private Assert2() {
+  private Assert2() {}
+
+  public static void isFalse(boolean expr) {
+    if (expr) {
+      reportFailure("expression was true");
+    }
+  }
+
+  public static void isFalse(boolean expr, String msg) {
+    if (expr) {
+      reportFailureWithCustomMessage(msg);
+    }
   }
 
   /**
@@ -38,7 +49,7 @@ public class Assert2 {
   public static void noNullElements(Iterable<?> elems, String msg) {
     elems.forEach(it -> {
       if (it == null) {
-        reportFailure(msg, true);
+        reportFailureWithCustomMessage(msg);
       }
     });
   }
@@ -68,11 +79,20 @@ public class Assert2 {
   }
 
   /**
+   * Throws the {@link IllegalArgumentException} with a completely user-defined message
+   * 
+   * @param msg the message
+   */
+  private static void reportFailureWithCustomMessage(String msg) {
+    reportFailure(msg, true);
+  }
+
+  /**
    * Throws the {@link IllegalArgumentException} with a dedicated message
    *
    * @param msg the message
    * @param customMsg whether the message should completely replace the default message. If
-   *     {@code false} the message will be appended to some default prefix
+   *        {@code false} the message will be appended to some default prefix
    */
   private static void reportFailure(String msg, boolean customMsg) {
     String exceptionMsg = customMsg ? msg : ("Assertion failed: " + msg);

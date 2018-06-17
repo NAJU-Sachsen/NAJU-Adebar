@@ -1,17 +1,18 @@
 package de.naju.adebar.model.events.rooms.scheduling.slacker;
 
-import org.springframework.util.Assert;
 import de.naju.adebar.model.events.rooms.scheduling.Participant;
 import de.naju.adebar.model.events.rooms.scheduling.ParticipantListValidator;
 import de.naju.adebar.model.events.rooms.scheduling.RegisteredParticipants;
 import de.naju.adebar.model.events.rooms.scheduling.RoomSpecification;
+import org.springframework.util.Assert;
 
 /**
  * A pretty lazy {@link ParticipantListValidator}
  * <p>
  * The Slacker scheduler will basically life up to his name: it will only perform as few work as
  * possible. Therefore even though some kind of schedule may exist according to the slacker, it may
- * actually not be of much use in practical scenarios - resulting in an usually terrible assessment.
+ * actually not be of much use in practical scenarios - resulting in an usually terrible
+ * assessment.
  * </p>
  * <h2>Here is how it works:</h2>
  * <p>
@@ -45,7 +46,7 @@ public class SlackerParticipantListValidator implements ParticipantListValidator
   }
 
   @Override
-  public int assessScheduleReliablity() {
+  public int assessScheduleReliability() {
     Assert.notNull(slackerImpl, "No schedule has been provided");
     return slackerImpl.assessScheduleReliablity();
   }

@@ -7,7 +7,7 @@ import de.naju.adebar.model.persons.events.AbstractPersonRelatedEvent;
 
 /**
  * Base class for all profiles. Takes care of the event propagation to the {@link Person}
- * 
+ *
  * @author Rico Bergmann
  */
 public class AbstractProfile {
@@ -17,7 +17,7 @@ public class AbstractProfile {
 
   /**
    * Sets the person the profile belongs to
-   * 
+   *
    * @param person the person
    */
   protected void provideRelatedPerson(Person person) {
@@ -44,7 +44,7 @@ public class AbstractProfile {
   /**
    * Notifies the {@link Person} about a new event if a person was provided and the event actually
    * may be registered.
-   * 
+   *
    * @param event the event
    */
   protected <E extends AbstractPersonRelatedEvent> void registerEventIfPossible(E event) {
@@ -57,13 +57,13 @@ public class AbstractProfile {
   /**
    * Checks, whether another instance of the event may be registered on the related person. This is
    * going to fail if no person was provided.
-   * 
+   *
    * @param event the event to check
    * @return whether the event may be registered
    */
   private <E extends AbstractPersonRelatedEvent> boolean mayRegisterEventOf(E event) {
     return event.aggregateMayContainMultipleInstances() //
-        || !relatedPerson.hasRegisteredEventOf(event.getClass());
+        || (hasRelatedPerson() && !relatedPerson.hasRegisteredEventOf(event.getClass()));
   }
 
 }
