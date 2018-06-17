@@ -4,6 +4,7 @@ import de.naju.adebar.model.events.Event;
 import de.naju.adebar.model.events.EventId;
 import de.naju.adebar.model.events.ReadOnlyEventRepository;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.lang.NonNull;
 import org.springframework.util.Assert;
 
 public class EventConverter implements Converter<String, Event> {
@@ -16,7 +17,7 @@ public class EventConverter implements Converter<String, Event> {
   }
 
   @Override
-  public Event convert(String source) {
+  public Event convert(@NonNull String source) {
     EventId eventId = new EventId(source);
     return eventRepo.findById(eventId)
         .orElseThrow(() -> new IllegalArgumentException("No event with ID " + source));

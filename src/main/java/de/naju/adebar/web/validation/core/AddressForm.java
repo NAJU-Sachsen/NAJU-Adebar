@@ -1,5 +1,7 @@
 package de.naju.adebar.web.validation.core;
 
+import de.naju.adebar.model.core.Address;
+
 /**
  * Model POJO for addresses. For most use-cases a subclass should be used. The fields are set by
  * Thymeleaf when the associated form is submitted.
@@ -11,6 +13,10 @@ public class AddressForm {
   private String street;
   private String zip;
   private String city;
+
+  public AddressForm(Address address) {
+    this(address.getStreet(), address.getZip(), address.getCity());
+  }
 
   /**
    * Full constructor. None of the parameters may be {@code null}
@@ -28,8 +34,7 @@ public class AddressForm {
   /**
    * Default constructor
    */
-  public AddressForm() {
-  }
+  public AddressForm() { }
 
   /**
    * @return the street

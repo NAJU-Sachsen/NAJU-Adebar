@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta th:name="_csrf" th:value="${_csrf.token}"/>
+  <title>Personen filtern | Adebar</title>
+
+  <link rel="stylesheet" type="text/css" href="../../static/resources/css/bootstrap.min.css"
+        th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+  <link rel="stylesheet" type="text/css" href="../../static/resources/css/style.css"
+        th:href="@{/resources/css/style.css}"/>
+  <link rel="stylesheet" type="text/css" href="../../static/resources/css/formCategories.css"
+        th:href="@{/resources/css/formCategories.css}"/>
+  <link rel="stylesheet" type="text/css" href="../../static/resources/css/filterPersons.css"
+        th:href="@{/resources/css/filterPersons.css}"/>
+  <link rel="stylesheet" href="../../static/resources/css/bootstrap-select.min.css"
+        th:href="@{/resources/css/bootstrap-select.min.css}"/>
+</head>
+<body>
+
+<!-- central navigation -->
+<nav th:replace="navigation :: topNav(page='persons')"></nav>
+
+<!-- page specific content-->
+<main id="main">
+
+  <div class="row">
+
+    <!-- filters -->
+    <div class="col-md-9">
+      <div class="row no-filters">
+        <div class="alert alert-info">
+          Zur Zeit sind keine Filter ausgewählt
+        </div>
+      </div>
+
+      <div class="row">
+        <form class="container scroll-horizontal">
+
+          <!-- general filter -->
+          <div class="scroll-item-4 form-category filter-group" id="filter-person"
+               data-controlled-by="#toggle-person-filter">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h2 class="panel-title">Personen</h2>
+              </div>
+              <div class="panel-body form-category-content">
+                <div class="form-group">
+                  <label for="first-name" class="control-label">Vorname</label>
+                  <input type="text" name="firstName" class="form-control" id="first-name"
+                         placeholder="Hier den Vornamen eingeben"/>
+                </div>
+                <div class="form-group">
+                  <label for="last-name" class="control-label">Nachname</label>
+                  <input type="text" name="lastName" class="form-control" id="last-name"
+                         placeholder="Hier den Nachnamen eingeben"/>
+                </div>
+                <div class="form-group">
+                  <label for="email" class="control-label">E-Mail</label>
+                  <input type="email" name="email" class="form-control" id="email"
+                         placeholder="Hier die E-Mail eingeben"/>
+                </div>
+                <div class="form-group">
+                  <label for="phone" class="control-label">Telefon</label>
+                  <input type="tel" name="phone" class="form-control" id="phone"
+                         placeholder="Bitte als '0123 45678901' eingeben"/>
+                </div>
+                <hr/>
+                <div class="form-group">
+                  <label for="address_street" class="control-label">Straße</label>
+                  <input type="text" name="address_street" class="form-control" id="address_street"
+                         placeholder="Hier die Straße eingeben"/>
+                </div>
+                <div class="form-group">
+                  <label for="address_zip" class="control-label">PLZ</label>
+                  <input type="text" name="address_zip" class="form-control" id="address_zip"
+                         placeholder="Hier die Postleitzahl eingeben"/>
+                </div>
+                <div class="form-group">
+                  <label for="address_city" class="control-label">Stadt</label>
+                  <input type="text" name="address_city" class="form-control" id="address_city"
+                         placeholder="Hier die Stadt eingeben"/>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- participant filter -->
+          <div class="scroll-item-4 form-category filter-group" id="filter-participant"
+               data-controlled-by="#toggle-participant-filter">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h2 class="panel-title">Teilnehmende</h2>
+              </div>
+              <div class="panel-body form-category-content">
+                <div class="form-group">
+                  <label for="gender-filter" class="control-label">Geschlecht</label>
+                  <div id="gender-filter">
+                    <select name="genderFilterType" class="selectpicker" data-width="auto">
+                      <option id="no-gender-filter">egal</option>
+                      <option value="enforce">ausschließlich</option>
+                      <option value="ignore">außer</option>
+                    </select>
+                    <fieldset class="radio" data-controlled-by="#no-gender-filter"
+                              data-invert-control="true">
+                      <label><input type="radio" name="gender"/> weiblich</label>
+                      <label><input type="radio" name="gender"/> männlich</label>
+                      <label><input type="radio" name="gender"/> anderes</label>
+                    </fieldset>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="date-of-birth-filter" class="control-label">Geburtsdatum</label>
+                  <div class="input-group" id="date-of-birth-filter">
+                    <select name="dateOfBirthFilterType" class="selectpicker" data-width="auto">
+                      <option id="no-date-of-birth-filter">egal</option>
+                      <option value="exact">exakt am</option>
+                      <option value="before">vor dem</option>
+                      <option value="after">nach dem</option>
+                    </select>
+                    <input type="date" name="dateOfBirth" class="form-control"
+                           data-controlled-by="#no-date-of-birth-filter"
+                           data-invert-control="true"/>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="eating-habits" class="control-label">Ernährung</label>
+                  <textarea name="eatingHabits" class="form-control" id="eating-habits"
+                            placeholder="vegetarisch, vegan o.ä."></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="health-impairments" class="control-label">Allergien o.ä.</label>
+                  <textarea name="healthImpairments" class="form-control" id="health-impairments"
+                            placeholder="Heuschnupfen, Lebensmittelallergien, ..."></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="nabu-membership-filter"
+                         class="control-label">NABU-Mitgliedschaft</label>
+                  <div class="input-group" id="nabu-membership-filter">
+                    <select name="nabuMembershipFilterType" class="selectpicker" data-width="auto">
+                      <option id="no-nabu-membership-filter">egal</option>
+                      <option value="enforce">nur NABU-Mitglieder*innen</option>
+                      <option value="ignore">keine NABU-Mitglieder*innen</option>
+                    </select>
+                    <input type="text" name="nabuMembership_membershipNumber" class="form-control"
+                           placeholder="Mitglieds-Nr."
+                           data-controlled-by="#no-nabu-membership-filter"
+                           data-invert-control="true"/>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="remarks" class="control-label">Bemerkungen</label>
+                  <textarea name="remarks" class="form-control" id="remarks"
+                            placeholder="sonstige wichtige Informationen"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- activist filter -->
+          <div class="scroll-item-4 form-category filter-group" id="filter-activist"
+               data-controlled-by="#toggle-activist-filter">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h2 class="panel-title">Aktive</h2>
+              </div>
+              <div class="panel-body form-category-content">
+                <div class="form-group">
+                  <label for="juleica-filter" class="control-label">Juleica</label>
+                  <div>
+                    <select class="selectpicker" id="juleica-filter" name="juleicaFilterType">
+                      <option selected="selected">egal</option>
+                      <option value="enforce" id="enable-juleica-expiry-date-filter">
+                        nur mit Juleica
+                      </option>
+                      <option value="ignore">nur ohne Juleica</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="juleica-expiry-date-filter" class="control-label">Ablaufdatum</label>
+                  <div class="input-group" id="juleica-expiry-date-filter">
+                    <select name="dateOfBirthFilterType" class="selectpicker" data-width="auto"
+                            data-controlled-by="#enable-juleica-expiry-date-filter">
+                      <option id="no-juleica-expiry-date-filter">egal</option>
+                      <option value="exact">exakt am</option>
+                      <option value="before">vor dem</option>
+                      <option value="after">nach dem</option>
+                    </select>
+                    <input type="date" name="juleicaExpiryDate" class="form-control"
+                           data-controlled-by="#no-juleica-expiry-date-filter"
+                           data-invert-control="true"/>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="juleica-level-filter" class="control-label">Level</label>
+                  <div>
+                    <select class="selectpicker" id="juleica-level-filter"
+                            data-controlled-by="#enable-juleica-expiry-date-filter"
+                            data-container="body">
+                      <option selected="selected">egal</option>
+                      <optgroup label="Grundausbildung">
+                        <option value="g-only">nur G</option>
+                        <option value="except-g">außer G</option>
+                      </optgroup>
+                      <optgroup label="Ausbilder*in">
+                        <option value="l-only">nur L</option>
+                        <option value="except-l">außer L</option>
+                      </optgroup>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="scroll-item-4 form-category filter-group" id="filter-referent"
+               data-controlled-by="#toggle-referent-filter">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h2 class="panel-title">Referierende</h2>
+              </div>
+              <div class="panel-body form-category-content"></div>
+            </div>
+          </div>
+
+          <div class="scroll-item-4 form-category filter-group" id="filter-events"
+               data-controlled-by="#toggle-events-filter">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h2 class="panel-title">Veranstaltungen</h2>
+              </div>
+              <div class="panel-body form-category-content"></div>
+            </div>
+          </div>
+
+          <div class="scroll-item-4 form-category filter-group" id="filter-local-groups"
+               data-controlled-by="#toggle-local-groups-filter">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h2 class="panel-title">Ortsgruppen</h2>
+              </div>
+              <div class="panel-body form-category-content"></div>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+
+    <!-- filter controls -->
+    <div class="col-md-3">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h2 class="panel-title">Filtereinstellungen</h2>
+        </div>
+        <ul class="list-group">
+          <li class="list-group-item">
+              <span class="checkbox">
+                <label>
+                  <input type="checkbox" id="toggle-person-filter" data-toggle="collapse-inline"
+                         data-target="#filter-person"/> nach Personen-Details filtern
+                </label>
+              </span>
+          </li>
+          <li class="list-group-item">
+              <span class="checkbox">
+                <label>
+                  <input type="checkbox" id="toggle-participant-filter"
+                         data-toggle="collapse-inline" data-target="#filter-participant"/> nach Teilnehmendem-Details filtern
+                </label>
+              </span>
+          </li>
+          <li class="list-group-item">
+              <span class="checkbox">
+                <label>
+                  <input type="checkbox" id="toggle-activist-filter" data-toggle="collapse-inline"
+                         data-target="#filter-activist"/> nach Aktiven-Details filtern
+                </label>
+              </span>
+          </li>
+          <li class="list-group-item">
+              <span class="checkbox">
+                <label>
+                  <input type="checkbox" id="toggle-referent-filter" data-toggle="collapse-inline"
+                         data-target="#filter-referent"/> nach Referierenden-Details filtern
+                </label>
+              </span>
+          </li>
+          <li class="list-group-item">
+              <span class="checkbox">
+                <label>
+                  <input type="checkbox" id="toggle-events-filter" data-toggle="collapse-inline"
+                         data-target="#filter-events"/> nach Veranstaltungs-Teilnahmen filtern
+                </label>
+              </span>
+          </li>
+          <li class="list-group-item">
+              <span class="checkbox">
+                <label>
+                  <input type="checkbox" id="toggle-local-groups-filter"
+                         data-toggle="collapse-inline" data-target="#filter-local-groups"/> nach Ortsgruppen-Mitgliedschaft filtern
+                </label>
+              </span>
+          </li>
+        </ul>
+        <div class="panel-body">
+          <h3 class="h4">Springe zu:</h3>
+        </div>
+        <ul class="nav nav-pills nav-stacked">
+          <li role="presentation">
+            <a href="#filter-person"><span class="glyphicon glyphicon-chevron-right"></span>
+              Personen</a>
+          </li>
+          <li role="presentation">
+            <a href="#filter-participant"><span class="glyphicon glyphicon-chevron-right"></span>
+              Teilnehmende</a>
+          </li>
+          <li role="presentation">
+            <a href="#filter-activist"><span class="glyphicon glyphicon-chevron-right"></span>
+              Aktive</a>
+          </li>
+          <li role="presentation">
+            <a href="#filter-referent"><span class="glyphicon glyphicon-chevron-right"></span>
+              Referierende</a>
+          </li>
+          <li role="presentation">
+            <a href="#filter-events"><span class="glyphicon glyphicon-chevron-right"></span>
+              Veranstaltungen</a>
+          </li>
+          <li role="presentation">
+            <a href="#filter-local-groups"><span class="glyphicon glyphicon-chevron-right"></span>
+              Ortsgruppen</a>
+          </li>
+        </ul>
+        <div class="panel-footer clearfix">
+          <div class="pull-right">
+            <button type="button" class="btn btn-success">Filtern</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <form id="logout-user" method="POST" th:action="@{/logout}">
+    <input type="hidden" name="csrf" th:value="csrf"/>
+  </form>
+
+</main>
+<input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+<span class="hidden" id="principal" sec:authentication="principal.associatedPerson"></span>
+<script type="text/javascript" src="../../static/resources/js/jquery.min.js"
+        th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript" src="../../static/resources/js/bootstrap.min.js"
+        th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script src="../../static/resources/js/bootstrap-select.min.js"
+        th:src="@{/resources/js/bootstrap-select.min.js}"></script>
+<script src="../../static/resources/js/collapse.js" th:src="@{/resources/js/collapse.js}"></script>
+<script src="../../static/resources/js/formControls.js"
+        th:src="@{/resources/js/formControls.js}"></script>
+<script src="../../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
+<script src="../../static/resources/js/filterPersons.js"
+        th:src="@{/resources/js/filterPersons.js}"></script>
+</body>
+</html>

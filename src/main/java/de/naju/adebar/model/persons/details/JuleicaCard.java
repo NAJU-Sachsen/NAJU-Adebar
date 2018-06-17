@@ -66,7 +66,7 @@ public class JuleicaCard {
 
   /**
    * @return {@code true} if the Juleica card is valid (i.e. not expired), or {@code false}
-   *         otherwise
+   *     otherwise
    */
   @Transient
   public boolean isValid() {
@@ -74,6 +74,10 @@ public class JuleicaCard {
       return false;
     }
     return expiryDate.isAfter(LocalDate.now());
+  }
+
+  public boolean isExpired() {
+    return !isValid();
   }
 
   /**
@@ -91,24 +95,27 @@ public class JuleicaCard {
   }
 
   @Override
-  public boolean equals(Object o) {
-    if (this == o)
-      return true;
-    if (o == null || getClass() != o.getClass())
-      return false;
-
-    JuleicaCard that = (JuleicaCard) o;
-
-    if (expiryDate != null ? !expiryDate.equals(that.expiryDate) : that.expiryDate != null)
-      return false;
-    return level != null ? level.equals(that.level) : that.level == null;
-  }
-
-  @Override
   public int hashCode() {
     int result = expiryDate != null ? expiryDate.hashCode() : 0;
     result = 31 * result + (level != null ? level.hashCode() : 0);
     return result;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    JuleicaCard that = (JuleicaCard) o;
+
+    if (expiryDate != null ? !expiryDate.equals(that.expiryDate) : that.expiryDate != null) {
+      return false;
+    }
+    return level != null ? level.equals(that.level) : that.level == null;
   }
 
   @Override

@@ -1,10 +1,11 @@
 package de.naju.adebar.model.persons;
 
-import de.naju.adebar.model.core.Email;
 import java.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import de.naju.adebar.model.core.Age;
+import de.naju.adebar.model.core.Email;
 
 /**
  * @author Rico Bergmann
@@ -29,15 +30,15 @@ public class ParticipantUnitTest {
     LocalDate dob = LocalDate.now().minusDays(1);
     hans.getParticipantProfile().setDateOfBirth(dob);
 
-    int age = 0;
+    Age age = Age.of(0);
     Assert.assertEquals(age, hans.getParticipantProfile().calculateAge());
 
-    age = 5;
-    hans.getParticipantProfile().setDateOfBirth(dob.minusYears(age));
+    age = Age.of(5);
+    hans.getParticipantProfile().setDateOfBirth(dob.minusYears(age.getValue()));
     Assert.assertEquals(age, hans.getParticipantProfile().calculateAge());
 
-    age = 42;
-    hans.getParticipantProfile().setDateOfBirth(dob.minusYears(age));
+    age = Age.of(42);
+    hans.getParticipantProfile().setDateOfBirth(dob.minusYears(age.getValue()));
     Assert.assertEquals(age, hans.getParticipantProfile().calculateAge());
 
   }

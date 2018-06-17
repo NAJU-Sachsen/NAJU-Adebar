@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta th:name="_csrf" th:value="${_csrf.token}"/>
+
+  <title>Veranstaltung erstellen | Adebar</title>
+
+  <link rel="stylesheet" type="text/css" href="../../static/resources/css/bootstrap.min.css"
+        th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+
+  <link rel="stylesheet" type="text/css" href="../../static/resources/css/style.css"
+        th:href="@{/resources/css/style.css}"/>
+  <link rel="stylesheet" type="text/css" href="../../static/resources/css/formCategories.css"
+        th:href="@{/resources/css/formCategories.css}"/>
+
+  <link rel="stylesheet" href="../../static/resources/css/bootstrap-select.min.css"
+        th:href="@{/resources/css/bootstrap-select.min.css}"/>
+</head>
+<body>
+
+<!-- central navigation -->
+<nav th:replace="navigation :: topNav(page='events')"></nav>
+
+<!-- page specific content-->
+<main id="main" th:object="${form}">
+
+  <!-- cancel confirmation dialog -->
+  <div class="modal fade" id="confirm-abort" tabindex="-1" role="document">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+          Möchtest du das Erstellen wirklich abbrechen? Alle Daten gehen verloren!
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">
+            Lieber doch nicht
+          </button>
+          <a href="overview.html" class="btn btn-danger" th:href="@{/events}">
+            Ja, wirklich
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- controls -->
+  <div class="row display-category">
+    <div class="col-md-4">
+      <h1>Veranstaltung erstellen</h1>
+    </div>
+    <div class="col-md-8 clearfix">
+      <div class="alert alert-warning pull-left" th:if="${#fields.hasAnyErrors()}">
+        Einige Eingaben sind ungültig, bitte überprüfe und korrigiere sie!
+      </div>
+      <div class="pull-right">
+        <button type="button" class="btn btn-default" data-toggle="modal"
+                data-target="#confirm-abort">Abbrechen
+        </button>
+        <button type="submit" form="add-event" class="btn btn-primary">Speichern</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- the form -->
+  <form id="add-event" class="row display-category" method="post" th:action="@{/events/add}">
+
+    <input type="hidden" name="return-to" th:value="${#request.getParameter('return-to')}"
+           th:if="${#request.getParameter('return-to') != null}"/>
+    <input type="hidden" name="return-action" th:value="${#request.getParameter('return-action')}"
+           th:if="${#request.getParameter('return-action') != null}"/>
+
+    <!-- general info -->
+    <div class="col-md-4">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h2 class="panel-title">Allgemein</h2>
+        </div>
+        <div class="panel-body">
+          <div class="form-group" th:classappend="${#fields.hasErrors('name')} ? 'has-error'">
+            <label for="name" class="control-label">Name</label>
+            <input type="text" class="form-control" id="name" required="required"
+                   placeholder="erforderlich" autocomplete="off" th:field="*{name}"/>
+            <p class="help-block" th:if="${#fields.hasErrors('name')}"
+               th:errors="*{name}">
+              Erforderlich
+            </p>
+          </div>
+          <div class="form-group" th:classappend="${#fields.hasErrors('startDate')} ? 'has-error'">
+            <label for="start-date" class="control-label">Beginn</label>
+            <input type="date" class="form-control" id="start-date" required="required"
+                   placeholder="erforderlich" th:field="*{startDate}">
+            <p class="help-block" th:if="${#fields.hasErrors('startDate')}"
+               th:errors="*{startDate}">
+              Erforderlich
+            </p>
+          </div>
+          <div class="form-group" th:classappend="${#fields.hasErrors('endDate')} ? 'has-error'">
+            <label for="end-date" class="control-label">Ende</label>
+            <input type="date" class="form-control" id="end-date" required="required"
+                   placeholder="erforderlich" th:field="*{endDate}"/>
+            <p class="help-block" th:if="${#fields.hasErrors('endDate')}"
+               th:errors="*{endDate}">
+              Erforderlich
+            </p>
+          </div>
+          <hr/>
+          <div class="form-group"
+               th:classappend="${#fields.hasErrors('useEventTime')} ? 'has-error'">
+            <label for="use-time" class="control-label">Zeitraum</label>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" id="use-time" data-toggle="collapse"
+                       data-target="#event-times" th:field="*{useEventTime}"/>
+                Startzeit und Ende für die Veranstaltung angeben
+              </label>
+            </div>
+            <p class="help-block" th:if="${#fields.hasErrors('useEventTime')}"
+               th:errors="*{useEventTime}">
+              Erforderlich
+            </p>
+          </div>
+          <div class="collapse" id="event-times" data-controlled-by="#use-time">
+            <div class="form-group"
+                 th:classappend="${#fields.hasErrors('startTime')} ? 'has-error'">
+              <label for="start-time" class="control-label">Startzeit</label>
+              <input type="time" class="form-control" id="start-time" th:field="*{startTime}"/>
+              <p class="help-block" th:if="${#fields.hasErrors('startTime')}"
+                 th:errors="*{useEventTime}">
+                Erforderlich
+              </p>
+            </div>
+            <div class="form-group"
+                 th:classappend="${#fields.hasErrors('endTime')} ? 'has-error'">
+              <label for="end-time" class="control-label">Endzeit</label>
+              <input type="time" class="form-control" id="end-time" th:field="*{endTime}"/>
+              <p class="help-block" th:if="${#fields.hasErrors('endTime')}"
+                 th:errors="*{endTime}">
+                Erforderlich
+              </p>
+            </div>
+          </div>
+          <hr/>
+          <div class="form-group"
+               th:classappend="${#fields.hasErrors('place.street')} ? 'has-error'">
+            <label for="place_street" class="control-label">Straße</label>
+            <div class="input-group">
+              <input type="text" class="form-control" id="place_street" autocomplete="off"
+                     th:field="*{place.street}"/>
+              <span class="input-group-addon">optional</span>
+            </div>
+            <p class="help-block" th:if="${#fields.hasErrors('place.street')}"
+               th:errors="*{place.street}">
+              Erforderlich
+            </p>
+          </div>
+          <div class="form-group"
+               th:classappend="${#fields.hasErrors('place.zip')} ? 'has-error'">
+            <label for="place_zip" class="control-label">PLZ</label>
+            <div class="input-group">
+              <input type="text" class="form-control" id="place_zip" autocomplete="off"
+                     th:field="*{place.zip}"/>
+              <span class="input-group-addon">optional</span>
+            </div>
+            <p class="help-block" th:if="${#fields.hasErrors('place.zip')}"
+               th:errors="*{place.zip}">
+              Erforderlich
+            </p>
+          </div>
+          <div class="form-group" th:classappend="${#fields.hasErrors('place.city')} ? 'has-error'">
+            <label for="place_city" class="control-label">Ort</label>
+            <div class="input-group">
+              <input type="text" class="form-control" id="place_city" autocomplete="off"
+                     th:field="*{place.city}"/>
+              <span class="input-group-addon">optional</span>
+            </div>
+            <p class="help-block" th:if="${#fields.hasErrors('place.city')}"
+               th:errors="*{place.city}">
+              Erforderlich
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- participation specific info -->
+    <div class="col-md-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h2 class="panel-title">Teilnahme</h2>
+        </div>
+        <div class="panel-body">
+          <div class="form-group"
+               th:classappend="${#fields.hasErrors('participationInfo.participantsLimit')} ? 'has-error'">
+            <label for="participants-limit" class="control-label">Max. Teilnehmende</label>
+            <div class="input-group">
+              <input type="number" min="1" class="form-control" id="participants-limit"
+                     placeholder="Limit" data-controlled-by="#toggle-room-scheduling"
+                     data-invert-control="true" th:field="*{participationInfo.participantsLimit}"/>
+              <span class="input-group-addon">optional</span>
+            </div>
+            <p class="help-block"
+               th:if="${#fields.hasErrors('participationInfo.participantsLimit')}"
+               th:errors="*{participationInfo.participantsLimit}">
+              Erforderlich
+            </p>
+          </div>
+          <div class="form-group"
+               th:classappend="${#fields.hasErrors('participationInfo.minParticipantAge')} ? 'has-error'">
+            <label for="min-participation-age" class="control-label">Teilnehmendenalter</label>
+            <div class="input-group">
+              <input type="number" min="6" max="18" class="form-control" id="min-participation-age"
+                     placeholder="Mindestalter" th:field="*{participationInfo.minParticipantAge}"/>
+              <span class="input-group-addon">optional</span>
+            </div>
+            <p class="help-block"
+               th:if="${#fields.hasErrors('participationInfo.minParticipantAge')}"
+               th:errors="*{participationInfo.minParticipantAge}">
+              Erforderlich
+            </p>
+          </div>
+          <div class="form-group"
+               th:classappend="${#fields.hasErrors('participationInfo.extParticipationFee')} ? 'has-error'">
+            <label for="ext-participation-fee" class="control-label">Teilnahmebeitrag
+              (nicht-Mitglieder)</label>
+            <div class="input-group">
+              <input type="number" min="0" class="form-control" id="ext-participation-fee"
+                     placeholder="externer TNB"
+                     th:field="*{participationInfo.extParticipationFee}"/>
+              <span class="input-group-addon">optional</span>
+            </div>
+            <p class="help-block"
+               th:if="${#fields.hasErrors('participationInfo.extParticipationFee')}"
+               th:errors="*{participationInfo.extParticipationFee}">
+              Erforderlich
+            </p>
+          </div>
+          <div class="form-group"
+               th:classappend="${#fields.hasErrors('participationInfo.intParticipationFee')} ? 'has-error'">
+            <label for="int-participation-fee" class="control-label">Teilnahmebeitrag
+              (NABU-Mitglieder)</label>
+            <div class="input-group">
+              <input type="number" min="0" class="form-control"
+                     id="int-participation-fee"
+                     placeholder="interner TNB"
+                     th:field="*{participationInfo.intParticipationFee}"/>
+              <span class="input-group-addon">optional</span>
+            </div>
+            <p class="help-block"
+               th:if="${#fields.hasErrors('participationInfo.intParticipationFee')}"
+               th:errors="*{participationInfo.intParticipationFee}">
+              Erforderlich
+            </p>
+          </div>
+          <hr/>
+          <div class="form-group"
+               th:classappend="${#fields.hasErrors('participationInfo.arrivalOptions')} ? 'has-error'">
+            <label for="arrival-options" class="control-label">Anreise</label>
+            <ul class="list-group" id="arrival-options" th:remove="all-but-first">
+              <li class="list-group-item" th:each="arrival : *{participationInfo.arrivalOptions}"
+                  th:inline="text">
+                [[${arrival.description}]]
+                <input type="hidden" name="participationInfo.arrivalOptions" value="selbstständig"
+                       th:value="${arrival.description}"/>
+                <button type="button" class="btn btn-danger btn-xs pull-right remove-arrival-opt">
+                  <span class="glyphicon glyphicon-remove"></span>
+                </button>
+              </li>
+              <li class="list-group-item">
+                Dresden
+                <button type="button" class="btn btn-danger btn-xs pull-right remove-arrival-opt">
+                  <span class="glyphicon glyphicon-remove"></span>
+                </button>
+              </li>
+              <li class="list-group-item">
+                Chemnitz
+                <button type="button" class="btn btn-danger btn-xs pull-right remove-arrival-opt">
+                  <span class="glyphicon glyphicon-remove"></span>
+                </button>
+              </li>
+            </ul>
+
+            <div class="clearfix">
+              <div class="form-inline pull-right">
+                <label for="arrival-opt" class="control-label margin-right">Neue Option:</label>
+                <input type="text" class="form-control" id="arrival-opt" placeholder="Option"
+                       autocomplete="off"/>
+                <button type="button" class="btn btn-default btn-sm" id="add-arrival-opt">
+                  <span class="glyphicon glyphicon-plus"></span>
+                  Hinzufügen
+                </button>
+              </div>
+            </div>
+
+            <div th:if="${#fields.hasErrors('participationInfo.arrivalOptions')}">
+              <hr/>
+              <p class="help-block"
+                 th:errors="*{participationInfo.arrivalOptions}">
+                Erforderlich
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- belonging and accommodation -->
+    <div class="col-md-4">
+      <div class="container-fluid">
+        <div class="row">
+
+          <!-- belonging -->
+          <div class="col-md-12">
+
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h2 class="panel-title">Sonstiges</h2>
+              </div>
+              <div class="panel-body">
+                <div class="form-group"
+                     th:classappend="${#fields.hasErrors('belonging')} ? 'has-error'">
+                  <label for="belonging" class="control-label">Zugehörigkeit</label>
+                  <div id="belonging">
+                    <label class="radio-inline">
+                      <input type="radio" value="LOCAL_GROUP" id="belonging-select-local-group"
+                             name="belonging-select" checked="checked" th:field="*{belonging}"/>
+                      Ortsgruppe
+                    </label>
+                    <label class="radio-inline">
+                      <input type="radio" value="PROJECT" id="belonging-select-project"
+                             name="belonging-select" th:field="*{belonging}"/>
+                      Projekt
+                    </label>
+                  </div>
+                  <p class="help-block"
+                     th:if="${#fields.hasErrors('belonging')}"
+                     th:errors="*{belonging}">
+                    Erforderlich
+                  </p>
+                </div>
+                <div class="form-group"
+                     th:classappend="${#fields.hasErrors('localGroup') or #fields.hasErrors('project')} ? 'has-error'">
+                  <label for="belonging-selection" class="control-label">Auswählen</label>
+                  <div id="belonging-selection">
+                    <label for="belonging-local-group" class="sr-only">Zugehörig zu einer
+                      Ortsgruppe</label>
+                    <select class="selectpicker" id="belonging-local-group"
+                            data-live-search="true"
+                            data-controlled-by="#belonging-select-local-group"
+                            data-display-toggle="true" th:remove="all-but-first"
+                            th:field="*{localGroup}">
+                      <option th:each="chapter : ${localGroups}" th:value="${chapter.id}"
+                              th:text="${chapter.name}">NAJU Sachsen
+                      </option>
+                      <option>NAJU Dresden</option>
+                      <option>NAJU Freiberg</option>
+                    </select>
+                    <label for="belonging-project" class="sr-only">
+                      Zugehörig zu einem Projekt
+                    </label>
+                    <select class="selectpicker" id="belonging-project"
+                            data-controlled-by="#belonging-select-project"
+                            data-display-toggle="true" th:remove="all-but-first"
+                            th:field="*{project}">
+                      <option data-subtext="NAJU Dresden" th:each="project : ${projects}"
+                              th:value="${project.id}" th:text="${project.name}"
+                              th:attr="data-subtext=${project.localGroup.name}">
+                        Puppenstuben gesucht!
+                      </option>
+                      <option data-subtext="NAJU Dresden">Waldläufer</option>
+                    </select>
+                  </div>
+                  <p class="help-block"
+                     th:if="${#fields.hasErrors('localGroup')}"
+                     th:errors="*{localGroup}">
+                    Erforderlich
+                  </p>
+                  <p class="help-block"
+                     th:if="${#fields.hasErrors('project')}"
+                     th:errors="*{project}">
+                    Erforderlich
+                  </p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- accommodation -->
+          <div class="col-md-12">
+
+            <div class="panel panel-default form-category toggle-category">
+              <div class="panel-heading">
+                <div class="checkbox-inline">
+                  <label>
+                    <input type="checkbox" class="form-category-controller"
+                           id="toggle-room-scheduling" th:field="*{customAccommodation}"/>
+                    Unterbringung konfigurieren
+                  </label>
+                </div>
+
+                <button type="button" class="btn btn-link ignore-control"
+                        data-toggle="collapse"
+                        data-target="#room-scheduling-description">
+                  <span class="glyphicon glyphicon-question-sign"></span>
+                  Was ist das?
+                </button>
+                <div class="collapse" id="room-scheduling-description">
+                  <p>
+                    Teilnehmende werden anhand einer Zimmerverteilung in Räume einsortiert. Ob eine
+                    Person an einer Veranstaltung teilnehmen kann, hängt davon ab, ob in der Zeit
+                    ein passendes Bett frei ist.
+                  </p>
+                  <p>
+                    Die Funktion deaktiviert das Teilnahmelimit, da sich dieses direkt aus den zur
+                    Verfügung stehenden Räumen ergibt.
+                  </p>
+                </div>
+                <h2 class="hidden">Unterbringung</h2>
+              </div>
+              <div class="panel-body form-category-content">
+
+                <div class="form-group">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" th:field="*{flexibleParticipationTimes}"/>
+                      flexible Teilnahmezeiträume erlauben
+                    </label>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" th:field="*{accommodation.includeCounselors}"/>
+                      Betreuende auf die gleichen Zimmer verteilen
+                    </label>
+                  </div>
+                </div>
+
+                <hr/>
+
+                <!-- room overview -->
+                <div class="form-group">
+                  <label for="accommodation" class="control-label">Verfügbare Zimmer</label>
+
+                  <div class="table-responsive">
+                    <table class="table table-striped table-hover"
+                           id="accommodation">
+                      <thead>
+                      <tr class="row">
+                        <th>Betten</th>
+                        <th>Zimmertyp</th>
+                        <th></th>
+                      </tr>
+                      </thead>
+                      <tbody id="accommodation-rooms" th:remove="all-but-first">
+                      <tr class="row" th:each="room, rstat : *{accommodation.rooms}">
+                        <td class="col-md-2" th:inline="text">
+                          <span class="glyphicon glyphicon-bed margin-right"></span>
+                          <span
+                              th:text="*{accommodation.rooms[__${rstat.index}__].roomCapacity}"></span>
+                          <input type="hidden"
+                                 th:field="*{accommodation.rooms[__${rstat.index}__].roomCapacity}"/>
+                        </td>
+                        <td class="col-md-8" th:inline="text">
+                          <span class="glyphicon glyphicon-user"></span>
+                          [[*{accommodation.rooms[__${rstat.index}__].roomType}]]
+                          <input type="hidden"
+                                 th:field="*{accommodation.rooms[__${rstat.index}__].roomType}"/>
+                        </td>
+                        <td class="col-md-2">
+                          <button type="button"
+                                  class="btn btn-danger btn-xs pull-right remove-accommodation">
+                            <span class="glyphicon glyphicon-remove"></span>
+                          </button>
+                        </td>
+                      </tr>
+                      <tr class="row">
+                        <td class="col-md-3">
+                          <span class="glyphicon glyphicon-bed margin-right"></span> 5
+                        </td>
+                        <td class="col-md-9">
+                          <span class="glyphicon glyphicon-user"></span> Jungen
+                        </td>
+                        <td class="col-md-2">
+                          <button type="button" class="btn btn-danger btn-xs pull-right">
+                            <span class="glyphicon glyphicon-remove"></span>
+                          </button>
+                        </td>
+                      </tr>
+                      <tr class="row">
+                        <td class="col-md-3">
+                          <span class="glyphicon glyphicon-bed margin-right"></span> 4
+                        </td>
+                        <td class="col-md-9">
+                          <span class="glyphicon glyphicon-user"></span> flexibel
+                        </td>
+                        <td class="col-md-2">
+                          <button type="button" class="btn btn-danger btn-xs pull-right">
+                            <span class="glyphicon glyphicon-remove"></span>
+                          </button>
+                        </td>
+                      </tr>
+                      <tr class="row">
+                        <td class="col-md-3">
+                          <span class="glyphicon glyphicon-bed margin-right"></span> 1
+                        </td>
+                        <td class="col-md-9">
+                          <span class="glyphicon glyphicon-user"></span> Reserve
+                        </td>
+                        <td class="col-md-2">
+                          <button type="button" class="btn btn-danger btn-xs pull-right">
+                            <span class="glyphicon glyphicon-remove"></span>
+                          </button>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
+
+                <p class="help-block"
+                   th:if="${#fields.hasErrors('customAccommodation')}"
+                   th:errors="*{customAccommodation}">
+                  Erforderlich
+                </p>
+
+                <hr/>
+
+                <!-- new room -->
+                <div class="form-group">
+                  <div class="container-fluid">
+                    <div class="row">
+                      <h3 class="h5 strong">Neuen Raum hinzufügen:</h3>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-5">
+                        <div class="form-group">
+                          <label for="accommodation-beds-count"
+                                 class="sr-only">Betten</label>
+                          <div class="input-group">
+                            <span class="input-group-addon">
+                              <span class="glyphicon glyphicon-bed margin-right"></span>
+                            </span>
+                            <input type="number" class="form-control"
+                                   id="accommodation-beds-count" min="1" value="1"
+                                   placeholder="Anzahl"/>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-7">
+                        <div class="form-group">
+                          <label for="accommodation-room-type"
+                                 class="sr-only">Zimmertyp</label>
+                          <div class="input-group">
+                            <div class="input-group-addon">
+                              <span class="glyphicon glyphicon-user"></span>
+                            </div>
+                            <select class="selectpicker" id="accommodation-room-type"
+                                    data-container="body">
+                              <option value="FEMALE">Mädchen</option>
+                              <option value="MALE">Jungen</option>
+                              <option value="FLEX">flexibel</option>
+                              <option value="FALLBACK">Reserve</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="clearfix">
+                    <div class="pull-right">
+                      <button type="button" class="btn btn-default btn-sm"
+                              id="accommodation-add-room">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        Hinzufügen
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <hr/>
+
+                <button type="button" class="btn btn-link" data-toggle="collapse"
+                        data-target="#accommodation-help">
+                  <span class="glyphicon glyphicon-info-sign"></span>
+                  Hilfe!
+                </button>
+                <article id="accommodation-help" class="collapse help-block">
+                  <h3 class="h4">Wie funktioniert das?</h3>
+                  <p>
+                    Wenn für eine Veranstaltung eine Zimmerverteilung hinterlegt ist, wird Adebar
+                    für jede*n neue*n Teilnehmende*n überprüfen, ob für diese*n im angegebenen
+                    Teilnahmezeitraum noch ein passendes Bett frei ist. Nur wenn das der Fall ist,
+                    lässt sich der/die Teilnehmende hinzufügen.
+                  </p>
+                  <p>
+                    Für die Unterbringung stehen verschiedene Arten von Räumen zur Verfügung:
+                  </p>
+                  <dl>
+                    <dt>Standard-Räume</dt>
+                    <dd>
+                      Für Mädchen und Jungen können sog. Standard-Räume erstellt werden. In diese
+                      können entsprechend auch nur Teilnehmde des passenden Geschlechts eingeteilt
+                      werden.
+                    </dd>
+                    <dt>Flexible Räume</dt>
+                    <dd>
+                      Flex. Räume werden keinem Geschlecht fest zugeordnet, sondern je nach Bedarf
+                      entweder für Mädchen oder Jungen reserviert.
+                    </dd>
+                    <dt>Reserve-Räume</dt>
+                    <dd>
+                      Reserve-Räume funktionieren wie flex. Räume, werden also je nach Bedarf einem
+                      Geschlecht zugeordnet. Allerdings werden Reserve-Räume nur verwendet, wenn
+                      sonst nicht alle Teilnehmenden untergebracht werden könnten.
+                    </dd>
+                  </dl>
+                  <p>
+                    Sollte die Option <cite>Betreuende auf die gleichen Zimmer verteilen</cite>
+                    aktiviert sein, werden Betreuende wie normale Teilnehmer*innen auf Betten
+                    zugeordnet.
+                  </p>
+                  <p>
+                    Die Option <cite>flexible Teilnahmezeiträume erlauben</cite> ermöglicht es
+                    außerdem, zu konfigurieren, wie lange ein*e Teilnehmende*r bei einer
+                    Veranstaltung dabei ist. Sollte ein Camp also bspw. zwei Wochen dauern, können
+                    Teilnehmende auch nur die erste Woche bleiben.
+                  </p>
+                </article>
+
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </form>
+
+  <!-- controls -->
+  <div class="row display-category">
+    <div class="pull-right">
+      <button type="button" class="btn btn-default" data-toggle="modal"
+              data-target="#confirm-abort">Abbrechen
+      </button>
+      <button type="submit" form="add-event" class="btn btn-primary">Speichern</button>
+    </div>
+  </div>
+
+  <form id="logout-user" method="POST" th:action="@{/logout}">
+    <input type="hidden" name="csrf" th:value="csrf"/>
+  </form>
+
+</main>
+<span class="hidden" id="principal" sec:authentication="principal.associatedPerson"></span>
+
+<script type="text/javascript" src="../../static/resources/js/jquery.min.js"
+        th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript" src="../../static/resources/js/bootstrap.min.js"
+        th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script src="../../static/resources/js/bootstrap-select.min.js"
+        th:src="@{/resources/js/bootstrap-select.min.js}"></script>
+
+<script src="../../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
+<script src="../../static/resources/js/formControls.js"
+        th:src="@{/resources/js/formControls.js}"></script>
+<script src="../../static/resources/js/addPerson.js"
+        th:src="@{/resources/js/addEvent.js}"></script>
+
+</body>
+</html>

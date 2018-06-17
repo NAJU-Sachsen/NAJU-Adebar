@@ -1,14 +1,9 @@
 package de.naju.adebar.web.controller.persons;
 
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Predicate;
-import de.naju.adebar.model.events.Event;
-import de.naju.adebar.model.events.EventRepository;
-import de.naju.adebar.model.events.QEvent;
-import de.naju.adebar.model.persons.Person;
-import de.naju.adebar.web.model.persons.participants.ParticipationTimeline;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +13,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
+import de.naju.adebar.model.events.Event;
+import de.naju.adebar.model.events.EventRepository;
+import de.naju.adebar.model.events.ParticipationManager;
+import de.naju.adebar.model.events.ParticipationManager.Result;
+import de.naju.adebar.model.events.QEvent;
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.web.model.persons.participants.ParticipationTimeline;
 
 /**
  * Handles all requests to participation timelines
@@ -31,15 +36,19 @@ public class ParticipationController {
   private static final QEvent event = QEvent.event;
 
   private final EventRepository eventRepo;
+  private final ParticipationManager participationManager;
 
   /**
    * Full constructor
    *
    * @param eventRepo repository containing all events
    */
-  public ParticipationController(EventRepository eventRepo) {
+  public ParticipationController(EventRepository eventRepo,
+      ParticipationManager participationManager) {
     Assert.notNull(eventRepo, "eventRepo may not be null");
+    Assert.notNull(participationManager, "participationManager may not be null");
     this.eventRepo = eventRepo;
+    this.participationManager = participationManager;
   }
 
   /**
@@ -79,10 +88,22 @@ public class ParticipationController {
    */
   @PostMapping("/persons/{id}/events/add")
   @Transactional
-  public String addParticipantToEvents(@PathVariable("id") Person person, @RequestParam("event-ids")
-      List<Event> events) {
+  public String addParticipantToEvents(@PathVariable("id") Person person,
+      @RequestParam("event-ids") List<Event> events, RedirectAttributes redirAttr) {
 
-    events.forEach(e -> e.addParticipant(person));
+    Map<Event, Result> failedParticipations = new HashMap<>();
+
+    events.forEach(e -> {
+      Result res = participationManager.addParticipant(e, person);
+      if (res != Result.OK) {
+        failedParticipations.put(e, res);
+      }
+    });
+
+    if (!failedParticipations.isEmpty()) {
+      redirAttr.addAttribute("add", "failed");
+      redirAttr.addFlashAttribute("failedParticipations", failedParticipations);
+    }
 
     return "redirect:/persons/" + person.getId() + "/events";
   }

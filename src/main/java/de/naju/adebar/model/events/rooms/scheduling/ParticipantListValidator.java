@@ -29,7 +29,7 @@ public interface ParticipantListValidator {
    * @param participants the participating persons
    * @return whether the persons may participate with regard to the accommodation available
    */
-  boolean isSchedulable(RoomSpecification rooms, Iterable<Participant> participants);
+  boolean isSchedulable(RoomSpecification rooms, RegisteredParticipants participants);
 
   /**
    * Provides an indicator on how much the scheduler "trusts" its latest result.
@@ -40,6 +40,38 @@ public interface ParticipantListValidator {
    *
    * @return the reliability of the latest schedule
    */
-  int assessScheduleReliablity();
+  int assessScheduleReliability();
+
+  /**
+   * Provides the index of the first person which caused the scheduling to fail (because the event
+   * would be overbooked). If this method is not implemented, it will throw an {@link
+   * UnsupportedOperationException}
+   *
+   * @return the index of the person as in {@link RegisteredParticipants#getParticipants()}
+   */
+  default int errorIndex() {
+    throw new UnsupportedOperationException(
+        this.getClass().getSimpleName() + " provides no error indexes");
+  }
+
+  /**
+   * Checks whether a number of persons may participate in an event with the given accommodation.
+   * <p>
+   * If this method is not implemented, the additional features of an {@link
+   * ExtendedRoomSpecification} will simply be ignored and the normal check as in {@link
+   * #isSchedulable(RoomSpecification, RegisteredParticipants)} will be performed.
+   *
+   * @param rooms the accommodation available
+   * @param participants the participating persons
+   * @return whether the persons may participate with regard to the accommodation available
+   */
+  default boolean isSchedulableWithExtendedSpec(ExtendedRoomSpecification rooms,
+      RegisteredParticipants participants) {
+    return isSchedulable(rooms, participants);
+  }
+
+  default boolean isBookedOut() {
+    return false;
+  }
 
 }

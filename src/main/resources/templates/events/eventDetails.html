@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta th:name="_csrf" th:value="${_csrf.token}"/>
+  <meta th:name="event" th:value="${event.id}"/>
+  <title th:text="${event.name} + ' | Adebar'">HIFA | Adebar</title>
+  <link rel="stylesheet" type="text/css" href="../../static/resources/css/bootstrap.min.css"
+        th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+
+  <link rel="stylesheet" type="text/css" href="../../static/resources/css/style.css"
+        th:href="@{/resources/css/style.css}"/>
+
+  <link rel="stylesheet" type="text/css" href="../../static/resources/css/bootstrap-select.min.css"
+        th:href="@{/resources/css/bootstrap-select.min.css}"/>
+</head>
+<body>
+
+<!-- central navigation -->
+<nav th:replace="navigation :: topNav(page='events')"></nav>
+
+<!-- page specific content-->
+<main id="main">
+
+  <header id="page-header">
+    <a href="overview.html" th:href="@{/events}">
+      <span class="glyphicon glyphicon-chevron-left"></span>
+      Zurück zur Veranstaltungs-Übersicht
+      <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom"
+            data-title="Bald kommt man hier zur letzten Seite zurück"></span>
+    </a>
+
+    <h1 id="event-title" th:inline="text">[[${event.name}]]
+      <small
+          th:text="|(${#time.formatTimeSpan(event.getStartTime(), event.getEndTime())})|">
+        (09.-13.05.18)
+      </small>
+    </h1>
+
+    <!-- page icon -->
+    <div class="clearfix" th:unless="${event.organizationInfo.hasLackOfOrganizers()}">
+      <div class="pull-right">
+        <span class="glyphicon glyphicon-tent details-icon"></span>
+      </div>
+    </div>
+
+    <div class="clearfix" th:if="${event.organizationInfo.hasLackOfOrganizers()}">
+      <div class="pull-right">
+        <span class="glyphicon glyphicon-warning-sign details-icon details-icon-danger"
+              data-toggle="tooltip" data-placement="bottom"
+              data-title="Zu wenig Betreuer*innen"></span>
+      </div>
+    </div>
+
+    <ul class="nav nav-tabs category-nav" role="tablist" th:fragment="navigation">
+      <li role="presentation"
+          th:classappend="${tab == 'general'} ? 'active'">
+        <a href="#overview" class="tab-controller" th:href="@{/events/{id}(id=${event.id})}">
+          Übersicht
+        </a>
+      </li>
+      <li role="presentation"
+          th:classappend="${tab == 'participants'} ? 'active'">
+        <a href="#participants" class="tab-controller"
+           th:href="@{/events/{id}/participants(id=${event.id})}">
+          Teilnehmende
+        </a>
+      </li>
+      <li role="presentation"
+          th:classappend="${tab == 'organization'} ? 'active'">
+        <a href="#organization" class="tab-controller"
+           th:href="@{/events/{id}/organization(id=${event.id})}">
+          <span class="glyphicon glyphicon-warning-sign text-danger"
+                data-toggle="tooltip" data-placement="bottom"
+                data-title="Zu wenig Betreuer*innen"
+                th:if="${event.organizationInfo.hasLackOfOrganizers()}"></span>
+          Organisation
+        </a>
+      </li>
+      <li role="presentation"
+          th:classappend="${tab == 'accommodation'} ? 'active'">
+        <a href="#accommodation" class="tab-controller"
+           th:href="@{/events/{id}/accommodation(id=${event.id})}">
+          Unterbringung
+        </a>
+      </li>
+    </ul>
+
+  </header>
+
+  <article class="tab-content">
+
+    <!-- general -->
+    <div id="overview" class="tab-pane container-fluid" th:if="${tab == 'general'}"
+         th:classappend="${tab == 'general'} ? 'active'">
+
+      <section th:replace="events/eventDetailsOverview :: general"></section>
+
+      <section th:replace="events/personsToContact :: content"></section>
+
+    </div>
+
+    <section id="participants" class="display-category tab-pane" role="tabpanel"
+             th:if="${tab == 'participants'}" th:classappend="${tab == 'participants'} ? 'active'">
+
+      <div th:replace="events/participants :: list"></div>
+
+    </section>
+
+    <section id="organization" class="display-category tab-pane" role="tabpanel"
+             th:if="${tab == 'organization'}" th:classappend="${tab == 'organization'} ? 'active'">
+
+      <div th:replace="events/organization :: details"></div>
+
+    </section>
+
+    <section id="accommodation" class="display-category tab-pane" role="tabpanel"
+             th:if="${tab == 'accommodation'}"
+             th:classappend="${tab == 'accommodation'} ? 'active'">
+
+      <div th:replace="events/accommodation :: details"></div>
+
+    </section>
+
+  </article>
+
+</main>
+
+<form id="logout-user" method="POST" th:action="@{/logout}">
+  <input type="hidden" name="csrf" th:value="csrf"/>
+</form>
+
+<script type="text/javascript" src="../../static/resources/js/jquery.min.js"
+        th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript" src="../../static/resources/js/bootstrap.min.js"
+        th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+
+<script type="text/javascript" src="../../static/resources/js/bootstrap-select.min.js"
+        th:src="@{/resources/js/bootstrap-select.min.js}"></script>
+
+<script type="text/javascript" src="../../static/resources/js/init.js"
+        th:src="@{/resources/js/init.js}"></script>
+
+<script src="../../static/resources/js/formControls.js"
+        th:src="@{/resources/js/formControls.js}"
+        th:if="not ${tab == 'organization'} and not ${tab == 'accommodation'}"></script>
+<script src="../../static/resources/js/personsToContact.js"
+        th:src="@{/resources/js/personsToContact.js}"
+        th:if="${tab == 'general'}"></script>
+<script src="../../static/resources/js/editEvent.js"
+        th:src="@{/resources/js/editEvent.js}"
+        th:if="${tab == 'general'}"></script>
+
+<script type="text/javascript" src="../../static/resources/js/list.min.js"
+        th:src="@{/resources/js/list.min.js}"
+        th:if="${tab == 'participants'} and ${param.view != null and param.view[0] == 'detailed'}"></script>
+<script type="text/javascript" src="../../static/resources/js/list.fuzzysearch.min.js"
+        th:src="@{/resources/js/list.fuzzysearch.min.js}"
+        th:if="${tab == 'participants'} and ${param.view != null and param.view[0] == 'detailed'}"></script>
+<script type="text/javascript" src="../../static/resources/js/masonry.pkgd.js"
+        th:src="@{/webjars/masonry/dist/masonry.pkgd.min.js}"
+        th:if="${tab == 'participants'} and ${param.view != null and param.view[0] == 'detailed'}"></script>
+<script type="text/javascript" src="../../static/resources/js/participants.js"
+        th:src="@{/resources/js/participants.js}" th:if="${tab == 'participants'}"></script>
+<script type="text/javascript" src="../../static/resources/js/eventOrganization.js"
+        th:src="@{/resources/js/eventOrganization.js}" th:if="${tab == 'organization'}"></script>
+<script type="text/javascript" src="../../static/resources/js/accommodation.js"
+        th:src="@{/resources/js/accommodation.js}" th:if="${tab == 'accommodation'}"></script>
+
+<script type="text/javascript"
+        th:if="${tab == 'general'} and ${param.do != null and param.do[0] == 'add-contact'}">
+
+  $('#add-contact-dialog').modal('show');
+
+</script>
+
+<script type="text/javascript"
+        th:if="${tab == 'participants'} and ${param.do != null and param.do[0] == 'add-participant'}">
+  $(document).ready(() => {
+    const modal = $('#add-participant-dialog');
+    modal.modal('show');
+  });
+</script>
+
+<script type="text/javascript"
+        th:if="${tab == 'participants'} and ${param.view != null and param.view[0] == 'detailed'}">
+
+  const masonry = $('#participants-details').masonry({
+    itemSelector: '.participant-details'
+  });
+
+  $('.participant-details-content').on('hidden.bs.collapse', function () {
+    masonry.masonry();
+  }).on('shown.bs.collapse', function () {
+    masonry.masonry();
+  });
+
+  const searchOptions = {
+    valueNames: ['participant-name', 'participant-address', 'participant-eating-habit',
+      'participant-arrival-departure'],
+    listClass: 'participants-details-list'
+  };
+
+  const participantsList = new List('participants', searchOptions);
+
+  participantsList.on('updated', function () {
+    masonry.masonry();
+  });
+
+  let toggled = false;
+  $('#toggle-all-participants').click(function () {
+    const newStatus = toggled ? 'show' : 'hide';
+    $('.participant-details-content').collapse(newStatus);
+    toggled = !toggled;
+  });
+
+</script>
+
+<script type="text/javascript"
+        th:if="${tab == 'participants'} and ${#httpServletRequest.getParameter('add-participants') == 'finished'} and ${participationReport != null}">
+
+  $('#failed-participations').modal('show');
+
+</script>
+
+<script type="text/javascript"
+        th:if="${tab == 'participants'} and ${#httpServletRequest.getParameter('update-participation') == 'failed'}">
+
+  $('#edit-participant-failed-dialog').modal('show');
+
+</script>
+
+<script th:if="${param.do != null and param.do[0] == 'add-waiting-list'}" th:inline="javascript">
+  $(document).ready(() => {
+    const modal = $('#add-waiting-list-dialog');
+    modal.modal('show');
+  });
+</script>
+
+<script type="text/javascript"
+        th:if="${tab == 'participants'} and ${#httpServletRequest.getParameter('apply-waiting-list') == 'failed'} and ${failure != null}">
+
+  $('#apply-waiting-list-error-dialog').modal('show');
+
+</script>
+
+<script th:if="${param.do != null and param.do[0] == 'add-organizer'}">
+  $(document).ready(() => {
+    const modal = $('#add-organizer-dialog');
+    modal.modal('show');
+  });
+</script>
+
+<script type="text/javascript" th:if="${param.do != null and param.do[0] == 'add-counselor'}">
+  $(document).ready(() => {
+    const modal = $('#add-counselor-dialog');
+    modal.modal('show');
+  });
+</script>
+
+<script type="text/javascript"
+        th:if="${#httpServletRequest.getParameter('add-counselor') == 'failed'}">
+  $(document).ready(() => {
+    const modal = $('#add-counselor-failed-dialog');
+    modal.modal('show');
+  });
+</script>
+
+</body>
+</html>

@@ -1,4 +1,3 @@
-
 function validatePassword(newPassword, confirmPassword) {
   const newInput = newPassword.find('input[type="password"]').val();
   const confirmedInput = confirmPassword.find('input[type="password"]').val();
@@ -15,16 +14,16 @@ function validatePassword(newPassword, confirmPassword) {
 }
 
 function weakPassword(passwordField) {
-  const letters = /[A-Za-z]/
-  const numbers = /\d/
-  const specialChars = /\W/
+  const letters = /[A-Za-z]/;
+  const numbers = /\d/;
+  const specialChars = /\W/;
   const password = passwordField.find('input[type="password"]').val();
 
   if (!password) {
     return false;
   }
 
-  return !(password.search(letters) != -1
-          && password.search(numbers) != -1
-          && password.search(specialChars) != -1);
+  return !(password.search(letters) !== -1
+      && password.search(numbers) !== -1
+      && password.search(specialChars) !== -1);
 }

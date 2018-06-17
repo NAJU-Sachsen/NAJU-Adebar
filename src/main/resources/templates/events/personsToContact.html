@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta th:name="_csrf" th:value="${_csrf.token}"/>
+  <title>Bergwiesencamp | Adebar</title>
+  <link rel="stylesheet" type="text/css" href="../../static/resources/css/bootstrap.min.css"
+        th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+  <link rel="stylesheet" href="../../static/resources/css/bootstrap-select.min.css"
+        th:href="@{/resources/css/bootstrap-select.min.css}"/>
+
+  <link rel="stylesheet" type="text/css" href="../../static/resources/css/style.css"
+        th:href="@{/resources/css/style.css}"/>
+</head>
+<body>
+
+<!--/*@thymesVar id="event" type="de.naju.adebar.model.events.Event"*/-->
+<!--/*@thymesVar id="processingService" type="de.naju.adebar.app.events.processing.EventDataProcessingService"*/-->
+<!--/*@thymesVar id="matchingPersons" type="java.util.Collection<de.naju.adebar.model.persons.Person>"*/-->
+
+<!-- central navigation -->
+<nav th:replace="navigation :: topNav(page='events')"></nav>
+
+<!-- page specific content-->
+<main id="main">
+
+  <a href="overview.html">
+    <span class="glyphicon glyphicon-chevron-left"></span>
+    Zurück zur Übersicht
+  </a>
+
+  <h1>Bergwiesencamp
+    <small>(28.07. - 11.08.18)</small>
+  </h1>
+
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active">
+      <a href="#overview" class="tab-controller" aria-controls="general" role="tab"
+         data-toggle="tab">Übersicht</a>
+    </li>
+    <li role="presentation">
+      <a href="#participants" class="tab-controller" aria-controls="participants"
+         role="tab" data-toggle="tab">Teilnehmende</a>
+    </li>
+    <li role="presentation">
+      <a href="#organization" class="tab-controller" aria-controls="organization" role="tab"
+         data-toggle="tab">
+        Organisation
+      </a>
+    </li>
+    <li role="presentation">
+      <a href="#accommodation" class="tab-controller" aria-controls="accommodation" role="tab"
+         data-toggle="tab">Unterbringung</a>
+    </li>
+  </ul>
+
+  <article class="tab-content">
+
+    <!-- persons to contact -->
+    <div id="persons-to-contact" class="tab-pane active container-fluid" role="tabpanel">
+
+      <section id="content" class="display-category" th:fragment="content">
+
+        <div class="row category-header">
+
+          <h2 class="col-md-4">Zu kontaktieren:</h2>
+
+        </div>
+
+        <div class="row">
+
+          <div class="col-md-6">
+
+            <ul class="list-group list-group-hover"
+                th:if="${event.organizationInfo.hasPersonsToContact()}"
+                th:remove="all-but-first">
+
+              <li class="list-group-item contact padding-top-lg"
+                  th:attrappend="data-person=${contact.id}"
+                  th:each="contact : ${event.organizationInfo.personsToContact}">
+                <div class="container-fluid">
+                  <div class="row margin-btm">
+                    <div class="col-md-8">
+                      <div class="contact-header">
+                        <span class="h4" th:inline="text">[[${contact.name}]]
+                          <small th:if="${contact.hasEmail()}">
+                            (<a href="mailto:jane.doe@mail.com" th:href="|mailto:${contact.email}|"
+                                th:text="${contact.email}">
+                            jane.doe@mail.com
+                          </a>)
+                          </small>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="hidden">
+                        <form method="post" id="delete-person-to-contact"
+                              th:id="|delete-person-to-contact-${contact.id}|"
+                              th:action="@{/events/{id}/persons-to-contact/delete(id=${event.id})}">
+                          <input type="hidden" name="person-id" th:value="${contact.id}"/>
+                        </form>
+                      </div>
+                      <div class="pull-right">
+                        <a href="../persons/personDetails.html" class="margin-right-lg"
+                           th:href="@{/persons/{id}(id=${contact.id})}">
+                          <span class="glyphicon glyphicon-new-window"></span>
+                          Zum Profil
+                        </a>
+                        <div class="btn-group btn-group-xs">
+                          <button type="button" class="btn btn-fancy" data-toggle="modal"
+                                  data-target="#edit-person-to-contact-dialog">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                          </button>
+                          <button type="submit" class="btn btn-danger"
+                                  th:form="|delete-person-to-contact-${contact.id}|">
+                            <span class="glyphicon glyphicon-trash"></span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <p class="col-md-12 description"
+                       th:utext="${#strings.replace( #strings.escapeXml( event.organizationInfo.getContactInformationFor(contact) ),T(java.lang.System).getProperty('line.separator'),'&lt;br /&gt;')}">
+                      Hat vielleicht noch Fragen.
+                    </p>
+                  </div>
+                </div>
+              </li>
+
+            </ul>
+
+            <!-- no persons view -->
+            <div th:unless="${event.organizationInfo.hasPersonsToContact()}">
+              Zur Zeit sind keine Personen hinterlegt.
+              <div>
+                <button type="button" class="btn btn-link no-padding" data-toggle="modal"
+                        data-target="#add-contact-dialog">
+                  <span class="glyphicon glyphicon-arrow-right"></span>
+                  Kontakt hinzufügen
+                </button>
+              </div>
+            </div>
+
+            <!-- edit persons to contact menu -->
+            <div class="clearfix margin-top-lg"
+                 th:if="${event.organizationInfo.hasPersonsToContact()}">
+              <div class="pull-right">
+
+                <div class="btn-group btn-group-sm margin-right">
+                  <button type="button" class="btn btn-fancy" data-toggle="modal"
+                          data-target="#add-person-to-contact-dialog">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    Hinzufügen
+                  </button>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- add contact dialog -->
+            <div class="modal fade" id="add-contact-dialog" tabindex="-1" role="dialog">
+              <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title">Kontakt hinzufügen</h3>
+                  </div>
+                  <div class="modal-body">
+                    <form id="add-contact" method="post" class="container-fluid"
+                          th:action="@{/events/{id}/persons-to-contact/add(id=${event.id})}">
+
+                      <div class="row">
+                        <div class="jumbotron padding-md">
+                          <div class="container">
+                            <div class="row">
+                              <div class="col-md-7"
+                                   th:classappend="${param.do == null or param.do[0] != 'add-contact'} ? 'strong'">
+                                <span class="badge">1.</span> Person suchen
+                              </div>
+                              <div class="col-md-5"
+                                   th:classappend="${param.do != null and param.do[0] == 'add-contact'} ? 'strong'">
+                                <span class="badge">2.</span> Beschreibung eingeben
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+
+                        <div class="col-md-8">
+
+                          <div class="container-fluid margin-top-lg person-search-container">
+                            <div class="row">
+                              <div class="col-md-4 no-margin-btm margin-top">
+                                <label for="contact-search" class="control-label">
+                                  Person suchen:
+                                </label>
+                              </div>
+                              <div class="col-md-6">
+                                <input type="search"
+                                       class="form-control" id="contact-search"
+                                       name="person-search-query"
+                                       placeholder="Name, E-Mail, Telefon od. Adresse"
+                                       th:value="${param.do != null and param.do[0] == 'add-contact'} ? ${param.search}"/>
+                                <input type="hidden" name="return-action" value="add-contact"/>
+                              </div>
+                              <div class="col-md-2">
+                                <button type="submit" class="btn btn-primary"
+                                        formmethod="get"
+                                        th:formaction="@{/events/{id}/persons-to-contact/search(id=${event.id})}">
+                                  Los
+                                </button>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <p class="col-md-12 help-block">
+                                Es kann sein, dass die Suche aktuell Probleme mit Umlauten hat. In
+                                so einem Fall bitte einfach nur den Vornamen oder Nachnamen
+                                verwenden.
+                              </p>
+                            </div>
+                            <hr/>
+                            <div class="panel panel-default"
+                                 th:if="${param.do != null and param.do[0] == 'add-contact' and matchingPersons != null and not matchingPersons.empty}">
+                              <div class="panel-heading">
+                                <h5 class="panel-title">Ergebnisse</h5>
+                              </div>
+                              <ul class="list-group">
+                                <li class="list-group-item"
+                                    th:each="match : ${matchingPersons}" th:inline="text">
+                                  <div class="radio">
+                                    <label>
+                                      <input type="radio" name="person-id"
+                                             th:value="${match.id}"/>
+                                      [[${match.name}]]
+                                      <small>[[${match.email}]] [[${match.phoneNumber}]]</small>
+                                    </label>
+                                  </div>
+                                </li>
+                              </ul>
+                            </div>
+
+                            <div class="alert alert-info"
+                                 th:unless="${param.do != null and param.do[0] == 'add-contact' and matchingPersons != null}">
+                              Bitte nach der gewünschten Person suchen
+                            </div>
+
+                            <div class="alert alert-info"
+                                 th:if="${param.do != null and param.do[0] == 'add-contact' and matchingPersons != null  and matchingPersons.empty}">
+                              Keine Übereinstimmungen
+                            </div>
+                          </div>
+
+                        </div>
+
+                        <div class="col-md-4">
+                          <div class="form-group margin-top-lg">
+                            <label for="add-contact-description" class="control-label">
+                              Beschreibung
+                            </label>
+                            <textarea class="form-control" id="add-contact-description"
+                                      name="description"
+                                      placeholder="Weshalb soll die Person kontaktiert werden?"></textarea>
+                          </div>
+                        </div>
+
+                      </div>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                      Abbrechen
+                    </button>
+                    <button type="submit" form="add-contact" class="btn btn-primary">
+                      Speichern
+                    </button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="modal fade" id="edit-person-to-contact-dialog" tabindex="-1">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title">Kontakt bearbeiten</h3>
+                  </div>
+                  <form method="post" class="modal-body" id="edit-person-to-contact"
+                        th:action="@{/events/{id}/persons-to-contact/update(id=${event.id})}">
+                    <input type="hidden" name="person-id" id="edit-person-to-contact-person"/>
+                    <div class="form-group">
+                      <label for="edit-person-to-contact-description" class="control-label">
+                        Beschreibung
+                      </label>
+                      <textarea name="description" class="form-control"
+                                id="edit-person-to-contact-description"
+                                placeholder="Weshalb soll die Person kontaktiert werden?"></textarea>
+                    </div>
+                  </form>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                      Abbrechen
+                    </button>
+                    <button type="submit" form="edit-person-to-contact" class="btn btn-primary">
+                      Speichern
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </article>
+
+</main>
+
+<form id="logout-user" method="POST" th:action="@{/logout}">
+  <input type="hidden" name="csrf" th:value="csrf"/>
+</form>
+
+<script type="text/javascript" src="../../static/resources/js/jquery.min.js"
+        th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript" src="../../static/resources/js/bootstrap.min.js"
+        th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script src="../../static/resources/js/bootstrap-select.min.js"
+        th:src="@{/resources/js/bootstrap-select.min.js}"></script>
+<script src="../../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
+
+</body>
+</html>

@@ -1,16 +1,17 @@
 package de.naju.adebar.model.core;
 
-import de.naju.adebar.documentation.ddd.ValueObject;
-import de.naju.adebar.documentation.infrastructure.JpaOnly;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Objects;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Transient;
 import org.springframework.lang.NonNull;
 import org.springframework.util.Assert;
+import de.naju.adebar.documentation.ddd.ValueObject;
+import de.naju.adebar.documentation.infrastructure.JpaOnly;
 
 /**
  * Wrapper for age statements
@@ -26,6 +27,7 @@ public class Age implements Comparable<Age> {
    */
   public static final Age LEGAL_AGE = Age.of(18);
 
+  @Column(name = "age")
   private int value;
 
   /**
@@ -34,7 +36,7 @@ public class Age implements Comparable<Age> {
    * @param value the age's value
    * @throws IllegalArgumentException if the age is negative
    */
-  private Age(int value) {
+  private Age(@Nonnegative int value) {
     Assert.isTrue(value >= 0, "Value may not be negative");
     this.value = value;
   }
@@ -43,7 +45,7 @@ public class Age implements Comparable<Age> {
    * Default constructor just for JPA's sake
    */
   @JpaOnly
-  private Age() { }
+  private Age() {}
 
   /**
    * Constructs a new age object
@@ -84,6 +86,7 @@ public class Age implements Comparable<Age> {
   /**
    * @return the age
    */
+  @Nonnegative
   public int getValue() {
     return value;
   }
@@ -91,7 +94,8 @@ public class Age implements Comparable<Age> {
   /**
    * @param value the age
    */
-  private void setValue(int value) {
+  @JpaOnly
+  private void setValue(@Nonnegative int value) {
     Assert.isTrue(value >= 0, "Value may not be negative");
     this.value = value;
   }
@@ -102,6 +106,28 @@ public class Age implements Comparable<Age> {
   @Transient
   public boolean isOfLegalAge() {
     return LEGAL_AGE.compareTo(this) <= -1;
+  }
+
+  /**
+   * Compares two ages
+   *
+   * @param other the age to compare
+   * @return whether this age is older than the other age
+   */
+  @Transient
+  public boolean isOlderThan(@Nonnull Age other) {
+    return this.compareTo(other) > 0;
+  }
+
+  /**
+   * Compares two ages
+   *
+   * @param other the age to compare
+   * @return whether this age is younger than the other age
+   */
+  @Transient
+  public boolean isYoungerThan(@Nonnull Age other) {
+    return this.compareTo(other) < 0;
   }
 
   @Override

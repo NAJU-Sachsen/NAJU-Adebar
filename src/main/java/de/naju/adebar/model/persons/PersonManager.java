@@ -1,10 +1,10 @@
 package de.naju.adebar.model.persons;
 
+import java.util.Optional;
+import org.springframework.stereotype.Service;
 import de.naju.adebar.model.core.Email;
 import de.naju.adebar.model.persons.exceptions.NoReferentException;
 import de.naju.adebar.model.persons.qualifications.Qualification;
-import java.util.Optional;
-import org.springframework.stereotype.Service;
 
 /**
  * Service to take care of {@link Person Persons}
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
  * @see Person
  */
 @Service
+@Deprecated
 public interface PersonManager {
 
   /**
@@ -21,7 +22,7 @@ public interface PersonManager {
    *
    * @param person the person to save
    * @return the saved person. As its internal state may differ after the save, this instance should
-   *     be used for future operations
+   *         be used for future operations
    */
   Person savePerson(Person person);
 
@@ -74,7 +75,7 @@ public interface PersonManager {
    *
    * @param person the person to disable
    * @throws IllegalStateException if the person may not be deactivated (e.g. because it is an
-   *     activist or referent)
+   *         activist or referent)
    */
   void deactivatePerson(Person person);
 

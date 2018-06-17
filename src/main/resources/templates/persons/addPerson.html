@@ -373,7 +373,8 @@
           </div>
           <hr/>
           <div class="form-group"
-               th:classappend="${#fields.hasErrors('participantForm.events')} ? 'has-error'">
+               th:classappend="${#fields.hasErrors('participantForm.events')} ? 'has-error'"
+               th:unless="${#httpServletRequest.getParameter('return-action') == 'add-participant'}">
             <label for="events" class="control-label">Veranstaltungen</label>
             <div>
               <select class="selectpicker" id="events" multiple="multiple" data-live-search="true"

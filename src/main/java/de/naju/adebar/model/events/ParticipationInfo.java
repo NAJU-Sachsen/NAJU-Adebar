@@ -1,95 +1,172 @@
 package de.naju.adebar.model.events;
 
+import com.google.common.collect.Lists;
+import de.naju.adebar.documentation.infrastructure.JpaOnly;
+import de.naju.adebar.model.core.Age;
+import de.naju.adebar.util.Assert2;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
+import javax.persistence.JoinColumn;
+import org.javamoney.moneta.Money;
+import org.springframework.util.Assert;
 
-/**
- * Meta-data needed for the participating persons
- * 
- * @author Rico Bergmann
- */
 @Embeddable
-public class ParticipationInfo {
+public class ParticipationInfo extends AbstractEventInfo {
 
-  @Column(name = "acknowledged")
-  private boolean acknowledged;
+  @Embedded
+  @AttributeOverrides(@AttributeOverride(name = "value",
+      column = @Column(name = "minParticipantAge")))
+  private Age minimumParticipantAge;
 
-  @Column(name = "feePayed")
-  private boolean participationFeePayed;
+  @Column(name = "intParticipationFee")
+  private Money internalParticipationFee;
 
-  @Column(name = "formFilled")
-  private boolean registrationFormFilled;
+  @Column(name = "extParticipationFee")
+  private Money externalParticipationFee;
 
-  @Column(name = "remarks")
-  private String remarks;
+  @ElementCollection
+  @CollectionTable(name = "eventArrivalOptions", joinColumns = @JoinColumn(name = "event"))
+  private List<ArrivalOption> arrivalOptions;
 
-  /**
-   * Only a default constructor is needed. All participation info looks the same at the beginning.
-   */
-  ParticipationInfo() {}
+  @Column(name = "flexibleParticipationTimes")
+  private boolean flexibleParticipationTimesEnabled;
 
-  /**
-   * @return whether the participation was acknowledged
-   */
-  public boolean isAcknowledged() {
-    return acknowledged;
+  ParticipationInfo(Event event) {
+    provideRelatedEvent(event);
+    this.arrivalOptions = new ArrayList<>();
   }
 
-  /**
-   * @param acknowledged whether the participation was acknowledged
-   */
-  public void setAcknowledged(boolean acknowledged) {
-    this.acknowledged = acknowledged;
+  ParticipationInfo(Event event, Age minimumParticipantAge, Money internalFee, Money externalFee,
+      List<ArrivalOption> arrivalOptions) {
+    provideRelatedEvent(event);
+    this.minimumParticipantAge = minimumParticipantAge;
+    this.internalParticipationFee = internalFee;
+    this.externalParticipationFee = externalFee;
+    this.arrivalOptions = arrivalOptions;
   }
 
-  /**
-   * @return whether the participation fee was payed
-   */
-  public boolean isParticipationFeePayed() {
-    return participationFeePayed;
+  @JpaOnly
+  private ParticipationInfo() {}
+
+  public Age getMinimumParticipantAge() {
+    return minimumParticipantAge;
   }
 
-  /**
-   * @param participationFeePayed whether the participation fee was payed
-   */
-  public void setParticipationFeePayed(boolean participationFeePayed) {
-    this.participationFeePayed = participationFeePayed;
+  public Money getInternalParticipationFee() {
+    return internalParticipationFee;
   }
 
-  /**
-   * @return whether the registration form (featuring signature, etc.) was received
-   */
-  public boolean isRegistrationFormFilled() {
-    return registrationFormFilled;
+  public Money getExternalParticipationFee() {
+    return externalParticipationFee;
   }
 
-  /**
-   * @param registrationFormReceived whether the registration form (featuring signature, etc.) was
-   *        received
-   */
-  public void setRegistrationFormFilled(boolean registrationFormReceived) {
-    this.registrationFormFilled = registrationFormReceived;
+  public Collection<ArrivalOption> getArrivalOptions() {
+    return Collections.unmodifiableCollection(arrivalOptions);
   }
 
-  /**
-   * @return special remarks for the participation
-   */
-  public String getRemarks() {
-    return remarks;
+  public boolean isFlexibleParticipationTimesEnabled() {
+    return flexibleParticipationTimesEnabled;
   }
 
-  /**
-   * @param remarks special remarks for the participation
-   */
-  public void setRemarks(String remarks) {
-    this.remarks = remarks;
+  public boolean hasMinimumParticipantAge() {
+    return minimumParticipantAge != null;
   }
 
-  // overridden from object
-
-  @Override
-  public String toString() {
-    return "ParticipationInfo{" + "acknowledged=" + acknowledged + ", participationFeePayed="
-        + participationFeePayed + ", registrationFormFilled=" + registrationFormFilled + '}';
+  public boolean hasInternalParticipationFee() {
+    return internalParticipationFee != null;
   }
+
+  public boolean hasExternalParticipationFee() {
+    return externalParticipationFee != null;
+  }
+
+  public boolean hasArrivalOptions() {
+    return !arrivalOptions.isEmpty();
+  }
+
+  public boolean hasFlexibleParticipationTimesEnabled() {
+    return flexibleParticipationTimesEnabled;
+  }
+
+  public boolean supportsFlexibleParticipationTimes() {
+    return hasFlexibleParticipationTimesEnabled();
+  }
+
+  public ParticipationInfo updateMinimumParticipantAge(Age newAge) {
+    setMinimumParticipantAge(newAge);
+    registerGenericEventUpdatedDomainEventIfPossible();
+    return this;
+  }
+
+  public ParticipationInfo updateInternalParticipationFee(Money newFee) {
+    setInternalParticipationFee(newFee);
+    registerGenericEventUpdatedDomainEventIfPossible();
+    return this;
+  }
+
+  public ParticipationInfo updateExternalParticipationFee(Money newFee) {
+    setExternalParticipationFee(newFee);
+    registerGenericEventUpdatedDomainEventIfPossible();
+    return this;
+  }
+
+  public ParticipationInfo updateFlexibleParticipationTimesEnabled(
+      boolean flexibleParticipationTimesEnabled) {
+    setFlexibleParticipationTimesEnabled(flexibleParticipationTimesEnabled);
+    registerGenericEventUpdatedDomainEventIfPossible();
+    return this;
+  }
+
+  public ParticipationInfo updateArrivalOptions(Collection<ArrivalOption> options) {
+    setArrivalOptions(Lists.newArrayList(options));
+    registerGenericEventUpdatedDomainEventIfPossible();
+    return this;
+  }
+
+  public void addArrivalOption(ArrivalOption option) {
+    Assert.notNull(option, "option may not be null");
+    Assert2.isFalse(arrivalOptions.contains(option), "Option already exists: " + option);
+
+    arrivalOptions.add(option);
+    registerGenericEventUpdatedDomainEventIfPossible();
+  }
+
+  public void removeArrivalOption(ArrivalOption option) {
+    Assert.notNull(option, "option may not be null");
+    Assert.isTrue(arrivalOptions.contains(option), "No such option available: " + option);
+
+    arrivalOptions.remove(option);
+    registerGenericEventUpdatedDomainEventIfPossible();
+  }
+
+  void setMinimumParticipantAge(Age minimumParticipantAge) {
+    this.minimumParticipantAge = minimumParticipantAge;
+  }
+
+  void setInternalParticipationFee(Money internalParticipationFee) {
+    this.internalParticipationFee = internalParticipationFee;
+  }
+
+  void setExternalParticipationFee(Money externalParticipationFee) {
+    this.externalParticipationFee = externalParticipationFee;
+  }
+
+  void setFlexibleParticipationTimesEnabled(boolean flexibleParticipationTimesEnabled) {
+    this.flexibleParticipationTimesEnabled = flexibleParticipationTimesEnabled;
+  }
+
+  @JpaOnly
+  private void setArrivalOptions(List<ArrivalOption> arrivalOptions) {
+    this.arrivalOptions = arrivalOptions;
+  }
+
 }

@@ -6,6 +6,7 @@ package de.naju.adebar.web.controller.api;
  *
  * @author Rico Bergmann
  */
+@Deprecated
 public class JsonResponse {
 
   /**

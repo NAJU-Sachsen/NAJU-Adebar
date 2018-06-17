@@ -1,6 +1,6 @@
 package de.naju.adebar.web.controller.persons;
 
-import de.naju.adebar.app.search.persons.PersonSearchServer;
+import de.naju.adebar.app.persons.search.PersonSearchServer;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.persons.PersonRepository;
 import de.naju.adebar.model.persons.family.VitalRecord;

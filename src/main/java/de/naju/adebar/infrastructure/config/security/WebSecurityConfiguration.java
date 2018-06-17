@@ -1,5 +1,7 @@
 package de.naju.adebar.infrastructure.config.security;
 
+import com.google.common.collect.Lists;
+import de.naju.adebar.app.security.user.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,14 +24,11 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.access.expression.WebExpressionVoter;
 import org.springframework.util.Assert;
-import com.google.common.collect.Lists;
-import de.naju.adebar.app.security.user.UserAccountService;
 
 /**
  * Controller configuration specifically regarding security aspects
  *
  * @author Rico Bergmann
- *
  */
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -55,15 +54,19 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     // @formatter:off
     http.authorizeRequests()
       // resources should be available without login
-      .antMatchers("/webjars/**", "/resources/**", "/imprint")
+      .antMatchers("/webjars/**", "/resources/**", "/imprint", "/unsupported-browser")
         .permitAll()
+      // only an admin may access actuator info
+      .antMatchers("/actuator/**")
+        .hasRole("ADMIN")
       // for every other request, a login is necessary
       .anyRequest()
         .authenticated().accessDecisionManager(accessDecisionManager())
         .expressionHandler(webExpressionHandler())
       // excluding the login page from necessity to login
       .and().formLogin()
-        .loginPage(LOGIN_ROUTE).loginProcessingUrl(LOGIN_ROUTE).permitAll().and().logout()
+        .loginPage(LOGIN_ROUTE).loginProcessingUrl(LOGIN_ROUTE).permitAll()
+      .and().logout()
         .logoutUrl(LOGOUT_ROUTE).logoutSuccessUrl(LOGIN_ROUTE + "?logout").permitAll()
       .and()
         .exceptionHandling().accessDeniedHandler(accessDenied());

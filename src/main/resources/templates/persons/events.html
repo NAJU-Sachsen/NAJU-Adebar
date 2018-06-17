@@ -12,6 +12,8 @@
         th:href="@{/resources/css/style.css}"/>
   <link rel="stylesheet" type="text/css" href="../../static/resources/css/personDetails.css"
         th:href="@{/resources/css/personDetails.css}"/>
+  <link rel="stylesheet" type="text/css" href="../../static/resources/css/timeline.css"
+        th:href="@{/resources/css/timeline.css}"/>
 </head>
 <body>
 
@@ -63,6 +65,50 @@
 
               <!-- add participation -->
               <div class="col-md-5 col-md-push-7">
+
+                <div class="row margin-btm"
+                     th:if="${param.add != null and param.add[0] == 'failed'}">
+
+                  <div class="panel panel-danger">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">Die Person konnte zu einigen Veranstaltungen nicht
+                        hinzugefügt werden:</h3>
+                    </div>
+                    <div class="panel-body">
+                      <p>
+                        Eventuell ist die Veranstaltung bereits <strong>ausgebucht</strong> oder das
+                        <strong>Mindest-Teilnahmealter</strong> stimmt nicht? Auch das Geschlecht
+                        muss für
+                        Bitte versuche den/die Teilnehmende*n in den Veranstaltungsdetails nochmal
+                        hinzuzufügen (und bspw. den Teilnahmezeitraum zu verändern).
+                      </p>
+                      <strong>Folgende Veranstaltungen sind betroffen:</strong>
+                    </div>
+                    <div class="list-group" th:remove="all-but-first"
+                         th:if="${failedParticipations != null}">
+                      <a href="../eventDetails.html" class="list-group-item"
+                         th:each="fe : ${failedParticipations.keySet()}"
+                         th:href="@{/events/{id}(id=${fe.id})}" th:inline="text">[[${fe.name}]]
+                        <small
+                            th:text="|(${#time.formatTimeSpan(fe.getStartTime(), fe.getEndTime())})|">
+                          (09.-13.05.18)
+                        </small>
+                        <span class="glyphicon glyphicon-baby-formula" data-toggle="tooltip"
+                              data-placement="bottom" data-title="Zu jung"
+                              th:if="${failedParticipations.get(fe).name() == 'TOO_YOUNG'}"></span>
+                        <span class="glyphicon glyphicon-bed" data-toggle="tooltip"
+                              data-placement="bottom" data-title="Ausgebucht"
+                              th:if="${failedParticipations.get(fe).name() == 'BOOKED_OUT'}"></span></a>
+                      <a href="../eventDetails.html" class="list-group-item">Bergwiesencamp
+                        <small>(28.07.-11.08.18)</small>
+                      </a>
+                    </div>
+                  </div>
+
+
+                </div>
+
+
                 <div class="row margin-btm">
                   <div class="col-md-5">
                     <button type="button" class="btn btn-primary" data-toggle="modal"
@@ -71,6 +117,7 @@
                       Teilnahme hinzufügen
                     </button>
 
+                    <!-- select events dialog -->
                     <div class="modal fade" id="add-participations-dialog" tabindex="-1"
                          role="dialog">
                       <div class="modal-dialog modal-lg" role="document">
@@ -131,12 +178,12 @@
                                          th:text="${event.localGroup.name}">
                                         NAJU Dresden
                                       </a>
-                                      <a href="../localGroupDetails.html"
+                                      <a href="../projectDetails.html"
                                          class="label label-info"
                                          th:if="${event.forProject}"
                                          th:href="@{/projects/{id}(id=${event.project.id})}"
                                          th:text="${event.project.name}">
-                                        NAJU Dresden
+                                        Puppenstuben gesucht!
                                       </a>
                                     </td>
                                     <td class="col-md-3 time"
@@ -167,6 +214,14 @@
                                 </table>
                               </div>
                             </form>
+                            <hr/>
+                            <p class="help-block">
+                              Falls die Veranstaltung eine Anpassung des Teilnahmezeitraums erlaubt,
+                              wird
+                              der/die Teilnehmende für die vollständige Dauer hinzugefügt. (Das
+                              lässt
+                              sich später in den Veranstaltungsdetails ändern)
+                            </p>
                           </div>
                           <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">
@@ -299,7 +354,6 @@
 <script src="../../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
 <script src="../../static/resources/js/formControls.js"
         th:src="@{/resources/js/formControls.js}"></script>
-<script src="../../static/resources/js/personDetails.js"
-        th:src="@{/resources/js/personDetails.js}"></script>
+
 </body>
 </html>

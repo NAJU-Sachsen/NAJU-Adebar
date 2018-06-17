@@ -1,5 +1,6 @@
 package de.naju.adebar.model.persons;
 
+import de.naju.adebar.documentation.infrastructure.JpaOnly;
 import de.naju.adebar.model.core.Address;
 import de.naju.adebar.model.core.Email;
 import de.naju.adebar.model.core.PhoneNumber;
@@ -171,6 +172,7 @@ public class Person {
   /**
    * @param id the person's unique ID
    */
+  @JpaOnly
   private void setId(PersonId id) {
     this.id = id;
   }
@@ -212,6 +214,18 @@ public class Person {
    */
   public Email getEmail() {
     return email;
+  }
+
+  @Transient
+  public Email getOwnOrParentsEmail() {
+    if (hasEmail()) {
+      return email;
+    }
+    return parents.stream() //
+        .filter(Person::hasEmail) //
+        .findFirst() //
+        .map(Person::getEmail) //
+        .orElse(null);
   }
 
   /**
@@ -262,6 +276,7 @@ public class Person {
    *
    * @param participant whether the person is a participant
    */
+  @JpaOnly
   private void setParticipant(boolean participant) {
     this.participant = participant;
   }
@@ -297,6 +312,7 @@ public class Person {
    *
    * @param participant whether the person is a participant
    */
+  @JpaOnly
   private void setActivist(boolean activist) {
     this.activist = activist;
   }
@@ -332,6 +348,7 @@ public class Person {
    *
    * @param participant whether the person is a participant
    */
+  @JpaOnly
   private void setReferent(boolean referent) {
     this.referent = referent;
   }
@@ -407,6 +424,7 @@ public class Person {
   /**
    * @param archived whether the person is still to be used
    */
+  @JpaOnly
   private void setArchived(boolean archived) {
     this.archived = archived;
   }
@@ -421,6 +439,7 @@ public class Person {
   /**
    * @param participatingEvents all the events this person attended as participant
    */
+  @JpaOnly
   private void setParticipatingEvents(List<Event> participatingEvents) {
     Assert.notNull(participatingEvents, "Events may not be null");
     this.participatingEvents = participatingEvents;
@@ -439,6 +458,10 @@ public class Person {
    */
   public boolean hasEmail() {
     return email != null;
+  }
+
+  public boolean hasOwnOrParentsEmail() {
+    return hasEmail() || parents.stream().anyMatch(Person::hasEmail);
   }
 
   /**
@@ -910,6 +933,11 @@ public class Person {
   }
 
   @Override
+  public int hashCode() {
+    return id.hashCode();
+  }
+
+  @Override
   public boolean equals(Object o) {
     if (this == o) {
       return true;
@@ -921,11 +949,6 @@ public class Person {
     Person person = (Person) o;
 
     return id.equals(person.id);
-  }
-
-  @Override
-  public int hashCode() {
-    return id.hashCode();
   }
 
   @Override

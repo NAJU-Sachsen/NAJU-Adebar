@@ -2,10 +2,11 @@ package de.naju.adebar.model.events;
 
 /**
  * Exception to indicate that an event does not have the required amount of available slots
- * 
+ *
  * @author Rico Bergmann
  */
 public class TooFewEmptySlotsException extends RuntimeException {
+
   private static final long serialVersionUID = -4668766134559857859L;
 
   public TooFewEmptySlotsException() {

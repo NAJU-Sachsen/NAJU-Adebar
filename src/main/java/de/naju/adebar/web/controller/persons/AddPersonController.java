@@ -1,22 +1,9 @@
 package de.naju.adebar.web.controller.persons;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import javax.validation.Valid;
-import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
-import org.springframework.validation.Errors;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.querydsl.core.BooleanBuilder;
 import de.naju.adebar.model.chapter.LocalGroupRepository;
 import de.naju.adebar.model.events.EventRepository;
+import de.naju.adebar.model.events.ParticipationManager;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.persons.PersonRepository;
 import de.naju.adebar.model.persons.QPerson;
@@ -26,6 +13,20 @@ import de.naju.adebar.web.model.persons.participants.EventCollection;
 import de.naju.adebar.web.model.persons.participants.EventCollection.EventCollectionBuilder;
 import de.naju.adebar.web.validation.persons.AddPersonForm;
 import de.naju.adebar.web.validation.persons.AddPersonFormConverter;
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
+import javax.validation.Valid;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  * Handles the creation of new person instances from the 'add person' template
@@ -41,6 +42,7 @@ public class AddPersonController {
   private final LocalGroupRepository localGroupRepo;
   private final QualificationRepository qualificationRepo;
   private final AddPersonFormConverter personFormConverter;
+  private final ParticipationManager participationManager;
 
   /**
    * Full constructor
@@ -53,16 +55,18 @@ public class AddPersonController {
    */
   public AddPersonController(PersonRepository personRepo, EventRepository eventRepo,
       LocalGroupRepository localGroupRepo, QualificationRepository qualificationRepo,
-      AddPersonFormConverter personFormConverter) {
+      AddPersonFormConverter personFormConverter, ParticipationManager participationManager) {
 
     Assert2.noNullArguments("No argument may be null", //
-        personRepo, eventRepo, localGroupRepo, qualificationRepo, personFormConverter);
+        personRepo, eventRepo, localGroupRepo, qualificationRepo, personFormConverter,
+        participationManager);
 
     this.personRepo = personRepo;
     this.eventRepo = eventRepo;
     this.localGroupRepo = localGroupRepo;
     this.qualificationRepo = qualificationRepo;
     this.personFormConverter = personFormConverter;
+    this.participationManager = participationManager;
   }
 
   /**
@@ -94,28 +98,25 @@ public class AddPersonController {
    * @return a redirection to the new person's profile page
    */
   @PostMapping("/persons/add")
-  @Transactional
-  public String addPerson(@ModelAttribute("form") @Valid AddPersonForm form, //
+  public String addPerson(@ModelAttribute("form") @Valid AddPersonForm form, Errors errors, //
       @RequestParam(value = "return-action", defaultValue = "") String returnAction, //
       @RequestParam(value = "return-to", defaultValue = "") String returnPath, //
-      Errors errors, RedirectAttributes redirAttr) {
+      RedirectAttributes redirAttr) {
 
+    Person newPerson = null;
     boolean success = true;
 
     // check n° 1: form has no errors
     if (errors.hasErrors()) {
-      redirAttr.addFlashAttribute("form", form);
-      redirAttr.addFlashAttribute(errors);
       success = false;
+    } else {
+      newPerson = personFormConverter.toEntity(form);
     }
-
-    Person newPerson = personFormConverter.toEntity(form);
 
     // check n° 2: there are no similar persons yet
     List<Person> similarPersons = checkForPersonsSimilarTo(newPerson);
     if (!similarPersons.isEmpty()) {
       redirAttr.addFlashAttribute("similarPersons", similarPersons);
-      redirAttr.addFlashAttribute("form", form);
       success = false;
     }
 
@@ -131,7 +132,7 @@ public class AddPersonController {
         redirAttr.addAttribute("return-to", returnPath);
       }
 
-      return "redirect:/persons/add";
+      return "persons/addPerson";
     }
 
     // everything seems fine, finish saving the new person
@@ -144,8 +145,11 @@ public class AddPersonController {
     }
 
     if (!returnPath.isEmpty()) {
+      redirAttr.addFlashAttribute("newPerson", newPerson);
+      redirAttr.addAttribute("from", "add-person");
       return "redirect:" + returnPath;
     }
+
     return "redirect:/persons/" + newPerson.getId();
   }
 
@@ -163,7 +167,7 @@ public class AddPersonController {
    * If the new person is a participant and it should attend an event right away, this method will
    * take care of exactly that.
    * <p>
-   * This method must run in a transactional context in order to persist its changed
+   * This method must run in a transactional context in order to persist its changes
    *
    * @param person the new person
    * @param form form possibly containing the events to attend
@@ -172,14 +176,18 @@ public class AddPersonController {
     if (!form.isParticipant() || !form.getParticipantForm().hasEvents()) {
       return;
     }
-    form.getParticipantForm().getEvents().forEach(event -> event.addParticipant(person));
+    form.getParticipantForm().getEvents()
+        .forEach(event -> {
+          participationManager.addParticipant(event, person);
+          eventRepo.save(event);
+        });
   }
 
   /**
-   * If the new person is an activist and it is part of local groups, this method will take care of
-   * creating this connection.
+   * If the new person is an activist and should be part of local groups, this method will take care
+   * of creating the necessary associations.
    * <p>
-   * This method must run in a transactional context in order to persist its changed
+   * This method must run in a transactional context in order to persist its changes
    *
    * @param person the new person
    * @param form form possibly containing the local groups the person should be part of
@@ -188,7 +196,10 @@ public class AddPersonController {
     if (!form.isActivist() || !form.getActivistForm().hasLocalGroups()) {
       return;
     }
-    form.getActivistForm().getLocalGroups().forEach(localGroup -> localGroup.addMember(person));
+    form.getActivistForm().getLocalGroups().forEach(localGroup -> {
+      localGroup.addMember(person);
+      localGroupRepo.save(localGroup);
+    });
   }
 
   /**
@@ -199,8 +210,8 @@ public class AddPersonController {
    */
   private EventCollection createEventCollection() {
     EventCollectionBuilder builder = EventCollection.newCollection();
-    eventRepo.findByStartTimeIsAfter(LocalDateTime.now()).stream()
-        .filter(event -> !event.isBookedOut()).forEach(event -> {
+    eventRepo.findByStartTimeIsAfterAndParticipantsListBookedOutIsFalse(LocalDateTime.now())
+        .forEach(event -> {
           if (event.isForLocalGroup()) {
             builder.appendFor(event.getLocalGroup(), event);
           } else if (event.isForProject()) {
@@ -219,6 +230,10 @@ public class AddPersonController {
    * @return all persons with a similar name
    */
   private List<Person> checkForPersonsSimilarTo(Person newPerson) {
+    if (newPerson == null) {
+      return Collections.emptyList();
+    }
+
     BooleanBuilder predicate = new BooleanBuilder();
     predicate //
         .and(person.firstName.containsIgnoreCase(newPerson.getFirstName())) //

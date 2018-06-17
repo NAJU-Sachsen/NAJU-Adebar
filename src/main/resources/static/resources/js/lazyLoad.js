@@ -7,9 +7,7 @@
  *  action: the function to run
  * }
  */
-const eventListeners = {
-  
-};
+const eventListeners = {};
 
 /**
  * Tries to register each non-registered event listener by modifying the

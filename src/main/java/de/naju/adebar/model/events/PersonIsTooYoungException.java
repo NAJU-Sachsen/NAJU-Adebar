@@ -2,10 +2,11 @@ package de.naju.adebar.model.events;
 
 /**
  * Exception to indicate that a person is too young to participate in a camp
- * 
+ *
  * @author Rico Bergmann
  */
 public class PersonIsTooYoungException extends RuntimeException {
+
   private static final long serialVersionUID = 130980750559664858L;
 
   public PersonIsTooYoungException() {}

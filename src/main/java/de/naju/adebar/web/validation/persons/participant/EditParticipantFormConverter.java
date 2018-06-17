@@ -2,11 +2,11 @@ package de.naju.adebar.web.validation.persons.participant;
 
 import de.naju.adebar.documentation.DesignSmell;
 import de.naju.adebar.documentation.ddd.BusinessRule;
+import de.naju.adebar.model.core.Age;
 import de.naju.adebar.model.persons.ParticipantProfile;
 import de.naju.adebar.model.persons.details.NabuMembershipInformation;
 import de.naju.adebar.web.validation.ValidatingEntityFormConverter;
 import java.time.LocalDate;
-import java.time.Period;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
@@ -145,11 +145,8 @@ public class EditParticipantFormConverter implements
       return true;
     }
 
-    LocalDate now = LocalDate.now();
-    Period timeDifference = Period.between(form.getDateOfBirth(), now);
-
     // if the person is of legal age, no gender is needed
-    if (timeDifference.getYears() >= ParticipantProfile.LEGAL_AGE) {
+    if (Age.forDateOfBirth(form.getDateOfBirth()).isOfLegalAge()) {
       return true;
     }
 

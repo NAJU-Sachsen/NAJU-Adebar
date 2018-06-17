@@ -7,7 +7,7 @@ import de.naju.adebar.model.events.Event;
 
 /**
  * Filter based on the events' participation fee
- * 
+ *
  * @author Rico Bergmann
  */
 public class ParticipationFeeFilter implements EventFilter {
@@ -29,15 +29,17 @@ public class ParticipationFeeFilter implements EventFilter {
   @Override
   public Stream<Event> filter(Stream<Event> input) {
     if (internalParticipationFee != null) {
-      input = input.filter(event -> event.getInternalParticipationFee() != null);
+      input =
+          input.filter(event -> event.getParticipationInfo().getInternalParticipationFee() != null);
       input = input.filter(event -> filterType.matching(internalParticipationFee,
-          event.getInternalParticipationFee()));
+          event.getParticipationInfo().getInternalParticipationFee()));
     }
 
     if (externalParticipationFee != null) {
-      input = input.filter(event -> event.getExternalParticipationFee() != null);
+      input =
+          input.filter(event -> event.getParticipationInfo().getExternalParticipationFee() != null);
       input = input.filter(event -> filterType.matching(externalParticipationFee,
-          event.getExternalParticipationFee()));
+          event.getParticipationInfo().getExternalParticipationFee()));
     }
 
     return input;

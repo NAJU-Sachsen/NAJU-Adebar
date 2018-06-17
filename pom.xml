@@ -3,22 +3,24 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.0.0.RELEASE</version>
-  </parent>
-
   <groupId>de.naju.sachsen</groupId>
   <artifactId>adebar</artifactId>
   <version>0.0.1-SNAPSHOT</version>
 
   <name>NAJU Adebar</name>
-  <description>Management tool used by the NAJU Sachsen organization to keep track of volunteers and the like.</description>
+  <description>
+    Management tool used by the NAJU Sachsen organization to keep track of volunteers and the like.
+  </description>
   <organization>
     <name>NAJU Sachsen</name>
     <url>http://naju-sachsen.de</url>
   </organization>
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.0.0.RELEASE</version>
+  </parent>
 
   <properties>
     <java.version>1.8</java.version>
@@ -45,7 +47,7 @@
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
     </dependency>
-    
+
     <dependency>
       <groupId>org.mariadb.jdbc</groupId>
       <artifactId>mariadb-java-client</artifactId>
@@ -54,6 +56,16 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-entitymanager</artifactId>
     </dependency>
 
     <!-- legacy! -->
@@ -127,6 +139,19 @@
       <artifactId>bootstrap</artifactId>
       <version>3.3.7-1</version>
       <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.webjars.bower</groupId>
+      <artifactId>masonry</artifactId>
+      <version>4.1.1</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <!-- Monitoring -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
     </dependency>
 
     <!-- Helper libraries -->

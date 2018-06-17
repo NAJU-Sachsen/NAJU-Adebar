@@ -1,5 +1,12 @@
 package de.naju.adebar.model.events.rooms.scheduling;
 
+import de.naju.adebar.documentation.infrastructure.JpaOnly;
+import de.naju.adebar.model.core.TimeSpan;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
+import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 import org.springframework.util.Assert;
 
 /**
@@ -13,10 +20,14 @@ import org.springframework.util.Assert;
  *
  * @author Rico Bergmann
  */
+@Embeddable
 public class ParticipationTime implements Comparable<ParticipationTime> {
 
-  private final int firstNight;
-  private final int lastNight;
+  private static final int NIGHT_DIFF_OFFSET = 1;
+  private static final int DAY_DIFF_OFFSET = 2;
+
+  private int firstNight;
+  private int lastNight;
 
   /**
    * Creates a new participation time for the given duration
@@ -32,6 +43,27 @@ public class ParticipationTime implements Comparable<ParticipationTime> {
     this.lastNight = lastNight;
   }
 
+  public ParticipationTime(LocalDateTime firstOvernightStay, LocalDateTime lastOvernightStay) {
+    this(firstOvernightStay, lastOvernightStay, firstOvernightStay);
+  }
+
+  public ParticipationTime(LocalDateTime firstOvernightStay, LocalDateTime lastOvernightStay,
+      LocalDateTime firstEventNight) {
+
+    // TODO test plox
+
+    Period firstNightPeriod = Period.between(firstEventNight.toLocalDate(),
+        firstOvernightStay.toLocalDate().plusDays(1L));
+    this.firstNight = firstNightPeriod.getDays();
+
+    Period firstNightToLastNightPeriod = Period.between(firstOvernightStay.toLocalDate(),
+        lastOvernightStay.toLocalDate());
+    this.lastNight = this.firstNight + firstNightToLastNightPeriod.getDays();
+  }
+
+  @JpaOnly
+  private ParticipationTime() {}
+
   /**
    * @return the first night
    */
@@ -44,6 +76,16 @@ public class ParticipationTime implements Comparable<ParticipationTime> {
    */
   public int getLastNight() {
     return lastNight;
+  }
+
+  @Transient
+  public int getNumberOfNights() {
+    return lastNight - firstNight + NIGHT_DIFF_OFFSET;
+  }
+
+  @Transient
+  public int getNumberOfDays() {
+    return lastNight - firstNight + DAY_DIFF_OFFSET;
   }
 
   /**
@@ -95,6 +137,29 @@ public class ParticipationTime implements Comparable<ParticipationTime> {
         || (other.firstNight <= this.firstNight && other.lastNight >= this.lastNight);
   }
 
+  public boolean participatesDuring(LocalDateTime day, LocalDateTime offset) {
+    return !day.isBefore(offset.plusDays(firstNight - 1)) //
+        && !offset.plusDays(lastNight).isBefore(day);
+  }
+
+  public TimeSpan toTimeSpan(LocalDate offset) {
+    return TimeSpan.between(offset, offset.plusDays(getNumberOfNights()));
+  }
+
+  public TimeSpan toTimeSpan(LocalDateTime offset) {
+    return toTimeSpan(offset.toLocalDate());
+  }
+
+  @JpaOnly
+  private void setFirstNight(int firstNight) {
+    this.firstNight = firstNight;
+  }
+
+  @JpaOnly
+  private void setLastNight(int lastNight) {
+    this.lastNight = lastNight;
+  }
+
   @Override
   public int compareTo(ParticipationTime other) {
     // if one participation time starts earlier than the other, it will be "less"
@@ -136,17 +201,22 @@ public class ParticipationTime implements Comparable<ParticipationTime> {
    */
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
+    if (this == obj) {
       return true;
-    if (obj == null)
+    }
+    if (obj == null) {
       return false;
-    if (getClass() != obj.getClass())
+    }
+    if (getClass() != obj.getClass()) {
       return false;
+    }
     ParticipationTime other = (ParticipationTime) obj;
-    if (firstNight != other.firstNight)
+    if (firstNight != other.firstNight) {
       return false;
-    if (lastNight != other.lastNight)
+    }
+    if (lastNight != other.lastNight) {
       return false;
+    }
     return true;
   }
 
