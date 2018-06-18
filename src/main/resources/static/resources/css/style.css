@@ -71,6 +71,15 @@ a {
   font-weight: 700;
 }
 
+a strong {
+  color: #333;
+}
+
+a:hover, strong,
+a strong:hover {
+  text-decoration: none;
+}
+
 .popover {
   max-width: 100%;
 }
@@ -661,6 +670,18 @@ fieldset.inline-options label {
   content: "\e114";
   box-sizing: border-box;
   vertical-align: sub;
+}
+
+.no-link-deco {
+  color: unset;
+  text-decoration: none;
+  font-weight: normal;
+}
+
+.no-link-deco:hover {
+  color: unset;
+  text-decoration: none;
+  font-weight: normal;
 }
 
 .no-decoration {

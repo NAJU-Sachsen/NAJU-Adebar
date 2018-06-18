@@ -1,150 +1,173 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-  <meta charset="utf-8" />
-  <meta content="width=device-width,initial-scale=1" name="viewport" />
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
   <title>Accounts | Adebar</title>
-  <script type="text/javascript" src="../static/resources/js/jquery.min.js" th:src="@{/webjars/jquery/jquery.min.js}"></script>
-  <script type="text/javascript" src="../static/resources/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-  <link rel="stylesheet" type="text/css" href="../static/resources/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+  <script type="text/javascript" src="../static/resources/js/jquery.min.js"
+          th:src="@{/webjars/jquery/jquery.min.js}"></script>
+  <script type="text/javascript" src="../static/resources/js/bootstrap.min.js"
+          th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+  <link rel="stylesheet" type="text/css" href="../static/resources/css/bootstrap.min.css"
+        th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
 
-  <link rel="stylesheet" type="text/css" href="../static/resources/css/style.css" th:href="@{/resources/css/style.css}" />
-  <link rel="stylesheet" type="text/css" href="../static/resources/css/accounts.css" th:href="@{/resources/css/accounts.css}" />
-  <link rel="stylesheet" type="text/css" href="../static/resources/css/animation.css" th:href="@{/resources/css/animation.css}" />
+  <link rel="stylesheet" type="text/css" href="../static/resources/css/style.css"
+        th:href="@{/resources/css/style.css}"/>
+  <link rel="stylesheet" type="text/css" href="../static/resources/css/accounts.css"
+        th:href="@{/resources/css/accounts.css}"/>
+  <link rel="stylesheet" type="text/css" href="../static/resources/css/animation.css"
+        th:href="@{/resources/css/animation.css}"/>
 
-  <script type="text/javascript" src="../static/resources/js/list.min.js" th:src="@{/resources/js/list.min.js}"></script>
-  <script type="text/javascript" src="../static/resources/js/list.fuzzysearch.min.js" th:src="@{/resources/js/list.fuzzysearch.min.js}"></script>
+  <script type="text/javascript" src="../static/resources/js/list.min.js"
+          th:src="@{/resources/js/list.min.js}"></script>
+  <script type="text/javascript" src="../static/resources/js/list.fuzzysearch.min.js"
+          th:src="@{/resources/js/list.fuzzysearch.min.js}"></script>
 
-  <link rel="stylesheet" type="text/css" href="../static/resources/css/bootstrap-select.min.css" th:href="@{/resources/css/bootstrap-select.min.css}" />
-  <script type="text/javascript" src="../static/resources/js/bootstrap-select.min.js" th:src="@{/resources/js/bootstrap-select.min.js}"></script>
+  <link rel="stylesheet" type="text/css" href="../static/resources/css/bootstrap-select.min.css"
+        th:href="@{/resources/css/bootstrap-select.min.css}"/>
+  <script type="text/javascript" src="../static/resources/js/bootstrap-select.min.js"
+          th:src="@{/resources/js/bootstrap-select.min.js}"></script>
 
-  <link rel="stylesheet" type="text/css" href="../static/resources/css/bootstrap-datetimepicker.min.css" th:href="@{/resources/css/bootstrap-datetimepicker.min.css}" />
-  <script type="text/javascript" src="../static/resources/js/moment-with-locales.min.js" th:src="@{/resources/js/moment-with-locales.min.js}"></script>
-  <script type="text/javascript" src="../static/resources/js/bootstrap-datetimepicker.min.js" th:src="@{/resources/js/bootstrap-datetimepicker.min.js}"></script>
+  <link rel="stylesheet" type="text/css"
+        href="../static/resources/css/bootstrap-datetimepicker.min.css"
+        th:href="@{/resources/css/bootstrap-datetimepicker.min.css}"/>
+  <script type="text/javascript" src="../static/resources/js/moment-with-locales.min.js"
+          th:src="@{/resources/js/moment-with-locales.min.js}"></script>
+  <script type="text/javascript" src="../static/resources/js/bootstrap-datetimepicker.min.js"
+          th:src="@{/resources/js/bootstrap-datetimepicker.min.js}"></script>
 
+  <link rel="shortcut icon" th:href="@{/resources/res/favicon.ico}"/>
 </head>
 
 <body>
 
-  <!-- central navigation -->
-  <nav th:replace="navigation :: topNav(page='releaseNotes')"></nav>
+<!-- central navigation -->
+<nav th:replace="navigation :: topNav(page='releaseNotes')"></nav>
 
-  <!-- page specific dialogs -->
-  <section id="dialogs">
-    <h2 class="hidden">Formulare</h2>
+<!-- page specific dialogs -->
+<section id="dialogs">
+  <h2 class="hidden">Formulare</h2>
 
-    <div id="create-notes-modal" class="modal fade" tabindex="-1">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            <h3 class="modal-title">Neue Release Notes</h3>
-          </div>
-          <div class="modal-body">
-            <form id="add-release-notes" class="" method="post" th:action="@{/release-notes}" th:object="${newNotes}">
-              <div class="form-group">
-                <label class="control-label" for="rl-title">Title</label>
-                  <div class="input-group">
-                    <input type="text" id="rl-title" class="form-control" placeholder="Toller Release-Name?" th:field="*{title}" />
-                    <span class="input-group-addon">(optional)</span>
-                </div>
+  <div id="create-notes-modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h3 class="modal-title">Neue Release Notes</h3>
+        </div>
+        <div class="modal-body">
+          <form id="add-release-notes" class="" method="post" th:action="@{/release-notes}"
+                th:object="${newNotes}">
+            <div class="form-group">
+              <label class="control-label" for="rl-title">Title</label>
+              <div class="input-group">
+                <input type="text" id="rl-title" class="form-control"
+                       placeholder="Toller Release-Name?" th:field="*{title}"/>
+                <span class="input-group-addon">(optional)</span>
               </div>
-              <div class="form-group">
-                <label class="control-label" for="rl-description">Beschreibung</label>
-                <textarea id="rl-description" class="form-control" required="required" maxlength="1023" placeholder="Was gibt's neues?" th:field="*{description}"></textarea>
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
-            <button type="submit" class="btn btn-primary" form="add-release-notes">Erstellen</button>
+            </div>
+            <div class="form-group">
+              <label class="control-label" for="rl-description">Beschreibung</label>
+              <textarea id="rl-description" class="form-control" required="required"
+                        maxlength="1023" placeholder="Was gibt's neues?"
+                        th:field="*{description}"></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+          <button type="submit" class="btn btn-primary" form="add-release-notes">Erstellen</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- page specific content-->
+<main id="main">
+
+  <!-- status messages concerning the last action -->
+  <section id="status">
+    <h2 class="hidden">Status</h2>
+
+  </section>
+
+  <!-- the 'real' content finally -->
+  <section id="content">
+
+    <h1>Release Notes</h1>
+
+    <div class="clearfix" style="margin-right: 90px; margin-bottom:45px;">
+      <div class="pull-right">
+        <button type="button" class="btn btn-primary" data-toggle="modal"
+                data-target="#create-notes-modal">
+          <span class="glyphicon glyphicon-plus"></span> Hinzufügen
+        </button>
+      </div>
+    </div>
+
+    <div class="container" th:if="${currentNotes}">
+      <article class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title" th:text="|Aktuelles Release: ${currentNotes.title}|">Aktuelles
+            Release: Atemberaubende Adebar</h3>
+        </div>
+        <div class="panel-body">
+          <div class="container-fluid">
+            <div class="col-sm-9">
+                <pre th:text="${currentNotes.description}">
+Alles neu und toll
+                </pre>
+              <p th:inline="text">Veröffentlicht: [[${{currentNotes.date}}]]</p>
+            </div>
+            <div class="col-sm-3">
+              <form method="post" th:action="@{/release-notes/outdated}">
+                <button type="submit" class="btn btn-danger">Als veraltet markieren</button>
+              </form>
+            </div>
           </div>
         </div>
+      </article>
+    </div>
+
+    <div class="container text-center" th:unless="${currentNotes}">
+      <div class="alert alert-info">
+        Aktuell gibt es keine Release Notes.
+      </div>
+    </div>
+
+    <div class="container" th:unless="${#iterables.isEmpty(outdatedNotes)}">
+      <h3>Alte Release Notes</h3>
+      <div class="list-group" th:remove="all-but-first">
+        <article class="list-group-item" th:each="notes : ${outdatedNotes}">
+          <h4 class="list-group-item-heading" th:inline="text">
+            Release Notes [[${notes.title} ?: '"${notes.title}"']]
+            <small>(veröffentlicht am [[${{notes.date}}]])</small>
+          </h4>
+          <pre class="list-group-item-text" style="margin-top: 15px;"
+               th:text="${notes.description}">
+* Bug XYZ gefixed
+* dabei 42 neue Bugs geschaffen</pre>
+        </article>
       </div>
     </div>
 
   </section>
 
-  <!-- page specific content-->
-  <main id="main">
+  <form id="logout-user" method="POST" th:action="@{/logout}">
+    <input type="hidden" name="csrf" th:value="csrf"/>
+  </form>
 
-    <!-- status messages concerning the last action -->
-    <section id="status">
-      <h2 class="hidden">Status</h2>
-
-    </section>
-
-    <!-- the 'real' content finally -->
-    <section id="content">
-
-      <h1>Release Notes</h1>
-
-      <div class="clearfix" style="margin-right: 90px; margin-bottom:45px;">
-        <div class="pull-right">
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#create-notes-modal">
-            <span class="glyphicon glyphicon-plus"></span> Hinzufügen
-          </button>
-        </div>
-      </div>
-
-      <div class="container" th:if="${currentNotes}">
-        <article class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title" th:text="|Aktuelles Release: ${currentNotes.title}|">Aktuelles Release: Atemberaubende Adebar</h3>
-          </div>
-          <div class="panel-body">
-            <div class="container-fluid">
-              <div class="col-sm-9">
-                <pre th:text="${currentNotes.description}">
-Alles neu und toll
-                </pre>
-                <p th:inline="text">Veröffentlicht: [[${{currentNotes.date}}]]</p>
-              </div>
-              <div class="col-sm-3">
-                <form method="post" th:action="@{/release-notes/outdated}">
-                  <button type="submit" class="btn btn-danger">Als veraltet markieren</button>
-                </form>
-              </div>
-            </div>
-          </div>
-        </article>
-      </div>
-
-      <div class="container text-center" th:unless="${currentNotes}">
-        <div class="alert alert-info">
-          Aktuell gibt es keine Release Notes.
-        </div>
-      </div>
-
-      <div class="container" th:unless="${#iterables.isEmpty(outdatedNotes)}">
-        <h3>Alte Release Notes</h3>
-        <div class="list-group" th:remove="all-but-first">
-          <article class="list-group-item" th:each="notes : ${outdatedNotes}">
-            <h4 class="list-group-item-heading" th:inline="text">
-              Release Notes [[${notes.title} ?: '"${notes.title}"']]
-              <small>(veröffentlicht am [[${{notes.date}}]])</small>
-            </h4>
-              <pre class="list-group-item-text" style="margin-top: 15px;" th:text="${notes.description}">
-* Bug XYZ gefixed
-* dabei 42 neue Bugs geschaffen</pre>
-          </article>
-        </div>
-      </div>
-
-    </section>
-
-    <form id="logout-user" method="POST" th:action="@{/logout}">
-      <input type="hidden" name="csrf" th:value="csrf" />
-    </form>
-
-  </main>
-  <input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-  <script src="../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
-  <script src="../static/resources/js/accounts.js" th:src="@{/resources/js/accounts.js}"></script>
+</main>
+<input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+<script src="../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
+<script src="../static/resources/js/accounts.js" th:src="@{/resources/js/accounts.js}"></script>
 </body>
 
 </html>

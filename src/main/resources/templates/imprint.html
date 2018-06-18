@@ -1,35 +1,45 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<meta charset="UTF-8" />
-	<title>Impressum | NAJU Adebar</title>
-	<script type="text/javascript" src="../static/resources/js/jquery.min.js" th:src="@{/webjars/jquery/jquery.min.js}"></script>
-	<script type="text/javascript" src="../static/resources/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-	<link rel="stylesheet" type="text/css" href="../static/resources/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+  <meta charset="UTF-8"/>
+  <title>Impressum | NAJU Adebar</title>
+  <script type="text/javascript" src="../static/resources/js/jquery.min.js"
+          th:src="@{/webjars/jquery/jquery.min.js}"></script>
+  <script type="text/javascript" src="../static/resources/js/bootstrap.min.js"
+          th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+  <link rel="stylesheet" type="text/css" href="../static/resources/css/bootstrap.min.css"
+        th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+  <link rel="shortcut icon" th:href="@{/resources/res/favicon.ico}"/>
 </head>
 <body>
 
-		<header class="container" style="margin-top:15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
-				<a href="login.html" th:href="@{/login}"><span class="glyphicon glyphicon-chevron-left"></span> Zurück zum Login</a>
-        <a href="https://github.com/portux/NAJU-Adebar">
-          <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" />
-        </a>
-		</header>
+<header class="container"
+        style="margin-top:15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+  <a href="login.html" th:href="@{/login}"><span class="glyphicon glyphicon-chevron-left"></span>
+    Zurück zum Login</a>
+  <a href="https://github.com/portux/NAJU-Adebar">
+    <img style="position: absolute; top: 0; right: 0; border: 0;"
+         src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67"
+         alt="Fork me on GitHub"
+         data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"/>
+  </a>
+</header>
 
-    <main class="container">
-	    <h1>Herausgeber</h1>
+<main class="container">
+  <h1>Herausgeber</h1>
 
-	    <address>
-		    NAJU Sachsen<br />
-		    Kamenzer Str. 7<br />
-		    01099 Dresden<br />
-		    Tel. 0351 4716566<br />
-		    <br />
-		    Unsere zentrale Mail-Adresse lautet:
-		    <a href="mailto:info@naju-sachsen.de">info@naju-sachsen.de</a>
-	    </address>
-    </main>
+  <address>
+    NAJU Sachsen<br/>
+    Kamenzer Str. 7<br/>
+    01099 Dresden<br/>
+    Tel. 0351 4716566<br/>
+    <br/>
+    Unsere zentrale Mail-Adresse lautet:
+    <a href="mailto:info@naju-sachsen.de">info@naju-sachsen.de</a>
+  </address>
+</main>
 
 </body>
 </html>

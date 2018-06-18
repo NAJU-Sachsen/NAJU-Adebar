@@ -14,6 +14,8 @@
         th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
   <link rel="stylesheet" type="text/css" href="../../static/resources/css/style.css"
         th:href="@{/resources/css/style.css}"/>
+
+  <link rel="shortcut icon" th:href="@{/resources/res/favicon.ico}"/>
 </head>
 <body>
 
@@ -118,9 +120,11 @@
             </span>
           </td>
           <td class="col-md-3">
-            <strong th:text="${event.name}">
-              Bergwiesencamp
-            </strong>
+            <a th:href="@{/events/{id}(id=${event.id})}">
+              <strong th:text="${event.name}">
+                Bergwiesencamp
+              </strong>
+            </a>
           </td>
           <td class="col-md-2"
               th:text="${#time.formatTimeSpan(event.getStartTime(), event.getEndTime())}">

@@ -13,6 +13,8 @@
         th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
   <link rel="stylesheet" type="text/css" href="../../static/resources/css/style.css"
         th:href="@{/resources/css/style.css}"/>
+
+  <link rel="shortcut icon" th:href="@{/resources/res/favicon.ico}"/>
 </head>
 <body>
 
@@ -87,7 +89,13 @@
                   data-placement="bottom" data-title="Elternteil" data-container="body"
                   th:if="false"></span>
           </td>
-          <td class="col-md-3" th:text="${person.name}">Frieda Frisch</td>
+          <td class="col-md-3">
+            <a href="personDetails.html" class="no-link-deco"
+               th:href="@{/persons/{id}(id=${person.id})}"
+               th:text="${person.name}">
+              Frieda Frisch
+            </a>
+          </td>
           <td class="col-md-5">
             <a href="mailto:frieda_frisch@web.de"
                th:href="|mailto:${person.email}|"

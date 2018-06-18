@@ -1,32 +1,51 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width,initial-scale=1" name="viewport"/>
-    <title>Ortsgruppen | Adebar</title>
-    <script type="text/javascript" src="../static/resources/js/jquery.min.js" th:src="@{/webjars/jquery/jquery.min.js}"></script>
-    <script type="text/javascript" src="../static/resources/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-    <link rel="stylesheet" type="text/css" href="../static/resources/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <title>Ortsgruppen | Adebar</title>
+  <script type="text/javascript" src="../static/resources/js/jquery.min.js"
+          th:src="@{/webjars/jquery/jquery.min.js}"></script>
+  <script type="text/javascript" src="../static/resources/js/bootstrap.min.js"
+          th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+  <link rel="stylesheet" type="text/css" href="../static/resources/css/bootstrap.min.css"
+        th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
 
-    <link rel="stylesheet" type="text/css" href="../static/resources/css/style.css" th:href="@{/resources/css/style.css}"/>
+  <link rel="stylesheet" type="text/css" href="../static/resources/css/style.css"
+        th:href="@{/resources/css/style.css}"/>
 
-    <script type="text/javascript" src="../static/resources/js/list.min.js" th:src="@{/resources/js/list.min.js}"></script>
-    <script type="text/javascript" src="../static/resources/js/list.fuzzysearch.min.js" th:src="@{/resources/js/list.fuzzysearch.min.js}"></script>
+  <script type="text/javascript" src="../static/resources/js/list.min.js"
+          th:src="@{/resources/js/list.min.js}"></script>
+  <script type="text/javascript" src="../static/resources/js/list.fuzzysearch.min.js"
+          th:src="@{/resources/js/list.fuzzysearch.min.js}"></script>
 
-    <link rel="stylesheet" type="text/css" href="../static/resources/css/animation.css" th:href="@{/resources/css/animation.css}"/>
+  <link rel="stylesheet" type="text/css" href="../static/resources/css/animation.css"
+        th:href="@{/resources/css/animation.css}"/>
 
-    <link rel="stylesheet" type="text/css" href="../static/resources/css/bootstrap-datetimepicker.min.css" th:href="@{/resources/css/bootstrap-datetimepicker.min.css}" />
-    <script type="text/javascript" src="../static/resources/js/moment-with-locales.min.js" th:src="@{/resources/js/moment-with-locales.min.js}"></script>
-    <script type="text/javascript" src="../static/resources/js/bootstrap-datetimepicker.min.js" th:src="@{/resources/js/bootstrap-datetimepicker.min.js}"></script>
+  <link rel="stylesheet" type="text/css"
+        href="../static/resources/css/bootstrap-datetimepicker.min.css"
+        th:href="@{/resources/css/bootstrap-datetimepicker.min.css}"/>
+  <script type="text/javascript" src="../static/resources/js/moment-with-locales.min.js"
+          th:src="@{/resources/js/moment-with-locales.min.js}"></script>
+  <script type="text/javascript" src="../static/resources/js/bootstrap-datetimepicker.min.js"
+          th:src="@{/resources/js/bootstrap-datetimepicker.min.js}"></script>
 
-    <link rel="stylesheet" href="../static/resources/css/bootstrap-select.min.css" th:href="@{/resources/css/bootstrap-select.min.css}"/>
-    <script src="../static/resources/js/bootstrap-select.min.js" th:src="@{/resources/js/bootstrap-select.min.js}"></script>
+  <link rel="stylesheet" href="../static/resources/css/bootstrap-select.min.css"
+        th:href="@{/resources/css/bootstrap-select.min.css}"/>
+  <script src="../static/resources/js/bootstrap-select.min.js"
+          th:src="@{/resources/js/bootstrap-select.min.js}"></script>
 
-    <link rel="stylesheet" href="../static/resources/css/jquery.tablesorter.css" th:href="@{/resources/css/jquery.tablesorter.css}"/>
-    <script src="../static/resources/js/jquery.tablesorter.min.js" th:src="@{/resources/js/jquery.tablesorter.min.js}"></script>
+  <link rel="stylesheet" href="../static/resources/css/jquery.tablesorter.css"
+        th:href="@{/resources/css/jquery.tablesorter.css}"/>
+  <script src="../static/resources/js/jquery.tablesorter.min.js"
+          th:src="@{/resources/js/jquery.tablesorter.min.js}"></script>
 
-    <link rel="stylesheet" href="../static/resources/css/bootstrap-year-calendar.min.css" th:href="@{/resources/css/bootstrap-year-calendar.min.css}"/>
-    <script src="../static/resources/js/bootstrap-year-calendar.min.js" th:src="@{/resources/js/bootstrap-year-calendar.min.js}"></script>
+  <link rel="stylesheet" href="../static/resources/css/bootstrap-year-calendar.min.css"
+        th:href="@{/resources/css/bootstrap-year-calendar.min.css}"/>
+  <script src="../static/resources/js/bootstrap-year-calendar.min.js"
+          th:src="@{/resources/js/bootstrap-year-calendar.min.js}"></script>
+
+  <link rel="shortcut icon" th:href="@{/resources/res/favicon.ico}"/>
 </head>
 <body>
 
@@ -38,435 +57,526 @@
   <h2 class="hidden">Dialoge</h2>
 
   <!-- 'edit local group' modal -->
-  <section class="modal fade" id="edit-localGroup-modal" tabindex="-1" role="dialog" aria-labelledby="edit-localgroup-label">
-      <div class="modal-dialog" role="document">
-          <div class="modal-content">
-              <header class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                  </button>
-                  <h3 class="modal-title" id="edit-localgroup-label">Ortsgruppe anpassen</h3>
-              </header>
-              <section class="modal-body">
-                  <form id="edit-localgroup" class="form-horizontal" method="post" th:action="@{/localGroups/{id}/edit(id=${localGroup.id})}" th:object="${localGroupForm}">
-                      <div class="form-group row">
-                          <label class="control-label col-sm-3" for="edit-name">Name</label>
-                          <div class="col-sm-9">
-                              <input type="text" id="edit-name" class="form-control" placeholder="Name" required="required" th:field="*{name}"/>
-                          </div>
-                      </div>
-                      <div class="form-group row">
-                          <label for="edit-address" class="col-sm-3 control-label">Adresse</label>
-                          <div class="col-sm-9 address" id="edit-address">
-                              <input type="text" class="form-control street" name="street" placeholder="Straße, HNr." th:field="*{street}"/>
-                              <input type="text" class="form-control zip" name="zip" placeholder="Plz" style="width: 30%; float: left;" th:field="*{zip}"/>
-                              <input type="text" class="form-control city" name="city" placeholder="Stadt" style="width: 67%; float: right;" th:field="*{city}"/>
-                          </div>
-                      </div>
-                      <div class="form-group row">
-                          <label for="nabuGroup" class="col-sm-3 control-label">Link zur NABU Gruppe</label>
-                          <div class="col-sm-9">
-                              <input type="url" id="nabuGroup" class="form-control" placeholder="Webseite" th:field="*{nabuGroup}" />
-                          </div>
-                      </div>
-                      <div class="form-group row">
-                          <label for="contactPersons" class="col-sm-3 control-label">Ansprechpersonen</label>
-                          <div class="col-sm-9">
-                              <select id="contactPersons" multiple="multiple" title="Ansprechpartner auswählen" class="selectpicker" data-live-search="true" data-selected-text-format="static" data-actions-box="true" th:field="*{contactPersons}" th:remove="all-but-first">
-                                  <option data-subtext="(* 31.02.1234)" value="1" th:each="member : ${members}" th:value="${member.id}" th:text="${member.name}" th:attr="'data-subtext'=|(* ${member.participant ? member.participantProfile.dateOfBirth != null ? {member.participantProfile.dateOfBirth} : 'unbekannt' : 'unbekannt'} )|">Maxi Musterfrau</option>
-                                  <option data-subtext="(* 01.01.1111)" value="2">Heinz Heimlich</option>
-                                  <option data-subtext="(* 12.11.1009)" value="3">Dieter Lustig</option>
-                                  <option data-subtext="(* 03.07.1999)" value="4">Klaus Klücklich</option>
-                              </select>
-                              <p class="help-block">
-                                  Ansprechpersonen müssen Mitglieder in der Ortsgruppe sein
-                              </p>
-                          </div>
-                      </div>
-                  </form>
-              </section>
-              <footer class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
-                  <button type="submit" class="btn btn-primary" form="edit-localgroup">Aktualisieren</button>
-              </footer>
-          </div>
+  <section class="modal fade" id="edit-localGroup-modal" tabindex="-1" role="dialog"
+           aria-labelledby="edit-localgroup-label">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <header class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h3 class="modal-title" id="edit-localgroup-label">Ortsgruppe anpassen</h3>
+        </header>
+        <section class="modal-body">
+          <form id="edit-localgroup" class="form-horizontal" method="post"
+                th:action="@{/localGroups/{id}/edit(id=${localGroup.id})}"
+                th:object="${localGroupForm}">
+            <div class="form-group row">
+              <label class="control-label col-sm-3" for="edit-name">Name</label>
+              <div class="col-sm-9">
+                <input type="text" id="edit-name" class="form-control" placeholder="Name"
+                       required="required" th:field="*{name}"/>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="edit-address" class="col-sm-3 control-label">Adresse</label>
+              <div class="col-sm-9 address" id="edit-address">
+                <input type="text" class="form-control street" name="street"
+                       placeholder="Straße, HNr." th:field="*{street}"/>
+                <input type="text" class="form-control zip" name="zip" placeholder="Plz"
+                       style="width: 30%; float: left;" th:field="*{zip}"/>
+                <input type="text" class="form-control city" name="city" placeholder="Stadt"
+                       style="width: 67%; float: right;" th:field="*{city}"/>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="nabuGroup" class="col-sm-3 control-label">Link zur NABU Gruppe</label>
+              <div class="col-sm-9">
+                <input type="url" id="nabuGroup" class="form-control" placeholder="Webseite"
+                       th:field="*{nabuGroup}"/>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="contactPersons" class="col-sm-3 control-label">Ansprechpersonen</label>
+              <div class="col-sm-9">
+                <select id="contactPersons" multiple="multiple" title="Ansprechpartner auswählen"
+                        class="selectpicker" data-live-search="true"
+                        data-selected-text-format="static" data-actions-box="true"
+                        th:field="*{contactPersons}" th:remove="all-but-first">
+                  <option data-subtext="(* 31.02.1234)" value="1" th:each="member : ${members}"
+                          th:value="${member.id}" th:text="${member.name}"
+                          th:attr="'data-subtext'=|(* ${member.participant ? member.participantProfile.dateOfBirth != null ? {member.participantProfile.dateOfBirth} : 'unbekannt' : 'unbekannt'} )|">
+                    Maxi Musterfrau
+                  </option>
+                  <option data-subtext="(* 01.01.1111)" value="2">Heinz Heimlich</option>
+                  <option data-subtext="(* 12.11.1009)" value="3">Dieter Lustig</option>
+                  <option data-subtext="(* 03.07.1999)" value="4">Klaus Klücklich</option>
+                </select>
+                <p class="help-block">
+                  Ansprechpersonen müssen Mitglieder in der Ortsgruppe sein
+                </p>
+              </div>
+            </div>
+          </form>
+        </section>
+        <footer class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+          <button type="submit" class="btn btn-primary" form="edit-localgroup">Aktualisieren
+          </button>
+        </footer>
       </div>
+    </div>
   </section>
 
   <!-- 'add member' modal -->
-  <section class="modal fade" id="add-member-modal" tabindex="-1" role="dialog" aria-labelledby="add-member-label">
-      <div class="modal-dialog" role="document">
-          <div class="modal-content">
-              <header class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                  </button>
-                  <h3 class="modal-title" id="add-member-label">Mitglied hinzufügen</h3>
-              </header>
-              <section class="modal-body">
-                  <div class="form-group clearfix">
-                      <label class="col-sm-3 control-label">Aktive suchen</label>
-                      <div class="col-sm-9">
-                          <div class="clearfix" style="margin-bottom: 5px;">
-                              <input type="text" id="add-member-search-firstname" class="form-control pull-left first-name" style="width: 48%;" placeholder="Vorname" />
-                              <input type="text" id="add-member-search-lastname" class="form-control pull-right last-name" style="width: 48%;" placeholder="Nachname" />
-                          </div>
-                          <div class="clearfix">
-                              <input type="text" id="add-member-search-city" class="form-control pull-left city" style="width: 68%;" placeholder="Ort"/>
-                              <button type="button" id="add-member-search-btn" class="btn btn-primary pull-right search" style="padding-left: 20px; padding-right: 20px;">
-                                  Suchen
-                              </button>
-                          </div>
-                      </div>
-                  </div>
-                  <hr style="width: 100%; margin-top:5px;"/>
-                  <form id="add-member" class="form-horizontal" method="post" th:action="@{/localGroups/{id}/members/add(id=${localGroup.id})}">
-                      <table class="table">
-                          <thead>
-                              <tr>
-                                  <th>Name</th>
-                                  <th>Geburtsdatum</th>
-                                  <th>Adresse</th>
-                                  <th>Auswählen</th>
-                              </tr>
-                          </thead>
-                          <tbody id="add-member-tablebody" class="matches" th:remove="body">
-                              <tr>
-                                  <td>Max Mustermann</td>
-                                  <td>31.02.1999</td>
-                                  <td>Bei Mir 7 01234 Noch ein Dorf</td>
-                                  <td class="text-center">
-                                      <label><input type="radio" name="person-id" value="0" required="required" /></label>
-                                  </td>
-                              </tr>
-                              <tr>
-                                  <td>Claus Dieter</td>
-                                  <td>17.07.1993</td>
-                                  <td>Zu Hause 123 01478 Irgendein Dorf</td>
-                                  <td class="text-center">
-                                      <label><input type="radio" name="person-id" value="0" required="required" /></label>
-                                  </td>
-                              </tr>
-                              <tr>
-                                  <td>Friedlinde Müller</td>
-                                  <td>11.11.1995</td>
-                                  <td>Um die Ecke 3c 01597 Großstadt</td>
-                                  <td class="text-center">
-                                      <label><input type="radio" name="person-id" value="0" required="required" /></label>
-                                  </td>
-                              </tr>
-                          </tbody>
-                      </table>
-                  </form>
-                  <div class="text-center searching">
-                      Suche läuft... <span class="glyphicon glyphicon-refresh glyphicon-load-animate"></span>
-                  </div>
-                  <div class="alert alert-info no-results">
-                      Keine Übereinstimmung
-                  </div>
-                  <div class="panel panel-info new-activists">
-                      <div class="panel-heading">
-                          <h4 class="panel-title">Einige Personen wurden bisher noch nicht als Aktive registriert:</h4>
-                      </div>
-                      <ul class="list-group list-group-minimalistic" th:remove="body">
-                          <li class="list-group-item">
-                              <div class="pull-left">
-                                  <h5 class="list-group-item-heading">Max Mustermann</h5>
-                                  <div class="list-group-item-text">
-                                      <span>* 05.05.2005</span> <span>Freiberg</span>
-                                  </div>
-                              </div>
-                              <div class="clearfix">
-                                  <form class="form-inline pull-right" method="POST" th:action="@{'/events/' + ${event.id} + '/organizers/add-new'}">
-                                      <input type="hidden" name="person-id" value="-1" />
-                                      <button type="submit" class="btn btn-default btn-sm">Als Aktive(n) markieren und hinzufügen</button>
-                                  </form>
-                              </div>
-                          </li>
-                          <li class="list-group-item">
-                              <div class="pull-left">
-                                  <h5 class="list-group-item-heading">Max Mustermann</h5>
-                                  <div class="list-group-item-text">
-                                      <span>* 05.05.2005</span> <span>Freiberg</span>
-                                  </div>
-                              </div>
-                              <div class="clearfix">
-                                  <form class="form-inline pull-right" method="POST" th:action="@{'/events/' + ${event.id} + '/organizers/add-new'}">
-                                      <input type="hidden" name="person-id" value="-1" />
-                                      <button type="submit" class="btn btn-default btn-sm">Als Aktive(n) markieren und hinzufügen</button>
-                                  </form>
-                              </div>
-                          </li>
-                          <li class="list-group-item">
-                              <div class="pull-left">
-                                  <h5 class="list-group-item-heading">Max Mustermann</h5>
-                                  <div class="list-group-item-text">
-                                      <span>* 05.05.2005</span> <span>Freiberg</span>
-                                  </div>
-                              </div>
-                              <div class="clearfix">
-                                  <form class="form-inline pull-right" method="POST" th:action="@{'/events/' + ${event.id} + '/organizers/add-new'}">
-                                      <input type="hidden" name="person-id" value="-1" />
-                                      <button type="submit" class="btn btn-default btn-sm">Als Aktive(n) markieren und hinzufügen</button>
-                                  </form>
-                              </div>
-                          </li>
-                      </ul>
-                  </div>
-                  <div class="text-center searching-new-activists">
-                      Weiterführende Suche läuft... <span class="glyphicon glyphicon-refresh glyphicon-load-animate"></span>
-                  </div>
-              </section>
-              <footer class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
-                  <button type="submit" class="btn btn-primary" form="add-member">Hinzufügen</button>
-              </footer>
+  <section class="modal fade" id="add-member-modal" tabindex="-1" role="dialog"
+           aria-labelledby="add-member-label">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <header class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h3 class="modal-title" id="add-member-label">Mitglied hinzufügen</h3>
+        </header>
+        <section class="modal-body">
+          <div class="form-group clearfix">
+            <label class="col-sm-3 control-label">Aktive suchen</label>
+            <div class="col-sm-9">
+              <div class="clearfix" style="margin-bottom: 5px;">
+                <input type="text" id="add-member-search-firstname"
+                       class="form-control pull-left first-name" style="width: 48%;"
+                       placeholder="Vorname"/>
+                <input type="text" id="add-member-search-lastname"
+                       class="form-control pull-right last-name" style="width: 48%;"
+                       placeholder="Nachname"/>
+              </div>
+              <div class="clearfix">
+                <input type="text" id="add-member-search-city" class="form-control pull-left city"
+                       style="width: 68%;" placeholder="Ort"/>
+                <button type="button" id="add-member-search-btn"
+                        class="btn btn-primary pull-right search"
+                        style="padding-left: 20px; padding-right: 20px;">
+                  Suchen
+                </button>
+              </div>
+            </div>
           </div>
+          <hr style="width: 100%; margin-top:5px;"/>
+          <form id="add-member" class="form-horizontal" method="post"
+                th:action="@{/localGroups/{id}/members/add(id=${localGroup.id})}">
+            <table class="table">
+              <thead>
+              <tr>
+                <th>Name</th>
+                <th>Geburtsdatum</th>
+                <th>Adresse</th>
+                <th>Auswählen</th>
+              </tr>
+              </thead>
+              <tbody id="add-member-tablebody" class="matches" th:remove="body">
+              <tr>
+                <td>Max Mustermann</td>
+                <td>31.02.1999</td>
+                <td>Bei Mir 7 01234 Noch ein Dorf</td>
+                <td class="text-center">
+                  <label><input type="radio" name="person-id" value="0"
+                                required="required"/></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Claus Dieter</td>
+                <td>17.07.1993</td>
+                <td>Zu Hause 123 01478 Irgendein Dorf</td>
+                <td class="text-center">
+                  <label><input type="radio" name="person-id" value="0"
+                                required="required"/></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Friedlinde Müller</td>
+                <td>11.11.1995</td>
+                <td>Um die Ecke 3c 01597 Großstadt</td>
+                <td class="text-center">
+                  <label><input type="radio" name="person-id" value="0"
+                                required="required"/></label>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </form>
+          <div class="text-center searching">
+            Suche läuft... <span class="glyphicon glyphicon-refresh glyphicon-load-animate"></span>
+          </div>
+          <div class="alert alert-info no-results">
+            Keine Übereinstimmung
+          </div>
+          <div class="panel panel-info new-activists">
+            <div class="panel-heading">
+              <h4 class="panel-title">Einige Personen wurden bisher noch nicht als Aktive
+                registriert:</h4>
+            </div>
+            <ul class="list-group list-group-minimalistic" th:remove="body">
+              <li class="list-group-item">
+                <div class="pull-left">
+                  <h5 class="list-group-item-heading">Max Mustermann</h5>
+                  <div class="list-group-item-text">
+                    <span>* 05.05.2005</span> <span>Freiberg</span>
+                  </div>
+                </div>
+                <div class="clearfix">
+                  <form class="form-inline pull-right" method="POST"
+                        th:action="@{'/events/' + ${event.id} + '/organizers/add-new'}">
+                    <input type="hidden" name="person-id" value="-1"/>
+                    <button type="submit" class="btn btn-default btn-sm">Als Aktive(n) markieren und
+                      hinzufügen
+                    </button>
+                  </form>
+                </div>
+              </li>
+              <li class="list-group-item">
+                <div class="pull-left">
+                  <h5 class="list-group-item-heading">Max Mustermann</h5>
+                  <div class="list-group-item-text">
+                    <span>* 05.05.2005</span> <span>Freiberg</span>
+                  </div>
+                </div>
+                <div class="clearfix">
+                  <form class="form-inline pull-right" method="POST"
+                        th:action="@{'/events/' + ${event.id} + '/organizers/add-new'}">
+                    <input type="hidden" name="person-id" value="-1"/>
+                    <button type="submit" class="btn btn-default btn-sm">Als Aktive(n) markieren und
+                      hinzufügen
+                    </button>
+                  </form>
+                </div>
+              </li>
+              <li class="list-group-item">
+                <div class="pull-left">
+                  <h5 class="list-group-item-heading">Max Mustermann</h5>
+                  <div class="list-group-item-text">
+                    <span>* 05.05.2005</span> <span>Freiberg</span>
+                  </div>
+                </div>
+                <div class="clearfix">
+                  <form class="form-inline pull-right" method="POST"
+                        th:action="@{'/events/' + ${event.id} + '/organizers/add-new'}">
+                    <input type="hidden" name="person-id" value="-1"/>
+                    <button type="submit" class="btn btn-default btn-sm">Als Aktive(n) markieren und
+                      hinzufügen
+                    </button>
+                  </form>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="text-center searching-new-activists">
+            Weiterführende Suche läuft... <span
+              class="glyphicon glyphicon-refresh glyphicon-load-animate"></span>
+          </div>
+        </section>
+        <footer class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+          <button type="submit" class="btn btn-primary" form="add-member">Hinzufügen</button>
+        </footer>
       </div>
+    </div>
   </section>
 
   <!-- 'remove member' modal -->
-  <section class="modal fade" id="remove-member-modal" tabindex="-1" role="dialog" aria-labelledby="remove-member-label">
-      <div class="modal-dialog" role="document">
-          <div class="modal-content">
-              <header class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                  </button>
-                  <h3 class="modal-title" id="remove-member-label">Mitglied entfernen</h3>
-              </header>
-              <section class="modal-body">
-                  <form id="remove-member" class="form-horizontal" method="post" th:action="@{/localGroups/{id}/members/remove(id=${localGroup.id})}">
-                      <input type="hidden" name="member-id" value="-1" />
-                      <input type="hidden" name="_csrf" value="-1" />
-                      <label for="remove-member-name" class="sr-only">Name</label>
-                      <input type="text" id="remove-member-name" class="form-control" value="Max Mustermann" readonly="readonly" disabled="disabled" />
-                  </form>
-              </section>
-              <footer class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
-                  <div class="btn-group">
-                     <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="glyphicon glyphicon-trash"></span> Löschen <span class="caret"></span>
-                     </button>
-                     <ul class="dropdown-menu confirm-delete">
-                        <li><button type="submit" class="btn btn-link" form="remove-member">Löschen</button></li>
-                     </ul>
-                  </div>
-              </footer>
+  <section class="modal fade" id="remove-member-modal" tabindex="-1" role="dialog"
+           aria-labelledby="remove-member-label">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <header class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h3 class="modal-title" id="remove-member-label">Mitglied entfernen</h3>
+        </header>
+        <section class="modal-body">
+          <form id="remove-member" class="form-horizontal" method="post"
+                th:action="@{/localGroups/{id}/members/remove(id=${localGroup.id})}">
+            <input type="hidden" name="member-id" value="-1"/>
+            <input type="hidden" name="_csrf" value="-1"/>
+            <label for="remove-member-name" class="sr-only">Name</label>
+            <input type="text" id="remove-member-name" class="form-control" value="Max Mustermann"
+                   readonly="readonly" disabled="disabled"/>
+          </form>
+        </section>
+        <footer class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+          <div class="btn-group">
+            <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+              <span class="glyphicon glyphicon-trash"></span> Löschen <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu confirm-delete">
+              <li>
+                <button type="submit" class="btn btn-link" form="remove-member">Löschen</button>
+              </li>
+            </ul>
           </div>
+        </footer>
       </div>
+    </div>
   </section>
 
   <!-- 'edit board' modal -->
-  <section class="modal fade" id="edit-board-modal" tabindex="-1" role="dialog" aria-labelledby="edit-board-label">
-      <div class="modal-dialog" role="document">
-          <div class="modal-content">
-              <header class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                  </button>
-                  <h3 class="modal-title" id="edit-board-label">Vorstand bearbeiten</h3>
-              </header>
-              <section class="modal-body">
-                  <form id="edit-board" class="form-horizontal" method="post" th:object="${boardForm}" th:action="@{/localGroups/{id}/board(id=${localGroup.id})}">
-                      <div class="form-group row">
-                          <label for="edit-board-chairman" class="control-label col-sm-3">Vorsitz:</label>
-                          <div class="col-sm-9">
-                              <select id="edit-board-chairman" class="selectpicker" data-live-search="true" required="required" th:remove="all-but-first" th:field="*{chairmanId}">
-                                  <option value="-1" th:each="member : ${members}" th:value="${member.id}" th:text="${member.name}">Maxi Musterfrau</option>
-                                  <option value="-1">Heinz Heimlich</option>
-                                  <option value="-1">Dieter Lustig</option>
-                                  <option value="-1">Klaus Klücklich</option>
-                              </select>
-                          </div>
-                      </div>
-                      <div class="form-group row">
-                          <label class="control-label col-sm-3">E-Mail:</label>
-                          <div class="col-sm-9">
-                              <div class="input-group">
-                                  <input type="email" class="form-control" placeholder="E-Mail" th:field="*{email}" />
-                                  <span class="input-group-addon">(optional)</span>
-                              </div>
-                          </div>
-                      </div>
-                      <div class="form-group row">
-                          <label for="edit-board-members" class="control-label col-sm-3">Mitglieder</label>
-                          <div class="col-sm-9">
-                              <div style="margin-bottom: 10px;">
-                                  <label for="edit-board-select-newMember" class="sr-only">Neues Mitglied</label>
-                                  <select id="edit-board-select-newMember" multiple="multiple" title="Neues Mitglied auswählen" class="selectpicker" data-live-search="true" data-selected-text-format="static" data-actions-box="true" th:remove="all-but-first">
-                                      <option data-subtext="(* 31.02.1234)" value="1" th:each="member : ${members}" th:value="${member.id}" th:text="${member.name}" th:attr="'data-subtext'=|(* ${member.participant ? member.participantProfile.dateOfBirth != null ? {member.participantProfile.dateOfBirth} : 'unbekannt' : 'unbekannt'} )|">Maxi Musterfrau</option>
-                                      <option data-subtext="(* 01.01.1111)" value="2">Heinz Heimlich</option>
-                                      <option data-subtext="(* 12.11.1009)" value="3">Dieter Lustig</option>
-                                      <option data-subtext="(* 03.07.1999)" value="4">Klaus Klücklich</option>
-                                  </select>
-                              </div>
-                              <div>
-                                  <select id="edit-board-members" class="form-control" multiple="multiple" size="10" th:remove="all-but-first" th:field="*{memberIds}">
-                                      <option value="1" th:each="member : ${members}" th:value="${member.id}" th:text="${member.name}">Maxi Musterfrau</option>
-                                      <option value="2">Heinz Heimlich</option>
-                                      <option value="3">Dieter Lustig</option>
-                                      <option value="4">Klaus Klücklich</option>
-                                  </select>
-                              </div>
-                          </div>
-                      </div>
-                  </form>
-              </section>
-              <footer class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
-                  <button type="submit" class="btn btn-primary" form="edit-board">Aktualisieren</button>
-              </footer>
-          </div>
+  <section class="modal fade" id="edit-board-modal" tabindex="-1" role="dialog"
+           aria-labelledby="edit-board-label">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <header class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h3 class="modal-title" id="edit-board-label">Vorstand bearbeiten</h3>
+        </header>
+        <section class="modal-body">
+          <form id="edit-board" class="form-horizontal" method="post" th:object="${boardForm}"
+                th:action="@{/localGroups/{id}/board(id=${localGroup.id})}">
+            <div class="form-group row">
+              <label for="edit-board-chairman" class="control-label col-sm-3">Vorsitz:</label>
+              <div class="col-sm-9">
+                <select id="edit-board-chairman" class="selectpicker" data-live-search="true"
+                        required="required" th:remove="all-but-first" th:field="*{chairmanId}">
+                  <option value="-1" th:each="member : ${members}" th:value="${member.id}"
+                          th:text="${member.name}">Maxi Musterfrau
+                  </option>
+                  <option value="-1">Heinz Heimlich</option>
+                  <option value="-1">Dieter Lustig</option>
+                  <option value="-1">Klaus Klücklich</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="control-label col-sm-3">E-Mail:</label>
+              <div class="col-sm-9">
+                <div class="input-group">
+                  <input type="email" class="form-control" placeholder="E-Mail"
+                         th:field="*{email}"/>
+                  <span class="input-group-addon">(optional)</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="edit-board-members" class="control-label col-sm-3">Mitglieder</label>
+              <div class="col-sm-9">
+                <div style="margin-bottom: 10px;">
+                  <label for="edit-board-select-newMember" class="sr-only">Neues Mitglied</label>
+                  <select id="edit-board-select-newMember" multiple="multiple"
+                          title="Neues Mitglied auswählen" class="selectpicker"
+                          data-live-search="true" data-selected-text-format="static"
+                          data-actions-box="true" th:remove="all-but-first">
+                    <option data-subtext="(* 31.02.1234)" value="1" th:each="member : ${members}"
+                            th:value="${member.id}" th:text="${member.name}"
+                            th:attr="'data-subtext'=|(* ${member.participant ? member.participantProfile.dateOfBirth != null ? {member.participantProfile.dateOfBirth} : 'unbekannt' : 'unbekannt'} )|">
+                      Maxi Musterfrau
+                    </option>
+                    <option data-subtext="(* 01.01.1111)" value="2">Heinz Heimlich</option>
+                    <option data-subtext="(* 12.11.1009)" value="3">Dieter Lustig</option>
+                    <option data-subtext="(* 03.07.1999)" value="4">Klaus Klücklich</option>
+                  </select>
+                </div>
+                <div>
+                  <select id="edit-board-members" class="form-control" multiple="multiple" size="10"
+                          th:remove="all-but-first" th:field="*{memberIds}">
+                    <option value="1" th:each="member : ${members}" th:value="${member.id}"
+                            th:text="${member.name}">Maxi Musterfrau
+                    </option>
+                    <option value="2">Heinz Heimlich</option>
+                    <option value="3">Dieter Lustig</option>
+                    <option value="4">Klaus Klücklich</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </form>
+        </section>
+        <footer class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+          <button type="submit" class="btn btn-primary" form="edit-board">Aktualisieren</button>
+        </footer>
       </div>
+    </div>
   </section>
 
   <!-- 'add project' modal -->
-  <section class="modal fade" id="add-project-modal" tabindex="-1" role="dialog" aria-labelledby="add-project-label">
-      <div class="modal-dialog" role="document">
-          <div class="modal-content">
-              <header class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                  </button>
-                  <h3 class="modal-title" id="edit-board-label">Projekt hinzufügen</h3>
-              </header>
-              <section class="modal-body">
-                  <form id="add-project" class="form-horizontal" method="post" th:object="${projectForm}" th:action="@{/projects/add}">
-                      <input type="hidden" name="localGroupId" th:value="${localGroup.id}" />
+  <section class="modal fade" id="add-project-modal" tabindex="-1" role="dialog"
+           aria-labelledby="add-project-label">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <header class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h3 class="modal-title" id="edit-board-label">Projekt hinzufügen</h3>
+        </header>
+        <section class="modal-body">
+          <form id="add-project" class="form-horizontal" method="post" th:object="${projectForm}"
+                th:action="@{/projects/add}">
+            <input type="hidden" name="localGroupId" th:value="${localGroup.id}"/>
 
-                      <div class="form-group row">
-                          <label class="control-label col-sm-3">Name</label>
-                          <div class="col-sm-9">
-                              <input type="text" class="form-control" placeholder="Name" autofocus="autofocus" th:field="*{name}"/>
-                          </div>
-                      </div>
-                      <div class="form-group row">
-                          <label class="control-label col-sm-3">Zeitraum <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" data-title="optional"></span></label>
-                          <div class="col-sm-9">
-                              <div class="input-group" id="add-project-period">
-                                  <input type="text" class="form-control" placeholder="Start" th:field="*{start}" />
-                                  <span class="input-group-addon">bis</span>
-                                  <input type="text" class="form-control" placeholder="Ende" th:field="*{end}" />
-                              </div>
-                          </div>
-                      </div>
-                      <div class="form-group row">
-                          <label for="add-project-personInCharge" class="control-label col-sm-3">Verantwortliche(r)</label>
-                          <div class="col-sm-9">
-                              <select id="add-project-personInCharge" class="selectpicker" data-live-search="true" required="required" th:remove="all-but-first" th:field="*{personInCharge}">
-                                  <option value="-1" th:each="member : ${members}" th:value="${member.id}" th:text="${member.name}">Maxi Musterfrau</option>
-                                  <option value="-1">Heinz Heimlich</option>
-                                  <option value="-1">Dieter Lustig</option>
-                                  <option value="-1">Klaus Klücklich</option>
-                              </select>
-                          </div>
-                      </div>
-                  </form>
-              </section>
-              <footer class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
-                  <button type="submit" class="btn btn-primary" form="add-project">Erstellen</button>
-              </footer>
-          </div>
+            <div class="form-group row">
+              <label class="control-label col-sm-3">Name</label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" placeholder="Name" autofocus="autofocus"
+                       th:field="*{name}"/>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="control-label col-sm-3">Zeitraum <span
+                  class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right"
+                  data-title="optional"></span></label>
+              <div class="col-sm-9">
+                <div class="input-group" id="add-project-period">
+                  <input type="text" class="form-control" placeholder="Start" th:field="*{start}"/>
+                  <span class="input-group-addon">bis</span>
+                  <input type="text" class="form-control" placeholder="Ende" th:field="*{end}"/>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="add-project-personInCharge" class="control-label col-sm-3">Verantwortliche(r)</label>
+              <div class="col-sm-9">
+                <select id="add-project-personInCharge" class="selectpicker" data-live-search="true"
+                        required="required" th:remove="all-but-first" th:field="*{personInCharge}">
+                  <option value="-1" th:each="member : ${members}" th:value="${member.id}"
+                          th:text="${member.name}">Maxi Musterfrau
+                  </option>
+                  <option value="-1">Heinz Heimlich</option>
+                  <option value="-1">Dieter Lustig</option>
+                  <option value="-1">Klaus Klücklich</option>
+                </select>
+              </div>
+            </div>
+          </form>
+        </section>
+        <footer class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+          <button type="submit" class="btn btn-primary" form="add-project">Erstellen</button>
+        </footer>
       </div>
+    </div>
   </section>
 
   <!-- 'add event' modal -->
-  <section class="modal fade" id="add-event-modal" tabindex="-1" role="dialog" aria-labelledby="add-event-label">
-      <div class="modal-dialog" role="document">
-          <div class="modal-content">
-              <header class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                  </button>
-                  <h3 class="modal-title" id="add-event-label">Veranstaltung erstellen</h3>
-              </header>
-              <section class="modal-body">
-                  <form id="add-event" class="form-horizontal" method="post" th:object="${addEventForm}" th:action="@{/events/add}">
-                      <input type="hidden" name="belonging" th:value="LOCALGROUP" />
-                      <input type="hidden" value="-1" name="localGroupId" th:value="${localGroup.id}" />
+  <section class="modal fade" id="add-event-modal" tabindex="-1" role="dialog"
+           aria-labelledby="add-event-label">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <header class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h3 class="modal-title" id="add-event-label">Veranstaltung erstellen</h3>
+        </header>
+        <section class="modal-body">
+          <form id="add-event" class="form-horizontal" method="post" th:object="${addEventForm}"
+                th:action="@{/events/add}">
+            <input type="hidden" name="belonging" th:value="LOCALGROUP"/>
+            <input type="hidden" value="-1" name="localGroupId" th:value="${localGroup.id}"/>
 
-                      <div class="form-group">
-                          <label for="name" class="col-sm-3 control-label">Name</label>
-                          <div class="col-sm-9">
-                              <input type="text" id="name" class="form-control" name="name" placeholder="Name" autofocus="" required="required" th:field="*{name}" />
-                          </div>
-                      </div>
-                      <div class="form-group">
-                          <label for="start-time" class="col-sm-3 control-label">Von <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" data-title="Format: DD.MM.YYYY. Wenn die Uhrzeit unwichtig ist, einfach auf 00:00 setzen"></span></label>
-                          <div class="col-sm-9">
-                              <div class="input-group date" id="event-startTime-picker">
-                                  <input type="text" class="form-control" name="start-time" id="add-event-startTime" placeholder="Startzeit" required="required" th:field="*{startTime}"/>
-                                  <span class="input-group-addon">
+            <div class="form-group">
+              <label for="name" class="col-sm-3 control-label">Name</label>
+              <div class="col-sm-9">
+                <input type="text" id="name" class="form-control" name="name" placeholder="Name"
+                       autofocus="" required="required" th:field="*{name}"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="start-time" class="col-sm-3 control-label">Von <span
+                  class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right"
+                  data-title="Format: DD.MM.YYYY. Wenn die Uhrzeit unwichtig ist, einfach auf 00:00 setzen"></span></label>
+              <div class="col-sm-9">
+                <div class="input-group date" id="event-startTime-picker">
+                  <input type="text" class="form-control" name="start-time" id="add-event-startTime"
+                         placeholder="Startzeit" required="required" th:field="*{startTime}"/>
+                  <span class="input-group-addon">
                                       <span class="glyphicon glyphicon-calendar"></span>
                                   </span>
-                              </div>
-                          </div>
-                      </div>
-                      <div class="form-group">
-                          <label for="end-time" class="col-sm-3 control-label">Bis <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" data-title="Format: DD.MM.YYYY. Wenn die Uhrzeit unwichtig ist, einfach auf 00:00 setzen"></span></label>
-                          <div class="col-sm-9">
-                              <div class="input-group date" id="event-endTime-picker">
-                                  <input type="text" class="form-control" name="end-time" id="add-event-endTime" placeholder="Endzeit" required="required" th:field="*{endTime}"/>
-                                  <span class="input-group-addon">
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="end-time" class="col-sm-3 control-label">Bis <span
+                  class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right"
+                  data-title="Format: DD.MM.YYYY. Wenn die Uhrzeit unwichtig ist, einfach auf 00:00 setzen"></span></label>
+              <div class="col-sm-9">
+                <div class="input-group date" id="event-endTime-picker">
+                  <input type="text" class="form-control" name="end-time" id="add-event-endTime"
+                         placeholder="Endzeit" required="required" th:field="*{endTime}"/>
+                  <span class="input-group-addon">
                                       <span class="glyphicon glyphicon-calendar"></span>
                                   </span>
-                              </div>
-                          </div>
-                      </div>
-                      <div class="form-group">
-                          <label for="participants-limit" class="col-sm-3 control-label">Max. Teilnehmer</label>
-                          <div class="col-sm-9">
-                              <div class="input-group">
-                                  <input type="number" class="form-control" name="participants-limit" id="participants-limit" placeholder="Teilnehmerlimit" th:field="*{participantsLimit}" />
-                                  <span class="input-group-addon">
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="participants-limit" class="col-sm-3 control-label">Max. Teilnehmer</label>
+              <div class="col-sm-9">
+                <div class="input-group">
+                  <input type="number" class="form-control" name="participants-limit"
+                         id="participants-limit" placeholder="Teilnehmerlimit"
+                         th:field="*{participantsLimit}"/>
+                  <span class="input-group-addon">
                                       Teilnehmer
                                   </span>
-                              </div>
-                          </div>
-                      </div>
-                      <div class="form-group">
-                          <label for="participants-age" class="col-sm-3 control-label">Teilnehmeralter</label>
-                          <div class="col-sm-9">
-                              <div class="input-group">
-                                  <input type="number" class="form-control" name="participants-age" id="participants-age" placeholder="min. Alter" th:field="*{participantsAge}"/>
-                                  <span class="input-group-addon">
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="participants-age" class="col-sm-3 control-label">Teilnehmeralter</label>
+              <div class="col-sm-9">
+                <div class="input-group">
+                  <input type="number" class="form-control" name="participants-age"
+                         id="participants-age" placeholder="min. Alter"
+                         th:field="*{participantsAge}"/>
+                  <span class="input-group-addon">
                                       Jahre
                                   </span>
-                              </div>
-                          </div>
-                      </div>
-                      <div class="form-group">
-                          <label for="add-event-fees" class="col-sm-3 control-label">Preis</label>
-                          <div class="col-sm-9" id="add-event-fees">
-                              <div class="input-group margin-btm">
-                                  <input type="number" step="0.1" class="form-control" name="internalFee" id="internalFee" placeholder="NAJU-Mitglieder" th:field="*{internalParticipationFee}" />
-                                  <span class="input-group-addon"><span class="glyphicon glyphicon-eur"></span></span>
-                              </div>
-                              <div class="input-group">
-                                  <input type="number" step="0.1" class="form-control" name="externalFee" id="externalFee" placeholder="nicht-Mitglieder" th:field="*{externalParticipationFee}" />
-                                  <span class="input-group-addon"><span class="glyphicon glyphicon-eur"></span></span>
-                              </div>
-                          </div>
-                      </div>
-                      <div class="form-group">
-                          <label for="add-event-address" class="col-sm-3 control-label">Ort</label>
-                          <div class="col-sm-9 address" id="add-event-address">
-                              <input type="text" class="form-control street" name="street" placeholder="Straße, HNr." th:field="*{street}"/>
-                              <input type="text" class="form-control zip" name="zip" placeholder="Plz" style="width: 30%; float: left;" th:field="*{zip}"/>
-                              <input type="text" class="form-control city" name="city" placeholder="Stadt" style="width: 67%; float: right;" th:field="*{city}"/>
-                          </div>
-                      </div>
-                  </form>
-              </section>
-              <footer class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
-                  <button type="submit" class="btn btn-primary" form="add-event">Erstellen</button>
-              </footer>
-          </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="add-event-fees" class="col-sm-3 control-label">Preis</label>
+              <div class="col-sm-9" id="add-event-fees">
+                <div class="input-group margin-btm">
+                  <input type="number" step="0.1" class="form-control" name="internalFee"
+                         id="internalFee" placeholder="NAJU-Mitglieder"
+                         th:field="*{internalParticipationFee}"/>
+                  <span class="input-group-addon"><span
+                      class="glyphicon glyphicon-eur"></span></span>
+                </div>
+                <div class="input-group">
+                  <input type="number" step="0.1" class="form-control" name="externalFee"
+                         id="externalFee" placeholder="nicht-Mitglieder"
+                         th:field="*{externalParticipationFee}"/>
+                  <span class="input-group-addon"><span
+                      class="glyphicon glyphicon-eur"></span></span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="add-event-address" class="col-sm-3 control-label">Ort</label>
+              <div class="col-sm-9 address" id="add-event-address">
+                <input type="text" class="form-control street" name="street"
+                       placeholder="Straße, HNr." th:field="*{street}"/>
+                <input type="text" class="form-control zip" name="zip" placeholder="Plz"
+                       style="width: 30%; float: left;" th:field="*{zip}"/>
+                <input type="text" class="form-control city" name="city" placeholder="Stadt"
+                       style="width: 67%; float: right;" th:field="*{city}"/>
+              </div>
+            </div>
+          </form>
+        </section>
+        <footer class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+          <button type="submit" class="btn btn-primary" form="add-event">Erstellen</button>
+        </footer>
       </div>
+    </div>
   </section>
 
 </section>
@@ -474,322 +584,366 @@
 <!-- page specific content-->
 <main id="main">
 
-    <!-- page specific menu items -->
-    <header id="action-bar" class="form-inline clearfix">
-        <h2 class="hidden">Menü</h2>
+  <!-- page specific menu items -->
+  <header id="action-bar" class="form-inline clearfix">
+    <h2 class="hidden">Menü</h2>
 
-        <!-- the actions at last -->
-        <div id="actions" class="pull-right">
+    <!-- the actions at last -->
+    <div id="actions" class="pull-right">
 
-            <div class="btn-group">
+      <div class="btn-group">
 
+      </div>
+    </div>
+  </header>
+
+  <!-- the 'real' content finally -->
+  <section id="content" class="tab-content" style="margin-top: 2em;">
+
+    <h1>Ortsgruppen Details</h1>
+
+    <!-- status messages -->
+    <div id="status">
+      <h2 class="hidden">Status</h2>
+
+      <div class="alert alert-success alert-dismissible" role="alert" th:if="${localGroupCreated}">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <p>
+          Ortsgruppe erfolgreich erstellt
+        </p>
+      </div>
+
+      <div class="alert alert-info alert-dismissible" role="alert" th:if="${localGroupUpdated}">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <p>
+          Ortsgruppe wurde aktualisiert
+        </p>
+      </div>
+
+      <div class="alert alert-success alert-dismissible" role="alert" th:if="${memberAdded}">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <p>
+          Neues Mitglied hinzugefügt
+        </p>
+      </div>
+
+      <div class="alert alert-info alert-dismissible" role="alert" th:if="${memberRemoved}">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <p>
+          Mitglied wurde entfernt
+        </p>
+      </div>
+
+      <div class="alert alert-warning alert-dismissible" role="alert" th:if="${existingMember}">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <p>
+          Die Person ist bereits Mitglied in der Ortsgruppe
+        </p>
+      </div>
+
+      <div class="alert alert-info alert-dismissible" role="alert" th:if="${boardUpdated}">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <p>
+          Vorstand wurde aktualisiert
+        </p>
+      </div>
+
+      <div class="alert alert-danger alert-dismissible" role="alert" th:if="${existingActivist}">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <p>
+          Die Person ist bereits als Aktive(r) registriert!
+        </p>
+      </div>
+
+    </div>
+
+    <!-- general overview -->
+    <div class="row">
+
+      <div class="col-md-12">
+        <div class="panel panel-default">
+          <header class="panel-heading panel-menu">
+            <h2 class="panel-title">Überblick</h2>
+            <div class="input-group panel-menu-container">
+              <button type="button" class="btn btn-default" data-toggle="modal"
+                      data-target="#edit-localGroup-modal">
+                <span class="glyphicon glyphicon-pencil"></span> Anpassen
+              </button>
             </div>
+          </header>
+          <table class="table">
+            <tbody>
+            <tr class="row">
+              <th class="col-sm-2"><span class="glyphicon glyphicon-tag"></span> Name:</th>
+              <td class="col-sm-10" th:text="${localGroup.name}">NAJU Sachsen</td>
+            </tr>
+            <tr class="row">
+              <th class="col-sm-2"><span class="glyphicon glyphicon-map-marker"></span> Adresse:
+              </th>
+              <td class="col-sm-10">
+                <a target="_blank"
+                   href="http://www.openstreetmap.org/search?query=Kamenzer%20Str.%207%2001099%20Dresden"
+                   th:href="@{http://www.openstreetmap.org/search(query=|${localGroup.address.street} ${localGroup.address.zip} ${localGroup.address.city}|)}"
+                   th:text="|${localGroup.address.street} ${localGroup.address.zip} ${localGroup.address.city}|">Kamenzer
+                  Str. 7 01099 Dresden</a>
+              </td>
+            </tr>
+            <tr class="row">
+              <th class="col-sm-2"><span class="glyphicon glyphicon-envelope"></span> Newsletter:
+              </th>
+              <td class="col-sm-10">
+                <a href="newsletterDetails.html" class="label label-primary"
+                   th:each="newsletter : ${localGroup.newsletters}"
+                   th:href="@{'/newsletters/' + ${newsletter.id}}" th:text="${newsletter.name}">NAJU
+                  Sachsen</a>
+                <span th:unless="${localGroup.hasNewsletters()}">---</span>
+              </td>
+            </tr>
+            <tr class="row" th:if="${localGroup.hasNabuGroupLink()}">
+              <th class="col-sm-2"><span class="glyphicon glyphicon-home"></span> NABU-Gruppe:</th>
+              <td class="col-sm-10">
+                <a href="http://sachsen.nabu.de" target="_blank"
+                   th:href="${localGroup.nabuGroupLink}" th:text="${localGroup.nabuGroupLink}">http://sachsen.nabu.de</a>
+              </td>
+            </tr>
+            <tr class="row" th:if="${localGroup.hasContactPersons()}">
+              <th class="col-sm-2"><span class="glyphicon glyphicon-star"></span> Ansprechpartner:
+              </th>
+              <td class="col-sm-10">
+                <a href="personDetails.html" th:each="contact : ${contactPersons}"
+                   th:href="@{/persons/{id}(id=${contact.id})}" th:text="${contact.name} + ', '">Max
+                  Muster</a>
+                <a href="mailto:" class="label label-default pull-right"
+                   th:href="|mailto:${contactPersonsEmails}|">E-Mail senden</a>
+              </td>
+            </tr>
+            </tbody>
+          </table>
         </div>
-    </header>
+      </div>
+    </div>
 
-    <!-- the 'real' content finally -->
-    <section id="content" class="tab-content" style="margin-top: 2em;">
+    <!-- member and board overview -->
+    <div class="row" id="members">
 
-        <h1>Ortsgruppen Details</h1>
+      <!-- member overview -->
+      <div class="col-md-8">
+        <div class="panel panel-default">
+          <header class="panel-heading panel-menu">
+            <h2 class="panel-title">Aktive <span class="badge" th:text="${localGroup.memberCount}">12</span>
+            </h2>
 
-        <!-- status messages -->
-        <div id="status">
-            <h2 class="hidden">Status</h2>
-
-            <div class="alert alert-success alert-dismissible" role="alert" th:if="${localGroupCreated}">
-               <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
-                  <span aria-hidden="true">&times;</span>
-               </button>
-               <p>
-                  Ortsgruppe erfolgreich erstellt
-               </p>
-            </div>
-
-            <div class="alert alert-info alert-dismissible" role="alert" th:if="${localGroupUpdated}">
-               <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
-                  <span aria-hidden="true">&times;</span>
-               </button>
-               <p>
-                  Ortsgruppe wurde aktualisiert
-               </p>
-            </div>
-
-            <div class="alert alert-success alert-dismissible" role="alert" th:if="${memberAdded}">
-               <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
-                  <span aria-hidden="true">&times;</span>
-               </button>
-               <p>
-                  Neues Mitglied hinzugefügt
-               </p>
-            </div>
-
-            <div class="alert alert-info alert-dismissible" role="alert" th:if="${memberRemoved}">
-               <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
-                  <span aria-hidden="true">&times;</span>
-               </button>
-               <p>
-                  Mitglied wurde entfernt
-               </p>
-            </div>
-
-            <div class="alert alert-warning alert-dismissible" role="alert" th:if="${existingMember}">
-               <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
-                  <span aria-hidden="true">&times;</span>
-               </button>
-               <p>
-                  Die Person ist bereits Mitglied in der Ortsgruppe
-               </p>
-            </div>
-
-            <div class="alert alert-info alert-dismissible" role="alert" th:if="${boardUpdated}">
-               <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
-                  <span aria-hidden="true">&times;</span>
-               </button>
-               <p>
-                  Vorstand wurde aktualisiert
-               </p>
-            </div>
-
-            <div class="alert alert-danger alert-dismissible" role="alert" th:if="${existingActivist}">
-               <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
-                  <span aria-hidden="true">&times;</span>
-               </button>
-               <p>
-                  Die Person ist bereits als Aktive(r) registriert!
-               </p>
-            </div>
-
-        </div>
-
-        <!-- general overview -->
-        <div class="row">
-
-            <div class="col-md-12">
-                <div class="panel panel-default">
-                    <header class="panel-heading panel-menu">
-                        <h2 class="panel-title">Überblick</h2>
-                        <div class="input-group panel-menu-container">
-                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#edit-localGroup-modal">
-                                <span class="glyphicon glyphicon-pencil"></span> Anpassen
-                            </button>
-                        </div>
-                    </header>
-                    <table class="table">
-                        <tbody>
-                            <tr class="row">
-                                <th class="col-sm-2"><span class="glyphicon glyphicon-tag"></span> Name:</th>
-                                <td class="col-sm-10" th:text="${localGroup.name}">NAJU Sachsen</td>
-                            </tr>
-                            <tr class="row">
-                                <th class="col-sm-2"><span class="glyphicon glyphicon-map-marker"></span> Adresse:</th>
-                                <td class="col-sm-10">
-                                    <a target="_blank" href="http://www.openstreetmap.org/search?query=Kamenzer%20Str.%207%2001099%20Dresden" th:href="@{http://www.openstreetmap.org/search(query=|${localGroup.address.street} ${localGroup.address.zip} ${localGroup.address.city}|)}" th:text="|${localGroup.address.street} ${localGroup.address.zip} ${localGroup.address.city}|">Kamenzer Str. 7 01099 Dresden</a>
-                                </td>
-                            </tr>
-                            <tr class="row">
-                                <th class="col-sm-2"><span class="glyphicon glyphicon-envelope"></span> Newsletter:</th>
-                                <td class="col-sm-10">
-                                    <a href="newsletterDetails.html" class="label label-primary" th:each="newsletter : ${localGroup.newsletters}" th:href="@{'/newsletters/' + ${newsletter.id}}" th:text="${newsletter.name}">NAJU Sachsen</a>
-                                    <span th:unless="${localGroup.hasNewsletters()}">---</span>
-                                </td>
-                            </tr>
-                            <tr class="row" th:if="${localGroup.hasNabuGroupLink()}">
-                                <th class="col-sm-2"><span class="glyphicon glyphicon-home"></span> NABU-Gruppe:</th>
-                                <td class="col-sm-10">
-                                    <a href="http://sachsen.nabu.de" target="_blank" th:href="${localGroup.nabuGroupLink}" th:text="${localGroup.nabuGroupLink}">http://sachsen.nabu.de</a>
-                                </td>
-                            </tr>
-                            <tr class="row" th:if="${localGroup.hasContactPersons()}">
-                                <th class="col-sm-2"><span class="glyphicon glyphicon-star"></span> Ansprechpartner:</th>
-                                <td class="col-sm-10">
-                                    <a href="personDetails.html" th:each="contact : ${contactPersons}" th:href="@{/persons/{id}(id=${contact.id})}" th:text="${contact.name} + ', '">Max Muster</a>
-                                    <a href="mailto:" class="label label-default pull-right" th:href="|mailto:${contactPersonsEmails}|">E-Mail senden</a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- member and board overview -->
-        <div class="row" id="members">
-
-            <!-- member overview -->
-            <div class="col-md-8">
-                <div class="panel panel-default">
-                    <header class="panel-heading panel-menu">
-                        <h2 class="panel-title">Aktive <span class="badge" th:text="${localGroup.memberCount}">12</span></h2>
-
-                        <div class="panel-menu-container">
-                           <div class="form-inline">
-                              <div class="form-group">
-                                 <div class="input-group">
-                                    <input id="persons" type="text" class="form-control fuzzy-search" name="persons" placeholder="Name, Ort o.ä."/>
-                                    <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
-                                </div>
-                              </div>
-                              <div class="form-group">
-                                 <div class="input-group">
-                                    <div class="btn-group">
-                                       <button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-member-modal">
-                                          <span class="glyphicon glyphicon-plus"></span> Hinzufügen
-                                       </button>
-                                       <a href="mailto:" class="btn btn-default" th:href="|mailto: ${memberEmails}|">
-                                          <span class="glyphicon glyphicon-envelope"></span> E-Mail
-                                       </a>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                    </header>
-                    <ul class="list-group list-group-hover member-list" th:remove="all-but-first">
-                        <li class="list-group-item list-group-item-interactive" data-toggle="modal" data-target="#remove-member-modal" data-id="1" data-name="Maxi Musterfrau" th:each="member : ${members}" th:attr="'data-id'=${member.id}, 'data-name'=${member.name}">
-                            <a href="personDetails.html" th:href="@{'/persons/' + ${member.id}}">
-                                <span class="glyphicon glyphicon-link"></span>
-                            </a> <span th:text="${member.name}" class="member-name">Maxi Musterfrau</span> (<a class="member-email" href="mailto:maxi.musterfrau@naju-sachsen.de" th:href="|mailto: ${member.email}|" th:text="${member.email}">maxi.musterfrau@naju-sachsen.de</a>)
-                        </li>
-                        <li class="list-group-item list-group-item-interactive" data-toggle="modal" data-target="#remove-member-modal" data-id="2" data-name="Heinz Heimlich">
-                            <a href="personDetails.html">
-                                <span class="glyphicon glyphicon-link"></span>
-                            </a> <span class="member-name">Heinz Heimlich</span> (<a class="member-email" href="mailto:heinz.heimlich@naju-sachsen.de">heinz.heimlich@naju-sachsen.de</a>)
-                        </li>
-                        <li class="list-group-item list-group-item-interactive" data-toggle="modal" data-target="#remove-member-modal" data-id="3" data-name="Dieter Lustig">
-                            <a href="personDetails.html">
-                                <span class="glyphicon glyphicon-link"></span>
-                            </a> <span class="member-name">Dieter Lustig</span> (<a class="member-email" href="mailto:dieter.lustig@naju-sachsen.de">dieter.lustig@naju-sachsen.de</a>)
-                        </li>
-                        <li class="list-group-item list-group-item-interactive" data-toggle="modal" data-target="#remove-member-modal" data-id="4" data-name="Klaus Klücklich">
-                            <a href="personDetails.html">
-                                <span class="glyphicon glyphicon-link"></span>
-                            </a> <span class="member-name">Klaus Klücklich</span> (<a class="member-email" href="mailto:klaus.kluecklich@naju-sachsen.de">klaus.kluecklich@naju-sachsen.de</a>)
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- board overview -->
-            <div class="col-md-4">
-                <div class="panel panel-primary">
-                    <header class="panel-heading panel-menu">
-                        <h2 class="panel-title">Jugendvorstand</h2>
-                        <div class="btn-group panel-menu-container">
-                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#edit-board-modal">
-                                <span class="glyphicon glyphicon-pencil"></span> Anpassen
-                            </button>
-                            <a href="mailto:" class="btn btn-default" th:href="|mailto: ${boardEmails}|">
-                                <span class="glyphicon glyphicon-envelope"></span> E-Mail
-                            </a>
-                        </div>
-                    </header>
-                    <ul class="list-group">
-                        <li class="list-group-item">
-                            <span class="item-title">Vorsitz:</span>
-                            <a href="personDetails.html" th:if="${chairman}" th:href="|mailto: ${chairman.email}|" th:text="${chairman.name}">Maxi Musterfrau</a>
-                            <span th:unless="${chairman}">---</span>
-                        </li>
-                        <li class="list-group-item">
-                            <span class="item-title">E-Mail:</span>
-                            <a href="mailto:vorstand-sn@naju-sachsen.de" th:if="${board}" th:href="|mailto: ${localGroup.board.email}|" th:text="${localGroup.board.email}">vorstand-sn@naju-sachsen.de</a>
-                            <span th:unless="${board}">---</span>
-                        </li>
-                    </ul>
-                    <div class="panel-body"><h3 class="panel-title">Mitglieder</h3></div>
-                    <div class="list-group" th:if="${board}" th:remove="all-but-first">
-                        <a href="personDetails.html" class="list-group-item" th:each="boardMember : ${board}" th:href="@{'/persons/' + ${boardMember.id}}" th:text="${boardMember.name}">Heinz Heimlich</a>
-                        <a href="personDetails.html" class="list-group-item">Dieter Lustig</a>
-                        <a href="personDetails.html" class="list-group-item">Klaus Klücklich</a>
+            <div class="panel-menu-container">
+              <div class="form-inline">
+                <div class="form-group">
+                  <div class="input-group">
+                    <input id="persons" type="text" class="form-control fuzzy-search" name="persons"
+                           placeholder="Name, Ort o.ä."/>
+                    <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span>
                     </div>
-
+                  </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- project overview -->
-        <div class="row" id="projects">
-            <div class="col-md-12">
-                <div class="panel panel-default">
-                    <header class="panel-heading panel-menu">
-                        <h2 class="panel-title">Projekte</h2>
-                        <div class="input-group panel-menu-container">
-                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#add-project-modal">
-                                <span class="glyphicon glyphicon-plus"></span> Hinzufügen
-                            </button>
-                        </div>
-                    </header>
-                    <table class="table table-striped table-hover">
-                        <thead>
-                            <tr>
-                                <th>Projektname</th>
-                                <th>Zeitraum</th>
-                                <th>Aktive</th>
-                                <th>Nächste Veranstaltung</th>
-                                <th><span class="sr-only">Link</span><span class="glyphicon glyphicon-link" aria-hidden="true"></span></th>
-                            </tr>
-                        </thead>
-                        <tbody th:remove="all-but-first">
-                            <tr th:each="project : ${localGroup.projects}">
-                                <td th:text="${project.name}">Puppenstuben gesucht!</td>
-                                <td th:text="|${{project.startTime}} - ${{project.endTime}}|">2016 - 2019</td>
-                                <td th:text="${project.contributorsCount}">7</td>
-                                <td><a href="#" th:if="${project.nextEvent}" th:href="@{'/events/' + {project.nextEvent.id}}" th:text="${project.nextEvent.name}">Mahdeinsatz auf dem Dachsenberg</a><span th:unless="${project.nextEvent}">---</span></td>
-                                <td><a href="projectDetails.html" th:href="@{'/projects/' + ${project.id}}">Details</a></td>
-                            </tr>
-                            <tr>
-                                <td>Brutvogelkartierung Dresdner Heide</td>
-                                <td>2016 - 2018</td>
-                                <td>3</td>
-                                <td><a href="#">Sperlingskauz Synchronzählung</a></td>
-                                <td><a href="projectDetails.html">Details</a></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-default" data-toggle="modal"
+                              data-target="#add-member-modal">
+                        <span class="glyphicon glyphicon-plus"></span> Hinzufügen
+                      </button>
+                      <a href="mailto:" class="btn btn-default" th:href="|mailto: ${memberEmails}|">
+                        <span class="glyphicon glyphicon-envelope"></span> E-Mail
+                      </a>
+                    </div>
+                  </div>
                 </div>
+              </div>
             </div>
+          </header>
+          <ul class="list-group list-group-hover member-list" th:remove="all-but-first">
+            <li class="list-group-item list-group-item-interactive" data-toggle="modal"
+                data-target="#remove-member-modal" data-id="1" data-name="Maxi Musterfrau"
+                th:each="member : ${members}"
+                th:attr="'data-id'=${member.id}, 'data-name'=${member.name}">
+              <a href="personDetails.html" th:href="@{'/persons/' + ${member.id}}">
+                <span class="glyphicon glyphicon-link"></span>
+              </a> <span th:text="${member.name}" class="member-name">Maxi Musterfrau</span> (<a
+                class="member-email" href="mailto:maxi.musterfrau@naju-sachsen.de"
+                th:href="|mailto: ${member.email}|" th:text="${member.email}">maxi.musterfrau@naju-sachsen.de</a>)
+            </li>
+            <li class="list-group-item list-group-item-interactive" data-toggle="modal"
+                data-target="#remove-member-modal" data-id="2" data-name="Heinz Heimlich">
+              <a href="personDetails.html">
+                <span class="glyphicon glyphicon-link"></span>
+              </a> <span class="member-name">Heinz Heimlich</span> (<a class="member-email"
+                                                                       href="mailto:heinz.heimlich@naju-sachsen.de">heinz.heimlich@naju-sachsen.de</a>)
+            </li>
+            <li class="list-group-item list-group-item-interactive" data-toggle="modal"
+                data-target="#remove-member-modal" data-id="3" data-name="Dieter Lustig">
+              <a href="personDetails.html">
+                <span class="glyphicon glyphicon-link"></span>
+              </a> <span class="member-name">Dieter Lustig</span> (<a class="member-email"
+                                                                      href="mailto:dieter.lustig@naju-sachsen.de">dieter.lustig@naju-sachsen.de</a>)
+            </li>
+            <li class="list-group-item list-group-item-interactive" data-toggle="modal"
+                data-target="#remove-member-modal" data-id="4" data-name="Klaus Klücklich">
+              <a href="personDetails.html">
+                <span class="glyphicon glyphicon-link"></span>
+              </a> <span class="member-name">Klaus Klücklich</span> (<a class="member-email"
+                                                                        href="mailto:klaus.kluecklich@naju-sachsen.de">klaus.kluecklich@naju-sachsen.de</a>)
+            </li>
+          </ul>
         </div>
+      </div>
 
-        <!-- event overview -->
-        <div class="row" id="events">
-            <div class="col-md-12">
-                <div class="panel panel-default">
-                    <header class="panel-heading">
-                        <h2 class="panel-title">Veranstaltungen</h2>
-                    </header>
-                    <div id="event-calendar" class="calendar"></div>
-                </div>
+      <!-- board overview -->
+      <div class="col-md-4">
+        <div class="panel panel-primary">
+          <header class="panel-heading panel-menu">
+            <h2 class="panel-title">Jugendvorstand</h2>
+            <div class="btn-group panel-menu-container">
+              <button type="button" class="btn btn-default" data-toggle="modal"
+                      data-target="#edit-board-modal">
+                <span class="glyphicon glyphicon-pencil"></span> Anpassen
+              </button>
+              <a href="mailto:" class="btn btn-default" th:href="|mailto: ${boardEmails}|">
+                <span class="glyphicon glyphicon-envelope"></span> E-Mail
+              </a>
             </div>
+          </header>
+          <ul class="list-group">
+            <li class="list-group-item">
+              <span class="item-title">Vorsitz:</span>
+              <a href="personDetails.html" th:if="${chairman}" th:href="|mailto: ${chairman.email}|"
+                 th:text="${chairman.name}">Maxi Musterfrau</a>
+              <span th:unless="${chairman}">---</span>
+            </li>
+            <li class="list-group-item">
+              <span class="item-title">E-Mail:</span>
+              <a href="mailto:vorstand-sn@naju-sachsen.de" th:if="${board}"
+                 th:href="|mailto: ${localGroup.board.email}|" th:text="${localGroup.board.email}">vorstand-sn@naju-sachsen.de</a>
+              <span th:unless="${board}">---</span>
+            </li>
+          </ul>
+          <div class="panel-body"><h3 class="panel-title">Mitglieder</h3></div>
+          <div class="list-group" th:if="${board}" th:remove="all-but-first">
+            <a href="personDetails.html" class="list-group-item" th:each="boardMember : ${board}"
+               th:href="@{'/persons/' + ${boardMember.id}}" th:text="${boardMember.name}">Heinz
+              Heimlich</a>
+            <a href="personDetails.html" class="list-group-item">Dieter Lustig</a>
+            <a href="personDetails.html" class="list-group-item">Klaus Klücklich</a>
+          </div>
+
         </div>
+      </div>
+    </div>
 
-    </section>
+    <!-- project overview -->
+    <div class="row" id="projects">
+      <div class="col-md-12">
+        <div class="panel panel-default">
+          <header class="panel-heading panel-menu">
+            <h2 class="panel-title">Projekte</h2>
+            <div class="input-group panel-menu-container">
+              <button type="button" class="btn btn-default" data-toggle="modal"
+                      data-target="#add-project-modal">
+                <span class="glyphicon glyphicon-plus"></span> Hinzufügen
+              </button>
+            </div>
+          </header>
+          <table class="table table-striped table-hover">
+            <thead>
+            <tr>
+              <th>Projektname</th>
+              <th>Zeitraum</th>
+              <th>Aktive</th>
+              <th>Nächste Veranstaltung</th>
+              <th><span class="sr-only">Link</span><span class="glyphicon glyphicon-link"
+                                                         aria-hidden="true"></span></th>
+            </tr>
+            </thead>
+            <tbody th:remove="all-but-first">
+            <tr th:each="project : ${localGroup.projects}">
+              <td th:text="${project.name}">Puppenstuben gesucht!</td>
+              <td th:text="|${{project.startTime}} - ${{project.endTime}}|">2016 - 2019</td>
+              <td th:text="${project.contributorsCount}">7</td>
+              <td><a href="#" th:if="${project.nextEvent}"
+                     th:href="@{'/events/' + {project.nextEvent.id}}"
+                     th:text="${project.nextEvent.name}">Mahdeinsatz auf dem Dachsenberg</a><span
+                  th:unless="${project.nextEvent}">---</span></td>
+              <td><a href="projectDetails.html"
+                     th:href="@{'/projects/' + ${project.id}}">Details</a></td>
+            </tr>
+            <tr>
+              <td>Brutvogelkartierung Dresdner Heide</td>
+              <td>2016 - 2018</td>
+              <td>3</td>
+              <td><a href="#">Sperlingskauz Synchronzählung</a></td>
+              <td><a href="projectDetails.html">Details</a></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
 
-    <!-- initialize search bar -->
-    <script type="text/javascript">
-        var fuzzyOptions = {
-           searchClass: "fuzzy-search",
-           location: 0,
-           distance: 150,
-           threshold: 0.4,
-           multiSearch: true
-         };
-         var memberOptions = {
-             listClass: 'member-list',
-             valueNames: ['member-name', 'member-email'],
-             plugins: [ListFuzzySearch(fuzzyOptions)]
-         };
-         new List('main', memberOptions);
-    </script>
-    <input type="hidden" id="local-group-id" value="-1" th:value="${localGroup.id}" />
+    <!-- event overview -->
+    <div class="row" id="events">
+      <div class="col-md-12">
+        <div class="panel panel-default">
+          <header class="panel-heading">
+            <h2 class="panel-title">Veranstaltungen</h2>
+          </header>
+          <div id="event-calendar" class="calendar"></div>
+        </div>
+      </div>
+    </div>
 
-    <form id="logout-user" method="POST" th:action="@{/logout}">
-      <input type="hidden" name="csrf" th:value="csrf" />
-    </form>
+  </section>
+
+  <!-- initialize search bar -->
+  <script type="text/javascript">
+    var fuzzyOptions = {
+      searchClass: "fuzzy-search",
+      location: 0,
+      distance: 150,
+      threshold: 0.4,
+      multiSearch: true
+    };
+    var memberOptions = {
+      listClass: 'member-list',
+      valueNames: ['member-name', 'member-email'],
+      plugins: [ListFuzzySearch(fuzzyOptions)]
+    };
+    new List('main', memberOptions);
+  </script>
+  <input type="hidden" id="local-group-id" value="-1" th:value="${localGroup.id}"/>
+
+  <form id="logout-user" method="POST" th:action="@{/logout}">
+    <input type="hidden" name="csrf" th:value="csrf"/>
+  </form>
 
 </main>
-<input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-<script src="../static/resources/js/displayMatchingPersons.js" th:src="@{/resources/js/displayMatchingPersons.js}"></script>
+<input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+<script src="../static/resources/js/displayMatchingPersons.js"
+        th:src="@{/resources/js/displayMatchingPersons.js}"></script>
 <script src="../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
-<script src="../static/resources/js/personSearch.js" th:src="@{/resources/js/personSearch.js}"></script>
-<script src="../static/resources/js/localGroupDetails.js" th:src="@{/resources/js/localGroupDetails.js}"></script>
+<script src="../static/resources/js/personSearch.js"
+        th:src="@{/resources/js/personSearch.js}"></script>
+<script src="../static/resources/js/localGroupDetails.js"
+        th:src="@{/resources/js/localGroupDetails.js}"></script>
 </body>
 </html>
