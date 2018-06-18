@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 <html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="utf-8"/>
@@ -64,6 +65,29 @@
     </div>
 
   </header>
+
+  <!-- latest release notes modal -->
+  <div class="modal fade" id="release-notes-dialog" tabindex="-1" th:if="${releaseNotes}"
+       sec:authorize="!getPrincipal().hasReadReleaseNotes()">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h3 class="modal-title" th:inline="text">Neue Adebar-Version: [[${releaseNotes.title} ?:
+            '"${releaseNotes.title}"']]</h3>
+        </div>
+        <div class="modal-body">
+          <pre th:text="${releaseNotes.description}"></pre>
+          <p th:inline="text">Veröffentlich: [[${{releaseNotes.date}}]]</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary confirm" data-dismiss="modal">Super!</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="row display-category">
 
@@ -181,5 +205,12 @@
 <script type="text/javascript" src="../../static/resources/js/bootstrap.min.js"
         th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 <script src="../../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
+
+<script type="text/javascript" th:if="${releaseNotes}"
+        sec:authorize="!getPrincipal().hasReadReleaseNotes()">
+
+  $('#release-notes-dialog').modal('show');
+</script>
+
 </body>
 </html>
