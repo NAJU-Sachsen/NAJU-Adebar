@@ -659,7 +659,8 @@
                       <th class="col-md-1">Formular versendet?</th>
                       <th class="col-md-1">Formular ausgefüllt?</th>
                       <th class="col-md-1">TNB bezahlt?</th>
-                      <th class="col-md-1" th:if="${participantsList.hasAccommodationInfo()}">
+                      <th class="col-md-1"
+                          th:if="${event.participationInfo.flexibleParticipationTimesEnabled}">
                         Teilnahmezeitraum
                       </th>
                       <th class="col-md-3">Bemerkungen</th>
@@ -670,9 +671,11 @@
                     <tr class="row participant-info" th:each="participant : ${participantsList}"
                         th:with="participationDetails = ${participantsList.getParticipationDetailsFor(participant)}"
                         th:attrappend="data-participant=${participant.id}">
-                      <td th:inline="text"
-                          th:classappend="${not participant.hasOwnOrParentsEmail()} ? 'text-danger'">
-                        [[${participant.name}]]
+                      <td th:classappend="${not participant.hasOwnOrParentsEmail()} ? 'text-danger'">
+                        <a href="../persons/personDetails.html" class="no-link-deco"
+                           th:href="@{/persons/{id}(id=${participant.id})}"
+                           th:text="${participant.name}">
+                        </a>
                         <small th:unless="${participant.hasOwnOrParentsEmail()}"
                                data-toggle="tooltip"
                                data-placement="bottom" data-container="body"
@@ -742,7 +745,7 @@
                                 data-title="Bearbeiten"
                                 data-placement="bottom"
                                 data-container="body" style="height: 22px;">
-                            <button class="btn btn-no-style" data-toggle="modal"
+                            <button class="btn btn-no-style edit-participant" data-toggle="modal"
                                     data-target="#edit-participant-dialog">
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </button>

@@ -1,3 +1,7 @@
+function openEditParticipantForm(e) {
+  $(e.target).closest('.participant-info').find('.edit-participant').click();
+}
+
 function initEditParticipantForm(e) {
   const button = $(e.relatedTarget);
   const participantRow = button.closest('.participant-info');
@@ -70,4 +74,5 @@ $(document).ready(function () {
   $('#edit-reservation-dialog').on('show.bs.modal', initEditReservationForm);
   $('#apply-waiting-list-dialog').on('show.bs.modal',
       initApplyWaitingListEntryForm);
+  $('.remarks').click(openEditParticipantForm);
 });

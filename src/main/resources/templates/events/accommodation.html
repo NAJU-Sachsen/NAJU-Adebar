@@ -267,14 +267,16 @@
                 <div class="col-md-12">
                   <p th:unless="${event.participantsList.hasAccommodationInfo()}">
                     Für die Veranstaltung wurde die Unterbringung nicht weiter spezifiziert.
+                  </p>
                   <div>
                     <button type="button" class="btn btn-link no-padding" data-toggle="modal"
-                            data-target="#edit-accommodation-dialog">
+                            data-target="#edit-accommodation-dialog"
+                            th:unless="${event.participantsList.hasAccommodationInfo()}">
                       <span class="glyphicon glyphicon-arrow-right"></span>
                       Spezifizieren
                     </button>
                   </div>
-                  </p>
+
 
                   <div class="table-responsive"
                        th:if="${event.participantsList.hasAccommodationInfo()}"
