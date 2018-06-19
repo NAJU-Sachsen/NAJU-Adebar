@@ -7,6 +7,8 @@
   <meta charset="utf-8"/>
   <meta content="width=device-width,initial-scale=1" name="viewport"/>
   <meta th:name="_csrf" th:content="${_csrf.token}"/>
+  <meta th:name="_principal"
+        th:content="${#authentication != null and #authentication.principal != null} ? ${#authentication.principal.associatedPerson}"/>
   <title>Veranstaltungen | Adebar</title>
 
 
@@ -34,32 +36,35 @@
 
       <!-- menu -->
       <div class="action-bar col-md-8">
-        <div class="row">
-          <form id="event-search" class="col-md-9" method="get" th:action="@{/events/search}">
-            <label for="event-search" class="sr-only">Suchen (Name, Datum, Ort)</label>
-            <div class="input-group">
-              <input type="search" name="query" class="form-control" id="search"
-                     placeholder="Name, Datum, Ort ..." autocomplete="off"
-                     th:value="${param.query}"/>
-              <div class="input-group-addon">
-                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+        <div class="container-fluid no-padding">
+          <div class="row">
+            <form id="event-search" class="col-md-8" method="get"
+                  th:action="@{/events/search}">
+              <label for="event-search" class="sr-only">Suchen (Name, Datum, Ort)</label>
+              <div class="input-group">
+                <input type="search" name="query" class="form-control" id="search"
+                       placeholder="Name, Datum, Ort ..." autocomplete="off"
+                       th:value="${param.query}"/>
+                <div class="input-group-addon">
+                  <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                </div>
               </div>
-            </div>
-          </form>
-          <button type="submit" form="event-search" class="sr-only">Suche durchführen</button>
-          <div class="col-md-3">
-            <div class="btn-group">
-              <a href="addEvent.html" class="btn btn-default" th:href="@{/events/add}">
-                <span class="glyphicon glyphicon-plus"></span>
-                Hinzufügen
-              </a>
-              <a href="filterEvents.html" class="btn btn-default" disabled="disabled"
-                 data-toggle="tooltip" data-placement="bottom"
-                 data-title="Funktioniert bald wieder.. Versprochen!"
-                 th:href="@{/events/filter}">
-                <span class="glyphicon glyphicon-filter"></span>
-                <span class="hide-sm">Filtern</span>
-              </a>
+            </form>
+            <button type="submit" form="event-search" class="sr-only">Suche durchführen</button>
+            <div class="col-md-4">
+              <div class="btn-group">
+                <a href="addEvent.html" class="btn btn-default" th:href="@{/events/add}">
+                  <span class="glyphicon glyphicon-plus"></span>
+                  Hinzufügen
+                </a>
+                <a href="filterEvents.html" class="btn btn-default" disabled="disabled"
+                   data-toggle="tooltip" data-placement="bottom"
+                   data-title="Funktioniert bald wieder.. Versprochen!"
+                   th:href="@{/events/filter}">
+                  <span class="glyphicon glyphicon-filter"></span>
+                  <span class="hide-sm">Filtern</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -209,12 +214,10 @@
 <script type="text/javascript" src="../../static/resources/js/bootstrap.min.js"
         th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 <script src="../../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
+<script src="../../static/resources/js/releaseNotes.js" th:src="@{/resources/js/releaseNotes.js}"
+        th:if="${releaseNotes}"
+        sec:authorize="!getPrincipal().hasReadReleaseNotes()"></script>
 
-<script type="text/javascript" th:if="${releaseNotes}"
-        sec:authorize="!getPrincipal().hasReadReleaseNotes()">
-
-  $('#release-notes-dialog').modal('show');
-</script>
 
 </body>
 </html>

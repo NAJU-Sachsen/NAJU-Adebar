@@ -69,7 +69,7 @@
           <td class="col-md-9"
               th:text="${#request.getAttribute('javax.servlet.error.request_uri')}"></td>
         </tr>
-        <tr class="row danger">
+        <tr class="row danger" th:if="${#request.getAttribute('javax.servlet.error.exception')}">
           <th class="col-md-3">Exception</th>
           <td class="col-md-9"
               th:text="${#request.getAttribute('javax.servlet.error.exception').getRootCause().getClass()}"></td>

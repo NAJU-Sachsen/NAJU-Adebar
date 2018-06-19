@@ -10,7 +10,7 @@ function addRoom() {
   .find('option:selected').text();
 
   const row = `
-  <tr class="row">
+  <tr class="row room">
     <td class="col-md-4">
       <span class="glyphicon glyphicon-bed margin-right"></span>
       ${beds}
