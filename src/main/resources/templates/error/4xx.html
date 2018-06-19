@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta th:name="_csrf" th:content="${_csrf.token}"/>
+  <title>Uuuups | Adebar</title>
+
+
+  <link rel="stylesheet" type="text/css" href="../../static/resources/css/bootstrap.min.css"
+        th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+  <link rel="stylesheet" type="text/css" href="../../static/resources/css/style.css"
+        th:href="@{/resources/css/style.css}"/>
+
+  <link rel="shortcut icon" th:href="@{/resources/res/favicon.ico}"/>
+</head>
+<body>
+
+<!-- page specific content-->
+<main id="main">
+
+  <div class="row">
+    <div class="col-md-12">
+      <h1>Es tut mir leid!</h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <p class="alter-danger">
+        Da ist etwas ganz anders gelaufen als geplant (╯°□°）╯︵ ┻━┻
+      </p>
+      <a th:href="@{/}">Zurück zur Homepage</a>
+    </div>
+  </div>
+
+  <div class="row margin-top">
+
+    <div class="col-md-12">
+      <div class="center-block">
+        <img style="display:block;"
+             src="https://sadanduseless.b-cdn.net/wp-content/uploads/2016/05/potoo1.jpg"
+             width="660"/>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <h2>Technische Details</h2>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+
+      <table class="table">
+        <tbody>
+        <tr class="row danger">
+          <th class="col-md-3">Status-Code</th>
+          <td class="col-md-9"
+              th:text="${#request.getAttribute('javax.servlet.error.status_code')}"></td>
+        </tr>
+        <tr class="row danger">
+          <th class="col-md-3">URI</th>
+          <td class="col-md-9"
+              th:text="${#request.getAttribute('javax.servlet.error.request_uri')}"></td>
+        </tr>
+        <tr class="row danger">
+          <th class="col-md-3">Exception</th>
+          <td class="col-md-9"
+              th:text="${#request.getAttribute('javax.servlet.error.exception').getRootCause().getClass()}"></td>
+        </tr>
+        <tr class="row danger" th:if="${#request.getAttribute('javax.servlet.error.exception')}">
+          <th class="col-md-3">Message</th>
+          <td class="col-md-9"
+              th:text="${#request.getAttribute('javax.servlet.error.exception').getRootCause().getMessage()}"></td>
+        </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+  <div class="row" th:if="${#request.getAttribute('javax.servlet.error.exception')}">
+    <div class="col-md-12">
+      <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#stack-trace">
+        Stack-Trace einblenden
+      </button>
+
+      <p id="stack-trace" class="well collapse"
+         th:text="${T(org.apache.commons.lang3.exception.ExceptionUtils).getStackTrace(#request.getAttribute('javax.servlet.error.exception'))}"></p>
+
+    </div>
+  </div>
+
+</main>
+<script type="text/javascript" src="../../static/resources/js/jquery.min.js"
+        th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript" src="../../static/resources/js/bootstrap.min.js"
+        th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+</body>
+</html>
