@@ -108,6 +108,11 @@ public class RoomSpecification implements Iterable<Room> {
 
   }
 
+  @Transient
+  public boolean isEmpty() {
+    return rooms.isEmpty();
+  }
+
   /**
    * Adds a new room to the specification
    *

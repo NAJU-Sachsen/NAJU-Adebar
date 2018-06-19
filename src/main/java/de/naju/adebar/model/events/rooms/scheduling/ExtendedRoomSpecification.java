@@ -218,6 +218,11 @@ public class ExtendedRoomSpecification extends RoomSpecification {
         + fallbackRooms.stream().mapToInt(Room::getBedsCount).sum();
   }
 
+  @Override
+  public boolean isEmpty() {
+    return super.isEmpty() && flexRooms.isEmpty() && fallbackRooms.isEmpty();
+  }
+
   /*
    * (non-Javadoc)
    *

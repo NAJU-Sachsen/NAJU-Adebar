@@ -157,7 +157,7 @@ public class ParticipantsList extends AbstractEventInfo implements Iterable<Pers
   }
 
   public boolean hasAccommodationInfo() {
-    return accommodation != null;
+    return accommodation != null && !accommodation.isEmpty();
   }
 
   public boolean hasParticipantsLimit() {
