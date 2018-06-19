@@ -2,18 +2,19 @@ package de.naju.adebar.model.events.rooms.scheduling;
 
 import de.naju.adebar.documentation.infrastructure.JpaOnly;
 import de.naju.adebar.model.persons.details.Gender;
-import de.naju.adebar.model.support.NumericEntityId;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
@@ -36,8 +37,10 @@ public class RoomSpecification implements Iterable<Room> {
   @Column(name = "extraSpaceForCounselors")
   protected boolean extraSpaceForCounselors;
 
-  @EmbeddedId
-  private NumericEntityId id = new NumericEntityId();
+  @Id
+  @GeneratedValue
+  @Column(name = "id")
+  private long id;
 
   /**
    * Creates a new specification. Nothing special about it.
@@ -147,12 +150,12 @@ public class RoomSpecification implements Iterable<Room> {
   }
 
   @JpaOnly
-  private NumericEntityId getId() {
+  private long getId() {
     return id;
   }
 
   @JpaOnly
-  private void setId(NumericEntityId id) {
+  private void setId(long id) {
     this.id = id;
   }
 
@@ -176,44 +179,22 @@ public class RoomSpecification implements Iterable<Room> {
     return rooms.iterator();
   }
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see java.lang.Object#hashCode()
-   */
   @Override
   public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((rooms == null) ? 0 : rooms.hashCode());
-    return result;
+
+    return Objects.hash(id);
   }
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see java.lang.Object#equals(java.lang.Object)
-   */
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
+  public boolean equals(Object o) {
+    if (this == o) {
       return true;
     }
-    if (obj == null) {
+    if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    RoomSpecification other = (RoomSpecification) obj;
-    if (rooms == null) {
-      if (other.rooms != null) {
-        return false;
-      }
-    } else if (!rooms.equals(other.rooms)) {
-      return false;
-    }
-    return true;
+    RoomSpecification rooms = (RoomSpecification) o;
+    return id == rooms.id;
   }
 
   /*

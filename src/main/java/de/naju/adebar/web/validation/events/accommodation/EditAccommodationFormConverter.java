@@ -50,9 +50,10 @@ public class EditAccommodationFormConverter implements
           break;
       }
 
-      if (form.isCounselorsAreSeparate()) {
-        roomSpecification.withExtraSpaceForCounselors();
-      }
+    }
+
+    if (form.isCounselorsAreSeparate()) {
+      roomSpecification.withExtraSpaceForCounselors();
     }
 
     return roomSpecification;

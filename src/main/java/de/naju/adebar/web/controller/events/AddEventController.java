@@ -4,6 +4,7 @@ import de.naju.adebar.model.chapter.LocalGroup;
 import de.naju.adebar.model.chapter.LocalGroupRepository;
 import de.naju.adebar.model.chapter.Project;
 import de.naju.adebar.model.chapter.ProjectRepository;
+import de.naju.adebar.model.events.AccommodationRepository;
 import de.naju.adebar.model.events.Event;
 import de.naju.adebar.model.events.EventRepository;
 import de.naju.adebar.util.Assert2;
@@ -27,16 +28,20 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class AddEventController {
 
   private final EventRepository eventRepo;
+  private final AccommodationRepository accomodationRepo;
   private final LocalGroupRepository localGroupRepo;
   private final ProjectRepository projectRepo;
   private final AddEventFormConverter eventFormConverter;
 
-  public AddEventController(EventRepository eventRepo, LocalGroupRepository localGroupRepo,
+  public AddEventController(EventRepository eventRepo, AccommodationRepository accomodationRepo,
+      LocalGroupRepository localGroupRepo,
       ProjectRepository projectRepo, AddEventFormConverter eventFormConverter) {
-    Assert2.noNullArguments("No argument may be null", eventRepo, localGroupRepo, projectRepo,
+    Assert2.noNullArguments("No argument may be null", eventRepo, accomodationRepo, localGroupRepo,
+        projectRepo,
         eventFormConverter);
     this.eventRepo = eventRepo;
     this.localGroupRepo = localGroupRepo;
+    this.accomodationRepo = accomodationRepo;
     this.projectRepo = projectRepo;
     this.eventFormConverter = eventFormConverter;
   }
@@ -77,7 +82,8 @@ public class AddEventController {
     }
 
     Event newEvent = eventFormConverter.toEntity(form);
-    eventRepo.save(newEvent);
+
+    newEvent = eventRepo.save(newEvent);
 
     switch (form.getBelonging()) {
       case LOCAL_GROUP:
