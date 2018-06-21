@@ -135,10 +135,10 @@ public class AddPersonController {
       return "persons/addPerson";
     }
 
+    newPerson = personRepo.save(newPerson);
     // everything seems fine, finish saving the new person
     addToEventsIfNecessary(newPerson, form);
     addToLocalGroupsIfNecessary(newPerson, form);
-    personRepo.save(newPerson);
 
     if (!returnAction.isEmpty()) {
       redirAttr.addAttribute("do", returnAction);
