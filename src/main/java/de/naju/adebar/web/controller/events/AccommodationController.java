@@ -1,7 +1,9 @@
 package de.naju.adebar.web.controller.events;
 
+import de.naju.adebar.model.events.AccommodationRepository;
 import de.naju.adebar.model.events.Event;
 import de.naju.adebar.model.events.EventRepository;
+import de.naju.adebar.model.events.rooms.scheduling.ExtendedRoomSpecification;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.util.Assert2;
 import de.naju.adebar.web.model.events.AccommodationReport;
@@ -24,12 +26,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class AccommodationController {
 
   private final EventRepository eventRepo;
+  private final AccommodationRepository accommodationRepo;
   private final EditAccommodationFormConverter formConverter;
 
   public AccommodationController(EventRepository eventRepo,
+      AccommodationRepository accommodationRepo,
       EditAccommodationFormConverter formConverter) {
-    Assert2.noNullArguments("No argument may be null", eventRepo, formConverter);
+    Assert2.noNullArguments("No argument may be null", eventRepo, accommodationRepo, formConverter);
     this.eventRepo = eventRepo;
+    this.accommodationRepo = accommodationRepo;
     this.formConverter = formConverter;
   }
 
@@ -57,7 +62,13 @@ public class AccommodationController {
       redirAttr.addFlashAttribute( //
           "org.springframework.validation.BindingResult.editAccommodation", result);
     } else {
+      ExtendedRoomSpecification currentSpec = event.getParticipantsList().getAccommodation();
+
       event.getParticipantsList().updateAccommodation(formConverter.toEntity(form));
+      if (currentSpec != null) {
+        accommodationRepo.delete(currentSpec);
+      }
+
       event.getParticipationInfo()
           .updateFlexibleParticipationTimesEnabled(form.isFlexibleParticipationTimes());
       eventRepo.save(event);
