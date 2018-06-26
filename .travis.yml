@@ -19,11 +19,6 @@ cache:
       - "$HOME/.m2"
       - "$HOME/.sonar/cache"
 
-addons:
-  sonarcloud:
-    organization: "portux-github"
-    branches:
-      - master
-      - develop
-    token:
-      secure: "igcGgKleBOmdKd+/JoIugDC9c4aXsOy795r4M06GzELukAtO0/pf3Mv0C1jOxB4WT9XUxx6hgFqRvzHb0rpkoF/fHldm6IDIKiVqbQsIx6RQwktMvgEO6J5GB+wBrmkn0G/Wr+QFwCVHtA5ZgncFcjiZK+ajhA6eMi35bd1YfkJZ7UNNsmiIHFZoXQMPRMsCcML2alTMG4VB8KkA/+RrQcieXSNKlybaQfx43XCaH5u1bmcjl2GLFqsMR47bNeBe29Hn/+NrqDFkDwpBPsLQ7U+E4KSQqX+lxrWGtgpFYVp3UmFf6B/0z+UdOr7hj8nAMldJ9Ak7a7F41oQwh2x9Lyxk44B8lf5I6X42Xiav8KXdGWJFJnYaSpmNQaRhDq7FKQrNlZjWwWLalptpDTzXOxteiR0XTDg+YktJnKKankp7YFY3jWMJWZJDQYdanGRMD51OHYmWoRiMlHdtaOSwA9yxG1ukb2BXXcTz+Assn3AK23/HoVNaScQkT/GdZwkRv/ipb78BRUFAghq/xNf4CELgJ0za5A9TeUknXUEvop1IDWfa03elo4v53hzUW3OXmdmC6ubWI36cwb6k4uQRlVPUBv6jhYIpeJvQyVM0OrZSOl76KAkWN4irivx0fxYUkuWHkpCZDhBAD0TqlfkZt/xsBjIwhIaPEHGt8ZW3j3Y="
+notifications:
+  slack:
+    secure: mhI3BfgTL3gIzrV2vMlWVjZOsGawESvpfSY6tCLM+/tPfzBIq37I1vtD7zInp5dlD97WtSyorQSRYKJha7if60Jc/IPBvVfcXGc3TSvqUTchII+djpSjtu151a6EmaNDZNm4MtOWScp9JfF57bne9A9SPgTzC/1sMbaO/9ePrVyFicOMea2KrrYRnzoxQC1jgTTT26/c1w3hPG75Vk7f4V3rwJ+z9WMYDerIypGsJdUTj3xWMok2kZEUevgBqJC3Mbnf/wbCqNiprL19hs8Pj2YP7KST2e0Is2tTZkjD2WiYpyBgA4u/K6nhweP+e0ltwkwsaVz+0z2MVTa6vdY8yGtweEzAdJpqE17jJVDRPAmJNdV86VffwZ9ggwLH5BpvBmWpQ8q+9Q/HSWYDlrOyY1pyMAf6V6H3oY/7iMofcl7u5GvkseF52WbrJiwoKB61P36p4GH2y9VRZoQrXk/qvrNSRc1+cbqHpoF7LIIEsgZMihVUY//MSWEbCjXbhqyHsEtDKzqxa8xTCL5F9HOId2OhKxbfobNvYJBOUa1CmdAH9VwStPQzOFO3tGhmhslXT6KzwEw/HmzYxcY1ROyIz4Tg775GwlDt4HRviZ12kUnTTp8/HL0orvOw7rWUdou/2CgO3ZyxpGZw3wbzNxCWkQ0JF51dFurKLtHFwIlQYyo=
