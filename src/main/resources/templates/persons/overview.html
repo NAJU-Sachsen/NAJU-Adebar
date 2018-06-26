@@ -73,7 +73,7 @@
         <thead></thead>
         <tbody th:remove="all-but-first">
         <tr class="row" th:each="person : ${persons}">
-          <td class="col-md-1">
+          <td class="col-md-1 text-right">
             <span class="glyphicon glyphicon-tent" data-toggle="tooltip" data-placement="bottom"
                   data-title="Campteilnehmer*in" data-container="body"
                   th:if="${person.participant}"></span>
