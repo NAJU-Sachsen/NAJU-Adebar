@@ -116,7 +116,7 @@ public interface ReadOnlyEventRepository extends //
   @Query("select e from event e")
   Stream<Event> streamAll();
 
-  Page<Event> findAllPagedByEndTimeIsBeforeOrderByStartTime(LocalDateTime time,
+  Page<Event> findAllPagedByEndTimeIsBeforeOrderByStartTimeDesc(LocalDateTime time,
       Pageable pageable);
 
   Page<Event> findAllPagedByEndTimeIsAfterOrderByStartTime(LocalDateTime time, Pageable pageable);

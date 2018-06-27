@@ -76,7 +76,7 @@ public class EventController {
   @GetMapping("/events/past")
   public String showPastEvents(Model model, @PageableDefault(size = 20) Pageable pageable) {
     LocalDateTime now = LocalDateTime.now();
-    Page<Event> pastEvents = eventRepo.findAllPagedByEndTimeIsBeforeOrderByStartTime(now, pageable);
+    Page<Event> pastEvents = eventRepo.findAllPagedByEndTimeIsBeforeOrderByStartTimeDesc(now, pageable);
     model.addAttribute("events", pastEvents);
     return "events/pastEvents";
   }
