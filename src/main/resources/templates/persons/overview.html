@@ -34,7 +34,7 @@
       <!-- menu -->
       <div class="action-bar col-md-8">
         <div class="row">
-          <form id="person-search" class="col-md-9" method="get" th:action="@{/persons/search}">
+          <form id="person-search" class="col-md-8" method="get" th:action="@{/persons/search}">
             <label for="person-search" class="sr-only">Suchen (Name, Stadt, Email o.ä.)</label>
             <div class="input-group">
               <input type="search" name="query" class="form-control" id="search"
@@ -45,13 +45,13 @@
             </div>
           </form>
           <button type="submit" form="person-search" class="sr-only">Suche durchführen</button>
-          <div class="col-md-3">
+          <div class="col-md-4">
             <div class="btn-group">
               <a href="addPerson.html" class="btn btn-default" th:href="@{/persons/add}">
                 <span class="glyphicon glyphicon-plus"></span>
                 Hinzufügen
               </a>
-              <a href="filterPersons.html" class="btn btn-default" disabled="disabled"
+              <a href="filterPersons.html" class="btn btn-default"
                  data-toggle="tooltip" data-placement="bottom"
                  data-title="Funktioniert bald wieder.. Versprochen!"
                  th:href="@{/persons/filter}">
