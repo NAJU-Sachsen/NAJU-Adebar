@@ -187,7 +187,7 @@
           </a>
         </li>
         <li>
-          <a th:href="@{/events/past}">Ältere Veranstaltungen anzeigen</a>
+          <a th:href="@{/events}">Zurück zur Übersicht</a>
         </li>
         <li class="next" th:if="${events.hasNext()}">
           <a th:href="@{/events/search(page=${events.nextPageable().pageNumber},size=${events.size},query=${param.query})}">
@@ -205,8 +205,14 @@
           <a th:href="@{/events/past}">Ältere Veranstaltungen anzeigen</a>
         </li>
       </ul>
+      <ul class="pager" th:with="total = ${events.totalPages}" th:if="${param.query}">
+        <li>
+          <a th:href="@{/events/}">Zurück zur Übersicht</a>
+        </li>
+      </ul>
     </nav>
   </div>
+
 
 </main>
 <script type="text/javascript" src="../../static/resources/js/jquery.min.js"
