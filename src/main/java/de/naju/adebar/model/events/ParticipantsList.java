@@ -1,11 +1,5 @@
 package de.naju.adebar.model.events;
 
-import de.naju.adebar.documentation.infrastructure.JpaOnly;
-import de.naju.adebar.model.core.Capacity;
-import de.naju.adebar.model.events.rooms.scheduling.ExtendedRoomSpecification;
-import de.naju.adebar.model.persons.Person;
-import de.naju.adebar.model.support.NumericEntityId;
-import de.naju.adebar.util.Assert2;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -33,6 +27,12 @@ import javax.persistence.OrderBy;
 import javax.persistence.OrderColumn;
 import javax.persistence.Transient;
 import org.springframework.util.Assert;
+import de.naju.adebar.documentation.infrastructure.JpaOnly;
+import de.naju.adebar.model.core.Capacity;
+import de.naju.adebar.model.events.rooms.scheduling.ExtendedRoomSpecification;
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.support.NumericEntityId;
+import de.naju.adebar.util.Assert2;
 
 /**
  * The participants (and reservations) of an {@link Event} will be stored here
@@ -213,8 +213,10 @@ public class ParticipantsList extends AbstractEventInfo implements Iterable<Pers
   }
 
   public ParticipantsList updateParticipantsLimit(Capacity limit) {
-    if (limit != null && this.participantsLimit.isSmallerThan(limit)) {
-      this.bookedOut = false;
+    if (this.participantsLimit == null && limit == null) {
+      return this;
+    } else {
+      this.bookedOut = !limit.isLargerThan(Capacity.of(participants.size()));
     }
 
     this.participantsLimit = limit;
@@ -237,11 +239,11 @@ public class ParticipantsList extends AbstractEventInfo implements Iterable<Pers
     Assert.notNull(reservationId, "reservationId may not be null");
     Assert.notNull(newInfo, "newInfo may not be null");
 
-    Reservation oldReservationData = reservations.stream()
-        .filter(reservation -> reservation.getId().equals(reservationId)) //
-        .findFirst() //
-        .orElseThrow(() -> new IllegalArgumentException(
-            String.format("No reservation with ID %s for event %s", reservationId, this)));
+    Reservation oldReservationData =
+        reservations.stream().filter(reservation -> reservation.getId().equals(reservationId)) //
+            .findFirst() //
+            .orElseThrow(() -> new IllegalArgumentException(
+                String.format("No reservation with ID %s for event %s", reservationId, this)));
 
     reservations.remove(oldReservationData);
     newInfo.setId(reservationId);
