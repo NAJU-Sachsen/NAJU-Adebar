@@ -74,5 +74,5 @@ $(document).ready(function () {
   $('#edit-reservation-dialog').on('show.bs.modal', initEditReservationForm);
   $('#apply-waiting-list-dialog').on('show.bs.modal',
       initApplyWaitingListEntryForm);
-  $('.remarks').click(openEditParticipantForm);
+  $('.participant-info-content').click(openEditParticipantForm);
 });

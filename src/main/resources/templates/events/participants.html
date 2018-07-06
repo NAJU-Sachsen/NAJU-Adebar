@@ -691,46 +691,46 @@
                         </small>
 
                       </td>
-                      <td th:text="${participant.participantProfile.hasDateOfBirth()} ? ${participant.participantProfile.calculateAge()} : ''">
+                      <td class="participant-info-content action-cursor" th:text="${participant.participantProfile.hasDateOfBirth()} ? ${participant.participantProfile.calculateAge()} : ''">
                         22.11.1999
                       </td>
-                      <td th:unless="${participantsList.hasAccommodationInfo()}"
+                      <td class="participant-info-content action-cursor" th:unless="${participantsList.hasAccommodationInfo()}"
                           th:text="${participant.address.city} ?: 'unbekannt'">
                         Entenhausen
                       </td>
-                      <td class="arrival"
+                      <td class="participant-info-content arrival action-cursor"
                           th:attrappend="data-arrival-option=${participationDetails.arrivalOption}"
                           th:text="${participationDetails.arrivalOption} ?: 'keine Angabe'">ab
                         Dresden
                       </td>
-                      <td class="form-sent text-center"
+                      <td class="participant-info-content form-sent text-center action-cursor"
                           th:attrappend="data-form-sent=${participationDetails.registrationFormSent}">
                         <span class="glyphicon glyphicon-ok text-success"
                               th:if="${participationDetails.registrationFormSent}"></span>
                         <span class="glyphicon glyphicon-remove text-danger"
                               th:unless="${participationDetails.registrationFormSent}"></span>
                       </td>
-                      <td class="form-filled text-center"
+                      <td class="participant-info-content form-filled text-center action-cursor"
                           th:attrappend="data-form-filled=${participationDetails.registrationFormFilled}">
                         <span class="glyphicon glyphicon-ok text-success"
                               th:if="${participationDetails.registrationFormFilled}"></span>
                         <span class="glyphicon glyphicon-remove text-danger"
                               th:unless="${participationDetails.registrationFormFilled}"></span>
                       </td>
-                      <td class="fee-payed text-center"
+                      <td class="participant-info-content fee-payed text-center action-cursor"
                           th:attrappend="data-fee-payed=${participationDetails.participationFeePayed}">
                         <span class="glyphicon glyphicon-ok text-success"
                               th:if="${participationDetails.participationFeePayed}"></span>
                         <span class="glyphicon glyphicon-remove text-danger"
                               th:unless="${participationDetails.participationFeePayed}"></span>
                       </td>
-                      <td class="participation-time"
+                      <td class="participant-info-content participation-time action-cursor"
                           th:if="${event.participationInfo.flexibleParticipationTimesEnabled}"
                           th:text="${#time.formatTimeSpan(event.startTime, participationDetails.participationTime)}"
                           th:attrappend="data-first-night=${#time.formatNightAsHtml(event.startTime, participationDetails.participationTime.firstNight)}, data-last-night=${#time.formatNightAsHtml(event.startTime, participationDetails.participationTime.lastNight)}">
                         28.07. - 04.08.18
                       </td>
-                      <td class="remarks action-cursor" th:text="${participationDetails.remarks}">
+                      <td class="participant-info-content remarks action-cursor" th:text="${participationDetails.remarks}">
                         Lorem Ipsum et dolor sit amet
                       </td>
                       <td>
