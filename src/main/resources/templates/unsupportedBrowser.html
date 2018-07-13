@@ -1,0 +1,38 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Browser wird nicht unterstützt</title>
+  <script type="text/javascript" src="../static/resources/js/jquery.min.js"
+          th:src="@{/webjars/jquery/jquery.min.js}"></script>
+  <script type="text/javascript" src="../static/resources/js/bootstrap.min.js"
+          th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+  <link rel="stylesheet" type="text/css" href="../static/resources/css/bootstrap.min.css"
+        th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+  <link rel="stylesheet" type="text/css" href="../static/resources/css/style.css"
+        th:href="@{/resources/css/style.css}"/>
+  <link rel="shortcut icon" th:href="@{/resources/res/favicon.ico}"/>
+</head>
+<body>
+
+<main class="container margin-top-lg">
+  <div class="alert alert-danger">
+    <h1>Browser wird nicht unterstützt</h1>
+    <p>
+      Anscheinend verwendest du einen Browser, der von Adebar nicht offiziell unterstützt wird.
+      Bitte wechsle zu einem unterstützten Browser.
+    </p>
+    <p>Unterstützte Browser sind:</p>
+    <ul class="list-group margin-top-lg">
+      <li class="list-group-item"><a href="https://www.mozilla.org/de/firefox/">Mozilla Firefox</a>
+        (bevorzugt)
+      </li>
+      <li class="list-group-item"><a href="https://google.com/chrome">Google Chrome</a></li>
+    </ul>
+  </div>
+</main>
+
+</body>
+</html>
