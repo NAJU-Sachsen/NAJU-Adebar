@@ -1,11 +1,11 @@
 package de.naju.adebar.infrastructure.thymeleaf;
 
-import de.naju.adebar.model.core.TimeSpan;
-import de.naju.adebar.model.events.rooms.scheduling.ParticipationTime;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import de.naju.adebar.model.core.TimeSpan;
+import de.naju.adebar.model.events.rooms.scheduling.ParticipationTime;
 
 /**
  * Custom formatter for time and time spans
@@ -68,7 +68,7 @@ public class TimeFormatter {
 
   public String formatTimeSpan(LocalDateTime offset, ParticipationTime participationTime) {
     return formatTimeSpan(offset.plusDays(participationTime.getFirstNight() - 1),
-        offset.plusDays(participationTime.getLastNight() - 1));
+        offset.plusDays(participationTime.getLastNight()));
   }
 
   public String formatNightAsHtml(LocalDateTime offset, int night) {
@@ -108,8 +108,7 @@ public class TimeFormatter {
   }
 
   private boolean shouldFormatWithoutYearRepetition(LocalDateTime from, LocalDateTime to) {
-    return from.getYear() == to.getYear() && hasOnlyDateSet(
-        from) && hasOnlyDateSet(to);
+    return from.getYear() == to.getYear() && hasOnlyDateSet(from) && hasOnlyDateSet(to);
   }
 
   private boolean hasOnlyDateSet(LocalDateTime dateTime) {
@@ -135,7 +134,7 @@ public class TimeFormatter {
    * @param from the first date
    * @param to the second date
    * @return {@code true} if the dates should be formatted as directly following ones, {@code false}
-   *     otherwise
+   *         otherwise
    */
   private boolean shouldApplyDirectlyFollowingFormat(LocalDateTime from, LocalDateTime to) {
     if (!shouldApplyDateOnlyFormat(from) || !shouldApplyDateOnlyFormat(to)) {
