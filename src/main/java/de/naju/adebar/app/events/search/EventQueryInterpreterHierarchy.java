@@ -1,5 +1,11 @@
 package de.naju.adebar.app.events.search;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
 import com.querydsl.core.BooleanBuilder;
 import de.naju.adebar.app.events.search.interpreters.DateQueryInterpreter;
 import de.naju.adebar.app.events.search.interpreters.DurationQueryInterpreter;
@@ -7,13 +13,12 @@ import de.naju.adebar.app.events.search.interpreters.NameOrPlaceQueryInterpreter
 import de.naju.adebar.app.search.QueryInterpreter;
 import de.naju.adebar.app.search.QueryInterpreterHierarchy;
 import de.naju.adebar.util.Assert2;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Service;
 
+/**
+ * The interpreter hierarchy for the {@link EventQueryInterpreter}s.
+ *
+ * @author Rico Bergmann
+ */
 @Service
 public class EventQueryInterpreterHierarchy implements QueryInterpreterHierarchy<BooleanBuilder> {
 
@@ -21,6 +26,13 @@ public class EventQueryInterpreterHierarchy implements QueryInterpreterHierarchy
 
   private final List<QueryInterpreter<BooleanBuilder>> interpreters;
 
+  /**
+   * The constructor will take care of inflating the hierarchy.
+   *
+   * @param nameOrPlaceQueryInterpreter
+   * @param dateQueryInterpreter
+   * @param durationQueryInterpreter
+   */
   public EventQueryInterpreterHierarchy(NameOrPlaceQueryInterpreter nameOrPlaceQueryInterpreter,
       DateQueryInterpreter dateQueryInterpreter,
       DurationQueryInterpreter durationQueryInterpreter) {
@@ -40,8 +52,14 @@ public class EventQueryInterpreterHierarchy implements QueryInterpreterHierarchy
 
   }
 
+  /*
+   * (non-Javadoc)
+   *
+   * @see de.naju.adebar.app.search.QueryInterpreterHierarchy#getInterpreterFor(java.lang.String)
+   */
   @Override
   public Optional<EventQueryInterpreter> getInterpreterFor(@NonNull String query) {
+
     /*
      * Just search for the first best interpreter (which is based on the order the interpreters
      * where added to the list)
@@ -55,9 +73,15 @@ public class EventQueryInterpreterHierarchy implements QueryInterpreterHierarchy
     return Optional.empty();
   }
 
+  /*
+   * (non-Javadoc)
+   *
+   * @see java.lang.Iterable#iterator()
+   */
   @Override
   @NonNull
   public Iterator<QueryInterpreter<BooleanBuilder>> iterator() {
     return interpreters.iterator();
   }
+
 }
