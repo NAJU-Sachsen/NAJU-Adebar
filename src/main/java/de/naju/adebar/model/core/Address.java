@@ -1,10 +1,10 @@
 package de.naju.adebar.model.core;
 
-import de.naju.adebar.documentation.ddd.ValueObject;
-import de.naju.adebar.documentation.infrastructure.JpaOnly;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 import org.springframework.util.Assert;
+import de.naju.adebar.documentation.ddd.ValueObject;
 
 /**
  * Abstraction of an address. Each address consists of street, zip and city and may contain
@@ -13,6 +13,10 @@ import org.springframework.util.Assert;
  * Mind that an address is a value-object - once created it may not be modified any more.
  *
  * @author Rico Bergmann
+ */
+/**
+ * @author Rico Bergmann
+ *
  */
 @ValueObject
 @Embeddable
@@ -61,6 +65,10 @@ public class Address {
     Assert.isTrue(zip.isEmpty() || zip.length() == ZIP_LENGTH,
         "Zip must be " + ZIP_LENGTH + " long or empty, but was: " + zip);
 
+    street = street.trim();
+    city = city.trim();
+    additionalInfo = additionalInfo.trim();
+
     this.street = street;
     this.zip = zip;
     this.city = city;
@@ -107,19 +115,70 @@ public class Address {
   }
 
   /**
-   * @param street the street to set
-   */
-  @JpaOnly
-  protected void setStreet(String street) {
-    Assert.notNull(street, "Street may not be null!");
-    this.street = street;
-  }
-
-  /**
    * @return the zip
    */
   public String getZip() {
     return zip;
+  }
+
+  /**
+   * @return the city
+   */
+  public String getCity() {
+    return city;
+  }
+
+  /**
+   * @return the additional info. May be empty
+   */
+  public String getAdditionalInfo() {
+    return additionalInfo;
+  }
+
+  /**
+   * @return whether no field is set
+   * @deprecated should use {@link #isEmpty()} instead
+   */
+  @Deprecated
+  public boolean empty() {
+    return isEmpty();
+  }
+
+  /**
+   * @return whether no field is set
+   */
+  @Transient
+  public boolean isEmpty() {
+    return !hasStreet() && !hasZip() && !hasCity();
+  }
+
+  /**
+   * @return whether the address contains a street
+   */
+  public boolean hasStreet() {
+    return !street.isEmpty();
+  }
+
+  /**
+   * @return whether the address contains a ZIP
+   */
+  public boolean hasZip() {
+    return !zip.isEmpty();
+  }
+
+  /**
+   * @return whether the address contains a city
+   */
+  public boolean hasCity() {
+    return !city.isEmpty();
+  }
+
+  /**
+   * @param street the street to set
+   */
+  protected void setStreet(String street) {
+    Assert.notNull(street, "Street may not be null!");
+    this.street = street;
   }
 
   /**
@@ -131,42 +190,19 @@ public class Address {
   }
 
   /**
-   * @return the city
-   */
-  public String getCity() {
-    return city;
-  }
-
-  /**
    * @param city the city to set
    */
-  @JpaOnly
   protected void setCity(String city) {
     Assert.notNull(city, "City may not be null!");
     this.city = city;
   }
 
   /**
-   * @return the additional info. May be empty
-   */
-  public String getAdditionalInfo() {
-    return additionalInfo;
-  }
-
-  /**
    * @param additionalInfo the additional info to set
    */
-  @JpaOnly
   protected void setAdditionalInfo(String additionalInfo) {
     Assert.notNull(additionalInfo, "Additional info may not be null!");
     this.additionalInfo = additionalInfo;
-  }
-
-  /**
-   * @return whether no field is set
-   */
-  public boolean empty() {
-    return street.isEmpty() && zip.isEmpty() && city.isEmpty() && additionalInfo.isEmpty();
   }
 
   /*
