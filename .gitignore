@@ -34,3 +34,6 @@ libraries/
 
 # DBeaver
 .dbeaver-data-sources.xml
+
+# others
+*log*
