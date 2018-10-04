@@ -12,6 +12,11 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * A {@link ParticipationManager} which operates on a database.
+ *
+ * @author Rico Bergmann
+ */
 @Service
 @Transactional
 public class DefaultParticipationManager implements ParticipationManager {
@@ -53,17 +58,33 @@ public class DefaultParticipationManager implements ParticipationManager {
 
     // if the event does not support flexible participation times, or no times are given
     // the participant is assumed to attend the event for the whole duration
-    ParticipationTime additionalTime =
-        registrationInfo.hasParticipationTime() //
-            && event.getParticipationInfo().hasFlexibleParticipationTimesEnabled() //
-            ? registrationInfo.getParticipationTime() //
-            : new ParticipationTime(event.getStartTime(), event.getEndTime(), event.getStartTime());
+    ParticipationTime additionalTime = registrationInfo.hasParticipationTime() //
+        && event.getParticipationInfo().hasFlexibleParticipationTimesEnabled() //
+        ? registrationInfo.getParticipationTime() //
+        : new ParticipationTime(event.getStartTime(), event.getEndTime(), event.getStartTime());
 
     if (!mayAccommodateAdditionalPerson(event, participant, registrationInfo, false, false)) {
       return Result.BOOKED_OUT;
     }
 
     registrationInfo.setParticipationTime(additionalTime);
+
+    // DISCUSS do we actually want this? What should happen, if a fee is introduced later on?
+    // Is it actually possible to introduce a fee later on?
+    // if no participation fee is set, mark the corresponding field in the registration info as
+    // "payed"
+    // @formatter:off
+    /*if (!event.getParticipationInfo().hasParticipationFee()) {
+      registrationInfo.setParticipationFeePayed(true);
+    } else if (participant.getParticipantProfile().isNabuMember()
+        && !event.getParticipationInfo().hasInternalParticipationFee()) {
+      registrationInfo.setParticipationFeePayed(true);
+    } else if (!participant.getParticipantProfile().isNabuMember()
+        && !event.getParticipationInfo().hasExternalParticipationFee()) {
+      registrationInfo.setParticipationFeePayed(true);
+    }*/
+    // @formatter:on
+
     event.getParticipantsList().addParticipant(participant, registrationInfo);
     event.getParticipantsList().setBookedOut(isBookedOut(event));
 
@@ -99,11 +120,10 @@ public class DefaultParticipationManager implements ParticipationManager {
 
   @Override
   public Result updateParticipation(Event event, Person participant, RegistrationInfo newInfo) {
-    ParticipationTime adjustedParticipationTime =
-        newInfo.hasParticipationTime() //
-            && event.getParticipationInfo().hasFlexibleParticipationTimesEnabled() //
-            ? newInfo.getParticipationTime() //
-            : new ParticipationTime(event.getStartTime(), event.getEndTime(), event.getStartTime());
+    ParticipationTime adjustedParticipationTime = newInfo.hasParticipationTime() //
+        && event.getParticipationInfo().hasFlexibleParticipationTimesEnabled() //
+        ? newInfo.getParticipationTime() //
+        : new ParticipationTime(event.getStartTime(), event.getEndTime(), event.getStartTime());
 
     // retain the original registration date
     newInfo.setRegistrationDate(
@@ -124,11 +144,10 @@ public class DefaultParticipationManager implements ParticipationManager {
 
   @Override
   public Result updateCounselor(Event event, Person counselor, CounselorInfo newInfo) {
-    ParticipationTime adjustedParticipationTime =
-        newInfo.hasParticipationTime() //
-            && event.getParticipationInfo().hasFlexibleParticipationTimesEnabled() //
-            ? newInfo.getParticipationTime() //
-            : new ParticipationTime(event.getStartTime(), event.getEndTime(), event.getStartTime());
+    ParticipationTime adjustedParticipationTime = newInfo.hasParticipationTime() //
+        && event.getParticipationInfo().hasFlexibleParticipationTimesEnabled() //
+        ? newInfo.getParticipationTime() //
+        : new ParticipationTime(event.getStartTime(), event.getEndTime(), event.getStartTime());
 
     newInfo.setParticipationTime(adjustedParticipationTime);
     if (mayAccommodateAdditionalPerson(event, counselor, newInfo, true, true)) {
@@ -175,8 +194,39 @@ public class DefaultParticipationManager implements ParticipationManager {
     return result;
   }
 
+  /**
+   * Marks the participation fee of all participants as "not payed".
+   * <p>
+   * <strong>This method is currently inactive</strong>
+   *
+   * @param feeAddedEvent the event that made the invalidation become necessary
+   */
+  //@EventListener
+  public void invalidateParticipationFeeInfo(ParticipationFeeIncreasedEvent feeAddedEvent) {
+    final Event correspondingEvent = feeAddedEvent.getEntity();
+
+    for (Person participant : correspondingEvent.getParticipantsList().getParticipantsList()) {
+      RegistrationInfo registrationInfo =
+          correspondingEvent.getParticipantsList().getParticipationDetailsFor(participant);
+      registrationInfo.setParticipationFeePayed(false);
+      correspondingEvent.getParticipantsList().updateParticipant(participant, registrationInfo);
+    }
+  }
+
+  /**
+   * Checks, whether a person may attend an event. The correct strategy to decide will be inferred
+   * from the parameters passed.
+   *
+   * @param event the event the person wants to attend
+   * @param participant the person
+   * @param registrationInfo information about how the person plans to attend
+   * @param isUpdate whether the person already participates and only the {@code
+   *     registrationInfo} is updated
+   * @param isCounselor whether the person attends the event as a counselor
+   * @return whether the person may attend
+   */
   private boolean mayAccommodateAdditionalPerson(Event event, Person participant,
-      DynamicParticipationTime registrationInfo, boolean isUpdate, boolean isCounselor) {
+      ParticipationInfoWithDynamicTime registrationInfo, boolean isUpdate, boolean isCounselor) {
     ParticipantsList pl = event.getParticipantsList();
 
     if (isCounselor && !pl.hasAccommodationInfo()) {
@@ -195,8 +245,26 @@ public class DefaultParticipationManager implements ParticipationManager {
     return true;
   }
 
+  /**
+   * Checks, whether a person may attend an event using a scheduling algorithm.
+   * <p>
+   * This method supports two operation modes:
+   * <ul>
+   * <li>per default the person is assumed to be a new participant</li>
+   * <li>alternatively the person could attend the event already, but the participation time needs
+   * to change (e.g. because holiday plans changed)</li>
+   * </ul>
+   * The {@code isUpdate} param is used to switch between the two modes.
+   *
+   * @param event the event the person wants to attend
+   * @param participant the person
+   * @param registrationInfo information about how the person plans to attend the event
+   * @param isUpdate whether the person already participates and only the {@code
+   *     registrationInfo} is updated
+   * @return whether the person may attend
+   */
   private boolean validateWithScheduler(Event event, Person participant,
-      DynamicParticipationTime registrationInfo, boolean isUpdate) {
+      ParticipationInfoWithDynamicTime registrationInfo, boolean isUpdate) {
     ParticipantsList pl = event.getParticipantsList();
     OrganizationInfo oi = event.getOrganizationInfo();
     ParticipationTime additionalTime = registrationInfo.hasParticipationTime() //
@@ -229,13 +297,33 @@ public class DefaultParticipationManager implements ParticipationManager {
     return validator.isSchedulableWithExtendedSpec(pl.getAccommodation(), registeredParticipants);
   }
 
+  /**
+   * Checks, whether a person may attend an event using the participants limit of the event.
+   *
+   * @param event the event the person wants to attend
+   * @param participant the person
+   * @param registrationInfo information about how the person plans to attend the event
+   * @return whether the person may attend
+   */
   private boolean validateWithParticipantsLimit(Event event, Person participant,
-      DynamicParticipationTime registrationInfo) {
+      ParticipationInfoWithDynamicTime registrationInfo) {
     ParticipantsList pl = event.getParticipantsList();
     return !Capacity.of(pl.getParticipantsList().size() + 1)
         .isLargerThan(pl.getParticipantsLimit());
   }
 
+  /**
+   * Checks, whether all available slots for an event are occupied.
+   * <p>
+   * <strong>If the event has custom accomodation info and the scheduler has not been invoked
+   * before, an {@link IllegalStateException} will be thrown.</strong>
+   * <p>
+   * Therefore this method should only be called after for updating an event's state after its
+   * participants or counselors have changed.
+   *
+   * @param event the event to check
+   * @return whether no more people may participate in the event
+   */
   private boolean isBookedOut(Event event) {
     ParticipantsList pl = event.getParticipantsList();
     if (pl.hasAccommodationInfo()) {
@@ -247,6 +335,15 @@ public class DefaultParticipationManager implements ParticipationManager {
     }
   }
 
+  /**
+   * Checks, whether a participant has the age required to participate in an event. This check is
+   * defensive, meaning that for participant's whose age is unknown will fail the test.
+   *
+   * @param participant the person to check. Assumed to be a {@link
+   *     de.naju.adebar.model.persons.ParticipantProfile participant}
+   * @param event the event that the participant wants to attend
+   * @return whether the person may attend the event (according to age requirements)
+   */
   private boolean satisfiesMinimumParticipantAge(Person participant, Event event) {
     if (!participant.getParticipantProfile().hasDateOfBirth()) {
       return false;

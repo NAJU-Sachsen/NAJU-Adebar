@@ -124,7 +124,7 @@ public class RepositoryBasedPersonSearchServer implements PersonSearchServer {
     while (result.isEmpty() && interpreter != null) {
       Predicate predicate = prepareQuery(interpreter.interpret(query), context);
       result = personRepo.findAll(predicate);
-      log.debug("Interpreter {} returned {} instances for query '{}'",
+      log.trace("Interpreter {} returned {} instances for query '{}'",
           interpreter.getClass().getSimpleName(),
           result.size(), query);
 
@@ -155,7 +155,7 @@ public class RepositoryBasedPersonSearchServer implements PersonSearchServer {
     while (!result.hasContent() && interpreter != null) {
       Predicate predicate = prepareQuery(interpreter.interpret(query), context);
       result = personRepo.findAll(predicate, pageable);
-      log.debug("Interpreter {} returned {} instances for query '{}'",
+      log.trace("Interpreter {} returned {} instances for query '{}'",
           interpreter.getClass().getSimpleName(),
           result.getTotalElements(), query);
 

@@ -38,7 +38,8 @@
             <label for="person-search" class="sr-only">Suchen (Name, Stadt, Email o.ä.)</label>
             <div class="input-group">
               <input type="search" name="query" class="form-control" id="search"
-                     placeholder="Name, Stadt, E-Mail, ..." th:value="${param.query}"/>
+                     placeholder="Name, Stadt, E-Mail, ..." autocomplete="off"
+                     th:value="${param.query}"/>
               <div class="input-group-addon">
                 <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
               </div>

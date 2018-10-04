@@ -1,5 +1,7 @@
 package de.naju.adebar.util;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import org.springframework.util.Assert;
 
 /**
@@ -11,12 +13,28 @@ public class Assert2 {
 
   private Assert2() {}
 
+  /**
+   * Provides an assertion utility that will produce {@link IllegalStateException}s it they fail.
+   */
+  public static AssertState state() {
+    return new AssertState();
+  }
+
+  /**
+   * Asserts that some condition evaluates to {@code false}.
+   */
   public static void isFalse(boolean expr) {
     if (expr) {
       reportFailure("expression was true");
     }
   }
 
+  /**
+   * Asserts that some condition evaluates to {@code false}.
+   *
+   * @param expr the condition
+   * @param msg an error message to use if the assertion fails
+   */
   public static void isFalse(boolean expr, String msg) {
     if (expr) {
       reportFailureWithCustomMessage(msg);
@@ -64,7 +82,7 @@ public class Assert2 {
   public static void noNullArguments(String message, Object... args) {
     for (Object arg : args) {
       if (arg == null) {
-        reportFailure(message);
+        reportFailureWithCustomMessage(message);
       }
     }
   }
@@ -80,7 +98,7 @@ public class Assert2 {
 
   /**
    * Throws the {@link IllegalArgumentException} with a completely user-defined message
-   * 
+   *
    * @param msg the message
    */
   private static void reportFailureWithCustomMessage(String msg) {
@@ -92,11 +110,50 @@ public class Assert2 {
    *
    * @param msg the message
    * @param customMsg whether the message should completely replace the default message. If
-   *        {@code false} the message will be appended to some default prefix
+   *     {@code false} the message will be appended to some default prefix
    */
   private static void reportFailure(String msg, boolean customMsg) {
     String exceptionMsg = customMsg ? msg : ("Assertion failed: " + msg);
     throw new IllegalArgumentException(exceptionMsg);
+  }
+
+  /**
+   * Assertions which throw an {@link IllegalStateException} on failure.
+   */
+  public static class AssertState {
+
+    private AssertState() {}
+
+    /**
+     * @see Assert2#noNullArguments(String, Object...)
+     */
+    public void noNullArguments(String message, Object... args) {
+      try {
+        Assert2.noNullArguments(message, args);
+      } catch (IllegalArgumentException e) {
+        reportFailure(message, IllegalStateException.class);
+      }
+    }
+
+    /**
+     * Throws the {@link IllegalStateException} with a user defined message.
+     *
+     * @param msg the exception's message
+     * @param exToThrow the kind of exception to throw. If it may not be created, an {@link
+     *     IllegalArgumentException} with error details attached will be thrown.
+     */
+    private void reportFailure(String msg, Class<? extends RuntimeException> exToThrow) {
+      try {
+        Constructor<? extends RuntimeException> exCons = exToThrow.getConstructor(String.class);
+        throw exCons.newInstance(msg);
+      } catch (NoSuchMethodException
+          | InstantiationException
+          | IllegalAccessException
+          | InvocationTargetException e) {
+        throw new IllegalArgumentException("Could not generate exception of class" + exToThrow, e);
+      }
+    }
+
   }
 
 }

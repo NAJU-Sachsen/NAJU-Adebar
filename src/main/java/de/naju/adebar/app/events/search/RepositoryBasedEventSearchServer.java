@@ -1,5 +1,9 @@
 package de.naju.adebar.app.events.search;
 
+import com.querydsl.core.types.Predicate;
+import de.naju.adebar.model.events.Event;
+import de.naju.adebar.model.events.ReadOnlyEventRepository;
+import de.naju.adebar.util.Assert2;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -11,10 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
-import com.querydsl.core.types.Predicate;
-import de.naju.adebar.model.events.Event;
-import de.naju.adebar.model.events.ReadOnlyEventRepository;
-import de.naju.adebar.util.Assert2;
 
 @Service
 public class RepositoryBasedEventSearchServer implements EventSearchServer {
@@ -50,6 +50,13 @@ public class RepositoryBasedEventSearchServer implements EventSearchServer {
         .orElse(Page.empty(pageable));
   }
 
+  /**
+   * Loads all results for the given query, using a certain interpreter and its fallbacks.
+   *
+   * @param query the query to use
+   * @param interpreter the interpreter to use
+   * @return all matching persons
+   */
   @NonNull
   private List<Event> fetchResultsFor(@NonNull String query,
       @NonNull EventQueryInterpreter interpreter) {
@@ -71,6 +78,14 @@ public class RepositoryBasedEventSearchServer implements EventSearchServer {
     return result;
   }
 
+  /**
+   * Loads all results for the given query, using a certain interpreter and its fallbacks.
+   *
+   * @param query the query to use
+   * @param interpreter the interpreter to use
+   * @param pageable pagination information for the resulting {@link Page}
+   * @return all matching events
+   */
   private Page<Event> fetchResultsFor(@NonNull String query,
       @NonNull EventQueryInterpreter interpreter, @NonNull Pageable pageable) {
     Page<Event> result = Page.empty(pageable);
@@ -82,7 +97,7 @@ public class RepositoryBasedEventSearchServer implements EventSearchServer {
           Direction.DESC, "startTime");
       result = eventRepo.findAll(predicate, pageRequest);
 
-      log.debug("Interpreter {} returned {} instances for query '{}'",
+      log.trace("Interpreter {} returned {} instances for query '{}'",
           interpreter.getClass().getSimpleName(), result.getTotalElements(), query);
 
       if (!result.hasContent()) {

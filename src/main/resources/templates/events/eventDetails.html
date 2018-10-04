@@ -14,7 +14,7 @@
 
   <link rel="stylesheet" type="text/css" href="../../static/resources/css/bootstrap-select.min.css"
         th:href="@{/resources/css/bootstrap-select.min.css}"/>
-        
+
   <link rel="shortcut icon" th:href="@{/resources/res/favicon.ico}"/>
 </head>
 <body>
@@ -63,7 +63,7 @@
         </a>
       </li>
       <li role="presentation"
-          th:classappend="${tab == 'participants'} ? 'active'">
+          th:classappend="${tab == 'participants' or tab == 'participantsTable'} ? 'active'">
         <a href="#participants" class="tab-controller"
            th:href="@{/events/{id}/participants(id=${event.id})}">
           Teilnehmende
@@ -107,6 +107,14 @@
              th:if="${tab == 'participants'}" th:classappend="${tab == 'participants'} ? 'active'">
 
       <div th:replace="events/participants :: list"></div>
+
+    </section>
+
+    <section id="participantsTable" class="display-category tab-pane" role="tabpanel"
+             th:if="${tab == 'participantsTable'}"
+             th:classappend="${tab == 'participantsTable'} ? 'active'">
+
+      <div th:replace="events/customizeParticipantsTable :: table"></div>
 
     </section>
 
@@ -267,6 +275,10 @@
     const modal = $('#add-counselor-failed-dialog');
     modal.modal('show');
   });
+</script>
+
+<script th:if="${tab == 'participantsTable' and not showTable}">
+  $(document).ready(() => $('#column-selection-dialog').modal('show'));
 </script>
 
 </body>

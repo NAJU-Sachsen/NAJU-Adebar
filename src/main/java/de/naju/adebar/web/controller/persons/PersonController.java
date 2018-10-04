@@ -12,7 +12,9 @@ import de.naju.adebar.web.validation.persons.relatives.AddParentForm;
 import javax.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -42,7 +44,7 @@ public class PersonController {
   private final VitalRecord vitalRecord;
 
   /**
-   * Full constructor. No parameter may be {@code null}
+   * Full constructor. No parameter may be {@code null}.
    *
    * @param personRepo repository containing all available persons
    * @param searchServer service to search persons based on queries
@@ -64,7 +66,7 @@ public class PersonController {
   }
 
   /**
-   * Renders a list of all persons
+   * Renders a list of all persons.
    *
    * @param model model to put the data to render into
    * @param pageable the requested page. As there may be quite many, will not display all
@@ -99,7 +101,7 @@ public class PersonController {
   }
 
   /**
-   * Renders the template to filter persons
+   * Renders the template to filter persons.
    *
    * @return the filter persons template
    */
@@ -150,7 +152,7 @@ public class PersonController {
   }
 
   /**
-   * Edits the data of a specific person according to the submitted form
+   * Edits the data of a specific person according to the submitted form.
    *
    * @param person the person to update
    * @param data the data to use for the update
@@ -175,6 +177,26 @@ public class PersonController {
     return "redirect:/persons/" + person.getId();
   }
 
+  /**
+   * Marks a person as "archived" making it immutable and transient for most queries.
+   * <p>
+   * This may only be done by a user who has at least chairman privileges.
+   *
+   * @param person the person
+   * @param redirAttr attributes for the model and URL to use after redirection
+   * @return a redirection to the person overview
+   */
+  @PostMapping("/persons/{pid}/archive")
+  @Transactional
+  @PreAuthorize("hasRole('ROLE_CHAIRMAN')")
+  public String archivePerson(@PathVariable("pid") Person person, RedirectAttributes redirAttr) {
+    person.archive();
+    return "redirect:/persons";
+  }
+
+  /**
+   * Registers the {@link EditPersonForm} validator for the data binder.
+   */
   @InitBinder("editPersonForm")
   protected void initBinder(WebDataBinder binder) {
     binder.addValidators(editPersonFormConverter);

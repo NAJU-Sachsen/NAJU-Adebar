@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="utf-8"/>
   <meta content="width=device-width,initial-scale=1" name="viewport"/>
@@ -85,7 +86,8 @@
                             th:action="@{/persons/{id}/update(id=${person.id})}"
                             th:object="${editPersonForm}">
                         <div class="row">
-                          <div class="col-md-6" th:class="*{participant} ? 'col-md-6' : 'col-md-12'">
+                          <div class="col-md-6"
+                               th:class="*{participant} ? 'col-md-6' : 'col-md-12'">
                             <div class="form-group"
                                  th:classappend="${#fields.hasErrors('firstName')} ? 'has-error'">
                               <label for="edit-first-name" class="control-label">Vorname</label>
@@ -99,7 +101,8 @@
                             <div class="form-group"
                                  th:classappend="${#fields.hasErrors('lastName')} ? 'has-error'">
                               <label for="edit-last-name" class="control-label">Nachname</label>
-                              <input type="text" class="form-control" id="edit-last-name" value="Doe"
+                              <input type="text" class="form-control" id="edit-last-name"
+                                     value="Doe"
                                      required="required" placeholder="erforderlich"
                                      th:field="*{lastName}"/>
                               <p class="help-block" th:if="${#fields.hasErrors('lastName')}"
@@ -150,7 +153,8 @@
                                 (Arbeit)</label>
                               <div class="input-group">
                                 <input type="tel" class="form-control" id="edit-landline-phone"
-                                       value="0123 45678901" th:field="*{parentForm.landlinePhone}"/>
+                                       value="0123 45678901"
+                                       th:field="*{parentForm.landlinePhone}"/>
                                 <span class="input-group-addon">optional</span>
                               </div>
                               <p class="help-block"
@@ -172,7 +176,8 @@
                             </div>
                             <div class="form-group"
                                  th:classappend="${#fields.hasErrors('address.zip')} ? 'has-error'">
-                              <label for="edit-address-zip" class="control-label">Postleitzahl</label>
+                              <label for="edit-address-zip"
+                                     class="control-label">Postleitzahl</label>
                               <div class="input-group">
                                 <input type="text" class="form-control" id="edit-address-zip"
                                        value="09876" th:field="*{address.zip}"/>
@@ -198,7 +203,8 @@
                               <label for="participant" class="control-label">Veranstaltungen</label>
                               <div class="checkbox">
                                 <label>
-                                  <input type="checkbox" id="participant" th:field="*{participant}"/>
+                                  <input type="checkbox" id="participant"
+                                         th:field="*{participant}"/>
                                   die Person nimmt an Veranstaltungen teil
                                 </label>
                               </div>
@@ -241,13 +247,15 @@
                                  th:errors="*{participantForm.dateOfBirth}">Erforderlich</p>
                             </div>
                             <p class="help-block">
-                              Für minderjährige Teilnehmer*innen muss das Geschlecht angegeben werden.
+                              Für minderjährige Teilnehmer*innen muss das Geschlecht angegeben
+                              werden.
                               Andernfalls ist es optional.
                             </p>
                             <hr/>
                             <div class="form-group"
                                  th:classappend="${#fields.hasErrors('participantForm.eatingHabits')} ? 'has-error'">
-                              <label for="edit-eating-habits" class="control-label">Ernährung</label>
+                              <label for="edit-eating-habits"
+                                     class="control-label">Ernährung</label>
                               <div id="edit-eating-habits-default-display">
                                 <div>
                                   <select class="selectpicker" id="edit-eating-habits-select"
@@ -356,24 +364,31 @@
                 </div>
               </div>
 
-              <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#archive-person-dialog" sec:authorize="hasRole('ROLE_CHAIRMAN')">
+              <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                      data-target="#archive-person-dialog" sec:authorize="hasRole('ROLE_CHAIRMAN')">
                 <span class="glyphicon glyphicon-trash"></span> Archivieren
               </button>
 
+              <!-- archive person confirmation dialog -->
               <div class="modal fade" id="archive-person-dialog" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">
                     <div class="modal-body">
                       <p>
-                        Die Person wird archiviert und kann nicht mehr als Teilnehmende*r zu Veranstaltungen hinzugefügt werden usw.
-                        Allerdings bleibt ein Teil der Daten weiter erhalten um Statistiken nicht zu verfälschen
+                        Die Person wird archiviert und kann nicht mehr als Teilnehmende*r zu
+                        Veranstaltungen hinzugefügt werden usw.
+                        Allerdings bleibt ein Teil der Daten weiter erhalten um Statistiken nicht zu
+                        verfälschen
                       </p>
                       <p>
-                        Wenn die Person aufgrund eines Antrags gemäß der DSGVO gelöscht werden soll meldet euch bitte bei
-                        <a href="http://naju-sachsen.de/index.php?article_id=26">der/dem Datenschutz-Beauftragten der NAJU</a>,
+                        Wenn die Person aufgrund eines Antrags gemäß der DSGVO gelöscht werden soll
+                        meldet euch bitte bei
+                        <a href="http://naju-sachsen.de/index.php?article_id=26">der/dem
+                          Datenschutz-Beauftragten der NAJU</a>,
                         er/sie kümmert sich dann um das "richtige" Löschen.
                       </p>
-                      <form method="post" id="archive-person" th:action="@{/persons/{id}/archive(id=${person.id})}"></form>
+                      <form method="post" id="archive-person"
+                            th:action="@{/persons/{id}/archive(id=${person.id})}"></form>
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-default" data-dismiss="modal">
@@ -467,7 +482,10 @@
                 <th class="col-md-2">
                   <span class="glyphicon glyphicon-calendar"></span> Geburtsdatum
                 </th>
-                <td class="col-md-10" th:text="${{participantProfile.dateOfBirth}}">11.02.2034</td>
+                <td class="col-md-10" th:inline="text">
+                  [[${{participantProfile.dateOfBirth}}]] [[${participantProfile.hasDateOfBirth()} ?
+                  '(Alter: ' + ${participantProfile.calculateAge()} + ')']]
+                </td>
               </tr>
               <tr class="row">
                 <th class="col-md-2">

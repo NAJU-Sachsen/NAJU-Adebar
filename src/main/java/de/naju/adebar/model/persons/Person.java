@@ -44,7 +44,7 @@ import org.springframework.util.Assert;
 /**
  * Abstraction of a person. No matter of its concrete role (camp participant, activist, ...) some
  * data always needs to be tracked. This will be handled here.
- *
+ * <p>
  * In terms of DDD a Person acts as an aggregate-root for a number of profiles.
  *
  * @author Rico Bergmann
@@ -216,6 +216,11 @@ public class Person {
     return email;
   }
 
+  /**
+   * Fetches the email address of {@code this} person. If he/she has none, continues searching on
+   * the parents. If all of the parents don't specify an address as well, {@code null} will be
+   * returned.
+   */
   @Transient
   public Email getOwnOrParentsEmail() {
     if (hasEmail()) {
@@ -310,7 +315,7 @@ public class Person {
    * Setter just for JPA's sake. Private to enforce consistency with the state of the {@link
    * #activistProfile}
    *
-   * @param participant whether the person is a participant
+   * @param activist whether the person is a activist
    */
   @JpaOnly
   private void setActivist(boolean activist) {
@@ -346,7 +351,7 @@ public class Person {
    * Setter just for JPA's sake. Private to enforce consistency with the state of the {@link
    * #referentProfile}
    *
-   * @param participant whether the person is a participant
+   * @param referent whether the person is a referent
    */
   @JpaOnly
   private void setReferent(boolean referent) {
@@ -460,6 +465,9 @@ public class Person {
     return email != null;
   }
 
+  /**
+   * Checks, whether {@code this} person or any of his/her parents have a phone number specified.
+   */
   public boolean hasOwnOrParentsEmail() {
     return hasEmail() || parents.stream().anyMatch(Person::hasEmail);
   }
@@ -495,9 +503,6 @@ public class Person {
 
   /**
    * Updates the personal information.
-   * <p>
-   * Once a person instance has been created, it is immutable. Therefore a copy is being created and
-   * returned.
    *
    * @param firstName the new first name
    * @param lastName the new last name
@@ -614,7 +619,6 @@ public class Person {
    * Be sure to save the person in order to persist the profile.
    *
    * @return the person's new participant profile
-   *
    * @throws IllegalStateException if the person already is a camp participant
    */
   public ParticipantProfile makeParticipant() {
@@ -634,7 +638,6 @@ public class Person {
    * @param eatingHabits the person's eating habits
    * @param healthImpairments the person's health impairments
    * @return the person's new participant profile
-   *
    * @throws IllegalStateException if the person already is a camp participant
    */
   public ParticipantProfile makeParticipant(Gender gender, LocalDate dateOfBirth,
@@ -652,7 +655,6 @@ public class Person {
    * Be sure to save the person in order to persist the profile.
    *
    * @return the new activist profile, containing all activist related data
-   *
    * @throws IllegalStateException if the person already is an activist
    */
   public ActivistProfile makeActivist() {
@@ -671,7 +673,6 @@ public class Person {
    *
    * @param juleica the person's juleica, may be {@code null} if there is none
    * @return the new activist profile
-   *
    * @throws IllegalStateException if the person already is an activist
    */
   public ActivistProfile makeActivist(JuleicaCard juleica) {
@@ -689,7 +690,6 @@ public class Person {
    * Be sure to save the person in order to persist the profile.
    *
    * @return the new referent profile, containing all referent related data.
-   *
    * @throws IllegalStateException if the person already is a referent
    */
   public ReferentProfile makeReferent() {
@@ -708,7 +708,6 @@ public class Person {
    *
    * @param qualifications the person's qualifications
    * @return the new referent profile
-   *
    * @throws IllegalStateException if the person already is a referent
    */
   public ReferentProfile makeReferent(Collection<Qualification> qualifications) {
@@ -726,7 +725,6 @@ public class Person {
    * Be sure to save the person in order to persist the profile.
    *
    * @return the new parent profile
-   *
    * @throws IllegalStateException if the person already is a parent
    */
   public ParentProfile makeParent() {
@@ -746,7 +744,6 @@ public class Person {
    * @param landlinePhone the parent's phone number at home
    * @param workPhone the parent's phone number at work
    * @return the new parent profile
-   *
    * @throws IllegalStateException if the person already is a parent
    */
   public ParentProfile makeParent(PhoneNumber landlinePhone, PhoneNumber workPhone) {
@@ -779,7 +776,6 @@ public class Person {
    *
    * @param parent the parent
    * @return the person with the new parent
-   *
    * @throws IllegalStateException if the person already has two parents
    * @throws ExistingParentException if the parent is already known
    * @throws ImpossibleKinshipRelationException if parent and child are the same person. No
@@ -811,7 +807,6 @@ public class Person {
    *
    * @param parent the former parent
    * @return the person without its parent
-   *
    * @throws IllegalArgumentException if the given parent is not known to be one
    */
   public Person disconnectParent(Person parent) {

@@ -1,9 +1,5 @@
 package de.naju.adebar.model.persons;
 
-import de.naju.adebar.model.persons.events.PersonDataUpdatedEvent;
-import de.naju.adebar.model.persons.qualifications.ExistingQualificationException;
-import de.naju.adebar.model.persons.qualifications.Qualification;
-import de.naju.adebar.util.Maps2;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +12,11 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.MapKey;
 import org.springframework.util.Assert;
+import de.naju.adebar.documentation.infrastructure.JpaOnly;
+import de.naju.adebar.model.persons.events.PersonDataUpdatedEvent;
+import de.naju.adebar.model.persons.qualifications.ExistingQualificationException;
+import de.naju.adebar.model.persons.qualifications.Qualification;
+import de.naju.adebar.util.Maps2;
 
 /**
  * Referents are persons who can give lectures or host field trips and the like.
@@ -61,6 +62,7 @@ public class ReferentProfile extends AbstractProfile {
   /**
    * Private constructor just for JPA's sake
    */
+  @JpaOnly
   private ReferentProfile() {}
 
   /**
@@ -135,6 +137,7 @@ public class ReferentProfile extends AbstractProfile {
   /**
    * @param personId the ID of the person to whom this profile belongs.
    */
+  @JpaOnly
   private void setPersonId(PersonId personId) {
     this.personId = personId;
   }

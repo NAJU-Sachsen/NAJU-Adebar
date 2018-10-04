@@ -33,8 +33,6 @@ public class ActivistController {
    *
    * @param personRepo repository containing the person instances. This is necessary to update
    *     persons if their activist profiles are being edited.
-   * @param activistRepo repository containing the person's activists. While this repo is not
-   *     strictly necessary it makes certain operations a lot easier.
    * @param profileConverter service to convert an {@link ActivistProfile} to a corresponding
    *     {@link EditActivistProfileForm} instance and vice-versa.
    */

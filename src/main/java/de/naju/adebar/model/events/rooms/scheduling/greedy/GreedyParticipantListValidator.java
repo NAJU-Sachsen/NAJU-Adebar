@@ -9,6 +9,7 @@ import de.naju.adebar.model.events.rooms.scheduling.RoomSpecification;
 import de.naju.adebar.model.events.rooms.scheduling.slacker.SlackerParticipantListValidator;
 import de.naju.adebar.model.persons.details.Gender;
 import de.naju.adebar.util.Arrays2;
+import de.naju.adebar.util.Assert2;
 import java.util.Arrays;
 import java.util.function.Function;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Service;
 /**
  * A greedy implementation of the {@link ParticipantListValidator} capable of handling {@link
  * ExtendedRoomSpecification}
- *
+ * <p>
  * Basically, the {@code GreedyValidator} may be seen as an extension of the idea behind the {@link
  * SlackerParticipantListValidator}. For each day, it will check whether there are at least as many
  * beds available, as participants registered for that night. If there is no schedule available
@@ -126,6 +127,8 @@ public class GreedyParticipantListValidator implements ParticipantListValidator 
    */
   @Override
   public boolean isBookedOut() {
+    Assert2.state()
+        .noNullArguments("Scheduler must be invoked first", femaleRooms, maleRooms, otherRooms);
     Function<Integer, Boolean> predicate = i -> i == 0;
     return Arrays2.allMatch(femaleRooms, predicate) && Arrays2.allMatch(maleRooms, predicate)
         && Arrays2.allMatch(otherRooms, predicate);

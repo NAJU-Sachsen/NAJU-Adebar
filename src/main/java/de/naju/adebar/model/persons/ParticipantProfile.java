@@ -1,5 +1,12 @@
 package de.naju.adebar.model.persons;
 
+import de.naju.adebar.documentation.ddd.BusinessRule;
+import de.naju.adebar.documentation.infrastructure.JpaOnly;
+import de.naju.adebar.model.core.Age;
+import de.naju.adebar.model.persons.details.Gender;
+import de.naju.adebar.model.persons.details.NabuMembershipInformation;
+import de.naju.adebar.model.persons.events.PersonDataUpdatedEvent;
+import de.naju.adebar.model.persons.exceptions.DateOfBirthIsRequiredForMinorsException;
 import java.time.LocalDate;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -11,13 +18,6 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Transient;
 import org.springframework.util.Assert;
-import de.naju.adebar.documentation.ddd.BusinessRule;
-import de.naju.adebar.documentation.infrastructure.JpaOnly;
-import de.naju.adebar.model.core.Age;
-import de.naju.adebar.model.persons.details.Gender;
-import de.naju.adebar.model.persons.details.NabuMembershipInformation;
-import de.naju.adebar.model.persons.events.PersonDataUpdatedEvent;
-import de.naju.adebar.model.persons.exceptions.DateOfBirthIsRequiredForMinorsException;
 
 /**
  * Every camp participant has to fill a registration form. The corresponding data will be collected
@@ -143,7 +143,7 @@ public class ParticipantProfile extends AbstractProfile {
 
   /**
    * @return the person's eating habit (i.e. vegetarian and the like as well as food-related
-   *         allergies). May be {@code null}.
+   *     allergies). May be {@code null}.
    */
   public String getEatingHabits() {
     return eatingHabits;
@@ -151,7 +151,7 @@ public class ParticipantProfile extends AbstractProfile {
 
   /**
    * @param eatingHabits the person's eating habit (i.e. vegetarian and the like as well as
-   *          food-related allergies). May be {@code null}.
+   *     food-related allergies). May be {@code null}.
    */
   protected void setEatingHabits(String eatingHabits) {
     this.eatingHabits = eatingHabits;
@@ -159,7 +159,7 @@ public class ParticipantProfile extends AbstractProfile {
 
   /**
    * @return the person's health impairments (mainly non-food-related allergies like hayfever). May
-   *         be {@code null}.
+   *     be {@code null}.
    */
   public String getHealthImpairments() {
     return healthImpairments;
@@ -167,7 +167,7 @@ public class ParticipantProfile extends AbstractProfile {
 
   /**
    * @param healthImpairments the person's health impairments (mainly non-food-related allergies
-   *          like hayfever). May be {@code null}.
+   *     like hayfever). May be {@code null}.
    */
   protected void setHealthImpairments(String healthImpairments) {
     this.healthImpairments = healthImpairments;
@@ -175,7 +175,7 @@ public class ParticipantProfile extends AbstractProfile {
 
   /**
    * @return information regarding the person's membership in the NABU. May be {@code null} if the
-   *         person is not a NABU member.
+   *     person is not a NABU member.
    */
   public NabuMembershipInformation getNabuMembership() {
     return nabuMembership;
@@ -198,24 +198,31 @@ public class ParticipantProfile extends AbstractProfile {
 
   /**
    * @param remarks additional remarks such as swimming permission or other information. May be
-   *          {@code null}.
+   *     {@code null}.
    */
   protected void setRemarks(String remarks) {
     this.remarks = remarks;
   }
 
   /**
-   * @return {@code true} if the person has eating habits set
+   * @return {@code true} if this participant has eating habits set
    */
   public boolean hasEatingHabits() {
     return eatingHabits != null && !eatingHabits.isEmpty();
   }
 
   /**
-   * @return {@code true} if the person has known health impairments
+   * @return {@code true} if this participant has known health impairments
    */
   public boolean hasHealthImpairments() {
     return healthImpairments != null && !healthImpairments.isEmpty();
+  }
+
+  /**
+   * @return {@code true} if there are any remarks about this participant
+   */
+  public boolean hasAdditionalRemarks() {
+    return remarks != null && !remarks.isEmpty();
   }
 
   /**
@@ -227,7 +234,6 @@ public class ParticipantProfile extends AbstractProfile {
 
   /**
    * @return the age of the person
-   *
    * @throws IllegalStateException if the person has no date of birth specified
    */
   public Age calculateAge() {
@@ -235,6 +241,13 @@ public class ParticipantProfile extends AbstractProfile {
     return Age.forDateOfBirth(dateOfBirth);
   }
 
+  /**
+   * Calculates how old a person is on a certain date.
+   *
+   * @param date the date
+   * @return the person's age
+   * @throws IllegalStateException if the person has no date of birth specified
+   */
   public Age calculateAgeOn(LocalDate date) {
     Assert.state(hasDateOfBirth(), "No date of birth specified");
     return Age.forPeriod(dateOfBirth, date);
@@ -398,8 +411,8 @@ public class ParticipantProfile extends AbstractProfile {
   /**
    * @param dateOfBirth the date of birth to check
    * @param gender the gender to check
-   * @throws DateOfBirthIsRequiredForMinorsException if the person is under-aged and no gender was
-   *           given
+   * @throws DateOfBirthIsRequiredForMinorsException if the person is under-aged and no gender
+   *     was given
    */
   @BusinessRule
   private void assertDateOfBirthIsSetForMinors(LocalDate dateOfBirth, Gender gender) {

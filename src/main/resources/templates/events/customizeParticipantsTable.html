@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta th:name="_csrf" th:value="${_csrf.token}"/>
+  <title>Bergwiesencamp | Adebar</title>
+  <link rel="stylesheet" type="text/css" href="../../static/resources/css/bootstrap.min.css"
+        th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+  <link rel="stylesheet" href="../../static/resources/css/bootstrap-select.min.css"
+        th:href="@{/resources/css/bootstrap-select.min.css}"/>
+
+  <link rel="stylesheet" type="text/css" href="../../static/resources/css/style.css"
+        th:href="@{/resources/css/style.css}"/>
+</head>
+<body>
+
+<!--/*@thymesVar id="event" type="de.naju.adebar.model.events.Event"*/-->
+<!--/*@thymesVar id="participationReport" type="de.naju.adebar.web.model.events.participation.ParticipationReport"*/-->
+<!--/*@thymesVar id="participantsTableForm" type="de.naju.adebar.web.validation.events.participation.ParticipantsTableForm"*/-->
+<!--/*@thymesVar id="participantsTable" type="de.naju.adebar.web.model.events.ParticipantsTable"*/-->
+<!--/*@thymesVar id="#time" type="de.naju.adebar.infrastructure.thymeleaf.TimeFormatter"*/-->
+<!--/*@thymesVar id="#email" type="de.naju.adebar.infrastructure.thymeleaf.EmailFormatter"*/-->
+<!--/*@thymesVar id="processingService" type="de.naju.adebar.app.events.processing.EventDataProcessingService"*/-->
+<!--/*@thymesVar id="formattingService" type="de.naju.adebar.web.model.events.ParticipantsTableFormattingService"*/-->
+<!--/*@thymesVar id="addParticipants" type="de.naju.adebar.web.validation.events.participation.AddParticipantsForm"*/-->
+<!--/*@thymesVar id="editParticipantForm" type="de.naju.adebar.web.validation.events.participation.AddParticipantsForm.AddParticipantForm"*/-->
+<!--/*@thymesVar id="addReservationForm" type="de.naju.adebar.web.validation.events.participation.ReservationForm"*/-->
+<!--/*@thymesVar id="editReservationForm" type="de.naju.adebar.web.validation.events.participation.ReservationForm"*/-->
+<!--/*@thymesVar id="applyWaitingListEntryForm" type="de.naju.adebar.web.validation.events.participation.AddParticipantsForm.AddParticipantForm"*/-->
+
+<!-- central navigation -->
+<nav th:replace="navigation :: topNav(page='events')"></nav>
+
+<!-- page specific content-->
+<main id="main">
+
+  <a href="overview.html">
+    <span class="glyphicon glyphicon-chevron-left"></span>
+    Zurück zur Übersicht
+  </a>
+
+  <h1>Bergwiesencamp
+    <small>(28.07. - 11.08.18)</small>
+  </h1>
+
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active">
+      <a href="#overview" class="tab-controller" aria-controls="general" role="tab"
+         data-toggle="tab">Übersicht</a>
+    </li>
+    <li role="presentation">
+      <a href="#participants" class="tab-controller" aria-controls="participants"
+         role="tab" data-toggle="tab">Teilnehmende</a>
+    </li>
+    <li role="presentation">
+      <a href="#organization" class="tab-controller" aria-controls="organization" role="tab"
+         data-toggle="tab">
+        Organisation
+      </a>
+    </li>
+    <li role="presentation">
+      <a href="#accommodation" class="tab-controller" aria-controls="accommodation" role="tab"
+         data-toggle="tab">Unterbringung</a>
+    </li>
+  </ul>
+
+  <article class="tab-content">
+
+    <!-- participants -->
+    <div id="participants-list" class="tab-pane active container-fluid" role="tabpanel">
+
+
+      <section id="content" class="display-category" th:fragment="table">
+
+        <!-- the header -->
+        <div class="row category-header category-menu">
+
+          <h2 class="col-md-5 category-title" id="participants">
+            Teilnehmende
+          </h2>
+          
+          <div class="col-md-7">
+            
+            <!-- action menu -->
+            <div class="pull-right category-menu-content">
+              <button type="button" class="btn btn-default btn-sm margin-right-lg"
+                      data-toggle="modal"
+                      data-target="#column-selection-dialog">
+                <span class="glyphicon glyphicon-pencil"></span> Anpassen
+              </button>
+              
+              <div class="btn-group btn-group-sm">
+                <button type="button" class="btn btn-default">
+                  <span class="glyphicon glyphicon-print"></span> Drucken
+                </button>
+                <button type="button" class="btn btn-default">
+                  <span class="glyphicon glyphicon-export"></span> Exportieren
+                </button>
+              </div>
+              
+            </div>
+
+          </div>
+          
+        </div>
+
+        <!-- column selection dialog -->
+        <div class="modal fade" id="column-selection-dialog">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3 class="modal-title">Spalten auswählen</h3>
+              </div>
+
+              <form method="post" id="column-selection" class="modal-body"
+                    th:object="${participantsTableForm}"
+                    th:action="@{/events/{id}/participants/table(id=${event.id})}">
+
+                <input type="hidden" name="columnSelection" value="false"/>
+
+                <h4>Allgemeines</h4>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" th:field="*{name}"/> Name der Teilnehmenden
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" th:field="*{email}"/> E-Mail Adressen
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" th:field="*{phone}"/> Telefonnummern
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" th:field="*{address}"/> vollständige Adresse
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" th:field="*{city}"/> Wohnort
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" th:field="*{dateOfBirth}"/> Geburtsdatum
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" th:field="*{age}"/> Alter
+                    <small>im Camp</small>
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" th:field="*{eatingHabits}"/> Ernährung
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" th:field="*{healthImpairments}"/> Allergien, etc.
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" th:field="*{nabu}"/> NABU-Mitgliedschaft
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" th:field="*{personRemarks}"/> Bemerkungen
+                    <small>(zur Person)</small>
+                  </label>
+                </div>
+                <hr/>
+
+                <h4>Daten der Eltern</h4>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" th:field="*{parents}"/> Namen der Eltern
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" th:field="*{parentsPrivatePhone}"/> private
+                    Telefonnummern
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" th:field="*{parentsLandlinePhone}"/> Telefonnummern
+                    <small>(Festnetz)</small>
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" th:field="*{parentsWorkPhone}"/> Telefonnummern
+                    <small>(Arbeit)</small>
+                  </label>
+                </div>
+                <hr/>
+
+                <h4>Daten zur Teilnahme
+                  <small>an genau dieser Veranstaltung</small>
+                </h4>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" th:field="*{registrationDate}"/> Datum der Anmeldung
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" th:field="*{registrationFormSent}"/> Anmeldeformular
+                    gesendet?
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" th:field="*{registrationFormFilled}"/> Anmeldeformular
+                    ausgefüllt?
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" th:field="*{feePayed}"/> Teilnahmebeitrag bezahlt?
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" th:field="*{arrival}"/> Anreise
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" th:field="*{departure}"/> Abreise
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" th:field="*{participationTime}"/> Teilnahmezeitraum
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" th:field="*{participationRemarks}"/> Bemerkungen
+                    <small>zur Teilnahme</small>
+                  </label>
+                </div>
+
+
+              </form>
+
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                  Abbrechen
+                </button>
+                <button type="submit" form="column-selection" class="btn btn-primary">
+                  Tabelle anzeigen
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+        <div class="table-responsive" th:if="${showTable}">
+
+          <table class="table table-striped table-hover" id="participants-table">
+            <thead>
+            <tr>
+              <th th:each="col : ${participantsTable.columns}" th:if="${formattingService.formatterIsApplicable(event, col)}" th:text="#{|col.${col}|}"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="participant : ${participantsTable.participants}">
+              <td th:each="col : ${participantsTable.columns}"
+                  th:if="${formattingService.formatterIsApplicable(event, col)}"
+                  th:text="${formattingService.getColumnValueFor(participantsTable.event, participant, col)}"></td>
+            </tr>
+            </tbody>
+
+
+          </table>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </article>
+
+</main>
+
+<form id="logout-user" method="POST" th:action="@{/logout}">
+  <input type="hidden" name="csrf" th:value="csrf"/>
+</form>
+
+<script type="text/javascript" src="../../static/resources/js/jquery.min.js"
+        th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript" src="../../static/resources/js/bootstrap.min.js"
+        th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script src="../../static/resources/js/bootstrap-select.min.js"
+        th:src="@{/resources/js/bootstrap-select.min.js}"></script>
+<script src="../../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
+
+</body>
+</html>

@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
- * Handles the creation of new person instances from the 'add person' template
+ * Handles the creation of new person instances from the 'add person' template.
  *
  * @author Rico Bergmann
  */
@@ -93,8 +93,8 @@ public class AddPersonController {
   /**
    * Saves a new person
    *
-   * @param form the filled add person form
-   * @param errors validation errors within the form
+   * @param form form containing the info about the new person
+   * @param errors validation errors for the form
    * @return a redirection to the new person's profile page
    */
   @PostMapping("/persons/add")
@@ -110,6 +110,8 @@ public class AddPersonController {
     if (errors.hasErrors()) {
       success = false;
     } else {
+      // only generate the person if no errors were found otherwise the converter may throw
+      // arbitrary exceptions due to a illegal data in the form
       newPerson = personFormConverter.toEntity(form);
     }
 
@@ -120,14 +122,15 @@ public class AddPersonController {
       success = false;
     }
 
-    // if something did not go as expected, we will cancel adding the person and instead redirect
-    // to the add person form. Depending on the kind of problem, the model has already been filled
-    // for us accordingly
+    // If something did not go as expected, we will cancel adding the person and instead redirect
+    // to the add person form. The model has already been filled according to the kind of error in
+    // this case.
     if (!success) {
+
+      // retain the attributes for post-processing a successful run
       if (!returnAction.isEmpty()) {
         redirAttr.addAttribute("return-action", returnAction);
       }
-
       if (!returnPath.isEmpty()) {
         redirAttr.addAttribute("return-to", returnPath);
       }
@@ -135,8 +138,8 @@ public class AddPersonController {
       return "persons/addPerson";
     }
 
-    newPerson = personRepo.save(newPerson);
     // everything seems fine, finish saving the new person
+    newPerson = personRepo.save(newPerson);
     addToEventsIfNecessary(newPerson, form);
     addToLocalGroupsIfNecessary(newPerson, form);
 
@@ -176,11 +179,10 @@ public class AddPersonController {
     if (!form.isParticipant() || !form.getParticipantForm().hasEvents()) {
       return;
     }
-    form.getParticipantForm().getEvents()
-        .forEach(event -> {
-          participationManager.addParticipant(event, person);
-          eventRepo.save(event);
-        });
+    form.getParticipantForm().getEvents().forEach(event -> {
+      participationManager.addParticipant(event, person);
+      eventRepo.save(event);
+    });
   }
 
   /**
