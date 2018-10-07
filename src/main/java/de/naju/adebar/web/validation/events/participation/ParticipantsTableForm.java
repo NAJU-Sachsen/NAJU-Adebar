@@ -1,10 +1,10 @@
 package de.naju.adebar.web.validation.events.participation;
 
-import de.naju.adebar.web.model.events.ParticipantsTable;
-import de.naju.adebar.web.model.events.ParticipantsTable.ParticipantsTableBuilder;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import de.naju.adebar.web.model.events.participation.table.ParticipantsTable;
+import de.naju.adebar.web.model.events.participation.table.ParticipantsTable.ParticipantsTableBuilder;
 
 /**
  * POJO representation of the data inside the "edit participants table" form.

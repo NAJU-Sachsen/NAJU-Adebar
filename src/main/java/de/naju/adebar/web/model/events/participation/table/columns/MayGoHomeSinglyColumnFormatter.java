@@ -2,7 +2,7 @@ package de.naju.adebar.web.model.events.participation.table.columns;
 
 import de.naju.adebar.model.events.Event;
 import de.naju.adebar.model.persons.Person;
-import de.naju.adebar.web.model.events.ParticipantsTable;
+import de.naju.adebar.web.model.events.participation.table.ParticipantsTable;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;

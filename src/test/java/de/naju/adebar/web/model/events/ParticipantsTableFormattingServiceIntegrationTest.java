@@ -12,6 +12,8 @@ import de.naju.adebar.Application;
 import de.naju.adebar.model.core.Email;
 import de.naju.adebar.model.events.Event;
 import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.web.model.events.participation.table.ParticipantsTable;
+import de.naju.adebar.web.model.events.participation.table.ParticipantsTableFormattingService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)

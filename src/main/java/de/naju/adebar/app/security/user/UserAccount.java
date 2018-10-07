@@ -9,9 +9,9 @@ import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import org.springframework.data.domain.AbstractAggregateRoot;
@@ -37,9 +37,8 @@ public class UserAccount extends AbstractAggregateRoot<UserAccount> implements U
 
   private static final long serialVersionUID = 756690351442752594L;
 
-  @Id
-  @Column(name = "username")
-  private String username;
+  @EmbeddedId
+  private Username username;
 
   @Embedded
   private Password password;
@@ -75,7 +74,7 @@ public class UserAccount extends AbstractAggregateRoot<UserAccount> implements U
    * @param authorities the authorities the person has
    * @param enabled whether the account is enabled
    */
-  public UserAccount(String username, Password password, Person person,
+  public UserAccount(Username username, Password password, Person person,
       List<SimpleGrantedAuthority> authorities, boolean enabled) {
     Object[] params = {username, password, person, authorities};
     Assert.noNullElements(params,
@@ -212,7 +211,7 @@ public class UserAccount extends AbstractAggregateRoot<UserAccount> implements U
 
   @Override
   public String getUsername() {
-    return username;
+    return username.getValue();
   }
 
   /**
@@ -223,7 +222,7 @@ public class UserAccount extends AbstractAggregateRoot<UserAccount> implements U
   @JpaOnly
   private void setUsername(String username) {
     Assert.hasText(username, "User name may not be empty");
-    this.username = username;
+    this.username = Username.of(username);
   }
 
   @Override

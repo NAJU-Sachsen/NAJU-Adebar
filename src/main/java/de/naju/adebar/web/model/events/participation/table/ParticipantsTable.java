@@ -1,4 +1,4 @@
-package de.naju.adebar.web.model.events;
+package de.naju.adebar.web.model.events.participation.table;
 
 import de.naju.adebar.model.events.Event;
 import de.naju.adebar.model.events.ParticipantsList;

@@ -9,7 +9,7 @@ import de.naju.adebar.model.persons.PersonId;
 
 /**
  * Repository to access {@link UserAccount} instances
- * 
+ *
  * @author Rico Bergmann
  *
  */
@@ -18,15 +18,15 @@ public interface UserAccountRepository extends CrudRepository<UserAccount, Strin
   /**
    * Queries for an user account by its username. Basically the same as
    * {@link #findOne(Serializable)}, just for receiving an {@link Optional}
-   * 
+   *
    * @param username the username
    * @return the user account if it exists or an empty optional otherwise
    */
-  Optional<UserAccount> findByUsername(String username);
+  Optional<UserAccount> findByUsername(Username username);
 
   /**
    * Queries for an user account by the person it is associated to.
-   * 
+   *
    * @param id the person's id
    * @return the user account if it exists
    */
@@ -34,7 +34,7 @@ public interface UserAccountRepository extends CrudRepository<UserAccount, Strin
 
   /**
    * Queries for all user accounts with a given authority
-   * 
+   *
    * @param authority the authority
    * @return the accounts
    */

@@ -7,7 +7,7 @@ import org.springframework.util.Assert;
 import de.naju.adebar.model.events.Event;
 import de.naju.adebar.model.events.RegistrationInfo;
 import de.naju.adebar.model.persons.Person;
-import de.naju.adebar.web.model.events.ParticipantsTable;
+import de.naju.adebar.web.model.events.participation.table.ParticipantsTable;
 
 /**
  * Formatter used in the {@link ParticipantsTable} to display additional remarks regarding the

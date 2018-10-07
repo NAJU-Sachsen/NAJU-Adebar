@@ -1,9 +1,5 @@
 package de.naju.adebar.app.security.user;
 
-import de.naju.adebar.app.news.ReleaseNotesPublishedEvent;
-import de.naju.adebar.model.persons.Person;
-import de.naju.adebar.model.persons.PersonId;
-import de.naju.adebar.model.persons.events.PersonDataUpdatedEvent;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -16,6 +12,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import de.naju.adebar.app.news.ReleaseNotesPublishedEvent;
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.model.persons.PersonId;
+import de.naju.adebar.model.persons.events.PersonDataUpdatedEvent;
 
 /**
  * A {@link UserAccountManager} that persists its data in a database
@@ -62,7 +62,7 @@ public class PersistentUserAccountManager implements UserAccountManager {
       authorities.add(Roles.ROLE_USER);
     }
 
-    return accountRepo.save(new UserAccount(userName, pw, person, authorities, true));
+    return accountRepo.save(new UserAccount(Username.of(userName), pw, person, authorities, true));
   }
 
   @Override
