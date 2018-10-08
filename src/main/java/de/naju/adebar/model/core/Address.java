@@ -14,10 +14,6 @@ import de.naju.adebar.documentation.ddd.ValueObject;
  *
  * @author Rico Bergmann
  */
-/**
- * @author Rico Bergmann
- *
- */
 @ValueObject
 @Embeddable
 public class Address {

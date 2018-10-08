@@ -40,16 +40,34 @@ public class PersistentUserAccountManager implements UserAccountManager {
     this.passwordEncoder = passwordEncoder;
   }
 
+  /*
+   * (non-Javadoc)
+   *
+   * @see de.naju.adebar.app.security.user.UserAccountManager#createFor(java.lang.String,
+   * java.lang.String, de.naju.adebar.model.persons.Person)
+   */
   @Override
   public UserAccount createFor(String userName, String password, Person person) {
     return createFor(userName, password, person, false);
   }
 
+  /*
+   * (non-Javadoc)
+   *
+   * @see de.naju.adebar.app.security.user.UserAccountManager#createFor(java.lang.String,
+   * java.lang.String, de.naju.adebar.model.persons.Person, boolean)
+   */
   @Override
   public UserAccount createFor(String userName, String password, Person person, boolean encrypted) {
     return createFor(userName, password, person, Collections.emptyList(), encrypted);
   }
 
+  /*
+   * (non-Javadoc)
+   *
+   * @see de.naju.adebar.app.security.user.UserAccountManager#createFor(java.lang.String,
+   * java.lang.String, de.naju.adebar.model.persons.Person, java.util.List, boolean)
+   */
   @Override
   public UserAccount createFor(String userName, String password, Person person,
       List<SimpleGrantedAuthority> authorities, boolean encrypted) {
@@ -65,41 +83,96 @@ public class PersistentUserAccountManager implements UserAccountManager {
     return accountRepo.save(new UserAccount(Username.of(userName), pw, person, authorities, true));
   }
 
+  /*
+   * (non-Javadoc)
+   *
+   * @see de.naju.adebar.app.security.user.UserAccountManager#find(de.naju.adebar.app.security.user.
+   * Username)
+   */
   @Override
-  public Optional<UserAccount> find(String userName) {
-    return accountRepo.findById(userName);
+  public Optional<UserAccount> find(Username userName) {
+    return accountRepo.findByUsername(userName);
   }
 
+
+  /*
+   * (non-Javadoc)
+   *
+   * @see de.naju.adebar.app.security.user.UserAccountManager#find(java.lang.String)
+   */
+  @Override
+  public Optional<UserAccount> find(String username) {
+    return accountRepo.findByUsername(Username.of(username));
+  }
+
+  /*
+   * (non-Javadoc)
+   *
+   * @see
+   * de.naju.adebar.app.security.user.UserAccountManager#find(de.naju.adebar.model.persons.PersonId)
+   */
   @Override
   public Optional<UserAccount> find(PersonId personId) {
     return accountRepo.findByAssociatedPerson(personId);
   }
 
+  /*
+   * (non-Javadoc)
+   *
+   * @see
+   * de.naju.adebar.app.security.user.UserAccountManager#find(de.naju.adebar.model.persons.Person)
+   */
   @Override
   public Optional<UserAccount> find(Person person) {
     return find(person.getId());
   }
 
+  /*
+   * (non-Javadoc)
+   *
+   * @see
+   * de.naju.adebar.app.security.user.UserAccountManager#deleteAccount(de.naju.adebar.app.security.
+   * user.Username)
+   */
   @Override
-  public void deleteAccount(String username) {
-    if (!usernameExists(username)) {
+  public void deleteAccount(Username username) {
+    if (!usernameExists(username.getValue())) {
       throw new UsernameNotFoundException(USERNAME_NOT_FOUND_MSG + username);
     }
-    accountRepo.deleteById(username);
+    accountRepo.deleteByUsername(username);
   }
 
+  /*
+   * (non-Javadoc)
+   *
+   * @see de.naju.adebar.app.security.user.UserAccountManager#usernameExists(java.lang.String)
+   */
   @Override
   public boolean usernameExists(String username) {
-    return accountRepo.existsById(username);
+    return accountRepo.existsByUsername(Username.of(username));
   }
 
+  /*
+   * (non-Javadoc)
+   *
+   * @see
+   * de.naju.adebar.app.security.user.UserAccountManager#hasUserAccount(de.naju.adebar.model.persons
+   * .Person)
+   */
   @Override
   public boolean hasUserAccount(Person person) {
     return accountRepo.findByAssociatedPerson(person.getId()).isPresent();
   }
 
+  /*
+   * (non-Javadoc)
+   *
+   * @see
+   * de.naju.adebar.app.security.user.UserAccountManager#updatePassword(de.naju.adebar.app.security.
+   * user.Username, java.lang.String, java.lang.String, boolean)
+   */
   @Override
-  public UserAccount updatePassword(String username, String currentPassword, String newPassword,
+  public UserAccount updatePassword(Username username, String currentPassword, String newPassword,
       boolean encrypted) {
     UserAccount account = find(username)
         .orElseThrow(() -> new UsernameNotFoundException(USERNAME_NOT_FOUND_MSG + username));
@@ -111,15 +184,28 @@ public class PersistentUserAccountManager implements UserAccountManager {
     return accountRepo.save(account.updatePassword(generatePassword(newPassword, encrypted)));
   }
 
+  /*
+   * (non-Javadoc)
+   *
+   * @see
+   * de.naju.adebar.app.security.user.UserAccountManager#resetPassword(de.naju.adebar.app.security.
+   * user.Username, java.lang.String, boolean)
+   */
   @Override
   @PreAuthorize("hasRole('ROLE_ADMIN')")
-  public UserAccount resetPassword(String username, String newPassword, boolean encrypted) {
+  public UserAccount resetPassword(Username username, String newPassword, boolean encrypted) {
     UserAccount account = find(username)
         .orElseThrow(() -> new UsernameNotFoundException(USERNAME_NOT_FOUND_MSG + username));
 
     return accountRepo.save(account.updatePassword(generatePassword(newPassword, encrypted)));
   }
 
+  /*
+   * (non-Javadoc)
+   *
+   * @see de.naju.adebar.app.security.user.UserAccountManager#updateAuthorities(de.naju.adebar.app.
+   * security.user.UserAccount, java.util.List)
+   */
   @Override
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   public UserAccount updateAuthorities(UserAccount account,
@@ -132,12 +218,26 @@ public class PersistentUserAccountManager implements UserAccountManager {
     return accountRepo.save(account.updateAuthorities(newAuthorities));
   }
 
+  /*
+   * (non-Javadoc)
+   *
+   * @see
+   * de.naju.adebar.app.security.user.UserAccountManager#updateUserAccountIfNecessary(de.naju.adebar
+   * .model.persons.events.PersonDataUpdatedEvent)
+   */
   @Override
   @EventListener
   public void updateUserAccountIfNecessary(PersonDataUpdatedEvent event) {
     find(event.getEntity()).ifPresent(account -> updateUserAccount(account, event.getEntity()));
   }
 
+  /*
+   * (non-Javadoc)
+   *
+   * @see
+   * de.naju.adebar.app.security.user.UserAccountManager#notifyAboutNewReleaseNotes(de.naju.adebar.
+   * app.news.ReleaseNotesPublishedEvent)
+   */
   @Override
   @EventListener
   public void notifyAboutNewReleaseNotes(ReleaseNotesPublishedEvent event) {
@@ -146,6 +246,12 @@ public class PersistentUserAccountManager implements UserAccountManager {
     accountRepo.saveAll(accounts);
   }
 
+  /*
+   * (non-Javadoc)
+   *
+   * @see de.naju.adebar.app.security.user.UserAccountManager#readReleaseNotes(de.naju.adebar.app.
+   * security.user.UserAccount)
+   */
   @Override
   public void readReleaseNotes(UserAccount account) {
     account.readReleaseNotes();

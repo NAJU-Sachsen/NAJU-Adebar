@@ -11,7 +11,7 @@ import de.naju.adebar.model.persons.events.PersonDataUpdatedEvent;
 
 /**
  * Service to take care of the {@link UserAccountManager} lifecycle
- * 
+ *
  * @author Rico Bergmann
  *
  */
@@ -19,7 +19,7 @@ public interface UserAccountManager {
 
   /**
    * Creates a new user account for the given person
-   * 
+   *
    * @param username the person's username
    * @param password the person's password
    * @param person the person the account is created for
@@ -29,7 +29,7 @@ public interface UserAccountManager {
 
   /**
    * Creates a new user account for the given person
-   * 
+   *
    * @param username the person's username
    * @param password the person's password
    * @param person the person the account is created for
@@ -40,7 +40,7 @@ public interface UserAccountManager {
 
   /**
    * Creates a new user account for the given person
-   * 
+   *
    * @param username the person's username
    * @param password the person's password
    * @param person the person the account is created for
@@ -53,7 +53,15 @@ public interface UserAccountManager {
 
   /**
    * Searches for a user account
-   * 
+   *
+   * @param username the user name
+   * @return the account or an empty {@link Optional}
+   */
+  Optional<UserAccount> find(Username username);
+
+  /**
+   * Searches for a user account
+   *
    * @param username the user name
    * @return the account or an empty {@link Optional}
    */
@@ -61,7 +69,7 @@ public interface UserAccountManager {
 
   /**
    * Searches for a user account
-   * 
+   *
    * @param personId the Id of the person to which the account belongs
    * @return the account if it exists
    */
@@ -69,7 +77,7 @@ public interface UserAccountManager {
 
   /**
    * Searches for a user account
-   * 
+   *
    * @param person the person to who owns the account
    * @return the account if it exists
    */
@@ -77,14 +85,14 @@ public interface UserAccountManager {
 
   /**
    * Removes a user account
-   * 
+   *
    * @param username the user name of the account
    */
-  void deleteAccount(String username);
+  void deleteAccount(Username username);
 
   /**
    * Searches for a given username
-   * 
+   *
    * @param username the username
    * @return whether the username exists
    */
@@ -92,7 +100,7 @@ public interface UserAccountManager {
 
   /**
    * Checks if a person has an user account
-   * 
+   *
    * @param person the person
    * @return whether the person has a user account
    */
@@ -100,30 +108,30 @@ public interface UserAccountManager {
 
   /**
    * Replaces the a user account's current password
-   * 
+   *
    * @param username the username of the account
    * @param currentPassword the current password (encrypted!)
    * @param newPassword the new password
    * @param encrypted whether the new password is already encrypted
    * @return the updated user account
    */
-  UserAccount updatePassword(String username, String currentPassword, String newPassword,
+  UserAccount updatePassword(Username username, String currentPassword, String newPassword,
       boolean encrypted);
 
   /**
    * Resets a user account's current password. This may only be done by the administrator!
-   * 
+   *
    * @param username the username of the account
    * @param newPassword the new password
    * @param encrypted whether the new password is already encrypted
    * @return the updated user account
    */
   @PreAuthorize("hasRole('ROLE_ADMIN')")
-  UserAccount resetPassword(String username, String newPassword, boolean encrypted);
+  UserAccount resetPassword(Username username, String newPassword, boolean encrypted);
 
   /**
    * Updates the roles a user account has. This may only be done by the administrator!
-   * 
+   *
    * @param account the account
    * @param newAuthorities the new authorities
    * @return the updated authorities
@@ -132,21 +140,21 @@ public interface UserAccountManager {
 
   /**
    * Adapts the user account of a person whenever the person's data has changed
-   * 
+   *
    * @param event the update event for a person. The person may or may not have an user account.
    */
   void updateUserAccountIfNecessary(PersonDataUpdatedEvent event);
 
   /**
    * Marks all user accounts to have not read the latest release notes
-   * 
+   *
    * @param event the event for the new release notes
    */
   void notifyAboutNewReleaseNotes(ReleaseNotesPublishedEvent event);
 
   /**
    * Marks an user account to have read the latest release notes
-   * 
+   *
    * @param account the user account
    */
   void readReleaseNotes(UserAccount account);

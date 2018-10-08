@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import de.naju.adebar.app.security.user.UserAccount;
 import de.naju.adebar.app.security.user.UserAccountManager;
 import de.naju.adebar.app.security.user.UserAccountRepository;
+import de.naju.adebar.app.security.user.Username;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.persons.PersonManager;
 import de.naju.adebar.web.validation.accounts.CreateAccountForm;
@@ -76,7 +77,7 @@ public class AccountController {
   }
 
   @RequestMapping("/accounts/reset-password")
-  public String resetPassword(@RequestParam("account") String username,
+  public String resetPassword(@RequestParam("account") Username username,
       @RequestParam("password") String password) {
     accountManager.resetPassword(username, password, false);
 
@@ -84,7 +85,7 @@ public class AccountController {
   }
 
   @RequestMapping("/accounts/delete")
-  public String deleteAccount(@RequestParam("account") String username) {
+  public String deleteAccount(@RequestParam("account") Username username) {
     accountManager.deleteAccount(username);
     return REDIRECT_ACCOUNTS;
   }

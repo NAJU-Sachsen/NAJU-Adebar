@@ -8,6 +8,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import de.naju.adebar.app.security.user.UserAccountManager;
+import de.naju.adebar.app.security.user.Username;
 
 @Controller
 public class SettingsController {
@@ -29,7 +30,11 @@ public class SettingsController {
   @RequestMapping("/settings/password/update")
   public String updatePassword(@RequestParam("current-password") String currentPassword,
       @RequestParam("new-password") String newPassword, Principal principal) {
-    accountManager.updatePassword(principal.getName(), currentPassword, newPassword, false);
+    accountManager.updatePassword( //
+        Username.of(principal.getName()), //
+        currentPassword, //
+        newPassword, //
+        false);
     return "redirect:/settings";
   }
 
