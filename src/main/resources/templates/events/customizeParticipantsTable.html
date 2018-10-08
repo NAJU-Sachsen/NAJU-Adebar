@@ -79,17 +79,40 @@
           <h2 class="col-md-5 category-title" id="participants">
             Teilnehmende
           </h2>
-          
+
           <div class="col-md-7">
-            
+
             <!-- action menu -->
             <div class="pull-right category-menu-content">
-              <button type="button" class="btn btn-default btn-sm margin-right-lg"
-                      data-toggle="modal"
-                      data-target="#column-selection-dialog">
-                <span class="glyphicon glyphicon-pencil"></span> Anpassen
-              </button>
-              
+              <div class="btn-group btn-group-sm margin-right-lg">
+                <button type="button" class="btn btn-default"
+                        data-toggle="modal"
+                        data-target="#column-selection-dialog">
+                  <span class="glyphicon glyphicon-pencil"></span> Anpassen
+                </button>
+                <button type="button" class="btn btn-default"
+                        data-toggle="modal"
+                        data-target="#save-as-template-dialog" th:unless="${fromTemplate}">
+                  <span class="glyphicon glyphicon-save"></span> Speichern
+                </button>
+                <div class="btn-group btn-group-sm" th:if="${templates} and not ${templates.empty}">
+                  <button type="button" class="btn btn-default dropdown-toggle"
+                          data-toggle="dropdown">
+                    <span class="glyphicon glyphicon-folder-open"></span> Laden
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li th:each="template : ${templates}">
+                      <a href="#"
+                         th:href="@{/events/{eid}/participants/table/template(eid=${event.id}, template=${template.name})}"
+                         th:inline="text">
+                        <span class="glyphicon glyphicon-file"></span>
+                        [[${template.name}]]
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
               <div class="btn-group btn-group-sm">
                 <button type="button" class="btn btn-default">
                   <span class="glyphicon glyphicon-print"></span> Drucken
@@ -98,11 +121,229 @@
                   <span class="glyphicon glyphicon-export"></span> Exportieren
                 </button>
               </div>
-              
+
             </div>
 
           </div>
-          
+
+        </div>
+
+        <!-- initial column selection dialog -->
+        <div class="modal fade" id="initial-column-selection-dialog">
+          <div class="modal-dialog"
+               th:classappend="${templates != null and not templates.empty} ? 'modal-lg'">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3 class="modal-title">Spalten auswählen</h3>
+              </div>
+
+              <div class="modal-body">
+
+                <div class="container-fluid">
+
+                  <div class="col-md-6"
+                       th:class="${templates != null and not templates.empty} ? 'col-md-6' : 'col-md-12'">
+
+                    <h4>Neue Auswahl:</h4>
+
+                    <form method="post" id="initial-column-selection"
+                          th:object="${participantsTableForm}"
+                          th:action="@{/events/{id}/participants/table(id=${event.id})}">
+
+                      <input type="hidden" name="columnSelection" value="false"/>
+
+                      <h5 class="action-cursor margin-top-lg" data-toggle="collapse"
+                          data-target="#initial-column-selection-general">
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                        Allgemeines
+                      </h5>
+                      <div id="initial-column-selection-general" class="collapse">
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" th:field="*{name}"/> Name der Teilnehmenden
+                          </label>
+                        </div>
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" th:field="*{email}"/> E-Mail Adressen
+                          </label>
+                        </div>
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" th:field="*{phone}"/> Telefonnummern
+                          </label>
+                        </div>
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" th:field="*{address}"/> vollständige Adresse
+                          </label>
+                        </div>
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" th:field="*{city}"/> Wohnort
+                          </label>
+                        </div>
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" th:field="*{dateOfBirth}"/> Geburtsdatum
+                          </label>
+                        </div>
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" th:field="*{age}"/> Alter
+                            <small>im Camp</small>
+                          </label>
+                        </div>
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" th:field="*{eatingHabits}"/> Ernährung
+                          </label>
+                        </div>
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" th:field="*{healthImpairments}"/> Allergien, etc.
+                          </label>
+                        </div>
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" th:field="*{nabu}"/> NABU-Mitgliedschaft
+                          </label>
+                        </div>
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" th:field="*{personRemarks}"/> Bemerkungen
+                            <small>(zur Person)</small>
+                          </label>
+                        </div>
+                        <hr/>
+                      </div>
+
+                      <h5 class="action-cursor margin-top-lg" data-toggle="collapse"
+                          data-target="#initial-column-selection-parents">
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                        Daten der Eltern
+                      </h5>
+                      <div id="initial-column-selection-parents" class="collapse">
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" th:field="*{parents}"/> Namen der Eltern
+                          </label>
+                        </div>
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" th:field="*{parentsPrivatePhone}"/> private
+                            Telefonnummern
+                          </label>
+                        </div>
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" th:field="*{parentsLandlinePhone}"/>
+                            Telefonnummern
+                            <small>(Festnetz)</small>
+                          </label>
+                        </div>
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" th:field="*{parentsWorkPhone}"/> Telefonnummern
+                            <small>(Arbeit)</small>
+                          </label>
+                        </div>
+                        <hr/>
+                      </div>
+
+                      <h5 class="action-cursor margin-top-lg" data-toggle="collapse"
+                          data-target="#initial-column-selection-participation">
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                        Daten zur Teilnahme
+                        <small>an genau dieser Veranstaltung</small>
+                      </h5>
+                      <div id="initial-column-selection-participation" class="collapse">
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" th:field="*{registrationDate}"/> Datum der
+                            Anmeldung
+                          </label>
+                        </div>
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" th:field="*{registrationFormSent}"/>
+                            Anmeldeformular
+                            gesendet?
+                          </label>
+                        </div>
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" th:field="*{registrationFormFilled}"/>
+                            Anmeldeformular
+                            ausgefüllt?
+                          </label>
+                        </div>
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" th:field="*{feePayed}"/> Teilnahmebeitrag
+                            bezahlt?
+                          </label>
+                        </div>
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" th:field="*{arrival}"/> Anreise
+                          </label>
+                        </div>
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" th:field="*{departure}"/> Abreise
+                          </label>
+                        </div>
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" th:field="*{participationTime}"/>
+                            Teilnahmezeitraum
+                          </label>
+                        </div>
+                        <div class="checkbox">
+                          <label>
+                            <input type="checkbox" th:field="*{participationRemarks}"/> Bemerkungen
+                            <small>zur Teilnahme</small>
+                          </label>
+                        </div>
+                      </div>
+
+
+                    </form>
+
+                  </div>
+
+                  <div class="col-md-6" th:if="${templates} and not ${templates.empty}">
+
+                    <h4>Von Vorlage laden:</h4>
+
+                    <div class="list-group">
+                      <a href="#" class="list-group-item" th:each="template : ${templates}"
+                         th:href="@{/events/{eid}/participants/table/template(eid=${event.id}, template=${template.name})}"
+                         th:text="${template.name}">
+                      </a>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                  Abbrechen
+                </button>
+                <button type="submit" form="initial-column-selection" class="btn btn-primary">
+                  Tabelle anzeigen
+                </button>
+              </div>
+
+            </div>
+
+          </div>
         </div>
 
         <!-- column selection dialog -->
@@ -120,137 +361,160 @@
 
                 <input type="hidden" name="columnSelection" value="false"/>
 
-                <h4>Allgemeines</h4>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" th:field="*{name}"/> Name der Teilnehmenden
-                  </label>
+                <h4 class="action-cursor margin-top-lg" data-toggle="collapse"
+                    data-target="#column-selection-general">
+                  <span class="glyphicon glyphicon-chevron-right"></span>
+                  Allgemeines
+                </h4>
+                <div id="column-selection-general" class="collapse">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" th:field="*{name}"/> Name der Teilnehmenden
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" th:field="*{email}"/> E-Mail Adressen
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" th:field="*{phone}"/> Telefonnummern
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" th:field="*{address}"/> vollständige Adresse
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" th:field="*{city}"/> Wohnort
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" th:field="*{dateOfBirth}"/> Geburtsdatum
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" th:field="*{age}"/> Alter
+                      <small>im Camp</small>
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" th:field="*{eatingHabits}"/> Ernährung
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" th:field="*{healthImpairments}"/> Allergien, etc.
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" th:field="*{nabu}"/> NABU-Mitgliedschaft
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" th:field="*{personRemarks}"/> Bemerkungen
+                      <small>(zur Person)</small>
+                    </label>
+                  </div>
+                  <hr/>
                 </div>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" th:field="*{email}"/> E-Mail Adressen
-                  </label>
-                </div>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" th:field="*{phone}"/> Telefonnummern
-                  </label>
-                </div>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" th:field="*{address}"/> vollständige Adresse
-                  </label>
-                </div>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" th:field="*{city}"/> Wohnort
-                  </label>
-                </div>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" th:field="*{dateOfBirth}"/> Geburtsdatum
-                  </label>
-                </div>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" th:field="*{age}"/> Alter
-                    <small>im Camp</small>
-                  </label>
-                </div>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" th:field="*{eatingHabits}"/> Ernährung
-                  </label>
-                </div>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" th:field="*{healthImpairments}"/> Allergien, etc.
-                  </label>
-                </div>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" th:field="*{nabu}"/> NABU-Mitgliedschaft
-                  </label>
-                </div>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" th:field="*{personRemarks}"/> Bemerkungen
-                    <small>(zur Person)</small>
-                  </label>
-                </div>
-                <hr/>
 
-                <h4>Daten der Eltern</h4>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" th:field="*{parents}"/> Namen der Eltern
-                  </label>
+                <h4 class="action-cursor margin-top-lg" data-toggle="collapse"
+                    data-target="#column-selection-parents">
+                  <span class="glyphicon glyphicon-chevron-right"></span>
+                  Daten der Eltern
+                </h4>
+                <div id="column-selection-parents" class="collapse">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" th:field="*{parents}"/> Namen der Eltern
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" th:field="*{parentsPrivatePhone}"/> private
+                      Telefonnummern
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" th:field="*{parentsLandlinePhone}"/>
+                      Telefonnummern
+                      <small>(Festnetz)</small>
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" th:field="*{parentsWorkPhone}"/> Telefonnummern
+                      <small>(Arbeit)</small>
+                    </label>
+                  </div>
+                  <hr/>
                 </div>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" th:field="*{parentsPrivatePhone}"/> private
-                    Telefonnummern
-                  </label>
-                </div>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" th:field="*{parentsLandlinePhone}"/> Telefonnummern
-                    <small>(Festnetz)</small>
-                  </label>
-                </div>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" th:field="*{parentsWorkPhone}"/> Telefonnummern
-                    <small>(Arbeit)</small>
-                  </label>
-                </div>
-                <hr/>
 
-                <h4>Daten zur Teilnahme
+                <h4 class="action-cursor margin-top-lg" data-toggle="collapse"
+                    data-target="#column-selection-participation">
+                  <span class="glyphicon glyphicon-chevron-right"></span>
+                  Daten zur Teilnahme
                   <small>an genau dieser Veranstaltung</small>
                 </h4>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" th:field="*{registrationDate}"/> Datum der Anmeldung
-                  </label>
-                </div>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" th:field="*{registrationFormSent}"/> Anmeldeformular
-                    gesendet?
-                  </label>
-                </div>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" th:field="*{registrationFormFilled}"/> Anmeldeformular
-                    ausgefüllt?
-                  </label>
-                </div>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" th:field="*{feePayed}"/> Teilnahmebeitrag bezahlt?
-                  </label>
-                </div>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" th:field="*{arrival}"/> Anreise
-                  </label>
-                </div>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" th:field="*{departure}"/> Abreise
-                  </label>
-                </div>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" th:field="*{participationTime}"/> Teilnahmezeitraum
-                  </label>
-                </div>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" th:field="*{participationRemarks}"/> Bemerkungen
-                    <small>zur Teilnahme</small>
-                  </label>
+                <div id="column-selection-participation" class="collapse">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" th:field="*{registrationDate}"/> Datum der
+                      Anmeldung
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" th:field="*{registrationFormSent}"/>
+                      Anmeldeformular
+                      gesendet?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" th:field="*{registrationFormFilled}"/>
+                      Anmeldeformular
+                      ausgefüllt?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" th:field="*{feePayed}"/> Teilnahmebeitrag
+                      bezahlt?
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" th:field="*{arrival}"/> Anreise
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" th:field="*{departure}"/> Abreise
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" th:field="*{participationTime}"/>
+                      Teilnahmezeitraum
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" th:field="*{participationRemarks}"/> Bemerkungen
+                      <small>zur Teilnahme</small>
+                    </label>
+                  </div>
                 </div>
 
 
@@ -271,12 +535,72 @@
           </div>
         </div>
 
+        <!-- save as template dialog -->
+        <div class="modal fade" id="save-as-template-dialog">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3 class="modal-title">Als Vorlage speichern</h3>
+              </div>
+
+              <form method="post" id="save-template" class="modal-body"
+                    th:object="${participantsTableForm}"
+                    th:action="@{/events/{id}/participants/table/save(id=${event.id})}">
+
+                <input type="hidden" th:field="*{name}"/>
+                <input type="hidden" th:field="*{email}"/>
+                <input type="hidden" th:field="*{phone}"/>
+                <input type="hidden" th:field="*{city}"/>
+                <input type="hidden" th:field="*{dateOfBirth}"/>
+                <input type="hidden" th:field="*{age}"/>
+                <input type="hidden" th:field="*{eatingHabits}"/>
+                <input type="hidden" th:field="*{healthImpairments}"/>
+                <input type="hidden" th:field="*{nabu}"/>
+                <input type="hidden" th:field="*{personRemarks}"/>
+                <input type="hidden" th:field="*{parents}"/>
+                <input type="hidden" th:field="*{parentsPrivatePhone}"/>
+                <input type="hidden" th:field="*{parentsLandlinePhone}"/>
+                <input type="hidden" th:field="*{parentsWorkPhone}"/>
+                <input type="hidden" th:field="*{registrationDate}"/>
+                <input type="hidden" th:field="*{registrationFormSent}"/>
+                <input type="hidden" th:field="*{registrationFormFilled}"/>
+                <input type="hidden" th:field="*{feePayed}"/>
+                <input type="hidden" th:field="*{arrival}"/>
+                <input type="hidden" th:field="*{departure}"/>
+                <input type="hidden" th:field="*{participationTime}"/>
+                <input type="hidden" th:field="*{participationRemarks}"/>
+
+                <div class="form-inline">
+                  <div class="form-group">
+                    <label for="template-name" class="control-label">Name der Vorlage:</label>
+                    <input type="text" name="templateName" class="form-control" id="template-name"/>
+                  </div>
+                </div>
+
+              </form>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                  Abbrechen
+                </button>
+                <button type="submit" form="save-template" class="btn btn-primary">
+                  Speichern
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- the table -->
         <div class="table-responsive" th:if="${showTable}">
 
           <table class="table table-striped table-hover" id="participants-table">
             <thead>
             <tr>
-              <th th:each="col : ${participantsTable.columns}" th:if="${formattingService.formatterIsApplicable(event, col)}" th:text="#{|col.${col}|}"></th>
+              <th th:each="col : ${participantsTable.columns}"
+                  th:if="${formattingService.formatterIsApplicable(event, col)}"
+                  th:text="#{|col.${col}|}"></th>
             </tr>
             </thead>
             <tbody>
@@ -289,6 +613,19 @@
 
 
           </table>
+
+        </div>
+
+        <div th:unless="${showTable}">
+          Keine Spalten ausgewählt.
+
+          <div>
+            <button type="button" class="btn btn-link no-padding" data-toggle="modal"
+                    data-target="#column-selection-dialog">
+              <span class="glyphicon glyphicon-arrow-right"></span>
+              Jetzt auswählen
+            </button>
+          </div>
 
         </div>
 

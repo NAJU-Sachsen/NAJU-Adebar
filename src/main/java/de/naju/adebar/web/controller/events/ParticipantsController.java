@@ -11,11 +11,8 @@ import de.naju.adebar.model.events.rooms.scheduling.ParticipationTime;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.util.Assert2;
 import de.naju.adebar.web.model.events.participation.ParticipationReport;
-import de.naju.adebar.web.model.events.participation.table.ParticipantsTable;
-import de.naju.adebar.web.model.events.participation.table.ParticipantsTableFormattingService;
 import de.naju.adebar.web.validation.events.participation.AddParticipantsForm;
 import de.naju.adebar.web.validation.events.participation.AddParticipantsForm.AddParticipantForm;
-import de.naju.adebar.web.validation.events.participation.ParticipantsTableForm;
 import de.naju.adebar.web.validation.events.participation.ReservationForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +39,7 @@ public class ParticipantsController {
   private final ParticipationManager participationManager;
   private final PersonSearchServer searchServer;
   private final EventDataProcessingService eventDataProcessingService;
-  private final ParticipantsTableFormattingService participantsTableFormattingService;
+
 
   /**
    * Full constructor. No parameter may be {@code null}.
@@ -52,18 +49,14 @@ public class ParticipantsController {
    * @param searchServer service to search for persons based on queries
    * @param eventDataProcessingService service to conveniently extract data from {@link Event
    *     Events}
-   * @param participantsTableFormattingService service to render the contents of the
-   *     participants table
    */
   public ParticipantsController(ParticipationManager participationManager,
-      PersonSearchServer searchServer, EventDataProcessingService eventDataProcessingService,
-      ParticipantsTableFormattingService participantsTableFormattingService) {
+      PersonSearchServer searchServer, EventDataProcessingService eventDataProcessingService) {
     Assert2.noNullArguments("No argument may be null", participationManager, searchServer,
-        eventDataProcessingService, participantsTableFormattingService);
+        eventDataProcessingService);
     this.participationManager = participationManager;
     this.searchServer = searchServer;
     this.eventDataProcessingService = eventDataProcessingService;
-    this.participantsTableFormattingService = participantsTableFormattingService;
   }
 
   /**
@@ -91,56 +84,6 @@ public class ParticipantsController {
     if (event.getParticipantsList().hasWaitingList()) {
       model.addAttribute("applyWaitingListEntryForm", new AddParticipantForm(event));
     }
-
-    return "events/eventDetails";
-  }
-
-  /**
-   * Renders the view to customize the columns in the participants table.
-   *
-   * @param event the event whose participants table should be edited
-   * @param columnSelection whether the column selection dialog should be shown
-   * @param model data model to use for the template
-   * @return the event details template. It will include the appropriate fragments.
-   */
-  @GetMapping("/events/{id}/participants/table")
-  public String showCustomizeParticipantsTable(@PathVariable("id") Event event,
-      @RequestParam(name = "columnSelection", defaultValue = "true") boolean columnSelection,
-      Model model) {
-
-    model.addAttribute("tab", "participantsTable");
-    model.addAttribute("showTable", false);
-    model.addAttribute("event", event);
-    model.addAttribute("processingService", eventDataProcessingService);
-
-    if (!model.containsAttribute("participantsTableForm")) {
-      model.addAttribute("participantsTableForm", new ParticipantsTableForm());
-    }
-
-    return "events/eventDetails";
-  }
-
-  /**
-   * Adapts the participants table.
-   *
-   * @param event the event whose participants table will be edited
-   * @param form form containing which columns should be shown
-   * @param model data model to for the resulting template
-   * @return the event details template. It will include the appropriate fragments.
-   */
-  @PostMapping("/events/{id}/participants/table")
-  public String customizeParticipantsTable(@PathVariable("id") Event event,
-      @ModelAttribute("participantsTable") ParticipantsTableForm form, Model model) {
-
-    ParticipantsTable table = form.toParticipantsTable().forEvent(event);
-    model.addAttribute("participantsTable", table);
-    model.addAttribute("participantsTableForm", form);
-    model.addAttribute("formattingService", participantsTableFormattingService);
-
-    model.addAttribute("tab", "participantsTable");
-    model.addAttribute("showTable", true);
-    model.addAttribute("event", event);
-    model.addAttribute("processingService", eventDataProcessingService);
 
     return "events/eventDetails";
   }
@@ -175,10 +118,9 @@ public class ParticipantsController {
 
   // TODO rework the 'add participant' workflow to make it less itchy
   /*
-    Right now the whole workflow is a bit hacky, maybe a framework such as Spring Webflow may help
-    here.
-    Hacky in this case means an unintuitive behaviour and ugly design of the AddParticipantsForm
-    as well as a complicated display in the template.
+   * Right now the whole workflow is a bit hacky, maybe a framework such as Spring Webflow may help
+   * here. Hacky in this case means an unintuitive behaviour and ugly design of the
+   * AddParticipantsForm as well as a complicated display in the template.
    */
 
   /**

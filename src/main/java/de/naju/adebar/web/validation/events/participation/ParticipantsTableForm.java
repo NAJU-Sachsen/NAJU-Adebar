@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import de.naju.adebar.web.model.events.participation.table.ParticipantsTable;
-import de.naju.adebar.web.model.events.participation.table.ParticipantsTable.ParticipantsTableBuilder;
+import de.naju.adebar.web.model.events.participation.table.ParticipantsTableBuilder;
 
 /**
  * POJO representation of the data inside the "edit participants table" form.

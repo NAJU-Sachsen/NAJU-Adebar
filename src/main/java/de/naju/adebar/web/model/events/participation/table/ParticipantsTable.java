@@ -148,11 +148,10 @@ public class ParticipantsTable {
   /**
    * Collection of all available columns. The list may not be modified.
    */
-  public static final List<String> ALL_COLUMNS = Collections
-      .unmodifiableList(Arrays.asList(COLUMN_NAME, COLUMN_EMAIL,
-          COLUMN_PHONE, COLUMN_ADDRESS, COLUMN_CITY, COLUMN_DATE_OF_BIRTH, COLUMN_AGE,
-          COLUMN_EATING_HABIT, COLUMN_HEALTH_IMPAIRMENTS, COLUMN_NABU_MEMBERSHIP,
-          COLUMN_PERSON_REMARKS,
+  public static final List<String> ALL_COLUMNS =
+      Collections.unmodifiableList(Arrays.asList(COLUMN_NAME, COLUMN_EMAIL, COLUMN_PHONE,
+          COLUMN_ADDRESS, COLUMN_CITY, COLUMN_DATE_OF_BIRTH, COLUMN_AGE, COLUMN_EATING_HABIT,
+          COLUMN_HEALTH_IMPAIRMENTS, COLUMN_NABU_MEMBERSHIP, COLUMN_PERSON_REMARKS,
           COLUMN_PARENTS_NAME, COLUMN_PARENTS_PRIVATE_PHONE, COLUMN_PARENTS_LANDLINE_PHONE,
           COLUMN_PARENTS_WORK_PHONE, COLUMN_REGISTRATION_DATE, COLUMN_REGISTRATION_FORM_SENT,
           COLUMN_REGISTRATION_FORM_FILLED, COLUMN_PARTICIPATION_FEE_PAYED, COLUMN_ARRIVAL,
@@ -168,7 +167,7 @@ public class ParticipantsTable {
    * It will contain the following columns:
    * <ul>
    * <li>the participants' names</li>
-   * <li>the participants' ages </li>
+   * <li>the participants' ages</li>
    * <li>the selected arrival options</li>
    * <li>whether the participants received the registration form</li>
    * <li>whether the participants signed the registration form already</li>
@@ -212,9 +211,10 @@ public class ParticipantsTable {
    *     code.
    * @see #ALL_COLUMNS
    */
-  private ParticipantsTable(Event event, List<String> columns) {
+  ParticipantsTable(Event event, List<String> columns) {
     Assert.notNull(event, "Event may not be null");
     for (String col : columns) {
+      // this will check for null cols as well
       Assert.isTrue(ALL_COLUMNS.contains(col), "Unknown column: " + col);
     }
     this.event = event;
@@ -243,41 +243,9 @@ public class ParticipantsTable {
     return participants.getParticipantsList();
   }
 
-  /**
-   * Builder to fluently create new {@link ParticipantsTable} instances.
-   * <p>
-   * A builder will be initialized with the columns that should form the final table and may be
-   * reused after the actual table was created. I.e. the selected columns will remain fixed and a
-   * table for another event may be created.
-   */
-  public static class ParticipantsTableBuilder {
-
-    private List<String> selectedColumns;
-
-    /**
-     * Full constructor.
-     *
-     * @param selectedColumns the columns that should be part of the final table
-     */
-    private ParticipantsTableBuilder(List<String> selectedColumns) {
-      this.selectedColumns = selectedColumns;
-    }
-
-    /**
-     * Creates the table for a specific event.
-     */
-    public ParticipantsTable forEvent(Event event) {
-      return new ParticipantsTable(event, selectedColumns);
-    }
-
-  }
-
   @Override
   public String toString() {
-    return "ParticipantsTable [" +
-        "event=" + event +
-        ", participants=" + participants +
-        ", selectedColumns=" + selectedColumns +
-        ']';
+    return "ParticipantsTable [" + "event=" + event + ", participants=" + participants
+        + ", selectedColumns=" + selectedColumns + ']';
   }
 }
