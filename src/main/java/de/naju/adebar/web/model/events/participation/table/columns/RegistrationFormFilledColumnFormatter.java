@@ -1,11 +1,13 @@
 package de.naju.adebar.web.model.events.participation.table.columns;
 
-import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 import de.naju.adebar.model.events.Event;
 import de.naju.adebar.model.events.RegistrationInfo;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.web.model.events.participation.table.ParticipantsTable;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 /**
  * Formatter used in the {@link ParticipantsTable} to display whether participants have filled the
@@ -15,6 +17,19 @@ import de.naju.adebar.web.model.events.participation.table.ParticipantsTable;
  */
 @Service
 public class RegistrationFormFilledColumnFormatter implements TableColumnFormatter {
+
+  private final MessageSource messageSource;
+
+  /**
+   * Constructs a new formatter.
+   *
+   * @param messageSource which contains default messages if a date of birth is not set. Must
+   *     not be {@code null}.
+   */
+  public RegistrationFormFilledColumnFormatter(MessageSource messageSource) {
+    Assert.notNull(messageSource, "MessageSource may not be null");
+    this.messageSource = messageSource;
+  }
 
   /*
    * (non-Javadoc)
@@ -45,11 +60,8 @@ public class RegistrationFormFilledColumnFormatter implements TableColumnFormatt
     Assert.state(registrationInfo != null,
         String.format("%s does not participate in %s", participant, event));
 
-    if (registrationInfo.isRegistrationFormFilled()) {
-      return "glyph.ok";
-    } else {
-      return "glyph.remove";
-    }
+    String code = registrationInfo.isRegistrationFormFilled() ? "yes" : "no";
+    return messageSource.getMessage(code, new Object[]{}, LocaleContextHolder.getLocale());
 
   }
 

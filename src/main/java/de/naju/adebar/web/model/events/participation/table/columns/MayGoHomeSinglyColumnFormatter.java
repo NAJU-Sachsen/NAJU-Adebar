@@ -54,9 +54,9 @@ public class MayGoHomeSinglyColumnFormatter implements TableColumnFormatter {
     Assert.notNull(event, "Event may not be null");
     assertIsApplicable(event);
 
-    return event.getParticipantsList().getParticipationDetailsFor(participant).mayGoHomeSingly() //
-        ? messageSource.getMessage("yes", new Object[]{}, LocaleContextHolder.getLocale()) //
-        : messageSource.getMessage("no", new Object[]{}, LocaleContextHolder.getLocale());
+    String code = event.getParticipantsList().getParticipationDetailsFor(participant) //
+        .mayGoHomeSingly() ? "yes" : "no";
+    return messageSource.getMessage(code, new Object[]{}, LocaleContextHolder.getLocale());
   }
 
 }
