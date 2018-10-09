@@ -43,7 +43,7 @@ public class CSVWriter implements Exporter<ParticipantsTable> {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.naju.adebar.app.storage.Exporter#export(java.lang.Object)
    */
   @Override
@@ -73,6 +73,8 @@ public class CSVWriter implements Exporter<ParticipantsTable> {
         }
         printer.println();
       }
+
+      printer.close();
       return new ByteArrayInputStream(writer.toString().getBytes());
     } catch (IOException e) {
       throw new CSVExportException("Could not export table " + instance, e);
