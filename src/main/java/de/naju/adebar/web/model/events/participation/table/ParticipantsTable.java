@@ -245,7 +245,6 @@ public class ParticipantsTable {
 
   @Override
   public String toString() {
-    return "ParticipantsTable [" + "event=" + event + ", participants=" + participants
-        + ", selectedColumns=" + selectedColumns + ']';
+    return "ParticipantsTable [" + "event=" + event + ", selectedColumns=" + selectedColumns + ']';
   }
 }

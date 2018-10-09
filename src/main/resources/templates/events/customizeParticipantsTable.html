@@ -117,7 +117,9 @@
                 <button type="button" class="btn btn-default">
                   <span class="glyphicon glyphicon-print"></span> Drucken
                 </button>
-                <button type="button" class="btn btn-default">
+                <button type="submit" form="column-selection" formmethod="get" formtarget="_blank"
+                        class="btn btn-default"
+                        th:formaction="@{/events/{id}/participants/table/export(id=${event.id})}">
                   <span class="glyphicon glyphicon-export"></span> Exportieren
                 </button>
               </div>
