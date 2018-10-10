@@ -10,7 +10,7 @@
     <link rel="stylesheet" type="text/css" href="../../static/resources/css/bootstrap.min.css"
         th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
   
-    <link rel="stylesheet" type="text/css" href="../../static/resources/css/print.css"
+    <link rel="stylesheet" type="text/css" href="../../static/resources/css/print.css" media="print"
           th:href="@{/resources/css/print.css}"/>
           
     <link rel="shortcut icon" th:href="@{/resources/res/favicon.ico}"/>
@@ -90,6 +90,23 @@
                 </tbody>
             </table>
         </div>
+        
+        <div class="row print-hide">
+          <div class="alert alert-info">
+          <p>
+            Der Druckvorgang lässt sich meistens über die <kbd>Strg + P</kbd> Tastekombination starten. Ansonsten gibt es im Menü der meisten Browser auch eine "Drucken"-Option.
+            </p>
+            <p>
+            Überprüft bitte davor nochmal, ob die Seite die richtige Ausrichtung hat!
+            </p>
+            <div>
+            <aside>
+              (Diese Info-Box wird im gedruckten Dokument nicht angezeigt)
+            </aside>
+            </div>
+          </div>
+        </div>
+        
     </main>
     
     <script type="text/javascript" src="../../static/resources/js/jquery.min.js"
