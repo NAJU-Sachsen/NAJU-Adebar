@@ -176,6 +176,26 @@ public class ParticipantsTableController {
   }
 
   /**
+   * Prints a participants table.
+   *
+   * @param event the event whose table should be printed
+   * @param form form containing the columns to be shown
+   * @param principal the user who requested the print action
+   * @param model data model to use for the template
+   * @return the print view template
+   */
+  @GetMapping("/events/{id}/participants/table/print")
+  public String printParticipantsTable(@PathVariable("id") Event event,
+      @ModelAttribute("participantsTable") ParticipantsTableForm form, Principal principal,
+      Model model) {
+
+    ParticipantsTable table = form.toParticipantsTable().forEvent(event);
+    prepareModel(table, form, event, principal, model);
+
+    return "events/printParticipantsTable";
+  }
+
+  /**
    * Provides a downloadable CSV file for a participants table.
    *
    * @param event the event for which the table should be printed

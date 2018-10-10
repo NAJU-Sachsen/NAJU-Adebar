@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width,initial-scale=1" name="viewport"/>
+    <meta th:name="_csrf" th:value="${_csrf.token}"/>
+    
+    <title th:text="|${event.name} (${{#time.formatTimeSpan(event.getStartTime(), event.getEndTime())}})|">HIFA (24.05.17 - 28.05.17)</title>
+
+    <link rel="stylesheet" type="text/css" href="../../static/resources/css/bootstrap.min.css"
+        th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+  
+    <link rel="stylesheet" type="text/css" href="../../static/resources/css/print.css"
+          th:href="@{/resources/css/print.css}"/>
+          
+    <link rel="shortcut icon" th:href="@{/resources/res/favicon.ico}"/>
+</head>
+<body>
+    <main class="container-fluid">
+        <div class="row" style="margin-bottom: 1em;">
+            <header>
+                <h1><span th:text="${event.name}">HIFA</span> <small><span th:text="${{#time.formatTimeSpan(event.getStartTime(), event.getEndTime())}}">24.05.17 - 28.05.17</span>, <span th:text="|${event.place.street} ${event.place.zip} ${event.place.city}|">Annahütte</span></small></h1>
+            </header>
+        </div>
+        
+        <!-- participants -->
+        <div class="row">
+            <h2>Teilnehmende</h2>
+            
+            <table class="table table-striped table-hover" id="participants-table">
+              <thead>
+              <tr>
+                <th th:each="col : ${participantsTable.columns}"
+                    th:if="${formattingService.formatterIsApplicable(event, col)}"
+                    th:text="#{|col.${col}|}"></th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="participant : ${participantsTable.participants}">
+                <td th:each="col : ${participantsTable.columns}"
+                    th:if="${formattingService.formatterIsApplicable(event, col)}"
+                    th:text="${formattingService.getColumnValueFor(participantsTable.event, participant, col)}"></td>
+              </tr>
+              </tbody>
+  
+  
+            </table>
+            
+        </div>
+        
+        <!-- counselors -->
+        <div class="row" th:if="${false}">
+            <h2>Betreuende</h2>
+            <table id="counselors" class="table tablesorter">
+                <thead>
+                    <th>Name</th>
+                    <th>Geburtsdatum</th>
+                    <th>Telefonnummer</th>
+                    <th>Juleica?</th>
+                </thead>
+                <tbody th:remove="all-but-first">
+                    <tr th:each="counselor : ${event.counselors}">
+                        <td th:text="${counselor.name}">Berta Beate</td>
+                        <td>
+                            <span th:if="${counselor.participant} AND ${counselor.getParticipantProfile().hasDateOfBirth()}" th:text="${counselor.participantProfile.dateOfBirth}">
+                                01.02.3456
+                            </span>
+                            <span th:if="!${counselor.participant} OR !${counselor.getParticipantProfile().hasDateOfBirth()}">
+                                ---
+                            </span>
+                        </td>
+                        <td th:text="${counselor.phoneNumber}">0987 65432109</td>
+                        <td>
+                            <span th:if="${counselor.activist} AND ${counselor.getActivistProfile().hasValidJuleica()}" class="glyphicon glyphicon-ok text-success"></span>
+                            <span th:unless="${counselor.activist} AND ${counselor.getActivistProfile().hasValidJuleica()}" class="glyphicon glyphicon-remove text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Berta Beate</td>
+                        <td>01.02.3456</td>
+                        <td>0987 65432109</td>
+                        <td><span class="glyphicon glyphicon-remove text-danger"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Berta Beate</td>
+                        <td>01.02.3456</td>
+                        <td>0987 65432109</td>
+                        <td><span class="glyphicon glyphicon-ok text-success"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+    
+    <script type="text/javascript" src="../../static/resources/js/jquery.min.js"
+        th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript" src="../../static/resources/js/bootstrap.min.js"
+        th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script src="../../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
+    
+    <script type="text/javascript">
+    	alert('Seite wird gedruckt. Querformat nicht vergessen!');
+    	window.print();
+    </script>
+    
+</body>
+</html>

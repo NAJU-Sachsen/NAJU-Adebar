@@ -114,7 +114,7 @@
               </div>
 
               <div class="btn-group btn-group-sm">
-                <button type="button" class="btn btn-default">
+                <button type="submit" form="column-selection" formmethod="get" formtarget="_blank" class="btn btn-default" th:formaction="@{/events/{id}/participants/table/print(id=${event.id})}">
                   <span class="glyphicon glyphicon-print"></span> Drucken
                 </button>
                 <button type="submit" form="column-selection" formmethod="get" formtarget="_blank"
