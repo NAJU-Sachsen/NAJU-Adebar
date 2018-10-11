@@ -23,6 +23,7 @@ target/
 .DS_Store
 Servers/
 .metadata
+.sts4-cache/
 
 # Intelli-J specific
 .idea/
