@@ -17,7 +17,7 @@ public class AddNewsletterForm {
   @NotNull
   private Belonging belonging;
 
-  private long localGroup;
+  private String localGroup;
 
   public AddNewsletterForm() {
     this.name = "";
@@ -40,11 +40,11 @@ public class AddNewsletterForm {
     this.belonging = Belonging.valueOf(belonging);
   }
 
-  public long getLocalGroup() {
+  public String getLocalGroup() {
     return localGroup;
   }
 
-  public void setLocalGroup(long localGroup) {
+  public void setLocalGroup(String localGroup) {
     this.localGroup = localGroup;
   }
 

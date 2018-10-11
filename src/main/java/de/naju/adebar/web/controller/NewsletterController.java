@@ -1,5 +1,13 @@
 package de.naju.adebar.web.controller;
 
+import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import de.naju.adebar.app.chapter.LocalGroupManager;
 import de.naju.adebar.app.newsletter.NewsletterDataProcessor;
 import de.naju.adebar.app.newsletter.NewsletterManager;
@@ -9,14 +17,6 @@ import de.naju.adebar.model.newsletter.NewsletterRepository;
 import de.naju.adebar.model.newsletter.Subscriber;
 import de.naju.adebar.model.newsletter.SubscriberRepository;
 import de.naju.adebar.web.validation.newsletter.AddNewsletterForm;
-import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  * Newsletter related controller mappings
@@ -78,7 +78,7 @@ public class NewsletterController {
     Newsletter newsletter = newsletterManager.createNewsletter(form.getName());
 
     if (form.belongsToChapter()) {
-      LocalGroup chapter = localGroupManager.findLocalGroup(form.getLocalGroup())
+      LocalGroup chapter = localGroupManager.findLocalGroup(Long.parseLong(form.getLocalGroup()))
           .orElseThrow(IllegalArgumentException::new);
       localGroupManager.addNewsletterToLocalGroup(chapter, newsletter);
     }
