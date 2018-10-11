@@ -56,6 +56,10 @@ public class NewsletterControllerWebIntegrationTests extends WebIntegrationTests
     form.add("name", "New and shiny");
     form.add("belonging", "NONE");
 
+    // #54 - when submitting the form with belonging=NONE, an empty String will be sent for
+    // localGroup
+    form.add("localGroup", "");
+
     assertThat(newsletterRepository.findByName("New and shiny")).isEmpty();
 
     mvc.perform(post("/newsletters/add") //
