@@ -2,8 +2,10 @@ package de.naju.adebar.web.controller.persons;
 
 import com.querydsl.core.BooleanBuilder;
 import de.naju.adebar.model.chapter.LocalGroupRepository;
+import de.naju.adebar.model.events.Event;
 import de.naju.adebar.model.events.EventRepository;
 import de.naju.adebar.model.events.ParticipationManager;
+import de.naju.adebar.model.events.ParticipationManager.Result;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.persons.PersonRepository;
 import de.naju.adebar.model.persons.QPerson;
@@ -15,7 +17,9 @@ import de.naju.adebar.web.validation.persons.AddPersonForm;
 import de.naju.adebar.web.validation.persons.AddPersonFormConverter;
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -79,9 +83,7 @@ public class AddPersonController {
   public String showAddPersonView(Model model) {
 
     // add all "backing" attributes first so that form and errors may operate on them
-    model.addAttribute("localGroups", localGroupRepo.findAll());
-    model.addAttribute("qualifications", qualificationRepo.findAll());
-    model.addAttribute("eventCollection", createEventCollection());
+    prepareModel(model);
 
     if (!model.containsAttribute("form")) {
       model.addAttribute("form", new AddPersonForm());
@@ -101,7 +103,7 @@ public class AddPersonController {
   public String addPerson(@ModelAttribute("form") @Valid AddPersonForm form, Errors errors, //
       @RequestParam(value = "return-action", defaultValue = "") String returnAction, //
       @RequestParam(value = "return-to", defaultValue = "") String returnPath, //
-      RedirectAttributes redirAttr) {
+      Model model, RedirectAttributes redirAttr) {
 
     Person newPerson = null;
     boolean success = true;
@@ -118,7 +120,7 @@ public class AddPersonController {
     // check n° 2: there are no similar persons yet
     List<Person> similarPersons = checkForPersonsSimilarTo(newPerson);
     if (!similarPersons.isEmpty()) {
-      redirAttr.addFlashAttribute("similarPersons", similarPersons);
+      model.addAttribute("similarPersons", similarPersons);
       success = false;
     }
 
@@ -127,20 +129,23 @@ public class AddPersonController {
     // this case.
     if (!success) {
 
-      // retain the attributes for post-processing a successful run
+      /*// retain the attributes for post-processing a successful run
       if (!returnAction.isEmpty()) {
         redirAttr.addAttribute("return-action", returnAction);
       }
       if (!returnPath.isEmpty()) {
         redirAttr.addAttribute("return-to", returnPath);
-      }
+      }*/
+
+      prepareModel(model);
 
       return "persons/addPerson";
     }
 
     // everything seems fine, finish saving the new person
     newPerson = personRepo.save(newPerson);
-    addToEventsIfNecessary(newPerson, form);
+
+    addToEventsIfNecessary(newPerson, form, redirAttr);
     addToLocalGroupsIfNecessary(newPerson, form);
 
     if (!returnAction.isEmpty()) {
@@ -175,14 +180,26 @@ public class AddPersonController {
    * @param person the new person
    * @param form form possibly containing the events to attend
    */
-  protected void addToEventsIfNecessary(Person person, AddPersonForm form) {
+  protected boolean addToEventsIfNecessary(Person person, AddPersonForm form,
+      RedirectAttributes redirAttr) {
     if (!form.isParticipant() || !form.getParticipantForm().hasEvents()) {
-      return;
+      return true;
     }
-    form.getParticipantForm().getEvents().forEach(event -> {
-      participationManager.addParticipant(event, person);
-      eventRepo.save(event);
-    });
+
+    boolean success = true;
+    Map<Event, Result> failedParticipations = new HashMap<>();
+    for (Event event : form.getParticipantForm().getEvents()) {
+      Result result = participationManager.addParticipant(event, person);
+
+      if (!result.isOk()) {
+        failedParticipations.put(event, result);
+        success = false;
+      }
+    }
+
+    redirAttr.addFlashAttribute("failedParticipations", failedParticipations);
+    redirAttr.addFlashAttribute("participationFailed", !success);
+    return success;
   }
 
   /**
@@ -241,6 +258,12 @@ public class AddPersonController {
         .and(person.firstName.containsIgnoreCase(newPerson.getFirstName())) //
         .and(person.lastName.containsIgnoreCase(newPerson.getLastName()));
     return personRepo.findAll(predicate);
+  }
+
+  private void prepareModel(Model model) {
+    model.addAttribute("localGroups", localGroupRepo.findAll());
+    model.addAttribute("qualifications", qualificationRepo.findAll());
+    model.addAttribute("eventCollection", createEventCollection());
   }
 
 }

@@ -1,591 +1,539 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      xmlns="http://www.w3.org/1999/xhtml">
-<head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width,initial-scale=1" name="viewport"/>
-  <meta th:name="_csrf" th:value="${_csrf.token}"/>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+  xmlns="http://www.w3.org/1999/xhtml">
 
-  <title>Neue Person | Adebar</title>
-  <script type="text/javascript" src="../../static/resources/js/jquery.min.js"
-          th:src="@{/webjars/jquery/jquery.min.js}"></script>
-  <script type="text/javascript" src="../../static/resources/js/bootstrap.min.js"
-          th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-  <link rel="stylesheet" type="text/css" href="../../static/resources/css/bootstrap.min.css"
-        th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width,initial-scale=1" name="viewport" />
+    <meta th:name="_csrf" th:value="${_csrf.token}" />
 
-  <link rel="stylesheet" type="text/css" href="../../static/resources/css/style.css"
-        th:href="@{/resources/css/style.css}"/>
-  <link rel="stylesheet" type="text/css" href="../../static/resources/css/formCategories.css"
-        th:href="@{/resources/css/formCategories.css}"/>
+    <title>Neue Person | Adebar</title>
+    <script type="text/javascript" src="../../static/resources/js/jquery.min.js" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script type="text/javascript" src="../../static/resources/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/resources/css/bootstrap.min.css"
+      th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
 
-  <link rel="stylesheet" href="../../static/resources/css/bootstrap-select.min.css"
-        th:href="@{/resources/css/bootstrap-select.min.css}"/>
-  <script src="../../static/resources/js/bootstrap-select.min.js"
-          th:src="@{/resources/js/bootstrap-select.min.js}"></script>
+    <link rel="stylesheet" type="text/css" href="../../static/resources/css/style.css" th:href="@{/resources/css/style.css}" />
+    <link rel="stylesheet" type="text/css" href="../../static/resources/css/formCategories.css"
+      th:href="@{/resources/css/formCategories.css}" />
 
-  <link rel="shortcut icon" th:href="@{/resources/res/favicon.ico}"/>
-</head>
-<body>
+    <link rel="stylesheet" href="../../static/resources/css/bootstrap-select.min.css" th:href="@{/resources/css/bootstrap-select.min.css}" />
+    <script src="../../static/resources/js/bootstrap-select.min.js" th:src="@{/resources/js/bootstrap-select.min.js}"></script>
 
-<!-- central navigation -->
-<nav th:replace="navigation :: topNav(page='persons')"></nav>
+    <link rel="shortcut icon" th:href="@{/resources/res/favicon.ico}" />
+  </head>
 
-<!-- page specific content-->
-<main id="main" th:object="${form}">
+  <body>
 
-  <!-- cancel confirmation dialog -->
-  <div class="modal fade" id="confirm-abort" tabindex="-1" role="document">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-body">
-          Möchtest du das Erstellen wirklich abbrechen? Alle Daten gehen verloren!
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">
-            Lieber doch nicht
-          </button>
-          <a href="overview.html" class="btn btn-danger" th:href="@{/persons}">
-            Ja, wirklich
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
+    <!-- central navigation -->
+    <nav th:replace="navigation :: topNav(page='persons')"></nav>
 
-  <!-- similar persons dialog -->
-  <div class="modal fade" id="similar-persons" tabindex="-1" role="dialog"
-       th:if="${similarPersons}">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2>Ähnliche Personen</h2>
-        </div>
-        <div class="modal-body">
-          <p>
-            Es existieren bereits Personen mit einem ähnlichen Namen in der Datenbank, bitte
-            überprüfe, ob die Person vielleicht schon existiert:
-          </p>
+    <!-- page specific content-->
+    <main id="main" th:object="${form}">
 
-          <div class="panel panel-default" th:each="person : ${similarPersons}">
-            <div class="panel-heading">
-              <h3 class="panel-title" th:inline="text">
-                [[${person.name}]]
-                <span class="glyphicon glyphicon-tent" data-toggle="tooltip"
-                      data-placement="bottom"
-                      data-title="Campteilnehmer*in"
-                      th:if="${person.participant}"></span>
-                <span class="glyphicon glyphicon-wrench" data-toggle="tooltip"
-                      data-placement="bottom"
-                      data-title="Aktive*r" th:if="${person.activist}"></span>
-                <span class="glyphicon glyphicon-blackboard" data-toggle="tooltip"
-                      data-placement="bottom" data-title="Referent*in" data-container="body"
-                      th:if="${person.referent}"></span>
-                <span class="glyphicon glyphicon-briefcase" data-toggle="tooltip"
-                      data-placement="bottom" data-title="Geschäftskontakt" th:if="false"></span>
-                <span class="glyphicon glyphicon-baby-formula" data-toggle="tooltip"
-                      data-placement="bottom" data-title="Elternteil"
-                      th:if="false"></span>
-              </h3>
+      <!-- cancel confirmation dialog -->
+      <div class="modal fade" id="confirm-abort" tabindex="-1" role="document">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-body">
+              Möchtest du das Erstellen wirklich abbrechen? Alle Daten gehen verloren!
             </div>
-            <table class="table">
-              <thead></thead>
-              <tbody>
-              <tr class="row">
-                <th class="col-md-4">E-Mail</th>
-                <td class="col-md-8">
-                  <a href="mailto:maxie.muster@web.de" th:href="|mailto:${person.email}|"
-                     th:if="${person.email}">
-                    maxie.muster@web.de
-                  </a>
-                  <span th:unless="${person.email}">keine Angabe</span>
-                </td>
-              </tr>
-              <tr class="row">
-                <th class="col-md-4">Telefon</th>
-                <td class="col-md-8" th:text="${person.phoneNumber} ?: 'keine Angabe'">
-                  0123 4567890
-                </td>
-              </tr>
-              <tr class="row">
-                <th class="col-md-4">Stadt</th>
-                <td class="col-md-8"
-                    th:text="${person.address != null and not person.address.city.isEmpty()} ? ${person.address.city} : 'keine Angabe'">
-                  Entenhausen
-                </td>
-              </tr>
-              </tbody>
-            </table>
-            <div class="panel-footer">
-              <a href="personDetails.html" th:href="@{/persons/{id}(id=${person.id})}">
-                <span class="glyphicon glyphicon-new-window"></span>
-                Zum Profil <strong>(Daten werden verworfen)</strong>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">
+                Lieber doch nicht
+              </button>
+              <a href="overview.html" class="btn btn-danger" th:href="@{/persons}">
+                Ja, wirklich
               </a>
             </div>
           </div>
-
-        </div>
-        <div class="modal-footer">
-          <a href="overview.html" class="btn btn-default" th:href="@{/persons}">OK, zurück zur
-            Personen-Übersicht
-          </a>
-          <button type="submit" form="add-person" class="btn btn-primary">
-            Ja, wirklich hinzufügen
-          </button>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- controls -->
-  <div class="row display-category">
-    <div class="col-md-4">
-      <h1>Neue Person hinzufügen</h1>
-    </div>
-    <div class="col-md-8 clearfix">
-      <div class="alert alert-warning pull-left" th:if="${#fields.hasAnyErrors()}">
-        Einige Eingaben sind ungültig, bitte überprüfe und korrigiere sie!
-      </div>
-      <div class="pull-right">
-        <button type="button" class="btn btn-default" data-toggle="modal"
-                data-target="#confirm-abort">Abbrechen
-        </button>
-        <button type="submit" form="add-person" class="btn btn-primary">Speichern</button>
-      </div>
-    </div>
-  </div>
+      <!-- similar persons dialog -->
+      <div class="modal fade" id="similar-persons" tabindex="-1" role="dialog" th:if="${similarPersons}">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h2 class="modal-title">Ähnliche Personen</h2>
+            </div>
+            <div class="modal-body">
+              <p>
+                Es existieren bereits Personen mit einem ähnlichen Namen in der Datenbank, bitte
+                überprüfe, ob die Person vielleicht schon existiert:
+              </p>
 
-  <!-- the form -->
-  <form id="add-person" class="row display-category" method="post" th:action="@{/persons/add}">
-
-    <input type="hidden" name="return-to" th:value="${#request.getParameter('return-to')}"
-           th:if="${#request.getParameter('return-to') != null}"/>
-    <input type="hidden" name="return-action" th:value="${#request.getParameter('return-action')}"
-           th:if="${#request.getParameter('return-action') != null}"/>
-
-    <!-- general info -->
-    <div class="col-md-4">
-      <div class="panel panel-primary">
-        <div class="panel-heading">
-          <h2 class="panel-title">Allgemein</h2>
-        </div>
-        <div class="panel-body">
-          <div class="form-group" th:classappend="${#fields.hasErrors('firstName')} ? 'has-error'">
-            <label for="first-name" class="control-label">Vorname</label>
-            <input type="text" class="form-control" id="first-name" required="required"
-                   placeholder="erforderlich" th:field="*{firstName}"/>
-            <p class="help-block" th:if="${#fields.hasErrors('firstName')}"
-               th:errors="*{firstName}">
-              Erforderlich
-            </p>
-          </div>
-          <div class="form-group" th:classappend="${#fields.hasErrors('lastName')} ? 'has-error'">
-            <label for="last-name" class="control-label">Nachname</label>
-            <input type="text" class="form-control" id="last-name" required="required"
-                   placeholder="erforderlich" th:field="*{lastName}"/>
-            <p class="help-block" th:if="${#fields.hasErrors('lastName')}"
-               th:errors="*{lastName}">
-              Erforderlich
-            </p>
-          </div>
-          <div class="form-group" th:classappend="${#fields.hasErrors('email')} ? 'has-error'">
-            <label for="email" class="control-label">E-Mail</label>
-            <div class="input-group">
-              <input type="email" class="form-control" id="email" th:field="*{email}"/>
-              <span class="input-group-addon">optional</span>
-            </div>
-            <p class="help-block" th:if="${#fields.hasErrors('email')}"
-               th:errors="*{email}">
-              Keine gültige E-Mail Adresse
-            </p>
-          </div>
-          <div class="form-group" th:classappend="${#fields.hasErrors('phone')} ? 'has-error'">
-            <label for="phone" class="control-label">Telefon</label>
-            <div class="input-group">
-              <input type="tel" class="form-control" id="phone"
-                     placeholder="Bitte als '0123 45678901' eingeben" th:field="*{phone}"/>
-              <span class="input-group-addon">optional</span>
-            </div>
-            <p class="help-block" th:if="${#fields.hasErrors('phone')}"
-               th:errors="*{phone}">
-              Keine gültige Telefonnummer
-            </p>
-          </div>
-          <hr/>
-          <div class="form-group"
-               th:classappend="${#fields.hasErrors('address.street')} ? 'has-error'">
-            <label for="address_street" class="control-label">Straße</label>
-            <div class="input-group">
-              <input type="text" class="form-control" id="address_street"
-                     th:field="*{address.street}"/>
-              <span class="input-group-addon">optional</span>
-            </div>
-            <p class="help-block" th:if="${#fields.hasErrors('address.street')}"
-               th:errors="*{address.street}">
-              Ungültige Eingabe
-            </p>
-          </div>
-          <div class="form-group"
-               th:classappend="${#fields.hasErrors('address.zip')} ? 'has-error'">
-            <label for="address_zip" class="control-label">PLZ</label>
-            <div class="input-group">
-              <input type="text" class="form-control" id="address_zip" th:field="*{address.zip}"/>
-              <span class="input-group-addon">optional</span>
-            </div>
-            <p class="help-block" th:if="${#fields.hasErrors('address.zip')}"
-               th:errors="*{address.zip}">
-              Ungültige Eingabe
-            </p>
-          </div>
-          <div class="form-group"
-               th:classappend="${#fields.hasErrors('address.city')} ? 'has-error'">
-            <label for="address_city" class="control-label">Stadt</label>
-            <div class="input-group">
-              <input type="text" class="form-control" id="address_city" th:field="*{address.city}"/>
-              <span class="input-group-addon">optional</span>
-            </div>
-            <p class="help-block" th:if="${#fields.hasErrors('address.city')}"
-               th:errors="*{address.city}">
-              Ungültige Eingabe
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- participant info -->
-    <div class="col-md-4">
-      <div class="panel panel-default form-category">
-        <div class="panel-heading">
-          <label>
-            <input type="checkbox" class="form-category-controller" th:field="*{participant}"/>
-            die Person nimmt an Veranstaltungen teil
-          </label>
-          <h2 class="hidden">Teilnahme-Profil</h2>
-        </div>
-        <div class="panel-body form-category-content">
-          <div class="form-group"
-               th:classappend="${#fields.hasErrors('participantForm.gender')} ? 'has-error'">
-            <label for="gender" class="control-label">Geschlecht</label>
-            <fieldset id="gender" class="radio">
-              <label>
-                <input type="radio" value="FEMALE" th:field="*{participantForm.gender}"/> weiblich
-              </label>
-              <label>
-                <input type="radio" value="MALE" th:field="*{participantForm.gender}"/> männlich
-              </label>
-              <label>
-                <input type="radio" value="OTHER" th:field="*{participantForm.gender}"/> anderes
-              </label>
-            </fieldset>
-            <p class="help-block" th:if="${#fields.hasErrors('participantForm.gender')}"
-               th:errors="*{participantForm.gender}">
-              Ungültige Eingabe
-            </p>
-          </div>
-          <div class="form-group"
-               th:classappend="${#fields.hasErrors('participantForm.dateOfBirth')} ? 'has-error'">
-            <label for="date-of-birth" class="control-label">Geburtsdatum</label>
-            <input type="date" class="form-control" id="date-of-birth"
-                   placeholder="Format: TT.MM.JJJJ"
-                   th:field="*{participantForm.dateOfBirth}"/>
-            <p class="help-block" th:if="${#fields.hasErrors('participantForm.dateOfBirth')}"
-               th:errors="*{participantForm.dateOfBirth}">
-              Ungültige Eingabe
-            </p>
-          </div>
-          <div class="form-group"
-               th:classappend="${#fields.hasErrors('participantForm.eatingHabits')} ? 'has-error'">
-            <label for="eating-habits" class="control-label">Ernährung</label>
-            <div id="eating-habits-default-display"
-                 th:unless="${#fields.hasErrors('participantForm.eatingHabits')}">
-              <div>
-                <select class="selectpicker" id="eating-habits-select" data-width="auto">
-                  <option value="" selected="selected">konventionell</option>
-                  <option value="vegetarisch">vegetarisch</option>
-                  <option value="vegan">vegan</option>
-                </select>
+              <div class="panel panel-default" th:each="person : ${similarPersons}">
+                <div class="panel-heading">
+                  <h3 class="panel-title" th:inline="text">
+                    [[${person.name}]]
+                    <span class="glyphicon glyphicon-tent" data-toggle="tooltip" data-placement="bottom"
+                      data-title="Campteilnehmer*in" th:if="${person.participant}"></span>
+                    <span class="glyphicon glyphicon-wrench" data-toggle="tooltip" data-placement="bottom"
+                      data-title="Aktive*r" th:if="${person.activist}"></span>
+                    <span class="glyphicon glyphicon-blackboard" data-toggle="tooltip"
+                      data-placement="bottom" data-title="Referent*in" data-container="body" th:if="${person.referent}"></span>
+                    <span class="glyphicon glyphicon-briefcase" data-toggle="tooltip"
+                      data-placement="bottom" data-title="Geschäftskontakt" th:if="false"></span>
+                    <span class="glyphicon glyphicon-baby-formula" data-toggle="tooltip"
+                      data-placement="bottom" data-title="Elternteil" th:if="false"></span>
+                  </h3>
+                </div>
+                <table class="table">
+                  <thead></thead>
+                  <tbody>
+                    <tr class="row">
+                      <th class="col-md-4">E-Mail</th>
+                      <td class="col-md-8">
+                        <a href="mailto:maxie.muster@web.de" th:href="|mailto:${person.email}|"
+                          th:if="${person.email}">
+                          maxie.muster@web.de
+                        </a>
+                        <span th:unless="${person.email}">keine Angabe</span>
+                      </td>
+                    </tr>
+                    <tr class="row">
+                      <th class="col-md-4">Telefon</th>
+                      <td class="col-md-8" th:text="${person.phoneNumber} ?: 'keine Angabe'">
+                        0123 4567890
+                      </td>
+                    </tr>
+                    <tr class="row">
+                      <th class="col-md-4">Stadt</th>
+                      <td class="col-md-8" th:text="${person.address != null and not person.address.city.isEmpty()} ? ${person.address.city} : 'keine Angabe'">
+                        Entenhausen
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="panel-footer">
+                  <a href="personDetails.html" th:href="@{/persons/{id}(id=${person.id})}">
+                    <span class="glyphicon glyphicon-new-window"></span>
+                    Zum Profil <strong>(Daten werden verworfen)</strong>
+                  </a>
+                </div>
               </div>
-              <button class="btn btn-link" type="button" data-toggle="collapse"
-                      data-target="#eating-habits-container">Weitere Ernährungsarten/-hinweise
+
+            </div>
+            <div class="modal-footer">
+              <a href="overview.html" class="btn btn-default" th:href="@{/persons}">OK, zurück zur
+                Personen-Übersicht
+              </a>
+              <button type="submit" form="add-person" class="btn btn-primary">
+                Ja, wirklich hinzufügen
               </button>
             </div>
-            <div class="collapse" id="eating-habits-container"
-                 th:class="${#fields.hasErrors('participantForm.eatingHabits')} ? '' : 'collapse'">
-              <textarea class="form-control" id="eating-habits"
-                        placeholder="vegetarisch, vegan o.ä. Unverträglichkeiten, ..."
-                        th:field="*{participantForm.eatingHabits}"></textarea>
-            </div>
-            <p class="help-block" th:if="${#fields.hasErrors('participantForm.eatingHabits')}"
-               th:errors="*{participantForm.eatingHabits}">
-              Ungültige Eingabe
-            </p>
-          </div>
-          <div class="form-group"
-               th:classappend="${#fields.hasErrors('participantForm.healthImpairments')} ? 'has-error'">
-            <label for="health-impairments" class="control-label">Allergien o.ä.</label>
-            <textarea class="form-control" id="health-impairments"
-                      placeholder="Heuschnupfen, o.ä."
-                      th:field="*{participantForm.healthImpairments}"></textarea>
-            <p class="help-block" th:if="${#fields.hasErrors('participantForm.healthImpairments')}"
-               th:errors="*{participantForm.healthImpairments}">
-              Ungültige Eingabe
-            </p>
-          </div>
-          <p class="help-block">
-            Allergien, die sich auf die Ernährung der/des Teilnehmenden beziehen bitte unter
-            "Ernährung" eintragen.
-          </p>
-          <div class="form-group"
-               th:classappend="${#fields.hasErrors('participantForm.nabuMember') or #fields.hasErrors('participantForm.nabuMembershipNumber')} ? 'has-error'">
-            <label for="nabu-membership" class="control-label">NABU-Mitgliedschaft</label>
-            <div class="input-group">
-              <select class="selectpicker" data-width="auto"
-                      th:field="*{participantForm.nabuMember}">
-                <option selected="selected" value="UNKNOWN">unbekannt</option>
-                <option id="nabu-membership-toggler" value="IS_MEMBER">Mitglied</option>
-                <option value="NO_MEMBER">kein Mitglied</option>
-              </select>
-              <label for="nabu-membership" class="sr-only">Mitgliedsnummer</label>
-              <input type="text" class="form-control" id="nabu-membership" disabled="disabled"
-                     placeholder="Mitgliedsnummer" data-controlled-by="#nabu-membership-toggler"
-                     th:field="*{participantForm.nabuMembershipNumber}"/>
-            </div>
-            <p class="help-block" th:if="${#fields.hasErrors('participantForm.nabuMember')}"
-               th:errors="*{participantForm.nabuMember}">
-              Ungültige Eingabe
-            </p>
-            <p class="help-block"
-               th:if="${#fields.hasErrors('participantForm.nabuMembershipNumber')}"
-               th:errors="*{participantForm.nabuMembershipNumber}">
-              Ungültige Eingabe
-            </p>
-          </div>
-          <hr/>
-          <div class="form-group"
-               th:classappend="${#fields.hasErrors('participantForm.remarks')} ? 'has-error'">
-            <label for="remarks" class="control-label">Bemerkungen</label>
-            <textarea class="form-control" id="remarks"
-                      th:field="*{participantForm.remarks}"></textarea>
-            <p class="help-block" th:if="${#fields.hasErrors('participantForm.remarks')}"
-               th:errors="*{participantForm.remarks}">
-              Ungültige Eingabe
-            </p>
-          </div>
-          <hr/>
-          <div class="form-group"
-               th:classappend="${#fields.hasErrors('participantForm.events')} ? 'has-error'"
-               th:unless="${#httpServletRequest.getParameter('return-action') == 'add-participant'}">
-            <label for="events" class="control-label">Veranstaltungen</label>
-            <div>
-              <select class="selectpicker" id="events" multiple="multiple" data-live-search="true"
-                      th:field="*{participantForm.events}" th:remove="all-but-first">
-                <optgroup label="NAJU Sachsen" th:each="entry : ${eventCollection}"
-                          th:remove="all-but-first"
-                          th:label="${entry.name}">
-                  <option data-subtext="25.07.-09.08., Oberwiesenthal"
-                          th:each="event : ${entry.events}"
-                          th:value="${event.id}"
-                          th:text="${event.name}"
-                          th:attr="data-subtext=${{#time.formatTimeSpan(event.getStartTime(), event.getEndTime())}} + ', ' + ${event.place.city}">
-                    Bergwiesencamp
-                  </option>
-                  <option data-subtext="14.-19.05., Dörfel">HIFA</option>
-                </optgroup>
-                <optgroup label="NAJU Dresden">
-                  <option data-subtext="21.-24.05., Dachsenberg">Wildlife-Camp</option>
-                  <option data-subtext="05.-16.06., Meck-Pom">Paddelcamp</option>
-                </optgroup>
-              </select>
-            </div>
-            <p class="help-block" th:if="${#fields.hasErrors('participantForm.events')}"
-               th:errors="*{participantForm.events}">
-              Ungültige Eingabe
-            </p>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- activist and referent info -->
-    <div class="col-md-4">
-      <div class="containter-fluid">
-        <div class="row">
+      <!-- controls -->
+      <div class="row display-category">
+        <div class="col-md-4">
+          <h1>Neue Person hinzufügen</h1>
+        </div>
+        <div class="col-md-8 clearfix">
+          <div class="alert alert-warning pull-left" th:if="${#fields.hasAnyErrors()}">
+            Einige Eingaben sind ungültig, bitte überprüfe und korrigiere sie!
+          </div>
+          <div class="pull-right">
+            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#confirm-abort">Abbrechen
+            </button>
+            <button type="submit" form="add-person" class="btn btn-primary">Speichern</button>
+          </div>
+        </div>
+      </div>
 
-          <!-- activist info -->
-          <div class="col-md-12">
-            <div class="panel panel-default form-category toggle-category">
-              <div class="panel-heading">
-                <label>
-                  <input type="checkbox" class="form-category-controller" th:field="*{activist}"/>
-                  die Person ist in der NAJU aktiv
-                </label>
-                <h2 class="hidden">Aktiven-Details</h2>
+      <!-- the form -->
+      <form id="add-person" class="row display-category" method="post" th:action="@{/persons/add}">
+
+        <input type="hidden" name="return-to" th:value="${#request.getParameter('return-to')}"
+          th:if="${#request.getParameter('return-to') != null}" />
+        <input type="hidden" name="return-action" th:value="${#request.getParameter('return-action')}"
+          th:if="${#request.getParameter('return-action') != null}" />
+
+        <!-- general info -->
+        <div class="col-md-4">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h2 class="panel-title">Allgemein</h2>
+            </div>
+            <div class="panel-body">
+              <div class="form-group" th:classappend="${#fields.hasErrors('firstName')} ? 'has-error'">
+                <label for="first-name" class="control-label">Vorname</label>
+                <input type="text" class="form-control" id="first-name" required="required"
+                  placeholder="erforderlich" th:field="*{firstName}" />
+                <p class="help-block" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">
+                  Erforderlich
+                </p>
               </div>
-              <div class="panel-body form-category-content">
-                <div class="form-group"
-                     th:classappend="${#fields.hasErrors('activistForm.juleica')} ? 'has-error'">
-                  <label for="juleica-card" class="control-label">Juleica</label>
-                  <div class="checkbox">
+              <div class="form-group" th:classappend="${#fields.hasErrors('lastName')} ? 'has-error'">
+                <label for="last-name" class="control-label">Nachname</label>
+                <input type="text" class="form-control" id="last-name" required="required"
+                  placeholder="erforderlich" th:field="*{lastName}" />
+                <p class="help-block" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">
+                  Erforderlich
+                </p>
+              </div>
+              <div class="form-group" th:classappend="${#fields.hasErrors('email')} ? 'has-error'">
+                <label for="email" class="control-label">E-Mail</label>
+                <div class="input-group">
+                  <input type="email" class="form-control" id="email" th:field="*{email}" />
+                  <span class="input-group-addon">optional</span>
+                </div>
+                <p class="help-block" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">
+                  Keine gültige E-Mail Adresse
+                </p>
+              </div>
+              <div class="form-group" th:classappend="${#fields.hasErrors('phone')} ? 'has-error'">
+                <label for="phone" class="control-label">Telefon</label>
+                <div class="input-group">
+                  <input type="tel" class="form-control" id="phone" placeholder="Bitte als '0123 45678901' eingeben"
+                    th:field="*{phone}" />
+                  <span class="input-group-addon">optional</span>
+                </div>
+                <p class="help-block" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}">
+                  Keine gültige Telefonnummer
+                </p>
+              </div>
+              <hr />
+              <div class="form-group" th:classappend="${#fields.hasErrors('address.street')} ? 'has-error'">
+                <label for="address_street" class="control-label">Straße</label>
+                <div class="input-group">
+                  <input type="text" class="form-control" id="address_street" th:field="*{address.street}" />
+                  <span class="input-group-addon">optional</span>
+                </div>
+                <p class="help-block" th:if="${#fields.hasErrors('address.street')}" th:errors="*{address.street}">
+                  Ungültige Eingabe
+                </p>
+              </div>
+              <div class="form-group" th:classappend="${#fields.hasErrors('address.zip')} ? 'has-error'">
+                <label for="address_zip" class="control-label">PLZ</label>
+                <div class="input-group">
+                  <input type="text" class="form-control" id="address_zip" th:field="*{address.zip}" />
+                  <span class="input-group-addon">optional</span>
+                </div>
+                <p class="help-block" th:if="${#fields.hasErrors('address.zip')}" th:errors="*{address.zip}">
+                  Ungültige Eingabe
+                </p>
+              </div>
+              <div class="form-group" th:classappend="${#fields.hasErrors('address.city')} ? 'has-error'">
+                <label for="address_city" class="control-label">Stadt</label>
+                <div class="input-group">
+                  <input type="text" class="form-control" id="address_city" th:field="*{address.city}" />
+                  <span class="input-group-addon">optional</span>
+                </div>
+                <p class="help-block" th:if="${#fields.hasErrors('address.city')}" th:errors="*{address.city}">
+                  Ungültige Eingabe
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- participant info -->
+        <div class="col-md-4">
+          <div class="panel panel-default form-category">
+            <div class="panel-heading">
+              <label>
+                <input type="checkbox" class="form-category-controller" th:field="*{participant}" />
+                die Person nimmt an Veranstaltungen teil
+              </label>
+              <h2 class="hidden">Teilnahme-Profil</h2>
+            </div>
+            <div class="panel-body form-category-content">
+              <div class="form-group" th:classappend="${#fields.hasErrors('participantForm.gender')} ? 'has-error'">
+                <label for="gender" class="control-label">Geschlecht</label>
+                <fieldset id="gender" class="radio">
+                  <label>
+                    <input type="radio" value="FEMALE" th:field="*{participantForm.gender}" />
+                    weiblich
+                  </label>
+                  <label>
+                    <input type="radio" value="MALE" th:field="*{participantForm.gender}" />
+                    männlich
+                  </label>
+                  <label>
+                    <input type="radio" value="OTHER" th:field="*{participantForm.gender}" />
+                    anderes
+                  </label>
+                </fieldset>
+                <p class="help-block" th:if="${#fields.hasErrors('participantForm.gender')}"
+                  th:errors="*{participantForm.gender}">
+                  Ungültige Eingabe
+                </p>
+              </div>
+              <div class="form-group" th:classappend="${#fields.hasErrors('participantForm.dateOfBirth')} ? 'has-error'">
+                <label for="date-of-birth" class="control-label">Geburtsdatum</label>
+                <input type="date" class="form-control" id="date-of-birth" placeholder="Format: TT.MM.JJJJ"
+                  th:field="*{participantForm.dateOfBirth}" />
+                <p class="help-block" th:if="${#fields.hasErrors('participantForm.dateOfBirth')}"
+                  th:errors="*{participantForm.dateOfBirth}">
+                  Ungültige Eingabe
+                </p>
+              </div>
+              <div class="form-group" th:classappend="${#fields.hasErrors('participantForm.eatingHabits')} ? 'has-error'">
+                <label for="eating-habits" class="control-label">Ernährung</label>
+                <div id="eating-habits-default-display" th:unless="${#fields.hasErrors('participantForm.eatingHabits')}">
+                  <div>
+                    <select class="selectpicker" id="eating-habits-select" data-width="auto">
+                      <option value="" selected="selected">konventionell</option>
+                      <option value="vegetarisch">vegetarisch</option>
+                      <option value="vegan">vegan</option>
+                    </select>
+                  </div>
+                  <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#eating-habits-container">Weitere
+                    Ernährungsarten/-hinweise
+                  </button>
+                </div>
+                <div class="collapse" id="eating-habits-container" th:class="${#fields.hasErrors('participantForm.eatingHabits')} ? '' : 'collapse'">
+                  <textarea class="form-control" id="eating-habits" placeholder="vegetarisch, vegan o.ä. Unverträglichkeiten, ..."
+                    th:field="*{participantForm.eatingHabits}"></textarea>
+                </div>
+                <p class="help-block" th:if="${#fields.hasErrors('participantForm.eatingHabits')}"
+                  th:errors="*{participantForm.eatingHabits}">
+                  Ungültige Eingabe
+                </p>
+              </div>
+              <div class="form-group" th:classappend="${#fields.hasErrors('participantForm.healthImpairments')} ? 'has-error'">
+                <label for="health-impairments" class="control-label">Allergien o.ä.</label>
+                <textarea class="form-control" id="health-impairments" placeholder="Heuschnupfen, o.ä."
+                  th:field="*{participantForm.healthImpairments}"></textarea>
+                <p class="help-block" th:if="${#fields.hasErrors('participantForm.healthImpairments')}"
+                  th:errors="*{participantForm.healthImpairments}">
+                  Ungültige Eingabe
+                </p>
+              </div>
+              <p class="help-block">
+                Allergien, die sich auf die Ernährung der/des Teilnehmenden beziehen bitte unter
+                "Ernährung" eintragen.
+              </p>
+              <div class="form-group" th:classappend="${#fields.hasErrors('participantForm.nabuMember') or #fields.hasErrors('participantForm.nabuMembershipNumber')} ? 'has-error'">
+                <label for="nabu-membership" class="control-label">NABU-Mitgliedschaft</label>
+                <div class="input-group">
+                  <select class="selectpicker" data-width="auto" th:field="*{participantForm.nabuMember}">
+                    <option selected="selected" value="UNKNOWN">unbekannt</option>
+                    <option id="nabu-membership-toggler" value="IS_MEMBER">Mitglied</option>
+                    <option value="NO_MEMBER">kein Mitglied</option>
+                  </select>
+                  <label for="nabu-membership" class="sr-only">Mitgliedsnummer</label>
+                  <input type="text" class="form-control" id="nabu-membership" disabled="disabled"
+                    placeholder="Mitgliedsnummer" data-controlled-by="#nabu-membership-toggler"
+                    th:field="*{participantForm.nabuMembershipNumber}" />
+                </div>
+                <p class="help-block" th:if="${#fields.hasErrors('participantForm.nabuMember')}"
+                  th:errors="*{participantForm.nabuMember}">
+                  Ungültige Eingabe
+                </p>
+                <p class="help-block" th:if="${#fields.hasErrors('participantForm.nabuMembershipNumber')}"
+                  th:errors="*{participantForm.nabuMembershipNumber}">
+                  Ungültige Eingabe
+                </p>
+              </div>
+              <hr />
+              <div class="form-group" th:classappend="${#fields.hasErrors('participantForm.remarks')} ? 'has-error'">
+                <label for="remarks" class="control-label">Bemerkungen</label>
+                <textarea class="form-control" id="remarks" th:field="*{participantForm.remarks}"></textarea>
+                <p class="help-block" th:if="${#fields.hasErrors('participantForm.remarks')}"
+                  th:errors="*{participantForm.remarks}">
+                  Ungültige Eingabe
+                </p>
+              </div>
+              <hr />
+              <div class="form-group" th:classappend="${#fields.hasErrors('participantForm.events')} ? 'has-error'"
+                th:unless="${#httpServletRequest.getParameter('return-action') == 'add-participant'}">
+                <label for="events" class="control-label">Veranstaltungen</label>
+                <div>
+                  <select class="selectpicker" id="events" multiple="multiple" data-live-search="true"
+                    th:field="*{participantForm.events}" th:remove="all-but-first">
+                    <optgroup label="NAJU Sachsen" th:each="entry : ${eventCollection}" th:remove="all-but-first"
+                      th:label="${entry.name}">
+                      <option data-subtext="25.07.-09.08., Oberwiesenthal" th:each="event : ${entry.events}"
+                        th:value="${event.id}" th:text="${event.name}" th:attr="data-subtext=${{#time.formatTimeSpan(event.getStartTime(), event.getEndTime())}} + ', ' + ${event.place.city}">
+                        Bergwiesencamp
+                      </option>
+                      <option data-subtext="14.-19.05., Dörfel">HIFA</option>
+                    </optgroup>
+                    <optgroup label="NAJU Dresden">
+                      <option data-subtext="21.-24.05., Dachsenberg">Wildlife-Camp</option>
+                      <option data-subtext="05.-16.06., Meck-Pom">Paddelcamp</option>
+                    </optgroup>
+                  </select>
+                </div>
+                <p class="help-block" th:if="${#fields.hasErrors('participantForm.events')}"
+                  th:errors="*{participantForm.events}">
+                  Ungültige Eingabe
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- activist and referent info -->
+        <div class="col-md-4">
+          <div class="containter-fluid">
+            <div class="row">
+
+              <!-- activist info -->
+              <div class="col-md-12">
+                <div class="panel panel-default form-category toggle-category">
+                  <div class="panel-heading">
                     <label>
-                      <input type="checkbox" id="juleica-toggler"
-                             th:field="*{activistForm.juleica}"/>
-                      die Person hat eine Juleica
+                      <input type="checkbox" class="form-category-controller" th:field="*{activist}" />
+                      die Person ist in der NAJU aktiv
                     </label>
+                    <h2 class="hidden">Aktiven-Details</h2>
                   </div>
-                  <p class="help-block" th:if="${#fields.hasErrors('activistForm.juleica')}"
-                     th:errors="*{activistForm.juleica}">
-                    Ungültige Eingabe
-                  </p>
-                </div>
-                <div class="form-group"
-                     th:classappend="${#fields.hasErrors('activistForm.juleicaExpiryDate')} ? 'has-error'">
-                  <label for="juleica-card" class="control-label">Ablaufdatum</label>
-                  <input type="date" class="form-control" id="juleica-card"
-                         data-controlled-by="#juleica-toggler"
-                         th:field="*{activistForm.juleicaExpiryDate}"/>
-                  <p class="help-block"
-                     th:if="${#fields.hasErrors('activistForm.juleicaExpiryDate')}"
-                     th:errors="*{activistForm.juleicaExpiryDate}">
-                    Ungültige Eingabe
-                  </p>
-                </div>
-                <div class="form-group"
-                     th:classappend="${#fields.hasErrors('activistForm.juleicaLevel')} ? 'has-error'">
-                  <label for="juleica-level" class="control-label">Stufe</label>
-                  <fieldset id="juleica-level">
-                    <div class="radio">
-                      <label>
-                        <input type="radio" name="juleica-level" value="G"
-                               th:field="*{activistForm.juleicaLevel}"/> G (Grundausbildung)
-                      </label>
+                  <div class="panel-body form-category-content">
+                    <div class="form-group" th:classappend="${#fields.hasErrors('activistForm.juleica')} ? 'has-error'">
+                      <label for="juleica-card" class="control-label">Juleica</label>
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" id="juleica-toggler" th:field="*{activistForm.juleica}" />
+                          die Person hat eine Juleica
+                        </label>
+                      </div>
+                      <p class="help-block" th:if="${#fields.hasErrors('activistForm.juleica')}"
+                        th:errors="*{activistForm.juleica}">
+                        Ungültige Eingabe
+                      </p>
                     </div>
-                    <div class="radio">
-                      <label>
-                        <input type="radio" name="juleica-level" value="L"
-                               th:field="*{activistForm.juleicaLevel}"/> L (Ausbilder*in)
-                      </label>
+                    <div class="form-group" th:classappend="${#fields.hasErrors('activistForm.juleicaExpiryDate')} ? 'has-error'">
+                      <label for="juleica-card" class="control-label">Ablaufdatum</label>
+                      <input type="date" class="form-control" id="juleica-card" data-controlled-by="#juleica-toggler"
+                        th:field="*{activistForm.juleicaExpiryDate}" />
+                      <p class="help-block" th:if="${#fields.hasErrors('activistForm.juleicaExpiryDate')}"
+                        th:errors="*{activistForm.juleicaExpiryDate}">
+                        Ungültige Eingabe
+                      </p>
                     </div>
-                  </fieldset>
-                  <p class="help-block" th:if="${#fields.hasErrors('activistForm.juleicaLevel')}"
-                     th:errors="*{activistForm.juleicaLevel}">
-                    Ungültige Eingabe
-                  </p>
-                </div>
-                <hr/>
-                <div class="form-group"
-                     th:classappend="${#fields.hasErrors('activistForm.localGroups')} ? 'has-error'">
-                  <label for="local-groups" class="control-label">Ortsgruppen</label>
-                  <div>
-                    <select class="selectpicker" id="local-groups" multiple="multiple"
-                            data-width="auto" data-live-search="true"
-                            th:field="*{activistForm.localGroups}" th:remove="all-but-first">
-                      <option th:each="localGroup : ${localGroups}" th:value="${localGroup.id}"
-                              th:text="${localGroup.name}">NAJU Sachsen
-                      </option>
-                      <option>NAJU Dresden</option>
-                      <option>NAJU Chemnitz</option>
-                      <option>NAJU Freiberg</option>
-                    </select>
+                    <div class="form-group" th:classappend="${#fields.hasErrors('activistForm.juleicaLevel')} ? 'has-error'">
+                      <label for="juleica-level" class="control-label">Stufe</label>
+                      <fieldset id="juleica-level">
+                        <div class="radio">
+                          <label>
+                            <input type="radio" name="juleica-level" value="G" th:field="*{activistForm.juleicaLevel}" />
+                            G (Grundausbildung)
+                          </label>
+                        </div>
+                        <div class="radio">
+                          <label>
+                            <input type="radio" name="juleica-level" value="L" th:field="*{activistForm.juleicaLevel}" />
+                            L (Ausbilder*in)
+                          </label>
+                        </div>
+                      </fieldset>
+                      <p class="help-block" th:if="${#fields.hasErrors('activistForm.juleicaLevel')}"
+                        th:errors="*{activistForm.juleicaLevel}">
+                        Ungültige Eingabe
+                      </p>
+                    </div>
+                    <hr />
+                    <div class="form-group" th:classappend="${#fields.hasErrors('activistForm.localGroups')} ? 'has-error'">
+                      <label for="local-groups" class="control-label">Ortsgruppen</label>
+                      <div>
+                        <select class="selectpicker" id="local-groups" multiple="multiple"
+                          data-width="auto" data-live-search="true" th:field="*{activistForm.localGroups}"
+                          th:remove="all-but-first">
+                          <option th:each="localGroup : ${localGroups}" th:value="${localGroup.id}"
+                            th:text="${localGroup.name}">NAJU Sachsen
+                          </option>
+                          <option>NAJU Dresden</option>
+                          <option>NAJU Chemnitz</option>
+                          <option>NAJU Freiberg</option>
+                        </select>
+                      </div>
+                      <p class="help-block" th:if="${#fields.hasErrors('activistForm.localGroups')}"
+                        th:errors="*{activistForm.localGroups}">
+                        Ungültige Eingabe
+                      </p>
+                    </div>
                   </div>
-                  <p class="help-block" th:if="${#fields.hasErrors('activistForm.localGroups')}"
-                     th:errors="*{activistForm.localGroups}">
-                    Ungültige Eingabe
-                  </p>
                 </div>
               </div>
+
+              <!-- referent info -->
+              <div class="col-md-12">
+                <div class="panel panel-default form-category toggle-category">
+                  <div class="panel-heading">
+                    <label>
+                      <input type="checkbox" class="form-category-controller" th:field="*{referent}" />
+                      die Person kann als Referent*in auftreten
+                    </label>
+                    <h2 class="hidden">Referenten-Details</h2>
+                  </div>
+                  <div class="panel-body form-category-content">
+                    <div class="form-group">
+                      <label for="phone-official" class="control-label">Telefon (dienstlich)</label>
+                      <div class="input-group">
+                        <span class="input-group-addon">
+                          <span class="glyphicon glyphicon-ban-circle"></span>
+                        </span>
+                        <input type="tel" class="form-control" id="phone-official" placeholder="Bitte als '0123 45678901' eingeben" />
+                        <span class="input-group-addon">z.Z. noch nicht unterstützt 😣</span>
+                      </div>
+                    </div>
+                    <div class="form-group" th:classappend="${#fields.hasErrors('referentForm.qualifications')} ? 'has-error'">
+                      <label for="qualifications" class="control-label">Qualifikationen</label>
+                      <div>
+                        <select class="selectpicker" id="qualifications" multiple="multiple"
+                          data-live-search="true" th:field="*{referentForm.qualifications}"
+                          th:remove="all-but-first">
+                          <option th:each="qualification : ${qualifications}" th:value="${qualification.name}"
+                            th:text="${qualification.name}" th:attr="data-subtext=${qualification.description}">
+                            Ehrenamtsmanagement
+                          </option>
+                          <option>Öffentlichkeitsarbeit</option>
+                          <option>Kleingruppenorganisation</option>
+                          <option>Entemologie</option>
+                          <option>Herpetologie</option>
+                          <option>Ornithologie</option>
+                          <option>Mammalogie</option>
+                          <option>Botanik</option>
+                        </select>
+                        <p class="help-block" th:if="${#fields.hasErrors('referentForm.qualifications')}"
+                          th:errors="*{referentForm.qualifications}">
+                          Ungültige Eingabe
+                        </p>
+                      </div>
+                      <p class="help-block">
+                        Neue Qualifikationen können im Referent*innen-Profil jederzeit hinzugefügt
+                        werden.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
+        </div>
 
-          <!-- referent info -->
-          <div class="col-md-12">
-            <div class="panel panel-default form-category toggle-category">
-              <div class="panel-heading">
-                <label>
-                  <input type="checkbox" class="form-category-controller"
-                         th:field="*{referent}"/> die Person kann als Referent*in auftreten
-                </label>
-                <h2 class="hidden">Referenten-Details</h2>
-              </div>
-              <div class="panel-body form-category-content">
-                <div class="form-group">
-                  <label for="phone-official" class="control-label">Telefon (dienstlich)</label>
-                  <div class="input-group">
-                    <span class="input-group-addon">
-                      <span class="glyphicon glyphicon-ban-circle"></span>
-                    </span>
-                    <input type="tel" class="form-control" id="phone-official"
-                           placeholder="Bitte als '0123 45678901' eingeben"/>
-                    <span class="input-group-addon">z.Z. noch nicht unterstützt 😣</span>
-                  </div>
-                </div>
-                <div class="form-group"
-                     th:classappend="${#fields.hasErrors('referentForm.qualifications')} ? 'has-error'">
-                  <label for="qualifications" class="control-label">Qualifikationen</label>
-                  <div>
-                    <select class="selectpicker" id="qualifications" multiple="multiple"
-                            data-live-search="true" th:field="*{referentForm.qualifications}"
-                            th:remove="all-but-first">
-                      <option th:each="qualification : ${qualifications}"
-                              th:value="${qualification.name}" th:text="${qualification.name}"
-                              th:attr="data-subtext=${qualification.description}">
-                        Ehrenamtsmanagement
-                      </option>
-                      <option>Öffentlichkeitsarbeit</option>
-                      <option>Kleingruppenorganisation</option>
-                      <option>Entemologie</option>
-                      <option>Herpetologie</option>
-                      <option>Ornithologie</option>
-                      <option>Mammalogie</option>
-                      <option>Botanik</option>
-                    </select>
-                    <p class="help-block"
-                       th:if="${#fields.hasErrors('referentForm.qualifications')}"
-                       th:errors="*{referentForm.qualifications}">
-                      Ungültige Eingabe
-                    </p>
-                  </div>
-                  <p class="help-block">
-                    Neue Qualifikationen können im Referent*innen-Profil jederzeit hinzugefügt
-                    werden.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+      </form>
 
+      <!-- controls -->
+      <div class="row display-category">
+        <div class="pull-right">
+          <button type="button" class="btn btn-default" data-toggle="modal" data-target="#confirm-abort">Abbrechen
+          </button>
+          <button type="submit" form="add-person" class="btn btn-primary">Speichern</button>
         </div>
       </div>
-    </div>
 
-  </form>
+      <form id="logout-user" method="POST" th:action="@{/logout}">
+        <input type="hidden" name="csrf" th:value="csrf" />
+      </form>
 
-  <!-- controls -->
-  <div class="row display-category">
-    <div class="pull-right">
-      <button type="button" class="btn btn-default" data-toggle="modal"
-              data-target="#confirm-abort">Abbrechen
-      </button>
-      <button type="submit" form="add-person" class="btn btn-primary">Speichern</button>
-    </div>
-  </div>
+    </main>
+    <span class="hidden" id="principal" sec:authentication="principal.associatedPerson"></span>
+    <script src="../../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
+    <script src="../../static/resources/js/formControls.js" th:src="@{/resources/js/formControls.js}"></script>
+    <script src="../../static/resources/js/addPerson.js" th:src="@{/resources/js/addPerson.js}"></script>
 
-  <form id="logout-user" method="POST" th:action="@{/logout}">
-    <input type="hidden" name="csrf" th:value="csrf"/>
-  </form>
+    <script type="text/javascript" th:if="${similarPersons}">
+      $('#similar-persons').modal('show');
+    </script>
 
-</main>
-<span class="hidden" id="principal" sec:authentication="principal.associatedPerson"></span>
-<script src="../../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
-<script src="../../static/resources/js/formControls.js"
-        th:src="@{/resources/js/formControls.js}"></script>
-<script src="../../static/resources/js/addPerson.js"
-        th:src="@{/resources/js/addPerson.js}"></script>
+  </body>
 
-<script type="text/javascript" th:if="${similarPersons}">
-  $('#similar-persons').modal('show');
-</script>
-
-</body>
 </html>
