@@ -264,6 +264,7 @@
               </button>
 
               <div class="btn-group btn-group-sm">
+                <!--
                 <a href="#" class="btn btn-default"
                    th:href="@{/events/{id}/participants(id=${event.id}, view='condensed')}">
                   <span class="glyphicon glyphicon-th-large"></span>
@@ -286,6 +287,13 @@
                    th:href="@{/events/{id}/participants(id=${event.id}, view='detailed')}">
                   <span class="glyphicon glyphicon-list"></span>
                   Details
+                </a>
+                -->
+                
+                <a href="customizeParticipantsTable.html" class="btn btn-default"
+                   th:href="@{/events/{id}/participants/table(id=${event.id}, columnSelection=true)}">
+                  <span class="glyphicon glyphicon-filter"></span>
+                  Tabelle Anpassen
                 </a>
 
               </div>
