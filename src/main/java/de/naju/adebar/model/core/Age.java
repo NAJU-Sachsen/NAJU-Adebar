@@ -105,7 +105,7 @@ public class Age implements Comparable<Age> {
    */
   @Transient
   public boolean isOfLegalAge() {
-    return LEGAL_AGE.compareTo(this) <= -1;
+    return LEGAL_AGE.compareTo(this) <= 0;
   }
 
   /**
