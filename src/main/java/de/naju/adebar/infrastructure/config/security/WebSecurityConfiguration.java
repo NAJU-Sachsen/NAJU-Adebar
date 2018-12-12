@@ -1,7 +1,5 @@
 package de.naju.adebar.infrastructure.config.security;
 
-import com.google.common.collect.Lists;
-import de.naju.adebar.app.security.user.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +13,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,6 +23,8 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.access.expression.WebExpressionVoter;
 import org.springframework.util.Assert;
+import com.google.common.collect.Lists;
+import de.naju.adebar.app.security.user.UserAccountService;
 
 /**
  * Controller configuration specifically regarding security aspects
@@ -73,6 +74,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     // @formatter:on
   }
 
+  @Override
+  public void configure(WebSecurity web) throws Exception {
+    web.expressionHandler(webExpressionHandler());
+  }
+
   /**
    * Configure how to receive the user account information for authentication
    */
@@ -108,9 +114,14 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
   @Bean
   protected RoleHierarchyImpl roleHierarchy() {
     RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
-    roleHierarchy.setHierarchy("ROLE_ADMIN > ROLE_JUBIREF\nROLE_JUBIREF > ROLE_EMPLOYEE\n"
-        + "ROLE_EMPLOYEE > ROLE_FOEJ\nROLE_FOEJ > ROLE_CHAIRMAN\nROLE_CHAIRMAN > ROLE_TREASURER\n"
-        + "ROLE_TREASURER > ROLE_BOARD_MEMBER\nROLE_BOARD_MEMBER > ROLE_USER");
+    roleHierarchy.setHierarchy( //
+        "ROLE_ADMIN > ROLE_JUBIREF\n" //
+            + "ROLE_JUBIREF > ROLE_EMPLOYEE\n" //
+            + "ROLE_EMPLOYEE > ROLE_FOEJ\n" //
+            + "ROLE_FOEJ > ROLE_CHAIRMAN\n" //
+            + "ROLE_CHAIRMAN > ROLE_TREASURER\n" //
+            + "ROLE_TREASURER > ROLE_BOARD_MEMBER\n" //
+            + "ROLE_BOARD_MEMBER > ROLE_USER");
     return roleHierarchy;
   }
 
