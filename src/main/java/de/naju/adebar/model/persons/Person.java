@@ -1,22 +1,5 @@
 package de.naju.adebar.model.persons;
 
-import de.naju.adebar.documentation.infrastructure.JpaOnly;
-import de.naju.adebar.model.core.Address;
-import de.naju.adebar.model.core.Email;
-import de.naju.adebar.model.core.PhoneNumber;
-import de.naju.adebar.model.events.Event;
-import de.naju.adebar.model.persons.details.Gender;
-import de.naju.adebar.model.persons.details.JuleicaCard;
-import de.naju.adebar.model.persons.events.AbstractPersonRelatedEvent;
-import de.naju.adebar.model.persons.events.NewActivistRegisteredEvent;
-import de.naju.adebar.model.persons.events.NewParentRegisteredEvent;
-import de.naju.adebar.model.persons.events.NewReferentRegisteredEvent;
-import de.naju.adebar.model.persons.events.PersonArchivedEvent;
-import de.naju.adebar.model.persons.events.PersonDataUpdatedEvent;
-import de.naju.adebar.model.persons.exceptions.ArchivedPersonException;
-import de.naju.adebar.model.persons.exceptions.ExistingParentException;
-import de.naju.adebar.model.persons.exceptions.ImpossibleKinshipRelationException;
-import de.naju.adebar.model.persons.qualifications.Qualification;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,6 +23,23 @@ import javax.persistence.Transient;
 import org.springframework.data.domain.AfterDomainEventPublication;
 import org.springframework.data.domain.DomainEvents;
 import org.springframework.util.Assert;
+import de.naju.adebar.documentation.infrastructure.JpaOnly;
+import de.naju.adebar.model.core.Address;
+import de.naju.adebar.model.core.Email;
+import de.naju.adebar.model.core.PhoneNumber;
+import de.naju.adebar.model.events.Event;
+import de.naju.adebar.model.persons.details.Gender;
+import de.naju.adebar.model.persons.details.JuleicaCard;
+import de.naju.adebar.model.persons.events.AbstractPersonRelatedEvent;
+import de.naju.adebar.model.persons.events.NewActivistRegisteredEvent;
+import de.naju.adebar.model.persons.events.NewParentRegisteredEvent;
+import de.naju.adebar.model.persons.events.NewReferentRegisteredEvent;
+import de.naju.adebar.model.persons.events.PersonArchivedEvent;
+import de.naju.adebar.model.persons.events.PersonDataUpdatedEvent;
+import de.naju.adebar.model.persons.exceptions.ArchivedPersonException;
+import de.naju.adebar.model.persons.exceptions.ExistingParentException;
+import de.naju.adebar.model.persons.exceptions.ImpossibleKinshipRelationException;
+import de.naju.adebar.model.persons.qualifications.Qualification;
 
 /**
  * Abstraction of a person. No matter of its concrete role (camp participant, activist, ...) some
@@ -276,8 +276,8 @@ public class Person {
   }
 
   /**
-   * Setter just for JPA's sake. Private to enforce consistency with the state of the {@link
-   * #participantProfile}
+   * Setter just for JPA's sake. Private to enforce consistency with the state of the
+   * {@link #participantProfile}
    *
    * @param participant whether the person is a participant
    */
@@ -288,7 +288,7 @@ public class Person {
 
   /**
    * @return the participant profile of the person. If it is not a camp participant, this will
-   *     return {@code null}.
+   *         return {@code null}.
    */
   public ParticipantProfile getParticipantProfile() {
     return participantProfile;
@@ -296,7 +296,7 @@ public class Person {
 
   /**
    * @param participantProfile the participant profile of the person. May be {@code null} if the
-   *     person is not a camp participant.
+   *          person is not a camp participant.
    */
   protected void setParticipantProfile(ParticipantProfile participantProfile) {
     this.participant = participantProfile != null;
@@ -312,8 +312,8 @@ public class Person {
   }
 
   /**
-   * Setter just for JPA's sake. Private to enforce consistency with the state of the {@link
-   * #activistProfile}
+   * Setter just for JPA's sake. Private to enforce consistency with the state of the
+   * {@link #activistProfile}
    *
    * @param activist whether the person is a activist
    */
@@ -324,15 +324,15 @@ public class Person {
 
   /**
    * @return activist-related information about the person. If it is not an activist, this will
-   *     return {@code null}.
+   *         return {@code null}.
    */
   public ActivistProfile getActivistProfile() {
     return activistProfile;
   }
 
   /**
-   * @param activistProfile the activist profile of the person. May be {@code null} if the
-   *     person is not an activist.
+   * @param activistProfile the activist profile of the person. May be {@code null} if the person is
+   *          not an activist.
    */
   protected void setActivistProfile(ActivistProfile activistProfile) {
     this.activist = activistProfile != null;
@@ -348,8 +348,8 @@ public class Person {
   }
 
   /**
-   * Setter just for JPA's sake. Private to enforce consistency with the state of the {@link
-   * #referentProfile}
+   * Setter just for JPA's sake. Private to enforce consistency with the state of the
+   * {@link #referentProfile}
    *
    * @param referent whether the person is a referent
    */
@@ -360,15 +360,15 @@ public class Person {
 
   /**
    * @return referent-related information about the person. If it is not a referent, this will
-   *     return {@code null}.
+   *         return {@code null}.
    */
   public ReferentProfile getReferentProfile() {
     return referentProfile;
   }
 
   /**
-   * @param referentProfile the referent profile of the person. May be {@code null} if the
-   *     person is not a referent.
+   * @param referentProfile the referent profile of the person. May be {@code null} if the person is
+   *          not a referent.
    */
   protected void setReferentProfile(ReferentProfile referentProfile) {
     this.referent = referentProfile != null;
@@ -385,15 +385,15 @@ public class Person {
 
   /**
    * @return parent-relation information about the person. If it is not a parent, {@code null} will
-   *     be returned. This is different from {@link #getParents()}!
+   *         be returned. This is different from {@link #getParents()}!
    */
   public ParentProfile getParentProfile() {
     return parentProfile;
   }
 
   /**
-   * @param parentProfile the parent profile of the person. May be {@code null} if the person is
-   *     no parent.
+   * @param parentProfile the parent profile of the person. May be {@code null} if the person is no
+   *          parent.
    */
   protected void setParentProfile(ParentProfile parentProfile) {
     this.parent = parentProfile != null;
@@ -495,7 +495,7 @@ public class Person {
 
   /**
    * @return {@code true} if another parent profile may be connected to this person, {@code false}
-   *     otherwise
+   *         otherwise
    */
   public boolean parentProfileMayBeConnected() {
     return parents.size() < MAX_PARENT_PROFILES;
@@ -765,6 +765,12 @@ public class Person {
     assertNotArchived();
     anonymiseProfile();
     anonymiseAddress();
+    parents.clear();
+
+    if (isParent()) {
+      parentProfile.anonymise();
+    }
+
     archived = true;
 
     registerEvent(PersonArchivedEvent.forPerson(this));
@@ -778,8 +784,8 @@ public class Person {
    * @return the person with the new parent
    * @throws IllegalStateException if the person already has two parents
    * @throws ExistingParentException if the parent is already known
-   * @throws ImpossibleKinshipRelationException if parent and child are the same person. No
-   *     cycle checks in the relationship graph are being performed yet.
+   * @throws ImpossibleKinshipRelationException if parent and child are the same person. No cycle
+   *           checks in the relationship graph are being performed yet.
    */
   public Person connectParent(Person parent) {
     if (!parentProfileMayBeConnected()) {
@@ -831,7 +837,7 @@ public class Person {
 
   /**
    * @return whether at least one {@link PersonDataUpdatedEvent} was registered since the last
-   *     {@link PersonRepository#save(Entity)} operation
+   *         {@link PersonRepository#save(Entity)} operation
    */
   boolean updateEventWasRegistered() {
     return hasRegisteredEventOf(PersonDataUpdatedEvent.class);
@@ -846,8 +852,8 @@ public class Person {
   }
 
   /**
-   * @return all events that where saved for publishing. This will include at most one {@link
-   *     PersonDataUpdatedEvent} and one {@link PersonArchivedEvent}
+   * @return all events that where saved for publishing. This will include at most one
+   *         {@link PersonDataUpdatedEvent} and one {@link PersonArchivedEvent}
    */
   @DomainEvents
   Collection<AbstractPersonRelatedEvent> getModificationEvents() {
@@ -855,8 +861,8 @@ public class Person {
   }
 
   /**
-   * Marks all events as "has been published" should always be called after the result of {@link
-   * #getModificationEvents()} has been processed
+   * Marks all events as "has been published" should always be called after the result of
+   * {@link #getModificationEvents()} has been processed
    */
   @AfterDomainEventPublication
   void clearEvents() {
@@ -917,6 +923,7 @@ public class Person {
    */
   private void anonymiseProfile() {
     this.firstName = "";
+    this.lastName = "";
     this.email = null;
   }
 

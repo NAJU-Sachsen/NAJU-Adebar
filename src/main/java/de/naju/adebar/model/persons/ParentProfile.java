@@ -1,8 +1,5 @@
 package de.naju.adebar.model.persons;
 
-import de.naju.adebar.documentation.infrastructure.JpaOnly;
-import de.naju.adebar.model.core.PhoneNumber;
-import de.naju.adebar.model.persons.events.PersonDataUpdatedEvent;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -10,6 +7,9 @@ import javax.persistence.Embedded;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import org.springframework.util.Assert;
+import de.naju.adebar.documentation.infrastructure.JpaOnly;
+import de.naju.adebar.model.core.PhoneNumber;
+import de.naju.adebar.model.persons.events.PersonDataUpdatedEvent;
 
 /**
  * Special information about parents - mainly extra phone numbers - will be stored here.
@@ -75,14 +75,6 @@ public class ParentProfile extends AbstractProfile {
   }
 
   /**
-   * @param id the ID of the person this profile belongs to
-   */
-  @JpaOnly
-  private void setId(PersonId id) {
-    this.id = id;
-  }
-
-  /**
    * @return the parent's phone number at home. If none is specified, {@code null} will be returned.
    */
   public PhoneNumber getLandlinePhone() {
@@ -90,24 +82,10 @@ public class ParentProfile extends AbstractProfile {
   }
 
   /**
-   * @param landlinePhone the parent's phone number at home
-   */
-  protected void setLandlinePhone(PhoneNumber landlinePhone) {
-    this.landlinePhone = landlinePhone;
-  }
-
-  /**
    * @return the parent's phone number at work. If none is specified, {@code null} will be returned.
    */
   public PhoneNumber getWorkPhone() {
     return workPhone;
-  }
-
-  /**
-   * @param workPhone the parent's phone number at work
-   */
-  protected void setWorkPhone(PhoneNumber workPhone) {
-    this.workPhone = workPhone;
   }
 
   /**
@@ -152,6 +130,33 @@ public class ParentProfile extends AbstractProfile {
         person -> registerEventIfPossible(PersonDataUpdatedEvent.forPerson(person)));
 
     return this;
+  }
+
+  /**
+   * @param landlinePhone the parent's phone number at home
+   */
+  protected void setLandlinePhone(PhoneNumber landlinePhone) {
+    this.landlinePhone = landlinePhone;
+  }
+
+  /**
+   * @param workPhone the parent's phone number at work
+   */
+  protected void setWorkPhone(PhoneNumber workPhone) {
+    this.workPhone = workPhone;
+  }
+
+  void anonymise() {
+    this.workPhone = null;
+    this.landlinePhone = null;
+  }
+
+  /**
+   * @param id the ID of the person this profile belongs to
+   */
+  @JpaOnly
+  private void setId(PersonId id) {
+    this.id = id;
   }
 
   /*

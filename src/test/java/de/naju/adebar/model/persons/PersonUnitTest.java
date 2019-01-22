@@ -1,7 +1,11 @@
 package de.naju.adebar.model.persons;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.Collection;
+import org.junit.Before;
+import org.junit.Test;
 import de.naju.adebar.model.core.Address;
 import de.naju.adebar.model.core.Email;
 import de.naju.adebar.model.core.PhoneNumber;
@@ -9,11 +13,6 @@ import de.naju.adebar.model.persons.details.Gender;
 import de.naju.adebar.model.persons.details.JuleicaCard;
 import de.naju.adebar.model.persons.exceptions.ArchivedPersonException;
 import de.naju.adebar.model.persons.qualifications.Qualification;
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Collection;
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  * Basic testing of the {@link Person} class
@@ -101,8 +100,22 @@ public class PersonUnitTest {
   public void archiveRemovesPersonalInformation() {
     person.archive();
     assertThat(person.getFirstName()).isEmpty();
+    assertThat(person.getLastName().isEmpty()); // #56 last names should be removed, too
     assertThat(person.getEmail()).isNull();
     assertThat(person.getAddress().getStreet()).isEmpty();
+  }
+
+  @Test // #56
+  public void archiveRemovesParents() {
+    Person parent = new Person(new PersonId(), "Berta", "Beate", Email.of("bbeate@mail.com"));
+    person.connectParent(parent);
+
+    // preconditions
+    assertThat(parent.isParent());
+    assertThat(person.getParents()).containsExactly(parent);
+
+    person.archive();
+    assertThat(person.getParents()).isEmpty();
   }
 
   @Test(expected = ArchivedPersonException.class)
