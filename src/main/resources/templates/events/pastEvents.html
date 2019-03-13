@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="utf-8"/>
   <meta content="width=device-width,initial-scale=1" name="viewport"/>
-  <meta th:name="_csrf" th:content="${_csrf.token}"/>
+  <meta th:content="${_csrf.token}" th:name="_csrf"/>
   <title>Veranstaltungen | Adebar</title>
 
 
-  <link rel="stylesheet" type="text/css" href="../../static/resources/css/bootstrap.min.css"
-        th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
-  <link rel="stylesheet" type="text/css" href="../../static/resources/css/style.css"
-        th:href="@{/resources/css/style.css}"/>
+  <link href="../../static/resources/css/bootstrap.min.css" rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"
+        type="text/css"/>
+  <link href="../../static/resources/css/style.css" rel="stylesheet" th:href="@{/resources/css/style.css}"
+        type="text/css"/>
 
   <link rel="shortcut icon" th:href="@{/resources/res/favicon.ico}"/>
 </head>
@@ -34,26 +34,26 @@
       <!-- menu -->
       <div class="action-bar col-md-8">
         <div class="row">
-          <form id="event-search" class="col-md-8" method="get" th:action="@{/events/search}">
-            <label for="event-search" class="sr-only">Suchen (Name, Datum, Ort)</label>
+          <form class="col-md-8" id="event-search" method="get" th:action="@{/events/search}">
+            <label class="sr-only" for="event-search">Suchen (Name, Datum, Ort)</label>
             <div class="input-group">
-              <input type="search" name="query" class="form-control" id="search"
-                     placeholder="Name, Datum, Ort ..." th:value="${param.query}"/>
+              <input class="form-control" id="search" name="query" placeholder="Name, Datum, Ort ..."
+                     th:value="${param.query}" type="search"/>
               <div class="input-group-addon">
-                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                <span aria-hidden="true" class="glyphicon glyphicon-search"></span>
               </div>
             </div>
           </form>
-          <button type="submit" form="event-search" class="sr-only">Suche durchführen</button>
+          <button class="sr-only" form="event-search" type="submit">Suche durchführen</button>
           <div class="col-md-4">
             <div class="btn-group">
-              <a href="addEvent.html" class="btn btn-default" th:href="@{/events/add}">
+              <a class="btn btn-default" href="addEvent.html" th:href="@{/events/add}">
                 <span class="glyphicon glyphicon-plus"></span>
                 Hinzufügen
               </a>
-              <a href="filterEvents.html" class="btn btn-default" disabled="disabled"
-                 data-toggle="tooltip" data-placement="bottom"
-                 data-title="Funktioniert bald wieder.. Versprochen!"
+              <a class="btn btn-default" data-placement="bottom" data-title="Funktioniert bald wieder.. Versprochen!"
+                 data-toggle="tooltip" disabled="disabled"
+                 href="filterEvents.html"
                  th:href="@{/events/filter}">
                 <span class="glyphicon glyphicon-filter"></span>
                 <span class="hide-sm">Filtern</span>
@@ -74,8 +74,8 @@
         <tbody th:remove="all-but-first">
         <tr class="row" th:each="event : ${events}">
           <td class="col-md-1">
-            <span class="glyphicon glyphicon-time" data-toggle="tooltip" data-placement="bottom"
-                  data-title="laufende Veranstaltung" data-container="body"
+            <span class="glyphicon glyphicon-time" data-container="body" data-placement="bottom"
+                  data-title="laufende Veranstaltung" data-toggle="tooltip"
                   th:if="${event.ongoing}"></span>
           </td>
           <td class="col-md-3 strong">
@@ -91,9 +91,9 @@
           </td>
           <td class="col-md-2">
             <a class="label label-default"
+               th:href="@{/localGroups/{id}(id=${event.localGroup.id})}"
                th:if="${event.forLocalGroup}"
-               th:text="${event.localGroup.name}"
-               th:href="@{/localGroups/{id}(id=${event.localGroup.id})}">
+               th:text="${event.localGroup.name}">
               NAJU Sachsen
             </a>
           </td>
@@ -119,10 +119,10 @@
 
   <div class="row display-category" th:if="${events.hasNext()} or ${events.hasPrevious()}">
     <nav class="clearfix col-md-12">
-      <ul class="pager" th:with="total = ${events.totalPages}" th:unless="${param.query}">
+      <ul class="pager" th:unless="${param.query}" th:with="total = ${events.totalPages}">
         <li class="previous" th:if="${events.hasPrevious()}">
           <a th:href="@{/events/past(page=${events.previousPageable().pageNumber},size=${events.size})}">
-            <span aria-hidden="true">&larr;</span> Zurück
+            <span aria-hidden="true">&larr;</span> Später
           </a>
         </li>
         <li>
@@ -130,14 +130,14 @@
         </li>
         <li class="next" th:if="${events.hasNext()}">
           <a th:href="@{/events/past(page=${events.nextPageable().pageNumber},size=${events.size})}">
-            Weiter <span aria-hidden="true">&rarr;</span>
+            Früher <span aria-hidden="true">&rarr;</span>
           </a>
         </li>
       </ul>
-      <ul class="pager" th:with="total = ${events.totalPages}" th:if="${param.query}">
+      <ul class="pager" th:if="${param.query}" th:with="total = ${events.totalPages}">
         <li class="previous" th:if="${events.hasPrevious()}">
           <a th:href="@{/events/search(page=${events.previousPageable().pageNumber},size=${events.size},query=${param.query})}">
-            <span aria-hidden="true">&larr;</span> Zurück
+            <span aria-hidden="true">&larr;</span> Später
           </a>
         </li>
         <li>
@@ -145,7 +145,7 @@
         </li>
         <li class="next" th:if="${events.hasNext()}">
           <a th:href="@{/events/search(page=${events.nextPageable().pageNumber},size=${events.size},query=${param.query})}">
-            Weiter <span aria-hidden="true">&rarr;</span>
+            Früher <span aria-hidden="true">&rarr;</span>
           </a>
         </li>
       </ul>
@@ -153,10 +153,10 @@
   </div>
 
 </main>
-<script type="text/javascript" src="../../static/resources/js/jquery.min.js"
-        th:src="@{/webjars/jquery/jquery.min.js}"></script>
-<script type="text/javascript" src="../../static/resources/js/bootstrap.min.js"
-        th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script src="../../static/resources/js/jquery.min.js" th:src="@{/webjars/jquery/jquery.min.js}"
+        type="text/javascript"></script>
+<script src="../../static/resources/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"
+        type="text/javascript"></script>
 <script src="../../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
 </body>
 </html>

@@ -409,7 +409,7 @@
                             keine Juleica
                           </td>
                         </tr>
-                        <tr class="row">
+                        <tr class="row" th:if="${event.participationInfo.hasArrivalOptions()}">
                           <th class="col-md-1 text-right">
                             <span class="glyphicon glyphicon-plane"></span>
                           </th>
