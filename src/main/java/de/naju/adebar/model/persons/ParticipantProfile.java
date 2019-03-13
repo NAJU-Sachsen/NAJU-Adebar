@@ -6,7 +6,7 @@ import de.naju.adebar.model.core.Age;
 import de.naju.adebar.model.persons.details.Gender;
 import de.naju.adebar.model.persons.details.NabuMembershipInformation;
 import de.naju.adebar.model.persons.events.PersonDataUpdatedEvent;
-import de.naju.adebar.model.persons.exceptions.DateOfBirthIsRequiredForMinorsException;
+import de.naju.adebar.model.persons.exceptions.GenderIsRequiredForMinorsException;
 import java.time.LocalDate;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -92,7 +92,9 @@ public class ParticipantProfile extends AbstractProfile {
    * Default constructor for JPA's sake
    */
   @JpaOnly
-  private ParticipantProfile() {}
+  private ParticipantProfile() {
+    // pass
+  }
 
   /**
    * @return the ID of the person to whom this profile belongs.
@@ -234,6 +236,7 @@ public class ParticipantProfile extends AbstractProfile {
 
   /**
    * @return the age of the person
+   *
    * @throws IllegalStateException if the person has no date of birth specified
    */
   public Age calculateAge() {
@@ -246,6 +249,7 @@ public class ParticipantProfile extends AbstractProfile {
    *
    * @param date the date
    * @return the person's age
+   *
    * @throws IllegalStateException if the person has no date of birth specified
    */
   public Age calculateAgeOn(LocalDate date) {
@@ -311,7 +315,7 @@ public class ParticipantProfile extends AbstractProfile {
    */
   public ParticipantProfile updateProfile(Gender gender, LocalDate dateOfBirth, String eatingHabits,
       String healthImpairments) {
-    assertDateOfBirthIsSetForMinors(dateOfBirth, gender);
+    assertGenderIsSetForMinors(dateOfBirth, gender);
 
     setGender(gender);
     setDateOfBirth(dateOfBirth);
@@ -331,7 +335,7 @@ public class ParticipantProfile extends AbstractProfile {
    * @return the updated profile information
    */
   public ParticipantProfile updateGender(Gender gender) {
-    assertDateOfBirthIsSetForMinors(this.dateOfBirth, gender);
+    assertGenderIsSetForMinors(this.dateOfBirth, gender);
 
     setGender(gender);
 
@@ -348,13 +352,39 @@ public class ParticipantProfile extends AbstractProfile {
    * @return the updated profile information
    */
   public ParticipantProfile updateDateOfBirth(LocalDate dateOfBirth) {
-    assertDateOfBirthIsSetForMinors(dateOfBirth, this.gender);
+    assertGenderIsSetForMinors(dateOfBirth, this.gender);
 
     setDateOfBirth(dateOfBirth);
 
     getRelatedPerson().ifPresent( //
         person -> registerEventIfPossible(PersonDataUpdatedEvent.forPerson(person)));
 
+    return this;
+  }
+
+  /**
+   * Updates participation info
+   *
+   * @param eatingHabits the new eating habits
+   * @return the updated profile information
+   */
+  public ParticipantProfile updateEatingHabits(String eatingHabits) {
+    setEatingHabits(eatingHabits);
+    getRelatedPerson().ifPresent( //
+        person -> registerEventIfPossible(PersonDataUpdatedEvent.forPerson(person)));
+    return this;
+  }
+
+  /**
+   * Updates participation info
+   *
+   * @param healthImpairments the new health impairments
+   * @return the updated profile information
+   */
+  public ParticipantProfile updateHealthImpairments(String healthImpairments) {
+    setHealthImpairments(healthImpairments);
+    getRelatedPerson().ifPresent( //
+        person -> registerEventIfPossible(PersonDataUpdatedEvent.forPerson(person)));
     return this;
   }
 
@@ -411,13 +441,14 @@ public class ParticipantProfile extends AbstractProfile {
   /**
    * @param dateOfBirth the date of birth to check
    * @param gender the gender to check
-   * @throws DateOfBirthIsRequiredForMinorsException if the person is under-aged and no gender
-   *     was given
+   * @throws GenderIsRequiredForMinorsException if the person is under-aged and no gender was
+   *     given
    */
   @BusinessRule
-  private void assertDateOfBirthIsSetForMinors(LocalDate dateOfBirth, Gender gender) {
+  private void assertGenderIsSetForMinors(LocalDate dateOfBirth, Gender gender) {
     if (dateOfBirth != null && personWithBirthdayIsMinor(dateOfBirth) && gender == null) {
-      throw new DateOfBirthIsRequiredForMinorsException(personId);
+      throw getRelatedPerson().map(GenderIsRequiredForMinorsException::new)
+          .orElse(new GenderIsRequiredForMinorsException(personId));
     }
   }
 
