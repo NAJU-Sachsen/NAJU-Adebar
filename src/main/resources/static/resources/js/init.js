@@ -34,6 +34,14 @@ $('[data-toggle="collapse"]').each((idx, elem) => {
   }
 });
 
+// set the funny icon according to the current time of day
+
+const currentTime = new Date();
+if (currentTime.getHours() >= 5 && currentTime.getHours() < 12) {
+  // early birds
+  document.body.style.backgroundImage = "url('/resources/img/morning_bird.png')";
+}
+
 /*
 $(document).ready(function(){
     $('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
