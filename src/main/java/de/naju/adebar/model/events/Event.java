@@ -79,6 +79,9 @@ public class Event implements Comparable<Event> {
       inverseJoinColumns = @JoinColumn(name = "projectId"))
   private Project project;
 
+  @Column(name = "canceled")
+  private boolean canceled;
+
   private transient Collection<AbstractEventRelatedDomainEvent> domainEvents = new ArrayList<>();
 
   /**
@@ -119,6 +122,15 @@ public class Event implements Comparable<Event> {
   }
 
   /**
+   * @param id may not be {@code null}
+   */
+  @JpaOnly
+  private void setId(EventId id) {
+    Assert.notNull(id, "Id may not be null");
+    this.id = id;
+  }
+
+  /**
    * Each event has a name which is likely unique. However, if there are follow-ups these may have
    * the same name. Furthermore there may be events in different local groups, which share the same
    * name.
@@ -129,12 +141,47 @@ public class Event implements Comparable<Event> {
   }
 
   /**
+   * Sets a new name for this event.
+   *
+   * @param name May not be {@code null} nor empty.
+   * @return this event
+   */
+  public Event updateName(String name) {
+    assertNotCanceled();
+
+    setName(name);
+
+    if (!updateEventWasRegistered()) {
+      registerEvent(EventUpdatedDomainEvent.forEvent(this));
+    }
+    return this;
+  }
+
+  /**
+   * @param name may not be empty
+   */
+  @JpaOnly
+  private void setName(String name) {
+    Assert.hasText(name, "Name may not be null nor empty");
+    this.name = name;
+  }
+
+  /**
    * The event's start time. If the start time does not matter, the time portion will be set to
    * {@link LocalTime#MIDNIGHT} (which is a quite unusual start time).
    */
   @Nonnull
   public LocalDateTime getStartTime() {
     return startTime;
+  }
+
+  /**
+   * @param startTime may not be {@code null}
+   */
+  @JpaOnly
+  private void setStartTime(LocalDateTime startTime) {
+    Assert.notNull(startTime, "StartTime may not be null");
+    this.startTime = startTime;
   }
 
   /**
@@ -149,61 +196,37 @@ public class Event implements Comparable<Event> {
   }
 
   /**
-   * The location where the event takes place. May be empty (according to {@link Address#empty()}).
+   * @param endTime may not be {@code null}
    */
-  @Nonnull
-  public Address getPlace() {
-    return place;
+  @JpaOnly
+  private void setEndTime(LocalDateTime endTime) {
+    Assert.notNull(endTime, "EndTime may not be null");
+    this.endTime = endTime;
   }
 
   /**
-   * The persons who participate in the event, as well as some related information.
-   */
-  @Nonnull
-  public ParticipantsList getParticipantsList() {
-    participantsList.provideRelatedEvent(this);
-    return participantsList;
-  }
-
-  /**
-   * Information for persons who want to, or will be participating in an event.
-   */
-  @Nonnull
-  public ParticipationInfo getParticipationInfo() {
-    participationInfo.provideRelatedEvent(this);
-    return participationInfo;
-  }
-
-  /**
-   * Information about who organizes an event and who will be counseling.
-   */
-  @Nonnull
-  public OrganizationInfo getOrganizationInfo() {
-    organizationInfo.provideRelatedEvent(this);
-    return organizationInfo;
-  }
-
-  /**
-   * Provides access to the local group this event belongs to, if there is any.
+   * Sets a new time span for this event.
+   * <p>
+   * The end time must be after (or equal to) the start time. If only the date portion is important,
+   * the time should be set to 00:00.
    *
-   * Each event will either belong to a local group, or a project.
-   *
-   * @return the local group or {@code null} otherwise
+   * @param startTime May not be {@code null}.
+   * @param endTime May not be {@code null}.
+   * @return this event
    */
-  @Nullable
-  public LocalGroup getLocalGroup() {
-    return localGroup;
-  }
+  public Event updateStartTimeAndEndTime(LocalDateTime startTime, LocalDateTime endTime) {
+    assertNotCanceled();
+    Assert.notNull(startTime, "startTime may not be null");
+    Assert.notNull(endTime, "endTime may not be null");
+    Assert2.isFalse(endTime.isBefore(startTime), "End time may not be before start time");
 
-  /**
-   * Provides access to the project this event belongs to, if there is any.
-   *
-   * Each event will either belong to a local group, or a project.
-   *
-   * @return the project or {@code null} otherwise
-   */
-  public Project getProject() {
-    return project;
+    this.startTime = startTime;
+    this.endTime = endTime;
+
+    if (!updateEventWasRegistered()) {
+      registerEvent(EventUpdatedDomainEvent.forEvent(this));
+    }
+    return this;
   }
 
   /**
@@ -226,23 +249,6 @@ public class Event implements Comparable<Event> {
   }
 
   /**
-   * Checks, whether this event is over already (according to the time provided by
-   * {@link LocalDateTime.now()}).
-   */
-  @Transient
-  public boolean isPast() {
-    final LocalDateTime now = LocalDateTime.now();
-    LocalDateTime effectiveEndTime = endTime;
-
-    // if the
-    if (endTime.toLocalTime().equals(LocalTime.MIDNIGHT)) {
-      effectiveEndTime = effectiveEndTime.plusDays(1);
-    }
-
-    return effectiveEndTime.isBefore(now);
-  }
-
-  /**
    * Checks, whether this event will take place in the future (according to the time provided by
    * {@link LocalDateTime#now()}).
    */
@@ -252,69 +258,31 @@ public class Event implements Comparable<Event> {
   }
 
   /**
-   * Returns {@code true} if this event belongs to a {@link LocalGroup}.
+   * Checks, whether this event is over already (according to the time provided by
+   * {@link LocalDateTime.now()}).
    */
   @Transient
-  public boolean isForLocalGroup() {
-    return localGroup != null;
-  }
+  public boolean isPast() {
+    final LocalDateTime now = LocalDateTime.now();
+    LocalDateTime effectiveEndTime = endTime;
 
-  /**
-   * Returns {@code true} if this is event takes place as part of a {@link Project}.
-   */
-  @Transient
-  public boolean isForProject() {
-    return project != null;
-  }
-
-  /**
-   * Checks, whether the maximum number of participants is reached.
-   */
-  @Transient
-  public boolean isBookedOut() {
-    if (participantsList.hasAccommodationInfo()) {
-      return false;
+    // If the end is not important for an event, it will have been set to midnight on the same day
+    // (as there will most likely not be any events that actually end during that time).
+    // If this is the case, we need to expand the date check by an additional day as the
+    // containment-check will be an exclusive one but we need the interval is yet inclusive.
+    if (endTime.toLocalTime().equals(LocalTime.MIDNIGHT)) {
+      effectiveEndTime = effectiveEndTime.plusDays(1);
     }
 
-    return participantsList.isBookedOut();
+    return effectiveEndTime.isBefore(now);
   }
 
   /**
-   * Sets a new name for this event.
-   *
-   * @param name May not be {@code null} nor empty.
-   * @return this event
+   * The location where the event takes place. May be empty (according to {@link Address#empty()}).
    */
-  public Event updateName(String name) {
-    setName(name);
-
-    if (!updateEventWasRegistered()) {
-      registerEvent(EventUpdatedDomainEvent.forEvent(this));
-    }
-    return this;
-  }
-
-  /**
-   * Sets a new time span for this event.
-   * <p>
-   * The end time must be after (or equal to) the start time. If only the date portion is important,
-   * the time should be set to 00:00.
-   *
-   * @param startTime May not be {@code null}.
-   * @param endTime May not be {@code null}.
-   * @return this event
-   */
-  public Event updateStartTimeAndEndTime(LocalDateTime startTime, LocalDateTime endTime) {
-    Assert.notNull(startTime, "startTime may not be null");
-    Assert.notNull(endTime, "endTime may not be null");
-    Assert2.isFalse(endTime.isBefore(startTime), "End time may not be before start time");
-    this.startTime = startTime;
-    this.endTime = endTime;
-
-    if (!updateEventWasRegistered()) {
-      registerEvent(EventUpdatedDomainEvent.forEvent(this));
-    }
-    return this;
+  @Nonnull
+  public Address getPlace() {
+    return place;
   }
 
   /**
@@ -324,6 +292,8 @@ public class Event implements Comparable<Event> {
    * @return this event
    */
   public Event updatePlace(Address place) {
+    assertNotCanceled();
+
     setPlace(place);
 
     if (!updateEventWasRegistered()) {
@@ -340,12 +310,42 @@ public class Event implements Comparable<Event> {
   }
 
   /**
+   * The persons who participate in the event, as well as some related information.
+   */
+  @Nonnull
+  public ParticipantsList getParticipantsList() {
+    participantsList.provideRelatedEvent(this);
+    return participantsList;
+  }
+
+  /**
    * @param participantsList may not be {@code null}
    */
   void setParticipantsList(ParticipantsList participantsList) {
     Assert.notNull(participantsList, "ParticipantsList may not be null");
     participantsList.provideRelatedEvent(this);
     this.participantsList = participantsList;
+  }
+
+  /**
+   * Checks, whether the maximum number of participants is reached.
+   */
+  @Transient
+  public boolean isBookedOut() {
+    if (participantsList.hasAccommodationInfo()) {
+      return false;
+    }
+
+    return participantsList.isBookedOut();
+  }
+
+  /**
+   * Information for persons who want to, or will be participating in an event.
+   */
+  @Nonnull
+  public ParticipationInfo getParticipationInfo() {
+    participationInfo.provideRelatedEvent(this);
+    return participationInfo;
   }
 
   /**
@@ -358,12 +358,102 @@ public class Event implements Comparable<Event> {
   }
 
   /**
+   * Information about who organizes an event and who will be counseling.
+   */
+  @Nonnull
+  public OrganizationInfo getOrganizationInfo() {
+    organizationInfo.provideRelatedEvent(this);
+    return organizationInfo;
+  }
+
+  /**
    * @param organizationInfo may not be {@code null}
    */
   void setOrganizationInfo(OrganizationInfo organizationInfo) {
     Assert.notNull(organizationInfo, "OrganizationInfo may not be null");
     organizationInfo.provideRelatedEvent(this);
     this.organizationInfo = organizationInfo;
+  }
+
+  /**
+   * Provides access to the local group this event belongs to, if there is any.
+   *
+   * Each event will either belong to a local group, or a project.
+   *
+   * @return the local group or {@code null} otherwise
+   */
+  @Nullable
+  public LocalGroup getLocalGroup() {
+    return localGroup;
+  }
+
+  /**
+   * Returns {@code true} if this event belongs to a {@link LocalGroup}.
+   */
+  @Transient
+  public boolean isForLocalGroup() {
+    return localGroup != null;
+  }
+
+  /**
+   * @param localGroup may be {@code null} if {@link #project} is not
+   */
+  @JpaOnly
+  private void setLocalGroup(LocalGroup localGroup) {
+    Assert.isTrue(localGroup != null || this.project != null,
+        "LocalGroup may not be null if project is null already");
+    this.localGroup = localGroup;
+  }
+
+  /**
+   * Provides access to the project this event belongs to, if there is any.
+   *
+   * Each event will either belong to a local group, or a project.
+   *
+   * @return the project or {@code null} otherwise
+   */
+  public Project getProject() {
+    return project;
+  }
+
+
+  /**
+   * Returns {@code true} if this is event takes place as part of a {@link Project}.
+   */
+  @Transient
+  public boolean isForProject() {
+    return project != null;
+  }
+
+  /**
+   * @param project may be {@code null} if {@link #localGroup} is not
+   */
+  @JpaOnly
+  private void setProject(Project project) {
+    Assert.isTrue(project != null || this.localGroup != null,
+        "Project may not be null if local group is null already");
+    this.project = project;
+  }
+
+  /**
+   */
+  public Event cancel() {
+    setCanceled(true);
+    registerEvent(EventCanceledDomainEvent.forEvent(this));
+    return this;
+  }
+
+  /**
+   * Checks, whether this event takes/took place normally or not.
+   * <p>
+   * If it was canceled, it may no longer be modified.
+   */
+  public boolean isCanceled() {
+    return canceled;
+  }
+
+  private void setCanceled(boolean canceled) {
+    this.canceled = canceled;
   }
 
   /**
@@ -401,59 +491,10 @@ public class Event implements Comparable<Event> {
   }
 
   /**
-   * @param id may not be {@code null}
+   * Ensures, that an event was not canceled and throws an {@link IllegalStateException} otherwise.
    */
-  @JpaOnly
-  private void setId(EventId id) {
-    Assert.notNull(id, "Id may not be null");
-    this.id = id;
-  }
-
-  /**
-   * @param name may not be empty
-   */
-  @JpaOnly
-  private void setName(String name) {
-    Assert.hasText(name, "Name may not be null nor empty");
-    this.name = name;
-  }
-
-  /**
-   * @param startTime may not be {@code null}
-   */
-  @JpaOnly
-  private void setStartTime(LocalDateTime startTime) {
-    Assert.notNull(startTime, "StartTime may not be null");
-    this.startTime = startTime;
-  }
-
-  /**
-   * @param endTime may not be {@code null}
-   */
-  @JpaOnly
-  private void setEndTime(LocalDateTime endTime) {
-    Assert.notNull(endTime, "EndTime may not be null");
-    this.endTime = endTime;
-  }
-
-  /**
-   * @param localGroup may be {@code null} if {@link #project} is not
-   */
-  @JpaOnly
-  private void setLocalGroup(LocalGroup localGroup) {
-    Assert.isTrue(localGroup != null || this.project != null,
-        "LocalGroup may not be null if project is null already");
-    this.localGroup = localGroup;
-  }
-
-  /**
-   * @param project may be {@code null} if {@link #localGroup} is not
-   */
-  @JpaOnly
-  private void setProject(Project project) {
-    Assert.isTrue(project != null || this.localGroup != null,
-        "Project may not be null if local group is null already");
-    this.project = project;
+  void assertNotCanceled() {
+    Assert2.state().isFalse(canceled, "Event was canceled and may thus no longer be modified!");
   }
 
   /*

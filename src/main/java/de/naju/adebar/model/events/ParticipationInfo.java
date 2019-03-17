@@ -1,9 +1,5 @@
 package de.naju.adebar.model.events;
 
-import com.google.common.collect.Lists;
-import de.naju.adebar.documentation.infrastructure.JpaOnly;
-import de.naju.adebar.model.core.Age;
-import de.naju.adebar.util.Assert2;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -19,6 +15,10 @@ import javax.persistence.Embedded;
 import javax.persistence.JoinColumn;
 import org.javamoney.moneta.Money;
 import org.springframework.util.Assert;
+import com.google.common.collect.Lists;
+import de.naju.adebar.documentation.infrastructure.JpaOnly;
+import de.naju.adebar.model.core.Age;
+import de.naju.adebar.util.Assert2;
 
 /**
  * Contains the information persons need to know in order to attend an event.
@@ -139,8 +139,7 @@ public class ParticipationInfo extends AbstractEventInfo {
   }
 
   /**
-   * Checks, whether there is a participation fee for persons that are not club members of the
-   * NABU.
+   * Checks, whether there is a participation fee for persons that are not club members of the NABU.
    */
   public boolean hasExternalParticipationFee() {
     return externalParticipationFee != null;
@@ -178,6 +177,8 @@ public class ParticipationInfo extends AbstractEventInfo {
    * @return this info. Just for easy method chaining.
    */
   public ParticipationInfo updateMinimumParticipantAge(Age newAge) {
+    assertEventNotCanceled();
+
     setMinimumParticipantAge(newAge);
     registerGenericEventUpdatedDomainEventIfPossible();
     return this;
@@ -190,10 +191,11 @@ public class ParticipationInfo extends AbstractEventInfo {
    * @return this info. Just for easy method chaining.
    */
   public ParticipationInfo updateInternalParticipationFee(Money newFee) {
+    assertEventNotCanceled();
+
     final boolean feeCreated = !hasParticipationFee() && newFee != null;
-    final boolean feeIncreased =
-        feeCreated || (hasInternalParticipationFee() && newFee != null && newFee
-            .isGreaterThan(internalParticipationFee));
+    final boolean feeIncreased = feeCreated || (hasInternalParticipationFee() && newFee != null
+        && newFee.isGreaterThan(internalParticipationFee));
 
     setInternalParticipationFee(newFee);
 
@@ -214,10 +216,11 @@ public class ParticipationInfo extends AbstractEventInfo {
    * @return this info. Just for easy method chaining.
    */
   public ParticipationInfo updateExternalParticipationFee(Money newFee) {
+    assertEventNotCanceled();
+
     final boolean feeCreated = !hasParticipationFee() && newFee != null;
-    final boolean feeIncreased =
-        feeCreated || (hasExternalParticipationFee() && newFee != null && newFee
-            .isGreaterThan(externalParticipationFee));
+    final boolean feeIncreased = feeCreated || (hasExternalParticipationFee() && newFee != null
+        && newFee.isGreaterThan(externalParticipationFee));
 
     setExternalParticipationFee(newFee);
 
@@ -236,11 +239,12 @@ public class ParticipationInfo extends AbstractEventInfo {
    * are possible as well.
    *
    * @param flexibleParticipationTimesEnabled whether participants may attend the event during
-   *     individual time spans
+   *          individual time spans
    * @return this info. Just for easy method chaining.
    */
   public ParticipationInfo updateFlexibleParticipationTimesEnabled(
       boolean flexibleParticipationTimesEnabled) {
+    assertEventNotCanceled();
     setFlexibleParticipationTimesEnabled(flexibleParticipationTimesEnabled);
     registerGenericEventUpdatedDomainEventIfPossible();
     return this;
@@ -254,6 +258,7 @@ public class ParticipationInfo extends AbstractEventInfo {
    * @return this info. Just for easy method chaining.
    */
   public ParticipationInfo updateArrivalOptions(Collection<ArrivalOption> options) {
+    assertEventNotCanceled();
     setArrivalOptions(Lists.newArrayList(options));
     registerGenericEventUpdatedDomainEventIfPossible();
     return this;
@@ -266,6 +271,7 @@ public class ParticipationInfo extends AbstractEventInfo {
    * @throws IllegalArgumentException if the option is already available
    */
   public void addArrivalOption(ArrivalOption option) {
+    assertEventNotCanceled();
     Assert.notNull(option, "option may not be null");
     Assert2.isFalse(arrivalOptions.contains(option), "Option already exists: " + option);
 
@@ -278,9 +284,10 @@ public class ParticipationInfo extends AbstractEventInfo {
    * now.</strong>
    *
    * @param option the option. May not be {@code null}.
-   * @throws IllegalArgumentException if the option is not avaiable.
+   * @throws IllegalArgumentException if the option is not available.
    */
   public void removeArrivalOption(ArrivalOption option) {
+    assertEventNotCanceled();
     Assert.notNull(option, "option may not be null");
     Assert.isTrue(arrivalOptions.contains(option), "No such option available: " + option);
 
@@ -291,8 +298,7 @@ public class ParticipationInfo extends AbstractEventInfo {
   /**
    * Sets the minimum age participants have to be of in order to attend this event.
    *
-   * @param minimumParticipantAge the age. May be {@code null} if there are no age
-   *     restrictions.
+   * @param minimumParticipantAge the age. May be {@code null} if there are no age restrictions.
    */
   void setMinimumParticipantAge(Age minimumParticipantAge) {
     this.minimumParticipantAge = minimumParticipantAge;
@@ -302,7 +308,7 @@ public class ParticipationInfo extends AbstractEventInfo {
    * Sets the fee club members of the NABU have to pay to attend the event.
    *
    * @param internalParticipationFee the new fee. May be {@code null} to indicate that no fee is
-   *     necessary.
+   *          necessary.
    * @throws IllegalArgumentException if the fee is negative
    */
   void setInternalParticipationFee(Money internalParticipationFee) {
@@ -322,7 +328,7 @@ public class ParticipationInfo extends AbstractEventInfo {
    * event.
    *
    * @param externalParticipationFee the new fee. May be {@code null} to indicate that no fee is
-   *     necessary.
+   *          necessary.
    * @throws IllegalArgumentException if the fee is negative
    */
   void setExternalParticipationFee(Money externalParticipationFee) {
@@ -356,6 +362,11 @@ public class ParticipationInfo extends AbstractEventInfo {
     }
   }
 
+  /*
+   * (non-Javadoc)
+   *
+   * @see de.naju.adebar.model.events.AbstractEventInfo#equals(java.lang.Object)
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -377,17 +388,24 @@ public class ParticipationInfo extends AbstractEventInfo {
         : that.minimumParticipantAge != null) {
       return false;
     }
-    if (internalParticipationFee != null ? !internalParticipationFee
-        .equals(that.internalParticipationFee) : that.internalParticipationFee != null) {
+    if (internalParticipationFee != null
+        ? !internalParticipationFee.equals(that.internalParticipationFee)
+        : that.internalParticipationFee != null) {
       return false;
     }
-    if (externalParticipationFee != null ? !externalParticipationFee
-        .equals(that.externalParticipationFee) : that.externalParticipationFee != null) {
+    if (externalParticipationFee != null
+        ? !externalParticipationFee.equals(that.externalParticipationFee)
+        : that.externalParticipationFee != null) {
       return false;
     }
     return arrivalOptions.equals(that.arrivalOptions);
   }
 
+  /*
+   * (non-Javadoc)
+   *
+   * @see de.naju.adebar.model.events.AbstractEventInfo#hashCode()
+   */
   @Override
   public int hashCode() {
     int result = super.hashCode();
@@ -401,15 +419,17 @@ public class ParticipationInfo extends AbstractEventInfo {
     return result;
   }
 
+  /*
+   * (non-Javadoc)
+   *
+   * @see java.lang.Object#toString()
+   */
   @Override
   public String toString() {
-    return "ParticipationInfo{" +
-        "minimumParticipantAge=" + minimumParticipantAge +
-        ", internalParticipationFee=" + internalParticipationFee +
-        ", externalParticipationFee=" + externalParticipationFee +
-        ", arrivalOptions=" + arrivalOptions +
-        ", flexibleParticipationTimesEnabled=" + flexibleParticipationTimesEnabled +
-        '}';
+    return "ParticipationInfo{" + "minimumParticipantAge=" + minimumParticipantAge
+        + ", internalParticipationFee=" + internalParticipationFee + ", externalParticipationFee="
+        + externalParticipationFee + ", arrivalOptions=" + arrivalOptions
+        + ", flexibleParticipationTimesEnabled=" + flexibleParticipationTimesEnabled + '}';
   }
 
 }

@@ -1,18 +1,27 @@
 package de.naju.adebar.model.events;
 
+import java.time.LocalDateTime;
+import javax.validation.constraints.NotEmpty;
+import org.javamoney.moneta.Money;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import de.naju.adebar.model.core.Address;
 import de.naju.adebar.model.core.Age;
 import de.naju.adebar.model.core.Capacity;
 import de.naju.adebar.model.events.rooms.scheduling.ExtendedRoomSpecification;
-import java.time.LocalDateTime;
-import org.javamoney.moneta.Money;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 /**
- * Factory to create {@link Event} instances
+ * Facility to create new {@link Event}s.
+ * <p>
+ * This factory provides the only (public) way of instantiating new {@code events} and offers a
+ * fluid construction process through a builder mechanism.
+ * <p>
+ * As the construction of an event involves quite a lot of setup, not all functionality will be
+ * provided by a single builder. Instead, {@link AbstractInfoBuilder more dedicated builders} are
+ * used to configure complex properties of the event.
  *
  * @author Rico Bergmann
+ * @see Event
  */
 @Service
 public class EventFactory {
@@ -25,30 +34,57 @@ public class EventFactory {
   }
 
   /**
-   * Creates a new event
+   * Starts the construction process for a new {@link Event} instance.
+   * <p>
+   * Further modifications of the event's initial state may be performed through the builder
+   * instance.
    *
-   * @param name the event's name
-   * @param startTime the start time
-   * @param endTime the end time
-   * @return the event
+   * @param name the event's name. May not be {@code null}.
+   * @param startTime the start time. May not be {@code null} nor after the {@code endTime}.
+   * @param endTime the end time. May not be {@code null} nor before the {@code startTime}.
+   * @return a builder to continue the construction through a fluid interface.
    */
-  public EventBuilder build(String name, LocalDateTime startTime, LocalDateTime endTime) {
+  public EventBuilder build(@NotEmpty String name, LocalDateTime startTime, LocalDateTime endTime) {
     return new EventBuilder(name, startTime, endTime);
   }
 
+  /**
+   * The {@code EventBuilder} takes care of transforming the {@link Event} under construction into a
+   * well-defined state as specified by the user. To achieve this in a natural and intuitive way,
+   * the Builder-pattern is used.
+   *
+   * @author Rico Bergmann
+   * @see <a href="">Builder-Pattern</a> // TODO insert link to pattern (PAEEE or Wikipedia)
+   */
   public class EventBuilder {
 
     private Event event;
 
+    /**
+     * Default constructor.
+     *
+     * @see EventFactory#build(String, LocalDateTime, LocalDateTime)
+     */
     private EventBuilder(String name, LocalDateTime startTime, LocalDateTime endTime) {
       this.event = new Event(idGenerator.next(), name, startTime, endTime);
     }
 
+    /**
+     * Sets the location where the event should take place.
+     *
+     * @param place the location. May be {@code null} to leave this information unspecified.
+     * @return {@code this} builder for easy method chaining.
+     */
     public EventBuilder specifyPlace(Address place) {
       event.setPlace(place);
       return this;
     }
 
+    /**
+     * Starts the configuration process for the event's {@link ParticipationInfo}.
+     * <p>
+     * For doing so, a "sub-builder" is used.
+     */
     public ParticipationInfoBuilder specifyParticipationInfo() {
       return new ParticipationInfoBuilder(this);
     }

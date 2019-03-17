@@ -1,5 +1,9 @@
 package de.naju.adebar.model.events;
 
+import java.util.ArrayList;
+import java.util.List;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import de.naju.adebar.model.core.Age;
 import de.naju.adebar.model.core.Capacity;
 import de.naju.adebar.model.events.rooms.scheduling.Participant;
@@ -7,10 +11,6 @@ import de.naju.adebar.model.events.rooms.scheduling.ParticipationTime;
 import de.naju.adebar.model.events.rooms.scheduling.RegisteredParticipants;
 import de.naju.adebar.model.events.rooms.scheduling.greedy.GreedyParticipantListValidator;
 import de.naju.adebar.model.persons.Person;
-import java.util.ArrayList;
-import java.util.List;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * A {@link ParticipationManager} which operates on a database.
@@ -27,16 +27,37 @@ public class DefaultParticipationManager implements ParticipationManager {
     this.validator = validator;
   }
 
+  /*
+   * (non-Javadoc)
+   *
+   * @see
+   * de.naju.adebar.model.events.ParticipationManager#addParticipant(de.naju.adebar.model.events.
+   * Event, de.naju.adebar.model.persons.Person)
+   */
   @Override
   public Result addParticipant(Event event, Person participant) {
     return addParticipant(event, participant, new RegistrationInfo(), false);
   }
 
+  /*
+   * (non-Javadoc)
+   *
+   * @see
+   * de.naju.adebar.model.events.ParticipationManager#addParticipant(de.naju.adebar.model.events.
+   * Event, de.naju.adebar.model.persons.Person, boolean)
+   */
   @Override
   public Result addParticipant(Event event, Person participant, boolean ignoreAgeRestriction) {
     return addParticipant(event, participant, new RegistrationInfo(), ignoreAgeRestriction);
   }
 
+  /*
+   * (non-Javadoc)
+   *
+   * @see
+   * de.naju.adebar.model.events.ParticipationManager#addParticipant(de.naju.adebar.model.events.
+   * Event, de.naju.adebar.model.persons.Person, de.naju.adebar.model.events.RegistrationInfo)
+   */
   @Override
   public Result addParticipant(Event event, Person participant, RegistrationInfo registrationInfo) {
     return addParticipant(event, participant, registrationInfo, false);
@@ -60,8 +81,8 @@ public class DefaultParticipationManager implements ParticipationManager {
     // the participant is assumed to attend the event for the whole duration
     ParticipationTime additionalTime = registrationInfo.hasParticipationTime() //
         && event.getParticipationInfo().hasFlexibleParticipationTimesEnabled() //
-        ? registrationInfo.getParticipationTime() //
-        : new ParticipationTime(event.getStartTime(), event.getEndTime(), event.getStartTime());
+            ? registrationInfo.getParticipationTime() //
+            : new ParticipationTime(event.getStartTime(), event.getEndTime(), event.getStartTime());
 
     if (!mayAccommodateAdditionalPerson(event, participant, registrationInfo, false, false)) {
       return Result.BOOKED_OUT;
@@ -86,11 +107,17 @@ public class DefaultParticipationManager implements ParticipationManager {
     // @formatter:on
 
     event.getParticipantsList().addParticipant(participant, registrationInfo);
-    event.getParticipantsList().setBookedOut(isBookedOut(event));
+    event.getParticipantsList().internal_setBookedOut(isBookedOut(event));
 
     return Result.OK;
   }
 
+  /*
+   * (non-Javadoc)
+   *
+   * @see de.naju.adebar.model.events.ParticipationManager#addCounselor(de.naju.adebar.model.events.
+   * Event, de.naju.adebar.model.persons.Person)
+   */
   @Override
   public Result addCounselor(Event event, Person counselor) {
     return addCounselor(event, counselor, new CounselorInfo());
@@ -107,23 +134,30 @@ public class DefaultParticipationManager implements ParticipationManager {
     }
 
     if (!mayAccommodateAdditionalPerson(event, counselor, registrationInfo, false, true)) {
-      event.getParticipantsList().setBookedOut(isBookedOut(event));
+      event.getParticipantsList().internal_setBookedOut(isBookedOut(event));
       return Result.BOOKED_OUT;
     }
 
     registrationInfo.setParticipationTime(additionalTime);
     event.getOrganizationInfo().addCounselor(counselor, registrationInfo);
-    event.getParticipantsList().setBookedOut(isBookedOut(event));
+    event.getParticipantsList().internal_setBookedOut(isBookedOut(event));
 
     return Result.OK;
   }
 
+  /*
+   * (non-Javadoc)
+   *
+   * @see de.naju.adebar.model.events.ParticipationManager#updateParticipation(de.naju.adebar.model.
+   * events.Event, de.naju.adebar.model.persons.Person,
+   * de.naju.adebar.model.events.RegistrationInfo)
+   */
   @Override
   public Result updateParticipation(Event event, Person participant, RegistrationInfo newInfo) {
     ParticipationTime adjustedParticipationTime = newInfo.hasParticipationTime() //
         && event.getParticipationInfo().hasFlexibleParticipationTimesEnabled() //
-        ? newInfo.getParticipationTime() //
-        : new ParticipationTime(event.getStartTime(), event.getEndTime(), event.getStartTime());
+            ? newInfo.getParticipationTime() //
+            : new ParticipationTime(event.getStartTime(), event.getEndTime(), event.getStartTime());
 
     // retain the original registration date
     newInfo.setRegistrationDate(
@@ -132,51 +166,79 @@ public class DefaultParticipationManager implements ParticipationManager {
     newInfo.setParticipationTime(adjustedParticipationTime);
 
     if (mayAccommodateAdditionalPerson(event, participant, newInfo, true, false)) {
-      event.getParticipantsList().setBookedOut(isBookedOut(event));
+      event.getParticipantsList().internal_setBookedOut(isBookedOut(event));
       event.getParticipantsList().updateParticipant(participant, newInfo);
       return Result.OK;
     }
 
-    event.getParticipantsList().setBookedOut(isBookedOut(event));
+    event.getParticipantsList().internal_setBookedOut(isBookedOut(event));
 
     return Result.BOOKED_OUT;
   }
 
+  /*
+   * (non-Javadoc)
+   *
+   * @see
+   * de.naju.adebar.model.events.ParticipationManager#updateCounselor(de.naju.adebar.model.events.
+   * Event, de.naju.adebar.model.persons.Person, de.naju.adebar.model.events.CounselorInfo)
+   */
   @Override
   public Result updateCounselor(Event event, Person counselor, CounselorInfo newInfo) {
     ParticipationTime adjustedParticipationTime = newInfo.hasParticipationTime() //
         && event.getParticipationInfo().hasFlexibleParticipationTimesEnabled() //
-        ? newInfo.getParticipationTime() //
-        : new ParticipationTime(event.getStartTime(), event.getEndTime(), event.getStartTime());
+            ? newInfo.getParticipationTime() //
+            : new ParticipationTime(event.getStartTime(), event.getEndTime(), event.getStartTime());
 
     newInfo.setParticipationTime(adjustedParticipationTime);
     if (mayAccommodateAdditionalPerson(event, counselor, newInfo, true, true)) {
-      event.getParticipantsList().setBookedOut(isBookedOut(event));
+      event.getParticipantsList().internal_setBookedOut(isBookedOut(event));
       event.getOrganizationInfo().updateCounselor(counselor, newInfo);
       return Result.OK;
     }
 
-    event.getParticipantsList().setBookedOut(isBookedOut(event));
+    event.getParticipantsList().internal_setBookedOut(isBookedOut(event));
 
     return Result.BOOKED_OUT;
   }
 
+  /*
+   * (non-Javadoc)
+   *
+   * @see
+   * de.naju.adebar.model.events.ParticipationManager#removeParticipant(de.naju.adebar.model.events.
+   * Event, de.naju.adebar.model.persons.Person)
+   */
   @Override
   public void removeParticipant(Event event, Person participant) {
     event.getParticipantsList().removeParticipant(participant);
-    event.getParticipantsList().setBookedOut(false);
+    event.getParticipantsList().internal_setBookedOut(false);
   }
 
+  /*
+   * (non-Javadoc)
+   *
+   * @see
+   * de.naju.adebar.model.events.ParticipationManager#removeCounselor(de.naju.adebar.model.events.
+   * Event, de.naju.adebar.model.persons.Person)
+   */
   @Override
   public void removeCounselor(Event event, Person counselor) {
     event.getOrganizationInfo().removeCounselor(counselor);
 
     if (event.getParticipantsList().hasAccommodationInfo() //
         && !event.getParticipantsList().getAccommodation().hasExtraSpaceForCounselors()) {
-      event.getParticipantsList().setBookedOut(false);
+      event.getParticipantsList().internal_setBookedOut(false);
     }
   }
 
+  /*
+   * (non-Javadoc)
+   *
+   * @see
+   * de.naju.adebar.model.events.ParticipationManager#movePersonFromWaitingListToParticipants(de.
+   * naju.adebar.model.events.Event, de.naju.adebar.model.persons.Person)
+   */
   @Override
   public Result movePersonFromWaitingListToParticipants(Event event, Person person) {
     return movePersonFromWaitingListToParticipants(event, person, new RegistrationInfo());
@@ -201,7 +263,7 @@ public class DefaultParticipationManager implements ParticipationManager {
    *
    * @param feeAddedEvent the event that made the invalidation become necessary
    */
-  //@EventListener
+  // @EventListener
   public void invalidateParticipationFeeInfo(ParticipationFeeIncreasedEvent feeAddedEvent) {
     final Event correspondingEvent = feeAddedEvent.getEntity();
 
@@ -339,8 +401,8 @@ public class DefaultParticipationManager implements ParticipationManager {
    * Checks, whether a participant has the age required to participate in an event. This check is
    * defensive, meaning that for participant's whose age is unknown will fail the test.
    *
-   * @param participant the person to check. Assumed to be a {@link
-   *     de.naju.adebar.model.persons.ParticipantProfile participant}
+   * @param participant the person to check. Assumed to be a
+   *          {@link de.naju.adebar.model.persons.ParticipantProfile participant}
    * @param event the event that the participant wants to attend
    * @return whether the person may attend the event (according to age requirements)
    */

@@ -1,18 +1,18 @@
 package de.naju.adebar.model.events;
 
-import de.naju.adebar.documentation.infrastructure.JpaOnly;
-import de.naju.adebar.model.core.Capacity;
-import de.naju.adebar.model.core.Email;
-import de.naju.adebar.model.support.NumericEntityId;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
 import org.springframework.util.Assert;
+import de.naju.adebar.documentation.infrastructure.JpaOnly;
+import de.naju.adebar.model.core.Capacity;
+import de.naju.adebar.model.core.Email;
+import de.naju.adebar.model.support.NumericEntityId;
 
 /**
- * A reservation for an event
+ * A reservation for an event.
  *
  * @author Rico Bergmann
  */
@@ -39,6 +39,10 @@ public class Reservation {
 
   public static Reservation generateFor(String description, Email contact, Capacity slots) {
     return new Reservation(description, contact, slots);
+  }
+
+  Reservation(Reservation base) {
+    this(base.description, base.contactEmail, base.slots);
   }
 
   private Reservation(String description, Email contactEmail, Capacity slots) {
