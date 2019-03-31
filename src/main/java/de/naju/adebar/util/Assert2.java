@@ -110,7 +110,7 @@ public class Assert2 {
    *
    * @param msg the message
    * @param customMsg whether the message should completely replace the default message. If
-   *     {@code false} the message will be appended to some default prefix
+   *          {@code false} the message will be appended to some default prefix
    */
   private static void reportFailure(String msg, boolean customMsg) {
     String exceptionMsg = customMsg ? msg : ("Assertion failed: " + msg);
@@ -135,20 +135,24 @@ public class Assert2 {
       }
     }
 
+    public void isFalse(boolean condition, String failureMessage) {
+      if (condition) {
+        reportFailure(failureMessage, IllegalStateException.class);
+      }
+    }
+
     /**
      * Throws the {@link IllegalStateException} with a user defined message.
      *
      * @param msg the exception's message
-     * @param exToThrow the kind of exception to throw. If it may not be created, an {@link
-     *     IllegalArgumentException} with error details attached will be thrown.
+     * @param exToThrow the kind of exception to throw. If it may not be created, an
+     *          {@link IllegalArgumentException} with error details attached will be thrown.
      */
     private void reportFailure(String msg, Class<? extends RuntimeException> exToThrow) {
       try {
         Constructor<? extends RuntimeException> exCons = exToThrow.getConstructor(String.class);
         throw exCons.newInstance(msg);
-      } catch (NoSuchMethodException
-          | InstantiationException
-          | IllegalAccessException
+      } catch (NoSuchMethodException | InstantiationException | IllegalAccessException
           | InvocationTargetException e) {
         throw new IllegalArgumentException("Could not generate exception of class" + exToThrow, e);
       }

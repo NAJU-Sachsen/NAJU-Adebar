@@ -72,11 +72,14 @@
       <table class="table table-striped table-hover">
         <thead></thead>
         <tbody th:remove="all-but-first">
-        <tr class="row" th:each="event : ${events}">
+        <tr class="row" th:each="event : ${events}" th:classappend="${event.canceled ? 'strike-through' : ''}|">
           <td class="col-md-1">
             <span class="glyphicon glyphicon-time" data-container="body" data-placement="bottom"
                   data-title="laufende Veranstaltung" data-toggle="tooltip"
                   th:if="${event.ongoing}"></span>
+            <span class="glyphicon glyphicon-remove-sign text-danger" data-container="body" data-placement="bottom"
+                  data-title="abgesagte Veranstaltung" data-toggle="tooltip"
+                  th:if="${event.canceled}"></span>
           </td>
           <td class="col-md-3 strong">
             <a th:href="@{/events/{id}(id=${event.id})}">

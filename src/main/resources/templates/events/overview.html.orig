@@ -1,21 +1,24 @@
 <!DOCTYPE html>
 
-<html xmlns:th="http://www.thymeleaf.org"
+<html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      xmlns="http://www.w3.org/1999/xhtml">
+      xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="utf-8"/>
   <meta content="width=device-width,initial-scale=1" name="viewport"/>
-  <meta th:name="_csrf" th:content="${_csrf.token}"/>
-  <meta th:name="_principal"
-        th:content="${#authentication != null and #authentication.principal != null} ? ${#authentication.principal.associatedPerson}"/>
+  <meta th:content="${_csrf.token}" th:name="_csrf"/>
+  <meta
+      th:content="${#authentication != null and #authentication.principal != null} ? ${#authentication.principal.associatedPerson}"
+      th:name="_principal"/>
   <title>Veranstaltungen | Adebar</title>
 
 
-  <link rel="stylesheet" type="text/css" href="../../static/resources/css/bootstrap.min.css"
-        th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
-  <link rel="stylesheet" type="text/css" href="../../static/resources/css/style.css"
-        th:href="@{/resources/css/style.css}"/>
+  <link href="../../static/resources/css/bootstrap.min.css" rel="stylesheet"
+        th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"
+        type="text/css"/>
+  <link href="../../static/resources/css/style.css" rel="stylesheet"
+        th:href="@{/resources/css/style.css}"
+        type="text/css"/>
 
   <link rel="shortcut icon" th:href="@{/resources/res/favicon.ico}"/>
 </head>
@@ -38,28 +41,28 @@
       <div class="action-bar col-md-8">
         <div class="container-fluid no-padding">
           <div class="row">
-            <form id="event-search" class="col-md-8" method="get"
+            <form class="col-md-8" id="event-search" method="get"
                   th:action="@{/events/search}">
-              <label for="event-search" class="sr-only">Suchen (Name, Datum, Ort)</label>
+              <label class="sr-only" for="event-search">Suchen (Name, Datum, Ort)</label>
               <div class="input-group">
-                <input type="search" name="query" class="form-control" id="search"
-                       placeholder="Name, Datum, Ort ..." autocomplete="off"
-                       th:value="${param.query}"/>
+                <input autocomplete="off" class="form-control" id="search" name="query"
+                       placeholder="Name, Datum, Ort ..." th:value="${param.query}"
+                       type="search"/>
                 <div class="input-group-addon">
-                  <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                  <span aria-hidden="true" class="glyphicon glyphicon-search"></span>
                 </div>
               </div>
             </form>
-            <button type="submit" form="event-search" class="sr-only">Suche durchführen</button>
+            <button class="sr-only" form="event-search" type="submit">Suche durchführen</button>
             <div class="col-md-4">
               <div class="btn-group">
-                <a href="addEvent.html" class="btn btn-default" th:href="@{/events/add}">
+                <a class="btn btn-default" href="addEvent.html" th:href="@{/events/add}">
                   <span class="glyphicon glyphicon-plus"></span>
                   Hinzufügen
                 </a>
-                <a href="filterEvents.html" class="btn btn-default"
-                   data-toggle="tooltip" data-placement="bottom"
-                   data-title="Funktioniert bald wieder.. Versprochen!"
+                <a class="btn btn-default" data-placement="bottom"
+                   data-title="Funktioniert bald wieder.. Versprochen!" data-toggle="tooltip"
+                   href="filterEvents.html"
                    th:href="@{/events/filter}">
                   <span class="glyphicon glyphicon-filter"></span>
                   <span class="hide-sm">Filtern</span>
@@ -74,12 +77,13 @@
   </header>
 
   <!-- latest release notes modal -->
-  <div class="modal fade" id="release-notes-dialog" tabindex="-1" th:if="${releaseNotes}"
-       sec:authorize="!getPrincipal().hasReadReleaseNotes()">
+  <div class="modal fade" id="release-notes-dialog"
+       sec:authorize="!getPrincipal().hasReadReleaseNotes()" tabindex="-1"
+       th:if="${releaseNotes}">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button aria-label="Close" class="close" data-dismiss="modal" type="button">
             <span aria-hidden="true">&times;</span>
           </button>
           <h3 class="modal-title" th:inline="text">Neue Adebar-Version: [[${releaseNotes.title} ?:
@@ -87,10 +91,10 @@
         </div>
         <div class="modal-body">
           <pre th:text="${releaseNotes.description}"></pre>
-          <p th:inline="text">Veröffentlich: [[${{releaseNotes.date}}]]</p>
+          <p th:inline="text">Veröffentlicht: [[${{releaseNotes.date}}]]</p>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary confirm" data-dismiss="modal">Super!</button>
+          <button class="btn btn-primary confirm" data-dismiss="modal" type="button">Super!</button>
         </div>
       </div>
     </div>
@@ -102,30 +106,32 @@
       <table class="table table-striped table-hover">
         <thead></thead>
         <tbody th:remove="all-but-first">
+<<<<<<< Updated upstream
+        <tr class="row"
+            th:classappend="${event.organizationInfo.hasLackOfOrganizers()} ? 'text-danger'"
+            th:each="event : ${events}">
+=======
         <tr class="row" th:each="event : ${events}"
-            th:classappend="|${event.organizationInfo.hasLackOfOrganizers() ? 'text-danger' : '' } ${event.canceled ? 'strike-through' : ''}|">
+            th:classappend="${event.organizationInfo.hasLackOfOrganizers()} ? 'text-danger', ${event.canceled} ? 'strike-through'">
+>>>>>>> Stashed changes
           <td class="col-md-1 text-right">
             <span th:if="${event.bookedOut}">
-              <span class="glyphicon glyphicon-bed" data-toggle="tooltip" data-placement="bottom"
-                    data-title="ausgebucht!" data-container="body"></span>
+              <span class="glyphicon glyphicon-bed" data-container="body" data-placement="bottom"
+                    data-title="ausgebucht!" data-toggle="tooltip"></span>
             </span>
             <span th:if="${event.ongoing}">
-              <span class="glyphicon glyphicon-play" data-toggle="tooltip"
+              <span class="glyphicon glyphicon-play" data-container="body"
                     data-placement="bottom"
-                    data-title="laufende Veranstaltung" data-container="body"></span>
+                    data-title="laufende Veranstaltung" data-toggle="tooltip"></span>
             </span>
             <span th:if="${event.past}">
-              <span class="glyphicon glyphicon-time" data-toggle="tooltip" data-placement="bottom"
-                    data-title="vergangene Veranstaltung" data-container="body"></span>
+              <span class="glyphicon glyphicon-time" data-container="body" data-placement="bottom"
+                    data-title="vergangene Veranstaltung" data-toggle="tooltip"></span>
             </span>
             <span th:if="${event.organizationInfo.hasLackOfOrganizers()}">
-              <span class="glyphicon glyphicon-warning-sign text-danger" data-toggle="tooltip"
+              <span class="glyphicon glyphicon-warning-sign" data-container="body"
                     data-placement="bottom" data-title="zu wenig Organisator*innen"
-                    data-container="body"></span>
-            </span>
-            <span th:if="${event.canceled}">
-              <span class="glyphicon glyphicon-remove-sign text-danger" data-container="body" data-placement="bottom"
-                    data-title="abgesagte Veranstaltung" data-toggle="tooltip"></span>
+                    data-toggle="tooltip"></span>
             </span>
           </td>
           <td class="col-md-3">
@@ -141,9 +147,9 @@
           </td>
           <td class="col-md-2">
             <a class="label label-default"
+               th:href="@{/localGroups/{id}(id=${event.localGroup.id})}"
                th:if="${event.forLocalGroup}"
-               th:text="${event.localGroup.name}"
-               th:href="@{/localGroups/{id}(id=${event.localGroup.id})}">
+               th:text="${event.localGroup.name}">
               NAJU Sachsen
             </a>
           </td>
@@ -219,15 +225,16 @@
 
 
 </main>
-<script type="text/javascript" src="../../static/resources/js/jquery.min.js"
-        th:src="@{/webjars/jquery/jquery.min.js}"></script>
-<script type="text/javascript" src="../../static/resources/js/bootstrap.min.js"
-        th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script src="../../static/resources/js/jquery.min.js" th:src="@{/webjars/jquery/jquery.min.js}"
+        type="text/javascript"></script>
+<script src="../../static/resources/js/bootstrap.min.js"
+        th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"
+        type="text/javascript"></script>
 <script src="../../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
-<script src="../../static/resources/js/releaseNotes.js" th:src="@{/resources/js/releaseNotes.js}"
+<script sec:authorize="!getPrincipal().hasReadReleaseNotes()"
+        src="../../static/resources/js/releaseNotes.js"
         th:if="${releaseNotes}"
-        sec:authorize="!getPrincipal().hasReadReleaseNotes()"></script>
-
+        th:src="@{/resources/js/releaseNotes.js}"></script>
 
 </body>
 </html>

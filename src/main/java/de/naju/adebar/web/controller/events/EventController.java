@@ -1,22 +1,11 @@
 package de.naju.adebar.web.controller.events;
 
-import de.naju.adebar.app.events.search.EventSearchServer;
-import de.naju.adebar.documentation.DesignSmell;
-import de.naju.adebar.model.chapter.LocalGroup;
-import de.naju.adebar.model.chapter.LocalGroupRepository;
-import de.naju.adebar.model.chapter.Project;
-import de.naju.adebar.model.chapter.ProjectRepository;
-import de.naju.adebar.model.events.Event;
-import de.naju.adebar.model.events.EventRepository;
-import de.naju.adebar.util.Assert2;
-import de.naju.adebar.web.validation.events.EditEventForm;
-import de.naju.adebar.web.validation.events.EditEventForm.Belonging;
-import de.naju.adebar.web.validation.events.EditEventFormConverter;
 import java.time.LocalDateTime;
 import javax.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -29,6 +18,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import de.naju.adebar.app.events.search.EventSearchServer;
+import de.naju.adebar.documentation.DesignSmell;
+import de.naju.adebar.model.chapter.LocalGroup;
+import de.naju.adebar.model.chapter.LocalGroupRepository;
+import de.naju.adebar.model.chapter.Project;
+import de.naju.adebar.model.chapter.ProjectRepository;
+import de.naju.adebar.model.events.Event;
+import de.naju.adebar.model.events.EventRepository;
+import de.naju.adebar.util.Assert2;
+import de.naju.adebar.web.validation.events.EditEventForm;
+import de.naju.adebar.web.validation.events.EditEventForm.Belonging;
+import de.naju.adebar.web.validation.events.EditEventFormConverter;
 
 @Controller
 public class EventController {
@@ -43,8 +44,7 @@ public class EventController {
       ProjectRepository projectRepo, EventSearchServer searchServer,
       EditEventFormConverter eventFormConverter) {
     Assert2.noNullArguments("No argument may be null", eventRepo, localGroupRepo, projectRepo,
-        searchServer,
-        eventFormConverter);
+        searchServer, eventFormConverter);
     this.eventRepo = eventRepo;
     this.localGroupRepo = localGroupRepo;
     this.projectRepo = projectRepo;
@@ -68,7 +68,7 @@ public class EventController {
         LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0).minusSeconds(1);
 
     model.addAttribute("events",
-        eventRepo.findAllPagedByEndTimeIsAfterOrderByStartTime(now, pageable));
+        eventRepo.findAllPagedByEndTimeIsAfterAndCanceledIsFalseOrderByStartTime(now, pageable));
 
     return "events/overview";
   }
@@ -76,7 +76,8 @@ public class EventController {
   @GetMapping("/events/past")
   public String showPastEvents(Model model, @PageableDefault(size = 20) Pageable pageable) {
     LocalDateTime now = LocalDateTime.now();
-    Page<Event> pastEvents = eventRepo.findAllPagedByEndTimeIsBeforeOrderByStartTimeDesc(now, pageable);
+    Page<Event> pastEvents =
+        eventRepo.findAllPagedByEndTimeIsBeforeOrCanceledIsTrueOrderByStartTimeDesc(now, pageable);
     model.addAttribute("events", pastEvents);
     return "events/pastEvents";
   }
@@ -121,6 +122,14 @@ public class EventController {
     eventFormConverter.applyFormToEntity(form, event);
     updateEventBelongingIfNecessary(event, form);
 
+    return "redirect:/events/" + event.getId();
+  }
+
+  @PostMapping("/events/{id}/cancel")
+  @Transactional
+  @PreAuthorize("hasRole('ROLE_CHAIRMAN')")
+  public String cancelEvent(@PathVariable("id") Event event, RedirectAttributes redirAttr) {
+    event.cancel();
     return "redirect:/events/" + event.getId();
   }
 

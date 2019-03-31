@@ -802,6 +802,10 @@ fieldset.inline-options label {
   font-style: italic;
 }
 
+.strike-through {
+	text-decoration: line-through;
+}
+
 .bordered {
   border: 1px solid #DDD;
 }
@@ -877,6 +881,10 @@ fieldset.inline-options label {
 
   .details-icon.details-icon-danger {
     color: #a94442;
+  }
+  
+  .details-icon.details-icon-warning {
+    color: #8a6d3b;
   }
 
 }

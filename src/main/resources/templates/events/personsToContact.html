@@ -136,7 +136,7 @@
               Zur Zeit sind keine Personen hinterlegt.
               <div>
                 <button type="button" class="btn btn-link no-padding" data-toggle="modal"
-                        data-target="#add-contact-dialog">
+                        data-target="#add-contact-dialog" th:unless="${event.canceled}">
                   <span class="glyphicon glyphicon-arrow-right"></span>
                   Kontakt hinzufügen
                 </button>

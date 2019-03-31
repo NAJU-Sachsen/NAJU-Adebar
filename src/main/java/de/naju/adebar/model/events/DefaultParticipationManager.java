@@ -66,6 +66,7 @@ public class DefaultParticipationManager implements ParticipationManager {
   @Override
   public Result addParticipant(Event event, Person participant, RegistrationInfo registrationInfo,
       boolean ignoreAgeRestrictions) {
+    event.assertNotCanceled();
 
     if (!participant.isParticipant()) {
       participant.makeParticipant();
@@ -125,6 +126,8 @@ public class DefaultParticipationManager implements ParticipationManager {
 
   @Override
   public Result addCounselor(Event event, Person counselor, CounselorInfo registrationInfo) {
+    event.assertNotCanceled();
+
     ParticipationTime additionalTime = registrationInfo.hasParticipationTime() //
         ? registrationInfo.getParticipationTime() //
         : new ParticipationTime(event.getStartTime(), event.getEndTime(), event.getStartTime());
@@ -154,6 +157,8 @@ public class DefaultParticipationManager implements ParticipationManager {
    */
   @Override
   public Result updateParticipation(Event event, Person participant, RegistrationInfo newInfo) {
+    event.assertNotCanceled();
+
     ParticipationTime adjustedParticipationTime = newInfo.hasParticipationTime() //
         && event.getParticipationInfo().hasFlexibleParticipationTimesEnabled() //
             ? newInfo.getParticipationTime() //
@@ -185,6 +190,8 @@ public class DefaultParticipationManager implements ParticipationManager {
    */
   @Override
   public Result updateCounselor(Event event, Person counselor, CounselorInfo newInfo) {
+    event.assertNotCanceled();
+
     ParticipationTime adjustedParticipationTime = newInfo.hasParticipationTime() //
         && event.getParticipationInfo().hasFlexibleParticipationTimesEnabled() //
             ? newInfo.getParticipationTime() //
@@ -211,6 +218,7 @@ public class DefaultParticipationManager implements ParticipationManager {
    */
   @Override
   public void removeParticipant(Event event, Person participant) {
+    event.assertNotCanceled();
     event.getParticipantsList().removeParticipant(participant);
     event.getParticipantsList().internal_setBookedOut(false);
   }
@@ -224,6 +232,7 @@ public class DefaultParticipationManager implements ParticipationManager {
    */
   @Override
   public void removeCounselor(Event event, Person counselor) {
+    event.assertNotCanceled();
     event.getOrganizationInfo().removeCounselor(counselor);
 
     if (event.getParticipantsList().hasAccommodationInfo() //
@@ -247,6 +256,8 @@ public class DefaultParticipationManager implements ParticipationManager {
   @Override
   public Result movePersonFromWaitingListToParticipants(Event event, Person person,
       RegistrationInfo registrationInfo) {
+    event.assertNotCanceled();
+
     Result result = addParticipant(event, person, registrationInfo);
 
     if (result == Result.OK) {

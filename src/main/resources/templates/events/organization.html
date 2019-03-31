@@ -146,7 +146,7 @@
                           <span class="glyphicon glyphicon-new-window"></span>
                           Zum Profil
                         </a>
-                        <div class="btn-group btn-group-xs">
+                        <div class="btn-group btn-group-xs" th:unless="${event.canceled}">
                           <button type="submit" class="btn btn-danger"
                                   th:form="|delete-organizer-${organizer.id}|">
                             <span class="glyphicon glyphicon-trash"></span>
@@ -196,7 +196,7 @@
 
                 <div class="btn-group btn-group-sm margin-right">
                   <button type="button" class="btn btn-default" data-toggle="modal"
-                          data-target="#add-organizer-dialog">
+                          data-target="#add-organizer-dialog" th:unless="${event.canceled}">
                     <span class="glyphicon glyphicon-plus"></span>
                     Hinzufügen
                   </button>
@@ -216,7 +216,7 @@
               Zur Zeit sind noch keine Organisator*innen bekannt.
               <div>
                 <button type="button" class="btn btn-link no-padding" data-toggle="modal"
-                        data-target="#add-organizer-dialog">
+                        data-target="#add-organizer-dialog" th:unless="${event.canceled}">
                   <span class="glyphicon glyphicon-arrow-right"></span>
                   Jetzt hinzufügen
                 </button>
@@ -349,7 +349,7 @@
                           <span class="glyphicon glyphicon-new-window"></span>
                           Zum Profil
                         </a>
-                        <div class="btn-group btn-group-xs">
+                        <div class="btn-group btn-group-xs" th:unless="${event.canceled}">
                           <button type="button" class="btn btn-default" data-toggle="modal"
                                   data-target="#edit-counselor-dialog">
                             <span class="glyphicon glyphicon-pencil"></span>
@@ -455,7 +455,7 @@
 
                 <div class="btn-group btn-group-sm margin-right">
                   <button type="button" class="btn btn-default" data-toggle="modal"
-                          data-target="#add-counselor-dialog">
+                          data-target="#add-counselor-dialog" th:unless="${event.canceled}">
                     <span class="glyphicon glyphicon-plus"></span>
                     Hinzufügen
                   </button>
@@ -475,7 +475,7 @@
               Zur Zeit sind noch keine Betreuer*innen bekannt.
               <div>
                 <button type="button" class="btn btn-link no-padding" data-toggle="modal"
-                        data-target="#add-counselor-dialog">
+                        data-target="#add-counselor-dialog" th:unless="${event.canceled}">
                   <span class="glyphicon glyphicon-arrow-right"></span>
                   Jetzt hinzufügen
                 </button>

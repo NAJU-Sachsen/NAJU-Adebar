@@ -1,9 +1,5 @@
 package de.naju.adebar.model.events;
 
-import com.querydsl.core.types.Predicate;
-import de.naju.adebar.infrastructure.ReadOnlyRepository;
-import de.naju.adebar.model.chapter.LocalGroup;
-import de.naju.adebar.model.persons.Person;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +11,9 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
+import com.querydsl.core.types.Predicate;
+import de.naju.adebar.infrastructure.ReadOnlyRepository;
+import de.naju.adebar.model.chapter.LocalGroup;
 
 /**
  * A repository that provides read-only access to the saved events
@@ -44,68 +43,11 @@ public interface ReadOnlyEventRepository extends //
   @NonNull
   List<Event> findAll(@NonNull Predicate predicate);
 
-  /**
-   * @param time the time to query for
-   * @return all events which start after the specified time
-   */
-  List<Event> findByStartTimeIsAfter(LocalDateTime time);
-
   List<Event> findByStartTimeIsAfterAndParticipantsListBookedOutIsFalse(LocalDateTime time);
 
-  /**
-   * @param time the time to query for
-   * @return all events which start after the specified time, ordered by their start time
-   */
-  Iterable<Event> findByStartTimeAfterOrderByStartTime(LocalDateTime time);
-
-  /**
-   * @param time the time to query for
-   * @return all events which end before the specified time
-   */
-  Iterable<Event> findByEndTimeIsBefore(LocalDateTime time);
-
-  /**
-   * @param time the time to query for
-   * @return all events which end before the specified time, ordered by their start time
-   *     (descending)
-   */
-  Iterable<Event> findByEndTimeBeforeOrderByStartTimeDesc(LocalDateTime time);
-
-  /**
-   * @param timeBefore the earlier time
-   * @param timeAfter the later time
-   * @return all events that take place within the given interval
-   */
-  Iterable<Event> findByStartTimeIsBeforeAndEndTimeIsAfter(LocalDateTime timeBefore,
-      LocalDateTime timeAfter);
-
-  /**
-   * @param timeBefore the earlier time
-   * @param timeAfter the later time
-   * @return all events that take place within the given interval, odered by their start time
-   */
-  Iterable<Event> findByStartTimeBeforeAndEndTimeAfterOrderByStartTime(LocalDateTime timeBefore,
-      LocalDateTime timeAfter);
-
-  /**
-   * @param person the participant to query for
-   * @return all events in which the person participates
-   */
-  Iterable<Event> findByParticipantsListParticipantsContains(Person person);
-
-  /**
-   * @param activist the activist to query for
-   * @return all events in which the activist participated as counsellor
-   */
-  Iterable<Event> findByOrganizationInfoCounselorsContains(Person activist);
-
-  /**
-   * @param activist the activist to query for
-   * @return all events in which the activist participated as organizer
-   */
-  Iterable<Event> findByOrganizationInfoOrganizersContains(Person activist);
-
-  @Query(value = "SELECT e.* FROM event e JOIN event_reservations r ON e.id = r.event_id WHERE r.id = ?1", nativeQuery = true)
+  @Query(
+      value = "SELECT e.* FROM event e JOIN event_reservations r ON e.id = r.event_id WHERE r.id = ?1",
+      nativeQuery = true)
   Optional<Event> findByReservation(long id);
 
   List<Event> findByLocalGroup(LocalGroup localGroup);
@@ -116,9 +58,9 @@ public interface ReadOnlyEventRepository extends //
   @Query("select e from event e")
   Stream<Event> streamAll();
 
-  Page<Event> findAllPagedByEndTimeIsBeforeOrderByStartTimeDesc(LocalDateTime time,
+  Page<Event> findAllPagedByEndTimeIsBeforeOrCanceledIsTrueOrderByStartTimeDesc(LocalDateTime time,
       Pageable pageable);
 
-  Page<Event> findAllPagedByEndTimeIsAfterOrderByStartTime(LocalDateTime time, Pageable pageable);
+  Page<Event> findAllPagedByEndTimeIsAfterAndCanceledIsFalseOrderByStartTime(LocalDateTime time, Pageable pageable);
 
 }

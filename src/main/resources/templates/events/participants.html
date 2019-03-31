@@ -219,7 +219,7 @@
 
               <button type="button" class="btn btn-default btn-sm margin-right-lg"
                       data-toggle="modal"
-                      data-target="#add-participant-dialog" th:unless="${event.bookedOut}">
+                      data-target="#add-participant-dialog" th:unless="${event.bookedOut} or ${event.canceled}">
                 <span class="glyphicon glyphicon-plus"></span> Hinzufügen
               </button>
 
@@ -768,7 +768,7 @@
                           <span class="btn btn-default" data-toggle="tooltip"
                                 data-title="Bearbeiten"
                                 data-placement="bottom"
-                                data-container="body" style="height: 22px;">
+                                data-container="body" style="height: 22px;" th:unless="${event.canceled}">
                             <button class="btn btn-no-style edit-participant" data-toggle="modal"
                                     data-target="#edit-participant-dialog">
                                 <span class="glyphicon glyphicon-pencil"></span>
@@ -791,6 +791,7 @@
           </div>
 
           <!-- details view -->
+          <!--  DEPRECATED  -->
           <div class="row participants-details-list sub-category" id="participants-details"
                th:if="${param.view != null and param.view[0] == 'detailed'} and ${participantsList.hasParticipants()}">
 
@@ -1115,7 +1116,7 @@
                     <span class="glyphicon glyphicon-arrow-up"></span>
                     nach oben
                   </a>
-                </div>
+               w </div>
 
               </div>
 
@@ -1128,7 +1129,7 @@
             Zur Zeit gibt es noch keine Anmeldungen.
             <div>
               <button type="button" class="btn btn-link no-padding" data-toggle="modal"
-                      data-target="#add-participant-dialog" th:disabled="${event.bookedOut}">
+                      data-target="#add-participant-dialog" th:disabled="${event.bookedOut}" th:unless="${event.canceled}">
                 <span class="glyphicon glyphicon-arrow-right"></span>
                 Erste Anmeldung hinzufügen
               </button>
@@ -1376,7 +1377,7 @@
                     Zur Zeit gibt es keine Reservierungen.
                     <div>
                       <button type="button" class="btn btn-link no-padding" data-toggle="modal"
-                              data-target="#add-reservation-dialog">
+                              data-target="#add-reservation-dialog" th:unless="${event.canceled}">
                         <span class="glyphicon glyphicon-arrow-right"></span>
                         Reservierung erstellen
                       </button>
@@ -1388,7 +1389,7 @@
                        th:if="${event.participantsList.hasReservations()}">
                     <div class="pull-right">
 
-                      <div class="btn-group btn-group-sm margin-right">
+                      <div class="btn-group btn-group-sm margin-right" th:unless="${event.canceled}">
                         <button type="button" class="btn btn-default" data-toggle="modal"
                                 data-target="#add-reservation-dialog">
                           <span class="glyphicon glyphicon-plus"></span>
@@ -1706,7 +1707,7 @@
                   <div class="clearfix" th:if="${event.participantsList.hasWaitingList()}">
                     <div class="pull-right">
 
-                      <div class="btn-group btn-group-sm margin-right">
+                      <div class="btn-group btn-group-sm margin-right" th:unless="${event.canceled}">
                         <button type="button" class="btn btn-default" data-toggle="modal"
                                 data-target="#add-waiting-list-dialog">
                           <span class="glyphicon glyphicon-plus"></span>
@@ -1758,7 +1759,7 @@
                     Zur Zeit gibt es noch keine Einträge.
                     <div>
                       <button type="button" class="btn btn-link no-padding" data-toggle="modal"
-                              data-target="#add-waiting-list-dialog">
+                              data-target="#add-waiting-list-dialog" th:unless="${event.canceled}">
                         <span class="glyphicon glyphicon-arrow-right"></span>
                         Person auf die Warteliste setzen
                       </button>

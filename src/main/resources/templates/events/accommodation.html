@@ -80,7 +80,7 @@
                   <button type="button" class="btn btn-default btn-sm pull-right"
                           data-toggle="modal"
                           data-target="#edit-accommodation-dialog"
-                          th:if="${event.participantsList.hasAccommodationInfo()}">
+                          th:if="${event.participantsList.hasAccommodationInfo()} and not ${event.canceled}">
                     <span class="glyphicon glyphicon-pencil"></span> Anpassen
                   </button>
 
@@ -271,7 +271,7 @@
                   <div>
                     <button type="button" class="btn btn-link no-padding" data-toggle="modal"
                             data-target="#edit-accommodation-dialog"
-                            th:unless="${event.participantsList.hasAccommodationInfo()}">
+                            th:unless="${event.participantsList.hasAccommodationInfo()} or ${event.canceled}">
                       <span class="glyphicon glyphicon-arrow-right"></span>
                       Spezifizieren
                     </button>

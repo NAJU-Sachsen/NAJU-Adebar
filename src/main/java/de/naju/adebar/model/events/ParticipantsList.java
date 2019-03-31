@@ -30,6 +30,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 import de.naju.adebar.documentation.infrastructure.JpaOnly;
 import de.naju.adebar.model.core.Capacity;
+import de.naju.adebar.model.core.Position;
 import de.naju.adebar.model.events.rooms.scheduling.ExtendedRoomSpecification;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.support.NumericEntityId;
@@ -96,11 +97,11 @@ public class ParticipantsList extends AbstractEventInfo implements Iterable<Pers
    *
    * @param event the event for which this list is created. May never be {@code null}.
    * @param participantsLimit the maximum amount of participants that may attend the event. May be
-   *        {@code null} to indicate that there is no such limit.
+   *          {@code null} to indicate that there is no such limit.
    * @param accomodation information about the available rooms for overnight accommodation. If this
-   *        is specified it will be used instead of the {@code participantsLimit} to determine
-   *        whether a new participant may be accommodated. May be {@code null} to indicate the
-   *        absence of such information.
+   *          is specified it will be used instead of the {@code participantsLimit} to determine
+   *          whether a new participant may be accommodated. May be {@code null} to indicate the
+   *          absence of such information.
    */
   ParticipantsList( //
       Event event, //
