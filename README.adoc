@@ -8,7 +8,7 @@ Currently under heavy development and in pre-alpha state.
 
 NOTE: a german version of this readme will also be created
 
-## Quickstart
+== Quickstart
 To get things running you will need
 
 * the http://www.oracle.com/technetwork/java/javase/overview/index.html[Java Development Kit], Version 8 - either from Oracle or as OpenJDK
@@ -28,25 +28,25 @@ $ mvn spring-boot:run
 Now Adebar should be hosted on a new local Tomcat-instance.
 You should be able to connect to it through your favourite webbrowser at http://localhost:8080.
 
-## What to expect
+== What to expect
 Adebar tries to keep track of volunteers, events, projects, newsletters and the like.
 Activists should be able to easily collect and maintain the data they need to organise the events and campaigns they host.
 This includes the management of participants and subscribers to newsletters as well as the management of local chapters.
 To make the application as widely accessable as possible, all content is served through web forms.
 Find more info and help about Adebar on the wiki pages.
 
-## Technical details
+== Technical details
 Adebar is implemented in Java, using varios tools from the https://spring.io[Spring Framework].
 The UI is created using http://www.thymeleaf.org[Thymeleaf].
 A detailed (javadoc) documentation will likely be available through the wiki one day. The general design of the application will also be discussed there.
 I tried to make this as transparent as possible and explain what led to which decision as best as I could.
 So if you're interested in Adebar's backbones - just check it out.
 
-## FAQ, troubleshooting
+== FAQ, troubleshooting
 
 Maybe you will find some useful information below..
 
-### "Your Quickstart guide doesn't work for me"
+=== "Your Quickstart guide doesn't work for me"
 There may be multiple reasons for this. As Adebar is a work-in-progress and still in a pretty early stage, the current build may simply be broken.
 However I perform some integration (and unit) testing before each commit to prevent this as best as possible.
 If you aren't even able to build the application, you should check your setup.
@@ -70,10 +70,10 @@ git version 2.7.4
 ----
 Of course operating system and the like may vary.
 
-### "I found a bug, what next?"
+=== "I found a bug, what next?"
 Feel free to mailto:rico.bergmann@naju-sachsen.de[contact me] about new bugs, or https://github.com/portux/NAJU-Adebar/issues[open an issue yourself].
 But please check out the issue tracker before, maybe the problem was already reported there.
 
-### "This feature would also be great..."
+=== "This feature would also be great..."
 I generally appreciate any proposals. Depending on my resources and on how useful me or the NAJU things the idea would be, implementation could however take some time.
 If you're feeling familiar with the technology stack Adebar is build upon, you could also write it yourself and make a pull request :-)
