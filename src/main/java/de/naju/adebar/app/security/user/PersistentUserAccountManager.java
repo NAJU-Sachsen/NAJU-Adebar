@@ -11,6 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import de.naju.adebar.app.news.ReleaseNotesPublishedEvent;
 import de.naju.adebar.model.persons.Person;
@@ -69,6 +70,7 @@ public class PersistentUserAccountManager implements UserAccountManager {
    * java.lang.String, de.naju.adebar.model.persons.Person, java.util.List, boolean)
    */
   @Override
+  @Transactional
   public UserAccount createFor(String userName, String password, Person person,
       List<SimpleGrantedAuthority> authorities, boolean encrypted) {
     if (usernameExists(userName)) {
@@ -135,6 +137,7 @@ public class PersistentUserAccountManager implements UserAccountManager {
    * user.Username)
    */
   @Override
+  @Transactional
   public void deleteAccount(Username username) {
     if (!usernameExists(username.getValue())) {
       throw new UsernameNotFoundException(USERNAME_NOT_FOUND_MSG + username);
@@ -172,6 +175,7 @@ public class PersistentUserAccountManager implements UserAccountManager {
    * user.Username, java.lang.String, java.lang.String, boolean)
    */
   @Override
+  @Transactional
   public UserAccount updatePassword(Username username, String currentPassword, String newPassword,
       boolean encrypted) {
     UserAccount account = find(username)
@@ -193,6 +197,7 @@ public class PersistentUserAccountManager implements UserAccountManager {
    */
   @Override
   @PreAuthorize("hasRole('ROLE_ADMIN')")
+  @Transactional
   public UserAccount resetPassword(Username username, String newPassword, boolean encrypted) {
     UserAccount account = find(username)
         .orElseThrow(() -> new UsernameNotFoundException(USERNAME_NOT_FOUND_MSG + username));
@@ -208,6 +213,7 @@ public class PersistentUserAccountManager implements UserAccountManager {
    */
   @Override
   @PreAuthorize("hasRole('ROLE_ADMIN')")
+  @Transactional
   public UserAccount updateAuthorities(UserAccount account,
       List<SimpleGrantedAuthority> newAuthorities) {
 
@@ -240,6 +246,7 @@ public class PersistentUserAccountManager implements UserAccountManager {
    */
   @Override
   @EventListener
+  @Transactional
   public void notifyAboutNewReleaseNotes(ReleaseNotesPublishedEvent event) {
     Iterable<UserAccount> accounts = accountRepo.findAll();
     accounts.forEach(UserAccount::notifyAboutNewReleaseNotes);
@@ -253,6 +260,7 @@ public class PersistentUserAccountManager implements UserAccountManager {
    * security.user.UserAccount)
    */
   @Override
+  @Transactional
   public void readReleaseNotes(UserAccount account) {
     account.readReleaseNotes();
     accountRepo.save(account);
@@ -264,6 +272,7 @@ public class PersistentUserAccountManager implements UserAccountManager {
    * @param account the account to update
    * @param person the person whose data should be used
    */
+  @Transactional
   private void updateUserAccount(UserAccount account, Person person) {
     accountRepo.save( //
         account.updatePersonalInformation( //
