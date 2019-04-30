@@ -65,7 +65,7 @@ public class AccountController {
 
   @RequestMapping("/accounts/update")
   public String editAuthorities(@RequestParam("account") String username,
-      @RequestParam("roles") List<String> roles) {
+      @RequestParam(value = "roles", defaultValue = "") List<String> roles) {
     UserAccount account = accountManager.find(username).orElseThrow(IllegalArgumentException::new);
 
     List<SimpleGrantedAuthority> newAuthorities =
