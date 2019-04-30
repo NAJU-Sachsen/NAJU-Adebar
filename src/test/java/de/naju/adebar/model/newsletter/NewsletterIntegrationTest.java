@@ -1,7 +1,6 @@
 package de.naju.adebar.model.newsletter;
 
-import de.naju.adebar.app.newsletter.PersistentNewsletterManager;
-import de.naju.adebar.model.core.Email;
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,6 +11,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
+import de.naju.adebar.app.newsletter.PersistentNewsletterManager;
+import de.naju.adebar.app.newsletter.PersistentSubscriberManager;
+import de.naju.adebar.model.core.Email;
 
 /**
  * Basic behavior testing for the {@link PersistentNewsletterManager}
@@ -27,10 +29,16 @@ public class NewsletterIntegrationTest {
 
   @Autowired
   private PersistentNewsletterManager newsletterManager;
+
+  @Autowired
+  private PersistentSubscriberManager subscriberManager;
+
   @Autowired
   private NewsletterRepository newsletterRepo;
+
   @Autowired
   private SubscriberRepository subscriberRepo;
+
   private Newsletter hifaNewsletter;
   private Subscriber hans;
 
@@ -80,6 +88,28 @@ public class NewsletterIntegrationTest {
     newsletterManager.unsubscribe(hans, hifaNewsletter);
     Assert.assertFalse(String.format("%s should be deleted", hans),
         subscriberRepo.existsById(hans.getId()));
+  }
+
+  @Test // #59
+  public void multipleNewPersonsMaySubscribeToTheSameNewsletter() {
+    final int ADDITIONAL_SUBS = 2;
+
+    hifaNewsletter =
+        newsletterRepo.findById(hifaNewsletter.getId()).orElseThrow(AssertionError::new);
+
+    int currentSubs = hifaNewsletter.getSubscribersCount();
+    int expectedSubs = currentSubs + ADDITIONAL_SUBS;
+
+    Subscriber firstSub = new Subscriber("Hans", "Wurst", Email.of("hw@web.de"));
+    Subscriber secondSub = new Subscriber("Berta", "Beate", Email.of("bbeate@gmx.de"));
+
+    firstSub = subscriberManager.saveSubscriber(firstSub);
+    secondSub = subscriberManager.saveSubscriber(secondSub);
+
+    newsletterManager.subscribe(firstSub, hifaNewsletter);
+    newsletterManager.subscribe(secondSub, hifaNewsletter);
+
+    assertThat(hifaNewsletter.getSubscribersCount()).isEqualTo(expectedSubs);
   }
 
 }
