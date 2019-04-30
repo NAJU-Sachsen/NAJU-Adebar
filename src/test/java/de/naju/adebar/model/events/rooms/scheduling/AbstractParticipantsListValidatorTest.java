@@ -9,7 +9,7 @@ import de.naju.adebar.TestData;
  * @author Rico Bergmann
  *
  */
-public class AbstractParticipantsListValidatorTest {
+public abstract class AbstractParticipantsListValidatorTest {
 
   /*
    * @formatter:off
@@ -30,18 +30,18 @@ public class AbstractParticipantsListValidatorTest {
    */
 
   protected Participant hans =
-      new Participant(TestData.getParticipant("hans"), new ParticipationTime(1, 3));
+      new Participant(TestData.getParticipant(TestData.PERSON_HANS), new ParticipationTime(1, 3));
 
   protected Participant martha =
-      new Participant(TestData.getParticipant("martha"), new ParticipationTime(2, 5));
+      new Participant(TestData.getParticipant(TestData.PERSON_MARTA), new ParticipationTime(2, 5));
 
   protected Participant dieter =
-      new Participant(TestData.getParticipant("dieter"), new ParticipationTime(6, 8));
+      new Participant(TestData.getParticipant(TestData.PERSON_DIETER), new ParticipationTime(6, 8));
 
   protected Participant nadine =
-      new Participant(TestData.getParticipant("nadine"), new ParticipationTime(4, 11));
+      new Participant(TestData.getParticipant(TestData.PERSON_NADINE), new ParticipationTime(4, 11));
 
-  protected Participant fritz = new Participant(TestData.getParticipant("fritz"),
+  protected Participant fritz = new Participant(TestData.getParticipant(TestData.PERSON_FRITZ),
       new ParticipationTime(4, 5), new ParticipationTime(9, 11));
 
 }
