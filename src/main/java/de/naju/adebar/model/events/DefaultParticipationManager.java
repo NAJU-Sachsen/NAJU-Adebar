@@ -2,8 +2,10 @@ package de.naju.adebar.model.events;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 import de.naju.adebar.model.core.Age;
 import de.naju.adebar.model.core.Capacity;
 import de.naju.adebar.model.events.rooms.scheduling.Participant;
@@ -127,6 +129,21 @@ public class DefaultParticipationManager implements ParticipationManager {
   @Override
   public Result addCounselor(Event event, Person counselor, CounselorInfo registrationInfo) {
     event.assertNotCanceled();
+
+    if (event.getParticipantsList().hasAccommodationInfo()) {
+      // just for safety measures we will invoke the scheduler here (s.t. there is an initial
+      // configuration available)
+      boolean scheduleTest = validator.isSchedulableWithExtendedSpec( //
+          event.getParticipantsList().getAccommodation(), //
+          RegisteredParticipants.of(event.getParticipantsList() //
+              .getParticipants().entrySet().stream() //
+              .map(participationEntry -> new Participant(participationEntry.getKey(), //
+                  participationEntry.getValue().getParticipationTime())) //
+              .collect(Collectors.toList()) //
+          ));
+      Assert.isTrue(scheduleTest, "Apparently the event is already booked out from the get go.");
+    }
+
 
     ParticipationTime additionalTime = registrationInfo.hasParticipationTime() //
         ? registrationInfo.getParticipationTime() //
@@ -413,7 +430,7 @@ public class DefaultParticipationManager implements ParticipationManager {
    * defensive, meaning that for participant's whose age is unknown will fail the test.
    *
    * @param participant the person to check. Assumed to be a
-   *          {@link de.naju.adebar.model.persons.ParticipantProfile participant}
+   *        {@link de.naju.adebar.model.persons.ParticipantProfile participant}
    * @param event the event that the participant wants to attend
    * @return whether the person may attend the event (according to age requirements)
    */
