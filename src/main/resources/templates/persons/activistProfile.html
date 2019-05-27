@@ -57,11 +57,14 @@
         <div class="row category-header">
           <h2 class="col-md-10">Aktiven-Profil</h2>
 
+          <!-- menu -->
           <div class="col-md-2 category-menu" th:if="${activist}">
             <button type="button" class="btn btn-default btn-sm pull-right" data-toggle="modal"
                     data-target="#edit-activist-dialog">
               <span class="glyphicon glyphicon-pencil"></span> Anpassen
             </button>
+
+            <!-- edit activist dialog -->
             <div class="modal fade" id="edit-activist-dialog" tabindex="-1" role="dialog">
               <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -136,14 +139,17 @@
                   <span class="glyphicon glyphicon-credit-card"></span> Juleica
                 </th>
                 <td class="col-md-10">
-                    <span th:if="${activist.hasJuleica() and activist.hasValidJuleica()}"
+                    <span th:if="${activist.hasValidJuleica()}"
                           th:inline="text">
                       läuft am [[${{activist.juleicaCard.expiryDate}}]] ab
                     </span>
-                  <span th:if="${activist.hasJuleica() and not activist.hasValidJuleica()}"
+                  <span th:if="${activist.hasJuleica() and activist.juleicaCard.expired}"
                         th:inline="text">
                       lief am [[${{activist.juleicaCard.expiryDate}}]] ab
                     </span>
+                  <span th:if="${activist.hasJuleica() and not activist.juleicaCard.expiryDateDefined}">
+                    Juleica vorhanden, aber Ablaufdatum unbekannt
+                  </span>
                   <span th:unless="${activist.hasJuleica()}">keine Juleica vorhanden</span>
                 </td>
               </tr>

@@ -405,6 +405,10 @@
                             [[${{counselor.activistProfile.juleicaCard.expiryDate}}]]
                           </td>
                           <td class="col-md-11"
+                              th:if="${counselor.activistProfile.hasJuleica()} and not ${counselor.activistProfile.juleicaCard.expiryDateDefined}">
+                            Juleica vorhanden, aber Ablaufdatum unbekannt.
+                          </td>
+                          <td class="col-md-11"
                               th:unless="${counselor.activistProfile.hasJuleica()}">
                             keine Juleica
                           </td>

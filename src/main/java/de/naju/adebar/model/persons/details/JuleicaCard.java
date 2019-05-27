@@ -15,6 +15,7 @@ import javax.persistence.Transient;
 public class JuleicaCard {
 
   public static final String BASIC_JULEICA_LEVEL = "G";
+  public static final String EXTENDED_JULEICA_LEVEL = "L";
 
   @Column(name = "expiryDate")
   private LocalDate expiryDate;
@@ -65,8 +66,7 @@ public class JuleicaCard {
   }
 
   /**
-   * @return {@code true} if the Juleica card is valid (i.e. not expired), or {@code false}
-   *     otherwise
+   * Checks, whether {@code this} card has a defined expiry date and that date was not reached.
    */
   @Transient
   public boolean isValid() {
@@ -76,8 +76,21 @@ public class JuleicaCard {
     return expiryDate.isAfter(LocalDate.now());
   }
 
+  /**
+   * Checks, whether {@code this} card has a defined expiry date which has passed already.
+   */
   public boolean isExpired() {
-    return !isValid();
+    if (expiryDate == null) {
+      return false;
+    }
+    return expiryDate.isBefore(LocalDate.now());
+  }
+
+  /**
+   * Checks, whether an expiry date was set for {@code this} card.
+   */
+  public boolean isExpiryDateDefined() {
+    return expiryDate != null;
   }
 
   /**
