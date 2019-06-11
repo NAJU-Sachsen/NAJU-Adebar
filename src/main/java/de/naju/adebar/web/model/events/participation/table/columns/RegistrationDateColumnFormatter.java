@@ -1,16 +1,18 @@
 package de.naju.adebar.web.model.events.participation.table.columns;
 
-import de.naju.adebar.model.events.Event;
-import de.naju.adebar.model.events.RegistrationInfo;
-import de.naju.adebar.model.persons.Person;
-import de.naju.adebar.web.model.events.participation.table.ParticipantsTable;
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.Period;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import de.naju.adebar.model.events.Event;
+import de.naju.adebar.model.events.RegistrationInfo;
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.web.model.events.participation.table.ParticipantsTable;
 
 /**
  * Formatter used in the {@link ParticipantsTable} to display the registration date of
@@ -59,13 +61,18 @@ public class RegistrationDateColumnFormatter implements TableColumnFormatter {
         event.getParticipantsList().getParticipationDetailsFor(participant);
 
     if (registrationInfo.hasRegistrationDate()) {
-      final LocalDate registrationDate = LocalDate.from(registrationInfo.getRegistrationDate());
-      final LocalTime registrationTime = LocalTime.from(registrationInfo.getRegistrationDate());
-      final Period timeSinceRegistration =
-          Period.between(registrationDate, LocalDate.now().plusDays(1L));
-      final Object[] messageArgs = {registrationTime};
+      final LocalDateTime registrationDate = registrationInfo.getRegistrationDate();
+      final long rawTimeSinceRegistration =
+          ChronoUnit.DAYS.between(LocalDate.from(registrationDate), LocalDate.now().plusDays(1L));
+      final Date registrationDateAsOldDate = Date.from(registrationDate.atZone(ZoneId.systemDefault()).toInstant());
+      final Object[] messageArgs = {registrationDateAsOldDate};
 
-      switch (timeSinceRegistration.getDays()) {
+      int timeSinceRegistration = Integer.MAX_VALUE;
+      if (rawTimeSinceRegistration < Integer.MAX_VALUE) {
+        timeSinceRegistration = (int) rawTimeSinceRegistration;
+      }
+
+      switch (timeSinceRegistration) {
         case 0:
           return messageSource.getMessage("today.with-flex-time", messageArgs,
               LocaleContextHolder.getLocale());
@@ -77,7 +84,7 @@ public class RegistrationDateColumnFormatter implements TableColumnFormatter {
               LocaleContextHolder.getLocale());
         default:
           return messageSource.getMessage("flex-datetime",
-              new Object[]{registrationDate, registrationTime}, LocaleContextHolder.getLocale());
+              new Object[]{registrationDateAsOldDate, registrationDateAsOldDate}, LocaleContextHolder.getLocale());
       }
     } else {
       return messageSource.getMessage("field.unknown", new Object[]{},
