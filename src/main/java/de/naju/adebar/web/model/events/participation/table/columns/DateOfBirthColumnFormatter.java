@@ -21,7 +21,7 @@ public class DateOfBirthColumnFormatter implements TableColumnFormatter {
 
   // we do not need to worry about l10n yet
   private static final DateTimeFormatter DATE_FORMAT =
-      DateTimeFormatter.ofPattern("dd.MM.yyy", Locale.GERMAN);
+      DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.GERMAN);
 
   private final MessageSource messageSource;
 
@@ -51,7 +51,7 @@ public class DateOfBirthColumnFormatter implements TableColumnFormatter {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see de.naju.adebar.web.model.events.participation.table.columns.TableColumnFormatter#
    * formatColumnFor(de.naju.adebar.model.persons.Person, de.naju.adebar.model.events.Event)
    */
