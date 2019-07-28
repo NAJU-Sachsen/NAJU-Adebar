@@ -36,26 +36,26 @@ import de.naju.adebar.app.security.user.UserAccountService;
 @EnableWebSecurity
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-  public static final String LOGIN_ROUTE = "/login";
-  public static final String LOGOUT_ROUTE = "/logout";
+	public static final String LOGIN_ROUTE = "/login";
+	public static final String LOGOUT_ROUTE = "/logout";
 
-  private final UserAccountService userAccountService;
+	private final UserAccountService userAccountService;
 
-  @Autowired
-  public WebSecurityConfiguration(UserAccountService userAccountService) {
-    Assert.notNull(userAccountService, "User account manager may not be null");
-    this.userAccountService = userAccountService;
-  }
+	@Autowired
+	public WebSecurityConfiguration(UserAccountService userAccountService) {
+		Assert.notNull(userAccountService, "User account manager may not be null");
+		this.userAccountService = userAccountService;
+	}
 
-  /**
-   * Configure which paths should be protected
-   */
-  @Override
-  protected void configure(HttpSecurity http) throws Exception {
-    // @formatter:off
+	/**
+	 * Configure which paths should be protected
+	 */
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		// @formatter:off
     http.authorizeRequests()
       // resources should be available without login
-      .antMatchers("/webjars/**", "/resources/**", "/imprint", "/unsupported-browser")
+      .antMatchers("/webjars/**", "/resources/**", "/imprint", "/unsupported-browser", "/robots.txt")
         .permitAll()
       // only an admin may access actuator info
       .antMatchers("/actuator/**")
@@ -72,81 +72,81 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
       .and()
         .exceptionHandling().accessDeniedHandler(accessDenied());
     // @formatter:on
-  }
+	}
 
-  @Override
-  public void configure(WebSecurity web) throws Exception {
-    web.expressionHandler(webExpressionHandler());
-  }
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+		web.expressionHandler(webExpressionHandler());
+	}
 
-  /**
-   * Configure how to receive the user account information for authentication
-   */
-  @Autowired
-  public void configureGlobal(AuthenticationManagerBuilder auth) {
-    auth.authenticationProvider(authProvider());
-  }
+	/**
+	 * Configure how to receive the user account information for authentication
+	 */
+	@Autowired
+	public void configureGlobal(AuthenticationManagerBuilder auth) {
+		auth.authenticationProvider(authProvider());
+	}
 
-  /**
-   * Configure our access decision voters
-   */
-  @Bean
-  protected AffirmativeBased accessDecisionManager() {
-    AccessDecisionVoter<?>[] voters = {new AdebarAuthorizer(), new WebExpressionVoter(),
-        new RoleVoter(), new AuthenticatedVoter()};
-    return new AffirmativeBased(Lists.newArrayList(voters));
-  }
+	/**
+	 * Configure our access decision voters
+	 */
+	@Bean
+	protected AffirmativeBased accessDecisionManager() {
+		AccessDecisionVoter<?>[] voters = {new AdebarAuthorizer(), new WebExpressionVoter(),
+				new RoleVoter(), new AuthenticatedVoter()};
+		return new AffirmativeBased(Lists.newArrayList(voters));
+	}
 
-  /**
-   * Register the password encoder for the authentication process
-   */
-  @Bean
-  protected DaoAuthenticationProvider authProvider() {
-    DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-    authProvider.setUserDetailsService(userAccountService);
-    authProvider.setPasswordEncoder(passwordEncoder());
-    return authProvider;
-  }
+	/**
+	 * Register the password encoder for the authentication process
+	 */
+	@Bean
+	protected DaoAuthenticationProvider authProvider() {
+		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+		authProvider.setUserDetailsService(userAccountService);
+		authProvider.setPasswordEncoder(passwordEncoder());
+		return authProvider;
+	}
 
-  /**
-   * Create the role hierarchy
-   */
-  @Bean
-  protected RoleHierarchyImpl roleHierarchy() {
-    RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
-    roleHierarchy.setHierarchy( //
-        "ROLE_ADMIN > ROLE_JUBIREF\n" //
-            + "ROLE_JUBIREF > ROLE_EMPLOYEE\n" //
-            + "ROLE_EMPLOYEE > ROLE_FOEJ\n" //
-            + "ROLE_FOEJ > ROLE_CHAIRMAN\n" //
-            + "ROLE_CHAIRMAN > ROLE_TREASURER\n" //
-            + "ROLE_TREASURER > ROLE_BOARD_MEMBER\n" //
-            + "ROLE_BOARD_MEMBER > ROLE_USER");
-    return roleHierarchy;
-  }
+	/**
+	 * Create the role hierarchy
+	 */
+	@Bean
+	protected RoleHierarchyImpl roleHierarchy() {
+		RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
+		roleHierarchy.setHierarchy( //
+				"ROLE_ADMIN > ROLE_JUBIREF\n" //
+						+ "ROLE_JUBIREF > ROLE_EMPLOYEE\n" //
+						+ "ROLE_EMPLOYEE > ROLE_FOEJ\n" //
+						+ "ROLE_FOEJ > ROLE_CHAIRMAN\n" //
+						+ "ROLE_CHAIRMAN > ROLE_TREASURER\n" //
+						+ "ROLE_TREASURER > ROLE_BOARD_MEMBER\n" //
+						+ "ROLE_BOARD_MEMBER > ROLE_USER");
+		return roleHierarchy;
+	}
 
-  /**
-   * The password encoder
-   */
-  @Bean(name = "PasswordEncoder")
-  protected PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
+	/**
+	 * The password encoder
+	 */
+	@Bean(name = "PasswordEncoder")
+	protected PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
-  @Bean
-  protected AccessDeniedHandler accessDenied() {
-    return new RedirectingAccessDeniedHandler();
-  }
+	@Bean
+	protected AccessDeniedHandler accessDenied() {
+		return new RedirectingAccessDeniedHandler();
+	}
 
-  /**
-   * Register the role hierarchy
-   */
-  private SecurityExpressionHandler<FilterInvocation> webExpressionHandler() {
-    DefaultWebSecurityExpressionHandler defaultWebSecurityExpressionHandler =
-        new DefaultWebSecurityExpressionHandler();
-    defaultWebSecurityExpressionHandler.setRoleHierarchy(roleHierarchy());
-    return defaultWebSecurityExpressionHandler;
-  }
+	/**
+	 * Register the role hierarchy
+	 */
+	private SecurityExpressionHandler<FilterInvocation> webExpressionHandler() {
+		DefaultWebSecurityExpressionHandler defaultWebSecurityExpressionHandler =
+				new DefaultWebSecurityExpressionHandler();
+		defaultWebSecurityExpressionHandler.setRoleHierarchy(roleHierarchy());
+		return defaultWebSecurityExpressionHandler;
+	}
 
 }
 
