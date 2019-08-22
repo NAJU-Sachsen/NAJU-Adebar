@@ -21,13 +21,13 @@ function updateNavigation() {
     const li = $(`[href="#${filter.id}"]`).closest('li');
     li.slideDown();
   }
-  
+
   if (active.length) {
 	  $('#filter-quick-nav-title').slideDown();
   } else {
 	  $('#filter-quick-nav-title').slideUp();
   }
-  
+
   for (const filter of inactiveFilters()) {
     const li = $(`[href="#${filter.id}"]`).closest('li');
     li.slideUp();

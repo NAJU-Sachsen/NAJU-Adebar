@@ -71,7 +71,7 @@
 		<div class="entity-filter" th:fragment="entity (field)"
 				 th:attrappend="data-input-name=|${field.defaultName}-value|">
 			<button class="btn btn-default entity-selection-trigger"
-							th:attrappend="data-target=|#select-${field.defaultName}-dialog|"
+							th:attrappend="data-target='#select-' + ${field.defaultName} + '-dialog'"
 							data-toggle="modal" type="button">Auswählen
 			</button>
 
@@ -242,9 +242,7 @@
 	<!-- filter groups -->
 	<article>
 
-		<div th:fragment="group (filterGroup)"
-				 th:attr="data-controlled-by=${filterGroup.togglerId}"
-				 th:id="${filterGroup.groupId}">
+		<div th:fragment="group (filterGroup)">
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h2 class="panel-title" th:text="${filterGroup.name}">Filter
@@ -270,7 +268,7 @@
 
 		<div class="filter-form  container scroll-horizontal" th:fragment="form (filterForm)">
 
-			<div class="filter-group-container scroll-item-4 form-category filter-group" th:each="filterGroup : ${filterForm.filterGroups}">
+			<div class="filter-group-container scroll-item-4 form-category filter-group" th:each="filterGroup : ${filterForm.filterGroups}" th:attrappend="data-controlled-by='#' + ${filterGroup.togglerId}" th:id="${filterGroup.groupId}">
 
 				<div th:replace=":: group (${filterGroup})"></div>
 
