@@ -139,21 +139,23 @@ public class EventController {
 	}
 
 	@DesignSmell(description = "This is just ugly")
-	private void updateEventBelongingIfNecessary(Event event, EditEventForm newData) {
+	@Transactional
+	protected void updateEventBelongingIfNecessary(Event event, EditEventForm newData) {
 		if (newData.getBelonging() == Belonging.LOCAL_GROUP) {
 			LocalGroup newLocalGroup = localGroupRepo.findById(newData.getLocalGroup()).orElseThrow(
 					() -> new IllegalArgumentException("No local group with ID " + newData.getLocalGroup()));
 
 			if (event.isForLocalGroup()) {
-				LocalGroup currentLocalGroup = event.getLocalGroup();
+				LocalGroup currentLocalGroup = localGroupRepo.findById(event.getLocalGroup().getId()).orElseThrow(IllegalArgumentException::new);
 
 				if (!newLocalGroup.equals(currentLocalGroup)) {
 					currentLocalGroup.removeEvent(event);
+					event.updateLocalGroup(newLocalGroup);
 					newLocalGroup.addEvent(event);
 				}
 
 			} else {
-				event.getProject().removeEvent(event);
+				event.dropProjectAndAddLocalGroup(newLocalGroup);
 				newLocalGroup.addEvent(event);
 			}
 
@@ -165,13 +167,14 @@ public class EventController {
 			if (event.isForProject()) {
 				Project currentProject = event.getProject();
 
-				if (newProject.equals(currentProject)) {
+				if (!newProject.equals(currentProject)) {
 					currentProject.removeEvent(event);
+					event.updateProject(newProject);
 					currentProject.addEvent(event);
 				}
 
 			} else {
-				event.getLocalGroup().removeEvent(event);
+				event.dropLocalGroupAndAddProject(newProject);
 				newProject.addEvent(event);
 			}
 		}

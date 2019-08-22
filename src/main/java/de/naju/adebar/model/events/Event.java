@@ -395,6 +395,14 @@ public class Event implements Comparable<Event> {
 		return localGroup != null;
 	}
 
+	public Event updateLocalGroup(LocalGroup localGroup) {
+		setLocalGroup(localGroup);
+		if (!updateEventWasRegistered()) {
+			registerEvent(EventUpdatedDomainEvent.forEvent(this));
+		}
+		return this;
+	}
+
 	/**
 	 * @param localGroup may be {@code null} if {@link #project} is not
 	 */
@@ -423,6 +431,32 @@ public class Event implements Comparable<Event> {
 	@Transient
 	public boolean isForProject() {
 		return project != null;
+	}
+
+	public Event updateProject(Project project) {
+		setProject(project);
+		if (!updateEventWasRegistered()) {
+			registerEvent(EventUpdatedDomainEvent.forEvent(this));
+		}
+		return this;
+	}
+
+	public Event dropLocalGroupAndAddProject(Project project) {
+		setProject(project);
+		setLocalGroup(null);
+		if (!updateEventWasRegistered()) {
+			registerEvent(EventUpdatedDomainEvent.forEvent(this));
+		}
+		return this;
+	}
+
+	public Event dropProjectAndAddLocalGroup(LocalGroup localGroup) {
+		setLocalGroup(localGroup);
+		setProject(null);
+		if (!updateEventWasRegistered()) {
+			registerEvent(EventUpdatedDomainEvent.forEvent(this));
+		}
+		return this;
 	}
 
 	/**
