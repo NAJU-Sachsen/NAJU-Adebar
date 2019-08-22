@@ -23,47 +23,47 @@ import de.naju.adebar.web.model.events.participation.table.ParticipantsTable;
 @Service
 public class CSVServer {
 
-  private static final String FILE_NAME_TEMPLATE = "ParticipantsTable-%03d-%s.csv";
+	private static final String FILE_NAME_TEMPLATE = "ParticipantsTable-%03d-%s.csv";
 
-  private final CSVWriter csvWriter;
-  private final TempStorageService storageService;
+	private final CSVWriter csvWriter;
+	private final TempStorageService storageService;
 
-  /**
-   * Full constructor. No parameter may be {@code null}.
-   */
-  public CSVServer(CSVWriter csvWriter, TempStorageService storageService) {
-    Assert.notNull(csvWriter, "Writer may not be null");
-    Assert.notNull(storageService, "StorageService may not be null");
-    this.csvWriter = csvWriter;
-    this.storageService = storageService;
-  }
+	/**
+	 * Full constructor. No parameter may be {@code null}.
+	 */
+	public CSVServer(CSVWriter csvWriter, TempStorageService storageService) {
+		Assert.notNull(csvWriter, "Writer may not be null");
+		Assert.notNull(storageService, "StorageService may not be null");
+		this.csvWriter = csvWriter;
+		this.storageService = storageService;
+	}
 
-  /**
-   * Provides a CSV file for some participants table.
-   */
-  public File generateCSV(ParticipantsTable table) {
-    InputStream csvInput = csvWriter.export(table);
-    return storageService.store( //
-        String.format(FILE_NAME_TEMPLATE, generateUniqueHandle(), adaptEventName(table)), //
-        csvInput);
-  }
+	/**
+	 * Provides a CSV file for some participants table.
+	 */
+	public File generateCSV(ParticipantsTable table) {
+		InputStream csvInput = csvWriter.export(table);
+		return storageService.store( //
+				String.format(FILE_NAME_TEMPLATE, generateUniqueHandle(), adaptEventName(table)), //
+				csvInput);
+	}
 
-  /**
-   * Prepares the name of an event so that it may be used in a file name.
-   * <p>
-   * This means turning the name to CamelCase and removing all non-alphanumeric characters.
-   */
-  private String adaptEventName(ParticipantsTable table) {
-    String titleCase = WordUtils.capitalizeFully(table.getEvent().getName());
-    return titleCase.replaceAll("\\W", "");
-  }
+	/**
+	 * Prepares the name of an event so that it may be used in a file name.
+	 * <p>
+	 * This means turning the name to CamelCase and removing all non-alphanumeric characters.
+	 */
+	private String adaptEventName(ParticipantsTable table) {
+		String titleCase = WordUtils.capitalizeFully(table.getEvent().getName());
+		return titleCase.replaceAll("\\W", "");
+	}
 
-  /**
-   * Provides a unique part of the file name to prevent (or at least make it very unlikely) that two
-   * users request a table for the same event and the results get intermingled.
-   */
-  private int generateUniqueHandle() {
-    return ThreadLocalRandom.current().nextInt(1, 1000);
-  }
+	/**
+	 * Provides a unique part of the file name to prevent (or at least make it very unlikely) that two
+	 * users request a table for the same event and the results get intermingled.
+	 */
+	private int generateUniqueHandle() {
+		return ThreadLocalRandom.current().nextInt(1, 1000);
+	}
 
 }

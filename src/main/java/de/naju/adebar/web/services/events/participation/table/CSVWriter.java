@@ -8,6 +8,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import de.naju.adebar.app.storage.Exporter;
@@ -26,59 +27,65 @@ import de.naju.adebar.web.model.events.participation.table.ParticipantsTableForm
 @Service
 public class CSVWriter implements Exporter<ParticipantsTable> {
 
-  private static final CSVFormat USED_FORMAT = CSVFormat.EXCEL;
+	private static final CSVFormat USED_FORMAT = CSVFormat.EXCEL;
 
-  private final ParticipantsTableFormattingService formatter;
-  private final MessageSource messageSource;
+	private final ParticipantsTableFormattingService formatter;
+	private final MessageSource messageSource;
 
-  /**
-   * Full constructor. No parameter may be {@code null}.
-   */
-  public CSVWriter(ParticipantsTableFormattingService formatter, MessageSource messageSource) {
-    Assert.notNull(formatter, "Formatter may not be null");
-    Assert.notNull(messageSource, "MessageSource may not be null");
-    this.formatter = formatter;
-    this.messageSource = messageSource;
-  }
+	/**
+	 * Full constructor. No parameter may be {@code null}.
+	 */
+	public CSVWriter(ParticipantsTableFormattingService formatter, MessageSource messageSource) {
+		Assert.notNull(formatter, "Formatter may not be null");
+		Assert.notNull(messageSource, "MessageSource may not be null");
+		this.formatter = formatter;
+		this.messageSource = messageSource;
+	}
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see de.naju.adebar.app.storage.Exporter#export(java.lang.Object)
-   */
-  @Override
-  public InputStream export(ParticipantsTable instance) {
-    final Event event = instance.getEvent();
-    try {
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see de.naju.adebar.app.storage.Exporter#export(java.lang.Object)
+	 */
+	@Override
+	@NonNull
+	public InputStream export(ParticipantsTable instance) {
+		final Event event = instance.getEvent();
+		try {
 
-      StringWriter writer = new StringWriter();
-      CSVPrinter printer = new CSVPrinter(writer, USED_FORMAT);
+			StringWriter writer = new StringWriter();
 
-      // write columns in the header
-      for (String col : instance.getColumns()) {
-        if (formatter.formatterIsApplicable(event, col)) {
-          String columnName = messageSource.getMessage("col." + col, new Object[] {},
-              LocaleContextHolder.getLocale());
-          printer.print(columnName);
-        }
-      }
-      printer.println();
+			// add a UTF-8 Byte order  mark to enable correct recognition of non-ASCII characters
+			// see https://en.wikipedia.org/wiki/Byte_order_mark
+			writer.write('\ufeff');
 
-      // write the participants as rows
-      for (Person participant : instance.getParticipants()) {
-        for (String col : instance.getColumns()) {
-          if (formatter.formatterIsApplicable(event, col)) {
-            printer.print(formatter.getColumnValueFor(event, participant, col));
-          }
-        }
-        printer.println();
-      }
+			CSVPrinter printer = new CSVPrinter(writer, USED_FORMAT);
 
-      printer.close();
-      return new ByteArrayInputStream(writer.toString().getBytes());
-    } catch (IOException e) {
-      throw new CSVExportException("Could not export table " + instance, e);
-    }
-  }
+			// write columns in the header
+			for (String col : instance.getColumns()) {
+				if (formatter.formatterIsApplicable(event, col)) {
+					String columnName = messageSource.getMessage("col." + col, new Object[] {},
+							LocaleContextHolder.getLocale());
+					printer.print(columnName);
+				}
+			}
+			printer.println();
+
+			// write the participants as rows
+			for (Person participant : instance.getParticipants()) {
+				for (String col : instance.getColumns()) {
+					if (formatter.formatterIsApplicable(event, col)) {
+						printer.print(formatter.getColumnValueFor(event, participant, col));
+					}
+				}
+				printer.println();
+			}
+
+			printer.close();
+			return new ByteArrayInputStream(writer.toString().getBytes());
+		} catch (IOException e) {
+			throw new CSVExportException("Could not export table " + instance, e);
+		}
+	}
 
 }
