@@ -227,6 +227,16 @@
                   Ungültige Eingabe
                 </p>
               </div>
+              <hr />
+              <div class="form-group" th:classappend="${#fields.hasErrors('marketingOptOut')} ? 'has-error'">
+                <label>
+                  <input type="checkbox" id="marketingOptOut" th:field="*{marketingOptOut}" />
+                  <em>nicht</em> über ähnliche Veranstaltungen informieren
+                </label>
+                <p class="help-block" th:if="${#fields.hasErrors('marketingOptOut')}" th:errors="*{marketingOptOut}">
+                  Ungültige Eingabe
+                </p>
+              </div>
             </div>
           </div>
         </div>

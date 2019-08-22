@@ -198,6 +198,7 @@ public class EditPersonFormConverter implements //
 				entity.getEmail(), //
 				entity.getPhoneNumber(), //
 				addressFormConverter.toForm(entity.getAddress()), //
+				entity.optedOutOfMarketing(), //
 				participantFormConverter.toForm(entity.getParticipantProfile()), //
 				parentFormConverter.toForm(entity.getParentProfile()));
 	}

@@ -1,58 +1,59 @@
 <!DOCTYPE html>
 <html xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-	xmlns:th="http://www.thymeleaf.org"
-	xmlns="http://www.w3.org/1999/xhtml">
+			xmlns:th="http://www.thymeleaf.org"
+			xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta charset="utf-8" />
-<meta content="width=device-width,initial-scale=1" name="viewport" />
-<meta th:name="_csrf" th:value="${_csrf.token}" />
-<title>Jane Doe | Adebar</title>
-<link rel="stylesheet" type="text/css"
-	href="../../static/resources/css/bootstrap.min.css"
-	th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
-<link rel="stylesheet"
-	href="../../static/resources/css/bootstrap-select.min.css"
-	th:href="@{/resources/css/bootstrap-select.min.css}" />
+	<meta charset="utf-8"/>
+	<meta content="width=device-width,initial-scale=1" name="viewport"/>
+	<meta th:name="_csrf" th:value="${_csrf.token}"/>
+	<title>Jane Doe | Adebar</title>
+	<link rel="stylesheet" type="text/css"
+				href="../../static/resources/css/bootstrap.min.css"
+				th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+	<link rel="stylesheet"
+				href="../../static/resources/css/bootstrap-select.min.css"
+				th:href="@{/resources/css/bootstrap-select.min.css}"/>
 
-<link rel="stylesheet" type="text/css"
-	href="../../static/resources/css/style.css"
-	th:href="@{/resources/css/style.css}" />
-<link rel="stylesheet" type="text/css"
-	href="../../static/resources/css/personDetails.css"
-	th:href="@{/resources/css/personDetails.css}" />
+	<link rel="stylesheet" type="text/css"
+				href="../../static/resources/css/style.css"
+				th:href="@{/resources/css/style.css}"/>
+	<link rel="stylesheet" type="text/css"
+				href="../../static/resources/css/personDetails.css"
+				th:href="@{/resources/css/personDetails.css}"/>
 </head>
 <body>
 
-	<!-- central navigation -->
-	<nav th:replace="navigation :: topNav(page='persons')"></nav>
+<!-- central navigation -->
+<nav th:replace="navigation :: topNav(page='persons')"></nav>
 
-	<!-- page specific content-->
-	<main id="main"> <a href="overview.html"> <span
+<!-- page specific content-->
+<main id="main"><a href="overview.html"> <span
 		class="glyphicon glyphicon-chevron-left"></span> Zurück zur Übersicht
-	</a>
+</a>
 
 	<h1>Profil von Jane Doe</h1>
 
 	<ul class="nav nav-tabs" role="tablist">
 		<li role="presentation" class="active"><a href="#overview"
-			class="tab-controller" aria-controls="general" role="tab"
-			data-toggle="tab">Allgemeine Infos</a></li>
+																							class="tab-controller" aria-controls="general"
+																							role="tab"
+																							data-toggle="tab">Allgemeine Infos</a></li>
 		<li role="presentation"><a href="#activist-referent"
-			class="tab-controller" aria-controls="activist-referent" role="tab"
-			data-toggle="tab">Aktiven + Referenteninfos</a></li>
+															 class="tab-controller" aria-controls="activist-referent" role="tab"
+															 data-toggle="tab">Aktiven + Referenteninfos</a></li>
 		<li role="presentation"><a href="#events" class="tab-controller"
-			aria-controls="events" role="tab" data-toggle="tab">
-				Veranstaltungsteilnahmen </a></li>
+															 aria-controls="events" role="tab" data-toggle="tab">
+			Veranstaltungsteilnahmen </a></li>
 		<li role="presentation"><a href="#newsletters"
-			class="tab-controller" aria-controls="newsletters" role="tab"
-			data-toggle="tab">Newsletter</a></li>
+															 class="tab-controller" aria-controls="newsletters" role="tab"
+															 data-toggle="tab">Newsletter</a></li>
 	</ul>
 
 	<article class="tab-content">
 
 		<!-- general and relationship -->
 		<div id="overview" class="tab-pane active container-fluid"
-			role="tabpanel">
+				 role="tabpanel">
 
 			<!-- general -->
 			<section id="general" class="display-category" th:fragment="general">
@@ -66,15 +67,15 @@
 						<div class="pull-right">
 
 							<button type="button" class="btn btn-default btn-sm"
-								data-toggle="modal" data-target="#edit-person-dialog">
+											data-toggle="modal" data-target="#edit-person-dialog">
 								<span class="glyphicon glyphicon-pencil"></span> Anpassen
 							</button>
 
 							<!-- edit person dialog -->
 							<div class="modal fade" id="edit-person-dialog" tabindex="-1"
-								role="dialog">
+									 role="dialog">
 								<div class="modal-dialog" role="document"
-									th:classappend="${editPersonForm.participant} ? 'modal-lg'">
+										 th:classappend="${editPersonForm.participant} ? 'modal-lg'">
 									<div class="modal-content">
 										<div class="modal-header">
 											<button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -82,258 +83,280 @@
 										</div>
 										<div class="modal-body">
 											<form id="edit-person" method="post" class="container-fluid"
-												th:action="@{/persons/{id}/update(id=${person.id})}"
-												th:object="${editPersonForm}">
+														th:action="@{/persons/{id}/update(id=${person.id})}"
+														th:object="${editPersonForm}">
 												<div class="row">
 													<div class="col-md-6"
-														th:class="*{participant} ? 'col-md-6' : 'col-md-12'">
+															 th:class="*{participant} ? 'col-md-6' : 'col-md-12'">
 														<div class="form-group"
-															th:classappend="${#fields.hasErrors('firstName')} ? 'has-error'">
+																 th:classappend="${#fields.hasErrors('firstName')} ? 'has-error'">
 															<label for="edit-first-name" class="control-label">Vorname</label>
 															<input type="text" class="form-control"
-																id="edit-first-name" value="Jane" required="required"
-																placeholder="erforderlich" th:field="*{firstName}" />
+																		 id="edit-first-name" value="Jane" required="required"
+																		 placeholder="erforderlich" th:field="*{firstName}"/>
 															<p class="help-block"
-																th:if="${#fields.hasErrors('firstName')}"
-																th:errors="*{firstName}">Erforderlich</p>
+																 th:if="${#fields.hasErrors('firstName')}"
+																 th:errors="*{firstName}">Erforderlich</p>
 														</div>
 														<div class="form-group"
-															th:classappend="${#fields.hasErrors('lastName')} ? 'has-error'">
+																 th:classappend="${#fields.hasErrors('lastName')} ? 'has-error'">
 															<label for="edit-last-name" class="control-label">Nachname</label>
 															<input type="text" class="form-control"
-																id="edit-last-name" value="Doe" required="required"
-																placeholder="erforderlich" th:field="*{lastName}" />
+																		 id="edit-last-name" value="Doe" required="required"
+																		 placeholder="erforderlich" th:field="*{lastName}"/>
 															<p class="help-block"
-																th:if="${#fields.hasErrors('lastName')}"
-																th:errors="*{lastName}">Erforderlich</p>
+																 th:if="${#fields.hasErrors('lastName')}"
+																 th:errors="*{lastName}">Erforderlich</p>
 														</div>
 														<div class="form-group"
-															th:classappend="${#fields.hasErrors('email')} ? 'has-error'">
+																 th:classappend="${#fields.hasErrors('email')} ? 'has-error'">
 															<label for="edit-email" class="control-label">E-Mail</label>
 															<div class="input-group">
 																<input type="text" class="form-control" id="edit-email"
-																	value="jane.doe@mail.com" th:field="*{email}" /> <span
+																			 value="jane.doe@mail.com" th:field="*{email}"/> <span
 																	class="input-group-addon">optional</span>
 															</div>
 															<p class="help-block"
-																th:if="${#fields.hasErrors('email')}"
-																th:errors="*{email}">Erforderlich</p>
+																 th:if="${#fields.hasErrors('email')}"
+																 th:errors="*{email}">Erforderlich</p>
 														</div>
 														<div class="form-group"
-															th:classappend="${#fields.hasErrors('phoneNumber')} ? 'has-error'">
+																 th:classappend="${#fields.hasErrors('phoneNumber')} ? 'has-error'">
 															<label for="edit-phone" class="control-label">Telefon
 																(privat)</label>
 															<div class="input-group">
 																<input type="tel" class="form-control" id="edit-phone"
-																	value="0123 45678901" th:field="*{phoneNumber}" /> <span
+																			 value="0123 45678901" th:field="*{phoneNumber}"/> <span
 																	class="input-group-addon">optional</span>
 															</div>
 															<p class="help-block"
-																th:if="${#fields.hasErrors('phoneNumber')}"
-																th:errors="*{phoneNumber}">Erforderlich</p>
+																 th:if="${#fields.hasErrors('phoneNumber')}"
+																 th:errors="*{phoneNumber}">Erforderlich</p>
 															<p class="help-block" th:unless="${person.parent}">
 																Für Eltern und "Business-Kontakte" können weitere
 																Telefonnummern hinterlegt werden.</p>
 														</div>
 														<div class="form-group" th:if="${person.parent}"
-															th:classappend="${#fields.hasErrors('parentForm.workPhone')} ? 'has-error'">
+																 th:classappend="${#fields.hasErrors('parentForm.workPhone')} ? 'has-error'">
 															<label for="edit-work-phone" class="control-label">Telefon
 																(Arbeit)</label>
 															<div class="input-group">
 																<input type="tel" class="form-control"
-																	id="edit-work-phone" value="0123 45678901"
-																	th:field="*{parentForm.workPhone}" /> <span
+																			 id="edit-work-phone" value="0123 45678901"
+																			 th:field="*{parentForm.workPhone}"/> <span
 																	class="input-group-addon">optional</span>
 															</div>
 															<p class="help-block"
-																th:if="${#fields.hasErrors('parentForm.workPhone')}"
-																th:errors="*{parentForm.workPhone}">Erforderlich</p>
+																 th:if="${#fields.hasErrors('parentForm.workPhone')}"
+																 th:errors="*{parentForm.workPhone}">Erforderlich</p>
 														</div>
 														<div class="form-group" th:if="${person.parent}"
-															th:classappend="${#fields.hasErrors('parentForm.landlinePhone')} ? 'has-error'">
+																 th:classappend="${#fields.hasErrors('parentForm.landlinePhone')} ? 'has-error'">
 															<label for="edit-landline-phone" class="control-label">Telefon
 																(Festnetz)</label>
 															<div class="input-group">
 																<input type="tel" class="form-control"
-																	id="edit-landline-phone" value="0123 45678901"
-																	th:field="*{parentForm.landlinePhone}" /> <span
+																			 id="edit-landline-phone" value="0123 45678901"
+																			 th:field="*{parentForm.landlinePhone}"/> <span
 																	class="input-group-addon">optional</span>
 															</div>
 															<p class="help-block"
-																th:if="${#fields.hasErrors('parentForm.landlinePhone')}"
-																th:errors="*{parentForm.landlinePhone}">Erforderlich</p>
+																 th:if="${#fields.hasErrors('parentForm.landlinePhone')}"
+																 th:errors="*{parentForm.landlinePhone}">Erforderlich</p>
 														</div>
-														<hr />
+														<hr/>
 														<div class="form-group"
-															th:classappend="${#fields.hasErrors('address.street')} ? 'has-error'">
+																 th:classappend="${#fields.hasErrors('address.street')} ? 'has-error'">
 															<label for="edit-address-street" class="control-label">Straße</label>
 															<div class="input-group">
 																<input type="text" name="address_street"
-																	class="form-control" id="edit-address-street"
-																	value="Hauptstraße 3" th:field="*{address.street}" /> <span
+																			 class="form-control" id="edit-address-street"
+																			 value="Hauptstraße 3" th:field="*{address.street}"/> <span
 																	class="input-group-addon">optional</span>
 															</div>
 															<p class="help-block"
-																th:if="${#fields.hasErrors('address.street')}"
-																th:errors="*{address.street}">Erforderlich</p>
+																 th:if="${#fields.hasErrors('address.street')}"
+																 th:errors="*{address.street}">Erforderlich</p>
 														</div>
 														<div class="form-group"
-															th:classappend="${#fields.hasErrors('address.zip')} ? 'has-error'">
-															<label for="edit-address-zip" class="control-label">Postleitzahl</label>
+																 th:classappend="${#fields.hasErrors('address.zip')} ? 'has-error'">
+															<label for="edit-address-zip"
+																		 class="control-label">Postleitzahl</label>
 															<div class="input-group">
 																<input type="text" class="form-control"
-																	id="edit-address-zip" value="09876"
-																	th:field="*{address.zip}" /> <span
+																			 id="edit-address-zip" value="09876"
+																			 th:field="*{address.zip}"/> <span
 																	class="input-group-addon">optional</span>
 															</div>
 															<p class="help-block"
-																th:if="${#fields.hasErrors('address.zip')}"
-																th:errors="*{address.zip}">Erforderlich</p>
+																 th:if="${#fields.hasErrors('address.zip')}"
+																 th:errors="*{address.zip}">Erforderlich</p>
 														</div>
 														<div class="form-group"
-															th:classappend="${#fields.hasErrors('address.city')} ? 'has-error'">
+																 th:classappend="${#fields.hasErrors('address.city')} ? 'has-error'">
 															<label for="edit-address-city" class="control-label">Stadt</label>
 															<div class="input-group">
 																<input type="text" class="form-control"
-																	id="edit-address-city" value="Entehausen"
-																	th:field="*{address.city}" /> <span
+																			 id="edit-address-city" value="Entehausen"
+																			 th:field="*{address.city}"/> <span
 																	class="input-group-addon">optional</span>
 															</div>
 															<p class="help-block"
-																th:if="${#fields.hasErrors('address.city')}"
-																th:errors="*{address.city}">Erforderlich</p>
+																 th:if="${#fields.hasErrors('address.city')}"
+																 th:errors="*{address.city}">Erforderlich</p>
 														</div>
-														<hr />
+														<hr/>
+														<div class="form-group"
+																 th:classappend="${#fields.hasErrors('marketingOptOut')} ? 'has-error'">
+															<label>
+																<input type="checkbox" id="marketingOptOut"
+																			 th:field="*{marketingOptOut}"/>
+																<em>nicht</em> über ähnliche Veranstaltungen informieren
+															</label>
+															<p class="help-block" th:if="${#fields.hasErrors('marketingOptOut')}"
+																 th:errors="*{marketingOptOut}">
+																Ungültige Eingabe
+															</p>
+														</div>
+														<hr/>
 														<div class="form-group" th:unless="*{participant}"
-															th:classappend="${#fields.hasErrors('participant')} ? 'has-error'">
+																 th:classappend="${#fields.hasErrors('participant')} ? 'has-error'">
 															<label for="participant" class="control-label">Veranstaltungen</label>
 															<div class="checkbox">
 																<label> <input type="checkbox" id="participant"
-																	th:field="*{participant}" /> die Person nimmt an
+																							 th:field="*{participant}"/> die Person nimmt an
 																	Veranstaltungen teil
 																</label>
 															</div>
 															<p class="help-block"
-																th:if="${#fields.hasErrors('participant')}"
-																th:errors="*{participant}">Erforderlich</p>
+																 th:if="${#fields.hasErrors('participant')}"
+																 th:errors="*{participant}">Erforderlich</p>
 														</div>
 													</div>
 													<div class="col-md-6" th:if="*{participant}">
-														<input type="hidden" th:field="*{participant}" />
+														<input type="hidden" th:field="*{participant}"/>
 														<div class="form-group"
-															th:classappend="${#fields.hasErrors('participantForm.gender')} ? 'has-error'">
+																 th:classappend="${#fields.hasErrors('participantForm.gender')} ? 'has-error'">
 															<label for="edit-gender" class="control-label">Geschlecht</label>
 															<fieldset id="edit-gender" class="radio">
 																<label> <input type="radio" name="gender"
-																	value="FEMALE" th:field="*{participantForm.gender}" />
+																							 value="FEMALE" th:field="*{participantForm.gender}"/>
 																	weiblich
 																</label> <label> <input type="radio" name="gender"
-																	value="MALE" th:field="*{participantForm.gender}" />
-																	männlich
-																</label> <label> <input type="radio" name="gender"
-																	value="OTHER" th:field="*{participantForm.gender}" />
-																	anderes
-																</label>
+																												value="MALE"
+																												th:field="*{participantForm.gender}"/>
+																männlich
+															</label> <label> <input type="radio" name="gender"
+																											value="OTHER"
+																											th:field="*{participantForm.gender}"/>
+																anderes
+															</label>
 															</fieldset>
 															<p class="help-block"
-																th:if="${#fields.hasErrors('participantForm.gender')}"
-																th:errors="*{participantForm.gender}">Erforderlich</p>
+																 th:if="${#fields.hasErrors('participantForm.gender')}"
+																 th:errors="*{participantForm.gender}">Erforderlich</p>
 														</div>
 														<div class="form-group"
-															th:classappend="${#fields.hasErrors('participantForm.dateOfBirth')} ? 'has-error'">
-															<label for="edit-date-of-birth" class="control-label">Geburtsdatum</label>
+																 th:classappend="${#fields.hasErrors('participantForm.dateOfBirth')} ? 'has-error'">
+															<label for="edit-date-of-birth"
+																		 class="control-label">Geburtsdatum</label>
 															<input type="date" id="edit-date-of-birth"
-																class="form-control" placeholder="Format: TT.MM.JJJJ"
-																th:field="*{participantForm.dateOfBirth}" />
+																		 class="form-control" placeholder="Format: TT.MM.JJJJ"
+																		 th:field="*{participantForm.dateOfBirth}"/>
 															<p class="help-block"
-																th:if="${#fields.hasErrors('participantForm.dateOfBirth')}"
-																th:errors="*{participantForm.dateOfBirth}">Erforderlich</p>
+																 th:if="${#fields.hasErrors('participantForm.dateOfBirth')}"
+																 th:errors="*{participantForm.dateOfBirth}">Erforderlich</p>
 														</div>
 														<p class="help-block">Für minderjährige
 															Teilnehmer*innen muss das Geschlecht angegeben werden.
 															Andernfalls ist es optional.</p>
-														<hr />
+														<hr/>
 														<div class="form-group"
-															th:classappend="${#fields.hasErrors('participantForm.eatingHabits')} ? 'has-error'">
-															<label for="edit-eating-habits" class="control-label">Ernährung</label>
+																 th:classappend="${#fields.hasErrors('participantForm.eatingHabits')} ? 'has-error'">
+															<label for="edit-eating-habits"
+																		 class="control-label">Ernährung</label>
 															<div id="edit-eating-habits-default-display">
 																<div>
 																	<select class="selectpicker"
-																		id="edit-eating-habits-select" data-width="auto">
+																					id="edit-eating-habits-select" data-width="auto">
 																		<option value="" selected="selected">konventionell</option>
 																		<option value="vegetarisch">vegetarisch</option>
 																		<option value="vegan">vegan</option>
 																	</select>
 																</div>
 																<button class="btn btn-link"
-																	id="edit-eating-habits-toggle" type="button">
-																	Weitere Ernährungsarten/-hinweise</button>
+																				id="edit-eating-habits-toggle" type="button">
+																	Weitere Ernährungsarten/-hinweise
+																</button>
 															</div>
 															<div class="collapse" id="eating-habits-container">
 																<textarea id="edit-eating-habits" class="form-control"
-																	maxlength="511"
-																	placeholder="vegetarisch, vegan o.ä. Unverträglichkeiten, ..."
-																	th:field="*{participantForm.eatingHabits}"></textarea>
+																					maxlength="511"
+																					placeholder="vegetarisch, vegan o.ä. Unverträglichkeiten, ..."
+																					th:field="*{participantForm.eatingHabits}"></textarea>
 															</div>
 															<p class="help-block"
-																th:if="${#fields.hasErrors('participantForm.eatingHabits')}"
-																th:errors="*{participantForm.eatingHabits}">Erforderlich</p>
+																 th:if="${#fields.hasErrors('participantForm.eatingHabits')}"
+																 th:errors="*{participantForm.eatingHabits}">Erforderlich</p>
 														</div>
 														<div class="form-group"
-															th:classappend="${#fields.hasErrors('participantForm.healthImpairments')} ? 'has-error'">
+																 th:classappend="${#fields.hasErrors('participantForm.healthImpairments')} ? 'has-error'">
 															<label for="edit-health-impairments"
-																class="control-label"> Allergien, o.ä. </label>
+																		 class="control-label"> Allergien, o.ä. </label>
 															<textarea id="edit-health-impairments"
-																class="form-control" maxlength="511"
-																placeholder="Heuschnupfen o.ä."
-																th:field="*{participantForm.healthImpairments}"></textarea>
+																				class="form-control" maxlength="511"
+																				placeholder="Heuschnupfen o.ä."
+																				th:field="*{participantForm.healthImpairments}"></textarea>
 															<p class="help-block"
-																th:if="${#fields.hasErrors('participantForm.healthImpairments')}"
-																th:errors="*{participantForm.healthImpairments}">Erforderlich</p>
+																 th:if="${#fields.hasErrors('participantForm.healthImpairments')}"
+																 th:errors="*{participantForm.healthImpairments}">Erforderlich</p>
 														</div>
 														<p class="help-block">
 															Allergien, die sich auf die Ernährung der/des
-															Teilnehmenden beziehen bitte unter <span class="italic">"Ernährung"</span>
+															Teilnehmenden beziehen bitte unter <span
+																class="italic">"Ernährung"</span>
 															eintragen.
 														</p>
-														<hr />
+														<hr/>
 														<div class="form-group"
-															th:classappend="${#fields.hasErrors('participantForm.nabuMember') or #fields.hasErrors('participantForm.nabuMembershipNumber')} ? 'has-error'">
+																 th:classappend="${#fields.hasErrors('participantForm.nabuMember') or #fields.hasErrors('participantForm.nabuMembershipNumber')} ? 'has-error'">
 															<label for="edit-nabu-membership" class="control-label">
 																NABU-Mitgliedschaft </label>
 															<div class="input-group" id="edit-nabu-membership">
 																<select class="selectpicker" data-width="auto"
-																	th:field="*{participantForm.nabuMember}">
+																				th:field="*{participantForm.nabuMember}">
 																	<option value="UNKNOWN" selected="selected">
-																		unbekannt</option>
+																		unbekannt
+																	</option>
 																	<option value="IS_MEMBER" id="nabu-membership-toggler">
-																		Mitglied</option>
+																		Mitglied
+																	</option>
 																	<option value="NO_MEMBER">kein Mitglied</option>
 																</select> <label for="nabu-membership" class="sr-only">Mitgliedsnummer</label>
 																<input type="text" class="form-control"
-																	id="nabu-membership" placeholder="Mitgliedsnummer"
-																	data-controlled-by="#nabu-membership-toggler"
-																	th:field="*{participantForm.nabuMembershipNumber}" />
+																			 id="nabu-membership" placeholder="Mitgliedsnummer"
+																			 data-controlled-by="#nabu-membership-toggler"
+																			 th:field="*{participantForm.nabuMembershipNumber}"/>
 																<p class="help-block"
-																	th:if="${#fields.hasErrors('participantForm.nabuMember')}"
-																	th:errors="*{participantForm.nabuMember}">Erforderlich</p>
+																	 th:if="${#fields.hasErrors('participantForm.nabuMember')}"
+																	 th:errors="*{participantForm.nabuMember}">Erforderlich</p>
 																<p class="help-block"
-																	th:if="${#fields.hasErrors('participantForm.nabuMembershipNumber')}"
-																	th:errors="*{participantForm.nabuMembershipNumber}">
+																	 th:if="${#fields.hasErrors('participantForm.nabuMembershipNumber')}"
+																	 th:errors="*{participantForm.nabuMembershipNumber}">
 																	Erforderlich</p>
 															</div>
 														</div>
-														<hr />
+														<hr/>
 														<div class="form-group"
-															th:classappend="${#fields.hasErrors('participantForm.remarks')} ? 'has-error'">
+																 th:classappend="${#fields.hasErrors('participantForm.remarks')} ? 'has-error'">
 															<label for="edit-remarks" class="control-label">Bemerkungen</label>
 															<textarea class="form-control" id="edit-remarks"
-																maxlength="511"
-																placeholder="Alles, was sonst noch wichtig ist"
-																th:field="*{participantForm.remarks}"></textarea>
+																				maxlength="511"
+																				placeholder="Alles, was sonst noch wichtig ist"
+																				th:field="*{participantForm.remarks}"></textarea>
 															<p class="help-block"
-																th:if="${#fields.hasErrors('participantForm.remarks')}"
-																th:errors="*{participantForm.remarks}">Erforderlich</p>
+																 th:if="${#fields.hasErrors('participantForm.remarks')}"
+																 th:errors="*{participantForm.remarks}">Erforderlich</p>
 														</div>
 														<p class="help-block">
 															Die <span class="italic">"Bemerkungen"</span> sollten
@@ -348,23 +371,25 @@
 										</div>
 										<div class="modal-footer">
 											<button type="button" class="btn btn-default"
-												data-dismiss="modal">Abbrechen</button>
+															data-dismiss="modal">Abbrechen
+											</button>
 											<button type="submit" form="edit-person"
-												class="btn btn-primary">Aktualisieren</button>
+															class="btn btn-primary">Aktualisieren
+											</button>
 										</div>
 									</div>
 								</div>
 							</div>
 
 							<button type="button" class="btn btn-danger btn-sm"
-								data-toggle="modal" data-target="#archive-person-dialog"
-								sec:authorize="hasRole('ROLE_CHAIRMAN')">
+											data-toggle="modal" data-target="#archive-person-dialog"
+											sec:authorize="hasRole('ROLE_CHAIRMAN')">
 								<span class="glyphicon glyphicon-trash"></span> Archivieren
 							</button>
 
 							<!-- archive person confirmation dialog -->
 							<div class="modal fade" id="archive-person-dialog" tabindex="-1"
-								role="dialog">
+									 role="dialog">
 								<div class="modal-dialog" role="document">
 									<div class="modal-content">
 										<div class="modal-body">
@@ -376,17 +401,19 @@
 												Wenn die Person aufgrund eines Antrags gemäß der DSGVO
 												gelöscht werden soll meldet euch bitte bei <a
 													href="http://naju-sachsen.de/index.php?article_id=26">der/dem
-													Datenschutz-Beauftragten der NAJU</a>, er/sie kümmert sich dann
+												Datenschutz-Beauftragten der NAJU</a>, er/sie kümmert sich dann
 												um das "richtige" Löschen.
 											</p>
 											<form method="post" id="archive-person"
-												th:action="@{/persons/{id}/archive(id=${person.id})}"></form>
+														th:action="@{/persons/{id}/archive(id=${person.id})}"></form>
 										</div>
 										<div class="modal-footer">
 											<button type="button" class="btn btn-default"
-												data-dismiss="modal">Abbrechen</button>
+															data-dismiss="modal">Abbrechen
+											</button>
 											<button type="submit" form="archive-person"
-												class="btn btn-danger">Los!</button>
+															class="btn btn-danger">Los!
+											</button>
 										</div>
 									</div>
 								</div>
@@ -401,114 +428,143 @@
 
 				<div class="row">
 					<div class="table-responsive"
-						th:classappend="${false} ? 'col-md-8' : 'col-md-12'">
+							 th:classappend="${false} ? 'col-md-8' : 'col-md-12'">
 						<table class="table">
 							<thead></thead>
 
 							<!-- general data -->
 							<tbody>
-								<tr class="row">
-									<th class="col-md-2"><span
-										class="glyphicon glyphicon-user"></span> Name</th>
-									<td class="col-md-10" th:text="${person.name}">Jane Doe</td>
-								</tr>
-								<tr class="row">
-									<th class="col-md-2"><span
-										class="glyphicon glyphicon-envelope"></span> E-Mail</th>
-									<td class="col-md-10"><a href="mailto:jane.doe@mail.com"
-										th:href="|mailto:${person.email}|" th:text="${person.email}"
-										th:if="${person.email}">jane.doe@mail.com</a> <span
+							<tr class="row">
+								<th class="col-md-2"><span
+										class="glyphicon glyphicon-user"></span> Name
+								</th>
+								<td class="col-md-10" th:text="${person.name}">Jane Doe</td>
+							</tr>
+							<tr class="row">
+								<th class="col-md-2"><span
+										class="glyphicon glyphicon-envelope"></span> E-Mail
+								</th>
+								<td class="col-md-10"><a href="mailto:jane.doe@mail.com"
+																				 th:href="|mailto:${person.email}|"
+																				 th:text="${person.email}"
+																				 th:if="${person.email}">jane.doe@mail.com</a> <span
 										th:unless="${person.email}">keine Angabe</span></td>
-								</tr>
-								<tr class="row">
-									<th class="col-md-2"><span
-										class="glyphicon glyphicon-phone"></span> Telefon (privat)</th>
-									<td class="col-md-10"
+							</tr>
+							<tr class="row">
+								<th class="col-md-2"><span
+										class="glyphicon glyphicon-phone"></span> Telefon (privat)
+								</th>
+								<td class="col-md-10"
 										th:text="${person.phoneNumber} ?: 'keine Angabe'">0123
-										45678901</td>
-								</tr>
-								<tr class="row" th:if="${person.parent}">
-									<th class="col-md-2"><span
+									45678901
+								</td>
+							</tr>
+							<tr class="row" th:if="${person.parent}">
+								<th class="col-md-2"><span
 										class="glyphicon glyphicon-earphone"></span> Telefon (Arbeit)
-									</th>
-									<td class="col-md-10"
+								</th>
+								<td class="col-md-10"
 										th:text="${person.parentProfile.workPhone} ?: 'keine Angabe'">
-										0123 45678901</td>
-								</tr>
-								<tr class="row" th:if="${person.parent}">
-									<th class="col-md-2"><span
+									0123 45678901
+								</td>
+							</tr>
+							<tr class="row" th:if="${person.parent}">
+								<th class="col-md-2"><span
 										class="glyphicon glyphicon-phone-alt"></span> Telefon
-										(Festnetz)</th>
-									<td class="col-md-10"
+									(Festnetz)
+								</th>
+								<td class="col-md-10"
 										th:text="${person.parentProfile.landlinePhone} ?: 'keine Angabe'">0123
-										45678901</td>
-								</tr>
-								<tr class="row">
-									<th class="col-md-2"><span
-										class="glyphicon glyphicon-home"></span> Adresse</th>
-									<td class="col-md-10" th:with="address=${person.address}"
+									45678901
+								</td>
+							</tr>
+							<tr class="row">
+								<th class="col-md-2"><span
+										class="glyphicon glyphicon-home"></span> Adresse
+								</th>
+								<td class="col-md-10" th:with="address=${person.address}"
 										th:inline="text">[[${address != null AND NOT
-										address.empty()} ? |${address.street} ${address.zip}
-										${address.city}| : 'keine Angabe']] <small
-										th:if="${NOT address.empty()}">( <a
+									address.empty()} ? |${address.street} ${address.zip}
+									${address.city}| : 'keine Angabe']] <small
+											th:if="${NOT address.empty()}">( <a
 											href="http://www.openstreetmap.org/search?query=Hauptstraße 3, 09876 Entenhausen"
 											th:href="${address} ? |https://www.openstreetmap.org/search?query=${address.street} ${address.zip} ${address.city}|">
-												<span class="glyphicon glyphicon-map-marker"></span> wo ist
-												das?
-										</a>)
+										<span class="glyphicon glyphicon-map-marker"></span> wo ist
+										das?
+									</a>)
 									</small>
-									</td>
-								</tr>
+								</td>
+							</tr>
+							<tr class="row">
+								<th class="col-md-2">
+									<span class="glyphicon glyphicon-thumbs-up"></span>
+									Marketing
+								</th>
+								<td class="col-md-10">
+									<span th:if="${person.optedOutOfMarketing()}">darf <em>keine</em> Werbemails erhalten </span>
+									<span th:unless="${person.optedOutOfMarketing()}">darf Werbemails erhalten </span>
+								</td>
+							</tr>
 							</tbody>
 
 							<!-- participant profile -->
 							<tbody th:if="${person.participantProfile}"
-								th:with="participantProfile = ${person.participantProfile}">
-								<tr class="row">
-									<th class="col-md-2"><span
-										class="glyphicon glyphicon-calendar"></span> Geburtsdatum</th>
-									<td class="col-md-10" th:inline="text">
-										[[${{participantProfile.dateOfBirth}}]]
-										[[${participantProfile.hasDateOfBirth()} ? '(Alter: ' +
-										${participantProfile.calculateAge()} + ')']]</td>
-								</tr>
-								<tr class="row">
-									<th class="col-md-2"><span
-										class="glyphicon glyphicon-cutlery"></span> Ernährung</th>
-									<td class="col-md-10"
+										 th:with="participantProfile = ${person.participantProfile}">
+							<tr class="row">
+								<th class="col-md-2"><span
+										class="glyphicon glyphicon-calendar"></span> Geburtsdatum
+								</th>
+								<td class="col-md-10" th:inline="text">
+									[[${{participantProfile.dateOfBirth}}]]
+									[[${participantProfile.hasDateOfBirth()} ? '(Alter: ' +
+									${participantProfile.calculateAge()} + ')']]
+								</td>
+							</tr>
+							<tr class="row">
+								<th class="col-md-2"><span
+										class="glyphicon glyphicon-cutlery"></span> Ernährung
+								</th>
+								<td class="col-md-10"
 										th:text="${participantProfile.eatingHabits}">
-										vegetarisch, vegan und mit vieeel Fleisch</td>
-								</tr>
-								<tr class="row">
-									<th class="col-md-2"><span class="glyphicon glyphicon-bed"></span>
-										Allergien</th>
-									<td class="col-md-10"
+									vegetarisch, vegan und mit vieeel Fleisch
+								</td>
+							</tr>
+							<tr class="row">
+								<th class="col-md-2"><span class="glyphicon glyphicon-bed"></span>
+									Allergien
+								</th>
+								<td class="col-md-10"
 										th:text="${participantProfile.healthImpairments}">
-										Schnupfen, Husten und ganz viele Auas</td>
-								</tr>
-								<tr class="row">
-									<th class="col-md-2"><span
+									Schnupfen, Husten und ganz viele Auas
+								</td>
+							</tr>
+							<tr class="row">
+								<th class="col-md-2"><span
 										class="glyphicon glyphicon-tree-deciduous"></span>
-										NABU-Mitgliedschaft</th>
-									<td class="col-md-10"><span
+									NABU-Mitgliedschaft
+								</th>
+								<td class="col-md-10"><span
 										th:if="${participantProfile.nabuMembershipUnknown}">unbekannt</span>
-										<div th:unless="${participantProfile.nabuMembershipUnknown}">
+									<div th:unless="${participantProfile.nabuMembershipUnknown}">
 											<span th:if="${participantProfile.nabuMember}"
-												th:inline="text"
-												th:with="nabu = ${participantProfile.nabuMembership}">
+														th:inline="text"
+														th:with="nabu = ${participantProfile.nabuMembership}">
 												ja (Mitgliedsnummer [[${nabu.hasMembershipNumber()} ?
 												${nabu.membershipNumber} : 'unbekannt']]) </span> <span
-												th:unless="${participantProfile.nabuMember}">kein
+											th:unless="${participantProfile.nabuMember}">kein
 												Mitglied</span>
-										</div></td>
-								</tr>
-								<tr class="row">
-									<th class="col-md-2"><span
-										class="glyphicon glyphicon-grain"></span> Bemerkungen</th>
-									<td class="col-md-10"
+									</div>
+								</td>
+							</tr>
+							<tr class="row">
+								<th class="col-md-2"><span
+										class="glyphicon glyphicon-grain"></span> Bemerkungen
+								</th>
+								<td class="col-md-10"
 										th:utext="${#strings.replace( #strings.escapeXml( participantProfile.remarks ),T(java.lang.System).getProperty('line.separator'),'&lt;br /&gt;')}">
-										So Zeug</td>
-								</tr>
+									So Zeug
+								</td>
+							</tr>
 							</tbody>
 						</table>
 					</div>
@@ -522,39 +578,45 @@
 							<table class="table">
 								<tr class="row">
 									<th class="col-md-5"><span
-										class="glyphicon glyphicon-briefcase"></span> Unternehmen</th>
+											class="glyphicon glyphicon-briefcase"></span> Unternehmen
+									</th>
 									<td class="col-md-7"><a
-										href="overview.html?company=Ghostbusters">Ghostbusters</a></td>
+											href="overview.html?company=Ghostbusters">Ghostbusters</a></td>
 								</tr>
 								<tr class="row">
 									<th class="col-md-5"><span
-										class="glyphicon glyphicon-earphone"></span> Telefon <small>(geschäftlich)</small>
+											class="glyphicon glyphicon-earphone"></span> Telefon
+										<small>(geschäftlich)</small>
 									</th>
 									<td class="col-md-7">0123 45678901</td>
 								</tr>
 								<tr class="row">
 									<th class="col-md-5"><span
-										class="glyphicon glyphicon-envelope"></span> E-Mail <small>(geschäftlich)</small>
+											class="glyphicon glyphicon-envelope"></span> E-Mail
+										<small>(geschäftlich)</small>
 									</th>
 									<td class="col-md-7"><a
-										href="mailto:jane.doe@dpt.company.com"
-										th:href="|mailto:${person.email}|" th:text="${person.email}">jane.doe@dpt.company.com</a>
+											href="mailto:jane.doe@dpt.company.com"
+											th:href="|mailto:${person.email}|" th:text="${person.email}">jane.doe@dpt.company.com</a>
 									</td>
 								</tr>
 								<tr class="row">
 									<th class="col-md-5"><span
-										class="glyphicon glyphicon-home"></span> Abteilung</th>
+											class="glyphicon glyphicon-home"></span> Abteilung
+									</th>
 									<td class="col-md-7"><a href="overview.html">Super
-											secret</a></td>
+										secret</a></td>
 								</tr>
 								<tr class="row">
 									<th class="col-md-5"><span
-										class="glyphicon glyphicon-time"></span> Bürozeiten</th>
+											class="glyphicon glyphicon-time"></span> Bürozeiten
+									</th>
 									<td class="col-md-7">Mo./Di. 09:00-11:00</td>
 								</tr>
 							</table>
 							<div class="panel-footer">Ms. Doe arbeitet an super
-								geheimen Entwicklungen von super tollen Sachen.</div>
+								geheimen Entwicklungen von super tollen Sachen.
+							</div>
 						</div>
 					</div>
 
@@ -566,25 +628,25 @@
 
 	</article>
 
-	</main>
+</main>
 
-	<form id="logout-user" method="POST" th:action="@{/logout}">
-		<input type="hidden" name="csrf" th:value="csrf" />
-	</form>
+<form id="logout-user" method="POST" th:action="@{/logout}">
+	<input type="hidden" name="csrf" th:value="csrf"/>
+</form>
 
-	<script type="text/javascript"
-		src="../../static/resources/js/jquery.min.js"
-		th:src="@{/webjars/jquery/jquery.min.js}"></script>
-	<script type="text/javascript"
-		src="../../static/resources/js/bootstrap.min.js"
-		th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-	<script src="../../static/resources/js/bootstrap-select.min.js"
-		th:src="@{/resources/js/bootstrap-select.min.js}"></script>
-	<script src="../../static/resources/js/init.js"
-		th:src="@{/resources/js/init.js}"></script>
-	<script src="../../static/resources/js/formControls.js"
-		th:src="@{/resources/js/formControls.js}"></script>
-	<script src="../../static/resources/js/personDetails.js"
-		th:src="@{/resources/js/personDetails.js}"></script>
+<script type="text/javascript"
+				src="../../static/resources/js/jquery.min.js"
+				th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript"
+				src="../../static/resources/js/bootstrap.min.js"
+				th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script src="../../static/resources/js/bootstrap-select.min.js"
+				th:src="@{/resources/js/bootstrap-select.min.js}"></script>
+<script src="../../static/resources/js/init.js"
+				th:src="@{/resources/js/init.js}"></script>
+<script src="../../static/resources/js/formControls.js"
+				th:src="@{/resources/js/formControls.js}"></script>
+<script src="../../static/resources/js/personDetails.js"
+				th:src="@{/resources/js/personDetails.js}"></script>
 </body>
 </html>

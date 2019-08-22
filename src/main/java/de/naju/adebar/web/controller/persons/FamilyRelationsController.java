@@ -1,6 +1,7 @@
 package de.naju.adebar.web.controller.persons;
 
 import de.naju.adebar.app.persons.search.PersonSearchServer;
+import de.naju.adebar.model.persons.MarketingManager;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.persons.PersonRepository;
 import de.naju.adebar.model.persons.family.VitalRecord;
@@ -36,6 +37,7 @@ public class FamilyRelationsController {
 	private final AddParentFormConverter addParentFormConverter;
 	private final SimplifiedAddParticipantFormConverter simplifiedAddParticipantFormConverter;
 	private final PersonSearchServer searchServer;
+	private final MarketingManager marketingManager;
 
 	/**
 	 * Full constructor
@@ -49,17 +51,20 @@ public class FamilyRelationsController {
 	 *        creation of children instances correctly.
 	 * @param searchServer service to search persons based on queries
 	 */
-	public FamilyRelationsController(PersonRepository personRepo, VitalRecord vitalRecord,
-			AddParentFormConverter addParentFormConverter,
-			SimplifiedAddParticipantFormConverter simplifiedAddParticipantFormConverter,
-			PersonSearchServer searchServer) {
+	public FamilyRelationsController(PersonRepository personRepo, //
+			VitalRecord vitalRecord, //
+			AddParentFormConverter addParentFormConverter, //
+			SimplifiedAddParticipantFormConverter simplifiedAddParticipantFormConverter, //
+			PersonSearchServer searchServer, //
+			MarketingManager marketingManager) {
 		Assert2.noNullArguments("No parameter may be null", personRepo, vitalRecord,
-				addParentFormConverter, simplifiedAddParticipantFormConverter, searchServer);
+				addParentFormConverter, simplifiedAddParticipantFormConverter, searchServer, marketingManager);
 		this.personRepo = personRepo;
 		this.vitalRecord = vitalRecord;
 		this.addParentFormConverter = addParentFormConverter;
 		this.simplifiedAddParticipantFormConverter = simplifiedAddParticipantFormConverter;
 		this.searchServer = searchServer;
+		this.marketingManager = marketingManager;
 	}
 
 	/**
@@ -151,6 +156,9 @@ public class FamilyRelationsController {
 
 		if (form.isNewEntity()) {
 			personRepo.save(parent);
+			if (person.optedOutOfMarketing()) {
+				marketingManager.optOut(parent);
+			}
 		}
 
 		vitalRecord.addParentTo(person, parent);
@@ -192,6 +200,9 @@ public class FamilyRelationsController {
 
 		if (form.isNewEntity()) {
 			personRepo.save(sibling);
+			if (person.optedOutOfMarketing()) {
+				marketingManager.optOut(sibling);
+			}
 		}
 
 		vitalRecord.addSiblingTo(person, sibling);
@@ -233,6 +244,9 @@ public class FamilyRelationsController {
 
 		if (form.isNewEntity()) {
 			personRepo.save(child);
+			if (person.optedOutOfMarketing()) {
+				marketingManager.optOut(child);
+			}
 		}
 
 		vitalRecord.addChildTo(person, child);

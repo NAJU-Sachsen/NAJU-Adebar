@@ -117,7 +117,8 @@ public class AddPersonFormConverter
 				entity.getLastName(), //
 				entity.getEmail(), //
 				entity.getPhoneNumber(), //
-				addressFormConverter.toForm(entity.getAddress()));
+				addressFormConverter.toForm(entity.getAddress()),
+				entity.optedOutOfMarketing());
 		form.setParticipantForm(participantFormConverter.toForm( //
 				entity.getParticipantProfile(), Lists.newArrayList(entity.getParticipatingEvents())));
 		form.setActivistForm(activistFormConverter.toForm(entity.getActivistProfile()));

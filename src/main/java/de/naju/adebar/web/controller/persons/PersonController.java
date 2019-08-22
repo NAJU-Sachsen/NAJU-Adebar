@@ -2,6 +2,7 @@ package de.naju.adebar.web.controller.persons;
 
 import com.querydsl.core.types.Predicate;
 import de.naju.adebar.app.persons.search.PersonSearchServer;
+import de.naju.adebar.model.persons.MarketingManager;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.persons.PersonRepository;
 import de.naju.adebar.model.persons.family.VitalRecord;
@@ -47,6 +48,7 @@ public class PersonController {
 	private final PersonSearchServer searchServer;
 	private final EditPersonFormConverter editPersonFormConverter;
 	private final VitalRecord vitalRecord;
+	private final MarketingManager marketingManager;
 
 	/**
 	 * Full constructor. No parameter may be {@code null}.
@@ -59,15 +61,17 @@ public class PersonController {
 	public PersonController(PersonRepository personRepo, //
 			PersonSearchServer searchServer, //
 			EditPersonFormConverter editPersonFormConverter, //
-			VitalRecord vitalRecord) {
+			VitalRecord vitalRecord, //
+			MarketingManager marketingManager) {
 
 		Assert2.noNullArguments("No parameter may be null", //
-				personRepo, searchServer, editPersonFormConverter, vitalRecord);
+				personRepo, searchServer, editPersonFormConverter, vitalRecord, marketingManager);
 
 		this.personRepo = personRepo;
 		this.searchServer = searchServer;
 		this.editPersonFormConverter = editPersonFormConverter;
 		this.vitalRecord = vitalRecord;
+		this.marketingManager = marketingManager;
 	}
 
 	/**
@@ -167,6 +171,13 @@ public class PersonController {
 		}
 
 		editPersonFormConverter.applyFormToEntity(data, person);
+
+		if (data.containsMarketingOptOut()) {
+			marketingManager.optOut(person);
+		} else {
+			marketingManager.enableMarketingFor(person);
+		}
+
 		personRepo.save(person);
 
 		return "redirect:/persons/" + person.getId();

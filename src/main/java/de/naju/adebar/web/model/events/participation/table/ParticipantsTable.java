@@ -1,5 +1,6 @@
 package de.naju.adebar.web.model.events.participation.table;
 
+import de.naju.adebar.documentation.Unmodifiable;
 import de.naju.adebar.model.events.Event;
 import de.naju.adebar.model.events.ParticipantsList;
 import de.naju.adebar.model.persons.Person;
@@ -44,6 +45,11 @@ public class ParticipantsTable {
 	 * Column displaying the city the participant lives in.
 	 */
 	public static final String COLUMN_CITY = "city";
+
+	/**
+	 * Column displaying whether the participant opted into receiving marketing information.
+	 */
+	public static final String COLUMN_MARKETING_STATUS = "marketingStatus";
 
 	/**
 	 * Column displaying the participant's birthday.
@@ -148,14 +154,16 @@ public class ParticipantsTable {
 	/**
 	 * Collection of all available columns. The list may not be modified.
 	 */
+	@Unmodifiable
 	public static final List<String> ALL_COLUMNS =
 			Collections.unmodifiableList(Arrays.asList(COLUMN_NAME, COLUMN_EMAIL, COLUMN_PHONE,
-					COLUMN_ADDRESS, COLUMN_CITY, COLUMN_DATE_OF_BIRTH, COLUMN_AGE, COLUMN_EATING_HABIT,
-					COLUMN_HEALTH_IMPAIRMENTS, COLUMN_NABU_MEMBERSHIP, COLUMN_PERSON_REMARKS,
-					COLUMN_PARENTS_NAME, COLUMN_PARENTS_PRIVATE_PHONE, COLUMN_PARENTS_LANDLINE_PHONE,
-					COLUMN_PARENTS_WORK_PHONE, COLUMN_REGISTRATION_DATE, COLUMN_REGISTRATION_FORM_SENT,
-					COLUMN_REGISTRATION_FORM_FILLED, COLUMN_PARTICIPATION_FEE_PAYED, COLUMN_ARRIVAL,
-					COLUMN_DEPARTURE, COLUMN_PARTICIPATION_TIME, COLUMN_PARTICIPATION_REMARKS));
+					COLUMN_ADDRESS, COLUMN_CITY, COLUMN_MARKETING_STATUS, COLUMN_DATE_OF_BIRTH, COLUMN_AGE,
+					COLUMN_EATING_HABIT, COLUMN_HEALTH_IMPAIRMENTS, COLUMN_NABU_MEMBERSHIP,
+					COLUMN_PERSON_REMARKS, COLUMN_PARENTS_NAME, COLUMN_PARENTS_PRIVATE_PHONE,
+					COLUMN_PARENTS_LANDLINE_PHONE, COLUMN_PARENTS_WORK_PHONE, COLUMN_REGISTRATION_DATE,
+					COLUMN_REGISTRATION_FORM_SENT, COLUMN_REGISTRATION_FORM_FILLED,
+					COLUMN_PARTICIPATION_FEE_PAYED, COLUMN_ARRIVAL, COLUMN_DEPARTURE,
+					COLUMN_PARTICIPATION_TIME, COLUMN_PARTICIPATION_REMARKS));
 
 	private final Event event;
 	private final ParticipantsList participants;
@@ -207,7 +215,8 @@ public class ParticipantsTable {
 	 * Primary constructor.
 	 *
 	 * @param event the event for which the participants should be displayed
-	 * @param columns the columns this table should contain. Each column must have a well-known code.
+	 * @param columns the columns this table should contain. Each column must have a well-known
+	 * 		code.
 	 * @see #ALL_COLUMNS
 	 */
 	ParticipantsTable(Event event, List<String> columns) {

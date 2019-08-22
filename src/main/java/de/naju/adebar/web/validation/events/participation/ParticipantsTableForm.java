@@ -21,6 +21,7 @@ public class ParticipantsTableForm {
 	private boolean phone;
 	private boolean address;
 	private boolean city;
+	private boolean marketingStatus;
 	private boolean dateOfBirth;
 	private boolean age;
 	private boolean eatingHabits;
@@ -97,6 +98,14 @@ public class ParticipantsTableForm {
 
 	public void setCity(boolean city) {
 		this.city = city;
+	}
+
+	public boolean isMarketingStatus() {
+		return marketingStatus;
+	}
+
+	public void setMarketingStatus(boolean marketingStatus) {
+		this.marketingStatus = marketingStatus;
 	}
 
 	public boolean isDateOfBirth() {
@@ -265,15 +274,31 @@ public class ParticipantsTableForm {
 
 	@Override
 	public String toString() {
-		return "ParticipantsTableForm [" + "name=" + name + ", email=" + email + ", phone=" + phone
-				+ ", address=" + address + ", city=" + city + ", dateOfBirth=" + dateOfBirth + ", age="
-				+ age + ", eatingHabits=" + eatingHabits + ", healthImpairments=" + healthImpairments
-				+ ", nabu=" + nabu + ", personRemarks=" + personRemarks + ", parents=" + parents
-				+ ", parentsPrivatePhone=" + parentsPrivatePhone + ", parentsLandlinePhone="
-				+ parentsLandlinePhone + ", parentsWorkPhone=" + parentsWorkPhone + ", registrationDate="
-				+ registrationDate + ", registrationFormSent=" + registrationFormSent
-				+ ", registrationFormFilled=" + registrationFormFilled + ", feePayed=" + feePayed
-				+ ", arrival=" + arrival + ", departure=" + departure + ", participationTime="
-				+ participationTime + ", participationRemarks=" + participationRemarks + ']';
+		return "ParticipantsTableForm{" +
+				"name=" + name +
+				", email=" + email +
+				", phone=" + phone +
+				", address=" + address +
+				", city=" + city +
+				", marketingStatus=" + marketingStatus +
+				", dateOfBirth=" + dateOfBirth +
+				", age=" + age +
+				", eatingHabits=" + eatingHabits +
+				", healthImpairments=" + healthImpairments +
+				", nabu=" + nabu +
+				", personRemarks=" + personRemarks +
+				", parents=" + parents +
+				", parentsPrivatePhone=" + parentsPrivatePhone +
+				", parentsLandlinePhone=" + parentsLandlinePhone +
+				", parentsWorkPhone=" + parentsWorkPhone +
+				", registrationDate=" + registrationDate +
+				", registrationFormSent=" + registrationFormSent +
+				", registrationFormFilled=" + registrationFormFilled +
+				", feePayed=" + feePayed +
+				", arrival=" + arrival +
+				", departure=" + departure +
+				", participationTime=" + participationTime +
+				", participationRemarks=" + participationRemarks +
+				'}';
 	}
 }

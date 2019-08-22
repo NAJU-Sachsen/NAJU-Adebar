@@ -43,7 +43,7 @@
 
 			<div class="row">
 
-					<div th:replace="~{filter :: %form(filterForm=${filterForm})}"></div>
+				<div th:replace="~{filter :: %form(filterForm=${filterForm})}"></div>
 
 			</div>
 
@@ -60,7 +60,8 @@
 					<li class="list-group-item" th:each="filterGroup : ${filterForm.filterGroups}">
               <span class="checkbox">
                 <label th:inline="text">
-                  <input type="checkbox" data-toggle="collapse-inline" th:id="${filterGroup.togglerId}"
+                  <input type="checkbox" data-toggle="collapse-inline"
+												 th:id="${filterGroup.togglerId}"
 												 th:attrappend="data-target='#' + ${filterGroup.groupId}"/> nach [[${filterGroup.name}]]-Details filtern
                 </label>
               </span>
@@ -101,6 +102,25 @@
 					</li>
 				</ul>
 
+				<hr/>
+
+				<ul class="list-group">
+					<li class="list-group-item">
+              <span class="checkbox">
+                <label>
+                  <input type="checkbox" name="exclude-marketing-optout"/> nur Personen einschließen, die Veranstaltungswerbung zugestimmt haben
+                </label>
+              </span>
+					</li>
+					<li class="list-group-item">
+						<span class="checkbox">
+							<label>
+								<input type="checkbox" name="use-parents"/> anstelle der Personen die Eltern anzeigen
+							</label>
+						</span>
+					</li>
+				</ul>
+
 				<div class="panel-footer clearfix">
 					<div class="pull-right">
 						<button type="submit" form="filters" class="btn btn-success">Filtern</button>
@@ -118,7 +138,8 @@
 				th:src="@{/webjars/jquery/jquery.min.js}"></script>
 <script type="text/javascript" src="../../static/resources/js/bootstrap.min.js"
 				th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-<script src="../js/collapse.js" type="text/javascript" th:src="@{/resources/js/collapse.js}"></script>
+<script src="../js/collapse.js" type="text/javascript"
+				th:src="@{/resources/js/collapse.js}"></script>
 <script src="../static/resources/js/filter.js"
 				th:src="@{/resources/js/filter.js}"></script>
 <script src="../../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>

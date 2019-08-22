@@ -103,13 +103,13 @@ public class AddParentFormConverter implements //
 				: null;
 
 		//@formatter:off
-    return personFactory.buildNew(form.getNewFirstName(), form.getNewLastName(), email)
-          .specifyPhoneNumber(privatePhone) //
-        .makeParent() //
-          .specifyLandlinePhone(landlinePhone) //
-          .specifyWorkPhone(workPhone) //
-        .create();
-    //@formatter:on
+		return personFactory.buildNew(form.getNewFirstName(), form.getNewLastName(), email)
+				.specifyPhoneNumber(privatePhone) //
+				.makeParent() //
+				.specifyLandlinePhone(landlinePhone) //
+				.specifyWorkPhone(workPhone) //
+				.create();
+		//@formatter:on
 	}
 
 	@Override

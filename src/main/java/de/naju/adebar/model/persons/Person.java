@@ -86,6 +86,9 @@ public class Person {
 			@AttributeOverride(name = "additionalInfo", column = @Column(name = "addressHints"))})
 	private Address address;
 
+	@Column(name = "marketingProhibition")
+	private boolean marketingProhibition;
+
 	@Column(name = "participant")
 	private boolean participant;
 
@@ -152,6 +155,7 @@ public class Person {
 
 		this.parents = new ArrayList<>(MAX_PARENT_PROFILES);
 
+		this.marketingProhibition = false;
 		this.archived = false;
 	}
 
@@ -266,6 +270,18 @@ public class Person {
 	 */
 	protected void setAddress(Address address) {
 		this.address = address;
+	}
+
+	public boolean isMarketingProhibition() {
+		return marketingProhibition;
+	}
+
+	public boolean optedOutOfMarketing() {
+		return isMarketingProhibition();
+	}
+
+	protected void setMarketingProhibition(boolean isProhibited) {
+		this.marketingProhibition = isProhibited;
 	}
 
 	/**

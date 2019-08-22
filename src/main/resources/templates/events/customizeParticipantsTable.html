@@ -188,6 +188,11 @@
                         </div>
                         <div class="checkbox">
                           <label>
+                            <input type="checkbox" th:field="*{marketingStatus}"/>Marketing-Zustimmung
+                          </label>
+                        </div>
+                        <div class="checkbox">
+                          <label>
                             <input type="checkbox" th:field="*{dateOfBirth}"/> Geburtsdatum
                           </label>
                         </div>
@@ -396,6 +401,11 @@
                   </div>
                   <div class="checkbox">
                     <label>
+                      <input type="checkbox" th:field="*{marketingStatus}"/> Marketing-Zustimmung
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
                       <input type="checkbox" th:field="*{dateOfBirth}"/> Geburtsdatum
                     </label>
                   </div>
@@ -554,6 +564,7 @@
                 <input type="hidden" th:field="*{email}"/>
                 <input type="hidden" th:field="*{phone}"/>
                 <input type="hidden" th:field="*{city}"/>
+                <input type="hidden" th:field="*{marketingStatus}"/>
                 <input type="hidden" th:field="*{dateOfBirth}"/>
                 <input type="hidden" th:field="*{age}"/>
                 <input type="hidden" th:field="*{eatingHabits}"/>

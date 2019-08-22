@@ -29,6 +29,7 @@ public class AddPersonForm {
 	private String email;
 	private String phone;
 	private AddressForm address;
+	private boolean marketingOptOut;
 	private boolean activist;
 	private AddActivistForm activistForm;
 	private boolean participant;
@@ -46,12 +47,13 @@ public class AddPersonForm {
 	 * @param address the person's address
 	 */
 	public AddPersonForm(String firstName, String lastName, Email email, PhoneNumber phone,
-			AddressForm address) {
+			AddressForm address, boolean marketingOptOut) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email.getValue();
 		this.phone = phone.getValue();
 		this.address = address;
+		this.marketingOptOut = marketingOptOut;
 	}
 
 	/**
@@ -127,6 +129,18 @@ public class AddPersonForm {
 	 */
 	public void setAddress(AddressForm address) {
 		this.address = address;
+	}
+
+	public boolean isMarketingOptOut() {
+		return marketingOptOut;
+	}
+
+	public boolean containsMarketingOptOut() {
+		return isMarketingOptOut();
+	}
+
+	public void setMarketingOptOut(boolean marketingOptOut) {
+		this.marketingOptOut = marketingOptOut;
 	}
 
 	/**

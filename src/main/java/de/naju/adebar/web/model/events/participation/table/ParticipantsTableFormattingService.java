@@ -11,6 +11,7 @@ import de.naju.adebar.web.model.events.participation.table.columns.DepartureOpti
 import de.naju.adebar.web.model.events.participation.table.columns.EatingHabitsColumnFormatter;
 import de.naju.adebar.web.model.events.participation.table.columns.EmailColumnFormatter;
 import de.naju.adebar.web.model.events.participation.table.columns.HealthImpairmentsColumnFormatter;
+import de.naju.adebar.web.model.events.participation.table.columns.MarketingStatusColumnFormatter;
 import de.naju.adebar.web.model.events.participation.table.columns.MayGoHomeSinglyColumnFormatter;
 import de.naju.adebar.web.model.events.participation.table.columns.NabuMembershipColumnFormatter;
 import de.naju.adebar.web.model.events.participation.table.columns.NameColumnFormatter;
@@ -84,6 +85,9 @@ public class ParticipantsTableFormattingService {
 				break;
 			case ParticipantsTable.COLUMN_CITY:
 				formatter = ctx.getBean(CityColumnFormatter.class);
+				break;
+			case ParticipantsTable.COLUMN_MARKETING_STATUS:
+				formatter = ctx.getBean(MarketingStatusColumnFormatter.class);
 				break;
 			case ParticipantsTable.COLUMN_DATE_OF_BIRTH:
 				formatter = ctx.getBean(DateOfBirthColumnFormatter.class);

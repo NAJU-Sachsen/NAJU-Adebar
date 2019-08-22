@@ -6,6 +6,7 @@ import de.naju.adebar.model.events.Event;
 import de.naju.adebar.model.events.EventRepository;
 import de.naju.adebar.model.events.ParticipationManager;
 import de.naju.adebar.model.events.ParticipationManager.Result;
+import de.naju.adebar.model.persons.MarketingManager;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.persons.PersonRepository;
 import de.naju.adebar.model.persons.QPerson;
@@ -48,6 +49,7 @@ public class AddPersonController {
 	private final QualificationRepository qualificationRepo;
 	private final AddPersonFormConverter personFormConverter;
 	private final ParticipationManager participationManager;
+	private final MarketingManager marketingManager;
 
 	/**
 	 * Full constructor
@@ -58,13 +60,17 @@ public class AddPersonController {
 	 * @param qualificationRepo repository containing all available referent qualifications
 	 * @param personFormConverter service to convert an {@link AddPersonForm} to new persons
 	 */
-	public AddPersonController(PersonRepository personRepo, EventRepository eventRepo,
-			LocalGroupRepository localGroupRepo, QualificationRepository qualificationRepo,
-			AddPersonFormConverter personFormConverter, ParticipationManager participationManager) {
+	public AddPersonController(PersonRepository personRepo, //
+			EventRepository eventRepo, //
+			LocalGroupRepository localGroupRepo, //
+			QualificationRepository qualificationRepo, //
+			AddPersonFormConverter personFormConverter, //
+			ParticipationManager participationManager, //
+			MarketingManager marketingManager) {
 
 		Assert2.noNullArguments("No argument may be null", //
 				personRepo, eventRepo, localGroupRepo, qualificationRepo, personFormConverter,
-				participationManager);
+				participationManager, marketingManager);
 
 		this.personRepo = personRepo;
 		this.eventRepo = eventRepo;
@@ -72,6 +78,7 @@ public class AddPersonController {
 		this.qualificationRepo = qualificationRepo;
 		this.personFormConverter = personFormConverter;
 		this.participationManager = participationManager;
+		this.marketingManager = marketingManager;
 	}
 
 	/**
@@ -146,6 +153,10 @@ public class AddPersonController {
 
 		addToEventsIfNecessary(newPerson, form, redirAttr);
 		addToLocalGroupsIfNecessary(newPerson, form);
+
+		if (form.containsMarketingOptOut()) {
+			marketingManager.optOut(newPerson);
+		}
 
 		if (!returnAction.isEmpty()) {
 			redirAttr.addAttribute("do", returnAction);
