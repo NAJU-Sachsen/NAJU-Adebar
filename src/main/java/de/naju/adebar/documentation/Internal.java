@@ -21,32 +21,32 @@ import java.lang.annotation.Target;
 @Target({TYPE, FIELD, METHOD, CONSTRUCTOR})
 public @interface Internal {
 
-  /**
-   * A scope denotes which classes are intended to access some element.
-   *
-   * @author Rico Bergmann
-   */
-  public enum Scope {
+	/**
+	 * A scope denotes which classes are intended to access some element.
+	 *
+	 * @author Rico Bergmann
+	 */
+	public enum Scope {
 
-    /**
-     * Only methods in the surrounding class should have access.
-     */
-    PRIVATE,
+		/**
+		 * Only methods in the surrounding class should have access.
+		 */
+		PRIVATE,
 
-    /**
-     * Only classes in the same package should have access.
-     */
-    PACKAGE,
+		/**
+		 * Only classes in the same package should have access.
+		 */
+		PACKAGE,
 
-    /**
-     * Only classes in the same package or subclasses of the surrounding class should have access.
-     */
-    PROTECTED
-  }
+		/**
+		 * Only classes in the same package or subclasses of the surrounding class should have access.
+		 */
+		PROTECTED
+	}
 
-  /**
-   * The scope which is intended for the annotated element.
-   */
-  Scope scope() default Scope.PRIVATE;
+	/**
+	 * The scope which is intended for the annotated element.
+	 */
+	Scope scope() default Scope.PRIVATE;
 
 }

@@ -27,95 +27,92 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Transactional
 public class AddEventController {
 
-  private final EventRepository eventRepo;
-  private final AccommodationRepository accomodationRepo;
-  private final LocalGroupRepository localGroupRepo;
-  private final ProjectRepository projectRepo;
-  private final AddEventFormConverter eventFormConverter;
+	private final EventRepository eventRepo;
+	private final AccommodationRepository accomodationRepo;
+	private final LocalGroupRepository localGroupRepo;
+	private final ProjectRepository projectRepo;
+	private final AddEventFormConverter eventFormConverter;
 
-  public AddEventController(EventRepository eventRepo, AccommodationRepository accomodationRepo,
-      LocalGroupRepository localGroupRepo,
-      ProjectRepository projectRepo, AddEventFormConverter eventFormConverter) {
-    Assert2.noNullArguments("No argument may be null", eventRepo, accomodationRepo, localGroupRepo,
-        projectRepo,
-        eventFormConverter);
-    this.eventRepo = eventRepo;
-    this.localGroupRepo = localGroupRepo;
-    this.accomodationRepo = accomodationRepo;
-    this.projectRepo = projectRepo;
-    this.eventFormConverter = eventFormConverter;
-  }
+	public AddEventController(EventRepository eventRepo, AccommodationRepository accomodationRepo,
+			LocalGroupRepository localGroupRepo, ProjectRepository projectRepo,
+			AddEventFormConverter eventFormConverter) {
+		Assert2.noNullArguments("No argument may be null", eventRepo, accomodationRepo, localGroupRepo,
+				projectRepo, eventFormConverter);
+		this.eventRepo = eventRepo;
+		this.localGroupRepo = localGroupRepo;
+		this.accomodationRepo = accomodationRepo;
+		this.projectRepo = projectRepo;
+		this.eventFormConverter = eventFormConverter;
+	}
 
-  @GetMapping("/events/add")
-  public String showAddEventView(Model model) {
-    model.addAttribute("localGroups", localGroupRepo.findAll());
-    model.addAttribute("projects", projectRepo.findAll());
+	@GetMapping("/events/add")
+	public String showAddEventView(Model model) {
+		model.addAttribute("localGroups", localGroupRepo.findAll());
+		model.addAttribute("projects", projectRepo.findAll());
 
-    if (!model.containsAttribute("form")) {
-      model.addAttribute("form", new AddEventForm());
-    }
+		if (!model.containsAttribute("form")) {
+			model.addAttribute("form", new AddEventForm());
+		}
 
-    return "events/addEvent";
-  }
+		return "events/addEvent";
+	}
 
-  @PostMapping("/events/add")
-  public String addEvent(@ModelAttribute("form") @Valid AddEventForm form, BindingResult errors,
-      @RequestParam(value = "return-action", defaultValue = "") String returnAction, //
-      @RequestParam(value = "return-to", defaultValue = "") String returnPath, //
-      RedirectAttributes redirAttr) {
+	@PostMapping("/events/add")
+	public String addEvent(@ModelAttribute("form") @Valid AddEventForm form, BindingResult errors,
+			@RequestParam(value = "return-action", defaultValue = "") String returnAction, //
+			@RequestParam(value = "return-to", defaultValue = "") String returnPath, //
+			RedirectAttributes redirAttr) {
 
-    if (errors.hasErrors()) {
+		if (errors.hasErrors()) {
 
-      form.getAccommodation().prepareRooms();
+			form.getAccommodation().prepareRooms();
 
-      redirAttr.addFlashAttribute("form", form);
-      redirAttr.addFlashAttribute("org.springframework.validation.BindingResult.form", errors);
+			redirAttr.addFlashAttribute("form", form);
+			redirAttr.addFlashAttribute("org.springframework.validation.BindingResult.form", errors);
 
-      if (!returnAction.isEmpty()) {
-        redirAttr.addAttribute("return-action", returnAction);
-      }
-      if (!returnPath.isEmpty()) {
-        redirAttr.addAttribute("return-to", returnPath);
-      }
+			if (!returnAction.isEmpty()) {
+				redirAttr.addAttribute("return-action", returnAction);
+			}
+			if (!returnPath.isEmpty()) {
+				redirAttr.addAttribute("return-to", returnPath);
+			}
 
-      return "redirect:/events/add";
-    }
+			return "redirect:/events/add";
+		}
 
-    Event newEvent = eventFormConverter.toEntity(form);
+		Event newEvent = eventFormConverter.toEntity(form);
 
-    newEvent = eventRepo.save(newEvent);
+		newEvent = eventRepo.save(newEvent);
 
-    switch (form.getBelonging()) {
-      case LOCAL_GROUP:
-        LocalGroup localGroup = localGroupRepo.findById(form.getLocalGroup())
-            .orElseThrow(() -> new IllegalArgumentException(
-                "No local group with id " + form.getLocalGroup()));
-        localGroup.addEvent(newEvent);
-        localGroupRepo.save(localGroup);
-        break;
-      case PROJECT:
-        Project project = projectRepo.findById(form.getProject())
-            .orElseThrow(() -> new IllegalArgumentException(
-                "No project with id " + form.getProject()));
-        project.addEvent(newEvent);
-        projectRepo.save(project);
-        break;
-    }
+		switch (form.getBelonging()) {
+			case LOCAL_GROUP:
+				LocalGroup localGroup = localGroupRepo.findById(form.getLocalGroup()).orElseThrow(
+						() -> new IllegalArgumentException("No local group with id " + form.getLocalGroup()));
+				localGroup.addEvent(newEvent);
+				localGroupRepo.save(localGroup);
+				break;
+			case PROJECT:
+				Project project = projectRepo.findById(form.getProject()).orElseThrow(
+						() -> new IllegalArgumentException("No project with id " + form.getProject()));
+				project.addEvent(newEvent);
+				projectRepo.save(project);
+				break;
+		}
 
-    if (!returnAction.isEmpty()) {
-      redirAttr.addAttribute("do", returnAction);
-    }
+		if (!returnAction.isEmpty()) {
+			redirAttr.addAttribute("do", returnAction);
+		}
 
-    if (!returnPath.isEmpty()) {
-      return "redirect:" + returnPath;
-    }
+		if (!returnPath.isEmpty()) {
+			return "redirect:" + returnPath;
+		}
 
-    return "redirect:/events/" + newEvent.getId();
-  }
+		return "redirect:/events/" + newEvent.getId();
+	}
 
-  @InitBinder("form")
-  protected void initBinders(WebDataBinder binder) {
-    binder.addValidators(eventFormConverter);
-  }
+	@InitBinder("form")
+	protected void initBinders(WebDataBinder binder) {
+		binder.addValidators(eventFormConverter);
+	}
 
 }

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+			xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8"/>
+	<meta content="width=device-width,initial-scale=1" name="viewport"/>
+	<meta th:name="_csrf" th:value="${_csrf.token}"/>
+	<title>Filtern | Adebar</title>
+	<link href="../static/resources/css/bootstrap.min.css" rel="stylesheet"
+				th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" type="text/css"/>
+	<link href="../static/resources/css/bootstrap-select.min.css"
+				rel="stylesheet" th:href="@{/resources/css/bootstrap-select.min.css}"/>
+
+	<link href="../static/resources/css/style.css" rel="stylesheet"
+				th:href="@{/resources/css/style.css}" type="text/css"/>
+</head>
+<body>
+
+<!-- central navigation -->
+<nav th:replace="navigation :: topNav(page='events')"></nav>
+
+<!-- page specific content-->
+<main id="main"><a href="overview.html"> <span
+		class="glyphicon glyphicon-chevron-left"></span> Zurück zur Übersicht
+</a>
+
+	<h1>Filtern</h1>
+
+	<article></article>
+
+	<!-- The 'primitives' -->
+	<article>
+
+		<!-- Text input -->
+		<div class="filter-text" th:fragment="text (field)">
+			<input class="form-control" type="text" autocomplete="off"
+						 th:id="|${field.defaultName}-value|"
+						 th:name="|${field.defaultName}-value|"
+						 th:unless="${field.largeText}"/>
+			<textarea class="form-control" th:id="|${field.defaultName}-value|"
+								th:name="|${field.defaultName}-value|" th:if="${field.largeText}"></textarea>
+		</div>
+
+		<!-- Checkboxes -->
+		<div class="filter-check" th:fragment="bool (field)">
+
+			<select class="form-control" th:id="|${field.defaultName}-value|" th:name="|${field.defaultName}-value|">
+				<option value="NOOP" th:text="#{filter.inactive}">egal</option>
+				<option th:value="true" th:name="|${field.defaultName}-value|"
+								th:text="#{|filter.${field.defaultName}.true|}">ja
+				</option>
+				<option th:value="false" th:name="|${field.defaultName}-value|"
+								th:text="#{|filter.${field.defaultName}.false|}">nein
+				</option>
+			</select>
+		</div>
+
+		<!-- Date selection -->
+		<div class="filter-date" th:fragment="date (field)">
+			<input class="form-control" autocomplete="off" th:id="|${field.defaultName}-value|"
+						 th:name="|${field.defaultName}-value|" type="date"/>
+		</div>
+
+		<!-- Email addresses -->
+		<div class="filter-email" th:fragment="email (field)">
+			<input class="form-control" autocomplete="off" th:id="|${field.defaultName}-value|"
+						 th:name="|${field.defaultName}-value|" type="email"/>
+		</div>
+
+		<!-- Entities -->
+		<div class="entity-filter" th:fragment="entity (field)"
+				 th:attrappend="data-input-name=|${field.defaultName}-value|">
+			<button class="btn btn-default entity-selection-trigger"
+							th:attrappend="data-target=|#select-${field.defaultName}-dialog|"
+							data-toggle="modal" type="button">Auswählen
+			</button>
+
+			<ul class="entity-container list-group list-group-hover margin-top-lg" th:attrappend="data-value-name=|${field.defaultName}-value|">
+
+			</ul>
+
+			<!-- Entity selection modal -->
+			<div class="modal entity-selection-modal fade" tabindex="-1"
+					 th:id="|select-${field.defaultName}-dialog|">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button class="close" data-dismiss="modal" type="button">&times;</button>
+							<h3 th:id="|select-${field.defaultName}-dialog-title|" th:text="${field.dialogTitle}">
+								...auswählen</h3>
+						</div>
+
+						<div class="modal-body entity-select-container">
+
+							<!-- Entity query form -->
+							<div class="form-inline entity-select-search-form" th:attrappend="data-action=${field.dialogAction}"
+										th:id="|select-${field.defaultName}-search-form|">
+								<div class="form-group">
+									<label class="control-label"
+												 th:for="|select-${field.defaultName}-search|">Suchen:</label>
+									<input
+											class="form-control query" type="text" autocomplete="off"
+											th:id="|select-${field.defaultName}-search|">
+								</div>
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" class="append-search"/> Suchergebnisse an die derzeitigen Ergebnisse anhängen.
+									</label>
+								</div>
+								<button class="btn btn-primary do-search" type="button">Los!</button>
+							</div>
+
+							<!-- Result display (the query result will be injected as pre-rendered HTML from the server here) -->
+							<ul class="entity-select-showcase container-fluid margin-top-lg list-group list-group-hover margin-left"
+									 th:id="|select-${field.defaultName}-dialog-showcase|"></ul>
+
+						</div>
+
+						<div class="modal-footer">
+							<button class="btn btn-default" data-dismiss="modal" type="button">Abbrechen</button>
+							<button class="btn btn-primary confirm-entity-selection multiple"
+											th:id="|select-${field.defaultName}-dialog-confirm|"
+											type="button">Übernehmen
+							</button>
+						</div>
+
+						<template class="matching-entity-template">
+							<li class="matching-entity list-group-item">
+								<div class="container-fluid">
+									<div class="row">
+										<div class="col-md-8 entity-title"></div>
+										<div class="col-md-4 entity-select">
+											<input type="checkbox" name="" value="" class="entity-select-value" />
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-12 entity-description"></div>
+									</div>
+								</div>
+							</li>
+						</template>
+
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<!-- Enumerated values -->
+		<div class="filter-enum" th:fragment="enum (field)">
+			<select class="form-control" th:name="|${field.defaultName}-value|">
+				<option th:each="val : ${field.values}" th:text="${val.display}"
+								th:value="${val.get()}"></option>
+			</select>
+		</div>
+
+		<!-- Integers -->
+		<div class="filter-int" th:fragment="int (field)">
+			<input class="form-control" step="1" autocomplete="off"
+						 th:id="${field.defaultName}-value" th:name="|${field.name}-vaue|"
+						 type="number"/>
+		</div>
+
+	</article>
+
+	<!--Filters wrapping the primitive fields -->
+	<article>
+
+		<div class="toplevel-filter" th:fragment="topLevelFilter (filter)"
+				 th:with="field = ${filter.filteredField}">
+			<label class="control-label" th:for="|${field.defaultName}-value|"
+						 th:text="${field.name}"></label>
+
+			<div th:replace="__${renderingService.fetch(filter)}__"></div>
+
+		</div>
+
+		<div class="filter-comp" th:fragment="comparingFilter (filter)"
+				 th:with="field = ${filter.filteredField}">
+
+			<select class="form-control margin-btm" th:name="|${field.defaultName}-comp|">
+				<option value="NOOP" th:text="#{filter.inactive}">nicht
+					filtern
+				</option>
+				<option value="min"
+								th:text="${labellingService.labelFor(filter).min()}">minimal
+				</option>
+				<option value="max"
+								th:text="${labellingService.labelFor(filter).max()}">maximal
+				</option>
+			</select>
+
+			<div th:replace="__${renderingService.fetch(field)}__"></div>
+
+		</div>
+
+		<div class="filter-inv" th:fragment="invertableFilter (filter)"
+				 th:with="field = ${filter.filteredField}">
+
+			<div>
+				<select class="form-control margin-btm" th:name="|${field.defaultName}-status|">
+					<option value="NOOP" th:text="#{filter.inactive}">egal</option>
+					<option value="inactive" th:text="${labellingService.labelFor(filter).inactive()}">ausschließlich</option>
+					<option value="active" th:text="${labellingService.labelFor(filter).active()}">außer</option>
+				</select>
+			</div>
+
+			<div th:replace="__${renderingService.fetch(filter.actualFilter)}__"></div>
+
+		</div>
+
+		<div class="filter-plain" th:fragment="plainFilter (filter)">
+
+			<div th:replace="__${renderingService.fetch(filter.filteredField)}__"></div>
+
+		</div>
+
+		<div class="filter-list" th:fragment="listFilter (filter)"
+				 th:with="field = ${filter.filteredField}">
+
+			<hr/>
+
+			<h3 th:text="${field.name}">Filter title</h3>
+
+			<div th:each="actualFilter : ${filter.values}"
+					 th:replace="__${renderingService.fetch(actualFilter)}__"></div>
+
+			<hr/>
+
+		</div>
+
+		<div class="filter-join" th:fragment="joiningFilter (filter)">
+
+			<div class="filter-join-first" th:replace="__${renderingService.fetch(filter.firstFilter)}__"></div>
+
+			<div class="filter-join-second" th:replace="__${renderingService.fetch(filter.secondFilter)}__"></div>
+
+		</div>
+
+	</article>
+
+	<!-- filter groups -->
+	<article>
+
+		<div th:fragment="group (filterGroup)"
+				 th:attr="data-controlled-by=${filterGroup.togglerId}"
+				 th:id="${filterGroup.groupId}">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h2 class="panel-title" th:text="${filterGroup.name}">Filter
+						group</h2>
+				</div>
+
+				<div class="panel-body form-category-content">
+
+					<div class="margin-btm" th:each="filter : ${filterGroup.content}">
+
+						<div th:replace=":: topLevelFilter (filter=${filter})"></div>
+
+					</div>
+
+				</div>
+
+			</div>
+		</div>
+
+	</article>
+
+	<article>
+
+		<div class="filter-form  container scroll-horizontal" th:fragment="form (filterForm)">
+
+			<div class="filter-group-container scroll-item-4 form-category filter-group" th:each="filterGroup : ${filterForm.filterGroups}">
+
+				<div th:replace=":: group (${filterGroup})"></div>
+
+			</div>
+
+		</div>
+
+	</article>
+
+</main>
+
+<form id="logout-user" method="POST" th:action="@{/logout}">
+	<input name="csrf" th:value="csrf" type="hidden"/>
+</form>
+
+<script src="../static/resources/js/jquery.min.js"
+				th:src="@{/webjars/jquery/jquery.min.js}" type="text/javascript"></script>
+<script src="../static/resources/js/bootstrap.min.js"
+				th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"
+				type="text/javascript"></script>
+<script src="../static/resources/js/bootstrap-select.min.js"
+				th:src="@{/resources/js/bootstrap-select.min.js}"></script>
+<script src="../static/resources/js/init.js"
+				th:src="@{/resources/js/init.js}"></script>
+<script src="../static/resources/js/filter.js"
+				th:src="@{/resources/js/filter.js}"></script>
+<script src="../static/resources/js/formControls.js"
+				th:src="@{/resources/js/formControls.js}"></script>
+
+
+</body>
+</html>

@@ -13,24 +13,24 @@ import org.springframework.util.Assert;
 @Service
 public class ReservationConverter implements Converter<String, Reservation> {
 
-  private final ReadOnlyEventRepository eventRepo;
+	private final ReadOnlyEventRepository eventRepo;
 
-  public ReservationConverter(ReadOnlyEventRepository eventRepo) {
-    Assert.notNull(eventRepo, "reservationRepo may not be null");
-    this.eventRepo = eventRepo;
-  }
+	public ReservationConverter(ReadOnlyEventRepository eventRepo) {
+		Assert.notNull(eventRepo, "reservationRepo may not be null");
+		this.eventRepo = eventRepo;
+	}
 
-  @Override
-  public Reservation convert(@Nonnull String source) {
-    if (source.isEmpty()) {
-      return null;
-    }
+	@Override
+	public Reservation convert(@Nonnull String source) {
+		if (source.isEmpty()) {
+			return null;
+		}
 
-    NumericEntityId id = new NumericEntityId(Long.parseLong(source));
-    Optional<Event> event = eventRepo.findByReservation(Long.parseLong(source));
+		NumericEntityId id = new NumericEntityId(Long.parseLong(source));
+		Optional<Event> event = eventRepo.findByReservation(Long.parseLong(source));
 
-    return event.map(e -> e.getParticipantsList().getReservationWithId(id).orElse(null)) //
-        .orElse(null);
+		return event.map(e -> e.getParticipantsList().getReservationWithId(id).orElse(null)) //
+				.orElse(null);
 
-  }
+	}
 }

@@ -34,149 +34,149 @@ import de.naju.adebar.web.validation.events.EditEventFormConverter;
 @Controller
 public class EventController {
 
-  private final EventRepository eventRepo;
-  private final LocalGroupRepository localGroupRepo;
-  private final ProjectRepository projectRepo;
-  private final EventSearchServer searchServer;
-  private final EditEventFormConverter eventFormConverter;
+	private final EventRepository eventRepo;
+	private final LocalGroupRepository localGroupRepo;
+	private final ProjectRepository projectRepo;
+	private final EventSearchServer searchServer;
+	private final EditEventFormConverter eventFormConverter;
 
-  public EventController(EventRepository eventRepo, LocalGroupRepository localGroupRepo,
-      ProjectRepository projectRepo, EventSearchServer searchServer,
-      EditEventFormConverter eventFormConverter) {
-    Assert2.noNullArguments("No argument may be null", eventRepo, localGroupRepo, projectRepo,
-        searchServer, eventFormConverter);
-    this.eventRepo = eventRepo;
-    this.localGroupRepo = localGroupRepo;
-    this.projectRepo = projectRepo;
-    this.searchServer = searchServer;
-    this.eventFormConverter = eventFormConverter;
-  }
+	public EventController(EventRepository eventRepo, LocalGroupRepository localGroupRepo,
+			ProjectRepository projectRepo, EventSearchServer searchServer,
+			EditEventFormConverter eventFormConverter) {
+		Assert2.noNullArguments("No argument may be null", eventRepo, localGroupRepo, projectRepo,
+				searchServer, eventFormConverter);
+		this.eventRepo = eventRepo;
+		this.localGroupRepo = localGroupRepo;
+		this.projectRepo = projectRepo;
+		this.searchServer = searchServer;
+		this.eventFormConverter = eventFormConverter;
+	}
 
-  @GetMapping("/events")
-  public String showAllEvents(Model model, @PageableDefault(size = 20) Pageable pageable) {
+	@GetMapping("/events")
+	public String showAllEvents(Model model, @PageableDefault(size = 20) Pageable pageable) {
 
-    /*
-     * This will also include all events where an end time has been created with a meaningful time
-     * portion and today is the date of the end time's date portion but the time set is already
-     * past. The simplification of storing a DateTime where the time portion is irrelevant as 0
-     * o'clock is impractical here. However solving this problem would required much more code and
-     * the inconvenience caused by it is pretty small. Therefore these events will still be
-     * included. One may even argue, whether this is an inconvenience at all - having an event which
-     * just ended still in the list may be useful for doing some kind of follow-up work.
-     */
-    LocalDateTime now =
-        LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0).minusSeconds(1);
+		/*
+		 * This will also include all events where an end time has been created with a meaningful time
+		 * portion and today is the date of the end time's date portion but the time set is already
+		 * past. The simplification of storing a DateTime where the time portion is irrelevant as 0
+		 * o'clock is impractical here. However solving this problem would required much more code and
+		 * the inconvenience caused by it is pretty small. Therefore these events will still be
+		 * included. One may even argue, whether this is an inconvenience at all - having an event which
+		 * just ended still in the list may be useful for doing some kind of follow-up work.
+		 */
+		LocalDateTime now =
+				LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0).minusSeconds(1);
 
-    model.addAttribute("events",
-        eventRepo.findAllPagedByEndTimeIsAfterAndCanceledIsFalseOrderByStartTime(now, pageable));
+		model.addAttribute("events",
+				eventRepo.findAllPagedByEndTimeIsAfterAndCanceledIsFalseOrderByStartTime(now, pageable));
 
-    return "events/overview";
-  }
+		return "events/overview";
+	}
 
-  @GetMapping("/events/past")
-  public String showPastEvents(Model model, @PageableDefault(size = 20) Pageable pageable) {
-    LocalDateTime now = LocalDateTime.now();
-    Page<Event> pastEvents =
-        eventRepo.findAllPagedByEndTimeIsBeforeOrCanceledIsTrueOrderByStartTimeDesc(now, pageable);
-    model.addAttribute("events", pastEvents);
-    return "events/pastEvents";
-  }
+	@GetMapping("/events/past")
+	public String showPastEvents(Model model, @PageableDefault(size = 20) Pageable pageable) {
+		LocalDateTime now = LocalDateTime.now();
+		Page<Event> pastEvents =
+				eventRepo.findAllPagedByEndTimeIsBeforeOrCanceledIsTrueOrderByStartTimeDesc(now, pageable);
+		model.addAttribute("events", pastEvents);
+		return "events/pastEvents";
+	}
 
-  @GetMapping("/events/search")
-  public String searchEvents(@RequestParam("query") String query,
-      @PageableDefault(size = 20) Pageable pageable, Model model) {
+	@GetMapping("/events/search")
+	public String searchEvents(@RequestParam("query") String query,
+			@PageableDefault(size = 20) Pageable pageable, Model model) {
 
-    model.addAttribute("events", searchServer.runQuery(query.trim(), pageable));
+		model.addAttribute("events", searchServer.runQuery(query.trim(), pageable));
 
-    return "events/overview";
-  }
+		return "events/overview";
+	}
 
-  @GetMapping("/events/{eid}")
-  public String showEventDetailsOverview(@PathVariable("eid") Event event, Model model) {
-    model.addAttribute("tab", "general");
-    model.addAttribute("event", event);
-    model.addAttribute("localGroups", localGroupRepo.findAll());
-    model.addAttribute("projects", projectRepo.findAll());
+	@GetMapping("/events/{eid}")
+	public String showEventDetailsOverview(@PathVariable("eid") Event event, Model model) {
+		model.addAttribute("tab", "general");
+		model.addAttribute("event", event);
+		model.addAttribute("localGroups", localGroupRepo.findAll());
+		model.addAttribute("projects", projectRepo.findAll());
 
-    if (!model.containsAttribute("eventForm")) {
-      model.addAttribute("eventForm", eventFormConverter.toForm(event));
-    }
+		if (!model.containsAttribute("eventForm")) {
+			model.addAttribute("eventForm", eventFormConverter.toForm(event));
+		}
 
-    return "events/eventDetails";
-  }
-
-
-  @PostMapping("/events/{id}/update")
-  @Transactional
-  public String updateEvent(@PathVariable("id") Event event, //
-      @ModelAttribute("eventForm") @Valid EditEventForm form, BindingResult errors, //
-      RedirectAttributes redirAttr) {
-
-    // FIXME removing old (but used) arrival opts => do we actually need to change anything?
-    if (errors.hasErrors()) {
-      redirAttr.addFlashAttribute("eventForm", form);
-      redirAttr.addFlashAttribute("org.springframework.validation.BindingResult.eventForm", errors);
-      return "redirect:/events/" + event.getId();
-    }
-
-    eventFormConverter.applyFormToEntity(form, event);
-    updateEventBelongingIfNecessary(event, form);
-
-    return "redirect:/events/" + event.getId();
-  }
-
-  @PostMapping("/events/{id}/cancel")
-  @Transactional
-  @PreAuthorize("hasRole('ROLE_CHAIRMAN')")
-  public String cancelEvent(@PathVariable("id") Event event, RedirectAttributes redirAttr) {
-    event.cancel();
-    return "redirect:/events/" + event.getId();
-  }
-
-  @InitBinder("eventForm")
-  protected void initBinders(WebDataBinder binder) {
-    binder.addValidators(eventFormConverter);
-  }
-
-  @DesignSmell(description = "This is just ugly")
-  private void updateEventBelongingIfNecessary(Event event, EditEventForm newData) {
-    if (newData.getBelonging() == Belonging.LOCAL_GROUP) {
-      LocalGroup newLocalGroup = localGroupRepo.findById(newData.getLocalGroup()).orElseThrow(
-          () -> new IllegalArgumentException("No local group with ID " + newData.getLocalGroup()));
-
-      if (event.isForLocalGroup()) {
-        LocalGroup currentLocalGroup = event.getLocalGroup();
-
-        if (!newLocalGroup.equals(currentLocalGroup)) {
-          currentLocalGroup.removeEvent(event);
-          newLocalGroup.addEvent(event);
-        }
-
-      } else {
-        event.getProject().removeEvent(event);
-        newLocalGroup.addEvent(event);
-      }
-
-    } else if (newData.getBelonging() == Belonging.PROJECT) {
-      Project newProject = projectRepo.findById(newData.getProject()) //
-          .orElseThrow(
-              () -> new IllegalArgumentException("No project with ID " + newData.getProject()));
-
-      if (event.isForProject()) {
-        Project currentProject = event.getProject();
-
-        if (newProject.equals(currentProject)) {
-          currentProject.removeEvent(event);
-          currentProject.addEvent(event);
-        }
-
-      } else {
-        event.getLocalGroup().removeEvent(event);
-        newProject.addEvent(event);
-      }
-    }
+		return "events/eventDetails";
+	}
 
 
-  }
+	@PostMapping("/events/{id}/update")
+	@Transactional
+	public String updateEvent(@PathVariable("id") Event event, //
+			@ModelAttribute("eventForm") @Valid EditEventForm form, BindingResult errors, //
+			RedirectAttributes redirAttr) {
+
+		// FIXME removing old (but used) arrival opts => do we actually need to change anything?
+		if (errors.hasErrors()) {
+			redirAttr.addFlashAttribute("eventForm", form);
+			redirAttr.addFlashAttribute("org.springframework.validation.BindingResult.eventForm", errors);
+			return "redirect:/events/" + event.getId();
+		}
+
+		eventFormConverter.applyFormToEntity(form, event);
+		updateEventBelongingIfNecessary(event, form);
+
+		return "redirect:/events/" + event.getId();
+	}
+
+	@PostMapping("/events/{id}/cancel")
+	@Transactional
+	@PreAuthorize("hasRole('ROLE_CHAIRMAN')")
+	public String cancelEvent(@PathVariable("id") Event event, RedirectAttributes redirAttr) {
+		event.cancel();
+		return "redirect:/events/" + event.getId();
+	}
+
+	@InitBinder("eventForm")
+	protected void initBinders(WebDataBinder binder) {
+		binder.addValidators(eventFormConverter);
+	}
+
+	@DesignSmell(description = "This is just ugly")
+	private void updateEventBelongingIfNecessary(Event event, EditEventForm newData) {
+		if (newData.getBelonging() == Belonging.LOCAL_GROUP) {
+			LocalGroup newLocalGroup = localGroupRepo.findById(newData.getLocalGroup()).orElseThrow(
+					() -> new IllegalArgumentException("No local group with ID " + newData.getLocalGroup()));
+
+			if (event.isForLocalGroup()) {
+				LocalGroup currentLocalGroup = event.getLocalGroup();
+
+				if (!newLocalGroup.equals(currentLocalGroup)) {
+					currentLocalGroup.removeEvent(event);
+					newLocalGroup.addEvent(event);
+				}
+
+			} else {
+				event.getProject().removeEvent(event);
+				newLocalGroup.addEvent(event);
+			}
+
+		} else if (newData.getBelonging() == Belonging.PROJECT) {
+			Project newProject = projectRepo.findById(newData.getProject()) //
+					.orElseThrow(
+							() -> new IllegalArgumentException("No project with ID " + newData.getProject()));
+
+			if (event.isForProject()) {
+				Project currentProject = event.getProject();
+
+				if (newProject.equals(currentProject)) {
+					currentProject.removeEvent(event);
+					currentProject.addEvent(event);
+				}
+
+			} else {
+				event.getLocalGroup().removeEvent(event);
+				newProject.addEvent(event);
+			}
+		}
+
+
+	}
 
 }

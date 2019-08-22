@@ -13,29 +13,29 @@ import de.naju.adebar.web.model.events.participation.table.ParticipantsTable;
 @Service
 public class NameColumnFormatter implements TableColumnFormatter {
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see
-   * de.naju.adebar.web.model.events.participation.table.columns.TableColumnFormatter#isApplicable(
-   * de.naju.adebar.model.events.Event)
-   */
-  @Override
-  public boolean isApplicable(Event event) {
-    // the participant's name may always be formatted
-    return true;
-  }
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * de.naju.adebar.web.model.events.participation.table.columns.TableColumnFormatter#isApplicable(
+	 * de.naju.adebar.model.events.Event)
+	 */
+	@Override
+	public boolean isApplicable(Event event) {
+		// the participant's name may always be formatted
+		return true;
+	}
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see de.naju.adebar.web.model.events.participation.table.columns.TableColumnFormatter#
-   * formatColumnFor(de.naju.adebar.model.persons.Person, de.naju.adebar.model.events.Event)
-   */
-  @Override
-  public String formatColumnFor(Person participant, Event event) {
-    assertIsApplicable(event);
-    return participant.getName();
-  }
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see de.naju.adebar.web.model.events.participation.table.columns.TableColumnFormatter#
+	 * formatColumnFor(de.naju.adebar.model.persons.Person, de.naju.adebar.model.events.Event)
+	 */
+	@Override
+	public String formatColumnFor(Person participant, Event event) {
+		assertIsApplicable(event);
+		return participant.getName();
+	}
 
 }

@@ -27,89 +27,89 @@ import de.naju.adebar.model.core.Email;
 @Component
 public class NewsletterIntegrationTest {
 
-  @Autowired
-  private PersistentNewsletterManager newsletterManager;
+	@Autowired
+	private PersistentNewsletterManager newsletterManager;
 
-  @Autowired
-  private PersistentSubscriberManager subscriberManager;
+	@Autowired
+	private PersistentSubscriberManager subscriberManager;
 
-  @Autowired
-  private NewsletterRepository newsletterRepo;
+	@Autowired
+	private NewsletterRepository newsletterRepo;
 
-  @Autowired
-  private SubscriberRepository subscriberRepo;
+	@Autowired
+	private SubscriberRepository subscriberRepo;
 
-  private Newsletter hifaNewsletter;
-  private Subscriber hans;
+	private Newsletter hifaNewsletter;
+	private Subscriber hans;
 
-  @Before
-  public void setUp() {
-    hifaNewsletter = new Newsletter("HIFA");
-    hans = new Subscriber("Hans", "Wurst", Email.of("hans.wurst@web.de"));
+	@Before
+	public void setUp() {
+		hifaNewsletter = new Newsletter("HIFA");
+		hans = new Subscriber("Hans", "Wurst", Email.of("hans.wurst@web.de"));
 
-    newsletterRepo.save(hifaNewsletter);
-    subscriberRepo.save(hans);
-  }
+		newsletterRepo.save(hifaNewsletter);
+		subscriberRepo.save(hans);
+	}
 
-  @Test
-  public void testSubscription() {
-    Assert.assertFalse(String.format("%s should not have subscribed already", hans),
-        hifaNewsletter.hasSubscriber(hans));
-    newsletterManager.subscribe(hans, hifaNewsletter);
-    Assert.assertTrue(String.format("%s should have subscribed", hans),
-        hifaNewsletter.hasSubscriber(hans));
-  }
+	@Test
+	public void testSubscription() {
+		Assert.assertFalse(String.format("%s should not have subscribed already", hans),
+				hifaNewsletter.hasSubscriber(hans));
+		newsletterManager.subscribe(hans, hifaNewsletter);
+		Assert.assertTrue(String.format("%s should have subscribed", hans),
+				hifaNewsletter.hasSubscriber(hans));
+	}
 
-  @Test
-  public void testDeletion() {
-    newsletterManager.subscribe(hans, hifaNewsletter);
-    newsletterManager.unsubscribe(hans, hifaNewsletter);
-    Assert.assertFalse(String.format("%s should have unsubscribed", hans),
-        hifaNewsletter.hasSubscriber(hans));
-  }
+	@Test
+	public void testDeletion() {
+		newsletterManager.subscribe(hans, hifaNewsletter);
+		newsletterManager.unsubscribe(hans, hifaNewsletter);
+		Assert.assertFalse(String.format("%s should have unsubscribed", hans),
+				hifaNewsletter.hasSubscriber(hans));
+	}
 
-  /**
-   * deleting a newsletter will delete subscriber as well, if he has no other signed up newsletters
-   */
-  @Test
-  public void testNewsletterDeletion() {
-    newsletterManager.subscribe(hans, hifaNewsletter);
-    newsletterManager.deleteNewsletter(hifaNewsletter.getId());
-    Assert.assertFalse(String.format("%s should be deleted", hans),
-        subscriberRepo.existsById(hans.getId()));
-  }
+	/**
+	 * deleting a newsletter will delete subscriber as well, if he has no other signed up newsletters
+	 */
+	@Test
+	public void testNewsletterDeletion() {
+		newsletterManager.subscribe(hans, hifaNewsletter);
+		newsletterManager.deleteNewsletter(hifaNewsletter.getId());
+		Assert.assertFalse(String.format("%s should be deleted", hans),
+				subscriberRepo.existsById(hans.getId()));
+	}
 
-  /**
-   * removing a subscriber from all newsletters will delete him
-   */
-  @Test
-  public void testUnsubscription() {
-    newsletterManager.subscribe(hans, hifaNewsletter);
-    newsletterManager.unsubscribe(hans, hifaNewsletter);
-    Assert.assertFalse(String.format("%s should be deleted", hans),
-        subscriberRepo.existsById(hans.getId()));
-  }
+	/**
+	 * removing a subscriber from all newsletters will delete him
+	 */
+	@Test
+	public void testUnsubscription() {
+		newsletterManager.subscribe(hans, hifaNewsletter);
+		newsletterManager.unsubscribe(hans, hifaNewsletter);
+		Assert.assertFalse(String.format("%s should be deleted", hans),
+				subscriberRepo.existsById(hans.getId()));
+	}
 
-  @Test // #59
-  public void multipleNewPersonsMaySubscribeToTheSameNewsletter() {
-    final int ADDITIONAL_SUBS = 2;
+	@Test // #59
+	public void multipleNewPersonsMaySubscribeToTheSameNewsletter() {
+		final int ADDITIONAL_SUBS = 2;
 
-    hifaNewsletter =
-        newsletterRepo.findById(hifaNewsletter.getId()).orElseThrow(AssertionError::new);
+		hifaNewsletter =
+				newsletterRepo.findById(hifaNewsletter.getId()).orElseThrow(AssertionError::new);
 
-    int currentSubs = hifaNewsletter.getSubscribersCount();
-    int expectedSubs = currentSubs + ADDITIONAL_SUBS;
+		int currentSubs = hifaNewsletter.getSubscribersCount();
+		int expectedSubs = currentSubs + ADDITIONAL_SUBS;
 
-    Subscriber firstSub = new Subscriber("Hans", "Wurst", Email.of("hw@web.de"));
-    Subscriber secondSub = new Subscriber("Berta", "Beate", Email.of("bbeate@gmx.de"));
+		Subscriber firstSub = new Subscriber("Hans", "Wurst", Email.of("hw@web.de"));
+		Subscriber secondSub = new Subscriber("Berta", "Beate", Email.of("bbeate@gmx.de"));
 
-    firstSub = subscriberManager.saveSubscriber(firstSub);
-    secondSub = subscriberManager.saveSubscriber(secondSub);
+		firstSub = subscriberManager.saveSubscriber(firstSub);
+		secondSub = subscriberManager.saveSubscriber(secondSub);
 
-    newsletterManager.subscribe(firstSub, hifaNewsletter);
-    newsletterManager.subscribe(secondSub, hifaNewsletter);
+		newsletterManager.subscribe(firstSub, hifaNewsletter);
+		newsletterManager.subscribe(secondSub, hifaNewsletter);
 
-    assertThat(hifaNewsletter.getSubscribersCount()).isEqualTo(expectedSubs);
-  }
+		assertThat(hifaNewsletter.getSubscribersCount()).isEqualTo(expectedSubs);
+	}
 
 }

@@ -12,13 +12,13 @@ import de.naju.adebar.model.persons.PersonManager;
  */
 @Component
 class LocalGroupControllerManagers {
-  public final LocalGroupManager localGroups;
-  public final PersonManager persons;
+	public final LocalGroupManager localGroups;
+	public final PersonManager persons;
 
-  @Autowired
-  public LocalGroupControllerManagers(LocalGroupManager localGroupManager,
-      PersonManager personManager) {
-    this.localGroups = localGroupManager;
-    this.persons = personManager;
-  }
+	@Autowired
+	public LocalGroupControllerManagers(LocalGroupManager localGroupManager,
+			PersonManager personManager) {
+		this.localGroups = localGroupManager;
+		this.persons = personManager;
+	}
 }

@@ -40,403 +40,402 @@ import org.springframework.util.Assert;
 @Entity(name = "localGroup")
 public class LocalGroup {
 
-  @Id
-  @GeneratedValue
-  @Column(name = "id")
-  private long id;
+	@Id
+	@GeneratedValue
+	@Column(name = "id")
+	private long id;
 
-  @Column(name = "name", unique = true)
-  private String name;
+	@Column(name = "name", unique = true)
+	private String name;
 
-  @AttributeOverrides({
-      @AttributeOverride(name = "street", column = @Column(name = "addressStreet")),
-      @AttributeOverride(name = "zip", column = @Column(name = "addressZip")),
-      @AttributeOverride(name = "city", column = @Column(name = "addressCity")),
-      @AttributeOverride(name = "additionalInfo", column = @Column(name = "addressHints"))})
-  private Address address;
+	@AttributeOverrides({
+			@AttributeOverride(name = "street", column = @Column(name = "addressStreet")),
+			@AttributeOverride(name = "zip", column = @Column(name = "addressZip")),
+			@AttributeOverride(name = "city", column = @Column(name = "addressCity")),
+			@AttributeOverride(name = "additionalInfo", column = @Column(name = "addressHints"))})
+	private Address address;
 
-  @ManyToMany(cascade = CascadeType.ALL)
-  @JoinTable(name = "localGroupMembers", //
-      joinColumns = @JoinColumn(name = "localGroupId"), //
-      inverseJoinColumns = @JoinColumn(name = "memberId"))
-  private List<Person> members;
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "localGroupMembers", //
+			joinColumns = @JoinColumn(name = "localGroupId"), //
+			inverseJoinColumns = @JoinColumn(name = "memberId"))
+	private List<Person> members;
 
-  @ManyToMany(cascade = CascadeType.ALL)
-  @JoinTable(name = "localGroupContactPersons", //
-      joinColumns = @JoinColumn(name = "localGroupId"), //
-      inverseJoinColumns = @JoinColumn(name = "personId"))
-  private List<Person> contactPersons;
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "localGroupContactPersons", //
+			joinColumns = @JoinColumn(name = "localGroupId"), //
+			inverseJoinColumns = @JoinColumn(name = "personId"))
+	private List<Person> contactPersons;
 
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  @JoinTable(name = "localGroupEvents", //
-      joinColumns = @JoinColumn(name = "localGroupId"), //
-      inverseJoinColumns = @JoinColumn(name = "eventId"))
-  private List<Event> events;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinTable(name = "localGroupEvents", //
+			joinColumns = @JoinColumn(name = "localGroupId"), //
+			inverseJoinColumns = @JoinColumn(name = "eventId"))
+	private List<Event> events;
 
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "localGroup")
-  private List<Project> projects;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "localGroup")
+	private List<Project> projects;
 
-  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  private Board board;
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Board board;
 
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  @JoinTable(name = "localGroupNewsletters", //
-      joinColumns = @JoinColumn(name = "localGroupId"), //
-      inverseJoinColumns = @JoinColumn(name = "newsletterId"))
-  private Set<Newsletter> newsletters;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinTable(name = "localGroupNewsletters", //
+			joinColumns = @JoinColumn(name = "localGroupId"), //
+			inverseJoinColumns = @JoinColumn(name = "newsletterId"))
+	private Set<Newsletter> newsletters;
 
-  @Column(name = "nabuGroup")
-  private URL nabuGroupLink;
+	@Column(name = "nabuGroup")
+	private URL nabuGroupLink;
 
-  // constructors
+	// constructors
 
-  /**
-   * Full constructor
-   *
-   * @param name the chapter's name
-   * @param address the address of the group - i. e. the office's address or the like
-   */
-  public LocalGroup(String name, Address address) {
-    Object[] params = {name, address};
-    Assert.noNullElements(params, "At least one parameter was null: " + Arrays.toString(params));
-    Assert.hasText(name, "Name must have content: " + name);
-    this.name = name;
-    this.address = address;
-    this.members = new LinkedList<>();
-    this.contactPersons = new LinkedList<>();
-    this.events = new LinkedList<>();
-    this.projects = new LinkedList<>();
-    this.newsletters = new HashSet<>();
-  }
+	/**
+	 * Full constructor
+	 *
+	 * @param name the chapter's name
+	 * @param address the address of the group - i. e. the office's address or the like
+	 */
+	public LocalGroup(String name, Address address) {
+		Object[] params = {name, address};
+		Assert.noNullElements(params, "At least one parameter was null: " + Arrays.toString(params));
+		Assert.hasText(name, "Name must have content: " + name);
+		this.name = name;
+		this.address = address;
+		this.members = new LinkedList<>();
+		this.contactPersons = new LinkedList<>();
+		this.events = new LinkedList<>();
+		this.projects = new LinkedList<>();
+		this.newsletters = new HashSet<>();
+	}
 
-  /**
-   * Default constructor for JPA
-   */
-  protected LocalGroup() {
-  }
+	/**
+	 * Default constructor for JPA
+	 */
+	protected LocalGroup() {}
 
-  // basic getter and setter
+	// basic getter and setter
 
-  /**
-   * @return the ID (= primary key) of the local group
-   */
-  public long getId() {
-    return id;
-  }
+	/**
+	 * @return the ID (= primary key) of the local group
+	 */
+	public long getId() {
+		return id;
+	}
 
-  /**
-   * @param id the primary key of the local group
-   */
-  protected void setId(long id) {
-    this.id = id;
-  }
+	/**
+	 * @param id the primary key of the local group
+	 */
+	protected void setId(long id) {
+		this.id = id;
+	}
 
-  /**
-   * @return the local group's name
-   */
-  public String getName() {
-    return name;
-  }
+	/**
+	 * @return the local group's name
+	 */
+	public String getName() {
+		return name;
+	}
 
-  /**
-   * @param name the local group's name. Must be unique amongst all local groups
-   * @throws IllegalArgumentException if the name is {@code null} or empty
-   */
-  public void setName(String name) {
-    Assert.hasText(name, "Name must have content: " + name);
-    this.name = name;
-  }
+	/**
+	 * @param name the local group's name. Must be unique amongst all local groups
+	 * @throws IllegalArgumentException if the name is {@code null} or empty
+	 */
+	public void setName(String name) {
+		Assert.hasText(name, "Name must have content: " + name);
+		this.name = name;
+	}
 
-  /**
-   * @return the local group's main address - i. e. the address of its office or something
-   */
-  public Address getAddress() {
-    return address;
-  }
+	/**
+	 * @return the local group's main address - i. e. the address of its office or something
+	 */
+	public Address getAddress() {
+		return address;
+	}
 
-  /**
-   * @param address the local group's address. May not be {@code null}
-   * @throws IllegalArgumentException if the address is {@code null}
-   */
-  public void setAddress(Address address) {
-    Assert.notNull(address, "Address may not be null");
-    this.address = address;
-  }
+	/**
+	 * @param address the local group's address. May not be {@code null}
+	 * @throws IllegalArgumentException if the address is {@code null}
+	 */
+	public void setAddress(Address address) {
+		Assert.notNull(address, "Address may not be null");
+		this.address = address;
+	}
 
-  /**
-   * @return the activist who contribute to the chapter
-   */
-  public Iterable<Person> getMembers() {
-    return members;
-  }
+	/**
+	 * @return the activist who contribute to the chapter
+	 */
+	public Iterable<Person> getMembers() {
+		return members;
+	}
 
-  /**
-   * @param members the local group's members
-   */
-  protected void setMembers(List<Person> members) {
-    this.members = members;
-  }
+	/**
+	 * @param members the local group's members
+	 */
+	protected void setMembers(List<Person> members) {
+		this.members = members;
+	}
 
-  /**
-   * @return the local group's contact persons
-   */
-  public Iterable<Person> getContactPersons() {
-    return contactPersons;
-  }
+	/**
+	 * @return the local group's contact persons
+	 */
+	public Iterable<Person> getContactPersons() {
+		return contactPersons;
+	}
 
-  /**
-   * @param contactPersons the contact persons for the local group
-   */
-  public void setContactPersons(List<Person> contactPersons) {
-    this.contactPersons = contactPersons;
-  }
+	/**
+	 * @param contactPersons the contact persons for the local group
+	 */
+	public void setContactPersons(List<Person> contactPersons) {
+		this.contactPersons = contactPersons;
+	}
 
-  /**
-   * @return the events the local group hosts
-   */
-  public Iterable<Event> getEvents() {
-    return events;
-  }
+	/**
+	 * @return the events the local group hosts
+	 */
+	public Iterable<Event> getEvents() {
+		return events;
+	}
 
-  /**
-   * @param events the events the local group hosts
-   */
-  protected void setEvents(List<Event> events) {
-    this.events = events;
-  }
+	/**
+	 * @param events the events the local group hosts
+	 */
+	protected void setEvents(List<Event> events) {
+		this.events = events;
+	}
 
-  /**
-   * @return the projects the local group organizes
-   */
-  public List<Project> getProjects() {
-    return Collections.unmodifiableList(projects);
-  }
+	/**
+	 * @return the projects the local group organizes
+	 */
+	public List<Project> getProjects() {
+		return Collections.unmodifiableList(projects);
+	}
 
-  /**
-   * @param projects the projects the local group organizes
-   */
-  protected void setProjects(List<Project> projects) {
-    this.projects = projects;
-  }
+	/**
+	 * @param projects the projects the local group organizes
+	 */
+	protected void setProjects(List<Project> projects) {
+		this.projects = projects;
+	}
 
-  /**
-   * @return the local group's board of directors
-   */
-  public Board getBoard() {
-    return board;
-  }
+	/**
+	 * @return the local group's board of directors
+	 */
+	public Board getBoard() {
+		return board;
+	}
 
-  /**
-   * @param board the local group's board of directors. May be {@code null}
-   */
-  public void setBoard(Board board) {
-    this.board = board;
-  }
+	/**
+	 * @param board the local group's board of directors. May be {@code null}
+	 */
+	public void setBoard(Board board) {
+		this.board = board;
+	}
 
-  public Iterable<Newsletter> getNewsletters() {
-    return newsletters;
-  }
+	public Iterable<Newsletter> getNewsletters() {
+		return newsletters;
+	}
 
-  public void setNewsletters(Set<Newsletter> newsletters) {
-    this.newsletters = newsletters;
-  }
+	public void setNewsletters(Set<Newsletter> newsletters) {
+		this.newsletters = newsletters;
+	}
 
-  /**
-   * @return the website of the NABU group this NAJU belongs to
-   */
-  public URL getNabuGroupLink() {
-    return nabuGroupLink;
-  }
+	/**
+	 * @return the website of the NABU group this NAJU belongs to
+	 */
+	public URL getNabuGroupLink() {
+		return nabuGroupLink;
+	}
 
-  /**
-   * @param nabuGroupLink the website of the NABU group this NAJU belongs to
-   */
-  public void setNabuGroupLink(URL nabuGroupLink) {
-    this.nabuGroupLink = nabuGroupLink;
-  }
+	/**
+	 * @param nabuGroupLink the website of the NABU group this NAJU belongs to
+	 */
+	public void setNabuGroupLink(URL nabuGroupLink) {
+		this.nabuGroupLink = nabuGroupLink;
+	}
 
-  // query methods
+	// query methods
 
-  /**
-   * @return the number of contributors to the chapter
-   */
-  @Transient
-  public int getMemberCount() {
-    return members.size();
-  }
+	/**
+	 * @return the number of contributors to the chapter
+	 */
+	@Transient
+	public int getMemberCount() {
+		return members.size();
+	}
 
-  /**
-   * @return the number of events the chapter hosts
-   */
-  @Transient
-  public int getEventCount() {
-    return events.size();
-  }
+	/**
+	 * @return the number of events the chapter hosts
+	 */
+	@Transient
+	public int getEventCount() {
+		return events.size();
+	}
 
-  /**
-   * @return the number of projects the local group organizes
-   */
-  @Transient
-  public int getProjectCount() {
-    return projects.size();
-  }
+	/**
+	 * @return the number of projects the local group organizes
+	 */
+	@Transient
+	public int getProjectCount() {
+		return projects.size();
+	}
 
-  /**
-   * @param name the project's name
-   * @return an optional if the local group organizes a project with that name. Otherwise the
-   *     optional is empty
-   */
-  @Transient
-  public Optional<Project> getProject(String name) {
-    return projects.stream().filter(project -> project.getName().equals(name)).findAny();
-  }
+	/**
+	 * @param name the project's name
+	 * @return an optional if the local group organizes a project with that name. Otherwise the
+	 *         optional is empty
+	 */
+	@Transient
+	public Optional<Project> getProject(String name) {
+		return projects.stream().filter(project -> project.getName().equals(name)).findAny();
+	}
 
-  /**
-   * @return {@code true} if a board is specified (i.e. different from {@code null}) or {@code
-   *     false} otherwise
-   */
-  public boolean hasBoard() {
-    return board != null;
-  }
+	/**
+	 * @return {@code true} if a board is specified (i.e. different from {@code null}) or {@code
+	 *     false} otherwise
+	 */
+	public boolean hasBoard() {
+		return board != null;
+	}
 
-  /**
-   * @return {@code true} if the local group has at least one newsletter, {@code false} otherwise
-   */
-  public boolean hasNewsletters() {
-    return !newsletters.isEmpty();
-  }
+	/**
+	 * @return {@code true} if the local group has at least one newsletter, {@code false} otherwise
+	 */
+	public boolean hasNewsletters() {
+		return !newsletters.isEmpty();
+	}
 
-  /**
-   * @return {@code true} if the local group has at least one contact person, {@code false}
-   *     otherwise
-   */
-  public boolean hasContactPersons() {
-    return !contactPersons.isEmpty();
-  }
+	/**
+	 * @return {@code true} if the local group has at least one contact person, {@code false}
+	 *         otherwise
+	 */
+	public boolean hasContactPersons() {
+		return !contactPersons.isEmpty();
+	}
 
-  /**
-   * @return {@code true} if a link to the related NABU group was specified, {@code false} otherwise
-   */
-  public boolean hasNabuGroupLink() {
-    return nabuGroupLink != null;
-  }
+	/**
+	 * @return {@code true} if a link to the related NABU group was specified, {@code false} otherwise
+	 */
+	public boolean hasNabuGroupLink() {
+		return nabuGroupLink != null;
+	}
 
-  // modification operations
+	// modification operations
 
-  /**
-   * @param person the activist to add to the local group
-   * @throws IllegalArgumentException if the activist is {@code null}
-   * @throws NoActivistException if the person is no activist
-   * @throws ExistingMemberException if the activist is already registered as contributor
-   */
-  public void addMember(Person person) {
-    Assert.notNull(person, "Activist to add may not be null!");
-    if (!person.isActivist()) {
-      throw new NoActivistException("Person is no activist: " + person);
-    } else if (isMember(person)) {
-      throw new ExistingMemberException(String.format(
-          "Activist %s is already part of local group %s", person.toString(), this.toString()));
-    }
-    members.add(person);
-  }
+	/**
+	 * @param person the activist to add to the local group
+	 * @throws IllegalArgumentException if the activist is {@code null}
+	 * @throws NoActivistException if the person is no activist
+	 * @throws ExistingMemberException if the activist is already registered as contributor
+	 */
+	public void addMember(Person person) {
+		Assert.notNull(person, "Activist to add may not be null!");
+		if (!person.isActivist()) {
+			throw new NoActivistException("Person is no activist: " + person);
+		} else if (isMember(person)) {
+			throw new ExistingMemberException(String.format(
+					"Activist %s is already part of local group %s", person.toString(), this.toString()));
+		}
+		members.add(person);
+	}
 
-  /**
-   * @param activist the activist to check
-   * @return {@code true} if the activist is registered as contributor to the chapter or {@code
-   *     false} otherwise
-   */
-  public boolean isMember(Person activist) {
-    return members.contains(activist);
-  }
+	/**
+	 * @param activist the activist to check
+	 * @return {@code true} if the activist is registered as contributor to the chapter or {@code
+	 *     false} otherwise
+	 */
+	public boolean isMember(Person activist) {
+		return members.contains(activist);
+	}
 
-  /**
-   * @param activist the activist to remove
-   * @throws IllegalArgumentException if the activist does not contribute to the local group
-   */
-  public void removeMember(Person activist) {
-    Assert.isTrue(isMember(activist), "Not a member of the local group: " + activist);
-    members.remove(activist);
-  }
+	/**
+	 * @param activist the activist to remove
+	 * @throws IllegalArgumentException if the activist does not contribute to the local group
+	 */
+	public void removeMember(Person activist) {
+		Assert.isTrue(isMember(activist), "Not a member of the local group: " + activist);
+		members.remove(activist);
+	}
 
-  /**
-   * @param event the event to be hosted by the local group
-   * @throws IllegalArgumentException if the event is {@code null} or already hosted by the
-   *     local group
-   */
-  public void addEvent(Event event) {
-    Assert.notNull(event, "Event to add may not be null!");
-    if (events.contains(event)) {
-      throw new IllegalArgumentException("Local group already hosts event " + event);
-    }
-    events.add(event);
-  }
+	/**
+	 * @param event the event to be hosted by the local group
+	 * @throws IllegalArgumentException if the event is {@code null} or already hosted by the local
+	 *         group
+	 */
+	public void addEvent(Event event) {
+		Assert.notNull(event, "Event to add may not be null!");
+		if (events.contains(event)) {
+			throw new IllegalArgumentException("Local group already hosts event " + event);
+		}
+		events.add(event);
+	}
 
-  public void removeEvent(Event event) {
-    Assert.notNull(event, "event may not be null");
-    Assert.isTrue(events.contains(event), "Local group has no such event: " + event);
-    events.remove(event);
-  }
+	public void removeEvent(Event event) {
+		Assert.notNull(event, "event may not be null");
+		Assert.isTrue(events.contains(event), "Local group has no such event: " + event);
+		events.remove(event);
+	}
 
-  /**
-   * @param project the project to be organized by the local group
-   * @throws IllegalArgumentException if the project is {@code null} or already organized by the
-   *     local group
-   * @throws IllegalStateException if the project is already hosted by another chapter
-   */
-  public void addProject(Project project) {
-    Assert.notNull(project, "Project may not be null");
-    if (hasProjectWithName(project.getName())) {
-      throw new IllegalArgumentException("Local group does already organize project " + project);
-    } else if (!this.equals(project.getLocalGroup())) {
-      throw new IllegalStateException("Project is already hosted by another local group");
-    }
-    projects.add(project);
-  }
+	/**
+	 * @param project the project to be organized by the local group
+	 * @throws IllegalArgumentException if the project is {@code null} or already organized by the
+	 *         local group
+	 * @throws IllegalStateException if the project is already hosted by another chapter
+	 */
+	public void addProject(Project project) {
+		Assert.notNull(project, "Project may not be null");
+		if (hasProjectWithName(project.getName())) {
+			throw new IllegalArgumentException("Local group does already organize project " + project);
+		} else if (!this.equals(project.getLocalGroup())) {
+			throw new IllegalStateException("Project is already hosted by another local group");
+		}
+		projects.add(project);
+	}
 
-  public boolean hasProjectWithName(String name) {
-    return projects.stream().anyMatch(p -> p.getName().equals(name));
-  }
+	public boolean hasProjectWithName(String name) {
+		return projects.stream().anyMatch(p -> p.getName().equals(name));
+	}
 
-  /**
-   * @param newsletter the newsletter to add
-   * @throws IllegalArgumentException if the newsletter is {@code null}
-   */
-  public void addNewsletter(Newsletter newsletter) {
-    Assert.notNull(newsletter, "Newsletter to add may not be null!");
-    newsletters.add(newsletter);
-  }
+	/**
+	 * @param newsletter the newsletter to add
+	 * @throws IllegalArgumentException if the newsletter is {@code null}
+	 */
+	public void addNewsletter(Newsletter newsletter) {
+		Assert.notNull(newsletter, "Newsletter to add may not be null!");
+		newsletters.add(newsletter);
+	}
 
-  /**
-   * @param newsletter the newsletter to remove from the chapter, if the local group actually
-   *     has such a newsletter
-   */
-  public void removeNewsletter(Newsletter newsletter) {
-    newsletters.remove(newsletter);
-  }
+	/**
+	 * @param newsletter the newsletter to remove from the chapter, if the local group actually has
+	 *        such a newsletter
+	 */
+	public void removeNewsletter(Newsletter newsletter) {
+		newsletters.remove(newsletter);
+	}
 
-  // overridden from Object
+	// overridden from Object
 
-  @Override
-  public int hashCode() {
+	@Override
+	public int hashCode() {
 
-    return Objects.hash(id);
-  }
+		return Objects.hash(id);
+	}
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    LocalGroup that = (LocalGroup) o;
-    return id == that.id;
-  }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		LocalGroup that = (LocalGroup) o;
+		return id == that.id;
+	}
 
-  @Override
-  public String toString() {
-    return "LocalGroup{" + "id=" + id + ", name='" + name + '\'' + ", address=" + address
-        + ", members=" + members + '}';
-  }
+	@Override
+	public String toString() {
+		return "LocalGroup{" + "id=" + id + ", name='" + name + '\'' + ", address=" + address
+				+ ", members=" + members + '}';
+	}
 }

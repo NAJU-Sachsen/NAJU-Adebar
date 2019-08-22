@@ -6,17 +6,17 @@ import org.springframework.beans.factory.annotation.Value;
 
 public interface PersonDetails {
 
-  @Value("#{target.firstName + ' ' + target.lastName}")
-  String getName();
+	@Value("#{target.firstName + ' ' + target.lastName}")
+	String getName();
 
-  Email getEmail();
+	Email getEmail();
 
-  LocalDate getDateOfBirth();
+	LocalDate getDateOfBirth();
 
-  String getCity();
+	String getCity();
 
-  boolean isActivist();
+	boolean isActivist();
 
-  boolean isReferent();
+	boolean isReferent();
 
 }

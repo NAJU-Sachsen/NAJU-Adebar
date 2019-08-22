@@ -13,91 +13,91 @@ import de.naju.adebar.model.persons.QPerson;
 @Service
 public class FilterToPredicateConverter {
 
-  /**
-   * Creates a predicate for a generic person filter. Each parameter which is either {@code null} or
-   * empty will be ignored.
-   *
-   * @param firstName the person's first name
-   * @param lastName the person's last name
-   * @param city the city the person resides in
-   * @return the predicate which describes the given criteria
-   */
-  public Predicate fromFields(String firstName, String lastName, String city) {
-    QPerson person = QPerson.person;
-    BooleanBuilder predicate = new BooleanBuilder();
+	/**
+	 * Creates a predicate for a generic person filter. Each parameter which is either {@code null} or
+	 * empty will be ignored.
+	 *
+	 * @param firstName the person's first name
+	 * @param lastName the person's last name
+	 * @param city the city the person resides in
+	 * @return the predicate which describes the given criteria
+	 */
+	public Predicate fromFields(String firstName, String lastName, String city) {
+		QPerson person = QPerson.person;
+		BooleanBuilder predicate = new BooleanBuilder();
 
-    predicate.and(person.archived.isFalse());
-    if (firstName != null && !firstName.isEmpty()) {
-      predicate.and(person.firstName.contains(firstName));
-    }
+		predicate.and(person.archived.isFalse());
+		if (firstName != null && !firstName.isEmpty()) {
+			predicate.and(person.firstName.contains(firstName));
+		}
 
-    if (lastName != null && !lastName.isEmpty()) {
-      predicate.and(person.lastName.contains(lastName));
-    }
+		if (lastName != null && !lastName.isEmpty()) {
+			predicate.and(person.lastName.contains(lastName));
+		}
 
-    if (city != null && !city.isEmpty()) {
-      predicate.and(person.address.city.eq(city));
-    }
+		if (city != null && !city.isEmpty()) {
+			predicate.and(person.address.city.eq(city));
+		}
 
-    return predicate;
-  }
+		return predicate;
+	}
 
-  /**
-   * Creates a predicate for a generic person filter. Each parameter which is either {@code null} or
-   * empty will be ignored.
-   *
-   * @param firstName the person's first name
-   * @param lastName the person's last name
-   * @param city the city the person resides in
-   * @param activist whether the person has to be an activist
-   * @param referent whether the person has to be a referent
-   * @return the predicate which describes the given criteria
-   */
-  public Predicate fromFields(String firstName, String lastName, String city, Boolean activist,
-      Boolean referent) {
-    QPerson person = QPerson.person;
-    BooleanBuilder predicate = (BooleanBuilder) fromFields(firstName, lastName, city);
+	/**
+	 * Creates a predicate for a generic person filter. Each parameter which is either {@code null} or
+	 * empty will be ignored.
+	 *
+	 * @param firstName the person's first name
+	 * @param lastName the person's last name
+	 * @param city the city the person resides in
+	 * @param activist whether the person has to be an activist
+	 * @param referent whether the person has to be a referent
+	 * @return the predicate which describes the given criteria
+	 */
+	public Predicate fromFields(String firstName, String lastName, String city, Boolean activist,
+			Boolean referent) {
+		QPerson person = QPerson.person;
+		BooleanBuilder predicate = (BooleanBuilder) fromFields(firstName, lastName, city);
 
-    if (activist != null) {
-      predicate.and(person.activist.eq(activist));
-    }
+		if (activist != null) {
+			predicate.and(person.activist.eq(activist));
+		}
 
-    if (referent != null) {
-      predicate.and(person.referent.eq(referent));
-    }
+		if (referent != null) {
+			predicate.and(person.referent.eq(referent));
+		}
 
-    return predicate;
-  }
+		return predicate;
+	}
 
-  /**
-   * Creates a predicate for a persons which are activists. Each parameter which is either
-   * {@code null} or empty will be ignored.
-   *
-   * @param firstName the activist's first name
-   * @param lastName the activist's last name
-   * @param city the city the activist resides in
-   * @return the predicate which describes the given criteria
-   */
-  public Predicate activistsFromFields(String firstName, String lastName, String city) {
-    QPerson person = QPerson.person;
-    BooleanBuilder predicate = new BooleanBuilder();
+	/**
+	 * Creates a predicate for a persons which are activists. Each parameter which is either
+	 * {@code null} or empty will be ignored.
+	 *
+	 * @param firstName the activist's first name
+	 * @param lastName the activist's last name
+	 * @param city the city the activist resides in
+	 * @return the predicate which describes the given criteria
+	 */
+	public Predicate activistsFromFields(String firstName, String lastName, String city) {
+		QPerson person = QPerson.person;
+		BooleanBuilder predicate = new BooleanBuilder();
 
-    predicate.and(person.archived.isFalse());
-    predicate.and(person.activist.isTrue());
+		predicate.and(person.archived.isFalse());
+		predicate.and(person.activist.isTrue());
 
-    if (firstName != null && !firstName.isEmpty()) {
-      predicate.and(person.firstName.contains(firstName));
-    }
+		if (firstName != null && !firstName.isEmpty()) {
+			predicate.and(person.firstName.contains(firstName));
+		}
 
-    if (lastName != null && !lastName.isEmpty()) {
-      predicate.and(person.lastName.contains(lastName));
-    }
+		if (lastName != null && !lastName.isEmpty()) {
+			predicate.and(person.lastName.contains(lastName));
+		}
 
-    if (city != null && !city.isEmpty()) {
-      predicate.and(person.address.city.eq(city));
-    }
+		if (city != null && !city.isEmpty()) {
+			predicate.and(person.address.city.eq(city));
+		}
 
-    return predicate;
-  }
+		return predicate;
+	}
 
 }

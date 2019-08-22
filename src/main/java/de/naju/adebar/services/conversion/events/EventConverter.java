@@ -9,18 +9,18 @@ import org.springframework.util.Assert;
 
 public class EventConverter implements Converter<String, Event> {
 
-  private final ReadOnlyEventRepository eventRepo;
+	private final ReadOnlyEventRepository eventRepo;
 
-  public EventConverter(ReadOnlyEventRepository eventRepo) {
-    Assert.notNull(eventRepo, "Event repository may not be null");
-    this.eventRepo = eventRepo;
-  }
+	public EventConverter(ReadOnlyEventRepository eventRepo) {
+		Assert.notNull(eventRepo, "Event repository may not be null");
+		this.eventRepo = eventRepo;
+	}
 
-  @Override
-  public Event convert(@NonNull String source) {
-    EventId eventId = new EventId(source);
-    return eventRepo.findById(eventId)
-        .orElseThrow(() -> new IllegalArgumentException("No event with ID " + source));
-  }
+	@Override
+	public Event convert(@NonNull String source) {
+		EventId eventId = new EventId(source);
+		return eventRepo.findById(eventId)
+				.orElseThrow(() -> new IllegalArgumentException("No event with ID " + source));
+	}
 
 }

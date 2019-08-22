@@ -7,25 +7,24 @@ package de.naju.adebar.model.persons.exceptions;
  */
 public class ExistingParentException extends RuntimeException {
 
-  private static final long serialVersionUID = 799521946635294458L;
+	private static final long serialVersionUID = 799521946635294458L;
 
-  public ExistingParentException() {
-  }
+	public ExistingParentException() {}
 
-  public ExistingParentException(String message) {
-    super(message);
-  }
+	public ExistingParentException(String message) {
+		super(message);
+	}
 
-  public ExistingParentException(String message, Throwable cause) {
-    super(message, cause);
-  }
+	public ExistingParentException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
-  public ExistingParentException(Throwable cause) {
-    super(cause);
-  }
+	public ExistingParentException(Throwable cause) {
+		super(cause);
+	}
 
-  public ExistingParentException(String message, Throwable cause, boolean enableSuppression,
-      boolean writableStackTrace) {
-    super(message, cause, enableSuppression, writableStackTrace);
-  }
+	public ExistingParentException(String message, Throwable cause, boolean enableSuppression,
+			boolean writableStackTrace) {
+		super(message, cause, enableSuppression, writableStackTrace);
+	}
 }

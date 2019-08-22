@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class NumericEntityIdConverter implements Converter<String, NumericEntityId> {
 
-  @Override
-  public NumericEntityId convert(@Nonnull String source) {
-    if (source.isEmpty()) {
-      return null;
-    }
-    return new NumericEntityId(Long.parseLong(source));
-  }
+	@Override
+	public NumericEntityId convert(@Nonnull String source) {
+		if (source.isEmpty()) {
+			return null;
+		}
+		return new NumericEntityId(Long.parseLong(source));
+	}
 }

@@ -7,14 +7,14 @@ import org.thymeleaf.processor.IProcessor;
 
 public class TagExtendedDialect extends AbstractProcessorDialect {
 
-  public TagExtendedDialect() {
-    super("Adebar dialect", "adebar", 1000);
-  }
+	public TagExtendedDialect() {
+		super("Adebar dialect", "adebar", 1000);
+	}
 
-  @Override
-  public Set<IProcessor> getProcessors(String dialectPrefix) {
-    final Set<IProcessor> processors = new HashSet<>();
-    processors.add(new NewlineRetainingTextFormatter(dialectPrefix));
-    return processors;
-  }
+	@Override
+	public Set<IProcessor> getProcessors(String dialectPrefix) {
+		final Set<IProcessor> processors = new HashSet<>();
+		processors.add(new NewlineRetainingTextFormatter(dialectPrefix));
+		return processors;
+	}
 }

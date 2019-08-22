@@ -12,17 +12,17 @@ import de.naju.adebar.model.persons.PersonId;
  */
 public class GenderIsRequiredForMinorsException extends AbstractPersonRelatedException {
 
-  private static final long serialVersionUID = 7276367870257718312L;
+	private static final long serialVersionUID = 7276367870257718312L;
 
-  /**
-   * @param personId the ID of the person that caused the exception
-   */
-  public GenderIsRequiredForMinorsException(PersonId personId) {
-    super(personId, "");
-  }
+	/**
+	 * @param personId the ID of the person that caused the exception
+	 */
+	public GenderIsRequiredForMinorsException(PersonId personId) {
+		super(personId, "");
+	}
 
-  public GenderIsRequiredForMinorsException(Person person) {
-    super(person.getId(), person.getName());
-  }
+	public GenderIsRequiredForMinorsException(Person person) {
+		super(person.getId(), person.getName());
+	}
 
 }

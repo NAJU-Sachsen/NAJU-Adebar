@@ -13,25 +13,25 @@ import java.util.Locale;
  */
 @Service
 public class ProjectToProjectFormConverter {
-  private DateTimeFormatter dateTimeFormatter;
+	private DateTimeFormatter dateTimeFormatter;
 
-  public ProjectToProjectFormConverter() {
-    dateTimeFormatter = DateTimeFormatter.ofPattern(ProjectForm.DATE_FORMAT, Locale.GERMAN);
-  }
+	public ProjectToProjectFormConverter() {
+		dateTimeFormatter = DateTimeFormatter.ofPattern(ProjectForm.DATE_FORMAT, Locale.GERMAN);
+	}
 
-  /**
-   * Performs the conversion
-   * 
-   * @param project the project to convert
-   * @return the created form
-   */
-  public ProjectForm convertToProjectForm(Project project) {
-    String start = project.hasStartTime() ? project.getStartTime().format(dateTimeFormatter) : null;
-    String end = project.hasEndTime() ? project.getEndTime().format(dateTimeFormatter) : null;
-    String personInCharge =
-        project.hasPersonInCharge() ? project.getPersonInCharge().getId().toString() : null;
+	/**
+	 * Performs the conversion
+	 * 
+	 * @param project the project to convert
+	 * @return the created form
+	 */
+	public ProjectForm convertToProjectForm(Project project) {
+		String start = project.hasStartTime() ? project.getStartTime().format(dateTimeFormatter) : null;
+		String end = project.hasEndTime() ? project.getEndTime().format(dateTimeFormatter) : null;
+		String personInCharge =
+				project.hasPersonInCharge() ? project.getPersonInCharge().getId().toString() : null;
 
-    return new ProjectForm(project.getName(), start, end, personInCharge, project.getId());
-  }
+		return new ProjectForm(project.getName(), start, end, personInCharge, project.getId());
+	}
 
 }

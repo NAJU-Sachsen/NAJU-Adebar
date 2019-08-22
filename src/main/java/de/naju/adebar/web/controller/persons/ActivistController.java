@@ -25,52 +25,52 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Transactional
 public class ActivistController {
 
-  private final PersonRepository personRepo;
-  private final EditActivistProfileConverter profileConverter;
+	private final PersonRepository personRepo;
+	private final EditActivistProfileConverter profileConverter;
 
-  /**
-   * Full constructor.
-   *
-   * @param personRepo repository containing the person instances. This is necessary to update
-   *     persons if their activist profiles are being edited.
-   * @param profileConverter service to convert an {@link ActivistProfile} to a corresponding
-   *     {@link EditActivistProfileForm} instance and vice-versa.
-   */
-  public ActivistController(PersonRepository personRepo,
-      EditActivistProfileConverter profileConverter) {
-    Assert2.noNullArguments("No parameter may be null", personRepo, profileConverter);
-    this.personRepo = personRepo;
-    this.profileConverter = profileConverter;
-  }
+	/**
+	 * Full constructor.
+	 *
+	 * @param personRepo repository containing the person instances. This is necessary to update
+	 *        persons if their activist profiles are being edited.
+	 * @param profileConverter service to convert an {@link ActivistProfile} to a corresponding
+	 *        {@link EditActivistProfileForm} instance and vice-versa.
+	 */
+	public ActivistController(PersonRepository personRepo,
+			EditActivistProfileConverter profileConverter) {
+		Assert2.noNullArguments("No parameter may be null", personRepo, profileConverter);
+		this.personRepo = personRepo;
+		this.profileConverter = profileConverter;
+	}
 
-  /**
-   * Turns the given person into an activist.
-   *
-   * @param person the person
-   * @return a redirection to the person's detail page
-   */
-  @PostMapping("/persons/{pid}/activist-profile/create")
-  public String createActivistProfile(@PathVariable("pid") Person person,
-      RedirectAttributes redirAttr) {
-    person.makeActivist();
-    return "redirect:/persons/" + person.getId() + "/activist-referent";
-  }
+	/**
+	 * Turns the given person into an activist.
+	 *
+	 * @param person the person
+	 * @return a redirection to the person's detail page
+	 */
+	@PostMapping("/persons/{pid}/activist-profile/create")
+	public String createActivistProfile(@PathVariable("pid") Person person,
+			RedirectAttributes redirAttr) {
+		person.makeActivist();
+		return "redirect:/persons/" + person.getId() + "/activist-referent";
+	}
 
-  /**
-   * Updates an activist profile according to the submitted data.
-   *
-   * @param personId the ID of the profile to update
-   * @param form the form containing the updated activist data
-   * @param redirAttr attributes to put in the modal after redirection
-   * @return a redirection to the person details page
-   */
-  @PostMapping("/persons/{pid}/activist-profile/update")
-  public String updateActivistProfile(@PathVariable("pid") PersonId personId,
-      @ModelAttribute("editActivistForm") EditActivistProfileForm form,
-      RedirectAttributes redirAttr) {
-    Person activist = personRepo.findOne(personId);
-    profileConverter.applyFormToEntity(form, activist.getActivistProfile());
-    return "redirect:/persons/" + personId + "/activist-referent";
-  }
+	/**
+	 * Updates an activist profile according to the submitted data.
+	 *
+	 * @param personId the ID of the profile to update
+	 * @param form the form containing the updated activist data
+	 * @param redirAttr attributes to put in the modal after redirection
+	 * @return a redirection to the person details page
+	 */
+	@PostMapping("/persons/{pid}/activist-profile/update")
+	public String updateActivistProfile(@PathVariable("pid") PersonId personId,
+			@ModelAttribute("editActivistForm") EditActivistProfileForm form,
+			RedirectAttributes redirAttr) {
+		Person activist = personRepo.findOne(personId);
+		profileConverter.applyFormToEntity(form, activist.getActivistProfile());
+		return "redirect:/persons/" + personId + "/activist-referent";
+	}
 
 }

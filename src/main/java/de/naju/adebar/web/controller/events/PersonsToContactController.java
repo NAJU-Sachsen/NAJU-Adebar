@@ -15,54 +15,53 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class PersonsToContactController {
 
-  private final PersonSearchServer searchServer;
+	private final PersonSearchServer searchServer;
 
-  public PersonsToContactController(PersonSearchServer searchServer) {
-    Assert2.noNullArguments("No argument may be null", searchServer);
-    this.searchServer = searchServer;
-  }
+	public PersonsToContactController(PersonSearchServer searchServer) {
+		Assert2.noNullArguments("No argument may be null", searchServer);
+		this.searchServer = searchServer;
+	}
 
-  @GetMapping("/events/{id}/persons-to-contact/search")
-  public String searchPersons(@PathVariable("id") Event event,
-      @RequestParam("person-search-query") String query,
-      @RequestParam(value = "return-action", defaultValue = "") String returnAction,
-      RedirectAttributes redirAttr) {
+	@GetMapping("/events/{id}/persons-to-contact/search")
+	public String searchPersons(@PathVariable("id") Event event,
+			@RequestParam("person-search-query") String query,
+			@RequestParam(value = "return-action", defaultValue = "") String returnAction,
+			RedirectAttributes redirAttr) {
 
-    redirAttr.addFlashAttribute("matchingPersons",
-        searchServer.runQuery(query.trim()));
+		redirAttr.addFlashAttribute("matchingPersons", searchServer.runQuery(query.trim()));
 
-    redirAttr.addAttribute("search", query);
-    redirAttr.addAttribute("do", returnAction);
+		redirAttr.addAttribute("search", query);
+		redirAttr.addAttribute("do", returnAction);
 
-    return "redirect:/events/" + event.getId();
-  }
+		return "redirect:/events/" + event.getId();
+	}
 
-  @PostMapping("/events/{id}/persons-to-contact/add")
-  @Transactional
-  public String addPersonToContact(@PathVariable("id") Event event, //
-      @RequestParam("person-id") Person contact, @RequestParam("description") String reason) {
+	@PostMapping("/events/{id}/persons-to-contact/add")
+	@Transactional
+	public String addPersonToContact(@PathVariable("id") Event event, //
+			@RequestParam("person-id") Person contact, @RequestParam("description") String reason) {
 
-    event.getOrganizationInfo().addPersonToContact(contact, reason);
+		event.getOrganizationInfo().addPersonToContact(contact, reason);
 
-    return "redirect:/events/" + event.getId();
-  }
+		return "redirect:/events/" + event.getId();
+	}
 
-  @PostMapping("/events/{id}/persons-to-contact/update")
-  @Transactional
-  public String updatePersonToContact(@PathVariable("id") Event event, //
-      @RequestParam("person-id") Person contact, @RequestParam("description") String newReason) {
+	@PostMapping("/events/{id}/persons-to-contact/update")
+	@Transactional
+	public String updatePersonToContact(@PathVariable("id") Event event, //
+			@RequestParam("person-id") Person contact, @RequestParam("description") String newReason) {
 
-    event.getOrganizationInfo().updatePersonToContact(contact, newReason);
+		event.getOrganizationInfo().updatePersonToContact(contact, newReason);
 
-    return "redirect:/events/" + event.getId();
-  }
+		return "redirect:/events/" + event.getId();
+	}
 
-  @PostMapping("/events/{id}/persons-to-contact/delete")
-  @Transactional
-  public String removePersonToContact(@PathVariable("id") Event event, //
-      @RequestParam("person-id") Person contact) {
-    event.getOrganizationInfo().removePersonToContact(contact);
-    return "redirect:/events/" + event.getId();
-  }
+	@PostMapping("/events/{id}/persons-to-contact/delete")
+	@Transactional
+	public String removePersonToContact(@PathVariable("id") Event event, //
+			@RequestParam("person-id") Person contact) {
+		event.getOrganizationInfo().removePersonToContact(contact);
+		return "redirect:/events/" + event.getId();
+	}
 
 }

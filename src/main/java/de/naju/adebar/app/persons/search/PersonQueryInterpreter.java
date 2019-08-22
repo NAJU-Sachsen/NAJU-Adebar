@@ -13,9 +13,9 @@ import java.util.Optional;
  */
 public interface PersonQueryInterpreter extends QueryInterpreter<BooleanBuilder> {
 
-  @Override
-  default Optional<PersonQueryInterpreter> getFallback() {
-    return Optional.empty();
-  }
+	@Override
+	default Optional<PersonQueryInterpreter> getFallback() {
+		return Optional.empty();
+	}
 
 }

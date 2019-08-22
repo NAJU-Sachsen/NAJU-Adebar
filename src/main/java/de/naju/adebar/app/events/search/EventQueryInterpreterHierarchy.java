@@ -22,66 +22,66 @@ import de.naju.adebar.util.Assert2;
 @Service
 public class EventQueryInterpreterHierarchy implements QueryInterpreterHierarchy<BooleanBuilder> {
 
-  private static final int INTERPRETER_COUNT = 3;
+	private static final int INTERPRETER_COUNT = 3;
 
-  private final List<QueryInterpreter<BooleanBuilder>> interpreters;
+	private final List<QueryInterpreter<BooleanBuilder>> interpreters;
 
-  /**
-   * The constructor will take care of inflating the hierarchy.
-   *
-   * @param nameOrPlaceQueryInterpreter
-   * @param dateQueryInterpreter
-   * @param durationQueryInterpreter
-   */
-  public EventQueryInterpreterHierarchy(NameOrPlaceQueryInterpreter nameOrPlaceQueryInterpreter,
-      DateQueryInterpreter dateQueryInterpreter,
-      DurationQueryInterpreter durationQueryInterpreter) {
+	/**
+	 * The constructor will take care of inflating the hierarchy.
+	 *
+	 * @param nameOrPlaceQueryInterpreter
+	 * @param dateQueryInterpreter
+	 * @param durationQueryInterpreter
+	 */
+	public EventQueryInterpreterHierarchy(NameOrPlaceQueryInterpreter nameOrPlaceQueryInterpreter,
+			DateQueryInterpreter dateQueryInterpreter,
+			DurationQueryInterpreter durationQueryInterpreter) {
 
-    Assert2.noNullArguments("No argument may be null", nameOrPlaceQueryInterpreter,
-        dateQueryInterpreter, durationQueryInterpreter);
+		Assert2.noNullArguments("No argument may be null", nameOrPlaceQueryInterpreter,
+				dateQueryInterpreter, durationQueryInterpreter);
 
-    this.interpreters = new ArrayList<>(INTERPRETER_COUNT);
+		this.interpreters = new ArrayList<>(INTERPRETER_COUNT);
 
-    /*
-     * The order in which the interpreters are added will be the order in which they should be
-     * applied.
-     */
-    interpreters.add(durationQueryInterpreter);
-    interpreters.add(dateQueryInterpreter);
-    interpreters.add(nameOrPlaceQueryInterpreter);
+		/*
+		 * The order in which the interpreters are added will be the order in which they should be
+		 * applied.
+		 */
+		interpreters.add(durationQueryInterpreter);
+		interpreters.add(dateQueryInterpreter);
+		interpreters.add(nameOrPlaceQueryInterpreter);
 
-  }
+	}
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see de.naju.adebar.app.search.QueryInterpreterHierarchy#getInterpreterFor(java.lang.String)
-   */
-  @Override
-  public Optional<EventQueryInterpreter> getInterpreterFor(@NonNull String query) {
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see de.naju.adebar.app.search.QueryInterpreterHierarchy#getInterpreterFor(java.lang.String)
+	 */
+	@Override
+	public Optional<EventQueryInterpreter> getInterpreterFor(@NonNull String query) {
 
-    /*
-     * Just search for the first best interpreter (which is based on the order the interpreters
-     * where added to the list)
-     */
+		/*
+		 * Just search for the first best interpreter (which is based on the order the interpreters
+		 * where added to the list)
+		 */
 
-    for (QueryInterpreter<BooleanBuilder> interpreter : interpreters) {
-      if (interpreter.mayInterpret(query)) {
-        return Optional.of((EventQueryInterpreter) interpreter);
-      }
-    }
-    return Optional.empty();
-  }
+		for (QueryInterpreter<BooleanBuilder> interpreter : interpreters) {
+			if (interpreter.mayInterpret(query)) {
+				return Optional.of((EventQueryInterpreter) interpreter);
+			}
+		}
+		return Optional.empty();
+	}
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see java.lang.Iterable#iterator()
-   */
-  @Override
-  @NonNull
-  public Iterator<QueryInterpreter<BooleanBuilder>> iterator() {
-    return interpreters.iterator();
-  }
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Iterable#iterator()
+	 */
+	@Override
+	@NonNull
+	public Iterator<QueryInterpreter<BooleanBuilder>> iterator() {
+		return interpreters.iterator();
+	}
 
 }

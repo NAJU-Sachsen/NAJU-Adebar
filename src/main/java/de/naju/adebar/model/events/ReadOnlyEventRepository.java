@@ -22,45 +22,48 @@ import de.naju.adebar.model.chapter.LocalGroup;
  */
 @Repository("ro_eventRepo")
 public interface ReadOnlyEventRepository extends //
-    ReadOnlyRepository<Event, EventId>, //
-    QuerydslPredicateExecutor<Event>, //
-    PagingAndSortingRepository<Event, EventId> {
+		ReadOnlyRepository<Event, EventId>, //
+		QuerydslPredicateExecutor<Event>, //
+		PagingAndSortingRepository<Event, EventId> {
 
-  @Override
-  @NonNull
-  Optional<Event> findById(@NonNull EventId id);
+	@Override
+	@NonNull
+	Optional<Event> findById(@NonNull EventId id);
 
-  /**
-   * @return all events ordered by their start time
-   */
-  Iterable<Event> findAllByOrderByStartTime();
+	Stream<Event> findByNameContainsIgnoreCase(String name);
 
-  /**
-   * @param predicate predicate to match the events to
-   * @return all events which matched the predicate
-   */
-  @Override
-  @NonNull
-  List<Event> findAll(@NonNull Predicate predicate);
+	/**
+	 * @return all events ordered by their start time
+	 */
+	Iterable<Event> findAllByOrderByStartTime();
 
-  List<Event> findByStartTimeIsAfterAndParticipantsListBookedOutIsFalse(LocalDateTime time);
+	/**
+	 * @param predicate predicate to match the events to
+	 * @return all events which matched the predicate
+	 */
+	@Override
+	@NonNull
+	List<Event> findAll(@NonNull Predicate predicate);
 
-  @Query(
-      value = "SELECT e.* FROM event e JOIN event_reservations r ON e.id = r.event_id WHERE r.id = ?1",
-      nativeQuery = true)
-  Optional<Event> findByReservation(long id);
+	List<Event> findByStartTimeIsAfterAndParticipantsListBookedOutIsFalse(LocalDateTime time);
 
-  List<Event> findByLocalGroup(LocalGroup localGroup);
+	@Query(
+			value = "SELECT e.* FROM event e JOIN event_reservations r ON e.id = r.event_id WHERE r.id = ?1",
+			nativeQuery = true)
+	Optional<Event> findByReservation(long id);
 
-  /**
-   * @return all persisted events as a stream
-   */
-  @Query("select e from event e")
-  Stream<Event> streamAll();
+	List<Event> findByLocalGroup(LocalGroup localGroup);
 
-  Page<Event> findAllPagedByEndTimeIsBeforeOrCanceledIsTrueOrderByStartTimeDesc(LocalDateTime time,
-      Pageable pageable);
+	/**
+	 * @return all persisted events as a stream
+	 */
+	@Query("select e from event e")
+	Stream<Event> streamAll();
 
-  Page<Event> findAllPagedByEndTimeIsAfterAndCanceledIsFalseOrderByStartTime(LocalDateTime time, Pageable pageable);
+	Page<Event> findAllPagedByEndTimeIsBeforeOrCanceledIsTrueOrderByStartTimeDesc(LocalDateTime time,
+			Pageable pageable);
+
+	Page<Event> findAllPagedByEndTimeIsAfterAndCanceledIsFalseOrderByStartTime(LocalDateTime time,
+			Pageable pageable);
 
 }

@@ -23,58 +23,58 @@ import de.naju.adebar.model.newsletter.NewsletterRepository;
 @Transactional
 public class NewsletterControllerWebIntegrationTests extends WebIntegrationTestsBase {
 
-  @Autowired
-  private NewsletterManager newsletterManager;
+	@Autowired
+	private NewsletterManager newsletterManager;
 
-  @Autowired
-  private NewsletterRepository newsletterRepository;
+	@Autowired
+	private NewsletterRepository newsletterRepository;
 
-  @Before
-  public void setup() {
-    initializeNewsletters();
-  }
+	@Before
+	public void setup() {
+		initializeNewsletters();
+	}
 
-  @Test
-  public void requiresAuthorizationToAccess() throws Exception {
-    ensureRequiresAuthentication("/newsletters");
-  }
+	@Test
+	public void requiresAuthorizationToAccess() throws Exception {
+		ensureRequiresAuthentication("/newsletters");
+	}
 
-  @Test
-  public void showNewslettersContainsAllNewsletters() throws Exception {
-    Newsletter[] allNewsletters =
-        Lists.newArrayList(newsletterRepository.findAll()).toArray(new Newsletter[] {});
+	@Test
+	public void showNewslettersContainsAllNewsletters() throws Exception {
+		Newsletter[] allNewsletters =
+				Lists.newArrayList(newsletterRepository.findAll()).toArray(new Newsletter[] {});
 
-    mvc.perform(get("/newsletters") //
-        .with(user(admin()))) //
-        .andExpect(status().isOk()) //
-        .andExpect(model().attribute("newsletters", hasItems(allNewsletters)));
-  }
+		mvc.perform(get("/newsletters") //
+				.with(user(admin()))) //
+				.andExpect(status().isOk()) //
+				.andExpect(model().attribute("newsletters", hasItems(allNewsletters)));
+	}
 
-  @Test
-  public void addNewsletterPersistsNewNewsletter() throws Exception {
-    MultiValueMap<String, String> form = new LinkedMultiValueMap<>(2);
-    form.add("name", "New and shiny");
-    form.add("belonging", "NONE");
+	@Test
+	public void addNewsletterPersistsNewNewsletter() throws Exception {
+		MultiValueMap<String, String> form = new LinkedMultiValueMap<>(2);
+		form.add("name", "New and shiny");
+		form.add("belonging", "NONE");
 
-    // #54 - when submitting the form with belonging=NONE, an empty String will be sent for
-    // localGroup
-    form.add("localGroup", "");
+		// #54 - when submitting the form with belonging=NONE, an empty String will be sent for
+		// localGroup
+		form.add("localGroup", "");
 
-    assertThat(newsletterRepository.findByName("New and shiny")).isEmpty();
+		assertThat(newsletterRepository.findByName("New and shiny")).isEmpty();
 
-    mvc.perform(post("/newsletters/add") //
-        .params(form) //
-        .with(user(admin())) //
-        .with(csrf())) //
-        .andExpect(redirectedUrl("/newsletters"));
+		mvc.perform(post("/newsletters/add") //
+				.params(form) //
+				.with(user(admin())) //
+				.with(csrf())) //
+				.andExpect(redirectedUrl("/newsletters"));
 
-    assertThat(newsletterRepository.findByName("New and shiny")).isNotEmpty();
-  }
+		assertThat(newsletterRepository.findByName("New and shiny")).isNotEmpty();
+	}
 
-  private void initializeNewsletters() {
-    for (int i = 1; i <= 100; ++i) {
-      newsletterManager.createNewsletter("Newsletter " + i);
-    }
-  }
+	private void initializeNewsletters() {
+		for (int i = 1; i <= 100; ++i) {
+			newsletterManager.createNewsletter("Newsletter " + i);
+		}
+	}
 
 }

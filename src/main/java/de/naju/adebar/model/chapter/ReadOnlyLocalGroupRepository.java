@@ -15,34 +15,34 @@ import org.springframework.stereotype.Repository;
 @Repository("ro_localGroupRepo")
 public interface ReadOnlyLocalGroupRepository extends ReadOnlyRepository<LocalGroup, Long> {
 
-  /**
-   * @param name the local group's name to query for
-   * @return an optional containing the local group with that name, otherwise the optional is empty
-   */
-  Optional<LocalGroup> findByName(String name);
+	/**
+	 * @param name the local group's name to query for
+	 * @return an optional containing the local group with that name, otherwise the optional is empty
+	 */
+	Optional<LocalGroup> findByName(String name);
 
-  /**
-   * @param activist the activist to query for
-   * @return all local groups with the specified person as member
-   */
-  Iterable<LocalGroup> findByMembersContains(Person activist);
+	/**
+	 * @param activist the activist to query for
+	 * @return all local groups with the specified person as member
+	 */
+	Iterable<LocalGroup> findByMembersContains(Person activist);
 
-  /**
-   * @param newsletter the newsletter to query for
-   * @return an optional containing the local group with that newsletter, otherwise the optional is
-   *     empty
-   */
-  Optional<LocalGroup> findByNewslettersContains(Newsletter newsletter);
+	/**
+	 * @param newsletter the newsletter to query for
+	 * @return an optional containing the local group with that newsletter, otherwise the optional is
+	 *         empty
+	 */
+	Optional<LocalGroup> findByNewslettersContains(Newsletter newsletter);
 
-  /**
-   * @param board the board to query for
-   * @return the local group with the given board
-   */
-  LocalGroup findByBoard(Board board);
+	/**
+	 * @param board the board to query for
+	 * @return the local group with the given board
+	 */
+	LocalGroup findByBoard(Board board);
 
-  /**
-   * @param event the event to query for
-   * @return an optional containing the local group which hosts the event, if such a group exists
-   */
-  Optional<LocalGroup> findFirstByEventsContaining(Event event);
+	/**
+	 * @param event the event to query for
+	 * @return an optional containing the local group which hosts the event, if such a group exists
+	 */
+	Optional<LocalGroup> findFirstByEventsContaining(Event event);
 }

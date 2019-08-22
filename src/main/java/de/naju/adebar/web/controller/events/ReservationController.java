@@ -20,51 +20,51 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class ReservationController {
 
-  private final ReservationFormConverter reservationFormConverter;
+	private final ReservationFormConverter reservationFormConverter;
 
-  public ReservationController(ReservationFormConverter reservationFormConverter) {
-    Assert2.noNullArguments("No argument may be null", reservationFormConverter);
-    this.reservationFormConverter = reservationFormConverter;
-  }
+	public ReservationController(ReservationFormConverter reservationFormConverter) {
+		Assert2.noNullArguments("No argument may be null", reservationFormConverter);
+		this.reservationFormConverter = reservationFormConverter;
+	}
 
-  @PostMapping("/events/{id}/reservations/add")
-  @Transactional
-  public String addReservation(@PathVariable("id") Event event,
-      @ModelAttribute("addReservationForm") @Valid ReservationForm form, Errors errors) {
+	@PostMapping("/events/{id}/reservations/add")
+	@Transactional
+	public String addReservation(@PathVariable("id") Event event,
+			@ModelAttribute("addReservationForm") @Valid ReservationForm form, Errors errors) {
 
-    if (!errors.hasErrors()) {
-      event.getParticipantsList().addReservation(reservationFormConverter.toEntity(form));
-    }
+		if (!errors.hasErrors()) {
+			event.getParticipantsList().addReservation(reservationFormConverter.toEntity(form));
+		}
 
-    return "redirect:/events/" + event.getId() + "/participants";
+		return "redirect:/events/" + event.getId() + "/participants";
 
-  }
+	}
 
-  @PostMapping("/events/{id}/reservations/remove")
-  @Transactional
-  public String deleteReservation(@PathVariable("id") Event event,
-      @RequestParam("reservation-id") Reservation theReservation) {
-    event.getParticipantsList().removeReservation(theReservation);
-    return "redirect:/events/" + event.getId() + "/participants";
-  }
+	@PostMapping("/events/{id}/reservations/remove")
+	@Transactional
+	public String deleteReservation(@PathVariable("id") Event event,
+			@RequestParam("reservation-id") Reservation theReservation) {
+		event.getParticipantsList().removeReservation(theReservation);
+		return "redirect:/events/" + event.getId() + "/participants";
+	}
 
-  @PostMapping("/events/{id}/reservations/update")
-  @Transactional
-  public String updateReservation(@PathVariable("id") Event event, @RequestParam("reservation-id")
-      NumericEntityId reservationId,
-      @ModelAttribute("editReservationForm") @Valid ReservationForm newInfo, Errors errors) {
+	@PostMapping("/events/{id}/reservations/update")
+	@Transactional
+	public String updateReservation(@PathVariable("id") Event event,
+			@RequestParam("reservation-id") NumericEntityId reservationId,
+			@ModelAttribute("editReservationForm") @Valid ReservationForm newInfo, Errors errors) {
 
-    if (!errors.hasErrors()) {
-      event.getParticipantsList()
-          .updateReservation(reservationId, reservationFormConverter.toEntity(newInfo));
-    }
+		if (!errors.hasErrors()) {
+			event.getParticipantsList().updateReservation(reservationId,
+					reservationFormConverter.toEntity(newInfo));
+		}
 
-    return "redirect:/events/" + event.getId() + "/participants";
-  }
+		return "redirect:/events/" + event.getId() + "/participants";
+	}
 
-  @InitBinder("editReservationForm")
-  protected void initBinders(WebDataBinder binder) {
-    binder.addValidators(reservationFormConverter);
-  }
+	@InitBinder("editReservationForm")
+	protected void initBinders(WebDataBinder binder) {
+		binder.addValidators(reservationFormConverter);
+	}
 
 }

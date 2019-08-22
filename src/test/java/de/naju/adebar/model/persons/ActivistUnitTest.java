@@ -14,33 +14,33 @@ import org.junit.Test;
  */
 public class ActivistUnitTest {
 
-  private Person hans;
+	private Person hans;
 
-  @Before
-  public void setUp() {
-    hans = new Person(new PersonId(), "Hans", "Wurst", Email.of("hans@web.de"));
-    hans.makeActivist();
-  }
+	@Before
+	public void setUp() {
+		hans = new Person(new PersonId(), "Hans", "Wurst", Email.of("hans@web.de"));
+		hans.makeActivist();
+	}
 
-  @Test
-  public void testHasJuleica() {
-    hans.getActivistProfile().setJuleicaCard(new JuleicaCard(LocalDate.now()));
-    Assert.assertTrue("Activist should have a JuLeiCa card",
-        hans.getActivistProfile().hasJuleica());
-  }
+	@Test
+	public void testHasJuleica() {
+		hans.getActivistProfile().setJuleicaCard(new JuleicaCard(LocalDate.now()));
+		Assert.assertTrue("Activist should have a JuLeiCa card",
+				hans.getActivistProfile().hasJuleica());
+	}
 
-  @Test
-  public void testHasNoJuleica() {
-    Assert.assertFalse("Activist should have no JuLeiCa card",
-        hans.getActivistProfile().hasJuleica());
-  }
+	@Test
+	public void testHasNoJuleica() {
+		Assert.assertFalse("Activist should have no JuLeiCa card",
+				hans.getActivistProfile().hasJuleica());
+	}
 
-  @Test
-  public void testRemoveJuleica() {
-    hans.getActivistProfile().setJuleicaCard(new JuleicaCard(LocalDate.now()));
-    hans.getActivistProfile().setJuleicaCard(null);
-    Assert.assertFalse("Activist should have no JuLeiCa card",
-        hans.getActivistProfile().hasJuleica());
-  }
+	@Test
+	public void testRemoveJuleica() {
+		hans.getActivistProfile().setJuleicaCard(new JuleicaCard(LocalDate.now()));
+		hans.getActivistProfile().setJuleicaCard(null);
+		Assert.assertFalse("Activist should have no JuLeiCa card",
+				hans.getActivistProfile().hasJuleica());
+	}
 
 }

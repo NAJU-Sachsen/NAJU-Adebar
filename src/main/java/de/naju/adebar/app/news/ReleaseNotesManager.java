@@ -9,26 +9,26 @@ import java.util.Optional;
  */
 public interface ReleaseNotesManager {
 
-  /**
-   * Saves the latest release notes
-   * 
-   * @param notes the release notes
-   * @return the saved notes. This instance should be used for further calls.
-   */
-  ReleaseNotes specifyLatestNotes(ReleaseNotes notes);
+	/**
+	 * Saves the latest release notes
+	 * 
+	 * @param notes the release notes
+	 * @return the saved notes. This instance should be used for further calls.
+	 */
+	ReleaseNotes specifyLatestNotes(ReleaseNotes notes);
 
-  /**
-   * Archives the current notes
-   */
-  void markLatestNotesOutdated();
+	/**
+	 * Archives the current notes
+	 */
+	void markLatestNotesOutdated();
 
-  /**
-   * @return all archived notes
-   */
-  Iterable<ReleaseNotes> findOutdated();
+	/**
+	 * @return all archived notes
+	 */
+	Iterable<ReleaseNotes> findOutdated();
 
-  /**
-   * @return the current release notes
-   */
-  Optional<ReleaseNotes> findLatest();
+	/**
+	 * @return the current release notes
+	 */
+	Optional<ReleaseNotes> findLatest();
 }

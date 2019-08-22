@@ -4,6 +4,6 @@ import java.io.Serializable;
 
 public interface EntityId<T> extends Serializable {
 
-  T getIdentifier();
+	T getIdentifier();
 
 }

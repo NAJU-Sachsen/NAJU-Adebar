@@ -38,48 +38,48 @@ import de.naju.adebar.util.Assert2;
 @Configuration
 public class WebConfiguration implements WebMvcConfigurer {
 
-  private final ReadOnlyPersonRepository personRepo;
-  private final ReadOnlyEventRepository eventRepo;
-  private final ReadOnlyLocalGroupRepository localGroupRepo;
-  private final ReadOnlyProjectRepository projectRepo;
+	private final ReadOnlyPersonRepository personRepo;
+	private final ReadOnlyEventRepository eventRepo;
+	private final ReadOnlyLocalGroupRepository localGroupRepo;
+	private final ReadOnlyProjectRepository projectRepo;
 
-  public WebConfiguration(ReadOnlyPersonRepository personRepo, ReadOnlyEventRepository eventRepo,
-      ReadOnlyLocalGroupRepository localGroupRepo, ReadOnlyProjectRepository projectRepo) {
-    Assert2.noNullArguments("No parameter may be null", personRepo, eventRepo, localGroupRepo,
-        projectRepo);
-    this.personRepo = personRepo;
-    this.eventRepo = eventRepo;
-    this.localGroupRepo = localGroupRepo;
-    this.projectRepo = projectRepo;
-  }
+	public WebConfiguration(ReadOnlyPersonRepository personRepo, ReadOnlyEventRepository eventRepo,
+			ReadOnlyLocalGroupRepository localGroupRepo, ReadOnlyProjectRepository projectRepo) {
+		Assert2.noNullArguments("No parameter may be null", personRepo, eventRepo, localGroupRepo,
+				projectRepo);
+		this.personRepo = personRepo;
+		this.eventRepo = eventRepo;
+		this.localGroupRepo = localGroupRepo;
+		this.projectRepo = projectRepo;
+	}
 
-  /**
-   * Registering new converters
-   */
-  @Override
-  public void addFormatters(FormatterRegistry registry) {
-    registry.addConverter(new NumericEntityIdConverter());
-    registry.addConverter(new UsernameConverter());
-    registry.addConverter(new PersonConverter(personRepo));
-    registry.addConverter(new EventConverter(eventRepo));
-    registry.addConverter(new LocalGroupConverter(localGroupRepo));
-    registry.addConverter(new ProjectConverter(projectRepo));
-    registry.addConverter(new ReservationConverter(eventRepo));
-    registry.addConverter(new EmailConverter());
-    registry.addConverter(new PhoneNumberConverter());
-    registry.addConverter(new AgeConverter());
-    registry.addConverter(new CapacityConverter());
-    registry.addConverter(new MoneyConverter());
-    registry.addConverter(new ArrivalOptionConverter());
-  }
+	/**
+	 * Registering new converters
+	 */
+	@Override
+	public void addFormatters(FormatterRegistry registry) {
+		registry.addConverter(new NumericEntityIdConverter());
+		registry.addConverter(new UsernameConverter());
+		registry.addConverter(new PersonConverter(personRepo));
+		registry.addConverter(new EventConverter(eventRepo));
+		registry.addConverter(new LocalGroupConverter(localGroupRepo));
+		registry.addConverter(new ProjectConverter(projectRepo));
+		registry.addConverter(new ReservationConverter(eventRepo));
+		registry.addConverter(new EmailConverter());
+		registry.addConverter(new PhoneNumberConverter());
+		registry.addConverter(new AgeConverter());
+		registry.addConverter(new CapacityConverter());
+		registry.addConverter(new MoneyConverter());
+		registry.addConverter(new ArrivalOptionConverter());
+	}
 
-  /**
-   * Registering new controllers, in this case the login view
-   */
-  @Override
-  public void addViewControllers(ViewControllerRegistry registry) {
-    registry.addViewController(WebSecurityConfiguration.LOGIN_ROUTE).setViewName("login");
-  }
+	/**
+	 * Registering new controllers, in this case the login view
+	 */
+	@Override
+	public void addViewControllers(ViewControllerRegistry registry) {
+		registry.addViewController(WebSecurityConfiguration.LOGIN_ROUTE).setViewName("login");
+	}
 
 }
 

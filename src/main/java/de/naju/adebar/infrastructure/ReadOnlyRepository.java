@@ -14,42 +14,42 @@ import org.springframework.data.repository.Repository;
  * @author Rico Bergmann
  * @see CrudRepository
  * @see <a href= "https://spring.io/blog/2011/07/27/fine-tuning-spring-data-repositories">Read-only
- *     repositories</a>
+ *      repositories</a>
  */
 @NoRepositoryBean
 public interface ReadOnlyRepository<T, I extends Serializable> extends Repository<T, I> {
 
-  /**
-   * Retrieves an entity by its id.
-   *
-   * @param id must not be {@code null}.
-   * @return the entity with the given id or {@code null} if none found
-   */
-  Optional<T> findById(I id);
+	/**
+	 * Retrieves an entity by its id.
+	 *
+	 * @param id must not be {@code null}.
+	 * @return the entity with the given id or {@code null} if none found
+	 */
+	Optional<T> findById(I id);
 
-  /**
-   * Returns all instances of the type.
-   *
-   * @return all entities
-   */
-  Iterable<T> findAll();
+	/**
+	 * Returns all instances of the type.
+	 *
+	 * @return all entities
+	 */
+	Iterable<T> findAll();
 
-  /**
-   * Returns all instances of the type with the given IDs.
-   */
-  Iterable<T> findAllById(Iterable<I> ids);
+	/**
+	 * Returns all instances of the type with the given IDs.
+	 */
+	Iterable<T> findAllById(Iterable<I> ids);
 
-  /**
-   * Checks, whether an entity with the given id exists.
-   *
-   * @param id must not be {@code null}.
-   */
-  boolean existsById(I id);
+	/**
+	 * Checks, whether an entity with the given id exists.
+	 *
+	 * @param id must not be {@code null}.
+	 */
+	boolean existsById(I id);
 
-  /**
-   * Returns the number of entities available
-   *
-   * @return the number of entities
-   */
-  long count();
+	/**
+	 * Returns the number of entities available
+	 *
+	 * @return the number of entities
+	 */
+	long count();
 }

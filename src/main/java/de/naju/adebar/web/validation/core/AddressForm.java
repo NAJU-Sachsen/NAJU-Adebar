@@ -10,82 +10,82 @@ import de.naju.adebar.model.core.Address;
  */
 public class AddressForm {
 
-  private String street;
-  private String zip;
-  private String city;
+	private String street;
+	private String zip;
+	private String city;
 
-  public AddressForm(Address address) {
-    this(address.getStreet(), address.getZip(), address.getCity());
-  }
+	public AddressForm(Address address) {
+		this(address.getStreet(), address.getZip(), address.getCity());
+	}
 
-  /**
-   * Full constructor. None of the parameters may be {@code null}
-   *
-   * @param street the street
-   * @param zip the zip
-   * @param city the city
-   */
-  public AddressForm(String street, String zip, String city) {
-    this.street = street;
-    this.zip = zip;
-    this.city = city;
-  }
+	/**
+	 * Full constructor. None of the parameters may be {@code null}
+	 *
+	 * @param street the street
+	 * @param zip the zip
+	 * @param city the city
+	 */
+	public AddressForm(String street, String zip, String city) {
+		this.street = street;
+		this.zip = zip;
+		this.city = city;
+	}
 
-  /**
-   * Default constructor
-   */
-  public AddressForm() { }
+	/**
+	 * Default constructor
+	 */
+	public AddressForm() {}
 
-  /**
-   * @return the street
-   */
-  public String getStreet() {
-    return street;
-  }
+	/**
+	 * @return the street
+	 */
+	public String getStreet() {
+		return street;
+	}
 
-  /**
-   * @param street the street. May not be {@code null}
-   */
-  public void setStreet(String street) {
-    this.street = street;
-  }
+	/**
+	 * @param street the street. May not be {@code null}
+	 */
+	public void setStreet(String street) {
+		this.street = street;
+	}
 
-  /**
-   * @return the zip
-   */
-  public String getZip() {
-    return zip;
-  }
+	/**
+	 * @return the zip
+	 */
+	public String getZip() {
+		return zip;
+	}
 
-  /**
-   * @param zip the zip. May not be {@code null}
-   */
-  public void setZip(String zip) {
-    this.zip = zip;
-  }
+	/**
+	 * @param zip the zip. May not be {@code null}
+	 */
+	public void setZip(String zip) {
+		this.zip = zip;
+	}
 
-  /**
-   * @return the city
-   */
-  public String getCity() {
-    return city;
-  }
+	/**
+	 * @return the city
+	 */
+	public String getCity() {
+		return city;
+	}
 
-  /**
-   * @param city the city. May not be {@code null}
-   */
-  public void setCity(String city) {
-    this.city = city;
-  }
+	/**
+	 * @param city the city. May not be {@code null}
+	 */
+	public void setCity(String city) {
+		this.city = city;
+	}
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see java.lang.Object#toString()
-   */
-  @Override
-  public String toString() {
-    return "AddressForm [street=" + street + ", zip=" + zip + ", city=" + city + "]";
-  }
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "AddressForm [street=" + street + ", zip=" + zip + ", city=" + city + "]";
+	}
 
 }

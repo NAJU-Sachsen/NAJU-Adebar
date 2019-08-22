@@ -1,4 +1,12 @@
 
+#main {
+	margin-top: 20px;
+}
+
+#top-nav {
+	border-radius: 0;
+}
+
 .form-category {
   margin-right: 10px;
 }

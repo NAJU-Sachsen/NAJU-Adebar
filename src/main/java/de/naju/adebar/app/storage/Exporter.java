@@ -11,13 +11,13 @@ import javax.annotation.Nonnull;
  */
 public interface Exporter<T> {
 
-  /**
-   * Provides an {@code InputStream} to write an object to the File System or other targets.
-   *
-   * @param instance the object to write
-   * @return a stream for the object
-   */
-  @Nonnull
-  InputStream export(@Nonnull T instance);
+	/**
+	 * Provides an {@code InputStream} to write an object to the File System or other targets.
+	 *
+	 * @param instance the object to write
+	 * @return a stream for the object
+	 */
+	@Nonnull
+	InputStream export(@Nonnull T instance);
 
 }

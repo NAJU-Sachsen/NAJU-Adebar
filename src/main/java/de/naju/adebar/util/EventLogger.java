@@ -12,18 +12,18 @@ import org.springframework.context.event.EventListener;
 // @Component
 public class EventLogger {
 
-  private static final Logger log = LoggerFactory.getLogger(EventLogger.class);
+	private static final Logger log = LoggerFactory.getLogger(EventLogger.class);
 
-  /**
-   * Prints all events to the log. The log must have info enabled.
-   *
-   * @param event the event
-   */
-  @EventListener
-  public void log(Object event) {
-    if (log.isInfoEnabled()) {
-      log.info("Event published: {}", event);
-    }
-  }
+	/**
+	 * Prints all events to the log. The log must have info enabled.
+	 *
+	 * @param event the event
+	 */
+	@EventListener
+	public void log(Object event) {
+		if (log.isInfoEnabled()) {
+			log.info("Event published: {}", event);
+		}
+	}
 
 }

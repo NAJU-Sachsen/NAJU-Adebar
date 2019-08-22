@@ -9,15 +9,15 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
  */
 @Converter(autoApply = true)
 public class AuthorityAttributeConverter
-    implements AttributeConverter<SimpleGrantedAuthority, String> {
+		implements AttributeConverter<SimpleGrantedAuthority, String> {
 
-  @Override
-  public String convertToDatabaseColumn(SimpleGrantedAuthority attribute) {
-    return attribute.getAuthority();
-  }
+	@Override
+	public String convertToDatabaseColumn(SimpleGrantedAuthority attribute) {
+		return attribute.getAuthority();
+	}
 
-  @Override
-  public SimpleGrantedAuthority convertToEntityAttribute(String dbData) {
-    return new SimpleGrantedAuthority(dbData);
-  }
+	@Override
+	public SimpleGrantedAuthority convertToEntityAttribute(String dbData) {
+		return new SimpleGrantedAuthority(dbData);
+	}
 }

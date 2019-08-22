@@ -29,92 +29,92 @@ import de.naju.adebar.web.validation.persons.referent.AddQualificationFormConver
 @Transactional
 public class ReferentController {
 
-  private final AddQualificationFormConverter addQualificationFormConverter;
+	private final AddQualificationFormConverter addQualificationFormConverter;
 
-  /**
-   * Full constructor.
-   *
-   * @param personRepo repository containing all available persons. This is necessary to make a
-   *        person a referent.
-   * @param addQualificationFormConverter service to convert an {@link AddQualificationForm} to a
-   *        corresponding {@link Qualification} and vice-versa.
-   */
-  public ReferentController(AddQualificationFormConverter addQualificationFormConverter) {
+	/**
+	 * Full constructor.
+	 *
+	 * @param personRepo repository containing all available persons. This is necessary to make a
+	 *        person a referent.
+	 * @param addQualificationFormConverter service to convert an {@link AddQualificationForm} to a
+	 *        corresponding {@link Qualification} and vice-versa.
+	 */
+	public ReferentController(AddQualificationFormConverter addQualificationFormConverter) {
 
-    Assert.notNull(addQualificationFormConverter, "addQualificationFormConverter may not be null");
+		Assert.notNull(addQualificationFormConverter, "addQualificationFormConverter may not be null");
 
-    this.addQualificationFormConverter = addQualificationFormConverter;
-  }
+		this.addQualificationFormConverter = addQualificationFormConverter;
+	}
 
-  /**
-   * Adds a qualification to a referent.
-   *
-   * @param person the referent
-   * @param form form containing the qualification to add
-   * @param result errors within the form
-   * @param redirAttr attributes to use after redirection
-   * @return a redirection to the person's activist/referent profile
-   */
-  @PostMapping("/persons/{pid}/referent-profile/qualifications/add")
-  public String addQualification(@PathVariable("pid") Person person,
-      @ModelAttribute("addQualificationForm") @Valid AddQualificationForm form,
-      BindingResult result, RedirectAttributes redirAttr) {
+	/**
+	 * Adds a qualification to a referent.
+	 *
+	 * @param person the referent
+	 * @param form form containing the qualification to add
+	 * @param result errors within the form
+	 * @param redirAttr attributes to use after redirection
+	 * @return a redirection to the person's activist/referent profile
+	 */
+	@PostMapping("/persons/{pid}/referent-profile/qualifications/add")
+	public String addQualification(@PathVariable("pid") Person person,
+			@ModelAttribute("addQualificationForm") @Valid AddQualificationForm form,
+			BindingResult result, RedirectAttributes redirAttr) {
 
-    Assert.isTrue(person.isReferent(), "Person must be a referent " + person);
+		Assert.isTrue(person.isReferent(), "Person must be a referent " + person);
 
-    ReferentProfile profile = person.getReferentProfile();
-    if (result.hasErrors()) {
-      redirAttr.addFlashAttribute("addQualificationForm", form);
-      redirAttr.addFlashAttribute(
-          "org.springframework.validation.BindingResult.addQualificationForm", result);
-      redirAttr.addAttribute("form", "add-qualification");
-      redirAttr.addAttribute("tab", form.getAddTypeShort());
-    } else {
-      profile.addQualification(addQualificationFormConverter.toEntity(form));
-    }
+		ReferentProfile profile = person.getReferentProfile();
+		if (result.hasErrors()) {
+			redirAttr.addFlashAttribute("addQualificationForm", form);
+			redirAttr.addFlashAttribute(
+					"org.springframework.validation.BindingResult.addQualificationForm", result);
+			redirAttr.addAttribute("form", "add-qualification");
+			redirAttr.addAttribute("tab", form.getAddTypeShort());
+		} else {
+			profile.addQualification(addQualificationFormConverter.toEntity(form));
+		}
 
-    return "redirect:/persons/" + person.getId() + "/activist-referent";
-  }
+		return "redirect:/persons/" + person.getId() + "/activist-referent";
+	}
 
-  /**
-   * Removes a qualification from a referent
-   *
-   * @param person the referent
-   * @param qualification the qualification
-   * @return a redirection to the person's activist/referent profile
-   */
-  @PostMapping("/persons/{pid}/referent-profile/qualifications/remove")
-  public String removeQualification(@PathVariable("pid") Person person,
-      @RequestParam("qualification-id") Qualification qualification) {
+	/**
+	 * Removes a qualification from a referent
+	 *
+	 * @param person the referent
+	 * @param qualification the qualification
+	 * @return a redirection to the person's activist/referent profile
+	 */
+	@PostMapping("/persons/{pid}/referent-profile/qualifications/remove")
+	public String removeQualification(@PathVariable("pid") Person person,
+			@RequestParam("qualification-id") Qualification qualification) {
 
-    Assert.isTrue(person.isReferent(), "Person must be a referent " + person);
+		Assert.isTrue(person.isReferent(), "Person must be a referent " + person);
 
-    ReferentProfile profile = person.getReferentProfile();
-    profile.removeQualification(qualification);
+		ReferentProfile profile = person.getReferentProfile();
+		profile.removeQualification(qualification);
 
-    return "redirect:/persons/" + person.getId() + "/activist-referent";
-  }
+		return "redirect:/persons/" + person.getId() + "/activist-referent";
+	}
 
-  /**
-   * Turns the given person into a referent
-   *
-   * @param person the referent to-be
-   * @return a redirection to the person's activist/referent profile
-   */
-  @PostMapping("/persons/{pid}/referent-profile/create")
-  public String makeReferent(@PathVariable("pid") Person person) {
-    person.makeReferent();
-    return "redirect:/persons/" + person.getId() + "/activist-referent";
-  }
+	/**
+	 * Turns the given person into a referent
+	 *
+	 * @param person the referent to-be
+	 * @return a redirection to the person's activist/referent profile
+	 */
+	@PostMapping("/persons/{pid}/referent-profile/create")
+	public String makeReferent(@PathVariable("pid") Person person) {
+		person.makeReferent();
+		return "redirect:/persons/" + person.getId() + "/activist-referent";
+	}
 
-  /**
-   * Registers the {@link AddQualificationFormConverter} as validator for this controller
-   *
-   * @param binder the binder which accepts the requests and delegates to the validator
-   */
-  @InitBinder
-  protected void initBinder(WebDataBinder binder) {
-    binder.addValidators(addQualificationFormConverter);
-  }
+	/**
+	 * Registers the {@link AddQualificationFormConverter} as validator for this controller
+	 *
+	 * @param binder the binder which accepts the requests and delegates to the validator
+	 */
+	@InitBinder
+	protected void initBinder(WebDataBinder binder) {
+		binder.addValidators(addQualificationFormConverter);
+	}
 
 }

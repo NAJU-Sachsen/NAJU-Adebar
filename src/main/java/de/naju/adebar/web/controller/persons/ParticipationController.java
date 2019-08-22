@@ -33,92 +33,92 @@ import de.naju.adebar.web.model.persons.participants.ParticipationTimeline;
 @Controller
 public class ParticipationController {
 
-  private static final QEvent event = QEvent.event;
+	private static final QEvent event = QEvent.event;
 
-  private final EventRepository eventRepo;
-  private final ParticipationManager participationManager;
+	private final EventRepository eventRepo;
+	private final ParticipationManager participationManager;
 
-  /**
-   * Full constructor
-   *
-   * @param eventRepo repository containing all events
-   */
-  public ParticipationController(EventRepository eventRepo,
-      ParticipationManager participationManager) {
-    Assert.notNull(eventRepo, "eventRepo may not be null");
-    Assert.notNull(participationManager, "participationManager may not be null");
-    this.eventRepo = eventRepo;
-    this.participationManager = participationManager;
-  }
+	/**
+	 * Full constructor
+	 *
+	 * @param eventRepo repository containing all events
+	 */
+	public ParticipationController(EventRepository eventRepo,
+			ParticipationManager participationManager) {
+		Assert.notNull(eventRepo, "eventRepo may not be null");
+		Assert.notNull(participationManager, "participationManager may not be null");
+		this.eventRepo = eventRepo;
+		this.participationManager = participationManager;
+	}
 
-  /**
-   * Renders the participation timeline for a specific person
-   *
-   * @param person the person
-   * @param model model to put the data to render into
-   * @return the participation timeline page
-   */
-  @GetMapping("/persons/{id}/events")
-  public String showParticipationTimeline(@PathVariable("id") Person person, Model model) {
+	/**
+	 * Renders the participation timeline for a specific person
+	 *
+	 * @param person the person
+	 * @param model model to put the data to render into
+	 * @return the participation timeline page
+	 */
+	@GetMapping("/persons/{id}/events")
+	public String showParticipationTimeline(@PathVariable("id") Person person, Model model) {
 
-    model.addAttribute("person", person);
+		model.addAttribute("person", person);
 
-    if (person.isParticipant()) {
-      model.addAttribute("participationTimeline", ParticipationTimeline.createFor(person));
-    } else {
-      model.addAttribute("participationTimeline", null);
-    }
+		if (person.isParticipant()) {
+			model.addAttribute("participationTimeline", ParticipationTimeline.createFor(person));
+		} else {
+			model.addAttribute("participationTimeline", null);
+		}
 
-    List<Event> futureEvents = eventRepo.findAll(futureEventsWithout(person));
-    futureEvents = futureEvents.stream() //
-        .filter(e -> !e.isBookedOut()) //
-        .collect(Collectors.toList());
+		List<Event> futureEvents = eventRepo.findAll(futureEventsWithout(person));
+		futureEvents = futureEvents.stream() //
+				.filter(e -> !e.isBookedOut()) //
+				.collect(Collectors.toList());
 
-    model.addAttribute("futureEvents", futureEvents);
-    model.addAttribute("tab", "events");
-    return "persons/personDetails";
-  }
+		model.addAttribute("futureEvents", futureEvents);
+		model.addAttribute("tab", "events");
+		return "persons/personDetails";
+	}
 
-  /**
-   * Adds a person as participant to a list of events
-   *
-   * @param person the person
-   * @param events the events
-   * @return a redirection to the participation timeline page
-   */
-  @PostMapping("/persons/{id}/events/add")
-  @Transactional
-  public String addParticipantToEvents(@PathVariable("id") Person person,
-      @RequestParam("event-ids") List<Event> events, RedirectAttributes redirAttr) {
+	/**
+	 * Adds a person as participant to a list of events
+	 *
+	 * @param person the person
+	 * @param events the events
+	 * @return a redirection to the participation timeline page
+	 */
+	@PostMapping("/persons/{id}/events/add")
+	@Transactional
+	public String addParticipantToEvents(@PathVariable("id") Person person,
+			@RequestParam("event-ids") List<Event> events, RedirectAttributes redirAttr) {
 
-    Map<Event, Result> failedParticipations = new HashMap<>();
+		Map<Event, Result> failedParticipations = new HashMap<>();
 
-    events.forEach(e -> {
-      Result res = participationManager.addParticipant(e, person);
-      if (res != Result.OK) {
-        failedParticipations.put(e, res);
-      }
-    });
+		events.forEach(e -> {
+			Result res = participationManager.addParticipant(e, person);
+			if (res != Result.OK) {
+				failedParticipations.put(e, res);
+			}
+		});
 
-    if (!failedParticipations.isEmpty()) {
-      redirAttr.addAttribute("add", "failed");
-      redirAttr.addFlashAttribute("failedParticipations", failedParticipations);
-    }
+		if (!failedParticipations.isEmpty()) {
+			redirAttr.addAttribute("add", "failed");
+			redirAttr.addFlashAttribute("failedParticipations", failedParticipations);
+		}
 
-    return "redirect:/persons/" + person.getId() + "/events";
-  }
+		return "redirect:/persons/" + person.getId() + "/events";
+	}
 
-  /**
-   * Creates a predicate that matches all future events in which a person does not participate
-   *
-   * @param participant the person
-   * @return the predicate
-   */
-  private Predicate futureEventsWithout(Person participant) {
-    BooleanBuilder predicate = new BooleanBuilder();
-    predicate.and(event.startTime.after(LocalDateTime.now()));
-    predicate.and(event.notIn(participant.getParticipatingEvents()));
-    return predicate;
-  }
+	/**
+	 * Creates a predicate that matches all future events in which a person does not participate
+	 *
+	 * @param participant the person
+	 * @return the predicate
+	 */
+	private Predicate futureEventsWithout(Person participant) {
+		BooleanBuilder predicate = new BooleanBuilder();
+		predicate.and(event.startTime.after(LocalDateTime.now()));
+		predicate.and(event.notIn(participant.getParticipatingEvents()));
+		return predicate;
+	}
 
 }

@@ -20,27 +20,28 @@ import org.springframework.stereotype.Service;
 @Service
 public class FirstNameOrLastNameQueryInterpreter implements PersonQueryInterpreter {
 
-  private static final String FIRST_NAME_LAST_NAME_REGEX = "^([a-zA-ZöÖüÜäÄß]+(\\s*(-\\s*)?[a-zA-ZöÖüÜäÄß]+)?)+$";
-  private static final QPerson person = QPerson.person;
+	private static final String FIRST_NAME_LAST_NAME_REGEX =
+			"^([a-zA-ZöÖüÜäÄß]+(\\s*(-\\s*)?[a-zA-ZöÖüÜäÄß]+)?)+$";
+	private static final QPerson person = QPerson.person;
 
-  @Override
-  public boolean mayInterpret(@NonNull String query) {
-    return query.matches(FIRST_NAME_LAST_NAME_REGEX);
-  }
+	@Override
+	public boolean mayInterpret(@NonNull String query) {
+		return query.matches(FIRST_NAME_LAST_NAME_REGEX);
+	}
 
-  @Override
-  public BooleanBuilder interpret(@NonNull String query) {
-    assertMayInterpret(query);
+	@Override
+	public BooleanBuilder interpret(@NonNull String query) {
+		assertMayInterpret(query);
 
-    BooleanBuilder predicate = new BooleanBuilder();
-    predicate.and(person.firstName.containsIgnoreCase(query) //
-        .or(person.lastName.containsIgnoreCase(query)));
-    return predicate;
-  }
+		BooleanBuilder predicate = new BooleanBuilder();
+		predicate.and(person.firstName.containsIgnoreCase(query) //
+				.or(person.lastName.containsIgnoreCase(query)));
+		return predicate;
+	}
 
-  @Override
-  public Optional<PersonQueryInterpreter> getFallback() {
-    return Optional.of(new GenericPersonQueryInterpreter());
-  }
+	@Override
+	public Optional<PersonQueryInterpreter> getFallback() {
+		return Optional.of(new GenericPersonQueryInterpreter());
+	}
 
 }

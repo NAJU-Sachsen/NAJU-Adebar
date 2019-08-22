@@ -11,26 +11,26 @@ import org.junit.Test;
  */
 public class SubscriberUnitTest {
 
-  @Test
-  public void testValidEmail() {
-    new Subscriber(Email.of("hans@web.de"));
-  }
+	@Test
+	public void testValidEmail() {
+		new Subscriber(Email.of("hans@web.de"));
+	}
 
-  @Test(expected = IllegalArgumentException.class)
-  public void testInvalidEmail() {
-    new Subscriber(Email.of("notreallyanemail@.de"));
-  }
+	@Test(expected = IllegalArgumentException.class)
+	public void testInvalidEmail() {
+		new Subscriber(Email.of("notreallyanemail@.de"));
+	}
 
-  @Test
-  public void testHasName() {
-    Subscriber sub = new Subscriber("Claus", "", Email.of("claus@web.de"));
-    Assert.assertTrue("Subscriber should have a name", sub.hasName());
-  }
+	@Test
+	public void testHasName() {
+		Subscriber sub = new Subscriber("Claus", "", Email.of("claus@web.de"));
+		Assert.assertTrue("Subscriber should have a name", sub.hasName());
+	}
 
-  @Test
-  public void testHasNoName() {
-    Subscriber sub = new Subscriber("", "", Email.of("claus@web.de"));
-    Assert.assertFalse("Subscriber should not have a name", sub.hasName());
-  }
+	@Test
+	public void testHasNoName() {
+		Subscriber sub = new Subscriber("", "", Email.of("claus@web.de"));
+		Assert.assertFalse("Subscriber should not have a name", sub.hasName());
+	}
 
 }

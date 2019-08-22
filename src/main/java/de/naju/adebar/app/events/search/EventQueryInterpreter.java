@@ -13,14 +13,14 @@ import de.naju.adebar.model.events.Event;
  */
 public interface EventQueryInterpreter extends QueryInterpreter<BooleanBuilder> {
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see de.naju.adebar.app.search.QueryInterpreter#getFallback()
-   */
-  @Override
-  default Optional<EventQueryInterpreter> getFallback() {
-    return Optional.empty();
-  }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see de.naju.adebar.app.search.QueryInterpreter#getFallback()
+	 */
+	@Override
+	default Optional<EventQueryInterpreter> getFallback() {
+		return Optional.empty();
+	}
 
 }

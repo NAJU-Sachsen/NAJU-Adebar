@@ -18,12 +18,12 @@ import org.springframework.lang.NonNull;
  */
 public interface QueryInterpreterHierarchy<R> extends Iterable<QueryInterpreter<R>> {
 
-  /**
-   * Directly retrieves the first appropriate interpreter for a query.
-   *
-   * @param query the query
-   * @return the interpreter if it exists, otherwise the Optional will be empty
-   */
-  Optional<? extends QueryInterpreter<R>> getInterpreterFor(@NonNull String query);
+	/**
+	 * Directly retrieves the first appropriate interpreter for a query.
+	 *
+	 * @param query the query
+	 * @return the interpreter if it exists, otherwise the Optional will be empty
+	 */
+	Optional<? extends QueryInterpreter<R>> getInterpreterFor(@NonNull String query);
 
 }

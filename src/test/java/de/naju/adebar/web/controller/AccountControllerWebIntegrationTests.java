@@ -24,37 +24,37 @@ import de.naju.adebar.app.security.user.UserAccountManager;
 @Transactional
 public class AccountControllerWebIntegrationTests extends WebIntegrationTestsBase {
 
-  private static final String TEST_USERNAME = "fritz";
-  private static final SimpleGrantedAuthority TEST_AUTHORITY =
-      new SimpleGrantedAuthority("ROLE_TEST");
+	private static final String TEST_USERNAME = "fritz";
+	private static final SimpleGrantedAuthority TEST_AUTHORITY =
+			new SimpleGrantedAuthority("ROLE_TEST");
 
-  @Autowired
-  private UserAccountManager accountManager;
+	@Autowired
+	private UserAccountManager accountManager;
 
-  private UserAccount accountUnderTest;
+	private UserAccount accountUnderTest;
 
-  @Before
-  public void setup() {
-    accountUnderTest = accountManager.createFor(TEST_USERNAME, "123",
-        TestData.getPerson(TestData.PERSON_FRITZ), Arrays.asList(TEST_AUTHORITY), false);
-  }
+	@Before
+	public void setup() {
+		accountUnderTest = accountManager.createFor(TEST_USERNAME, "123",
+				TestData.getPerson(TestData.PERSON_FRITZ), Arrays.asList(TEST_AUTHORITY), false);
+	}
 
-  @Test // #58
-  public void removingAllExtraAuthoritiesSetsDefaultAuthority() throws Exception {
-    assertThat(accountUnderTest.getAuthorities()).doesNotContain(Roles.ROLE_USER);
-    assertThat(accountUnderTest.getAuthorities()).contains(TEST_AUTHORITY);
+	@Test // #58
+	public void removingAllExtraAuthoritiesSetsDefaultAuthority() throws Exception {
+		assertThat(accountUnderTest.getAuthorities()).doesNotContain(Roles.ROLE_USER);
+		assertThat(accountUnderTest.getAuthorities()).contains(TEST_AUTHORITY);
 
-    MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
-    formData.add("account", TEST_USERNAME);
+		MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
+		formData.add("account", TEST_USERNAME);
 
-    mvc.perform(post("/accounts/update") //
-        .params(formData) //
-        .with(user(admin())) //
-        .with(csrf())) //
-        .andExpect(redirectedUrl("/accounts"));
+		mvc.perform(post("/accounts/update") //
+				.params(formData) //
+				.with(user(admin())) //
+				.with(csrf())) //
+				.andExpect(redirectedUrl("/accounts"));
 
-    assertThat(accountUnderTest.getAuthorities()).contains(Roles.ROLE_USER);
-    assertThat(accountUnderTest.getAuthorities()).doesNotContain(TEST_AUTHORITY);
-  }
+		assertThat(accountUnderTest.getAuthorities()).contains(Roles.ROLE_USER);
+		assertThat(accountUnderTest.getAuthorities()).doesNotContain(TEST_AUTHORITY);
+	}
 
 }

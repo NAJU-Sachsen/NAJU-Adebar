@@ -12,44 +12,44 @@ import de.naju.adebar.web.validation.persons.AddPersonForm;
  */
 public class AddReferentForm implements AbstractForm {
 
-  private List<Qualification> qualifications;
+	private List<Qualification> qualifications;
 
-  /**
-   * Full constructor
-   *
-   * @param qualifications the refernt's qualifications
-   */
-  public AddReferentForm(List<Qualification> qualifications) {
-    this.qualifications = qualifications;
-  }
+	/**
+	 * Full constructor
+	 *
+	 * @param qualifications the refernt's qualifications
+	 */
+	public AddReferentForm(List<Qualification> qualifications) {
+		this.qualifications = qualifications;
+	}
 
-  /**
-   * Default constructor
-   */
-  public AddReferentForm() {}
+	/**
+	 * Default constructor
+	 */
+	public AddReferentForm() {}
 
-  /**
-   * @return the referent's qualifications
-   */
-  public List<Qualification> getQualifications() {
-    return qualifications;
-  }
+	/**
+	 * @return the referent's qualifications
+	 */
+	public List<Qualification> getQualifications() {
+		return qualifications;
+	}
 
-  /**
-   * @param qualifications the referent's qualifications
-   */
-  public void setQualifications(List<Qualification> qualifications) {
-    this.qualifications = qualifications;
-  }
+	/**
+	 * @param qualifications the referent's qualifications
+	 */
+	public void setQualifications(List<Qualification> qualifications) {
+		this.qualifications = qualifications;
+	}
 
-  @Override
-  public boolean hasData() {
-    return qualifications != null && !qualifications.isEmpty();
-  }
+	@Override
+	public boolean hasData() {
+		return qualifications != null && !qualifications.isEmpty();
+	}
 
-  @Override
-  public String toString() {
-    return "AddReferentForm [" + "qualifications=" + qualifications + ']';
-  }
+	@Override
+	public String toString() {
+		return "AddReferentForm [" + "qualifications=" + qualifications + ']';
+	}
 
 }

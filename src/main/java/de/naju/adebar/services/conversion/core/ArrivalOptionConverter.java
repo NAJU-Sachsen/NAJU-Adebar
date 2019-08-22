@@ -8,12 +8,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class ArrivalOptionConverter implements Converter<String, ArrivalOption> {
 
-  @Override
-  public ArrivalOption convert(@NonNull String source) {
-    if (source.isEmpty()) {
-      return null;
-    }
-    return ArrivalOption.of(source);
-  }
+	@Override
+	public ArrivalOption convert(@NonNull String source) {
+		if (source.isEmpty()) {
+			return null;
+		}
+		return ArrivalOption.of(source);
+	}
 
 }

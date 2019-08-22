@@ -12,58 +12,58 @@ import de.naju.adebar.web.validation.core.AddressForm;
  */
 public class LocalGroupForm extends AddressForm {
 
-  @NotNull
-  private String name;
-  private String nabuGroup;
-  private List<String> contactPersons;
+	@NotNull
+	private String name;
+	private String nabuGroup;
+	private List<String> contactPersons;
 
-  // constructor
+	// constructor
 
-  public LocalGroupForm(String name, String street, String zip, String city, String nabuGroup,
-      List<String> contactPersons) {
-    super(street, zip, city);
-    this.name = name;
-    this.nabuGroup = nabuGroup;
-    this.contactPersons = contactPersons;
-  }
+	public LocalGroupForm(String name, String street, String zip, String city, String nabuGroup,
+			List<String> contactPersons) {
+		super(street, zip, city);
+		this.name = name;
+		this.nabuGroup = nabuGroup;
+		this.contactPersons = contactPersons;
+	}
 
-  public LocalGroupForm() {
-    this.name = "";
-  }
+	public LocalGroupForm() {
+		this.name = "";
+	}
 
-  // getter and setter
+	// getter and setter
 
-  public String getName() {
-    return name;
-  }
+	public String getName() {
+		return name;
+	}
 
-  public void setName(String name) {
-    this.name = name;
-  }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-  public String getNabuGroup() {
-    return nabuGroup;
-  }
+	public String getNabuGroup() {
+		return nabuGroup;
+	}
 
-  public void setNabuGroup(String nabuGroup) {
-    this.nabuGroup = nabuGroup;
-  }
+	public void setNabuGroup(String nabuGroup) {
+		this.nabuGroup = nabuGroup;
+	}
 
-  public List<String> getContactPersons() {
-    return contactPersons;
-  }
+	public List<String> getContactPersons() {
+		return contactPersons;
+	}
 
-  public void setContactPersons(List<String> contactPersons) {
-    this.contactPersons = contactPersons;
-  }
+	public void setContactPersons(List<String> contactPersons) {
+		this.contactPersons = contactPersons;
+	}
 
-  // query methods
+	// query methods
 
-  public boolean hasNabuGroup() {
-    return nabuGroup != null && !nabuGroup.isEmpty();
-  }
+	public boolean hasNabuGroup() {
+		return nabuGroup != null && !nabuGroup.isEmpty();
+	}
 
-  public boolean hasContactPersons() {
-    return contactPersons != null;
-  }
+	public boolean hasContactPersons() {
+		return contactPersons != null;
+	}
 }

@@ -8,40 +8,40 @@ package de.naju.adebar.app.storage;
  */
 public class StorageException extends RuntimeException {
 
-  private static final long serialVersionUID = -8543598931973068040L;
+	private static final long serialVersionUID = -8543598931973068040L;
 
-  /**
-   * Creates a new exception without any details attached.
-   *
-   * @see RuntimeException#RuntimeException()
-   */
-  public StorageException() {}
+	/**
+	 * Creates a new exception without any details attached.
+	 *
+	 * @see RuntimeException#RuntimeException()
+	 */
+	public StorageException() {}
 
-  /**
-   * Creates a new exception with an error message.
-   *
-   * @see RuntimeException#RuntimeException(String)
-   */
-  public StorageException(String message) {
-    super(message);
-  }
+	/**
+	 * Creates a new exception with an error message.
+	 *
+	 * @see RuntimeException#RuntimeException(String)
+	 */
+	public StorageException(String message) {
+		super(message);
+	}
 
-  /**
-   * Creates a new exception with an error message and a causing exception.
-   *
-   * @see RuntimeException#RuntimeException(String, Throwable)
-   */
-  public StorageException(String message, Throwable cause) {
-    super(message, cause);
-  }
+	/**
+	 * Creates a new exception with an error message and a causing exception.
+	 *
+	 * @see RuntimeException#RuntimeException(String, Throwable)
+	 */
+	public StorageException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
-  /**
-   * Creates a new exception with a causing exception.
-   *
-   * @see RuntimeException#RuntimeException(Throwable)
-   */
-  public StorageException(Throwable cause) {
-    super(cause);
-  }
+	/**
+	 * Creates a new exception with a causing exception.
+	 *
+	 * @see RuntimeException#RuntimeException(Throwable)
+	 */
+	public StorageException(Throwable cause) {
+		super(cause);
+	}
 
 }

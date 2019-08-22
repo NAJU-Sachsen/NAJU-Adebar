@@ -9,23 +9,22 @@ import org.springframework.stereotype.Service;
 @Service
 public class NameOrPlaceQueryInterpreter implements EventQueryInterpreter {
 
-  private static final QEvent event = QEvent.event;
+	private static final QEvent event = QEvent.event;
 
-  @Override
-  public boolean mayInterpret(@NonNull String query) {
-    // we may interpret everything
-    return true;
-  }
+	@Override
+	public boolean mayInterpret(@NonNull String query) {
+		// we may interpret everything
+		return true;
+	}
 
-  @Override
-  public BooleanBuilder interpret(@NonNull String query) {
-    assertMayInterpret(query);
+	@Override
+	public BooleanBuilder interpret(@NonNull String query) {
+		assertMayInterpret(query);
 
-    BooleanBuilder predicate = new BooleanBuilder();
+		BooleanBuilder predicate = new BooleanBuilder();
 
-    predicate.and( //
-        event.name.containsIgnoreCase(query)
-            .or(event.place.city.containsIgnoreCase(query)));
-    return predicate;
-  }
+		predicate.and( //
+				event.name.containsIgnoreCase(query).or(event.place.city.containsIgnoreCase(query)));
+		return predicate;
+	}
 }

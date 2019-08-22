@@ -6,27 +6,27 @@ import de.naju.adebar.model.EntityUpdatedEvent;
 
 public class UserAccountUpdatedEvent extends EntityUpdatedEvent<UserAccount> {
 
-  public static UserAccountUpdatedEvent forAccount(UserAccount a) {
-    return new UserAccountUpdatedEvent(a);
-  }
+	public static UserAccountUpdatedEvent forAccount(UserAccount a) {
+		return new UserAccountUpdatedEvent(a);
+	}
 
-  public static UserAccountUpdatedEvent withChangeset(UserAccount account,
-      Collection<ChangeSetEntry> changeset) {
-    return new UserAccountUpdatedEvent(account, changeset);
-  }
+	public static UserAccountUpdatedEvent withChangeset(UserAccount account,
+			Collection<ChangeSetEntry> changeset) {
+		return new UserAccountUpdatedEvent(account, changeset);
+	}
 
 
-  protected UserAccountUpdatedEvent(UserAccount account) {
-    super(account);
-  }
+	protected UserAccountUpdatedEvent(UserAccount account) {
+		super(account);
+	}
 
-  protected UserAccountUpdatedEvent(UserAccount account, Collection<ChangeSetEntry> changeset) {
-    super(account, changeset);
-  }
+	protected UserAccountUpdatedEvent(UserAccount account, Collection<ChangeSetEntry> changeset) {
+		super(account, changeset);
+	}
 
-  @Override
-  public boolean aggregateMayContainMultipleInstances() {
-    return false;
-  }
+	@Override
+	public boolean aggregateMayContainMultipleInstances() {
+		return false;
+	}
 
 }

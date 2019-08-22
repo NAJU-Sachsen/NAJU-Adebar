@@ -20,27 +20,27 @@ import org.springframework.stereotype.Component;
 @Component
 public class RedirectingAccessDeniedHandler implements AccessDeniedHandler {
 
-  private static final Logger log = LoggerFactory.getLogger(RedirectingAccessDeniedHandler.class);
+	private static final Logger log = LoggerFactory.getLogger(RedirectingAccessDeniedHandler.class);
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see org.springframework.security.web.access.AccessDeniedHandler#handle(javax.servlet.http.
-   * HttpServletRequest, javax.servlet.http.HttpServletResponse,
-   * org.springframework.security.access.AccessDeniedException)
-   */
-  @Override
-  public void handle(HttpServletRequest request, HttpServletResponse response,
-      AccessDeniedException accessDeniedException) throws IOException, ServletException {
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see org.springframework.security.web.access.AccessDeniedHandler#handle(javax.servlet.http.
+	 * HttpServletRequest, javax.servlet.http.HttpServletResponse,
+	 * org.springframework.security.access.AccessDeniedException)
+	 */
+	@Override
+	public void handle(HttpServletRequest request, HttpServletResponse response,
+			AccessDeniedException accessDeniedException) throws IOException, ServletException {
 
-    log.info("Exception occurred for request to {} with response {} - exception is {}", request,
-        response, accessDeniedException);
+		log.info("Exception occurred for request to {} with response {} - exception is {}", request,
+				response, accessDeniedException);
 
-    if (!response.isCommitted() && accessDeniedException instanceof CsrfException) {
-      request.logout();
-      response.sendRedirect(WebSecurityConfiguration.LOGIN_ROUTE + "?expired");
-    }
+		if (!response.isCommitted() && accessDeniedException instanceof CsrfException) {
+			request.logout();
+			response.sendRedirect(WebSecurityConfiguration.LOGIN_ROUTE + "?expired");
+		}
 
-  }
+	}
 
 }

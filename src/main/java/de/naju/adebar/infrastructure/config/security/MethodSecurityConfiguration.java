@@ -16,18 +16,18 @@ import org.springframework.security.config.annotation.method.configuration.Globa
 @Configuration
 public class MethodSecurityConfiguration extends GlobalMethodSecurityConfiguration {
 
-  @Resource
-  private RoleHierarchy roleHierarchy;
+	@Resource
+	private RoleHierarchy roleHierarchy;
 
-  /**
-   * Registering the role hierarchy
-   */
-  @Override
-  protected MethodSecurityExpressionHandler createExpressionHandler() {
-    DefaultMethodSecurityExpressionHandler expressionHandler =
-        (DefaultMethodSecurityExpressionHandler) super.createExpressionHandler();
-    expressionHandler.setRoleHierarchy(roleHierarchy);
-    return expressionHandler;
-  }
+	/**
+	 * Registering the role hierarchy
+	 */
+	@Override
+	protected MethodSecurityExpressionHandler createExpressionHandler() {
+		DefaultMethodSecurityExpressionHandler expressionHandler =
+				(DefaultMethodSecurityExpressionHandler) super.createExpressionHandler();
+		expressionHandler.setRoleHierarchy(roleHierarchy);
+		return expressionHandler;
+	}
 
 }

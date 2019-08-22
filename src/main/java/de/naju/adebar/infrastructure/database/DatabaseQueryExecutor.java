@@ -8,13 +8,13 @@ package de.naju.adebar.infrastructure.database;
  */
 public interface DatabaseQueryExecutor<R> {
 
-  /**
-   * Executes a query
-   *
-   * @param query the query
-   * @return the querie's result
-   * @throws MalformedSqlException if the query contains syntax errors
-   */
-  R runQuery(String query);
+	/**
+	 * Executes a query
+	 *
+	 * @param query the query
+	 * @return the querie's result
+	 * @throws MalformedSqlException if the query contains syntax errors
+	 */
+	R runQuery(String query);
 
 }

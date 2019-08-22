@@ -19,23 +19,23 @@ import de.naju.adebar.web.model.events.participation.table.ParticipantsTableForm
 @SpringBootTest(classes = Application.class)
 public class ParticipantsTableFormattingServiceIntegrationTest {
 
-  private static final String DEFAULT_EMAIL = "test@test.com";
+	private static final String DEFAULT_EMAIL = "test@test.com";
 
-  @Autowired
-  private ParticipantsTableFormattingService formattingService;
+	@Autowired
+	private ParticipantsTableFormattingService formattingService;
 
-  private Event eventMock = mock(Event.class);
-  private Person participantMock = mock(Person.class);
+	private Event eventMock = mock(Event.class);
+	private Person participantMock = mock(Person.class);
 
-  public ParticipantsTableFormattingServiceIntegrationTest() {
-    when(participantMock.hasEmail()).thenReturn(true);
-    when(participantMock.getEmail()).thenReturn(Email.of(DEFAULT_EMAIL));
-  }
+	public ParticipantsTableFormattingServiceIntegrationTest() {
+		when(participantMock.hasEmail()).thenReturn(true);
+		when(participantMock.getEmail()).thenReturn(Email.of(DEFAULT_EMAIL));
+	}
 
-  @Test
-  public void usesFormatterAccordingToColumnCode() {
-    assertEquals(formattingService.getColumnValueFor(eventMock, participantMock,
-        ParticipantsTable.COLUMN_EMAIL), DEFAULT_EMAIL);
-  }
+	@Test
+	public void usesFormatterAccordingToColumnCode() {
+		assertEquals(formattingService.getColumnValueFor(eventMock, participantMock,
+				ParticipantsTable.COLUMN_EMAIL), DEFAULT_EMAIL);
+	}
 
 }

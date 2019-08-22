@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+			xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="utf-8"/>
+	<meta content="width=device-width,initial-scale=1" name="viewport"/>
+	<meta th:name="_csrf" th:content="${_csrf.token}"/>
+	<title>Ergebnisse | Adebar</title>
+
+
+	<link rel="stylesheet" type="text/css" href="../../static/resources/css/bootstrap.min.css"
+				th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../static/resources/css/style.css"
+				th:href="@{/resources/css/style.css}"/>
+
+	<link rel="shortcut icon" th:href="@{/resources/res/favicon.ico}"/>
+</head>
+<body>
+
+<!-- central navigation -->
+<nav th:replace="navigation :: topNav(page='persons')"></nav>
+
+<!-- page specific content-->
+<main id="main">
+
+	<header id="page-header">
+
+		<div class="row margin-top-lg margin-btm-lg">
+			<div class="col-md-4">
+				<h1>Filter Ergebnisse</h1>
+			</div>
+
+			<!-- menu -->
+			<div class="col-md-8">
+				<div class="row">
+					<div class="action-bar col-md-5 pull-right">
+						<div class="btn-group">
+							<a href="addPerson.html" class="btn btn-default" th:href="|mailto:recipients@naju-sachsen.de?bcc=${emailAddresses}|">
+								<span class="glyphicon glyphicon-envelope"></span>
+								<span class="hide-sm">E-Mail verfassen</span>
+							</a>
+							<button type="submit" class="btn btn-default" form="result-processing">
+								<span class="glyphicon glyphicon-stats"></span>
+								<span class="hide-sm">Daten weiterverarbeiten</span>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</header>
+
+	<div class="row display-category">
+
+		<div class="table-responsive col-md-10 col-md-offset-1" th:unless="${persons.empty}">
+			<table class="table table-striped table-hover">
+				<thead></thead>
+				<tbody th:remove="all-but-first">
+				<tr class="row" th:each="person : ${persons}">
+					<td class="col-md-1 text-right">
+            <span class="glyphicon glyphicon-tent" data-toggle="tooltip" data-placement="bottom"
+									data-title="Campteilnehmer*in" data-container="body"
+									th:if="${person.participant}"></span>
+						<span class="glyphicon glyphicon-wrench" data-toggle="tooltip" data-placement="bottom"
+									data-title="Aktive*r" data-container="body" th:if="${person.activist}"></span>
+						<span class="glyphicon glyphicon-blackboard" data-toggle="tooltip"
+									data-placement="bottom" data-title="Referent*in" data-container="body"
+									th:if="${person.referent}"></span>
+						<span class="glyphicon glyphicon-briefcase" data-toggle="tooltip"
+									data-placement="bottom" data-title="Geschäftskontakt" data-container="body"
+									th:if="false"></span>
+						<span class="glyphicon glyphicon-baby-formula" data-toggle="tooltip"
+									data-placement="bottom" data-title="Elternteil" data-container="body"
+									th:if="false"></span>
+					</td>
+					<td class="col-md-3">
+						<a href="personDetails.html" class="no-link-deco"
+							 th:href="@{/persons/{id}(id=${person.id})}"
+							 th:text="${person.name}">
+							Frieda Frisch
+						</a>
+					</td>
+					<td class="col-md-5">
+						<a href="mailto:frieda_frisch@web.de"
+							 th:href="|mailto:${person.email}|"
+							 th:text="${person.email}" th:if="${person.email}">frieda_frisch@web.de</a>
+						<span th:unless="${person.email}">---</span>
+					</td>
+					<td class="col-md-2"
+							th:text="${person.address != null and not person.address.city.empty} ? ${person.address.city} : '---'">
+						Entenhausen
+					</td>
+					<td class="col-md-1">
+						<a href="personDetails.html" th:href="@{/persons/{id}(id=${person.id})}">
+							<span class="glyphicon glyphicon-new-window"></span>
+							<span class="sr-only">Details</span>
+						</a>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+
+	</div>
+
+	<form id="result-processing" class="hidden" method="get" th:action="@{/persons/process}">
+		<input type="hidden" name="person" th:each="person : ${persons}" th:value="${person.id}" />
+	</form>
+
+</main>
+<script type="text/javascript" src="../../static/resources/js/jquery.min.js"
+				th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript" src="../../static/resources/js/bootstrap.min.js"
+				th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script src="../../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
+</body>
+</html>

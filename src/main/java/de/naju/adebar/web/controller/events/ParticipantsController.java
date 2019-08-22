@@ -34,250 +34,250 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class ParticipantsController {
 
-  private static final Logger log = LoggerFactory.getLogger(ParticipantsController.class);
+	private static final Logger log = LoggerFactory.getLogger(ParticipantsController.class);
 
-  private final ParticipationManager participationManager;
-  private final PersonSearchServer searchServer;
-  private final EventDataProcessingService eventDataProcessingService;
+	private final ParticipationManager participationManager;
+	private final PersonSearchServer searchServer;
+	private final EventDataProcessingService eventDataProcessingService;
 
 
-  /**
-   * Full constructor. No parameter may be {@code null}.
-   *
-   * @param participationManager service for the actual business logic involved with managing
-   *     participants
-   * @param searchServer service to search for persons based on queries
-   * @param eventDataProcessingService service to conveniently extract data from {@link Event
-   *     Events}
-   */
-  public ParticipantsController(ParticipationManager participationManager,
-      PersonSearchServer searchServer, EventDataProcessingService eventDataProcessingService) {
-    Assert2.noNullArguments("No argument may be null", participationManager, searchServer,
-        eventDataProcessingService);
-    this.participationManager = participationManager;
-    this.searchServer = searchServer;
-    this.eventDataProcessingService = eventDataProcessingService;
-  }
+	/**
+	 * Full constructor. No parameter may be {@code null}.
+	 *
+	 * @param participationManager service for the actual business logic involved with managing
+	 *        participants
+	 * @param searchServer service to search for persons based on queries
+	 * @param eventDataProcessingService service to conveniently extract data from {@link Event
+	 *        Events}
+	 */
+	public ParticipantsController(ParticipationManager participationManager,
+			PersonSearchServer searchServer, EventDataProcessingService eventDataProcessingService) {
+		Assert2.noNullArguments("No argument may be null", participationManager, searchServer,
+				eventDataProcessingService);
+		this.participationManager = participationManager;
+		this.searchServer = searchServer;
+		this.eventDataProcessingService = eventDataProcessingService;
+	}
 
-  /**
-   * Renders the participant's overview for a specific event.
-   *
-   * @param event the event
-   * @param model data model to use for the template
-   * @return the event details template. It will include the appropriate fragments.
-   */
-  @GetMapping("/events/{id}/participants")
-  public String showEventParticipants(@PathVariable("id") Event event, Model model) {
+	/**
+	 * Renders the participant's overview for a specific event.
+	 *
+	 * @param event the event
+	 * @param model data model to use for the template
+	 * @return the event details template. It will include the appropriate fragments.
+	 */
+	@GetMapping("/events/{id}/participants")
+	public String showEventParticipants(@PathVariable("id") Event event, Model model) {
 
-    model.addAttribute("tab", "participants");
-    model.addAttribute("event", event);
-    model.addAttribute("processingService", eventDataProcessingService);
+		model.addAttribute("tab", "participants");
+		model.addAttribute("event", event);
+		model.addAttribute("processingService", eventDataProcessingService);
 
-    model.addAttribute("editParticipantForm", new AddParticipantForm(event));
-    model.addAttribute("addReservationForm", new ReservationForm());
-    model.addAttribute("editReservationForm", new ReservationForm());
+		model.addAttribute("editParticipantForm", new AddParticipantForm(event));
+		model.addAttribute("addReservationForm", new ReservationForm());
+		model.addAttribute("editReservationForm", new ReservationForm());
 
-    if (!model.containsAttribute("addParticipants")) {
-      model.addAttribute("addParticipants", new AddParticipantsForm(event));
-    }
+		if (!model.containsAttribute("addParticipants")) {
+			model.addAttribute("addParticipants", new AddParticipantsForm(event));
+		}
 
-    if (event.getParticipantsList().hasWaitingList()) {
-      model.addAttribute("applyWaitingListEntryForm", new AddParticipantForm(event));
-    }
+		if (event.getParticipantsList().hasWaitingList()) {
+			model.addAttribute("applyWaitingListEntryForm", new AddParticipantForm(event));
+		}
 
-    return "events/eventDetails";
-  }
+		return "events/eventDetails";
+	}
 
-  /**
-   * Searches for persons based on some (natural language) query. A redirection to the participants
-   * view will be performed afterwards.
-   *
-   * @param event the event for which the search is performed. This is necessary to redirect to
-   *     the correct page after the search returned.
-   * @param form the current data entered in the add participants dialog
-   * @param query the search query. May be a name, email address or the like.
-   * @param returnAction action to perform after the search finished
-   * @param redirAttr attributes for the model and URL to use after redirection
-   * @return a redirection to the participants view of the event
-   */
-  @PostMapping("/events/{id}/participants/search")
-  public String searchParticipants(@PathVariable("id") Event event,
-      @ModelAttribute("addParticipants") AddParticipantsForm form,
-      @RequestParam("person-search-query") String query,
-      @RequestParam(value = "return-action", defaultValue = "") String returnAction,
-      RedirectAttributes redirAttr) {
+	/**
+	 * Searches for persons based on some (natural language) query. A redirection to the participants
+	 * view will be performed afterwards.
+	 *
+	 * @param event the event for which the search is performed. This is necessary to redirect to the
+	 *        correct page after the search returned.
+	 * @param form the current data entered in the add participants dialog
+	 * @param query the search query. May be a name, email address or the like.
+	 * @param returnAction action to perform after the search finished
+	 * @param redirAttr attributes for the model and URL to use after redirection
+	 * @return a redirection to the participants view of the event
+	 */
+	@PostMapping("/events/{id}/participants/search")
+	public String searchParticipants(@PathVariable("id") Event event,
+			@ModelAttribute("addParticipants") AddParticipantsForm form,
+			@RequestParam("person-search-query") String query,
+			@RequestParam(value = "return-action", defaultValue = "") String returnAction,
+			RedirectAttributes redirAttr) {
 
-    redirAttr.addFlashAttribute("matchingPersons", searchServer.runQuery(query.trim()));
+		redirAttr.addFlashAttribute("matchingPersons", searchServer.runQuery(query.trim()));
 
-    redirAttr.addAttribute("search", query);
-    redirAttr.addAttribute("do", returnAction);
-    redirAttr.addFlashAttribute("addParticipants", form.prepareForm());
+		redirAttr.addAttribute("search", query);
+		redirAttr.addAttribute("do", returnAction);
+		redirAttr.addFlashAttribute("addParticipants", form.prepareForm());
 
-    return "redirect:/events/" + event.getId() + "/participants";
-  }
+		return "redirect:/events/" + event.getId() + "/participants";
+	}
 
-  // TODO rework the 'add participant' workflow to make it less itchy
-  /*
-   * Right now the whole workflow is a bit hacky, maybe a framework such as Spring Webflow may help
-   * here. Hacky in this case means an unintuitive behaviour and ugly design of the
-   * AddParticipantsForm as well as a complicated display in the template.
-   */
+	// TODO rework the 'add participant' workflow to make it less itchy
+	/*
+	 * Right now the whole workflow is a bit hacky, maybe a framework such as Spring Webflow may help
+	 * here. Hacky in this case means an unintuitive behaviour and ugly design of the
+	 * AddParticipantsForm as well as a complicated display in the template.
+	 */
 
-  /**
-   * Enqueues a person to be added as participant, but enables still adding more persons.
-   * <p>
-   * The participant will not be saved yet, this action will be performed after the last person has
-   * been added.
-   *
-   * @param event the event the participant wants to attend.
-   * @param form the form containing the new participants
-   * @param returnAction action to perform after the person was enqueued
-   * @param returnTab the tab to show after the person was enqueued. Currently unused.
-   * @param redirAttr attributes for the model and URL to use after redirection
-   * @return the participants overview of the event. A dialog to add more participants will be
-   *     shown.
-   */
-  @PostMapping("/events/{id}/participants/add/continue")
-  public String addMultipleParticipants(@PathVariable("id") Event event,
-      @ModelAttribute("addParticipants") AddParticipantsForm form,
-      @RequestParam(value = "return-action", defaultValue = "") String returnAction,
-      @RequestParam(value = "return-tab", defaultValue = "") String returnTab,
-      RedirectAttributes redirAttr) {
+	/**
+	 * Enqueues a person to be added as participant, but enables still adding more persons.
+	 * <p>
+	 * The participant will not be saved yet, this action will be performed after the last person has
+	 * been added.
+	 *
+	 * @param event the event the participant wants to attend.
+	 * @param form the form containing the new participants
+	 * @param returnAction action to perform after the person was enqueued
+	 * @param returnTab the tab to show after the person was enqueued. Currently unused.
+	 * @param redirAttr attributes for the model and URL to use after redirection
+	 * @return the participants overview of the event. A dialog to add more participants will be
+	 *         shown.
+	 */
+	@PostMapping("/events/{id}/participants/add/continue")
+	public String addMultipleParticipants(@PathVariable("id") Event event,
+			@ModelAttribute("addParticipants") AddParticipantsForm form,
+			@RequestParam(value = "return-action", defaultValue = "") String returnAction,
+			@RequestParam(value = "return-tab", defaultValue = "") String returnTab,
+			RedirectAttributes redirAttr) {
 
-    redirAttr.addAttribute("do", returnAction);
-    redirAttr.addFlashAttribute("addParticipants", form.prepareForm());
+		redirAttr.addAttribute("do", returnAction);
+		redirAttr.addFlashAttribute("addParticipants", form.prepareForm());
 
-    return "redirect:/events/" + event.getId() + "/participants";
-  }
+		return "redirect:/events/" + event.getId() + "/participants";
+	}
 
-  /**
-   * Adds new participants to an event.
-   * <p>
-   * If some participants may not be added, a detailed list displaying the reason for failure will
-   * be provided. There are just two possible reasons for why a person could not become a
-   * participant: either because he/she is too young, or because there were no more slots available
-   * (during the requested time). In the first case the user may choose to add the participant
-   * anyway.
-   *
-   * @param event the event to add the participants to
-   * @param form form containing the participants' data
-   * @param redirAttr attributes for the model and URL to use after redirection
-   * @return a redirection to the event's participants overview (a.k.a. participants table)
-   * @see #addParticipantsIgnoreAge(Event, AddParticipantsForm, RedirectAttributes)
-   */
-  @PostMapping("/events/{id}/participants/add/done")
-  @Transactional
-  public String addParticipants(@PathVariable("id") Event event,
-      @ModelAttribute("addParticipants") AddParticipantsForm form, RedirectAttributes redirAttr) {
-    return doAddParticipants(event, form, redirAttr, false);
-  }
+	/**
+	 * Adds new participants to an event.
+	 * <p>
+	 * If some participants may not be added, a detailed list displaying the reason for failure will
+	 * be provided. There are just two possible reasons for why a person could not become a
+	 * participant: either because he/she is too young, or because there were no more slots available
+	 * (during the requested time). In the first case the user may choose to add the participant
+	 * anyway.
+	 *
+	 * @param event the event to add the participants to
+	 * @param form form containing the participants' data
+	 * @param redirAttr attributes for the model and URL to use after redirection
+	 * @return a redirection to the event's participants overview (a.k.a. participants table)
+	 * @see #addParticipantsIgnoreAge(Event, AddParticipantsForm, RedirectAttributes)
+	 */
+	@PostMapping("/events/{id}/participants/add/done")
+	@Transactional
+	public String addParticipants(@PathVariable("id") Event event,
+			@ModelAttribute("addParticipants") AddParticipantsForm form, RedirectAttributes redirAttr) {
+		return doAddParticipants(event, form, redirAttr, false);
+	}
 
-  /**
-   * Adds new participants to an event, ignoring the minimum participant age required by the event.
-   *
-   * @param event the event to add the participants to
-   * @param form form containing the participant's data
-   * @param redirAttr attributes for the model and URL to use after redirection
-   * @return a redirection to the event's participants table
-   */
-  @PostMapping("/events/{id}/participants/add/ignore-age")
-  @Transactional
-  public String addParticipantsIgnoreAge(@PathVariable("id") Event event,
-      @ModelAttribute("addParticipants") AddParticipantsForm form, RedirectAttributes redirAttr) {
-    return doAddParticipants(event, form, redirAttr, true);
-  }
+	/**
+	 * Adds new participants to an event, ignoring the minimum participant age required by the event.
+	 *
+	 * @param event the event to add the participants to
+	 * @param form form containing the participant's data
+	 * @param redirAttr attributes for the model and URL to use after redirection
+	 * @return a redirection to the event's participants table
+	 */
+	@PostMapping("/events/{id}/participants/add/ignore-age")
+	@Transactional
+	public String addParticipantsIgnoreAge(@PathVariable("id") Event event,
+			@ModelAttribute("addParticipants") AddParticipantsForm form, RedirectAttributes redirAttr) {
+		return doAddParticipants(event, form, redirAttr, true);
+	}
 
-  /**
-   * Updates the registration of a participant.
-   * <p>
-   * This update will involve invoking the manager checking, whether the person may still
-   * participate (if the participation time changed). Therefore an update may easily fail.
-   *
-   * @param event the event for which the participant should be updated
-   * @param newInfo the updated registration info. This contains the participant as well.
-   * @param redirAttr attributes for the model and URL to use after redirection
-   * @return a redirection to the event's participants table
-   */
-  @PostMapping("/events/{id}/participants/update")
-  @Transactional
-  public String updateParticipationInfo(@PathVariable("id") Event event,
-      @ModelAttribute("editParticipantForm") AddParticipantForm newInfo,
-      RedirectAttributes redirAttr) {
+	/**
+	 * Updates the registration of a participant.
+	 * <p>
+	 * This update will involve invoking the manager checking, whether the person may still
+	 * participate (if the participation time changed). Therefore an update may easily fail.
+	 *
+	 * @param event the event for which the participant should be updated
+	 * @param newInfo the updated registration info. This contains the participant as well.
+	 * @param redirAttr attributes for the model and URL to use after redirection
+	 * @return a redirection to the event's participants table
+	 */
+	@PostMapping("/events/{id}/participants/update")
+	@Transactional
+	public String updateParticipationInfo(@PathVariable("id") Event event,
+			@ModelAttribute("editParticipantForm") AddParticipantForm newInfo,
+			RedirectAttributes redirAttr) {
 
-    RegistrationInfoBuilder registrationInfoBuilder = newInfo.prepareRegistrationInfo();
+		RegistrationInfoBuilder registrationInfoBuilder = newInfo.prepareRegistrationInfo();
 
-    if (event.getParticipationInfo().supportsFlexibleParticipationTimes()) {
+		if (event.getParticipationInfo().supportsFlexibleParticipationTimes()) {
 
-      registrationInfoBuilder
-          .withParticipationDuring(new ParticipationTime(newInfo.generateFirstNightAsLDT(),
-              newInfo.generateLastNightAsLDT(), event.getStartTime()));
-    }
+			registrationInfoBuilder
+					.withParticipationDuring(new ParticipationTime(newInfo.generateFirstNightAsLDT(),
+							newInfo.generateLastNightAsLDT(), event.getStartTime()));
+		}
 
-    RegistrationInfo registrationInfo = registrationInfoBuilder.build();
+		RegistrationInfo registrationInfo = registrationInfoBuilder.build();
 
-    Result result =
-        participationManager.updateParticipation(event, newInfo.getParticipant(), registrationInfo);
+		Result result =
+				participationManager.updateParticipation(event, newInfo.getParticipant(), registrationInfo);
 
-    if (result != Result.OK) {
-      redirAttr.addAttribute("update-participation", "failed");
-    }
+		if (result != Result.OK) {
+			redirAttr.addAttribute("update-participation", "failed");
+		}
 
-    return "redirect:/events/" + event.getId() + "/participants";
-  }
+		return "redirect:/events/" + event.getId() + "/participants";
+	}
 
-  /**
-   * Deletes a participant from an event.
-   *
-   * @param event the event to remove the participant from
-   * @param participant the participant to remove
-   * @return a redirection to the event's participants table
-   */
-  @PostMapping("/events/{id}/participants/remove")
-  public String removeParticipant(@PathVariable("id") Event event,
-      @RequestParam("participant") Person participant) {
-    participationManager.removeParticipant(event, participant);
-    return "redirect:/events/" + event.getId() + "/participants";
-  }
+	/**
+	 * Deletes a participant from an event.
+	 *
+	 * @param event the event to remove the participant from
+	 * @param participant the participant to remove
+	 * @return a redirection to the event's participants table
+	 */
+	@PostMapping("/events/{id}/participants/remove")
+	public String removeParticipant(@PathVariable("id") Event event,
+			@RequestParam("participant") Person participant) {
+		participationManager.removeParticipant(event, participant);
+		return "redirect:/events/" + event.getId() + "/participants";
+	}
 
-  /**
-   * Performs the actual addition of participants to some event.
-   *
-   * @param event the event
-   * @param form the form containing the participants to add
-   * @param redirAttr attributes for the model and URL to use after redirection
-   * @param ignoreAgeRestrictions whether the minimum participant age of the event should be
-   *     respected
-   * @return a redirection to the event's participants table
-   */
-  private String doAddParticipants(Event event, AddParticipantsForm form,
-      RedirectAttributes redirAttr, boolean ignoreAgeRestrictions) {
+	/**
+	 * Performs the actual addition of participants to some event.
+	 *
+	 * @param event the event
+	 * @param form the form containing the participants to add
+	 * @param redirAttr attributes for the model and URL to use after redirection
+	 * @param ignoreAgeRestrictions whether the minimum participant age of the event should be
+	 *        respected
+	 * @return a redirection to the event's participants table
+	 */
+	private String doAddParticipants(Event event, AddParticipantsForm form,
+			RedirectAttributes redirAttr, boolean ignoreAgeRestrictions) {
 
-    ParticipationReport report = new ParticipationReport();
+		ParticipationReport report = new ParticipationReport();
 
-    for (AddParticipantForm newParticipant : form.getParticipants()) {
-      RegistrationInfoBuilder registrationInfoBuilder = newParticipant.prepareRegistrationInfo();
+		for (AddParticipantForm newParticipant : form.getParticipants()) {
+			RegistrationInfoBuilder registrationInfoBuilder = newParticipant.prepareRegistrationInfo();
 
-      if (event.getParticipationInfo().supportsFlexibleParticipationTimes()) {
+			if (event.getParticipationInfo().supportsFlexibleParticipationTimes()) {
 
-        registrationInfoBuilder
-            .withParticipationDuring(new ParticipationTime(newParticipant.generateFirstNightAsLDT(),
-                newParticipant.generateLastNightAsLDT(), event.getStartTime()));
-      }
+				registrationInfoBuilder
+						.withParticipationDuring(new ParticipationTime(newParticipant.generateFirstNightAsLDT(),
+								newParticipant.generateLastNightAsLDT(), event.getStartTime()));
+			}
 
-      RegistrationInfo registrationInfo = registrationInfoBuilder.build();
-      Result result = participationManager.addParticipant(event, newParticipant.getParticipant(),
-          registrationInfo, ignoreAgeRestrictions);
+			RegistrationInfo registrationInfo = registrationInfoBuilder.build();
+			Result result = participationManager.addParticipant(event, newParticipant.getParticipant(),
+					registrationInfo, ignoreAgeRestrictions);
 
-      report.appendEntry(newParticipant, result);
-    }
+			report.appendEntry(newParticipant, result);
+		}
 
-    log.info("Tried to add participants with report {}", report);
+		log.info("Tried to add participants with report {}", report);
 
-    redirAttr.addAttribute("add-participants", "finished");
-    redirAttr.addFlashAttribute("participationReport", report);
+		redirAttr.addAttribute("add-participants", "finished");
+		redirAttr.addFlashAttribute("participationReport", report);
 
-    return "redirect:/events/" + event.getId() + "/participants";
+		return "redirect:/events/" + event.getId() + "/participants";
 
-  }
+	}
 
 }

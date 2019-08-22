@@ -23,30 +23,30 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/newsletter")
 public class SubscriberController {
 
-  private NewsletterRepository newsletterRepo;
-  private SubscriberRepository subscriberRepo;
+	private NewsletterRepository newsletterRepo;
+	private SubscriberRepository subscriberRepo;
 
-  @Autowired
-  public SubscriberController(NewsletterRepository newsletterRepo,
-      SubscriberRepository subscriberRepo) {
-    this.newsletterRepo = newsletterRepo;
-    this.subscriberRepo = subscriberRepo;
-  }
+	@Autowired
+	public SubscriberController(NewsletterRepository newsletterRepo,
+			SubscriberRepository subscriberRepo) {
+		this.newsletterRepo = newsletterRepo;
+		this.subscriberRepo = subscriberRepo;
+	}
 
-  /**
-   * @param email the email of the subscriber to query for
-   * @return a {@link TechnicalSubscriberJSON} object providing the requested data
-   */
-  @RequestMapping("/subscriberDetails")
-  public TechnicalSubscriberJSON sendTechnicalSubscriberDetails(
-      @RequestParam("email") Email email) {
-    LinkedList<Long> subscribedNewsletters = new LinkedList<>();
-    for (Newsletter newsletter : newsletterRepo.findBySubscribersEmail(email)) {
-      subscribedNewsletters.add(newsletter.getId());
-    }
-    Optional<Subscriber> subscriber = subscriberRepo.findByEmail(email);
-    return subscriber.map(sub -> new TechnicalSubscriberJSON(sub, subscribedNewsletters))
-        .orElse(null);
-  }
+	/**
+	 * @param email the email of the subscriber to query for
+	 * @return a {@link TechnicalSubscriberJSON} object providing the requested data
+	 */
+	@RequestMapping("/subscriberDetails")
+	public TechnicalSubscriberJSON sendTechnicalSubscriberDetails(
+			@RequestParam("email") Email email) {
+		LinkedList<Long> subscribedNewsletters = new LinkedList<>();
+		for (Newsletter newsletter : newsletterRepo.findBySubscribersEmail(email)) {
+			subscribedNewsletters.add(newsletter.getId());
+		}
+		Optional<Subscriber> subscriber = subscriberRepo.findByEmail(email);
+		return subscriber.map(sub -> new TechnicalSubscriberJSON(sub, subscribedNewsletters))
+				.orElse(null);
+	}
 
 }

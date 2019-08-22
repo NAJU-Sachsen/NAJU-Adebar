@@ -13,38 +13,38 @@ import org.springframework.validation.Errors;
  * @author Rico Bergmann
  */
 @Service
-public class AddReferentFormConverter implements
-    ValidatingEntityFormConverter<ReferentProfile, AddReferentForm> {
+public class AddReferentFormConverter
+		implements ValidatingEntityFormConverter<ReferentProfile, AddReferentForm> {
 
-  @Override
-  public boolean isValid(AddReferentForm form) {
-    // every form is valid
-    return true;
-  }
+	@Override
+	public boolean isValid(AddReferentForm form) {
+		// every form is valid
+		return true;
+	}
 
-  @Override
-  public ReferentProfile toEntity(AddReferentForm form) {
-    throw new UnsupportedOperationException(
-        "An AddReferentForm may only be applied to existing persons");
-  }
+	@Override
+	public ReferentProfile toEntity(AddReferentForm form) {
+		throw new UnsupportedOperationException(
+				"An AddReferentForm may only be applied to existing persons");
+	}
 
-  @Override
-  public AddReferentForm toForm(ReferentProfile entity) {
-    return new AddReferentForm(Lists.newArrayList(entity.getQualifications()));
-  }
+	@Override
+	public AddReferentForm toForm(ReferentProfile entity) {
+		return new AddReferentForm(Lists.newArrayList(entity.getQualifications()));
+	}
 
-  @Override
-  public boolean supports(Class<?> clazz) {
-    return AddReferentForm.class.isAssignableFrom(clazz);
-  }
+	@Override
+	public boolean supports(Class<?> clazz) {
+		return AddReferentForm.class.isAssignableFrom(clazz);
+	}
 
-  @Override
-  public void validate(Object o, Errors errors) {
-    // every form is valid
-  }
+	@Override
+	public void validate(Object o, Errors errors) {
+		// every form is valid
+	}
 
-  @Override
-  public void applyFormToEntity(AddReferentForm form, ReferentProfile entity) {
-    form.getQualifications().forEach(entity::addQualification);
-  }
+	@Override
+	public void applyFormToEntity(AddReferentForm form, ReferentProfile entity) {
+		form.getQualifications().forEach(entity::addQualification);
+	}
 }

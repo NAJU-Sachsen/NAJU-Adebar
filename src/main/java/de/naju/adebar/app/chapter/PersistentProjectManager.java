@@ -21,79 +21,79 @@ import org.springframework.util.Assert;
 @Service
 public class PersistentProjectManager implements ProjectManager {
 
-  private ProjectRepository projectRepo;
-  private ReadOnlyProjectRepository roRepo;
-  private LocalGroupManager localGroupManager;
+	private ProjectRepository projectRepo;
+	private ReadOnlyProjectRepository roRepo;
+	private LocalGroupManager localGroupManager;
 
-  @Autowired
-  public PersistentProjectManager(ProjectRepository projectRepo, ReadOnlyProjectRepository roRepo,
-      LocalGroupManager localGroupManager) {
-    Object[] params = {projectRepo, roRepo, localGroupManager};
-    Assert.notNull(params, "At least one parameter was null: " + Arrays.toString(params));
-    this.projectRepo = projectRepo;
-    this.roRepo = roRepo;
-    this.localGroupManager = localGroupManager;
-  }
+	@Autowired
+	public PersistentProjectManager(ProjectRepository projectRepo, ReadOnlyProjectRepository roRepo,
+			LocalGroupManager localGroupManager) {
+		Object[] params = {projectRepo, roRepo, localGroupManager};
+		Assert.notNull(params, "At least one parameter was null: " + Arrays.toString(params));
+		this.projectRepo = projectRepo;
+		this.roRepo = roRepo;
+		this.localGroupManager = localGroupManager;
+	}
 
-  @Override
-  public Project saveProject(Project project) {
-    return projectRepo.save(project);
-  }
+	@Override
+	public Project saveProject(Project project) {
+		return projectRepo.save(project);
+	}
 
-  @Override
-  public Project createProject(String name, LocalGroup localGroup) {
-    Project project = new Project(name, localGroup);
-    localGroup.addProject(project);
-    localGroupManager.updateLocalGroup(localGroup.getId(), localGroup);
-    return projectRepo.save(project);
-  }
+	@Override
+	public Project createProject(String name, LocalGroup localGroup) {
+		Project project = new Project(name, localGroup);
+		localGroup.addProject(project);
+		localGroupManager.updateLocalGroup(localGroup.getId(), localGroup);
+		return projectRepo.save(project);
+	}
 
-  @Override
-  public Project updateProject(long projectId, Project projectData) {
-    setProjectId(projectData, projectId);
-    return projectRepo.save(projectData);
-  }
+	@Override
+	public Project updateProject(long projectId, Project projectData) {
+		setProjectId(projectData, projectId);
+		return projectRepo.save(projectData);
+	}
 
-  @Override
-  public Project adoptProjectData(long projectId, Project projectData) {
-    Project project = findProject(projectId)
-        .orElseThrow(() -> new IllegalArgumentException("No project found for ID " + projectId));
-    project.setName(projectData.getName());
-    project.setStartTime(projectData.getStartTime());
-    project.setEndTime(projectData.getEndTime());
-    project.setPersonInCharge(projectData.getPersonInCharge());
-    return updateProject(projectId, project);
-  }
+	@Override
+	public Project adoptProjectData(long projectId, Project projectData) {
+		Project project = findProject(projectId)
+				.orElseThrow(() -> new IllegalArgumentException("No project found for ID " + projectId));
+		project.setName(projectData.getName());
+		project.setStartTime(projectData.getStartTime());
+		project.setEndTime(projectData.getEndTime());
+		project.setPersonInCharge(projectData.getPersonInCharge());
+		return updateProject(projectId, project);
+	}
 
-  @Override
-  public Optional<Project> findProject(long id) {
-    return projectRepo.findById(id);
-  }
+	@Override
+	public Optional<Project> findProject(long id) {
+		return projectRepo.findById(id);
+	}
 
-  @Override
-  public Optional<Project> findProject(String name, LocalGroup localGroup) {
-    Project project = projectRepo.findByNameAndLocalGroup(name, localGroup);
-    return project != null ? Optional.of(project) : Optional.empty();
-  }
+	@Override
+	public Optional<Project> findProject(String name, LocalGroup localGroup) {
+		Project project = projectRepo.findByNameAndLocalGroup(name, localGroup);
+		return project != null ? Optional.of(project) : Optional.empty();
+	}
 
-  @Override
-  public ReadOnlyProjectRepository repository() {
-    return roRepo;
-  }
+	@Override
+	public ReadOnlyProjectRepository repository() {
+		return roRepo;
+	}
 
-  /**
-   * Updates a project's ID. To be used extremely cautiously.
-   *
-   * @param project the project to update
-   * @param id the new ID
-   */
-  protected void setProjectId(Project project, Long id) {
-    try {
-      Method changeId = Project.class.getDeclaredMethod("setId", long.class);
-      changeId.setAccessible(true);
-      changeId.invoke(project, id);
-    } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-      throw new IdUpdateFailedException("Error during invocation of reflection", e);
-    }
-  }
+	/**
+	 * Updates a project's ID. To be used extremely cautiously.
+	 *
+	 * @param project the project to update
+	 * @param id the new ID
+	 */
+	protected void setProjectId(Project project, Long id) {
+		try {
+			Method changeId = Project.class.getDeclaredMethod("setId", long.class);
+			changeId.setAccessible(true);
+			changeId.invoke(project, id);
+		} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+			throw new IdUpdateFailedException("Error during invocation of reflection", e);
+		}
+	}
 }

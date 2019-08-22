@@ -21,113 +21,113 @@ import de.naju.adebar.model.persons.qualifications.Qualification;
  */
 public class PersonUnitTest {
 
-  private Person person;
+	private Person person;
 
-  @Before
-  public void setUp() {
-    person = new Person(new PersonId(), "Hans", "Wurst", Email.of("hans.wurst@web.de"));
-    person.setAddress(Address.of("Hauptstraße 3", "01234", "Entehausen"));
-  }
+	@Before
+	public void setUp() {
+		person = new Person(new PersonId(), "Hans", "Wurst", Email.of("hans.wurst@web.de"));
+		person.setAddress(Address.of("Hauptstraße 3", "01234", "Entehausen"));
+	}
 
-  @Test
-  public void personMayBeMadeParticipantRetrospectively() {
-    assertThat(person.isParticipant()).isFalse();
+	@Test
+	public void personMayBeMadeParticipantRetrospectively() {
+		assertThat(person.isParticipant()).isFalse();
 
-    person.makeParticipant();
-    assertThat(person.isParticipant()).isTrue();
-    assertThat(person.getParticipantProfile()).isNotNull();
-  }
+		person.makeParticipant();
+		assertThat(person.isParticipant()).isTrue();
+		assertThat(person.getParticipantProfile()).isNotNull();
+	}
 
-  @Test
-  public void usesProvidedParticipantInformationWhenMadeParticipant() {
-    LocalDate dateOfBirth = LocalDate.of(1999, 11, 22);
-    person.makeParticipant(Gender.FEMALE, dateOfBirth, "vegan", "");
-    assertThat(person.getParticipantProfile().getGender()).isEqualTo(Gender.FEMALE);
-    assertThat(person.getParticipantProfile().getDateOfBirth()).isEqualTo(dateOfBirth);
-    assertThat(person.getParticipantProfile().getEatingHabits()).isEqualTo("vegan");
-  }
+	@Test
+	public void usesProvidedParticipantInformationWhenMadeParticipant() {
+		LocalDate dateOfBirth = LocalDate.of(1999, 11, 22);
+		person.makeParticipant(Gender.FEMALE, dateOfBirth, "vegan", "");
+		assertThat(person.getParticipantProfile().getGender()).isEqualTo(Gender.FEMALE);
+		assertThat(person.getParticipantProfile().getDateOfBirth()).isEqualTo(dateOfBirth);
+		assertThat(person.getParticipantProfile().getEatingHabits()).isEqualTo("vegan");
+	}
 
-  @Test(expected = ArchivedPersonException.class)
-  public void personMayNotBeMadeParticipantIfArchived() {
-    person.archive();
-    person.makeParticipant();
-  }
+	@Test(expected = ArchivedPersonException.class)
+	public void personMayNotBeMadeParticipantIfArchived() {
+		person.archive();
+		person.makeParticipant();
+	}
 
-  @Test
-  public void personMayBeMadeActivistRetrospectively() {
-    assertThat(person.isActivist()).isFalse();
+	@Test
+	public void personMayBeMadeActivistRetrospectively() {
+		assertThat(person.isActivist()).isFalse();
 
-    person.makeActivist();
-    assertThat(person.isActivist()).isTrue();
-    assertThat(person.getActivistProfile()).isNotNull();
-  }
+		person.makeActivist();
+		assertThat(person.isActivist()).isTrue();
+		assertThat(person.getActivistProfile()).isNotNull();
+	}
 
-  @Test
-  public void usesProvidedActivistInformationWhenMadeActivst() {
-    LocalDate expiryDate = LocalDate.of(2222, 3, 11);
-    JuleicaCard juleica = new JuleicaCard(expiryDate, "L");
-    person.makeActivist(juleica);
-    assertThat(person.getActivistProfile().getJuleicaCard()).isEqualTo(juleica);
-  }
+	@Test
+	public void usesProvidedActivistInformationWhenMadeActivst() {
+		LocalDate expiryDate = LocalDate.of(2222, 3, 11);
+		JuleicaCard juleica = new JuleicaCard(expiryDate, "L");
+		person.makeActivist(juleica);
+		assertThat(person.getActivistProfile().getJuleicaCard()).isEqualTo(juleica);
+	}
 
-  @Test(expected = ArchivedPersonException.class)
-  public void personMayNotBeMadeActivistIfArchived() {
-    person.archive();
-    person.makeActivist();
-  }
+	@Test(expected = ArchivedPersonException.class)
+	public void personMayNotBeMadeActivistIfArchived() {
+		person.archive();
+		person.makeActivist();
+	}
 
-  @Test
-  public void personMayBeMadeReferentRetrospectively() {
-    assertThat(person.isReferent()).isFalse();
+	@Test
+	public void personMayBeMadeReferentRetrospectively() {
+		assertThat(person.isReferent()).isFalse();
 
-    person.makeReferent();
-    assertThat(person.isReferent()).isTrue();
-    assertThat(person.getReferentProfile()).isNotNull();
-  }
+		person.makeReferent();
+		assertThat(person.isReferent()).isTrue();
+		assertThat(person.getReferentProfile()).isNotNull();
+	}
 
-  @Test
-  public void usesProvidedReferentInformationWhenMadeReferent() {
-    Collection<Qualification> qualifications = Arrays.asList( //
-        new Qualification("Very important", "Lorem ipsum"), //
-        new Qualification("Event more important", "et dolor sit amet"));
-    person.makeReferent(qualifications);
+	@Test
+	public void usesProvidedReferentInformationWhenMadeReferent() {
+		Collection<Qualification> qualifications = Arrays.asList( //
+				new Qualification("Very important", "Lorem ipsum"), //
+				new Qualification("Event more important", "et dolor sit amet"));
+		person.makeReferent(qualifications);
 
-    assertThat(person.getReferentProfile().getQualifications())
-        .containsExactlyElementsOf(qualifications);
-  }
+		assertThat(person.getReferentProfile().getQualifications())
+				.containsExactlyElementsOf(qualifications);
+	}
 
-  @Test
-  public void archiveRemovesPersonalInformation() {
-    person.archive();
-    assertThat(person.getFirstName()).isEmpty();
-    assertThat(person.getLastName().isEmpty()); // #56 last names should be removed, too
-    assertThat(person.getEmail()).isNull();
-    assertThat(person.getAddress().getStreet()).isEmpty();
-  }
+	@Test
+	public void archiveRemovesPersonalInformation() {
+		person.archive();
+		assertThat(person.getFirstName()).isEmpty();
+		assertThat(person.getLastName().isEmpty()); // #56 last names should be removed, too
+		assertThat(person.getEmail()).isNull();
+		assertThat(person.getAddress().getStreet()).isEmpty();
+	}
 
-  @Test // #56
-  public void archiveRemovesParents() {
-    Person parent = new Person(new PersonId(), "Berta", "Beate", Email.of("bbeate@mail.com"));
-    person.connectParent(parent);
+	@Test // #56
+	public void archiveRemovesParents() {
+		Person parent = new Person(new PersonId(), "Berta", "Beate", Email.of("bbeate@mail.com"));
+		person.connectParent(parent);
 
-    // preconditions
-    assertThat(parent.isParent());
-    assertThat(person.getParents()).containsExactly(parent);
+		// preconditions
+		assertThat(parent.isParent());
+		assertThat(person.getParents()).containsExactly(parent);
 
-    person.archive();
-    assertThat(person.getParents()).isEmpty();
-  }
+		person.archive();
+		assertThat(person.getParents()).isEmpty();
+	}
 
-  @Test(expected = ArchivedPersonException.class)
-  public void mayOnlyBeArchivedOnce() {
-    person.archive();
-    person.archive();
-  }
+	@Test(expected = ArchivedPersonException.class)
+	public void mayOnlyBeArchivedOnce() {
+		person.archive();
+		person.archive();
+	}
 
-  @Test
-  public void updateInformationPublishesEvent() {
-    person.updateInformation("John", "Doe", Email.of("doejohn@mail.com"),
-        PhoneNumber.of("0123 45678901"));
-  }
+	@Test
+	public void updateInformationPublishesEvent() {
+		person.updateInformation("John", "Doe", Email.of("doejohn@mail.com"),
+				PhoneNumber.of("0123 45678901"));
+	}
 
 }

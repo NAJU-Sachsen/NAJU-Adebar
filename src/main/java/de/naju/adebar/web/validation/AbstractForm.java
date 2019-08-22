@@ -5,9 +5,9 @@ package de.naju.adebar.web.validation;
  */
 public interface AbstractForm {
 
-  /**
-   * @return whether the form contains any data
-   */
-  boolean hasData();
+	/**
+	 * @return whether the form contains any data
+	 */
+	boolean hasData();
 
 }

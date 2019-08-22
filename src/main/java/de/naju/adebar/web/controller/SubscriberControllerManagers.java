@@ -14,18 +14,18 @@ import de.naju.adebar.model.persons.PersonManager;
  */
 @Component
 class SubscriberControllerManagers {
-  public final NewsletterManager newsletters;
-  public final SubscriberManager subscribers;
-  public final PersonManager persons;
-  public final LocalGroupManager localGroups;
+	public final NewsletterManager newsletters;
+	public final SubscriberManager subscribers;
+	public final PersonManager persons;
+	public final LocalGroupManager localGroups;
 
-  @Autowired
-  public SubscriberControllerManagers(NewsletterManager newsletterManager,
-      SubscriberManager subscriberManager, PersonManager personManager,
-      LocalGroupManager localGroupManager) {
-    this.newsletters = newsletterManager;
-    this.subscribers = subscriberManager;
-    this.persons = personManager;
-    this.localGroups = localGroupManager;
-  }
+	@Autowired
+	public SubscriberControllerManagers(NewsletterManager newsletterManager,
+			SubscriberManager subscriberManager, PersonManager personManager,
+			LocalGroupManager localGroupManager) {
+		this.newsletters = newsletterManager;
+		this.subscribers = subscriberManager;
+		this.persons = personManager;
+		this.localGroups = localGroupManager;
+	}
 }

@@ -40,230 +40,232 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class AddPersonController {
 
-  private static final QPerson person = QPerson.person;
-  private final PersonRepository personRepo;
-  private final EventRepository eventRepo;
-  private final LocalGroupRepository localGroupRepo;
-  private final QualificationRepository qualificationRepo;
-  private final AddPersonFormConverter personFormConverter;
-  private final ParticipationManager participationManager;
+	private static final QPerson person = QPerson.person;
 
-  /**
-   * Full constructor
-   *
-   * @param personRepo repository receiving the fresh person instances
-   * @param eventRepo repository containing all future events
-   * @param localGroupRepo repository containing all available local groups for activists
-   * @param qualificationRepo repository containing all available referent qualifications
-   * @param personFormConverter service to convert an {@link AddPersonForm} to new persons
-   */
-  public AddPersonController(PersonRepository personRepo, EventRepository eventRepo,
-      LocalGroupRepository localGroupRepo, QualificationRepository qualificationRepo,
-      AddPersonFormConverter personFormConverter, ParticipationManager participationManager) {
+	private final PersonRepository personRepo;
+	private final EventRepository eventRepo;
+	private final LocalGroupRepository localGroupRepo;
+	private final QualificationRepository qualificationRepo;
+	private final AddPersonFormConverter personFormConverter;
+	private final ParticipationManager participationManager;
 
-    Assert2.noNullArguments("No argument may be null", //
-        personRepo, eventRepo, localGroupRepo, qualificationRepo, personFormConverter,
-        participationManager);
+	/**
+	 * Full constructor
+	 *
+	 * @param personRepo repository receiving the fresh person instances
+	 * @param eventRepo repository containing all future events
+	 * @param localGroupRepo repository containing all available local groups for activists
+	 * @param qualificationRepo repository containing all available referent qualifications
+	 * @param personFormConverter service to convert an {@link AddPersonForm} to new persons
+	 */
+	public AddPersonController(PersonRepository personRepo, EventRepository eventRepo,
+			LocalGroupRepository localGroupRepo, QualificationRepository qualificationRepo,
+			AddPersonFormConverter personFormConverter, ParticipationManager participationManager) {
 
-    this.personRepo = personRepo;
-    this.eventRepo = eventRepo;
-    this.localGroupRepo = localGroupRepo;
-    this.qualificationRepo = qualificationRepo;
-    this.personFormConverter = personFormConverter;
-    this.participationManager = participationManager;
-  }
+		Assert2.noNullArguments("No argument may be null", //
+				personRepo, eventRepo, localGroupRepo, qualificationRepo, personFormConverter,
+				participationManager);
 
-  /**
-   * Renders the template to add new persons to the database
-   *
-   * @param model model to put the data to render into
-   * @return the add person template
-   */
-  @GetMapping("/persons/add")
-  public String showAddPersonView(Model model) {
+		this.personRepo = personRepo;
+		this.eventRepo = eventRepo;
+		this.localGroupRepo = localGroupRepo;
+		this.qualificationRepo = qualificationRepo;
+		this.personFormConverter = personFormConverter;
+		this.participationManager = participationManager;
+	}
 
-    // add all "backing" attributes first so that form and errors may operate on them
-    prepareModel(model);
+	/**
+	 * Renders the template to add new persons to the database
+	 *
+	 * @param model model to put the data to render into
+	 * @return the add person template
+	 */
+	@GetMapping("/persons/add")
+	public String showAddPersonView(Model model) {
 
-    if (!model.containsAttribute("form")) {
-      model.addAttribute("form", new AddPersonForm());
-    }
+		// add all "backing" attributes first so that form and errors may operate on them
+		prepareModel(model);
 
-    return "persons/addPerson";
-  }
+		if (!model.containsAttribute("form")) {
+			model.addAttribute("form", new AddPersonForm());
+		}
 
-  /**
-   * Saves a new person
-   *
-   * @param form form containing the info about the new person
-   * @param errors validation errors for the form
-   * @return a redirection to the new person's profile page
-   */
-  @PostMapping("/persons/add")
-  public String addPerson(@ModelAttribute("form") @Valid AddPersonForm form, Errors errors, //
-      @RequestParam(value = "return-action", defaultValue = "") String returnAction, //
-      @RequestParam(value = "return-to", defaultValue = "") String returnPath, //
-      Model model, RedirectAttributes redirAttr) {
+		return "persons/addPerson";
+	}
 
-    Person newPerson = null;
-    boolean success = true;
+	/**
+	 * Saves a new person
+	 *
+	 * @param form form containing the info about the new person
+	 * @param errors validation errors for the form
+	 * @return a redirection to the new person's profile page
+	 */
+	@PostMapping("/persons/add")
+	public String addPerson(@ModelAttribute("form") @Valid AddPersonForm form, Errors errors, //
+			@RequestParam(value = "return-action", defaultValue = "") String returnAction, //
+			@RequestParam(value = "return-to", defaultValue = "") String returnPath, //
+			Model model, RedirectAttributes redirAttr) {
 
-    // check n° 1: form has no errors
-    if (errors.hasErrors()) {
-      success = false;
-    } else {
-      // only generate the person if no errors were found otherwise the converter may throw
-      // arbitrary exceptions due to a illegal data in the form
-      newPerson = personFormConverter.toEntity(form);
-    }
+		Person newPerson = null;
+		boolean success = true;
 
-    // check n° 2: there are no similar persons yet
-    List<Person> similarPersons = checkForPersonsSimilarTo(newPerson);
-    if (!similarPersons.isEmpty()) {
-      model.addAttribute("similarPersons", similarPersons);
-      success = false;
-    }
+		// check n° 1: form has no errors
+		if (errors.hasErrors()) {
+			success = false;
+		} else {
+			// only generate the person if no errors were found otherwise the converter may throw
+			// arbitrary exceptions due to a illegal data in the form
+			newPerson = personFormConverter.toEntity(form);
+		}
 
-    // If something did not go as expected, we will cancel adding the person and instead redirect
-    // to the add person form. The model has already been filled according to the kind of error in
-    // this case.
-    if (!success) {
+		// check n° 2: there are no similar persons yet
+		List<Person> similarPersons = checkForPersonsSimilarTo(newPerson);
+		if (!similarPersons.isEmpty()) {
+			model.addAttribute("similarPersons", similarPersons);
+			success = false;
+		}
 
-      /*// retain the attributes for post-processing a successful run
-      if (!returnAction.isEmpty()) {
-        redirAttr.addAttribute("return-action", returnAction);
-      }
-      if (!returnPath.isEmpty()) {
-        redirAttr.addAttribute("return-to", returnPath);
-      }*/
+		// If something did not go as expected, we will cancel adding the person and instead redirect
+		// to the add person form. The model has already been filled according to the kind of error in
+		// this case.
+		if (!success) {
 
-      prepareModel(model);
+			/*
+			 * // retain the attributes for post-processing a successful run if (!returnAction.isEmpty())
+			 * { redirAttr.addAttribute("return-action", returnAction); } if (!returnPath.isEmpty()) {
+			 * redirAttr.addAttribute("return-to", returnPath); }
+			 */
 
-      return "persons/addPerson";
-    }
+			prepareModel(model);
 
-    // everything seems fine, finish saving the new person
-    newPerson = personRepo.save(newPerson);
+			return "persons/addPerson";
+		}
 
-    addToEventsIfNecessary(newPerson, form, redirAttr);
-    addToLocalGroupsIfNecessary(newPerson, form);
+		// everything seems fine, finish saving the new person
+		newPerson = personRepo.save(newPerson);
 
-    if (!returnAction.isEmpty()) {
-      redirAttr.addAttribute("do", returnAction);
-    }
+		addToEventsIfNecessary(newPerson, form, redirAttr);
+		addToLocalGroupsIfNecessary(newPerson, form);
 
-    if (!returnPath.isEmpty()) {
-      redirAttr.addFlashAttribute("newPerson", newPerson);
-      redirAttr.addAttribute("from", "add-person");
-      return "redirect:" + returnPath;
-    }
+		if (!returnAction.isEmpty()) {
+			redirAttr.addAttribute("do", returnAction);
+		}
 
-    return "redirect:/persons/" + newPerson.getId();
-  }
+		if (!returnPath.isEmpty()) {
+			redirAttr.addFlashAttribute("newPerson", newPerson);
+			redirAttr.addAttribute("from", "add-person");
+			return "redirect:" + returnPath;
+		}
 
-  /**
-   * Registers the validator for the {@link AddPersonForm}
-   *
-   * @param binder the binder
-   */
-  @InitBinder("form")
-  protected void initBinders(WebDataBinder binder) {
-    binder.addValidators(personFormConverter);
-  }
+		return "redirect:/persons/" + newPerson.getId();
+	}
 
-  /**
-   * If the new person is a participant and it should attend an event right away, this method will
-   * take care of exactly that.
-   * <p>
-   * This method must run in a transactional context in order to persist its changes
-   *
-   * @param person the new person
-   * @param form form possibly containing the events to attend
-   */
-  protected boolean addToEventsIfNecessary(Person person, AddPersonForm form,
-      RedirectAttributes redirAttr) {
-    if (!form.isParticipant() || !form.getParticipantForm().hasEvents()) {
-      return true;
-    }
+	/**
+	 * Registers the validator for the {@link AddPersonForm}
+	 *
+	 * @param binder the binder
+	 */
+	@InitBinder("form")
+	protected void initBinders(WebDataBinder binder) {
+		binder.addValidators(personFormConverter);
+	}
 
-    boolean success = true;
-    Map<Event, Result> failedParticipations = new HashMap<>();
-    for (Event event : form.getParticipantForm().getEvents()) {
-      Result result = participationManager.addParticipant(event, person);
+	/**
+	 * If the new person is a participant and it should attend an event right away, this method will
+	 * take care of exactly that.
+	 * <p>
+	 * This method must run in a transactional context in order to persist its changes
+	 *
+	 * @param person the new person
+	 * @param form form possibly containing the events to attend
+	 */
+	protected boolean addToEventsIfNecessary(Person person, AddPersonForm form,
+			RedirectAttributes redirAttr) {
+		if (!form.isParticipant() || !form.getParticipantForm().hasEvents()) {
+			return true;
+		}
 
-      if (!result.isOk()) {
-        failedParticipations.put(event, result);
-        success = false;
-      }
-    }
+		boolean success = true;
+		Map<Event, Result> failedParticipations = new HashMap<>();
+		for (Event event : form.getParticipantForm().getEvents()) {
+			Result result = participationManager.addParticipant(event, person);
 
-    redirAttr.addFlashAttribute("failedParticipations", failedParticipations);
-    redirAttr.addFlashAttribute("participationFailed", !success);
-    return success;
-  }
+			if (!result.isOk()) {
+				failedParticipations.put(event, result);
+				success = false;
+			}
+		}
 
-  /**
-   * If the new person is an activist and should be part of local groups, this method will take care
-   * of creating the necessary associations.
-   * <p>
-   * This method must run in a transactional context in order to persist its changes
-   *
-   * @param person the new person
-   * @param form form possibly containing the local groups the person should be part of
-   */
-  protected void addToLocalGroupsIfNecessary(Person person, AddPersonForm form) {
-    if (!form.isActivist() || !form.getActivistForm().hasLocalGroups()) {
-      return;
-    }
-    form.getActivistForm().getLocalGroups().forEach(localGroup -> {
-      localGroup.addMember(person);
-      localGroupRepo.save(localGroup);
-    });
-  }
+		redirAttr.addFlashAttribute("failedParticipations", failedParticipations);
+		redirAttr.addFlashAttribute("participationFailed", !success);
+		return success;
+	}
 
-  /**
-   * Collects all future events which are not yet booked out and wraps them into a model object to
-   * better support their display in a select box
-   *
-   * @return the event wrapper
-   */
-  private EventCollection createEventCollection() {
-    EventCollectionBuilder builder = EventCollection.newCollection();
-    eventRepo.findByStartTimeIsAfterAndParticipantsListBookedOutIsFalse(LocalDateTime.now())
-        .forEach(event -> {
-          if (event.isForLocalGroup()) {
-            builder.appendFor(event.getLocalGroup(), event);
-          } else if (event.isForProject()) {
-            builder.appendFor(event.getProject(), event);
-          } else {
-            builder.appendRaw(event);
-          }
-        });
-    return builder.done();
-  }
+	/**
+	 * If the new person is an activist and should be part of local groups, this method will take care
+	 * of creating the necessary associations.
+	 * <p>
+	 * This method must run in a transactional context in order to persist its changes
+	 *
+	 * @param person the new person
+	 * @param form form possibly containing the local groups the person should be part of
+	 */
+	protected void addToLocalGroupsIfNecessary(Person person, AddPersonForm form) {
+		if (!form.isActivist() || !form.getActivistForm().hasLocalGroups()) {
+			return;
+		}
+		form.getActivistForm().getLocalGroups().forEach(localGroup -> {
+			localGroup.addMember(person);
+			localGroupRepo.save(localGroup);
+		});
+	}
 
-  /**
-   * Searches for persons with a similar name like the given one
-   *
-   * @param newPerson the person to compare
-   * @return all persons with a similar name
-   */
-  private List<Person> checkForPersonsSimilarTo(Person newPerson) {
-    if (newPerson == null) {
-      return Collections.emptyList();
-    }
+	/**
+	 * Collects all future events which are not yet booked out and wraps them into a model object to
+	 * better support their display in a select box
+	 *
+	 * @return the event wrapper
+	 */
+	private EventCollection createEventCollection() {
+		EventCollectionBuilder builder = EventCollection.newCollection();
+		eventRepo.findByStartTimeIsAfterAndParticipantsListBookedOutIsFalse(LocalDateTime.now())
+				.forEach(event -> {
+					if (event.isForLocalGroup()) {
+						builder.appendFor(event.getLocalGroup(), event);
+					} else if (event.isForProject()) {
+						builder.appendFor(event.getProject(), event);
+					} else {
+						builder.appendRaw(event);
+					}
+				});
+		return builder.done();
+	}
 
-    BooleanBuilder predicate = new BooleanBuilder();
-    predicate //
-        .and(person.firstName.containsIgnoreCase(newPerson.getFirstName())) //
-        .and(person.lastName.containsIgnoreCase(newPerson.getLastName()));
-    return personRepo.findAll(predicate);
-  }
+	/**
+	 * Searches for persons with a similar name like the given one
+	 *
+	 * @param newPerson the person to compare
+	 * @return all persons with a similar name
+	 */
+	private List<Person> checkForPersonsSimilarTo(Person newPerson) {
+		if (newPerson == null) {
+			return Collections.emptyList();
+		}
 
-  private void prepareModel(Model model) {
-    model.addAttribute("localGroups", localGroupRepo.findAll());
-    model.addAttribute("qualifications", qualificationRepo.findAll());
-    model.addAttribute("eventCollection", createEventCollection());
-  }
+		BooleanBuilder predicate = new BooleanBuilder();
+		predicate //
+				.and(person.firstName.containsIgnoreCase(newPerson.getFirstName())) //
+				.and(person.lastName.containsIgnoreCase(newPerson.getLastName()));
+		return personRepo.findAll(predicate);
+	}
+
+	/**
+	 * Sets up the necessary attributes of a model for the 'Add person' view.
+	 */
+	private void prepareModel(Model model) {
+		model.addAttribute("localGroups", localGroupRepo.findAll());
+		model.addAttribute("qualifications", qualificationRepo.findAll());
+		model.addAttribute("eventCollection", createEventCollection());
+	}
 
 }

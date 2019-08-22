@@ -13,24 +13,24 @@ import de.naju.adebar.model.persons.PersonId;
  * @see PersonId
  */
 public class NoActivistException extends RuntimeException {
-  private static final long serialVersionUID = -2975195863515282271L;
+	private static final long serialVersionUID = -2975195863515282271L;
 
-  public NoActivistException() {}
+	public NoActivistException() {}
 
-  public NoActivistException(String message) {
-    super(message);
-  }
+	public NoActivistException(String message) {
+		super(message);
+	}
 
-  public NoActivistException(String message, Throwable cause) {
-    super(message, cause);
-  }
+	public NoActivistException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
-  public NoActivistException(Throwable cause) {
-    super(cause);
-  }
+	public NoActivistException(Throwable cause) {
+		super(cause);
+	}
 
-  public NoActivistException(String message, Throwable cause, boolean enableSuppression,
-      boolean writableStackTrace) {
-    super(message, cause, enableSuppression, writableStackTrace);
-  }
+	public NoActivistException(String message, Throwable cause, boolean enableSuppression,
+			boolean writableStackTrace) {
+		super(message, cause, enableSuppression, writableStackTrace);
+	}
 }

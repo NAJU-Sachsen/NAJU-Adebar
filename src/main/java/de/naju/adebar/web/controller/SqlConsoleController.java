@@ -18,28 +18,28 @@ import de.naju.adebar.infrastructure.database.simple.SimpleDatabaseQueryExecutor
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 public class SqlConsoleController {
 
-  private final SimpleDatabaseQueryExecutor databaseQueryExecutor;
+	private final SimpleDatabaseQueryExecutor databaseQueryExecutor;
 
-  public SqlConsoleController(SimpleDatabaseQueryExecutor databaseQueryExecutor) {
-    Assert.notNull(databaseQueryExecutor, "databaseQueryExecutor may not be null");
-    this.databaseQueryExecutor = databaseQueryExecutor;
-  }
+	public SqlConsoleController(SimpleDatabaseQueryExecutor databaseQueryExecutor) {
+		Assert.notNull(databaseQueryExecutor, "databaseQueryExecutor may not be null");
+		this.databaseQueryExecutor = databaseQueryExecutor;
+	}
 
-  /**
-   * Performs the given query
-   *
-   * @param query the query. Spring will default this to the empty string
-   * @param model the model which will contain the data displayed by the view
-   * @return the sqlConsole template
-   */
-  @GetMapping("/admin/sql-console")
-  public String showSqlConsole(@RequestParam(value = "query", defaultValue = "") String query,
-      Model model) {
-    if (query != null && !query.isEmpty()) {
-      model.addAttribute("query", query);
-      model.addAttribute("resultSet", databaseQueryExecutor.runQuery(query));
-    }
-    return "sqlConsole";
-  }
+	/**
+	 * Performs the given query
+	 *
+	 * @param query the query. Spring will default this to the empty string
+	 * @param model the model which will contain the data displayed by the view
+	 * @return the sqlConsole template
+	 */
+	@GetMapping("/admin/sql-console")
+	public String showSqlConsole(@RequestParam(value = "query", defaultValue = "") String query,
+			Model model) {
+		if (query != null && !query.isEmpty()) {
+			model.addAttribute("query", query);
+			model.addAttribute("resultSet", databaseQueryExecutor.runQuery(query));
+		}
+		return "sqlConsole";
+	}
 
 }

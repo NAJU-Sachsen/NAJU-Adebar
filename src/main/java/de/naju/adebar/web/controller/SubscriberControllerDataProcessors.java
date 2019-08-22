@@ -12,15 +12,15 @@ import de.naju.adebar.services.conversion.newsletter.PersonToSubscriberConverter
  */
 @Component
 class SubscriberControllerDataProcessors {
-  public final PersonToSubscriberConverter personToSubscriberConverter;
-  public final NewsletterDataProcessor newsletters;
+	public final PersonToSubscriberConverter personToSubscriberConverter;
+	public final NewsletterDataProcessor newsletters;
 
-  @Autowired
-  public SubscriberControllerDataProcessors(PersonToSubscriberConverter personToSubscriberConverter,
-      NewsletterDataProcessor dataProcessor) {
-    this.personToSubscriberConverter = personToSubscriberConverter;
-    this.newsletters = dataProcessor;
-  }
+	@Autowired
+	public SubscriberControllerDataProcessors(PersonToSubscriberConverter personToSubscriberConverter,
+			NewsletterDataProcessor dataProcessor) {
+		this.personToSubscriberConverter = personToSubscriberConverter;
+		this.newsletters = dataProcessor;
+	}
 
 }
 

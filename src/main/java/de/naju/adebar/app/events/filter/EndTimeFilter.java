@@ -2,7 +2,7 @@ package de.naju.adebar.app.events.filter;
 
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
-import de.naju.adebar.app.filter.DateTimeFilterType;
+import de.naju.adebar.app.filter.legacy.DateTimeFilterType;
 import de.naju.adebar.model.events.Event;
 
 /**
@@ -11,18 +11,18 @@ import de.naju.adebar.model.events.Event;
  * @author Rico Bergmann
  */
 public class EndTimeFilter implements EventFilter {
-  private TimeFilter timeFilter;
+	private TimeFilter timeFilter;
 
-  /**
-   * @param endTime the time to filter for
-   * @param filterType the kind of border the time should form
-   */
-  public EndTimeFilter(LocalDateTime endTime, DateTimeFilterType filterType) {
-    this.timeFilter = new TimeFilter(endTime, filterType);
-  }
+	/**
+	 * @param endTime the time to filter for
+	 * @param filterType the kind of border the time should form
+	 */
+	public EndTimeFilter(LocalDateTime endTime, DateTimeFilterType filterType) {
+		this.timeFilter = new TimeFilter(endTime, filterType);
+	}
 
-  @Override
-  public Stream<Event> filter(Stream<Event> input) {
-    return timeFilter.filter(input, Event::getEndTime);
-  }
+	@Override
+	public Stream<Event> filter(Stream<Event> input) {
+		return timeFilter.filter(input, Event::getEndTime);
+	}
 }

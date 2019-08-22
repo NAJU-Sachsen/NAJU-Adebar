@@ -9,7 +9,8 @@ import java.lang.annotation.Target;
 /**
  * The whole purpose of the method, constructor or field is to enable some JPA functionality.
  *
- * <p> It is not supposed to used by normal program code and should normally be {@code private}
+ * <p>
+ * It is not supposed to used by normal program code and should normally be {@code private}
  *
  * @author Rico Bergmann
  */

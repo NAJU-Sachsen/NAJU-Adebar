@@ -38,3 +38,6 @@ libraries/
 
 # others
 *log*
+
+# Visual Studio Code
+*.code-workspace

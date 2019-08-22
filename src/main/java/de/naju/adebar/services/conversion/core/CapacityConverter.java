@@ -6,13 +6,13 @@ import org.springframework.lang.NonNull;
 
 public class CapacityConverter implements Converter<String, Capacity> {
 
-  @Override
-  public Capacity convert(@NonNull String source) {
-    if (source.isEmpty()) {
-      return null;
-    }
+	@Override
+	public Capacity convert(@NonNull String source) {
+		if (source.isEmpty()) {
+			return null;
+		}
 
-    return Capacity.of(Integer.parseInt(source));
-  }
-  
+		return Capacity.of(Integer.parseInt(source));
+	}
+
 }

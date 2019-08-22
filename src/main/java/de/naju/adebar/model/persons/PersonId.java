@@ -22,89 +22,89 @@ import org.springframework.util.Assert;
 @Embeddable
 public class PersonId implements Serializable, Iterator<PersonId>, Comparable<PersonId> {
 
-  private static final long serialVersionUID = -6223486850240404100L;
+	private static final long serialVersionUID = -6223486850240404100L;
 
-  @Column(name = "id", unique = true)
-  private final String id;
+	@Column(name = "id", unique = true)
+	private final String id;
 
-  /**
-   * Create an identifier using an existing one
-   *
-   * @param id the existing id to use
-   */
-  public PersonId(String id) {
-    Assert.notNull(id, "Id may not be null!");
-    this.id = id;
-  }
+	/**
+	 * Create an identifier using an existing one
+	 *
+	 * @param id the existing id to use
+	 */
+	public PersonId(String id) {
+		Assert.notNull(id, "Id may not be null!");
+		this.id = id;
+	}
 
-  /**
-   * Copy constructor
-   *
-   * @param other the person ID to copy
-   */
-  public PersonId(PersonId other) {
-    this.id = other.id;
-  }
+	/**
+	 * Copy constructor
+	 *
+	 * @param other the person ID to copy
+	 */
+	public PersonId(PersonId other) {
+		this.id = other.id;
+	}
 
-  /**
-   * Just create a new identifier
-   */
-  PersonId() {
-    this.id = UUID.randomUUID().toString();
-  }
+	/**
+	 * Just create a new identifier
+	 */
+	PersonId() {
+		this.id = UUID.randomUUID().toString();
+	}
 
-  /**
-   * @return the identifier. As it should not be modified under any circumstances, it is
-   *         {@code final}
-   */
-  final String getId() {
-    return id;
-  }
+	/**
+	 * @return the identifier. As it should not be modified under any circumstances, it is
+	 *         {@code final}
+	 */
+	final String getId() {
+		return id;
+	}
 
-  // implementation of Iterator-interface
+	// implementation of Iterator-interface
 
-  @Override
-  public boolean hasNext() {
-    return true;
-  }
+	@Override
+	public boolean hasNext() {
+		return true;
+	}
 
-  @Override
-  public PersonId next() {
-    if (!hasNext()) {
-      throw new NoSuchElementException();
-    }
-    return new PersonId();
-  }
+	@Override
+	public PersonId next() {
+		if (!hasNext()) {
+			throw new NoSuchElementException();
+		}
+		return new PersonId();
+	}
 
-  // implementation of the Comparable-interface
+	// implementation of the Comparable-interface
 
-  @Override
-  public int compareTo(PersonId other) {
-    return this.id.compareTo(other.id);
-  }
+	@Override
+	public int compareTo(PersonId other) {
+		return this.id.compareTo(other.id);
+	}
 
-  // overridden from Object
+	// overridden from Object
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o)
-      return true;
-    if (o == null || getClass() != o.getClass())
-      return false;
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
 
-    PersonId personId = (PersonId) o;
+		PersonId personId = (PersonId) o;
 
-    return id.equals(personId.id);
-  }
+		return id.equals(personId.id);
+	}
 
-  @Override
-  public int hashCode() {
-    return id.hashCode();
-  }
+	@Override
+	public int hashCode() {
+		return id.hashCode();
+	}
 
-  @Override
-  public String toString() {
-    return id;
-  }
+	@Override
+	public String toString() {
+		return id;
+	}
 
 }

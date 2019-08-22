@@ -16,32 +16,32 @@ import de.naju.adebar.web.model.events.participation.table.ParticipantsTable;
 @Service
 public class PersonRemarksColumnFormatter implements TableColumnFormatter {
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see
-   * de.naju.adebar.web.model.events.participation.table.columns.TableColumnFormatter#isApplicable(
-   * de.naju.adebar.model.events.Event)
-   */
-  @Override
-  public boolean isApplicable(Event event) {
-    // remarks about the participant may always be shown
-    return true;
-  }
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * de.naju.adebar.web.model.events.participation.table.columns.TableColumnFormatter#isApplicable(
+	 * de.naju.adebar.model.events.Event)
+	 */
+	@Override
+	public boolean isApplicable(Event event) {
+		// remarks about the participant may always be shown
+		return true;
+	}
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see de.naju.adebar.web.model.events.participation.table.columns.TableColumnFormatter#
-   * formatColumnFor(de.naju.adebar.model.persons.Person, de.naju.adebar.model.events.Event)
-   */
-  @Override
-  public String formatColumnFor(Person participant, Event event) {
-    Assert.state(participant.isParticipant(), "Person is no participant: " + participant);
-    final ParticipantProfile profile = participant.getParticipantProfile();
-    return profile.hasAdditionalRemarks() //
-        ? profile.getRemarks() //
-        : "";
-  }
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see de.naju.adebar.web.model.events.participation.table.columns.TableColumnFormatter#
+	 * formatColumnFor(de.naju.adebar.model.persons.Person, de.naju.adebar.model.events.Event)
+	 */
+	@Override
+	public String formatColumnFor(Person participant, Event event) {
+		Assert.state(participant.isParticipant(), "Person is no participant: " + participant);
+		final ParticipantProfile profile = participant.getParticipantProfile();
+		return profile.hasAdditionalRemarks() //
+				? profile.getRemarks() //
+				: "";
+	}
 
 }

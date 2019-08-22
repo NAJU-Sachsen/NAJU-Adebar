@@ -12,14 +12,14 @@ import de.naju.adebar.model.newsletter.SubscriberRepository;
  */
 @Component
 class SubscriberControllerRepositories {
-  public final NewsletterRepository newsletters;
-  public final SubscriberRepository subscribers;
+	public final NewsletterRepository newsletters;
+	public final SubscriberRepository subscribers;
 
-  @Autowired
-  public SubscriberControllerRepositories(NewsletterRepository newsletterRepo,
-      SubscriberRepository subscriberRepo) {
-    this.newsletters = newsletterRepo;
-    this.subscribers = subscriberRepo;
-  }
+	@Autowired
+	public SubscriberControllerRepositories(NewsletterRepository newsletterRepo,
+			SubscriberRepository subscriberRepo) {
+		this.newsletters = newsletterRepo;
+		this.subscribers = subscriberRepo;
+	}
 
 }

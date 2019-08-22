@@ -17,76 +17,75 @@ import org.springframework.validation.Errors;
  * @author Rico Bergmann
  */
 @Service
-public class AddParticipantFormConverter implements
-    ValidatingEntityFormConverter<ParticipantProfile, AddParticipantForm> {
+public class AddParticipantFormConverter
+		implements ValidatingEntityFormConverter<ParticipantProfile, AddParticipantForm> {
 
-  private final EditParticipantFormConverter editParticipantFormConverter;
+	private final EditParticipantFormConverter editParticipantFormConverter;
 
-  /**
-   * Full constructor
-   *
-   * @param editParticipantFormConverter service to handle most of the conversion for us
-   */
-  public AddParticipantFormConverter(EditParticipantFormConverter editParticipantFormConverter) {
-    Assert.notNull(editParticipantFormConverter, "editParticipantFormConverter may not be null");
-    this.editParticipantFormConverter = editParticipantFormConverter;
-  }
+	/**
+	 * Full constructor
+	 *
+	 * @param editParticipantFormConverter service to handle most of the conversion for us
+	 */
+	public AddParticipantFormConverter(EditParticipantFormConverter editParticipantFormConverter) {
+		Assert.notNull(editParticipantFormConverter, "editParticipantFormConverter may not be null");
+		this.editParticipantFormConverter = editParticipantFormConverter;
+	}
 
-  @Override
-  public boolean isValid(AddParticipantForm form) {
-    return editParticipantFormConverter.isValid(form);
-  }
+	@Override
+	public boolean isValid(AddParticipantForm form) {
+		return editParticipantFormConverter.isValid(form);
+	}
 
-  @Override
-  public boolean supports(@NonNull Class<?> clazz) {
-    return AddParticipantForm.class.isAssignableFrom(clazz);
-  }
+	@Override
+	public boolean supports(@NonNull Class<?> clazz) {
+		return AddParticipantForm.class.isAssignableFrom(clazz);
+	}
 
-  @Override
-  public void validate(Object target, @NonNull Errors errors) {
-    editParticipantFormConverter.validate(target, errors);
-  }
+	@Override
+	public void validate(Object target, @NonNull Errors errors) {
+		editParticipantFormConverter.validate(target, errors);
+	}
 
-  @Override
-  public ParticipantProfile toEntity(AddParticipantForm form) {
-    throw new UnsupportedOperationException(
-        "An AddParticipantForm may only be applied to existing persons");
-  }
+	@Override
+	public ParticipantProfile toEntity(AddParticipantForm form) {
+		throw new UnsupportedOperationException(
+				"An AddParticipantForm may only be applied to existing persons");
+	}
 
-  @DesignSmell(description =
-      "The participation profile knows nothing of the events the participants attends."
-          + "This knowledge is contained entirely in the Person class")
-  @Override
-  public AddParticipantForm toForm(ParticipantProfile entity) {
-    return new AddParticipantForm(
-        entity.getGender(), // 
-        entity.getDateOfBirth(), //
-        entity.getEatingHabits(), //
-        entity.getEatingHabits(), //
-        entity.getNabuMembership(), //
-        entity.getRemarks());
-  }
+	@DesignSmell(
+			description = "The participation profile knows nothing of the events the participants attends."
+					+ "This knowledge is contained entirely in the Person class")
+	@Override
+	public AddParticipantForm toForm(ParticipantProfile entity) {
+		return new AddParticipantForm(entity.getGender(), //
+				entity.getDateOfBirth(), //
+				entity.getEatingHabits(), //
+				entity.getEatingHabits(), //
+				entity.getNabuMembership(), //
+				entity.getRemarks());
+	}
 
-  /**
-   * Converts an {@link ParticipantProfile} to an {@link AddParticipantForm}, whilst retaining the
-   * events the person participated in.
-   *
-   * @param entity the entity to convert
-   * @param participatingEvents the events the participant attends
-   * @return the form
-   */
-  public AddParticipantForm toForm(ParticipantProfile entity, List<Event> participatingEvents) {
-    AddParticipantForm form = toForm(entity);
-    form.setEvents(participatingEvents);
-    return form;
-  }
+	/**
+	 * Converts an {@link ParticipantProfile} to an {@link AddParticipantForm}, whilst retaining the
+	 * events the person participated in.
+	 *
+	 * @param entity the entity to convert
+	 * @param participatingEvents the events the participant attends
+	 * @return the form
+	 */
+	public AddParticipantForm toForm(ParticipantProfile entity, List<Event> participatingEvents) {
+		AddParticipantForm form = toForm(entity);
+		form.setEvents(participatingEvents);
+		return form;
+	}
 
-  @Override
-  public void applyFormToEntity(AddParticipantForm form, ParticipantProfile entity) {
-    if (!isValid(form)) {
-      throw new IllegalArgumentException("Form is invalid: " + form);
-    }
+	@Override
+	public void applyFormToEntity(AddParticipantForm form, ParticipantProfile entity) {
+		if (!isValid(form)) {
+			throw new IllegalArgumentException("Form is invalid: " + form);
+		}
 
-    editParticipantFormConverter.applyFormToEntity(form, entity);
-  }
+		editParticipantFormConverter.applyFormToEntity(form, entity);
+	}
 }

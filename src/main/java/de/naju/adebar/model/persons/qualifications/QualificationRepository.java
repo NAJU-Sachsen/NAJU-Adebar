@@ -11,14 +11,15 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface QualificationRepository extends CrudRepository<Qualification, String> {
 
-  /**
-   * Searches for all qualifications which a referent does not have
-   *
-   * @param referentId the ID of the referent
-   * @return the qualifications
-   */
-  @Query(value = "SELECT q.* FROM qualification q  WHERE q.name NOT IN"
-      + "(SELECT qualifications_name FROM referent JOIN referent_qualifications ON referent.id = referent_qualifications.referent_id WHERE referent.id = ?1)", nativeQuery = true)
-  Iterable<Qualification> findAllQualificationsNotPossessedBy(String referentId);
+	/**
+	 * Searches for all qualifications which a referent does not have
+	 *
+	 * @param referentId the ID of the referent
+	 * @return the qualifications
+	 */
+	@Query(value = "SELECT q.* FROM qualification q  WHERE q.name NOT IN"
+			+ "(SELECT qualifications_name FROM referent JOIN referent_qualifications ON referent.id = referent_qualifications.referent_id WHERE referent.id = ?1)",
+			nativeQuery = true)
+	Iterable<Qualification> findAllQualificationsNotPossessedBy(String referentId);
 
 }

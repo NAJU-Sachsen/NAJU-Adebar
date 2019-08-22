@@ -25,13 +25,13 @@ import org.springframework.lang.NonNull;
  */
 public interface SearchServer<E> {
 
-  /**
-   * Executes the given query
-   *
-   * @param query the query
-   * @return all entities which matched the query
-   */
-  @NonNull
-  List<E> runQuery(@NonNull String query);
+	/**
+	 * Executes the given query
+	 *
+	 * @param query the query
+	 * @return all entities which matched the query
+	 */
+	@NonNull
+	List<E> runQuery(@NonNull String query);
 
 }

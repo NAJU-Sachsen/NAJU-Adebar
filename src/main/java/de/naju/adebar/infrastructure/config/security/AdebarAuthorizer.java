@@ -18,21 +18,21 @@ import org.springframework.stereotype.Service;
 @Service
 public class AdebarAuthorizer implements AccessDecisionVoter<FilterInvocation> {
 
-  @Override
-  public boolean supports(ConfigAttribute attribute) {
-    return true;
-  }
+	@Override
+	public boolean supports(ConfigAttribute attribute) {
+		return true;
+	}
 
-  @Override
-  public boolean supports(Class<?> clazz) {
-    return clazz == FilterInvocation.class;
-  }
+	@Override
+	public boolean supports(Class<?> clazz) {
+		return clazz == FilterInvocation.class;
+	}
 
-  @Override
-  public int vote(Authentication authentication, FilterInvocation object,
-      Collection<ConfigAttribute> attributes) {
-    return ACCESS_ABSTAIN;
-  }
+	@Override
+	public int vote(Authentication authentication, FilterInvocation object,
+			Collection<ConfigAttribute> attributes) {
+		return ACCESS_ABSTAIN;
+	}
 
 
 

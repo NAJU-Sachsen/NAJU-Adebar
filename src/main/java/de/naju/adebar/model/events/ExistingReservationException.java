@@ -6,26 +6,26 @@ package de.naju.adebar.model.events;
  * @author Rico Bergmann
  */
 public class ExistingReservationException extends RuntimeException {
-  private static final long serialVersionUID = -4276021814884682189L;
+	private static final long serialVersionUID = -4276021814884682189L;
 
-  public ExistingReservationException() {
-    super();
-  }
+	public ExistingReservationException() {
+		super();
+	}
 
-  public ExistingReservationException(String message, Throwable cause, boolean enableSuppression,
-      boolean writableStackTrace) {
-    super(message, cause, enableSuppression, writableStackTrace);
-  }
+	public ExistingReservationException(String message, Throwable cause, boolean enableSuppression,
+			boolean writableStackTrace) {
+		super(message, cause, enableSuppression, writableStackTrace);
+	}
 
-  public ExistingReservationException(String message, Throwable cause) {
-    super(message, cause);
-  }
+	public ExistingReservationException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
-  public ExistingReservationException(String message) {
-    super(message);
-  }
+	public ExistingReservationException(String message) {
+		super(message);
+	}
 
-  public ExistingReservationException(Throwable cause) {
-    super(cause);
-  }
+	public ExistingReservationException(Throwable cause) {
+		super(cause);
+	}
 }

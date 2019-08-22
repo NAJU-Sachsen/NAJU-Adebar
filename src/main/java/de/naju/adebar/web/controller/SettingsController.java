@@ -12,30 +12,30 @@ import de.naju.adebar.app.security.user.Username;
 
 @Controller
 public class SettingsController {
-  private UserAccountManager accountManager;
+	private UserAccountManager accountManager;
 
-  @Autowired
-  public SettingsController(UserAccountManager accountManager) {
-    Object[] params = {accountManager};
-    Assert.noNullElements(params, "No parameter may be null: " + Arrays.toString(params));
-    this.accountManager = accountManager;
-  }
+	@Autowired
+	public SettingsController(UserAccountManager accountManager) {
+		Object[] params = {accountManager};
+		Assert.noNullElements(params, "No parameter may be null: " + Arrays.toString(params));
+		this.accountManager = accountManager;
+	}
 
 
-  @RequestMapping("/settings")
-  public String showSettings() {
-    return "settings";
-  }
+	@RequestMapping("/settings")
+	public String showSettings() {
+		return "settings";
+	}
 
-  @RequestMapping("/settings/password/update")
-  public String updatePassword(@RequestParam("current-password") String currentPassword,
-      @RequestParam("new-password") String newPassword, Principal principal) {
-    accountManager.updatePassword( //
-        Username.of(principal.getName()), //
-        currentPassword, //
-        newPassword, //
-        false);
-    return "redirect:/settings";
-  }
+	@RequestMapping("/settings/password/update")
+	public String updatePassword(@RequestParam("current-password") String currentPassword,
+			@RequestParam("new-password") String newPassword, Principal principal) {
+		accountManager.updatePassword( //
+				Username.of(principal.getName()), //
+				currentPassword, //
+				newPassword, //
+				false);
+		return "redirect:/settings";
+	}
 
 }

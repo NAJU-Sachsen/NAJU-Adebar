@@ -18,30 +18,30 @@ import org.springframework.stereotype.Service;
 @Service
 public class GenericPersonQueryInterpreter implements PersonQueryInterpreter {
 
-  private static final QPerson person = QPerson.person;
+	private static final QPerson person = QPerson.person;
 
-  @Override
-  public boolean mayInterpret(@NonNull String query) {
-    // the generic interpreter is always applicable
-    return true;
-  }
+	@Override
+	public boolean mayInterpret(@NonNull String query) {
+		// the generic interpreter is always applicable
+		return true;
+	}
 
-  @Override
-  public BooleanBuilder interpret(@NonNull String query) {
-    assertMayInterpret(query);
-    BooleanBuilder predicate = new BooleanBuilder();
-    BooleanBuilder subPredicate = new BooleanBuilder();
+	@Override
+	public BooleanBuilder interpret(@NonNull String query) {
+		assertMayInterpret(query);
+		BooleanBuilder predicate = new BooleanBuilder();
+		BooleanBuilder subPredicate = new BooleanBuilder();
 
-    for (String queryPart : query.split(" ")) {
-      subPredicate.or(person.firstName.containsIgnoreCase(queryPart)
-          .or(person.lastName.containsIgnoreCase(queryPart))
-          .or(person.email.isNotNull().and(person.email.value.eq(queryPart)))
-          .or(person.phoneNumber.isNotNull().and(person.phoneNumber.value.eq(queryPart)))
-          .or(person.address.isNotNull().and(person.address.city.eq(queryPart))));
-    }
+		for (String queryPart : query.split(" ")) {
+			subPredicate.or(person.firstName.containsIgnoreCase(queryPart)
+					.or(person.lastName.containsIgnoreCase(queryPart))
+					.or(person.email.isNotNull().and(person.email.value.eq(queryPart)))
+					.or(person.phoneNumber.isNotNull().and(person.phoneNumber.value.eq(queryPart)))
+					.or(person.address.isNotNull().and(person.address.city.eq(queryPart))));
+		}
 
-    predicate.and(subPredicate);
-    return predicate;
-  }
+		predicate.and(subPredicate);
+		return predicate;
+	}
 
 }

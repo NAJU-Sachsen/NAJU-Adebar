@@ -9,80 +9,80 @@ import javax.validation.constraints.NotNull;
  */
 public class ProjectForm {
 
-  public static final String DATE_FORMAT = "dd.MM.yyyy";
+	public static final String DATE_FORMAT = "dd.MM.yyyy";
 
-  @NotNull
-  private String name;
-  private String start;
-  private String end;
+	@NotNull
+	private String name;
+	private String start;
+	private String end;
 
-  @NotNull
-  private String personInCharge;
-  private long localGroupId;
+	@NotNull
+	private String personInCharge;
+	private long localGroupId;
 
-  public ProjectForm(String name, String start, String end, String personInCharge,
-      long localGroupId) {
-    this.name = name;
-    this.start = start;
-    this.end = end;
-    this.personInCharge = personInCharge;
-    this.localGroupId = localGroupId;
-  }
+	public ProjectForm(String name, String start, String end, String personInCharge,
+			long localGroupId) {
+		this.name = name;
+		this.start = start;
+		this.end = end;
+		this.personInCharge = personInCharge;
+		this.localGroupId = localGroupId;
+	}
 
-  public ProjectForm() {
-    this.name = "";
-    this.personInCharge = "";
-  }
+	public ProjectForm() {
+		this.name = "";
+		this.personInCharge = "";
+	}
 
-  public String getName() {
-    return name;
-  }
+	public String getName() {
+		return name;
+	}
 
-  public void setName(String name) {
-    this.name = name;
-  }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-  public String getStart() {
-    return start;
-  }
+	public String getStart() {
+		return start;
+	}
 
-  public void setStart(String start) {
-    this.start = start;
-  }
+	public void setStart(String start) {
+		this.start = start;
+	}
 
-  public String getEnd() {
-    return end;
-  }
+	public String getEnd() {
+		return end;
+	}
 
-  public void setEnd(String end) {
-    this.end = end;
-  }
+	public void setEnd(String end) {
+		this.end = end;
+	}
 
-  public String getPersonInCharge() {
-    return personInCharge;
-  }
+	public String getPersonInCharge() {
+		return personInCharge;
+	}
 
-  public void setPersonInCharge(String personInCharge) {
-    this.personInCharge = personInCharge;
-  }
+	public void setPersonInCharge(String personInCharge) {
+		this.personInCharge = personInCharge;
+	}
 
-  public long getLocalGroupId() {
-    return localGroupId;
-  }
+	public long getLocalGroupId() {
+		return localGroupId;
+	}
 
-  public void setLocalGroupId(long localGroupId) {
-    this.localGroupId = localGroupId;
-  }
+	public void setLocalGroupId(long localGroupId) {
+		this.localGroupId = localGroupId;
+	}
 
-  public boolean hasStart() {
-    return start != null && !start.isEmpty();
-  }
+	public boolean hasStart() {
+		return start != null && !start.isEmpty();
+	}
 
-  public boolean hasEnd() {
-    return end != null && !start.isEmpty();
-  }
+	public boolean hasEnd() {
+		return end != null && !start.isEmpty();
+	}
 
-  public boolean hasPersonInCharge() {
-    return personInCharge != null && !personInCharge.isEmpty();
-  }
+	public boolean hasPersonInCharge() {
+		return personInCharge != null && !personInCharge.isEmpty();
+	}
 }

@@ -24,83 +24,81 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class WaitingListController {
 
-  private static final Logger log = LoggerFactory.getLogger(WaitingListController.class);
+	private static final Logger log = LoggerFactory.getLogger(WaitingListController.class);
 
-  private final ParticipationManager participationManager;
-  private final PersonSearchServer searchServer;
+	private final ParticipationManager participationManager;
+	private final PersonSearchServer searchServer;
 
-  public WaitingListController(ParticipationManager participationManager,
-      PersonSearchServer searchServer) {
-    Assert2.noNullArguments("No argument may be null", participationManager, searchServer);
-    this.participationManager = participationManager;
-    this.searchServer = searchServer;
-  }
+	public WaitingListController(ParticipationManager participationManager,
+			PersonSearchServer searchServer) {
+		Assert2.noNullArguments("No argument may be null", participationManager, searchServer);
+		this.participationManager = participationManager;
+		this.searchServer = searchServer;
+	}
 
-  @GetMapping("/events/{id}/participants/waiting-list/search")
-  public String searchPersonsForWaitingList(@PathVariable("id") Event event,
-      @RequestParam("person-search-query") String query,
-      @RequestParam(value = "return-action", defaultValue = "") String returnAction,
-      RedirectAttributes redirAttr) {
+	@GetMapping("/events/{id}/participants/waiting-list/search")
+	public String searchPersonsForWaitingList(@PathVariable("id") Event event,
+			@RequestParam("person-search-query") String query,
+			@RequestParam(value = "return-action", defaultValue = "") String returnAction,
+			RedirectAttributes redirAttr) {
 
-    redirAttr.addFlashAttribute("matchingPersons",
-        searchServer.runQuery(query.trim()));
+		redirAttr.addFlashAttribute("matchingPersons", searchServer.runQuery(query.trim()));
 
-    redirAttr.addAttribute("search", query);
-    redirAttr.addAttribute("do", returnAction);
+		redirAttr.addAttribute("search", query);
+		redirAttr.addAttribute("do", returnAction);
 
-    return "redirect:/events/" + event.getId() + "/participants";
-  }
+		return "redirect:/events/" + event.getId() + "/participants";
+	}
 
-  @PostMapping("/events/{id}/waiting-list/add")
-  @Transactional
-  public String addPersonToWaitingList(@PathVariable("id") Event event,
-      @RequestParam("person-id") Person person) {
-    event.getParticipantsList().putOnWaitingList(person);
-    return "redirect:/events/" + event.getId() + "/participants";
-  }
+	@PostMapping("/events/{id}/waiting-list/add")
+	@Transactional
+	public String addPersonToWaitingList(@PathVariable("id") Event event,
+			@RequestParam("person-id") Person person) {
+		event.getParticipantsList().putOnWaitingList(person);
+		return "redirect:/events/" + event.getId() + "/participants";
+	}
 
-  @PostMapping("/events/{id}/waiting-list/apply")
-  @Transactional
-  public String applyWaitingListEntry(@PathVariable("id") Event event,
-      @ModelAttribute("applyWaitingListEntryForm") AddParticipantForm form,
-      RedirectAttributes redirAttr) {
+	@PostMapping("/events/{id}/waiting-list/apply")
+	@Transactional
+	public String applyWaitingListEntry(@PathVariable("id") Event event,
+			@ModelAttribute("applyWaitingListEntryForm") AddParticipantForm form,
+			RedirectAttributes redirAttr) {
 
-    RegistrationInfoBuilder registrationInfoBuilder = form.prepareRegistrationInfo();
+		RegistrationInfoBuilder registrationInfoBuilder = form.prepareRegistrationInfo();
 
-    if (event.getParticipationInfo().supportsFlexibleParticipationTimes()) {
+		if (event.getParticipationInfo().supportsFlexibleParticipationTimes()) {
 
-      registrationInfoBuilder.withParticipationDuring(
-          new ParticipationTime(form.generateFirstNightAsLDT(), form.generateLastNightAsLDT(),
-              event.getStartTime()));
-    }
+			registrationInfoBuilder.withParticipationDuring(new ParticipationTime(
+					form.generateFirstNightAsLDT(), form.generateLastNightAsLDT(), event.getStartTime()));
+		}
 
-    RegistrationInfo registrationInfo = registrationInfoBuilder.build();
-    Result result = participationManager
-        .movePersonFromWaitingListToParticipants(event, form.getParticipant(), registrationInfo);
+		RegistrationInfo registrationInfo = registrationInfoBuilder.build();
+		Result result = participationManager.movePersonFromWaitingListToParticipants(event,
+				form.getParticipant(), registrationInfo);
 
-    if (result != Result.OK) {
-      redirAttr.addAttribute("apply-waiting-list", "failed");
-      redirAttr.addFlashAttribute("failure", result);
-    }
+		if (result != Result.OK) {
+			redirAttr.addAttribute("apply-waiting-list", "failed");
+			redirAttr.addFlashAttribute("failure", result);
+		}
 
-    return "redirect:/events/" + event.getId() + "/participants";
+		return "redirect:/events/" + event.getId() + "/participants";
 
-  }
+	}
 
-  @PostMapping("/events/{id}/waiting-list/drop")
-  @Transactional
-  public String dropWaitingListEntry(@PathVariable("id") Event event,
-      @RequestParam("person-id") Person person) {
-    event.getParticipantsList().removeFromWaitingList(person);
-    return "redirect:/events/" + event.getId() + "/participants";
-  }
+	@PostMapping("/events/{id}/waiting-list/drop")
+	@Transactional
+	public String dropWaitingListEntry(@PathVariable("id") Event event,
+			@RequestParam("person-id") Person person) {
+		event.getParticipantsList().removeFromWaitingList(person);
+		return "redirect:/events/" + event.getId() + "/participants";
+	}
 
 
-  @PostMapping("/events/{id}/waiting-list/clear")
-  @Transactional
-  public String clearWaitingList(@PathVariable("id") Event event) {
-    event.getParticipantsList().clearWaitingList();
-    return "redirect:/events/" + event.getId() + "/participants";
-  }
+	@PostMapping("/events/{id}/waiting-list/clear")
+	@Transactional
+	public String clearWaitingList(@PathVariable("id") Event event) {
+		event.getParticipantsList().clearWaitingList();
+		return "redirect:/events/" + event.getId() + "/participants";
+	}
 
 }

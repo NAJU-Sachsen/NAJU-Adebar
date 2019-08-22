@@ -16,54 +16,54 @@ import org.springframework.validation.Errors;
  * @author Rico Bergmann
  */
 @Service
-public class AddActivistFormConverter implements
-    ValidatingEntityFormConverter<ActivistProfile, AddActivistForm> {
+public class AddActivistFormConverter
+		implements ValidatingEntityFormConverter<ActivistProfile, AddActivistForm> {
 
-  @Override
-  public boolean isValid(AddActivistForm form) {
-    // every form is valid
-    return true;
-  }
+	@Override
+	public boolean isValid(AddActivistForm form) {
+		// every form is valid
+		return true;
+	}
 
-  @Override
-  public boolean supports(@NonNull Class<?> clazz) {
-    return AddActivistForm.class.isAssignableFrom(clazz);
-  }
+	@Override
+	public boolean supports(@NonNull Class<?> clazz) {
+		return AddActivistForm.class.isAssignableFrom(clazz);
+	}
 
-  @Override
-  public void validate(Object target, @NonNull Errors errors) {
-    // every form is valid
-  }
+	@Override
+	public void validate(Object target, @NonNull Errors errors) {
+		// every form is valid
+	}
 
-  @DesignSmell(description = "It should actually be possible to use this method. "
-      + "An ActivistProfile should just be some value object")
-  @Override
-  public ActivistProfile toEntity(AddActivistForm form) {
-    throw new UnsupportedOperationException(
-        "An AddActivistForm may only be applied to existing persons");
-  }
+	@DesignSmell(description = "It should actually be possible to use this method. "
+			+ "An ActivistProfile should just be some value object")
+	@Override
+	public ActivistProfile toEntity(AddActivistForm form) {
+		throw new UnsupportedOperationException(
+				"An AddActivistForm may only be applied to existing persons");
+	}
 
-  @Override
-  public AddActivistForm toForm(ActivistProfile entity) {
-    if (entity == null) {
-      return null;
-    }
+	@Override
+	public AddActivistForm toForm(ActivistProfile entity) {
+		if (entity == null) {
+			return null;
+		}
 
-    return new AddActivistForm(entity.getJuleicaCard(),
-        Lists.newArrayList(entity.getLocalGroups()));
-  }
+		return new AddActivistForm(entity.getJuleicaCard(),
+				Lists.newArrayList(entity.getLocalGroups()));
+	}
 
-  @Override
-  public void applyFormToEntity(AddActivistForm form, ActivistProfile entity) {
-    if (!isValid(form)) {
-      throw new IllegalArgumentException("Form is invalid: " + form);
-    }
+	@Override
+	public void applyFormToEntity(AddActivistForm form, ActivistProfile entity) {
+		if (!isValid(form)) {
+			throw new IllegalArgumentException("Form is invalid: " + form);
+		}
 
-    if (form.isJuleica()) {
-      entity.updateJuleicaCard( //
-          new JuleicaCard(form.getJuleicaExpiryDate(), form.getJuleicaLevel()));
-    } else {
-      entity.updateJuleicaCard(null);
-    }
-  }
+		if (form.isJuleica()) {
+			entity.updateJuleicaCard( //
+					new JuleicaCard(form.getJuleicaExpiryDate(), form.getJuleicaLevel()));
+		} else {
+			entity.updateJuleicaCard(null);
+		}
+	}
 }

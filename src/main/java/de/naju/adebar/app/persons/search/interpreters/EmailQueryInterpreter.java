@@ -11,47 +11,47 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 /**
- * Interpreter for email addresses. Only matches on queries which are an email address. The {@link
- * GenericPersonQueryInterpreter} will be used as fallback.
+ * Interpreter for email addresses. Only matches on queries which are an email address. The
+ * {@link GenericPersonQueryInterpreter} will be used as fallback.
  *
  * @author Rico Bergmann
  */
 @Service
 public class EmailQueryInterpreter implements PersonQueryInterpreter {
 
-  private static final QPerson person = QPerson.person;
+	private static final QPerson person = QPerson.person;
 
-  private final GenericPersonQueryInterpreter genericQueryInterpreter;
+	private final GenericPersonQueryInterpreter genericQueryInterpreter;
 
-  /**
-   * Full constructor
-   *
-   * @param genericQueryInterpreter the generic interpreter to use
-   */
-  public EmailQueryInterpreter(GenericPersonQueryInterpreter genericQueryInterpreter) {
-    Assert.notNull(genericQueryInterpreter, "genericQueryInterpreter may not be null");
-    this.genericQueryInterpreter = genericQueryInterpreter;
-  }
+	/**
+	 * Full constructor
+	 *
+	 * @param genericQueryInterpreter the generic interpreter to use
+	 */
+	public EmailQueryInterpreter(GenericPersonQueryInterpreter genericQueryInterpreter) {
+		Assert.notNull(genericQueryInterpreter, "genericQueryInterpreter may not be null");
+		this.genericQueryInterpreter = genericQueryInterpreter;
+	}
 
-  @Override
-  public boolean mayInterpret(@NonNull String query) {
-    return Validation.isEmail(query);
-  }
+	@Override
+	public boolean mayInterpret(@NonNull String query) {
+		return Validation.isEmail(query);
+	}
 
-  @Override
-  public BooleanBuilder interpret(@NonNull String query) {
-    assertMayInterpret(query);
+	@Override
+	public BooleanBuilder interpret(@NonNull String query) {
+		assertMayInterpret(query);
 
-    BooleanBuilder predicate = new BooleanBuilder();
+		BooleanBuilder predicate = new BooleanBuilder();
 
-    // better save than sorry - check if the person actually has an email before comparing it
-    predicate.and(person.email.isNotNull().and(person.email.eq(Email.of(query))));
-    return predicate;
-  }
+		// better save than sorry - check if the person actually has an email before comparing it
+		predicate.and(person.email.isNotNull().and(person.email.eq(Email.of(query))));
+		return predicate;
+	}
 
-  @Override
-  public Optional<PersonQueryInterpreter> getFallback() {
-    return Optional.of(genericQueryInterpreter);
-  }
+	@Override
+	public Optional<PersonQueryInterpreter> getFallback() {
+		return Optional.of(genericQueryInterpreter);
+	}
 
 }

@@ -12,34 +12,34 @@ import de.naju.adebar.model.core.Email;
  */
 public class ParticipantUnitTest {
 
-  private Person hans;
+	private Person hans;
 
-  @Before
-  public void setUp() {
-    hans = new Person(new PersonId(), "Hans", "Wurst", Email.of("hans@web.de"));
-    hans.makeParticipant();
-  }
+	@Before
+	public void setUp() {
+		hans = new Person(new PersonId(), "Hans", "Wurst", Email.of("hans@web.de"));
+		hans.makeParticipant();
+	}
 
-  @Test(expected = IllegalArgumentException.class)
-  public void testInvalidDateOfBirth() {
-    hans.getParticipantProfile().setDateOfBirth(LocalDate.MAX);
-  }
+	@Test(expected = IllegalArgumentException.class)
+	public void testInvalidDateOfBirth() {
+		hans.getParticipantProfile().setDateOfBirth(LocalDate.MAX);
+	}
 
-  @Test
-  public void testCalculateAge() {
-    LocalDate dob = LocalDate.now().minusDays(1);
-    hans.getParticipantProfile().setDateOfBirth(dob);
+	@Test
+	public void testCalculateAge() {
+		LocalDate dob = LocalDate.now().minusDays(1);
+		hans.getParticipantProfile().setDateOfBirth(dob);
 
-    Age age = Age.of(0);
-    Assert.assertEquals(age, hans.getParticipantProfile().calculateAge());
+		Age age = Age.of(0);
+		Assert.assertEquals(age, hans.getParticipantProfile().calculateAge());
 
-    age = Age.of(5);
-    hans.getParticipantProfile().setDateOfBirth(dob.minusYears(age.getValue()));
-    Assert.assertEquals(age, hans.getParticipantProfile().calculateAge());
+		age = Age.of(5);
+		hans.getParticipantProfile().setDateOfBirth(dob.minusYears(age.getValue()));
+		Assert.assertEquals(age, hans.getParticipantProfile().calculateAge());
 
-    age = Age.of(42);
-    hans.getParticipantProfile().setDateOfBirth(dob.minusYears(age.getValue()));
-    Assert.assertEquals(age, hans.getParticipantProfile().calculateAge());
+		age = Age.of(42);
+		hans.getParticipantProfile().setDateOfBirth(dob.minusYears(age.getValue()));
+		Assert.assertEquals(age, hans.getParticipantProfile().calculateAge());
 
-  }
+	}
 }

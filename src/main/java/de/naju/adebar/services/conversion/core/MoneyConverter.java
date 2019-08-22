@@ -6,11 +6,11 @@ import org.springframework.lang.NonNull;
 
 public class MoneyConverter implements Converter<String, Money> {
 
-  @Override
-  public Money convert(@NonNull String source) {
-    if (source.isEmpty()) {
-      return null;
-    }
-    return Money.parse("EUR " + source);
-  }
+	@Override
+	public Money convert(@NonNull String source) {
+		if (source.isEmpty()) {
+			return null;
+		}
+		return Money.parse("EUR " + source);
+	}
 }

@@ -6,12 +6,12 @@ import org.springframework.validation.Errors;
 
 public class ErrorUtils {
 
-  public static void rejectIndexedKey(@NotEmpty String field, int index,
-      @NotEmpty String errorCode, @NonNull Errors errors) {
-    String indexedField = String.format("%s[%d]", field, index);
-    errors.rejectValue(indexedField, errorCode);
-  }
+	public static void rejectIndexedKey(@NotEmpty String field, int index, @NotEmpty String errorCode,
+			@NonNull Errors errors) {
+		String indexedField = String.format("%s[%d]", field, index);
+		errors.rejectValue(indexedField, errorCode);
+	}
 
-  private ErrorUtils() {}
+	private ErrorUtils() {}
 
 }

@@ -11,12 +11,12 @@ import org.springframework.stereotype.Repository;
  */
 @Repository("localGroupRepo")
 public interface LocalGroupRepository
-    extends ReadOnlyLocalGroupRepository, CrudRepository<LocalGroup, Long> {
+		extends ReadOnlyLocalGroupRepository, CrudRepository<LocalGroup, Long> {
 
-  @Override
-  Optional<LocalGroup> findById(Long id);
+	@Override
+	Optional<LocalGroup> findById(Long id);
 
-  @Override
-  boolean existsById(Long id);
+	@Override
+	boolean existsById(Long id);
 
 }

@@ -13,18 +13,18 @@ import de.naju.adebar.model.persons.Person;
  */
 public abstract class AbstractPersonRelatedEvent extends EntityUpdatedEvent<Person> {
 
-  /**
-   * @see EntityUpdatedEvent#EntityUpdatedEvent(E)
-   */
-  protected AbstractPersonRelatedEvent(Person person) {
-    super(person);
-  }
+	/**
+	 * @see EntityUpdatedEvent#EntityUpdatedEvent(E)
+	 */
+	protected AbstractPersonRelatedEvent(Person person) {
+		super(person);
+	}
 
-  /**
-   * @see EntityUpdatedEvent#EntityUpdatedEvent(E, Collection)
-   */
-  protected AbstractPersonRelatedEvent(Person person, Collection<ChangeSetEntry> changeset) {
-    super(person, changeset);
-  }
+	/**
+	 * @see EntityUpdatedEvent#EntityUpdatedEvent(E, Collection)
+	 */
+	protected AbstractPersonRelatedEvent(Person person, Collection<ChangeSetEntry> changeset) {
+		super(person, changeset);
+	}
 
 }

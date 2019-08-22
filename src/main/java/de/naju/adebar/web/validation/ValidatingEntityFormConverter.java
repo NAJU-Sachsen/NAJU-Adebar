@@ -11,12 +11,12 @@ import org.springframework.validation.Validator;
  */
 public interface ValidatingEntityFormConverter<E, F> extends EntityFormConverter<E, F>, Validator {
 
-  /**
-   * Checks whether the given form is valid.
-   *
-   * @param form the form
-   * @return {@code true} if the form is valid or {@code false} otherwise
-   */
-  boolean isValid(F form);
+	/**
+	 * Checks whether the given form is valid.
+	 *
+	 * @param form the form
+	 * @return {@code true} if the form is valid or {@code false} otherwise
+	 */
+	boolean isValid(F form);
 
 }

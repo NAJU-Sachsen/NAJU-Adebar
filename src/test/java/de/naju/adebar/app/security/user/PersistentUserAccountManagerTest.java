@@ -16,33 +16,33 @@ import de.naju.adebar.model.persons.Person;
 @Transactional
 public class PersistentUserAccountManagerTest {
 
-  @Autowired
-  private PersistentUserAccountManager accountManager;
+	@Autowired
+	private PersistentUserAccountManager accountManager;
 
-  @Autowired
-  private UserAccountRepository accountRepo;
+	@Autowired
+	private UserAccountRepository accountRepo;
 
-  private Person person;
+	private Person person;
 
-  @Before
-  public void setUp() {
-    person = TestData.getPerson(TestData.PERSON_FRITZ);
-  }
+	@Before
+	public void setUp() {
+		person = TestData.getPerson(TestData.PERSON_FRITZ);
+	}
 
-  @Test // #57
-  public void testDeleteAccount() {
-    String username = "fritz";
-    final long currentNumberOfAccounts = accountRepo.count();
+	@Test // #57
+	public void testDeleteAccount() {
+		String username = "fritz";
+		final long currentNumberOfAccounts = accountRepo.count();
 
-    UserAccount someAccount = accountManager.createFor(username, "123", person);
+		UserAccount someAccount = accountManager.createFor(username, "123", person);
 
-    assertThat(accountRepo.count()).isEqualTo(currentNumberOfAccounts + 1);
-    assertThat(accountRepo.findAll()).contains(someAccount);
+		assertThat(accountRepo.count()).isEqualTo(currentNumberOfAccounts + 1);
+		assertThat(accountRepo.findAll()).contains(someAccount);
 
-    accountManager.deleteAccount(Username.of(username));
+		accountManager.deleteAccount(Username.of(username));
 
-    assertThat(accountRepo.count()).isEqualTo(currentNumberOfAccounts);
-    assertThat(accountRepo.findAll()).doesNotContain(someAccount);
-  }
+		assertThat(accountRepo.count()).isEqualTo(currentNumberOfAccounts);
+		assertThat(accountRepo.findAll()).doesNotContain(someAccount);
+	}
 
 }

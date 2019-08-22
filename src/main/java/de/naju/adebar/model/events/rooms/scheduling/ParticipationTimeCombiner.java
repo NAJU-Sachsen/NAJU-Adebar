@@ -10,12 +10,12 @@ package de.naju.adebar.model.events.rooms.scheduling;
  */
 public interface ParticipationTimeCombiner {
 
-  /**
-   * Performs the combination
-   * 
-   * @param rawTimes the potentially overlapping participation times
-   * @return the minimal yet equivalent set of participation times.
-   */
-  Iterable<ParticipationTime> combine(Iterable<ParticipationTime> rawTimes);
+	/**
+	 * Performs the combination
+	 * 
+	 * @param rawTimes the potentially overlapping participation times
+	 * @return the minimal yet equivalent set of participation times.
+	 */
+	Iterable<ParticipationTime> combine(Iterable<ParticipationTime> rawTimes);
 
 }

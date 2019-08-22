@@ -10,18 +10,18 @@ import org.springframework.data.repository.CrudRepository;
  */
 interface ReleaseNewsRepository extends CrudRepository<ReleaseNotes, Long> {
 
-  /**
-   * Searches for active release notes. Generally there should only be one or none.
-   * 
-   * @return the release notes if there are any active ones
-   */
-  Optional<ReleaseNotes> findFirstByActiveIsTrue();
+	/**
+	 * Searches for active release notes. Generally there should only be one or none.
+	 * 
+	 * @return the release notes if there are any active ones
+	 */
+	Optional<ReleaseNotes> findFirstByActiveIsTrue();
 
-  /**
-   * Searches for all archived release notes
-   * 
-   * @return the release notes
-   */
-  Iterable<ReleaseNotes> findAllByActiveIsFalseOrderByDateDesc();
+	/**
+	 * Searches for all archived release notes
+	 * 
+	 * @return the release notes
+	 */
+	Iterable<ReleaseNotes> findAllByActiveIsFalseOrderByDateDesc();
 
 }

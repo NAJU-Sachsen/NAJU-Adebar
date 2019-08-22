@@ -10,28 +10,28 @@ import javax.validation.constraints.NotNull;
  */
 public class AddLocalGroupForm extends LocalGroupForm {
 
-  private boolean createNewsletter;
+	private boolean createNewsletter;
 
-  @NotNull
-  private String newsletterName;
+	@NotNull
+	private String newsletterName;
 
-  public AddLocalGroupForm() {
-    newsletterName = "";
-  }
+	public AddLocalGroupForm() {
+		newsletterName = "";
+	}
 
-  public boolean isCreateNewsletter() {
-    return createNewsletter;
-  }
+	public boolean isCreateNewsletter() {
+		return createNewsletter;
+	}
 
-  public void setCreateNewsletter(boolean createNewsletter) {
-    this.createNewsletter = createNewsletter;
-  }
+	public void setCreateNewsletter(boolean createNewsletter) {
+		this.createNewsletter = createNewsletter;
+	}
 
-  public String getNewsletterName() {
-    return newsletterName;
-  }
+	public String getNewsletterName() {
+		return newsletterName;
+	}
 
-  public void setNewsletterName(String newsletterName) {
-    this.newsletterName = newsletterName;
-  }
+	public void setNewsletterName(String newsletterName) {
+		this.newsletterName = newsletterName;
+	}
 }

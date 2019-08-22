@@ -26,41 +26,41 @@ import de.naju.adebar.app.security.user.UserAccountManager;
 @RunWith(SpringRunner.class)
 public abstract class WebIntegrationTestsBase {
 
-  protected MockMvc mvc;
+	protected MockMvc mvc;
 
-  @Autowired
-  private UserAccountManager userAccountManager;
+	@Autowired
+	private UserAccountManager userAccountManager;
 
-  @Autowired
-  private WebApplicationContext context;
+	@Autowired
+	private WebApplicationContext context;
 
-  @Autowired
-  private FilterChainProxy securityFilterChain;
+	@Autowired
+	private FilterChainProxy securityFilterChain;
 
-  @Before
-  public void setUp() {
-    context.getServletContext()
-        .setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, context);
+	@Before
+	public void setUp() {
+		context.getServletContext()
+				.setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, context);
 
-    mvc = MockMvcBuilders.webAppContextSetup(context) //
-        .addFilter(securityFilterChain) //
-        .build();
-  }
+		mvc = MockMvcBuilders.webAppContextSetup(context) //
+				.addFilter(securityFilterChain) //
+				.build();
+	}
 
-  protected UserDetails admin() {
-    return userAccountManager.find("hans").orElseThrow(IllegalStateException::new);
-  }
+	protected UserDetails admin() {
+		return userAccountManager.find("hans").orElseThrow(IllegalStateException::new);
+	}
 
-  /**
-   * Asserts that a GET-request to some URI redirects to the login page
-   *
-   * @param uri the URI to check
-   * @throws Exception whatever may go wrong...
-   */
-  protected void ensureRequiresAuthentication(String uri) throws Exception {
-    mvc.perform(get(uri)) //
-        .andExpect(status().isFound()) //
-        .andExpect(header().string("Location", endsWith("/login")));
-  }
+	/**
+	 * Asserts that a GET-request to some URI redirects to the login page
+	 *
+	 * @param uri the URI to check
+	 * @throws Exception whatever may go wrong...
+	 */
+	protected void ensureRequiresAuthentication(String uri) throws Exception {
+		mvc.perform(get(uri)) //
+				.andExpect(status().isFound()) //
+				.andExpect(header().string("Location", endsWith("/login")));
+	}
 
 }

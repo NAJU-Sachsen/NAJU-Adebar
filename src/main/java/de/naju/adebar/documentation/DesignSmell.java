@@ -11,14 +11,14 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.SOURCE)
 public @interface DesignSmell {
 
-  /**
-   * @return what the smell is
-   */
-  String description();
+	/**
+	 * @return what the smell is
+	 */
+	String description();
 
-  /**
-   * @return why the smell was introduced
-   */
-  String reason() default "";
+	/**
+	 * @return why the smell was introduced
+	 */
+	String reason() default "";
 
 }

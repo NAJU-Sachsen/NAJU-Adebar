@@ -24,70 +24,70 @@ import de.naju.adebar.web.validation.accounts.CreateAccountForm;
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 public class AccountController {
 
-  private static final String REDIRECT_ACCOUNTS = "redirect:/accounts";
+	private static final String REDIRECT_ACCOUNTS = "redirect:/accounts";
 
-  private final PersonManager personManager;
-  private final UserAccountManager accountManager;
-  private final UserAccountRepository accountRepo;
+	private final PersonManager personManager;
+	private final UserAccountManager accountManager;
+	private final UserAccountRepository accountRepo;
 
-  @Autowired
-  public AccountController(PersonManager personManager, UserAccountManager accountManager,
-      UserAccountRepository accountRepo) {
-    Object[] params = {personManager, accountManager, accountRepo};
-    Assert.noNullElements(params, "No parameter may be null: " + Arrays.toString(params));
-    this.personManager = personManager;
-    this.accountManager = accountManager;
-    this.accountRepo = accountRepo;
-  }
+	@Autowired
+	public AccountController(PersonManager personManager, UserAccountManager accountManager,
+			UserAccountRepository accountRepo) {
+		Object[] params = {personManager, accountManager, accountRepo};
+		Assert.noNullElements(params, "No parameter may be null: " + Arrays.toString(params));
+		this.personManager = personManager;
+		this.accountManager = accountManager;
+		this.accountRepo = accountRepo;
+	}
 
 
-  @RequestMapping("/accounts")
-  public String showAccounts(Model model) {
-    model.addAttribute("accounts", accountRepo.findAll());
-    model.addAttribute("createAccountForm", new CreateAccountForm());
-    return "accounts";
-  }
+	@RequestMapping("/accounts")
+	public String showAccounts(Model model) {
+		model.addAttribute("accounts", accountRepo.findAll());
+		model.addAttribute("createAccountForm", new CreateAccountForm());
+		return "accounts";
+	}
 
-  @RequestMapping("/accounts/create")
-  public String createAccount(
-      @ModelAttribute("createAccountForm") CreateAccountForm createAccountForm) {
-    Person person = personManager.findPerson(createAccountForm.getPerson())
-        .orElseThrow(IllegalArgumentException::new);
+	@RequestMapping("/accounts/create")
+	public String createAccount(
+			@ModelAttribute("createAccountForm") CreateAccountForm createAccountForm) {
+		Person person = personManager.findPerson(createAccountForm.getPerson())
+				.orElseThrow(IllegalArgumentException::new);
 
-    List<SimpleGrantedAuthority> authorities = createAccountForm.getRoles().stream()
-        .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+		List<SimpleGrantedAuthority> authorities = createAccountForm.getRoles().stream()
+				.map(SimpleGrantedAuthority::new).collect(Collectors.toList());
 
-    accountManager.createFor(createAccountForm.getUsername(), createAccountForm.getPassword(),
-        person, authorities, false);
+		accountManager.createFor(createAccountForm.getUsername(), createAccountForm.getPassword(),
+				person, authorities, false);
 
-    return REDIRECT_ACCOUNTS;
-  }
+		return REDIRECT_ACCOUNTS;
+	}
 
-  @RequestMapping("/accounts/update")
-  public String editAuthorities(@RequestParam("account") String username,
-      @RequestParam(value = "roles", defaultValue = "") List<String> roles) {
-    UserAccount account = accountManager.find(username).orElseThrow(IllegalArgumentException::new);
+	@RequestMapping("/accounts/update")
+	public String editAuthorities(@RequestParam("account") String username,
+			@RequestParam(value = "roles", defaultValue = "") List<String> roles) {
+		UserAccount account = accountManager.find(username).orElseThrow(IllegalArgumentException::new);
 
-    List<SimpleGrantedAuthority> newAuthorities =
-        roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+		List<SimpleGrantedAuthority> newAuthorities =
+				roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
 
-    accountManager.updateAuthorities(account, newAuthorities);
+		accountManager.updateAuthorities(account, newAuthorities);
 
-    return REDIRECT_ACCOUNTS;
-  }
+		return REDIRECT_ACCOUNTS;
+	}
 
-  @RequestMapping("/accounts/reset-password")
-  public String resetPassword(@RequestParam("account") Username username,
-      @RequestParam("password") String password) {
-    accountManager.resetPassword(username, password, false);
+	@RequestMapping("/accounts/reset-password")
+	public String resetPassword(@RequestParam("account") Username username,
+			@RequestParam("password") String password) {
+		accountManager.resetPassword(username, password, false);
 
-    return REDIRECT_ACCOUNTS;
-  }
+		return REDIRECT_ACCOUNTS;
+	}
 
-  @RequestMapping("/accounts/delete")
-  public String deleteAccount(@RequestParam("account") Username username) {
-    accountManager.deleteAccount(username);
-    return REDIRECT_ACCOUNTS;
-  }
+	@RequestMapping("/accounts/delete")
+	public String deleteAccount(@RequestParam("account") Username username) {
+		accountManager.deleteAccount(username);
+		return REDIRECT_ACCOUNTS;
+	}
 
 }

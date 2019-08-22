@@ -11,36 +11,36 @@ import org.springframework.util.Assert;
 
 public class ParticipationReport {
 
-  private Set<ParticipationReportEntry> report;
+	private Set<ParticipationReportEntry> report;
 
-  public ParticipationReport() {
-    this.report = new HashSet<>();
-  }
+	public ParticipationReport() {
+		this.report = new HashSet<>();
+	}
 
-  public void appendEntry(AddParticipantForm registrationInfo, Result result) {
-    Assert.notNull(registrationInfo, "registrationInfo may not be null");
+	public void appendEntry(AddParticipantForm registrationInfo, Result result) {
+		Assert.notNull(registrationInfo, "registrationInfo may not be null");
 
-    ParticipationReportEntry reportEntry = new ParticipationReportEntry(registrationInfo, result);
+		ParticipationReportEntry reportEntry = new ParticipationReportEntry(registrationInfo, result);
 
-    Assert2.isFalse(report.contains(reportEntry),
-        "Report already contains entry for " + registrationInfo.getParticipant());
+		Assert2.isFalse(report.contains(reportEntry),
+				"Report already contains entry for " + registrationInfo.getParticipant());
 
-    report.add(reportEntry);
-  }
+		report.add(reportEntry);
+	}
 
-  public boolean isFailed() {
-    return report.stream().anyMatch(entry -> entry.getResult() != Result.OK);
-  }
+	public boolean isFailed() {
+		return report.stream().anyMatch(entry -> entry.getResult() != Result.OK);
+	}
 
-  public Collection<ParticipationReportEntry> getFailedParticipations() {
-    return report.stream() //
-        .filter(entry -> entry.getResult() != Result.OK) //
-        .collect(Collectors.toList());
-  }
+	public Collection<ParticipationReportEntry> getFailedParticipations() {
+		return report.stream() //
+				.filter(entry -> entry.getResult() != Result.OK) //
+				.collect(Collectors.toList());
+	}
 
-  @Override
-  public String toString() {
-    return "ParticipationReport [" + report + ']';
-  }
+	@Override
+	public String toString() {
+		return "ParticipationReport [" + report + ']';
+	}
 
 }

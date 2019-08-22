@@ -11,36 +11,35 @@ import org.springframework.data.repository.CrudRepository;
  * @author Rico Bergmann
  */
 public interface ParticipantsTableTemplateRepository
-    extends CrudRepository<ParticipantsTableTemplate, ParticipantsTableTemplateId> {
+		extends CrudRepository<ParticipantsTableTemplate, ParticipantsTableTemplateId> {
 
-  /**
-   * Queries for all templates that were created by a certain user.
-   */
-  List<ParticipantsTableTemplate> findByIdCreatedBy(Username createdBy);
+	/**
+	 * Queries for all templates that were created by a certain user.
+	 */
+	List<ParticipantsTableTemplate> findByIdCreatedBy(Username createdBy);
 
-  /**
-   * Queries for a specific template.
-   */
-  Optional<ParticipantsTableTemplate> findByIdCreatedByAndIdName(Username createdBy, String name);
+	/**
+	 * Queries for a specific template.
+	 */
+	Optional<ParticipantsTableTemplate> findByIdCreatedByAndIdName(Username createdBy, String name);
 
-  /**
-   * Queries for all templates that were created by a certain user.
-   * <p>
-   * This is just a better-sounding alias for {@link #findByIdCreatedBy(Username)}.
-   */
-  default Optional<ParticipantsTableTemplate> findByCreatorAndName(Username creator,
-      String templateName) {
-    return findByIdCreatedByAndIdName(creator, templateName);
-  }
+	/**
+	 * Queries for all templates that were created by a certain user.
+	 * <p>
+	 * This is just a better-sounding alias for {@link #findByIdCreatedBy(Username)}.
+	 */
+	default Optional<ParticipantsTableTemplate> findByCreatorAndName(Username creator,
+			String templateName) {
+		return findByIdCreatedByAndIdName(creator, templateName);
+	}
 
-  /**
-   * Queries for a specific template.
-   * <p>
-   * This is just a better-sounding alias for {@link #findByIdCreatedByAndIdName(Username,
-   * String)}.
-   */
-  default List<ParticipantsTableTemplate> findByCreator(Username creator) {
-    return findByIdCreatedBy(creator);
-  }
+	/**
+	 * Queries for a specific template.
+	 * <p>
+	 * This is just a better-sounding alias for {@link #findByIdCreatedByAndIdName(Username, String)}.
+	 */
+	default List<ParticipantsTableTemplate> findByCreator(Username creator) {
+		return findByIdCreatedBy(creator);
+	}
 
 }

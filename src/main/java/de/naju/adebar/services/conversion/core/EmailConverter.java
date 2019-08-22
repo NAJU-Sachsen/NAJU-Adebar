@@ -12,17 +12,17 @@ import org.springframework.lang.NonNull;
  */
 public class EmailConverter implements Converter<String, Email> {
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see org.springframework.core.convert.converter.Converter#convert(java.lang.Object)
-   */
-  @Override
-  public Email convert(@NonNull String source) {
-    if (source.isEmpty()) {
-      return null;
-    }
-    return Email.of(source);
-  }
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see org.springframework.core.convert.converter.Converter#convert(java.lang.Object)
+	 */
+	@Override
+	public Email convert(@NonNull String source) {
+		if (source.isEmpty()) {
+			return null;
+		}
+		return Email.of(source);
+	}
 
 }

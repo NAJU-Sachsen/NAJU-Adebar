@@ -1,7 +1,7 @@
 package de.naju.adebar.app.events.filter;
 
 import java.util.stream.Stream;
-import de.naju.adebar.app.filter.ComparableFilterType;
+import de.naju.adebar.app.filter.legacy.ComparableFilterType;
 import de.naju.adebar.model.core.Age;
 import de.naju.adebar.model.events.Event;
 
@@ -12,21 +12,21 @@ import de.naju.adebar.model.events.Event;
  */
 public class MinimumParticipantAgeFilter implements EventFilter {
 
-  private Age minimumParticipantAge;
-  private ComparableFilterType filterType;
+	private Age minimumParticipantAge;
+	private ComparableFilterType filterType;
 
-  /**
-   * @param minimumParticipantAge the minimum age to filter for
-   */
-  public MinimumParticipantAgeFilter(Age minimumParticipantAge) {
-    this.minimumParticipantAge = minimumParticipantAge;
-    this.filterType = ComparableFilterType.MINIMUM;
-  }
+	/**
+	 * @param minimumParticipantAge the minimum age to filter for
+	 */
+	public MinimumParticipantAgeFilter(Age minimumParticipantAge) {
+		this.minimumParticipantAge = minimumParticipantAge;
+		this.filterType = ComparableFilterType.MINIMUM;
+	}
 
-  @Override
-  public Stream<Event> filter(Stream<Event> input) {
-    return input.filter(event -> filterType.matching(minimumParticipantAge,
-        event.getParticipationInfo().getMinimumParticipantAge()));
-  }
+	@Override
+	public Stream<Event> filter(Stream<Event> input) {
+		return input.filter(event -> filterType.matching(minimumParticipantAge,
+				event.getParticipationInfo().getMinimumParticipantAge()));
+	}
 
 }

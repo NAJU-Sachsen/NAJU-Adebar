@@ -10,30 +10,30 @@ import de.naju.adebar.app.news.ReleaseNotes;
  */
 public class ReleaseNotesForm {
 
-  private String title;
+	private String title;
 
-  @NotEmpty
-  private String description;
+	@NotEmpty
+	private String description;
 
-  public String getTitle() {
-    return title;
-  }
+	public String getTitle() {
+		return title;
+	}
 
-  public String getDescription() {
-    return description;
-  }
+	public String getDescription() {
+		return description;
+	}
 
-  public void setTitle(String title) {
-    this.title = title;
-  }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-  public void setDescription(String description) {
-    this.description = description;
-  }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-  @Override
-  public String toString() {
-    return "ReleaseNotesForm [title=" + title + ", description=" + description + "]";
-  }
+	@Override
+	public String toString() {
+		return "ReleaseNotesForm [title=" + title + ", description=" + description + "]";
+	}
 
 }

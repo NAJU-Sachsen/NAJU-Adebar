@@ -17,21 +17,21 @@ import de.naju.adebar.model.persons.PersonId;
 @RestController("api_releaseNotesController")
 public class ReleaseNotesController {
 
-  private final UserAccountManager userAccountManager;
+	private final UserAccountManager userAccountManager;
 
-  public ReleaseNotesController(UserAccountManager userAccountManager) {
-    Assert.notNull(userAccountManager, "User account manager may not be null");
-    this.userAccountManager = userAccountManager;
-  }
+	public ReleaseNotesController(UserAccountManager userAccountManager) {
+		Assert.notNull(userAccountManager, "User account manager may not be null");
+		this.userAccountManager = userAccountManager;
+	}
 
-  /**
-   * Marks an {@link UserAccount} to have read the current release notes
-   * 
-   * @param userId the ID of the user
-   */
-  @PostMapping("/release-notes/read")
-  public void readReleaseNotes(@RequestParam("user") String userId) {
-    userAccountManager.find(new PersonId(userId)).ifPresent(userAccountManager::readReleaseNotes);
-  }
+	/**
+	 * Marks an {@link UserAccount} to have read the current release notes
+	 * 
+	 * @param userId the ID of the user
+	 */
+	@PostMapping("/release-notes/read")
+	public void readReleaseNotes(@RequestParam("user") String userId) {
+		userAccountManager.find(new PersonId(userId)).ifPresent(userAccountManager::readReleaseNotes);
+	}
 
 }

@@ -10,14 +10,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class SimpleEventIdGenerator implements EventIdGenerator {
 
-  @Override
-  public boolean hasNext() {
-    return true;
-  }
+	@Override
+	public boolean hasNext() {
+		return true;
+	}
 
-  @Override
-  public EventId next() {
-    return new EventId();
-  }
+	@Override
+	public EventId next() {
+		return new EventId();
+	}
 
 }

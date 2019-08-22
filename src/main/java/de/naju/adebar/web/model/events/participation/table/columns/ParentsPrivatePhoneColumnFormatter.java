@@ -16,43 +16,43 @@ import org.springframework.stereotype.Service;
 @Service
 public class ParentsPrivatePhoneColumnFormatter implements TableColumnFormatter {
 
-  private static final String PHONE_DELIM = ", ";
+	private static final String PHONE_DELIM = ", ";
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see
-   * de.naju.adebar.web.model.events.participation.table.columns.TableColumnFormatter#isApplicable(
-   * de.naju.adebar.model.events.Event)
-   */
-  @Override
-  public boolean isApplicable(Event event) {
-    // the phone numbers of a participant's parents may always be displayed
-    return true;
-  }
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * de.naju.adebar.web.model.events.participation.table.columns.TableColumnFormatter#isApplicable(
+	 * de.naju.adebar.model.events.Event)
+	 */
+	@Override
+	public boolean isApplicable(Event event) {
+		// the phone numbers of a participant's parents may always be displayed
+		return true;
+	}
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see de.naju.adebar.web.model.events.participation.table.columns.TableColumnFormatter#
-   * formatColumnFor(de.naju.adebar.model.persons.Person, de.naju.adebar.model.events.Event)
-   */
-  @Override
-  public String formatColumnFor(Person participant, Event event) {
-    if (!participant.hasParents()) {
-      return "";
-    }
-    StringJoiner phoneJoiner = new StringJoiner(PHONE_DELIM);
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see de.naju.adebar.web.model.events.participation.table.columns.TableColumnFormatter#
+	 * formatColumnFor(de.naju.adebar.model.persons.Person, de.naju.adebar.model.events.Event)
+	 */
+	@Override
+	public String formatColumnFor(Person participant, Event event) {
+		if (!participant.hasParents()) {
+			return "";
+		}
+		StringJoiner phoneJoiner = new StringJoiner(PHONE_DELIM);
 
-    Stream<Person> parents = Streamable.of(participant.getParents()).stream();
+		Stream<Person> parents = Streamable.of(participant.getParents()).stream();
 
-    parents //
-        .filter(Person::hasPhoneNumber) //
-        .map(par -> par.getPhoneNumber().getValue()) //
-        .distinct() //
-        .forEach(phoneJoiner::add);
+		parents //
+				.filter(Person::hasPhoneNumber) //
+				.map(par -> par.getPhoneNumber().getValue()) //
+				.distinct() //
+				.forEach(phoneJoiner::add);
 
-    return phoneJoiner.toString();
-  }
+		return phoneJoiner.toString();
+	}
 
 }

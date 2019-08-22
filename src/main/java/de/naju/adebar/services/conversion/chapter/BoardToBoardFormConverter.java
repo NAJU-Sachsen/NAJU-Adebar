@@ -15,24 +15,24 @@ import java.util.List;
 @Service
 public class BoardToBoardFormConverter {
 
-  /**
-   * Performs the conversion
-   * 
-   * @param board the board to convert
-   * @return the created form
-   */
-  public BoardForm convertToBoardForm(Board board) {
-    if (board == null) {
-      return new BoardForm();
-    }
+	/**
+	 * Performs the conversion
+	 * 
+	 * @param board the board to convert
+	 * @return the created form
+	 */
+	public BoardForm convertToBoardForm(Board board) {
+		if (board == null) {
+			return new BoardForm();
+		}
 
-    PersonId chairman = board.getChairman().getId();
-    String email = board.getEmail();
-    List<String> members = new LinkedList<>();
+		PersonId chairman = board.getChairman().getId();
+		String email = board.getEmail();
+		List<String> members = new LinkedList<>();
 
-    board.getMembers().forEach(m -> members.add(m.getId().toString()));
+		board.getMembers().forEach(m -> members.add(m.getId().toString()));
 
-    return new BoardForm(chairman.toString(), email, members);
-  }
+		return new BoardForm(chairman.toString(), email, members);
+	}
 
 }

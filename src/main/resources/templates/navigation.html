@@ -42,7 +42,7 @@
 <body>
 
 <!-- central navigation -->
-<nav id="top-nav" class="navbar navbar-fixed-top navbar-inverse" th:fragment="topNav (page)">
+<nav id="top-nav" class="navbar navbar-inverse" th:fragment="topNav (page)" th:classappend="${static} ?: 'navbar-fixed-top'">
   <div class="container-fluid">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"

@@ -1,7 +1,7 @@
 package de.naju.adebar.app.events.filter;
 
 import java.util.stream.Stream;
-import de.naju.adebar.app.filter.ComparableFilterType;
+import de.naju.adebar.app.filter.legacy.ComparableFilterType;
 import de.naju.adebar.model.core.Capacity;
 import de.naju.adebar.model.events.Event;
 
@@ -11,17 +11,17 @@ import de.naju.adebar.model.events.Event;
  * @author Rico Bergmann
  */
 public class ParticipantsLimitFilter implements EventFilter {
-  private Capacity participantsLimit;
-  private ComparableFilterType filterType;
+	private Capacity participantsLimit;
+	private ComparableFilterType filterType;
 
-  public ParticipantsLimitFilter(Capacity participantsLimit, ComparableFilterType filterType) {
-    this.participantsLimit = participantsLimit;
-    this.filterType = filterType;
-  }
+	public ParticipantsLimitFilter(Capacity participantsLimit, ComparableFilterType filterType) {
+		this.participantsLimit = participantsLimit;
+		this.filterType = filterType;
+	}
 
-  @Override
-  public Stream<Event> filter(Stream<Event> input) {
-    return input.filter(event -> filterType.matching(participantsLimit,
-        event.getParticipantsList().getParticipantsLimit()));
-  }
+	@Override
+	public Stream<Event> filter(Stream<Event> input) {
+		return input.filter(event -> filterType.matching(participantsLimit,
+				event.getParticipantsList().getParticipantsLimit()));
+	}
 }

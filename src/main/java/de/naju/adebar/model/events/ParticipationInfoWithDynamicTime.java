@@ -11,16 +11,16 @@ import de.naju.adebar.model.events.rooms.scheduling.ParticipationTime;
  */
 public interface ParticipationInfoWithDynamicTime {
 
-  /**
-   * Provides the actual participation time
-   *
-   * @return the time. May be {@code null}
-   */
-  ParticipationTime getParticipationTime();
+	/**
+	 * Provides the actual participation time
+	 *
+	 * @return the time. May be {@code null}
+	 */
+	ParticipationTime getParticipationTime();
 
-  /**
-   * Checks, whether the information about the participation time was stored.
-   */
-  boolean hasParticipationTime();
+	/**
+	 * Checks, whether the information about the participation time was stored.
+	 */
+	boolean hasParticipationTime();
 
 }

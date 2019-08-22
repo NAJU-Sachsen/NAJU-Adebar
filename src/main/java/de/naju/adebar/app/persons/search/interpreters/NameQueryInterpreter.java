@@ -22,29 +22,29 @@ import org.springframework.util.Assert;
 @Service
 public class NameQueryInterpreter extends AbstractNameQueryInterpreter {
 
-  private static final String NAME_REGEX =
-      "^(?<firstName>[a-zA-ZöÖüÜäÄß]+) (?<lastName>(von |zu )?([a-zA-ZöÖüÜäÄß]+(\\s*(-\\s*)?[a-zA-ZöÖüÜäÄß]+)?)+)$";
+	private static final String NAME_REGEX =
+			"^(?<firstName>[a-zA-ZöÖüÜäÄß]+) (?<lastName>(von |zu )?([a-zA-ZöÖüÜäÄß]+(\\s*(-\\s*)?[a-zA-ZöÖüÜäÄß]+)?)+)$";
 
-  private final ShiftedNameQueryInterpreter shiftedInterpreter;
+	private final ShiftedNameQueryInterpreter shiftedInterpreter;
 
-  /**
-   * Full constructor
-   *
-   * @param shiftedInterpreter the fallback interpreter
-   */
-  public NameQueryInterpreter(ShiftedNameQueryInterpreter shiftedInterpreter) {
-    Assert.notNull(shiftedInterpreter, "shiftedInterpreter may not be null");
-    this.shiftedInterpreter = shiftedInterpreter;
-  }
+	/**
+	 * Full constructor
+	 *
+	 * @param shiftedInterpreter the fallback interpreter
+	 */
+	public NameQueryInterpreter(ShiftedNameQueryInterpreter shiftedInterpreter) {
+		Assert.notNull(shiftedInterpreter, "shiftedInterpreter may not be null");
+		this.shiftedInterpreter = shiftedInterpreter;
+	}
 
-  @Override
-  public Optional<PersonQueryInterpreter> getFallback() {
-    return Optional.of(shiftedInterpreter);
-  }
+	@Override
+	public Optional<PersonQueryInterpreter> getFallback() {
+		return Optional.of(shiftedInterpreter);
+	}
 
-  @Override
-  protected String getNameRegex() {
-    return NAME_REGEX;
-  }
+	@Override
+	protected String getNameRegex() {
+		return NAME_REGEX;
+	}
 
 }

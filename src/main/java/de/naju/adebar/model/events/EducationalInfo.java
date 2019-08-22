@@ -8,9 +8,9 @@ import javax.persistence.FetchType;
 @Embeddable
 public class EducationalInfo extends AbstractEventInfo {
 
-  @ElementCollection(fetch = FetchType.LAZY)
-  private List<Lecture> lectures;
+	@ElementCollection(fetch = FetchType.LAZY)
+	private List<Lecture> lectures;
 
-  // TODO implementation and usage
+	// TODO implementation and usage
 
 }

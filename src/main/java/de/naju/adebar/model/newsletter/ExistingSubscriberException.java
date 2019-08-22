@@ -6,27 +6,27 @@ package de.naju.adebar.model.newsletter;
  * @author Rico Bergmann
  */
 public class ExistingSubscriberException extends RuntimeException {
-  private static final long serialVersionUID = 680016776844043448L;
+	private static final long serialVersionUID = 680016776844043448L;
 
-  private final Subscriber existingSubscriber;
+	private final Subscriber existingSubscriber;
 
-  public ExistingSubscriberException(Subscriber theSubscriber) {
-    super();
-    this.existingSubscriber = theSubscriber;
-  }
+	public ExistingSubscriberException(Subscriber theSubscriber) {
+		super();
+		this.existingSubscriber = theSubscriber;
+	}
 
-  public ExistingSubscriberException(String message, Subscriber theSubscriber) {
-    super(message);
-    this.existingSubscriber = theSubscriber;
-  }
+	public ExistingSubscriberException(String message, Subscriber theSubscriber) {
+		super(message);
+		this.existingSubscriber = theSubscriber;
+	}
 
-  public Subscriber getSubscriber() {
-    return existingSubscriber;
-  }
+	public Subscriber getSubscriber() {
+		return existingSubscriber;
+	}
 
-  @Override
-  public String toString() {
-    return super.toString() + " subscriber: " + existingSubscriber;
-  }
+	@Override
+	public String toString() {
+		return super.toString() + " subscriber: " + existingSubscriber;
+	}
 
 }

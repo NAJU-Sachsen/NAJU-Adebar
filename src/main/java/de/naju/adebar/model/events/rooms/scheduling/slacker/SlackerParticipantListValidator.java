@@ -11,8 +11,7 @@ import org.springframework.util.Assert;
  * <p>
  * The Slacker scheduler will basically life up to his name: it will only perform as few work as
  * possible. Therefore even though some kind of schedule may exist according to the slacker, it may
- * actually not be of much use in practical scenarios - resulting in an usually terrible
- * assessment.
+ * actually not be of much use in practical scenarios - resulting in an usually terrible assessment.
  * </p>
  * <h2>Here is how it works:</h2>
  * <p>
@@ -37,35 +36,35 @@ import org.springframework.util.Assert;
  */
 public class SlackerParticipantListValidator implements ParticipantListValidator {
 
-  private SlackerParticipantListValidatorImpl slackerImpl;
+	private SlackerParticipantListValidatorImpl slackerImpl;
 
-  @Override
-  public boolean isSchedulable(RoomSpecification rooms, RegisteredParticipants participants) {
-    updateSlackerImplementationIfNecessary(rooms, participants);
-    return slackerImpl.isSchedulable();
-  }
+	@Override
+	public boolean isSchedulable(RoomSpecification rooms, RegisteredParticipants participants) {
+		updateSlackerImplementationIfNecessary(rooms, participants);
+		return slackerImpl.isSchedulable();
+	}
 
-  @Override
-  public int assessScheduleReliability() {
-    Assert.notNull(slackerImpl, "No schedule has been provided");
-    return slackerImpl.assessScheduleReliablity();
-  }
+	@Override
+	public int assessScheduleReliability() {
+		Assert.notNull(slackerImpl, "No schedule has been provided");
+		return slackerImpl.assessScheduleReliablity();
+	}
 
-  /**
-   * Creates a new {@link SlackerParticipantListValidatorImpl} instance if the new scheduling data
-   * differs from the current one.
-   *
-   * @param rooms the accommodation details
-   * @param participants the participants
-   */
-  private void updateSlackerImplementationIfNecessary(RoomSpecification rooms,
-      Iterable<Participant> participants) {
-    SlackerParticipantListValidatorImpl updatedSlackerImpl =
-        new SlackerParticipantListValidatorImpl(rooms, participants);
+	/**
+	 * Creates a new {@link SlackerParticipantListValidatorImpl} instance if the new scheduling data
+	 * differs from the current one.
+	 *
+	 * @param rooms the accommodation details
+	 * @param participants the participants
+	 */
+	private void updateSlackerImplementationIfNecessary(RoomSpecification rooms,
+			Iterable<Participant> participants) {
+		SlackerParticipantListValidatorImpl updatedSlackerImpl =
+				new SlackerParticipantListValidatorImpl(rooms, participants);
 
-    if (!updatedSlackerImpl.equals(slackerImpl)) {
-      this.slackerImpl = updatedSlackerImpl;
-    }
-  }
+		if (!updatedSlackerImpl.equals(slackerImpl)) {
+			this.slackerImpl = updatedSlackerImpl;
+		}
+	}
 
 }

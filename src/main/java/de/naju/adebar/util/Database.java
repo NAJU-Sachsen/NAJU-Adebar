@@ -13,36 +13,36 @@ import de.naju.adebar.infrastructure.ReadOnlyRepository;
  */
 public class Database {
 
-  private static final Logger log = LoggerFactory.getLogger(Database.class);
+	private static final Logger log = LoggerFactory.getLogger(Database.class);
 
-  private Database() {}
+	private Database() {}
 
-  /**
-   * Plots the content of a database
-   *
-   * @param db database to print
-   */
-  public static void dumpDatabase(CrudRepository<?, ?> db) {
-    if (!log.isDebugEnabled()) {
-      return;
-    }
-    for (Object entity : db.findAll()) {
-      log.debug(entity.toString());
-    }
-  }
+	/**
+	 * Plots the content of a database
+	 *
+	 * @param db database to print
+	 */
+	public static void dumpDatabase(CrudRepository<?, ?> db) {
+		if (!log.isDebugEnabled()) {
+			return;
+		}
+		for (Object entity : db.findAll()) {
+			log.debug(entity.toString());
+		}
+	}
 
-  /**
-   * Plots the content of a database
-   *
-   * @param db database to print
-   */
-  public static void dumpDatabase(ReadOnlyRepository<?, ?> db) {
-    if (!log.isDebugEnabled()) {
-      return;
-    }
-    for (Object entity : db.findAll()) {
-      log.debug(entity.toString());
-    }
-  }
+	/**
+	 * Plots the content of a database
+	 *
+	 * @param db database to print
+	 */
+	public static void dumpDatabase(ReadOnlyRepository<?, ?> db) {
+		if (!log.isDebugEnabled()) {
+			return;
+		}
+		for (Object entity : db.findAll()) {
+			log.debug(entity.toString());
+		}
+	}
 
 }

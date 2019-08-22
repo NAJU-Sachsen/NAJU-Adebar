@@ -10,18 +10,18 @@ import org.springframework.util.Assert;
 @Service
 public class ProjectConverter implements Converter<String, Project> {
 
-  private final ReadOnlyProjectRepository projectRepo;
+	private final ReadOnlyProjectRepository projectRepo;
 
-  public ProjectConverter(ReadOnlyProjectRepository projectRepo) {
-    Assert.notNull(projectRepo, "projectRepo may not be null");
-    this.projectRepo = projectRepo;
-  }
+	public ProjectConverter(ReadOnlyProjectRepository projectRepo) {
+		Assert.notNull(projectRepo, "projectRepo may not be null");
+		this.projectRepo = projectRepo;
+	}
 
-  @Override
-  public Project convert(@Nonnull String source) {
-    if (source.isEmpty()) {
-      return null;
-    }
-    return projectRepo.findById(Long.parseLong(source)).orElse(null);
-  }
+	@Override
+	public Project convert(@Nonnull String source) {
+		if (source.isEmpty()) {
+			return null;
+		}
+		return projectRepo.findById(Long.parseLong(source)).orElse(null);
+	}
 }
