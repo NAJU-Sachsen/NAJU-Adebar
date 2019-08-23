@@ -9,8 +9,8 @@
 
 	<name>NAJU Adebar</name>
 	<description>
-    Management tool used by the NAJU Sachsen organization to keep track of volunteers and the like.
-  </description>
+		Management tool used by the NAJU Sachsen organization to keep track of volunteers and the like.
+	</description>
 	<organization>
 		<name>NAJU Sachsen</name>
 		<url>http://naju-sachsen.de</url>
@@ -218,6 +218,9 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<executable>true</executable>
+				</configuration>
 			</plugin>
 
 			<plugin>
@@ -243,7 +246,7 @@
 					</dependency>
 				</dependencies>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>com.spotify</groupId>
 				<artifactId>dockerfile-maven-plugin</artifactId>
