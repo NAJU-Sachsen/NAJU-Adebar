@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -34,8 +35,9 @@ public class MainController {
 	 */
 	@GetMapping({"/", "/index", "/overview"})
 	public String showOverview(@RequestHeader("User-Agent") String userAgent,
+			@CookieValue(value="Continue-If-Unsupported", defaultValue = "false") String continueEvenIfUnsupported,
 			RedirectAttributes redirAttr) {
-		if (requestFromSafariBrowser(userAgent)) {
+		if (requestFromSafariBrowser(userAgent) && (continueEvenIfUnsupported.equals("false") )) {
 			// we only want to catch Safari, so if there are false-positives we need to know their User
 			// agents
 			log.debug("Access with unsupported browser: " + userAgent);

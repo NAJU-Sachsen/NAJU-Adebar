@@ -31,6 +31,25 @@
       </li>
       <li class="list-group-item"><a href="https://google.com/chrome">Google Chrome</a></li>
     </ul>
+
+    <p class="margin-top-lg">
+      Trotzdem weitermachen und dafür in Kauf nehmen, dass einige Funktionen wahrscheinlich
+      nicht korrekt arbeiten werden (welche das genau sind, kann ich leider nicht sagen).
+      <button type="button" id="ignore-unsupported-warning" class="btn btn-default">Weitermachen</button>
+    </p>
+
+    <script type="text/javascript">
+
+      document.addEventListener('DOMContentLoaded', () => {
+
+        document.getElementById('ignore-unsupported-warning').addEventListener('click', () => {
+          document.cookie = "Continue-If-Unsupported=true";
+          window.location.assign("/");
+        });
+      });
+
+    </script>
+
   </div>
 </main>
 
