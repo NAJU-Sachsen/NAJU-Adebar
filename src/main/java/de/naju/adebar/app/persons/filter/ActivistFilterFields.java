@@ -4,14 +4,17 @@ import com.google.common.collect.Lists;
 import de.naju.adebar.app.filter.BooleanField;
 import de.naju.adebar.app.filter.ComparingFilter;
 import de.naju.adebar.app.filter.DateField;
+import de.naju.adebar.app.filter.EntityField;
 import de.naju.adebar.app.filter.EnumeratedField;
 import de.naju.adebar.app.filter.EqualityFilter;
 import de.naju.adebar.app.filter.InvertableFilter;
+import de.naju.adebar.app.filter.ListFilter;
 import de.naju.adebar.model.persons.details.JuleicaCard;
 
 public class ActivistFilterFields {
 
 	public static class Juleica extends BooleanField {
+
 	}
 
 	public static class JuleicaLevel extends EnumeratedField {
@@ -30,6 +33,11 @@ public class ActivistFilterFields {
 	}
 
 	public static class JuleicaExpiry extends DateField {
+
+	}
+
+	public static class Counselor extends EntityField {
+
 	}
 
 	public ActivistFilterFields() {
@@ -46,6 +54,10 @@ public class ActivistFilterFields {
 
 	public ComparingFilter getJuleicaExpiryDateFilter() {
 		return ComparingFilter.createFor(new JuleicaExpiry());
+	}
+
+	public ListFilter getCounselorFilter() {
+		return ListFilter.anyMatchesOn(new Counselor());
 	}
 
 }

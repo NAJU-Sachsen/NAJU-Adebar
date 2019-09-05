@@ -1,13 +1,5 @@
 package de.naju.adebar.app.filter.querydsl;
 
-import de.naju.adebar.app.filter.EqualityFilter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.List;
-import javax.persistence.EntityManager;
-import org.springframework.util.Assert;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.CollectionExpression;
 import com.querydsl.core.types.EntityPath;
@@ -32,6 +24,13 @@ import de.naju.adebar.app.filter.querydsl.FieldToPathConverter.Join;
 import de.naju.adebar.documentation.DesignPattern;
 import de.naju.adebar.util.Assert2;
 import de.naju.adebar.util.Functional;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.List;
+import javax.persistence.EntityManager;
+import org.springframework.util.Assert;
 
 /**
  * @param <T>
@@ -101,7 +100,7 @@ public class QueryPredicateGeneratingVisitor<T> implements FilterElementVisitor 
 			});
 		}
 
-		query.where(predicateStack.peek());
+		query.distinct().where(predicateStack.peek());
 		return query;
 	}
 

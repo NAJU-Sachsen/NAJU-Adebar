@@ -1,12 +1,12 @@
 package de.naju.adebar.app.persons.filter;
 
-import org.springframework.stereotype.Service;
 import com.querydsl.core.types.EntityPath;
 import com.querydsl.core.types.Path;
 import de.naju.adebar.app.filter.AbstractFilterableField;
 import de.naju.adebar.app.filter.querydsl.FieldToPathConverter;
-import de.naju.adebar.app.persons.filter.ActivistFilterFields.JuleicaExpiry;
+import de.naju.adebar.app.persons.filter.ActivistFilterFields.Counselor;
 import de.naju.adebar.app.persons.filter.ActivistFilterFields.Juleica;
+import de.naju.adebar.app.persons.filter.ActivistFilterFields.JuleicaExpiry;
 import de.naju.adebar.app.persons.filter.ActivistFilterFields.JuleicaLevel;
 import de.naju.adebar.app.persons.filter.ParticipantFilterFields.DateOfBirth;
 import de.naju.adebar.app.persons.filter.ParticipantFilterFields.EatingHabits;
@@ -29,6 +29,7 @@ import de.naju.adebar.model.events.QEvent;
 import de.naju.adebar.model.persons.QPerson;
 import de.naju.adebar.model.persons.qualifications.QQualification;
 import de.naju.adebar.util.Functional;
+import org.springframework.stereotype.Service;
 
 /**
  * @author Rico Bergmann
@@ -76,6 +77,7 @@ public class PersonFieldToPathConverter implements FieldToPathConverter {
 				.caseOf(Juleica.class, person.activistProfile.juleicaCard) //
 				.caseOf(JuleicaLevel.class, person.activistProfile.juleicaCard.level) //
 				.caseOf(JuleicaExpiry.class, person.activistProfile.juleicaCard.expiryDate) //
+				.caseOf(Counselor.class, person.activistProfile.counseledEvents.any().id.id) //
 
 				// referent filter fields
 				.caseOf(QualificationField.class, qualification) //
@@ -97,6 +99,7 @@ public class PersonFieldToPathConverter implements FieldToPathConverter {
 				match(field) //
 
 				.caseOf(Event.class, event) //
+				.caseOf(Counselor.class, event) //
 				.caseOf(QualificationField.class, qualification) //
 				.caseOf(QualificationDescription.class, qualification) //
 
@@ -116,6 +119,7 @@ public class PersonFieldToPathConverter implements FieldToPathConverter {
 				match(field) //
 
 				.caseOf(Event.class, Join.of(person.participatingEvents, event)) //
+				.caseOf(Counselor.class, Join.of(person.activistProfile.counseledEvents, event)) //
 				.caseOf(QualificationField.class,
 						Join.of(person.referentProfile.qualifications, qualification)) //
 				.caseOf(QualificationDescription.class,
@@ -136,6 +140,8 @@ public class PersonFieldToPathConverter implements FieldToPathConverter {
 		return Functional.<Boolean> //
 				match(field) //
 
+				.caseOf(Event.class, true) //
+				.caseOf(Counselor.class, true) //
 				.caseOf(QualificationField.class, true) //
 				.caseOf(QualificationDescription.class, true) //
 

@@ -1,8 +1,10 @@
 package de.naju.adebar.model.persons;
 
+import de.naju.adebar.documentation.Unmodifiable;
 import de.naju.adebar.documentation.infrastructure.JpaOnly;
 import de.naju.adebar.model.chapter.LocalGroup;
 import de.naju.adebar.model.chapter.Project;
+import de.naju.adebar.model.events.Event;
 import de.naju.adebar.model.persons.details.JuleicaCard;
 import de.naju.adebar.model.persons.events.PersonDataUpdatedEvent;
 import java.util.Collection;
@@ -52,6 +54,12 @@ public class ActivistProfile extends AbstractProfile {
 			inverseJoinColumns = @JoinColumn(name = "projectId"))
 	private List<Project> projects;
 
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "counselors", //
+			joinColumns = @JoinColumn(name = "counselorId"), //
+			inverseJoinColumns = @JoinColumn(name = "eventId"))
+	private List<Event> counseledEvents;
+
 	/**
 	 * Each activist profile has to be created in terms of an existing person.
 	 *
@@ -100,15 +108,25 @@ public class ActivistProfile extends AbstractProfile {
 
 	/**
 	 * @return the activist's Juleica card. May be {@code null} if the person does not have a Juleica
-	 *         card
+	 * 		card
 	 */
 	public JuleicaCard getJuleicaCard() {
 		return juleicaCard;
 	}
 
+	@Unmodifiable
+	public List<Event> getCounseledEvents() {
+		return Collections.unmodifiableList(counseledEvents);
+	}
+
+	@JpaOnly
+	private void setCounseledEvents(List<Event> counseledEvents) {
+		this.counseledEvents = counseledEvents;
+	}
+
 	/**
-	 * @param juleicaCard the activist's Juleica card. May be {@code null} if the person does not have
-	 *        a Juleica card
+	 * @param juleicaCard the activist's Juleica card. May be {@code null} if the person does not
+	 * 		have a Juleica card
 	 */
 	protected void setJuleicaCard(JuleicaCard juleicaCard) {
 		this.juleicaCard = juleicaCard;
@@ -123,7 +141,7 @@ public class ActivistProfile extends AbstractProfile {
 
 	/**
 	 * @return {@code true} if the activist's Juleica card is valid (i.e. not expired), {@code false}
-	 *         otherwise
+	 * 		otherwise
 	 */
 	public boolean hasValidJuleica() {
 		if (!hasJuleica()) {

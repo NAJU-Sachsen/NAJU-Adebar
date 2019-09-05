@@ -33,7 +33,9 @@ public class OrganizationInfo extends AbstractEventInfo {
 	private Map<Person, CounselorInfo> counselors;
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinTable(name = "eventOrganizers", inverseJoinColumns = @JoinColumn(name = "organizerId"))
+	@JoinTable(name = "eventOrganizers", //
+			joinColumns = @JoinColumn(name = "eventId"), //
+			inverseJoinColumns = @JoinColumn(name = "organizerId"))
 	private List<Person> organizers;
 
 	@ElementCollection(fetch = FetchType.LAZY)

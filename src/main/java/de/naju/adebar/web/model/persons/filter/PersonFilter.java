@@ -1,10 +1,11 @@
 package de.naju.adebar.web.model.persons.filter;
 
 import static de.naju.adebar.web.model.html.NodeFactory.id;
-import org.springframework.stereotype.Service;
+
 import de.naju.adebar.app.persons.filter.ActivistFilterFields;
 import de.naju.adebar.app.persons.filter.ParticipantFilterFields;
 import de.naju.adebar.app.persons.filter.PersonFilterFields;
+import org.springframework.stereotype.Service;
 
 @Service
 public class PersonFilter extends WebFilter {
@@ -26,8 +27,8 @@ public class PersonFilter extends WebFilter {
 		return WebFilterForm.of( //
 				personGroup, participantGroup, activistGroup,
 				eventGroup /*
-										 * // referentGroup, // chapterGroup
-										 */);
+				 * // referentGroup, // chapterGroup
+				 */);
 	}
 
 	private void init() {
@@ -63,7 +64,8 @@ public class PersonFilter extends WebFilter {
 				.withContents( //
 						activistFilters.getJuleicaFilter(), //
 						activistFilters.getJuleicaExpiryDateFilter(), //
-						activistFilters.getJuleicaLevelFilter());
+						activistFilters.getJuleicaLevelFilter(), //
+						activistFilters.getCounselorFilter());
 
 		referentGroup = FilterGroup //
 				.with(id("filter-referent")) //
