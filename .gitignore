@@ -38,6 +38,7 @@ libraries/
 
 # others
 *log*
+*bckp*.sql
 
 # Visual Studio Code
 *.code-workspace
