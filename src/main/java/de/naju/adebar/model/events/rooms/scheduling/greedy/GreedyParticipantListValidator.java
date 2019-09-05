@@ -15,14 +15,14 @@ import java.util.function.Function;
 import org.springframework.stereotype.Service;
 
 /**
- * A greedy implementation of the {@link ParticipantListValidator} capable of handling
- * {@link ExtendedRoomSpecification}
+ * A greedy implementation of the {@link ParticipantListValidator} capable of handling {@link
+ * ExtendedRoomSpecification}
  * <p>
- * Basically, the {@code GreedyValidator} may be seen as an extension of the idea behind the
- * {@link SlackerParticipantListValidator}. For each day, it will check whether there are at least
- * as many beds available, as participants registered for that night. If there is no schedule
- * available using the fixed rooms, the scheduler will try to use the flexible rooms step by step
- * and the fallback rooms as a last resort.
+ * Basically, the {@code GreedyValidator} may be seen as an extension of the idea behind the {@link
+ * SlackerParticipantListValidator}. For each day, it will check whether there are at least as many
+ * beds available, as participants registered for that night. If there is no schedule available
+ * using the fixed rooms, the scheduler will try to use the flexible rooms step by step and the
+ * fallback rooms as a last resort.
  *
  * @author Rico Bergmann
  */
@@ -141,14 +141,14 @@ public class GreedyParticipantListValidator implements ParticipantListValidator 
 	 * ParticipantsLimitFilter.getParticipants()} which could not be accommodated. The algorithm
 	 * guarantees that all other participants with a larger index have not been housed as well.
 	 * <p>
-	 * To do its work, the algorithm will decrease the values in {@link #femaleRooms},
-	 * {@link #maleRooms} and {@link #otherRooms}.
+	 * To do its work, the algorithm will decrease the values in {@link #femaleRooms}, {@link
+	 * #maleRooms} and {@link #otherRooms}.
 	 *
 	 * @param participants all participants
-	 * @param firstParticipantIdx the first participant to check, the algorithm will start with it and
-	 *        continue with all participants with larger index
+	 * @param firstParticipantIdx the first participant to check, the algorithm will start with it
+	 * 		and continue with all participants with larger index
 	 * @param firstNight the participation first night - this is important to readjust the
-	 *        participation nights to array indexes
+	 * 		participation nights to array indexes
 	 * @return whether all participants could be successfully housed
 	 */
 	protected boolean fillOccupationAsFarAsPossible(RegisteredParticipants participants,
@@ -158,7 +158,13 @@ public class GreedyParticipantListValidator implements ParticipantListValidator 
 		for (Participant participant : participants.getParticipants().subList(firstParticipantIdx,
 				participants.getParticipants().size())) {
 			int[] roomArr;
-			switch (participant.getGender()) {
+			final Gender gender = participant.getGender();
+
+			if (gender == null) {
+				throw new IllegalStateException("Gender unknown for " + participant);
+			}
+
+			switch (gender) {
 				case FEMALE:
 					roomArr = femaleRooms;
 					break;
