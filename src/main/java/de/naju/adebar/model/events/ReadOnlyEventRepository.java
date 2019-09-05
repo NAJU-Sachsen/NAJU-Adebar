@@ -1,5 +1,9 @@
 package de.naju.adebar.model.events;
 
+import com.querydsl.core.types.Predicate;
+import de.naju.adebar.infrastructure.ReadOnlyRepository;
+import de.naju.adebar.model.chapter.LocalGroup;
+import de.naju.adebar.model.persons.Person;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -11,9 +15,6 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
-import com.querydsl.core.types.Predicate;
-import de.naju.adebar.infrastructure.ReadOnlyRepository;
-import de.naju.adebar.model.chapter.LocalGroup;
 
 /**
  * A repository that provides read-only access to the saved events
@@ -65,5 +66,8 @@ public interface ReadOnlyEventRepository extends //
 
 	Page<Event> findAllPagedByEndTimeIsAfterAndCanceledIsFalseOrderByStartTime(LocalDateTime time,
 			Pageable pageable);
+
+	@Query("select e from event e join e.organizationInfo.counselors cs where ?1 in (key(cs))")
+	List<Event> findByCounselor(Person person);
 
 }

@@ -1,20 +1,46 @@
 package de.naju.adebar.web.model.persons.participants;
 
+import com.google.common.collect.Sets;
+import de.naju.adebar.model.events.Event;
 import java.time.Year;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.SortedSet;
+import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
-import com.google.common.collect.Sets;
-import de.naju.adebar.model.events.Event;
 
 /**
  * Simple wrapper for a number of events taking place in the same year
  */
 class TimelineEntry implements Comparable<TimelineEntry> {
 
+	/**
+	 * Factory method to create timeline entries
+	 *
+	 * @param year the year the events took place
+	 * @param events the events
+	 * @return the entry
+	 */
+	public static TimelineEntry createFor(Year year, Iterable<Event> events) {
+		return new TimelineEntry(year, events, null);
+	}
+
+	/**
+	 * Factory method to create timeline entries
+	 *
+	 * @param year the year the events took place
+	 * @param events the events
+	 * @param counseledEvents events where the person participated as counselor
+	 * @return the entry
+	 */
+	public static TimelineEntry createFor(Year year, Iterable<Event> events,
+			Iterable<Event> counseledEvents) {
+		return new TimelineEntry(year, events, counseledEvents);
+	}
+
 	private Year year;
 	private SortedSet<Event> events;
+	private SortedSet<Event> counseledEvents;
 
 	/**
 	 * Full constructor.
@@ -27,23 +53,19 @@ class TimelineEntry implements Comparable<TimelineEntry> {
 	 * @param year the year the events took place
 	 * @param events the events
 	 */
-	private TimelineEntry(Year year, Iterable<Event> events) {
+	private TimelineEntry(Year year, Iterable<Event> events,
+			@Nullable Iterable<Event> counseledEvents) {
 		Assert.notNull(year, "Year may not be null");
 		Assert.notNull(events, "Events may not be null");
 		this.year = year;
 		this.events = Sets.newTreeSet(Comparator.reverseOrder());
 		events.forEach(event -> this.events.add(event));
-	}
 
-	/**
-	 * Factory method to create timeline entries
-	 *
-	 * @param year the year the events took place
-	 * @param events the events
-	 * @return the entry
-	 */
-	public static TimelineEntry createFor(Year year, Iterable<Event> events) {
-		return new TimelineEntry(year, events);
+		this.counseledEvents = Sets.newTreeSet();
+		if (counseledEvents != null) {
+			counseledEvents.forEach(event -> this.counseledEvents.add(event));
+			this.events.addAll(this.counseledEvents);
+		}
 	}
 
 	/**
@@ -58,6 +80,10 @@ class TimelineEntry implements Comparable<TimelineEntry> {
 	 */
 	public SortedSet<Event> getEvents() {
 		return Collections.unmodifiableSortedSet(events);
+	}
+
+	public boolean wasCounselorFor(Event event) {
+		return counseledEvents.contains(event);
 	}
 
 	@Override
@@ -76,23 +102,30 @@ class TimelineEntry implements Comparable<TimelineEntry> {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		TimelineEntry other = (TimelineEntry) obj;
 		if (events == null) {
-			if (other.events != null)
+			if (other.events != null) {
 				return false;
-		} else if (!events.equals(other.events))
+			}
+		} else if (!events.equals(other.events)) {
 			return false;
+		}
 		if (year == null) {
-			if (other.year != null)
+			if (other.year != null) {
 				return false;
-		} else if (!year.equals(other.year))
+			}
+		} else if (!year.equals(other.year)) {
 			return false;
+		}
 		return true;
 	}
 

@@ -1,5 +1,14 @@
 package de.naju.adebar.web.controller.persons;
 
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
+import de.naju.adebar.model.events.Event;
+import de.naju.adebar.model.events.EventRepository;
+import de.naju.adebar.model.events.ParticipationManager;
+import de.naju.adebar.model.events.ParticipationManager.Result;
+import de.naju.adebar.model.events.QEvent;
+import de.naju.adebar.model.persons.Person;
+import de.naju.adebar.web.model.persons.participants.ParticipationTimeline;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -14,15 +23,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Predicate;
-import de.naju.adebar.model.events.Event;
-import de.naju.adebar.model.events.EventRepository;
-import de.naju.adebar.model.events.ParticipationManager;
-import de.naju.adebar.model.events.ParticipationManager.Result;
-import de.naju.adebar.model.events.QEvent;
-import de.naju.adebar.model.persons.Person;
-import de.naju.adebar.web.model.persons.participants.ParticipationTimeline;
 
 /**
  * Handles all requests to participation timelines
@@ -64,7 +64,12 @@ public class ParticipationController {
 		model.addAttribute("person", person);
 
 		if (person.isParticipant()) {
-			model.addAttribute("participationTimeline", ParticipationTimeline.createFor(person));
+			final ParticipationTimeline timeline = person.isActivist() //
+					? ParticipationTimeline
+					.createForCounselor(person, eventRepo.findByCounselor(person))
+					//
+					: ParticipationTimeline.createFor(person);
+			model.addAttribute("participationTimeline", timeline);
 		} else {
 			model.addAttribute("participationTimeline", null);
 		}
