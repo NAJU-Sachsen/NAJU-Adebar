@@ -1,10 +1,10 @@
 = NAJU-Adebar
 
 image:https://travis-ci.org/portux/NAJU-Adebar.svg?branch=master["Build Status", link="https://travis-ci.org/portux/NAJU-Adebar"]
-image:https://img.shields.io/badge/SonarQube-overview-blue.svg["SonarQube", link="https://sonarcloud.io/dashboard?id=de.naju.sachsen:adebar:develop"]
+//image:https://img.shields.io/badge/SonarQube-overview-blue.svg["SonarQube", link="https://sonarcloud.io/dashboard?id=de.naju.sachsen:adebar:develop"]
 
 Management tool used by the http://naju-sachsen.de[NAJU Sachsen] to keep track of volunteers and the like.
-Currently under heavy development and in pre-alpha state.
+Currently under heavy development and in alpha state.
 
 NOTE: a german version of this readme will also be created
 
@@ -29,18 +29,25 @@ Now Adebar should be hosted on a new local Tomcat-instance.
 You should be able to connect to it through your favourite webbrowser at http://localhost:8080.
 
 == What to expect
-Adebar tries to keep track of volunteers, events, projects, newsletters and the like.
-Activists should be able to easily collect and maintain the data they need to organise the events and campaigns they host.
+
+Adebar keeps track of volunteers, events, projects, newsletters and the like.
+Activists should be able to easily collect and maintain the data they need to organise events and campaigns.
 This includes the management of participants and subscribers to newsletters as well as the management of local chapters.
-To make the application as widely accessable as possible, all content is served through web forms.
-Find more info and help about Adebar on the wiki pages.
+To make the application as widely accessible as possible, all content is served through web forms.
+Some time in the future you may find more info and help about Adebar on the wiki pages.
 
 == Technical details
-Adebar is implemented in Java, using varios tools from the https://spring.io[Spring Framework].
+
+Adebar is implemented in Java, using various tools of the https://spring.io[Spring Framework].
 The UI is created using http://www.thymeleaf.org[Thymeleaf].
-A detailed (javadoc) documentation will likely be available through the wiki one day. The general design of the application will also be discussed there.
-I tried to make this as transparent as possible and explain what led to which decision as best as I could.
-So if you're interested in Adebar's backbones - just check it out.
+A detailed (JavaDoc) documentation will likely be available through the wiki one day.
+For now, reside to the JavaDoc embedded in the source code.
+One day, there will also be a more extensive description of the overall design and architecture
+choices. However this project is currently developed entirely in my free time, so this is of low
+priority.
+If you're still interested in Adebar's backbones just check out the source code. Currently I'm
+following a layered approach with feature specific sub-packages. (Although huge refactorings are
+planned, which will change this completely)
 
 == FAQ, troubleshooting
 
@@ -72,8 +79,8 @@ Of course operating system and the like may vary.
 
 === "I found a bug, what next?"
 Feel free to mailto:rico.bergmann@naju-sachsen.de[contact me] about new bugs, or https://github.com/portux/NAJU-Adebar/issues[open an issue yourself].
-But please check out the issue tracker before, maybe the problem was already reported there.
+But please check the issue tracker before, maybe the problem was already reported there.
 
 === "This feature would also be great..."
-I generally appreciate any proposals. Depending on my resources and on how useful me or the NAJU things the idea would be, implementation could however take some time.
-If you're feeling familiar with the technology stack Adebar is build upon, you could also write it yourself and make a pull request :-)
+I generally appreciate any proposals. Depending on my resources and on how useful we consider the feature to be, its implementation could still take some time.
+However, if you're feeling familiar with the technology stack Adebar is build upon, a pull request would be very welcome!
