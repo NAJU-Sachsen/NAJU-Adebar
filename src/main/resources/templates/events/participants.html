@@ -289,7 +289,7 @@
                   Details
                 </a>
                 -->
-                
+
                 <a href="customizeParticipantsTable.html" class="btn btn-default"
                    th:href="@{/events/{id}/participants/table(id=${event.id}, columnSelection=true)}">
                   <span class="glyphicon glyphicon-filter"></span>
@@ -713,7 +713,7 @@
 
                       </td>
                       <td class="participant-info-content action-cursor"
-                          th:text="${participant.participantProfile.hasDateOfBirth()} ? ${participant.participantProfile.calculateAge()} : ''">
+                          th:text="${participant.participantProfile.hasDateOfBirth()} ? ${participant.participantProfile.calculateAgeOn(event.startTime.toLocalDate())} : ''">
                         22.11.1999
                       </td>
                       <td class="participant-info-content action-cursor"
