@@ -139,7 +139,7 @@
               th:text="${#time.formatTimeSpan(event.getStartTime(), event.getEndTime())}">
             28.07.-11.08.18
           </td>
-          <td class="col-md-2">
+          <td class="col-md-2 center-text">
             <a class="label label-default"
                th:if="${event.forLocalGroup}"
                th:text="${event.localGroup.name}"
@@ -147,7 +147,18 @@
               NAJU Sachsen
             </a>
           </td>
-          <td class="col-md-3" th:text="${event.place.city}">Oberwiesenthal</td>
+          <td class="col-md-1">
+          	<span data-toggle="tooltip" data-placement="bottom" data-container="body"
+                    th:attrappend="data-title='' + ${event.participantsList.participantsCount} + ' Anmeldungen'"
+                    th:with="occupation = ${event.participantsList.occupationRatio}">
+	          	<span class="glyphicon glyphicon-hourglass" th:if="${occupation} LT 0.1"></span>
+	          	<span class="glyphicon glyphicon-user" th:if="${occupation} GE 0.1"></span>
+	          	<span class="glyphicon glyphicon-user" th:if="${occupation} GE 0.4"></span>
+	          	<span class="glyphicon glyphicon-user" th:if="${occupation} GE 0.7"></span>
+	          	<span class="glyphicon glyphicon-user" th:if="${occupation} GE 0.9"></span>
+          	</span>
+          </td>
+          <td class="col-md-2" th:text="${event.place.city}">Oberwiesenthal</td>
           <td class="col-md-1">
             <a href="eventDetails.html" th:href="@{/events/{id}(id=${event.id})}">
               <span class="glyphicon glyphicon-new-window"></span>

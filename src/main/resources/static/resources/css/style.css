@@ -256,6 +256,10 @@ a strong:hover {
   max-width: 100%;
 }
 
+.center-text {
+  text-align: center;
+}
+
 .address .street {
   margin-bottom: 5px;
 }
