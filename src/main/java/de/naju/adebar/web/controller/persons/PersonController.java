@@ -1,6 +1,21 @@
 package de.naju.adebar.web.controller.persons;
 
-import com.querydsl.core.types.Predicate;
+import javax.validation.Valid;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import de.naju.adebar.app.persons.search.PersonSearchServer;
 import de.naju.adebar.model.persons.MarketingManager;
 import de.naju.adebar.model.persons.Person;
@@ -11,24 +26,6 @@ import de.naju.adebar.web.validation.persons.EditPersonForm;
 import de.naju.adebar.web.validation.persons.EditPersonFormConverter;
 import de.naju.adebar.web.validation.persons.participant.SimplifiedAddParticipantForm;
 import de.naju.adebar.web.validation.persons.relatives.AddParentForm;
-import javax.validation.Valid;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.querydsl.binding.QuerydslPredicate;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
-import org.springframework.util.MultiValueMap;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  * Handles all requests directly related to persons. This includes displaying their details,
@@ -197,6 +194,7 @@ public class PersonController {
 	@PreAuthorize("hasRole('ROLE_CHAIRMAN')")
 	public String archivePerson(@PathVariable("pid") Person person, RedirectAttributes redirAttr) {
 		person.archive();
+		personRepo.save(person);
 		return "redirect:/persons";
 	}
 
