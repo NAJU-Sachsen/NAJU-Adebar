@@ -673,10 +673,13 @@
                     <tr class="row">
                       <th class="col-md-2">Name</th>
                       <th class="col-md-1">Alter im Camp</th>
-                      <th class="col-md-1" th:unless="${participantsList.hasAccommodationInfo()}">
+                      <th class="col-md-1" th:unless="${event.participationInfo.flexibleParticipationTimesEnabled} and ${event.participationInfo.hasArrivalOptions()}">
                         Wohnort
                       </th>
-                      <th class="col-md-1">Anreise</th>
+                      <th class="col-md-1" th:if="${event.participationInfo.hasArrivalOptions()} and not ${event.participationInfo.flexibleParticipationTimesEnabled}">Anreise</th>
+                      <th class="col-md-2" th:if="${event.participationInfo.hasArrivalOptions()} and ${event.participationInfo.flexibleParticipationTimesEnabled}">
+						Wohnort / Anreise                 
+                      </th>
                       <th class="col-md-1">Formular versendet?</th>
                       <th class="col-md-1">Formular ausgefüllt?</th>
                       <th class="col-md-1">TNB bezahlt?</th>
@@ -684,7 +687,7 @@
                           th:if="${event.participationInfo.flexibleParticipationTimesEnabled}">
                         Teilnahmezeitraum
                       </th>
-                      <th class="col-md-3">Bemerkungen</th>
+                      <th th:class="${event.participationInfo.hasArrivalOptions()} and ${event.participationInfo.flexibleParticipationTimesEnabled} ? 'col-md-2' : 'col-md-3'">Bemerkungen</th>
                       <th class="col-md-1"></th>
                     </tr>
                     </thead>
@@ -717,14 +720,30 @@
                         22.11.1999
                       </td>
                       <td class="participant-info-content action-cursor"
-                          th:unless="${participantsList.hasAccommodationInfo()}"
+                          th:unless="${event.participationInfo.flexibleParticipationTimesEnabled} and ${event.participationInfo.hasArrivalOptions()}"
                           th:text="${participant.address.city} ?: 'unbekannt'">
                         Entenhausen
                       </td>
                       <td class="participant-info-content arrival action-cursor"
+                      	  th:if="${event.participationInfo.hasArrivalOptions()} and not ${event.participationInfo.flexibleParticipationTimesEnabled}"
                           th:attrappend="data-arrival-option=${participationDetails.arrivalOption}"
                           th:text="${participationDetails.arrivalOption} ?: 'keine Angabe'">ab
                         Dresden
+                      </td>
+                      <td class="participation-info-content arrival action-cursor"
+                      	  th:if="${event.participationInfo.hasArrivalOptions()} and ${event.participationInfo.flexibleParticipationTimesEnabled}"
+                      	  th:attrappend="data-arrival-option=${participationDetails.arrivalOption}">
+                      	  <span th:if="${participant.address.city} NE ${participationDetails.arrivalOption.description}">
+                      	  	<!-- <span class="glyphicon glyphicon-home" th:if="${participant.address.city}"></span> <span th:if="${participant.address.city}" th:text="${participant.address.city}"></span>
+                      	  	<span class="glyphicon glyphicon-plane" th:if="${participationDetails.arrivalOption}"></span> <span th:if="${participationDetails.arrivalOption}" th:text="${participationDetails.arrivalOption}"></span>
+                      	  	-->
+                      	  	<span th:if="${participant.address.city}" th:text="${participant.address.city}"></span>
+                      	  	<span th:if="${participant.address.city} and ${participationDetails.arrivalOption}"> / </span>
+                      	  	<span th:if="${participationDetails.arrivalOption}" th:text="${participationDetails.arrivalOption}"></span>
+                      	  	
+                      	  	
+                      	  </span>
+                      	  <span th:if="${participant.address.city} EQ ${participationDetails.arrivalOption.description}" th:text="${participant.address.city} ?: 'unbekannt'"></span>
                       </td>
                       <td class="participant-info-content form-sent text-center action-cursor"
                           th:attrappend="data-form-sent=${participationDetails.registrationFormSent}">
