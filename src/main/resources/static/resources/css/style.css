@@ -818,6 +818,10 @@ fieldset.inline-options label {
   border-radius: 15px;
 }
 
+.occupation-pictogram {
+  color: #555;
+}
+
 @media (max-width: 767px) {
   .height-md {
     height: auto;
