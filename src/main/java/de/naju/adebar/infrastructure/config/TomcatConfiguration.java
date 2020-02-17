@@ -28,10 +28,10 @@ public class TomcatConfiguration {
 	}
 
 	private Connector initiateHttpConnector() {
-		Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
-		connector.setScheme("http");
+		Connector connector = new Connector(TomcatServletWebServerFactory.DEFAULT_PROTOCOL);
+		// connector.setScheme("http");
 		connector.setPort(80);
-		connector.setSecure(false);
+		// connector.setSecure(false);
 		connector.setRedirectPort(443);
 
 		return connector;
