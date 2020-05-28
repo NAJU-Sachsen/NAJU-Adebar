@@ -62,7 +62,7 @@ class SimpleResultSetExtractor implements ResultSetExtractor<SimplifiedResultSet
 		List<String> columns = new ArrayList<>(tableInfo.getColumnCount());
 
 		for (int i = 1; i <= tableInfo.getColumnCount(); ++i) {
-			columns.add(tableInfo.getColumnName(i));
+			columns.add(tableInfo.getColumnLabel(i));
 		}
 
 		return columns;
