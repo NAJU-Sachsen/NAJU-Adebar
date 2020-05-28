@@ -1,7 +1,5 @@
 package de.naju.adebar.model.events;
 
-import de.naju.adebar.documentation.infrastructure.JpaOnly;
-import de.naju.adebar.model.events.rooms.scheduling.ParticipationTime;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.AttributeOverride;
@@ -9,6 +7,8 @@ import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
+import de.naju.adebar.documentation.infrastructure.JpaOnly;
+import de.naju.adebar.model.events.rooms.scheduling.ParticipationTime;
 
 /**
  * Information about the participation of a person for a specific event.
@@ -125,6 +125,13 @@ public class RegistrationInfo implements ParticipationInfoWithDynamicTime {
 	 */
 	public boolean isRegistrationFormFilled() {
 		return registrationFormFilled;
+	}
+
+	/**
+	 * Checks, whether an arrival option was specified for the participant.
+	 */
+	public boolean hasArrivalOption() {
+		return arrivalOption != null;
 	}
 
 	/**

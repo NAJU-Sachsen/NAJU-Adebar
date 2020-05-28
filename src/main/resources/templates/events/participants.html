@@ -731,8 +731,9 @@
                         Dresden
                       </td>
                       <td class="participation-info-content arrival action-cursor"
-                      	  th:if="${event.participationInfo.hasArrivalOptions()} and ${event.participationInfo.flexibleParticipationTimesEnabled}"
+                      	  th:if="${event.participationInfo.hasArrivalOptions()} and ${event.participationInfo.flexibleParticipationTimesEnabled} and ${participationDetails.hasArrivalOption()}"
                       	  th:attrappend="data-arrival-option=${participationDetails.arrivalOption}">
+
                       	  <span th:if="${participant.address.city} NE ${participationDetails.arrivalOption.description}">
                       	  	<!-- <span class="glyphicon glyphicon-home" th:if="${participant.address.city}"></span> <span th:if="${participant.address.city}" th:text="${participant.address.city}"></span>
                       	  	<span class="glyphicon glyphicon-plane" th:if="${participationDetails.arrivalOption}"></span> <span th:if="${participationDetails.arrivalOption}" th:text="${participationDetails.arrivalOption}"></span>
@@ -744,6 +745,15 @@
                       	  	
                       	  </span>
                       	  <span th:if="${participant.address.city} EQ ${participationDetails.arrivalOption.description}" th:text="${participant.address.city} ?: 'unbekannt'"></span>
+                      </td>
+                      <td class="participation-info-content arrival action-cursor"
+                      	  th:if="${event.participationInfo.hasArrivalOptions()} and ${event.participationInfo.flexibleParticipationTimesEnabled} and not ${participationDetails.hasArrivalOption()}"
+                      	  data-arrival-option="">
+
+                      	  <span th:if="${participant.address.city}">
+                      	  	<span th:text="${participant.address.city}"></span>/ keine Angabe
+                      	  </span>
+                      	  <span th:unless="${participant.address.city}">unbekannt</span>
                       </td>
                       <td class="participant-info-content form-sent text-center action-cursor"
                           th:attrappend="data-form-sent=${participationDetails.registrationFormSent}">
