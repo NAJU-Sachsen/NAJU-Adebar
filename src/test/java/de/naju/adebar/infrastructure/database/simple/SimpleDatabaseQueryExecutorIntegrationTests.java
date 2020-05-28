@@ -84,4 +84,13 @@ public class SimpleDatabaseQueryExecutorIntegrationTests {
 		assertThat(resultSet.getResultSet()).allMatch((row) -> row.getColumnCount() == 4);
 	}
 
+	@Test
+	@WithMockUser(roles = "ADMIN")
+	public void respectsColumnRenames() {
+		String query = "SELECT first_name AS fn FROM subscriber";
+		SimplifiedResultSet resultSet = queryExec.runQuery(query);
+
+		// beware that column names will be all uppercase
+		assertThat(resultSet.getColumnNames()).containsExactly("FN");
+	}
 }
