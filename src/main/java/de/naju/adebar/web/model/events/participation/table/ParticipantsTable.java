@@ -1,13 +1,13 @@
 package de.naju.adebar.web.model.events.participation.table;
 
-import de.naju.adebar.documentation.Unmodifiable;
-import de.naju.adebar.model.events.Event;
-import de.naju.adebar.model.events.ParticipantsList;
-import de.naju.adebar.model.persons.Person;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import org.springframework.util.Assert;
+import de.naju.adebar.documentation.Unmodifiable;
+import de.naju.adebar.model.events.Event;
+import de.naju.adebar.model.events.ParticipantsList;
+import de.naju.adebar.model.persons.Person;
 
 /**
  * A participants table consists of one row for each participant of an {@link Event}. The columns
@@ -25,6 +25,11 @@ public class ParticipantsTable {
 	 * Column displaying the name of the participant.
 	 */
 	public static final String COLUMN_NAME = "name";
+
+	/**
+	 * Column displaying the participant's last name and first name.
+	 */
+	public static final String COLUMN_NAME_REVERSED = "reversedName";
 
 	/**
 	 * Column displaying the email address of the participant.
@@ -156,9 +161,9 @@ public class ParticipantsTable {
 	 */
 	@Unmodifiable
 	public static final List<String> ALL_COLUMNS =
-			Collections.unmodifiableList(Arrays.asList(COLUMN_NAME, COLUMN_EMAIL, COLUMN_PHONE,
-					COLUMN_ADDRESS, COLUMN_CITY, COLUMN_MARKETING_STATUS, COLUMN_DATE_OF_BIRTH, COLUMN_AGE,
-					COLUMN_EATING_HABIT, COLUMN_HEALTH_IMPAIRMENTS, COLUMN_NABU_MEMBERSHIP,
+			Collections.unmodifiableList(Arrays.asList(COLUMN_NAME, COLUMN_NAME_REVERSED, COLUMN_EMAIL,
+					COLUMN_PHONE, COLUMN_ADDRESS, COLUMN_CITY, COLUMN_MARKETING_STATUS, COLUMN_DATE_OF_BIRTH,
+					COLUMN_AGE, COLUMN_EATING_HABIT, COLUMN_HEALTH_IMPAIRMENTS, COLUMN_NABU_MEMBERSHIP,
 					COLUMN_PERSON_REMARKS, COLUMN_PARENTS_NAME, COLUMN_PARENTS_PRIVATE_PHONE,
 					COLUMN_PARENTS_LANDLINE_PHONE, COLUMN_PARENTS_WORK_PHONE, COLUMN_REGISTRATION_DATE,
 					COLUMN_REGISTRATION_FORM_SENT, COLUMN_REGISTRATION_FORM_FILLED,
@@ -215,8 +220,7 @@ public class ParticipantsTable {
 	 * Primary constructor.
 	 *
 	 * @param event the event for which the participants should be displayed
-	 * @param columns the columns this table should contain. Each column must have a well-known
-	 * 		code.
+	 * @param columns the columns this table should contain. Each column must have a well-known code.
 	 * @see #ALL_COLUMNS
 	 */
 	ParticipantsTable(Event event, List<String> columns) {

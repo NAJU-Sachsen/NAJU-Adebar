@@ -1,5 +1,8 @@
 package de.naju.adebar.web.model.events.participation.table;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import de.naju.adebar.model.events.Event;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.web.model.events.participation.table.columns.AddressColumnFormatter;
@@ -27,10 +30,8 @@ import de.naju.adebar.web.model.events.participation.table.columns.PhoneColumnFo
 import de.naju.adebar.web.model.events.participation.table.columns.RegistrationDateColumnFormatter;
 import de.naju.adebar.web.model.events.participation.table.columns.RegistrationFormFilledColumnFormatter;
 import de.naju.adebar.web.model.events.participation.table.columns.RegistrationFormSentColumnFormatter;
+import de.naju.adebar.web.model.events.participation.table.columns.ReversedNameColumnFormatter;
 import de.naju.adebar.web.model.events.participation.table.columns.TableColumnFormatter;
-import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
 /**
  * A service that provides the appropriate {@link TableColumnFormatter renderer} for a column of a
@@ -73,6 +74,9 @@ public class ParticipantsTableFormattingService {
 		switch (columnName) {
 			case ParticipantsTable.COLUMN_NAME:
 				formatter = ctx.getBean(NameColumnFormatter.class);
+				break;
+			case ParticipantsTable.COLUMN_NAME_REVERSED:
+				formatter = ctx.getBean(ReversedNameColumnFormatter.class);
 				break;
 			case ParticipantsTable.COLUMN_EMAIL:
 				formatter = ctx.getBean(EmailColumnFormatter.class);

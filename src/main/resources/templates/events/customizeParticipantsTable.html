@@ -170,6 +170,11 @@
 												</div>
 												<div class="checkbox">
 													<label>
+														<input type="checkbox" th:field="*{reversedName}"/> Name der Teilnehmenden (als Nachname, Vorname)
+													</label>
+												</div>
+												<div class="checkbox">
+													<label>
 														<input type="checkbox" th:field="*{email}"/> E-Mail Adressen
 													</label>
 												</div>
@@ -383,6 +388,11 @@
 									</div>
 									<div class="checkbox">
 										<label>
+											<input type="checkbox" th:field="*{reversedName}"/> Name der Teilnehmenden (als Nachname, Vorname)
+										</label>
+									</div>
+									<div class="checkbox">
+										<label>
 											<input type="checkbox" th:field="*{email}"/> E-Mail Adressen
 										</label>
 									</div>
@@ -563,6 +573,7 @@
 										th:action="@{/events/{id}/participants/table/save(id=${event.id})}">
 
 								<input type="hidden" th:field="*{name}"/>
+								<input type="hidden" th:field="*{reversedName}"/>
 								<input type="hidden" th:field="*{email}"/>
 								<input type="hidden" th:field="*{phone}"/>
 								<input type="hidden" th:field="*{city}"/>

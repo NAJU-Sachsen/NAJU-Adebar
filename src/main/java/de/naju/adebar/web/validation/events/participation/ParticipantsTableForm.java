@@ -17,6 +17,7 @@ import de.naju.adebar.web.model.events.participation.table.ParticipantsTableBuil
 public class ParticipantsTableForm {
 
 	private boolean name = true;
+	private boolean reversedName;
 	private boolean email;
 	private boolean phone;
 	private boolean address;
@@ -66,6 +67,14 @@ public class ParticipantsTableForm {
 
 	public void setName(boolean name) {
 		this.name = name;
+	}
+
+	public boolean isReversedName() {
+		return reversedName;
+	}
+
+	public void setReversedName(boolean reversedName) {
+		this.reversedName = reversedName;
 	}
 
 	public boolean isEmail() {
@@ -274,31 +283,16 @@ public class ParticipantsTableForm {
 
 	@Override
 	public String toString() {
-		return "ParticipantsTableForm{" +
-				"name=" + name +
-				", email=" + email +
-				", phone=" + phone +
-				", address=" + address +
-				", city=" + city +
-				", marketingStatus=" + marketingStatus +
-				", dateOfBirth=" + dateOfBirth +
-				", age=" + age +
-				", eatingHabits=" + eatingHabits +
-				", healthImpairments=" + healthImpairments +
-				", nabu=" + nabu +
-				", personRemarks=" + personRemarks +
-				", parents=" + parents +
-				", parentsPrivatePhone=" + parentsPrivatePhone +
-				", parentsLandlinePhone=" + parentsLandlinePhone +
-				", parentsWorkPhone=" + parentsWorkPhone +
-				", registrationDate=" + registrationDate +
-				", registrationFormSent=" + registrationFormSent +
-				", registrationFormFilled=" + registrationFormFilled +
-				", feePayed=" + feePayed +
-				", arrival=" + arrival +
-				", departure=" + departure +
-				", participationTime=" + participationTime +
-				", participationRemarks=" + participationRemarks +
-				'}';
+		return "ParticipantsTableForm{" + "name=" + name + ", email=" + email + ", phone=" + phone
+				+ ", address=" + address + ", city=" + city + ", marketingStatus=" + marketingStatus
+				+ ", dateOfBirth=" + dateOfBirth + ", age=" + age + ", eatingHabits=" + eatingHabits
+				+ ", healthImpairments=" + healthImpairments + ", nabu=" + nabu + ", personRemarks="
+				+ personRemarks + ", parents=" + parents + ", parentsPrivatePhone=" + parentsPrivatePhone
+				+ ", parentsLandlinePhone=" + parentsLandlinePhone + ", parentsWorkPhone="
+				+ parentsWorkPhone + ", registrationDate=" + registrationDate + ", registrationFormSent="
+				+ registrationFormSent + ", registrationFormFilled=" + registrationFormFilled
+				+ ", feePayed=" + feePayed + ", arrival=" + arrival + ", departure=" + departure
+				+ ", participationTime=" + participationTime + ", participationRemarks="
+				+ participationRemarks + '}';
 	}
 }
