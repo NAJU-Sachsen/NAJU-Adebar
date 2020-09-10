@@ -6,6 +6,7 @@ function initEditParticipantForm(e) {
   const button = $(e.relatedTarget);
   const participantRow = button.closest('.participant-info');
 
+  const participantName = participantRow.data('name');
   const participantId = participantRow.data('participant');
   const formSent = participantRow.find('.form-sent').data('form-sent');
   const formFilled = participantRow.find('.form-filled').data('form-filled');
@@ -16,6 +17,7 @@ function initEditParticipantForm(e) {
       participantRow.find('.go-home-singly').data('go-home-singly');
   const remarks = participantRow.find('.remarks').text();
 
+  $('#edit-participant-name').text(participantName);
   $('#edit-participant-id').val(participantId);
   $('#edit-participant-form-sent').prop('checked', formSent).trigger('change');
   $('#edit-participant-form-filled').prop('checked', formFilled).trigger(

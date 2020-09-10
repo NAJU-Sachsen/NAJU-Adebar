@@ -694,7 +694,7 @@
                     <tbody th:remove="all-but-first">
                     <tr class="row participant-info" th:each="participant : ${participantsList}"
                         th:with="participationDetails = ${participantsList.getParticipationDetailsFor(participant)}"
-                        th:attrappend="data-participant=${participant.id}">
+                        th:attrappend="data-participant=${participant.id} data-name=${participant.name}">
                       <td th:classappend="${not participant.hasOwnOrParentsEmail()} ? 'text-danger'">
                         <a href="../persons/personDetails.html" class="no-link-deco"
                            th:href="@{/persons/{id}(id=${participant.id})}"
@@ -1171,7 +1171,7 @@
               <div class="modal-content">
                 <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  <h3 class="modal-title">Anpassen</h3>
+                  <h3 class="modal-title">Anpassen <span id="edit-participant-name"></span></h3>
                 </div>
 
                 <div class="modal-body">
