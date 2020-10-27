@@ -1,11 +1,11 @@
 package de.naju.adebar.app.events.processing;
 
+import java.util.stream.Collectors;
+import org.springframework.stereotype.Service;
 import de.naju.adebar.model.core.Email;
 import de.naju.adebar.model.events.Event;
 import de.naju.adebar.model.events.Reservation;
 import de.naju.adebar.model.persons.Person;
-import java.util.stream.Collectors;
-import org.springframework.stereotype.Service;
 
 /**
  * Service providing useful data extraction capabilities for events.
@@ -28,6 +28,15 @@ public class EventDataProcessingService {
 		return event.getParticipantsList().getParticipants().entrySet().stream()
 				.filter(entry -> entry.getKey().hasOwnOrParentsEmail()) // ignore participants with no email
 				.filter(entry -> !entry.getValue().isParticipationFeePayed()) // ignore payed participants
+				.map(entry -> entry.getKey().getOwnOrParentsEmail()) // use the parent's email if necessary
+				.collect(Collectors.toSet()); // eliminate duplicates
+	}
+
+	public Iterable<Email> getEmailAddressesOfParticpantsWithSignedRegistrationForm(Event event) {
+		return event.getParticipantsList().getParticipants().entrySet().stream()
+				.filter(entry -> entry.getKey().hasOwnOrParentsEmail()) // ignore participants with no email
+				// ignore participants if they did not sign the form
+				.filter(entry -> entry.getValue().isRegistrationFormFilled())
 				.map(entry -> entry.getKey().getOwnOrParentsEmail()) // use the parent's email if necessary
 				.collect(Collectors.toSet()); // eliminate duplicates
 	}

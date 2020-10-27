@@ -238,13 +238,19 @@
                   <li>
                     <a href="mailto:"
                        th:href="${#email.mailtoBcc(processingService.getEmailAddressesOfParticpantsWithoutSentRegistrationForm(event))}">
-                      Anmeldeformular noch nicht gesendet
+                      Anmeldeformular noch nicht gesendet (an die*den Teilnehmer*in)
+                    </a>
+                  </li>
+                  <li>
+                    <a href="mailto:"
+                       th:href="${#email.mailtoBcc(processingService.getEmailAddressesOfParticipantsWithSignedRegistrationForm(event))}">
+                      Anmeldeformular <strong>bereits</strong> ausgefüllt
                     </a>
                   </li>
                   <li>
                     <a href="#"
                        th:href="${#email.mailtoBcc(processingService.getEmailAddressesOfParticipantsWithoutSignedRegistrationForm(event))}">
-                      Anmeldeformular noch nicht ausgefüllt
+                      Anmeldeformular <strong>noch nicht</strong> ausgefüllt
                     </a>
                   </li>
                   <li>
