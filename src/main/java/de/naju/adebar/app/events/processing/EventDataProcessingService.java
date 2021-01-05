@@ -32,7 +32,7 @@ public class EventDataProcessingService {
 				.collect(Collectors.toSet()); // eliminate duplicates
 	}
 
-	public Iterable<Email> getEmailAddressesOfParticpantsWithSignedRegistrationForm(Event event) {
+	public Iterable<Email> getEmailAddressesOfParticipantsWithSignedRegistrationForm(Event event) {
 		return event.getParticipantsList().getParticipants().entrySet().stream()
 				.filter(entry -> entry.getKey().hasOwnOrParentsEmail()) // ignore participants with no email
 				// ignore participants if they did not sign the form
