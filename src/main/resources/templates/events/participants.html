@@ -709,15 +709,19 @@
                         <small th:unless="${participant.hasOwnOrParentsEmail()}"
                                data-toggle="tooltip"
                                data-placement="bottom" data-container="body"
-                               data-title="Weder für den/die Teilnehmende, noch für die Eltern ist eine E-Mail Addresse hinterlegt. E-Mails werden an ihn/sie nicht versendet werden!">
+                               data-title="Weder für den/die Teilnehmende, noch für die Eltern ist eine E-Mail Addresse hinterlegt. E-Mails werden an ihn/sie nicht versendet werden!"
+                               style="margin-right: 0.5em; margin-left: 0.5em;">
                           <span class="glyphicon glyphicon-warning-sign"></span>
+                          <span class="glyphicon glyphicon-envelope"></span>
                         </small>
                         
                         <small th:if="${participant.participantProfile.hasHealthImpairments()}"
                         			 data-toggle="tooltip"
                         			 data-placement="bottom" data-container="body"
-                        			 th-attrappend="data-title='Informationen zu Allergien und Unverträglichkeiten vorhanden: ' + ${participant.participantProfile.healthImpairments}">
-                        	<span class="glyphicon glyphicon-warning-cutlery"></span>
+                        			 th:attrappend="data-title=|Informationen zu Allergien und Unverträglichkeiten vorhanden: ${participant.participantProfile.healthImpairments}|"
+                        			 style="margin-right: 0.5em; margin-left: 0.5em;">
+                        	<span class="glyphicon glyphicon-warning-sign"></span>
+                        	<span class="glyphicon glyphicon-cutlery"></span>
                         </small>
 
                         <small class="text-warning"
