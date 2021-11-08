@@ -701,7 +701,7 @@
                     <tr class="row participant-info" th:each="participant : ${participantsList}"
                         th:with="participationDetails = ${participantsList.getParticipationDetailsFor(participant)}"
                         th:attrappend="data-participant=${participant.id}, data-name=${participant.name}">
-                      <td th:classappend="${not participant.hasOwnOrParentsEmail()} or ${participant.hasHealthImpairments()} ? 'text-danger'">
+                      <td th:classappend="${not participant.hasOwnOrParentsEmail()} or ${participant.participantProfile.hasHealthImpairments()} ? 'text-danger'">
                         <a href="../persons/personDetails.html" class="no-link-deco"
                            th:href="@{/persons/{id}(id=${participant.id})}"
                            th:text="${participant.name}">
@@ -713,10 +713,10 @@
                           <span class="glyphicon glyphicon-warning-sign"></span>
                         </small>
                         
-                        <small th:if="${participant.hasHealthImpairments()}"
+                        <small th:if="${participant.participantProfile.hasHealthImpairments()}"
                         			 data-toggle="tooltip"
                         			 data-placement="bottom" data-container="body"
-                        			 th-attrappend="data-title='Informationen zu Allergien und Unverträglichkeiten vorhanden: ' + ${participant.healthImpairments}">
+                        			 th-attrappend="data-title='Informationen zu Allergien und Unverträglichkeiten vorhanden: ' + ${participant.participantProfile.healthImpairments}">
                         	<span class="glyphicon glyphicon-warning-cutlery"></span>
                         </small>
 
