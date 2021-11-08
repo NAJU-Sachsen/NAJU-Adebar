@@ -292,8 +292,9 @@
 															<div class="collapse" id="eating-habits-container">
 																<textarea id="edit-eating-habits" class="form-control"
 																					maxlength="511"
-																					placeholder="vegetarisch, vegan o.ä. Unverträglichkeiten, ..."
+																					placeholder="vegetarisch, vegan o.ä. ..."
 																					th:field="*{participantForm.eatingHabits}"></textarea>
+																<p class="text-danger">Wichtig: Unverträglichkeiten müssen unter Allergien gelistet werden!</p>
 															</div>
 															<p class="help-block"
 																 th:if="${#fields.hasErrors('participantForm.eatingHabits')}"
@@ -302,7 +303,7 @@
 														<div class="form-group"
 																 th:classappend="${#fields.hasErrors('participantForm.healthImpairments')} ? 'has-error'">
 															<label for="edit-health-impairments"
-																		 class="control-label"> Allergien, o.ä. </label>
+																		 class="control-label"> Allergien, Unverträglichkeiten, o.ä. </label>
 															<textarea id="edit-health-impairments"
 																				class="form-control" maxlength="511"
 																				placeholder="Heuschnupfen o.ä."
@@ -531,7 +532,7 @@
 							</tr>
 							<tr class="row">
 								<th class="col-md-2"><span class="glyphicon glyphicon-bed"></span>
-									Allergien
+									Allergien etc.
 								</th>
 								<td class="col-md-10"
 										th:text="${participantProfile.healthImpairments}">

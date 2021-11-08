@@ -297,8 +297,9 @@
                   </button>
                 </div>
                 <div class="collapse" id="eating-habits-container" th:class="${#fields.hasErrors('participantForm.eatingHabits')} ? '' : 'collapse'">
-                  <textarea class="form-control" id="eating-habits" placeholder="vegetarisch, vegan o.ä. Unverträglichkeiten, ..."
+                  <textarea class="form-control" id="eating-habits" placeholder="vegetarisch, vegan o.ä. ..."
                     th:field="*{participantForm.eatingHabits}"></textarea>
+                    <p class="text-danger">Wichtig: Unverträglichkeiten müssen unter Allergien gelistet werden!</p>
                 </div>
                 <p class="help-block" th:if="${#fields.hasErrors('participantForm.eatingHabits')}"
                   th:errors="*{participantForm.eatingHabits}">
@@ -306,7 +307,7 @@
                 </p>
               </div>
               <div class="form-group" th:classappend="${#fields.hasErrors('participantForm.healthImpairments')} ? 'has-error'">
-                <label for="health-impairments" class="control-label">Allergien o.ä.</label>
+                <label for="health-impairments" class="control-label">Allergien, Unverträglichkeiten, o.ä.</label>
                 <textarea class="form-control" id="health-impairments" placeholder="Heuschnupfen, o.ä."
                   th:field="*{participantForm.healthImpairments}"></textarea>
                 <p class="help-block" th:if="${#fields.hasErrors('participantForm.healthImpairments')}"
