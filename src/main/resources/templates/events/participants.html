@@ -716,7 +716,7 @@
                         <small th:if="${participant.hasHealthImpairments()}"
                         			 data-toggle="tooltip"
                         			 data-placement="bottom" data-container="body"
-                        			 data-title="Informationen zu Allergien und Unverträglichkeiten vorhanden!">
+                        			 th-attrappend="data-title='Informationen zu Allergien und Unverträglichkeiten vorhanden: ' + ${participant.healthImpairments}">
                         	<span class="glyphicon glyphicon-warning-cutlery"></span>
                         </small>
 
