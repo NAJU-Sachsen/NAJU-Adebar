@@ -27,6 +27,7 @@
 		<assertj.version>3.5.2</assertj.version>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
+    <log4j2.version>2.15.0</log4j2.version>
 	</properties>
 
 	<packaging>jar</packaging>
@@ -177,7 +178,7 @@
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
-			<version>21.0</version>
+			<version>30.0-jre</version>
 		</dependency>
 
 		<dependency>
