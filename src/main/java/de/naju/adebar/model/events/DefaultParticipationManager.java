@@ -143,7 +143,7 @@ public class DefaultParticipationManager implements ParticipationManager {
           ));
       boolean extraSpaceForCounselors =
           event.getParticipantsList().getAccommodation().hasExtraSpaceForCounselors();
-      Assert.isTrue(scheduleTest && !extraSpaceForCounselors,
+      Assert.isTrue(scheduleTest || extraSpaceForCounselors,
           "Apparently the event is already booked out from the get go.");
     }
 
@@ -156,7 +156,7 @@ public class DefaultParticipationManager implements ParticipationManager {
       counselor.makeActivist();
     }
 
-    if (mayAccommodateAdditionalPerson(event, counselor, registrationInfo, false, true)) {
+    if (!mayAccommodateAdditionalPerson(event, counselor, registrationInfo, false, true)) {
       event.getParticipantsList().internal_setBookedOut(isBookedOut(event));
       return Result.BOOKED_OUT;
     }
