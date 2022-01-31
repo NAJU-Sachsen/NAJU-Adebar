@@ -130,9 +130,6 @@ public class DefaultParticipationManager implements ParticipationManager {
   public Result addCounselor(Event event, Person counselor, CounselorInfo registrationInfo) {
     event.assertNotCanceled();
 
-    boolean extraSpaceForCounselors =
-        event.getParticipantsList().getAccommodation().hasExtraSpaceForCounselors();
-
     if (event.getParticipantsList().hasAccommodationInfo() && !extraSpaceForCounselors) {
       // just for safety measures we will invoke the scheduler here (s.t. there is an initial
       // configuration available)
@@ -144,7 +141,10 @@ public class DefaultParticipationManager implements ParticipationManager {
                   participationEntry.getValue().getParticipationTime())) //
               .collect(Collectors.toList()) //
           ));
-      Assert.isTrue(scheduleTest, "Apparently the event is already booked out from the get go.");
+      boolean extraSpaceForCounselors =
+          event.getParticipantsList().getAccommodation().hasExtraSpaceForCounselors();
+      Assert.isTrue(scheduleTest && !extraSpaceForCounselors,
+          "Apparently the event is already booked out from the get go.");
     }
 
 
