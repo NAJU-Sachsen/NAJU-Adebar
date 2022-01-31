@@ -130,7 +130,7 @@ public class DefaultParticipationManager implements ParticipationManager {
   public Result addCounselor(Event event, Person counselor, CounselorInfo registrationInfo) {
     event.assertNotCanceled();
 
-    if (event.getParticipantsList().hasAccommodationInfo() && !extraSpaceForCounselors) {
+    if (event.getParticipantsList().hasAccommodationInfo()) {
       // just for safety measures we will invoke the scheduler here (s.t. there is an initial
       // configuration available)
       boolean scheduleTest = validator.isSchedulableWithExtendedSpec( //
