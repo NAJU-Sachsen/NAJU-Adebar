@@ -437,6 +437,14 @@
                             </strong>
                           </td>
                         </tr>
+                        <tr class="row" th:if="${counselor.isParticipant()} and ${counselor.participantProfile.hasHealthImpairments()}">
+                        	<th class="col-md-1 text-right text-danger">
+                        		<span class="glyphicon glyphicon-cutlery"></span>
+                        	</th>
+                        	<td class="col-md-11 text-danger" th:inline="text">
+                        		Allergien/Unverträglichkeiten: <strong>[[${counselor.participantProfile.healthImpairments}]]</strong>
+                        	</td>
+                        </tr>
                         <tr class="row" th:if="${counselorInfo.hasRemarks()}">
                           <th class="col-md-1 text-right">
                             <span class="glyphicon glyphicon-grain"></span>
