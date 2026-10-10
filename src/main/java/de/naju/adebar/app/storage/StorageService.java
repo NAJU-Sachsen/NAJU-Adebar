@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
 
 /**
  * Service to write files to some buffer and retrieve them later on.

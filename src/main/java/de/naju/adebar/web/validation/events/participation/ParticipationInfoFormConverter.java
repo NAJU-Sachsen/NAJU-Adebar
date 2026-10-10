@@ -6,7 +6,7 @@ import de.naju.adebar.model.events.ParticipationInfo;
 import de.naju.adebar.web.validation.ValidatingEntityFormConverter;
 import java.util.HashSet;
 import java.util.List;
-import org.springframework.lang.NonNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 

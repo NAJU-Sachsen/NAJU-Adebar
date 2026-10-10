@@ -14,7 +14,7 @@ import de.naju.adebar.web.validation.persons.participant.EditParticipantForm;
 import de.naju.adebar.web.validation.persons.participant.EditParticipantFormConverter;
 import de.naju.adebar.web.validation.persons.relatives.EditParentProfileForm;
 import de.naju.adebar.web.validation.persons.relatives.EditParentProfileFormConverter;
-import org.springframework.lang.NonNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;

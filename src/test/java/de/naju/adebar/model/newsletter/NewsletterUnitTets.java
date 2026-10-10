@@ -1,10 +1,12 @@
 package de.naju.adebar.model.newsletter;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import de.naju.adebar.TestUtils;
 import de.naju.adebar.model.core.Email;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Basic testing of the {@link Newsletter} class
@@ -16,7 +18,7 @@ public class NewsletterUnitTets {
 	private Newsletter hifaNewsletter;
 	private Subscriber hans, berta, claus;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		hifaNewsletter = new Newsletter("HIFA");
 		hans = new Subscriber("Hans", "Wurst", Email.of("hans.wurst@web.de"));
@@ -24,26 +26,30 @@ public class NewsletterUnitTets {
 		claus = new Subscriber(Email.of("cccclllaaus@gmx.net"));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testCreateNameNull() {
-		new Newsletter(null);
+		assertThrows(IllegalArgumentException.class, () -> {
+			new Newsletter(null);
+		});
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testSetNameNull() {
-		hifaNewsletter.setName(null);
+		assertThrows(IllegalArgumentException.class, () ->
+			hifaNewsletter.setName(null));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testSetSubscribersNull() {
-		hifaNewsletter.setSubscribers(null);
+		assertThrows(IllegalArgumentException.class, () ->
+			hifaNewsletter.setSubscribers(null));
 	}
 
 	@Test
 	public void testAddValidSubscriber() {
 		hifaNewsletter.addSubscriber(hans);
-		Assert.assertTrue(String.format("%s should have been added!", hans),
-				hifaNewsletter.hasSubscriber(hans));
+		Assertions.assertTrue(hifaNewsletter.hasSubscriber(hans),
+				String.format("%s should have been added!", hans));
 	}
 
 	@Test
@@ -51,30 +57,33 @@ public class NewsletterUnitTets {
 		hifaNewsletter.addSubscriber(hans);
 		hifaNewsletter.addSubscriber(berta);
 		hifaNewsletter.addSubscriber(claus);
-		Assert.assertTrue(String.format("%s should have been added!", hans),
-				TestUtils.iterableContains(hifaNewsletter.getSubscribers(), hans));
-		Assert.assertTrue(String.format("%s should have been added!", berta),
-				TestUtils.iterableContains(hifaNewsletter.getSubscribers(), berta));
-		Assert.assertTrue(String.format("%s should have been added!", claus),
-				TestUtils.iterableContains(hifaNewsletter.getSubscribers(), claus));
+		Assertions.assertTrue(TestUtils.iterableContains(hifaNewsletter.getSubscribers(), hans),
+				String.format("%s should have been added!", hans));
+		Assertions.assertTrue(TestUtils.iterableContains(hifaNewsletter.getSubscribers(), berta),
+				String.format("%s should have been added!", berta));
+		Assertions.assertTrue(TestUtils.iterableContains(hifaNewsletter.getSubscribers(), claus),
+				String.format("%s should have been added!", claus));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testAddNullSubscriber() {
-		hifaNewsletter.addSubscriber(null);
+		assertThrows(IllegalArgumentException.class, () ->
+			hifaNewsletter.addSubscriber(null));
 	}
 
-	@Test(expected = AlreadySubscribedException.class)
+	@Test
 	public void testAddSubscriberTwice() {
-		hifaNewsletter.addSubscriber(hans);
-		hifaNewsletter.addSubscriber(hans);
+		assertThrows(AlreadySubscribedException.class, () -> {
+			hifaNewsletter.addSubscriber(hans);
+			hifaNewsletter.addSubscriber(hans);
+		});
 	}
 
 	@Test
 	public void testRemoveSubscriber() {
 		hifaNewsletter.addSubscriber(hans);
 		hifaNewsletter.removeSubscriber(hans);
-		Assert.assertFalse(String.format("%s should have been removed!", hans),
-				hifaNewsletter.hasSubscriber(hans));
+		Assertions.assertFalse(hifaNewsletter.hasSubscriber(hans),
+				String.format("%s should have been removed!", hans));
 	}
 }

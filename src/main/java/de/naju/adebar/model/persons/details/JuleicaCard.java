@@ -1,9 +1,9 @@
 package de.naju.adebar.model.persons.details;
 
 import java.time.LocalDate;
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Transient;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Transient;
 
 /**
  * A Juleica card qualifies an activist to host events with teenagers and assures a basic education

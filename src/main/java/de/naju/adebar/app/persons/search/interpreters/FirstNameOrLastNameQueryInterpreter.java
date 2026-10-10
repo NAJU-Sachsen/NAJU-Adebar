@@ -4,7 +4,7 @@ import com.querydsl.core.BooleanBuilder;
 import de.naju.adebar.app.persons.search.PersonQueryInterpreter;
 import de.naju.adebar.model.persons.QPerson;
 import java.util.Optional;
-import org.springframework.lang.NonNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 
 /**

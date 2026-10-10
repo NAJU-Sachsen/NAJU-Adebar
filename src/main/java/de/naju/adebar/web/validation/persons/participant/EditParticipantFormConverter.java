@@ -7,7 +7,7 @@ import de.naju.adebar.model.persons.ParticipantProfile;
 import de.naju.adebar.model.persons.details.NabuMembershipInformation;
 import de.naju.adebar.web.validation.ValidatingEntityFormConverter;
 import java.time.LocalDate;
-import org.springframework.lang.NonNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 

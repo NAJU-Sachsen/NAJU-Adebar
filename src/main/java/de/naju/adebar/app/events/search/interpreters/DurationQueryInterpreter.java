@@ -6,7 +6,7 @@ import java.time.LocalTime;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.springframework.lang.NonNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import com.querydsl.core.BooleanBuilder;

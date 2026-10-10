@@ -1,7 +1,7 @@
 package de.naju.adebar.model.events;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 import org.springframework.util.Assert;
 import de.naju.adebar.documentation.infrastructure.JpaOnly;
 

@@ -2,7 +2,7 @@ package de.naju.adebar.services.conversion.core;
 
 import de.naju.adebar.model.core.Email;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.lang.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Converter used to automatically provide required {@link Email} instances when a String is given

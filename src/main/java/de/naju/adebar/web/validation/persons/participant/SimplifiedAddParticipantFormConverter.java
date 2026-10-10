@@ -7,7 +7,7 @@ import de.naju.adebar.web.validation.NewOrExistingEntityForm.SubmittedData;
 import de.naju.adebar.web.validation.NewOrExistingValidatingEntityFormConverter;
 import java.time.LocalDate;
 import java.time.Period;
-import org.springframework.lang.NonNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.validation.Errors;

@@ -1,11 +1,13 @@
 package de.naju.adebar.model.persons;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import com.google.common.collect.Iterables;
 import de.naju.adebar.model.core.Email;
 import de.naju.adebar.model.persons.qualifications.Qualification;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Basic testing of the {@link ReferentProfile} class
@@ -17,7 +19,7 @@ public class ReferentUnitTest {
 	private Person referent;
 	private Qualification qualification;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		referent = new Person(new PersonId(), "Hans", "Wurst", Email.of("hw@web.de"));
 		referent.makeReferent();
@@ -25,16 +27,17 @@ public class ReferentUnitTest {
 				"Hat die Qualifikation, einen Erste-Hilfe Kurs zu leiten");
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testAddNullQualification() {
-		referent.getReferentProfile().addQualification(null);
+		assertThrows(IllegalArgumentException.class, () ->
+			referent.getReferentProfile().addQualification(null));
 	}
 
 	@Test
 	public void testAddQualification() {
 		referent.getReferentProfile().addQualification(qualification);
-		Assert.assertTrue(String.format("%s should have qualification %s", referent, qualification),
-				referent.getReferentProfile().hasQualification(qualification));
+		Assertions.assertTrue(referent.getReferentProfile().hasQualification(qualification),
+				String.format("%s should have qualification %s", referent, qualification));
 	}
 
 	@Test
@@ -42,12 +45,12 @@ public class ReferentUnitTest {
 		referent.getReferentProfile().addQualification(qualification);
 		referent.getReferentProfile().removeQualification(qualification);
 
-		Assert.assertFalse(
-				String.format("%s should not have qualification %s any more", referent, qualification),
-				referent.getReferentProfile().hasQualification(qualification));
-		Assert.assertFalse(
-				String.format("%s should not have qualification %s any more", referent, qualification),
-				Iterables.contains(referent.getReferentProfile().getQualifications(), qualification));
+		Assertions.assertFalse(
+				referent.getReferentProfile().hasQualification(qualification),
+				String.format("%s should not have qualification %s any more", referent, qualification));
+		Assertions.assertFalse(
+				Iterables.contains(referent.getReferentProfile().getQualifications(), qualification),
+				String.format("%s should not have qualification %s any more", referent, qualification));
 	}
 
 }

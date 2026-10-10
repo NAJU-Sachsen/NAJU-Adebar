@@ -1,9 +1,9 @@
 package de.naju.adebar.infrastructure.config.security;
 
 import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
@@ -25,8 +25,8 @@ public class RedirectingAccessDeniedHandler implements AccessDeniedHandler {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see org.springframework.security.web.access.AccessDeniedHandler#handle(javax.servlet.http.
-	 * HttpServletRequest, javax.servlet.http.HttpServletResponse,
+	 * @see org.springframework.security.web.access.AccessDeniedHandler#handle(jakarta.servlet.http.
+	 * HttpServletRequest, jakarta.servlet.http.HttpServletResponse,
 	 * org.springframework.security.access.AccessDeniedException)
 	 */
 	@Override

@@ -3,7 +3,7 @@ package de.naju.adebar.app.events.search.interpreters;
 import com.querydsl.core.BooleanBuilder;
 import de.naju.adebar.app.events.search.EventQueryInterpreter;
 import de.naju.adebar.model.events.QEvent;
-import org.springframework.lang.NonNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 
 @Service

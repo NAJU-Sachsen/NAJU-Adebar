@@ -2,9 +2,9 @@ package de.naju.adebar.model.core;
 
 import java.beans.Transient;
 import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.validation.constraints.Min;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.validation.constraints.Min;
 import org.springframework.util.Assert;
 import de.naju.adebar.documentation.infrastructure.JpaOnly;
 

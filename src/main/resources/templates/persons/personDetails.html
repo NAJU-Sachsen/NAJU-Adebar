@@ -35,7 +35,7 @@
 <body>
 
 <!-- central navigation -->
-<nav th:replace="navigation :: topNav(page='persons')"></nav>
+<nav th:replace="~{navigation :: topNav(page='persons')}"></nav>
 
 <!-- page specific content-->
 <main id="main">
@@ -137,12 +137,12 @@
 				 th:if="${tab == 'general'}">
 
 			<section class="display-category" id="general"
-							 th:replace="persons/personDetailsOverview :: general">
+							 th:replace="~{persons/personDetailsOverview :: general}">
 
 			</section>
 
 			<section class="display-category" id="family-relations"
-							 th:replace="persons/familyRelations :: graph">
+							 th:replace="~{persons/familyRelations :: graph}">
 				<div class="row">
 					<h2>Verwandschaft</h2>
 				</div>
@@ -160,12 +160,12 @@
 
 			<!-- activist profile -->
 			<section class="display-category" id="activist"
-							 th:replace="persons/activistProfile :: profile">
+							 th:replace="~{persons/activistProfile :: profile}">
 			</section>
 
 			<!-- referent profile -->
 			<section class="display-category" id="referent"
-							 th:replace="persons/referentProfile :: profile">
+							 th:replace="~{persons/referentProfile :: profile}">
 				<div class="row">
 					<h2>Referierenden-Infos</h2>
 				</div>
@@ -176,7 +176,7 @@
 						 th:classappend="${tab == 'events'} ? 'active'"
 						 th:if="${tab == 'events'}">
 
-			<div th:replace="persons/events :: timeline"></div>
+			<div th:replace="~{persons/events :: timeline}"></div>
 
 		</section>
 
@@ -184,7 +184,7 @@
 						 th:classappend="${tab == 'newsletters'} ? 'active'"
 						 th:if="${tab == 'newsletters'}">
 
-			<div th:replace="persons/subscribedNewsletters :: newsletters"></div>
+			<div th:replace="~{persons/subscribedNewsletters :: newsletters}"></div>
 
 		</section>
 

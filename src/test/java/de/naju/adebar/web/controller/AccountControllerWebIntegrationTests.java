@@ -9,8 +9,8 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import java.util.Arrays;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +33,7 @@ public class AccountControllerWebIntegrationTests extends WebIntegrationTestsBas
 
 	private UserAccount accountUnderTest;
 
-	@Before
+	@BeforeEach
 	public void setup() {
 		accountUnderTest = accountManager.createFor(TEST_USERNAME, "123",
 				TestData.getPerson(TestData.PERSON_FRITZ), Arrays.asList(TEST_AUTHORITY), false);

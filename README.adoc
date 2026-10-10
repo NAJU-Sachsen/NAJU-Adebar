@@ -11,9 +11,13 @@ NOTE: a german version of this readme will also be created
 == Quickstart
 To get things running you will need
 
-* the http://www.oracle.com/technetwork/java/javase/overview/index.html[Java Development Kit], Version 8 - either from Oracle or as OpenJDK
-* https://maven.apache.org/[Maven 3.x]
+* a https://openjdk.org/[Java Development Kit], Version 25
+* https://maven.apache.org/[Maven] 3.9 or newer
+* a https://www.mysql.com/[MySQL] database, version 8.4 or newer (see `application.properties` for the connection settings)
 * preferably an installation of https://git-scm.com/[Git]
+
+The required versions of Java and Maven are pinned in the `.sdkmanrc` file.
+If you use https://sdkman.io/[SDKMAN!], `sdk env install` sets up both of them.
 
 Kick off the application like the following:
 
@@ -21,6 +25,7 @@ Kick off the application like the following:
 ----
 $ git clone https://github.com/portux/NAJU-Adebar.git
 $ cd NAJU-Adebar
+$ sdk env
 $ mvn clean package
 $ mvn spring-boot:run
 ----
@@ -62,16 +67,12 @@ Your console output should look like this:
 [source, shell]
 ----
 $ java -version
-openjdk version "1.8.0_91"
-OpenJDK Runtime Environment (build 1.8.0_91-8u91-b14-3ubuntu1~16.04.1-b14)
-OpenJDK 64-Bit Server VM (build 25.91-b14, mixed mode)
+openjdk version "25.0.4" 2026-07-21 LTS
+OpenJDK Runtime Environment Temurin-25.0.4+7 (build 25.0.4+7-LTS)
+OpenJDK 64-Bit Server VM Temurin-25.0.4+7 (build 25.0.4+7-LTS, mixed mode, sharing)
 $ mvn -v
-Apache Maven 3.3.9
-Maven home: /usr/share/maven
-Java version: 1.8.0_91, vendor: Oracle Corporation
-Java home: /usr/lib/jvm/java-8-openjdk-amd64/jre
-Default locale: de_DE, platform encoding: UTF-8
-OS name: "linux", version: "4.4.0-38-generic", arch: "amd64", family: "unix"
+Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)
+Java version: 25.0.4, vendor: Eclipse Adoptium
 $ git --version
 git version 2.7.4
 ----

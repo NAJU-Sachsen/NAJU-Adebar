@@ -6,7 +6,7 @@ import java.time.Year;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.SortedSet;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.util.Assert;
 
 /**

@@ -2,8 +2,10 @@ package de.naju.adebar.model;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import de.naju.adebar.model.core.PhoneNumber;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class PhoneNumberUnitTests {
 
@@ -39,9 +41,10 @@ public class PhoneNumberUnitTests {
 		}
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void rejectsNullPhoneNumber() {
-		PhoneNumber.of(null);
+		assertThrows(IllegalArgumentException.class, () ->
+			PhoneNumber.of(null));
 	}
 
 	@Test

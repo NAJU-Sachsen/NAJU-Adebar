@@ -6,7 +6,7 @@ import de.naju.adebar.model.persons.Person;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.lang.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * A {@link SearchServer} for {@link Person Persons}.

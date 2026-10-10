@@ -8,15 +8,15 @@ import de.naju.adebar.model.persons.details.NabuMembershipInformation;
 import de.naju.adebar.model.persons.events.PersonDataUpdatedEvent;
 import de.naju.adebar.model.persons.exceptions.GenderIsRequiredForMinorsException;
 import java.time.LocalDate;
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Transient;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Transient;
 import org.springframework.util.Assert;
 
 /**

@@ -1,6 +1,6 @@
 package de.naju.adebar.web.model.html;
 
-import org.springframework.lang.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class NodeFactory {
 

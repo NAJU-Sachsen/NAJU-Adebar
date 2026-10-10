@@ -1,11 +1,13 @@
 package de.naju.adebar.model.persons;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collection;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import de.naju.adebar.model.core.Address;
 import de.naju.adebar.model.core.Email;
 import de.naju.adebar.model.core.PhoneNumber;
@@ -23,7 +25,7 @@ public class PersonUnitTest {
 
 	private Person person;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		person = new Person(new PersonId(), "Hans", "Wurst", Email.of("hans.wurst@web.de"));
 		person.setAddress(Address.of("Hauptstraße 3", "01234", "Entehausen"));
@@ -47,10 +49,12 @@ public class PersonUnitTest {
 		assertThat(person.getParticipantProfile().getEatingHabits()).isEqualTo("vegan");
 	}
 
-	@Test(expected = ArchivedPersonException.class)
+	@Test
 	public void personMayNotBeMadeParticipantIfArchived() {
-		person.archive();
-		person.makeParticipant();
+		assertThrows(ArchivedPersonException.class, () -> {
+			person.archive();
+			person.makeParticipant();
+		});
 	}
 
 	@Test
@@ -70,10 +74,12 @@ public class PersonUnitTest {
 		assertThat(person.getActivistProfile().getJuleicaCard()).isEqualTo(juleica);
 	}
 
-	@Test(expected = ArchivedPersonException.class)
+	@Test
 	public void personMayNotBeMadeActivistIfArchived() {
-		person.archive();
-		person.makeActivist();
+		assertThrows(ArchivedPersonException.class, () -> {
+			person.archive();
+			person.makeActivist();
+		});
 	}
 
 	@Test
@@ -118,10 +124,12 @@ public class PersonUnitTest {
 		assertThat(person.getParents()).isEmpty();
 	}
 
-	@Test(expected = ArchivedPersonException.class)
+	@Test
 	public void mayOnlyBeArchivedOnce() {
-		person.archive();
-		person.archive();
+		assertThrows(ArchivedPersonException.class, () -> {
+			person.archive();
+			person.archive();
+		});
 	}
 
 	@Test

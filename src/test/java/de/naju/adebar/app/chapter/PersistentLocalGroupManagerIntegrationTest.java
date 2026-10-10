@@ -8,19 +8,16 @@ import de.naju.adebar.model.core.Email;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.persons.PersonFactory;
 import de.naju.adebar.model.persons.PersonManager;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Rico Bergmann
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
 public class PersistentLocalGroupManagerIntegrationTest {
@@ -37,7 +34,7 @@ public class PersistentLocalGroupManagerIntegrationTest {
 	private LocalGroup najuSn;
 	private Person hans;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		najuSn = new LocalGroup("NAJU Sachsen", new Address());
 		hans = personFactory.buildNew("Hans", "Wurst", Email.of("hw@web.de")).makeActivist().create();
@@ -46,7 +43,7 @@ public class PersistentLocalGroupManagerIntegrationTest {
 	@Test
 	public void testSave() {
 		najuSn = localGroupManager.saveLocalGroup(najuSn);
-		Assert.assertTrue("Group should have been saved", localGroupRepo.existsById(najuSn.getId()));
+		Assertions.assertTrue(localGroupRepo.existsById(najuSn.getId()), "Group should have been saved");
 	}
 
 	@Test
@@ -58,7 +55,7 @@ public class PersistentLocalGroupManagerIntegrationTest {
 		localGroupManager.updateLocalGroup(najuSn.getId(), najuSn);
 
 		najuSn = localGroupManager.findLocalGroup(najuSn.getId()).orElse(null);
-		Assert.assertEquals("Group should have been updated", city, najuSn.getAddress().getCity());
+		Assertions.assertEquals(city, najuSn.getAddress().getCity(), "Group should have been updated");
 	}
 
 	@Test
@@ -68,6 +65,6 @@ public class PersistentLocalGroupManagerIntegrationTest {
 		Board b = new Board(hans);
 
 		najuSn = localGroupManager.updateBoard(najuSn.getId(), b);
-		Assert.assertEquals("Chairman should have been updated", hans, najuSn.getBoard().getChairman());
+		Assertions.assertEquals(hans, najuSn.getBoard().getChairman(), "Chairman should have been updated");
 	}
 }

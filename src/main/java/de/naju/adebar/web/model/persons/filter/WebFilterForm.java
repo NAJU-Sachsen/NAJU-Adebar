@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import de.naju.adebar.documentation.Unmodifiable;
-import org.springframework.lang.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class WebFilterForm implements Iterable<FilterGroup> {
 

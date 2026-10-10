@@ -25,7 +25,7 @@
 <body>
 
 <!-- central navigation -->
-<nav th:replace="navigation :: topNav(page='events')"></nav>
+<nav th:replace="~{navigation :: topNav(page='events')}"></nav>
 
 <!-- page specific content-->
 <main id="main" th:object="${form}">
@@ -71,10 +71,10 @@
   <!-- the form -->
   <form id="add-event" class="row display-category" method="post" th:action="@{/events/add}">
 
-    <input type="hidden" name="return-to" th:value="${#request.getParameter('return-to')}"
-           th:if="${#request.getParameter('return-to') != null}"/>
-    <input type="hidden" name="return-action" th:value="${#request.getParameter('return-action')}"
-           th:if="${#request.getParameter('return-action') != null}"/>
+    <input type="hidden" name="return-to" th:value="${param['return-to'][0]}"
+           th:if="${param['return-to'] != null}"/>
+    <input type="hidden" name="return-action" th:value="${param['return-action'][0]}"
+           th:if="${param['return-action'] != null}"/>
 
     <!-- general info -->
     <div class="col-md-4">

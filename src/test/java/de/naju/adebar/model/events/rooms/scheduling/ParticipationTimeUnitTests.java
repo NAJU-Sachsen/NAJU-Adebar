@@ -2,7 +2,9 @@ package de.naju.adebar.model.events.rooms.scheduling;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.Test;
 
 public class ParticipationTimeUnitTests {
 
@@ -25,9 +27,11 @@ public class ParticipationTimeUnitTests {
 				.isThrownBy(() -> new ParticipationTime(3, -4));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void rejectsLastNightBeforeFirstNight() {
-		new ParticipationTime(5, 3);
+		assertThrows(IllegalArgumentException.class, () -> {
+			new ParticipationTime(5, 3);
+		});
 	}
 
 	@Test

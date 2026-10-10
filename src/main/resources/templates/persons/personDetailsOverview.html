@@ -24,7 +24,7 @@
 <body>
 
 <!-- central navigation -->
-<nav th:replace="navigation :: topNav(page='persons')"></nav>
+<nav th:replace="~{navigation :: topNav(page='persons')}"></nav>
 
 <!-- page specific content-->
 <main id="main"><a href="overview.html"> <span
@@ -563,7 +563,7 @@
 										class="glyphicon glyphicon-grain"></span> Bemerkungen
 								</th>
 								<td class="col-md-10"
-										th:utext="${#strings.replace( #strings.escapeXml( participantProfile.remarks ),T(java.lang.System).getProperty('line.separator'),'&lt;br /&gt;')}">
+										th:utext="${#strings.replace( #strings.escapeXml( participantProfile.remarks ),'&#10;','&lt;br /&gt;')}">
 									So Zeug
 								</td>
 							</tr>

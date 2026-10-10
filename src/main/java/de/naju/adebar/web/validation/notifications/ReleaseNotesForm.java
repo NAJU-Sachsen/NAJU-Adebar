@@ -1,6 +1,6 @@
 package de.naju.adebar.web.validation.notifications;
 
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
 import de.naju.adebar.app.news.ReleaseNotes;
 
 /**

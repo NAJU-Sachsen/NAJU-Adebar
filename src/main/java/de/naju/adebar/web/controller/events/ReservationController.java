@@ -6,7 +6,7 @@ import de.naju.adebar.model.support.NumericEntityId;
 import de.naju.adebar.util.Assert2;
 import de.naju.adebar.web.validation.events.participation.ReservationForm;
 import de.naju.adebar.web.validation.events.participation.ReservationFormConverter;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;

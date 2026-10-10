@@ -20,7 +20,7 @@
 <body>
 
 <!-- central navigation -->
-<nav th:replace="navigation :: topNav(page='events')"></nav>
+<nav th:replace="~{navigation :: topNav(page='events')}"></nav>
 
 <!-- page specific content-->
 <main id="main">
@@ -113,16 +113,16 @@
     <div id="overview" class="tab-pane container-fluid" th:if="${tab == 'general'}"
          th:classappend="${tab == 'general'} ? 'active'">
 
-      <section th:replace="events/eventDetailsOverview :: general"></section>
+      <section th:replace="~{events/eventDetailsOverview :: general}"></section>
 
-      <section th:replace="events/personsToContact :: content"></section>
+      <section th:replace="~{events/personsToContact :: content}"></section>
 
     </div>
 
     <section id="participants" class="display-category tab-pane" role="tabpanel"
              th:if="${tab == 'participants'}" th:classappend="${tab == 'participants'} ? 'active'">
 
-      <div th:replace="events/participants :: list"></div>
+      <div th:replace="~{events/participants :: list}"></div>
 
     </section>
 
@@ -130,14 +130,14 @@
              th:if="${tab == 'participantsTable'}"
              th:classappend="${tab == 'participantsTable'} ? 'active'">
 
-      <div th:replace="events/customizeParticipantsTable :: table"></div>
+      <div th:replace="~{events/customizeParticipantsTable :: table}"></div>
 
     </section>
 
     <section id="organization" class="display-category tab-pane" role="tabpanel"
              th:if="${tab == 'organization'}" th:classappend="${tab == 'organization'} ? 'active'">
 
-      <div th:replace="events/organization :: details"></div>
+      <div th:replace="~{events/organization :: details}"></div>
 
     </section>
 
@@ -145,7 +145,7 @@
              th:if="${tab == 'accommodation'}"
              th:classappend="${tab == 'accommodation'} ? 'active'">
 
-      <div th:replace="events/accommodation :: details"></div>
+      <div th:replace="~{events/accommodation :: details}"></div>
 
     </section>
 
@@ -185,7 +185,7 @@
         th:src="@{/resources/js/list.fuzzysearch.min.js}"
         th:if="${tab == 'participants'} and ${param.view != null and param.view[0] == 'detailed'}"></script>
 <script type="text/javascript" src="../../static/resources/js/masonry.pkgd.js"
-        th:src="@{/webjars/masonry/dist/masonry.pkgd.min.js}"
+        th:src="@{/webjars/masonry-layout/dist/masonry.pkgd.min.js}"
         th:if="${tab == 'participants'} and ${param.view != null and param.view[0] == 'detailed'}"></script>
 <script type="text/javascript" src="../../static/resources/js/participants.js"
         th:src="@{/resources/js/participants.js}" th:if="${tab == 'participants'}"></script>
@@ -244,14 +244,14 @@
 </script>
 
 <script type="text/javascript"
-        th:if="${tab == 'participants'} and ${#httpServletRequest.getParameter('add-participants') == 'finished'} and ${participationReport != null}">
+        th:if="${tab == 'participants'} and ${(param['add-participants'] != null and param['add-participants'][0] == 'finished')} and ${participationReport != null}">
 
   $('#failed-participations').modal('show');
 
 </script>
 
 <script type="text/javascript"
-        th:if="${tab == 'participants'} and ${#httpServletRequest.getParameter('update-participation') == 'failed'}">
+        th:if="${tab == 'participants'} and ${(param['update-participation'] != null and param['update-participation'][0] == 'failed')}">
 
   $('#edit-participant-failed-dialog').modal('show');
 
@@ -265,7 +265,7 @@
 </script>
 
 <script type="text/javascript"
-        th:if="${tab == 'participants'} and ${#httpServletRequest.getParameter('apply-waiting-list') == 'failed'} and ${failure != null}">
+        th:if="${tab == 'participants'} and ${(param['apply-waiting-list'] != null and param['apply-waiting-list'][0] == 'failed')} and ${failure != null}">
 
   $('#apply-waiting-list-error-dialog').modal('show');
 
@@ -286,7 +286,7 @@
 </script>
 
 <script type="text/javascript"
-        th:if="${#httpServletRequest.getParameter('add-counselor') == 'failed'}">
+        th:if="${(param['add-counselor'] != null and param['add-counselor'][0] == 'failed')}">
   $(document).ready(() => {
     const modal = $('#add-counselor-failed-dialog');
     modal.modal('show');

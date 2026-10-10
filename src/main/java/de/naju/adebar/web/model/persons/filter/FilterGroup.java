@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import de.naju.adebar.app.filter.AbstractFilter;
 import de.naju.adebar.web.model.html.ElementId;
 

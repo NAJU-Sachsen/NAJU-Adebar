@@ -1,18 +1,15 @@
 package de.naju.adebar.app.security.user;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import de.naju.adebar.TestData;
 import de.naju.adebar.model.persons.Person;
 
 @SpringBootTest
-@RunWith(SpringRunner.class)
 @Transactional
 public class PersistentUserAccountManagerTest {
 
@@ -24,7 +21,7 @@ public class PersistentUserAccountManagerTest {
 
 	private Person person;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		person = TestData.getPerson(TestData.PERSON_FRITZ);
 	}

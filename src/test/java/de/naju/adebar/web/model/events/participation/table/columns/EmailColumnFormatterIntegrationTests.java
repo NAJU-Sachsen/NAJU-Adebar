@@ -1,19 +1,16 @@
 package de.naju.adebar.web.model.events.participation.table.columns;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 import de.naju.adebar.Application;
 import de.naju.adebar.model.core.Email;
 import de.naju.adebar.model.events.Event;
 import de.naju.adebar.model.persons.Person;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
 public class EmailColumnFormatterIntegrationTests {
 

@@ -1,19 +1,18 @@
 package de.naju.adebar.infrastructure.database.simple;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import de.naju.adebar.infrastructure.database.MalformedSqlException;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
 @Sql("/sql/newsletter_test_data.sql")
@@ -22,11 +21,13 @@ public class SimpleDatabaseQueryExecutorIntegrationTests {
 	@Autowired
 	private SimpleDatabaseQueryExecutor queryExec;
 
-	@Test(expected = AccessDeniedException.class)
+	@Test
 	@WithMockUser
 	public void requiresAdminPrivileges() {
-		String query = "SELECT * FROM subscriber";
-		queryExec.runQuery(query);
+		assertThrows(AccessDeniedException.class, () -> {
+			String query = "SELECT * FROM subscriber";
+			queryExec.runQuery(query);
+		});
 	}
 
 	@Test
@@ -53,25 +54,31 @@ public class SimpleDatabaseQueryExecutorIntegrationTests {
 		assertThat(resultSet).hasSize(2);
 	}
 
-	@Test(expected = DataAccessException.class)
+	@Test
 	@WithMockUser(roles = "ADMIN")
 	public void doesNotExecuteInserts() {
-		String insert = "INSERT INTO subscriber (email) VALUES ('john.smith@email.com')";
-		queryExec.runQuery(insert);
+		assertThrows(DataAccessException.class, () -> {
+			String insert = "INSERT INTO subscriber (email) VALUES ('john.smith@email.com')";
+			queryExec.runQuery(insert);
+		});
 	}
 
-	@Test(expected = DataAccessException.class)
+	@Test
 	@WithMockUser(roles = "ADMIN")
 	public void doesNotExecuteUpdates() {
-		String update = "UPDATE subscriber SET first_name = 'Joe' WHERE email = 'john@email.com'";
-		queryExec.runQuery(update);
+		assertThrows(DataAccessException.class, () -> {
+			String update = "UPDATE subscriber SET first_name = 'Joe' WHERE email = 'john@email.com'";
+			queryExec.runQuery(update);
+		});
 	}
 
-	@Test(expected = MalformedSqlException.class)
+	@Test
 	@WithMockUser(roles = "ADMIN")
 	public void throwsMalformedSqlExceptionIfMalformedQuery() {
-		String query = "SELECT WHERE last_name = 'Foo'";
-		queryExec.runQuery(query);
+		assertThrows(MalformedSqlException.class, () -> {
+			String query = "SELECT WHERE last_name = 'Foo'";
+			queryExec.runQuery(query);
+		});
 	}
 
 	@Test

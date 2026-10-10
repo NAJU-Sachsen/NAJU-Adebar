@@ -3,8 +3,8 @@ package de.naju.adebar.services.conversion;
 import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Arrays;
 import java.util.List;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.util.MultiValueMap;
 import de.naju.adebar.services.conversion.FormToMapConverter;
 
@@ -12,7 +12,7 @@ public class FormToMapConverterUnitTests {
 
 	private FormToMapConverter converter;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		converter = new FormToMapConverter();
 	}

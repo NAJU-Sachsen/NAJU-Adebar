@@ -6,7 +6,7 @@ import de.naju.adebar.model.core.PhoneNumber;
 import de.naju.adebar.model.persons.QPerson;
 import de.naju.adebar.util.Validation;
 import java.util.Optional;
-import org.springframework.lang.NonNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 

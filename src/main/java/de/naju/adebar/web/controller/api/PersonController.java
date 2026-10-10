@@ -119,7 +119,7 @@ public class PersonController {
 	@RequestMapping(//
 			value = "/search", //
 			consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE,
-					MediaType.APPLICATION_JSON_UTF8_VALUE})
+					MediaType.APPLICATION_JSON_VALUE})
 	public Iterable<SimplePersonJSON> filterPersons(FilterPersonForm form) {
 
 		// TODO: directly use predicate here

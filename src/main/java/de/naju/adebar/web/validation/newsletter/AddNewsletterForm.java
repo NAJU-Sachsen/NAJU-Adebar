@@ -1,6 +1,6 @@
 package de.naju.adebar.web.validation.newsletter;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * @author Rico Bergmann

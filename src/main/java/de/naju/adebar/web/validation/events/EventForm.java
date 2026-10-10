@@ -2,7 +2,7 @@ package de.naju.adebar.web.validation.events;
 
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import de.naju.adebar.web.validation.core.AddressForm;
 
 /**

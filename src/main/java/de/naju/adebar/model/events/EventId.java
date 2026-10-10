@@ -2,8 +2,8 @@ package de.naju.adebar.model.events;
 
 import java.io.Serializable;
 import java.util.UUID;
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 import org.springframework.util.Assert;
 
 /**

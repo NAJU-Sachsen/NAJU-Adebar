@@ -3,8 +3,8 @@ package de.naju.adebar.model.core;
 import de.naju.adebar.documentation.ddd.ValueObject;
 import de.naju.adebar.util.Validation;
 import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 import org.springframework.util.Assert;
 
 /**

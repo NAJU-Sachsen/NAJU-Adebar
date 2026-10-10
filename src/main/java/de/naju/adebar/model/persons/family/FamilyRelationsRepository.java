@@ -33,10 +33,21 @@ interface FamilyRelationsRepository
 	 * @param person the person to query for. May never be {@code null}
 	 * @return all registered siblings of the person
 	 */
+	default List<Person> findSiblingsOf(Person person) {
+		return findSiblingsOf(person.getId().toString());
+	}
+
+	/**
+	 * Native queries may only be parameterized with basic values, therefore we need to use the
+	 * plain ID here.
+	 *
+	 * @param personId the ID of the person to query for. May never be {@code null}
+	 * @return all registered siblings of the person
+	 */
 	@Query(value = "SELECT DISTINCT sib.* " + "FROM person sib"
 			+ "  JOIN parents p ON sib.id = p.child " + "WHERE p.parent IN ( "
 			+ "  SELECT DISTINCT par.parent " + "  FROM person p " + "    JOIN parents par"
 			+ "      ON p.id = par.child" + "  WHERE p.id = ?1) " + "AND NOT sib.id = ?1",
 			nativeQuery = true)
-	List<Person> findSiblingsOf(Person person);
+	List<Person> findSiblingsOf(String personId);
 }

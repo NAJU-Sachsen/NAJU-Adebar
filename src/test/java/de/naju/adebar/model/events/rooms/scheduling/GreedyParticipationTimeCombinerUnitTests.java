@@ -1,31 +1,36 @@
 package de.naju.adebar.model.events.rooms.scheduling;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class GreedyParticipationTimeCombinerUnitTests {
 
 	private GreedyParticipationTimeCombiner combiner;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		combiner = new GreedyParticipationTimeCombiner();
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void nullParticipationTimesResultInException() {
-		combiner.combine(null);
+		assertThrows(IllegalArgumentException.class, () ->
+			combiner.combine(null));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void participationTimesWithNullElementResultInException() {
-		List<ParticipationTime> times =
-				Arrays.asList(new ParticipationTime(1, 3), null, new ParticipationTime(7, 10));
-		combiner.combine(times);
+		assertThrows(IllegalArgumentException.class, () -> {
+			List<ParticipationTime> times =
+					Arrays.asList(new ParticipationTime(1, 3), null, new ParticipationTime(7, 10));
+			combiner.combine(times);
+		});
 	}
 
 	@Test

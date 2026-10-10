@@ -9,7 +9,7 @@ import de.naju.adebar.util.Assert2;
 import de.naju.adebar.web.model.events.AccommodationReport;
 import de.naju.adebar.web.validation.events.accommodation.EditAccommodationForm;
 import de.naju.adebar.web.validation.events.accommodation.EditAccommodationFormConverter;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;

@@ -4,13 +4,13 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToMany;
-import javax.persistence.MapKey;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.MapKey;
 import org.springframework.util.Assert;
 import de.naju.adebar.documentation.infrastructure.JpaOnly;
 import de.naju.adebar.model.persons.events.PersonDataUpdatedEvent;
@@ -31,7 +31,7 @@ public class ReferentProfile extends AbstractProfile {
 	private PersonId personId;
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@MapKey
+	@MapKey(name = "name")
 	private Map<String, Qualification> qualifications;
 
 	/**

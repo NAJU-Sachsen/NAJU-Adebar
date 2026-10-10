@@ -1,8 +1,10 @@
 package de.naju.adebar.model.newsletter;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import de.naju.adebar.model.core.Email;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Basic testing of the {@link Subscriber} class
@@ -16,21 +18,23 @@ public class SubscriberUnitTest {
 		new Subscriber(Email.of("hans@web.de"));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testInvalidEmail() {
-		new Subscriber(Email.of("notreallyanemail@.de"));
+		assertThrows(IllegalArgumentException.class, () -> {
+			new Subscriber(Email.of("notreallyanemail@.de"));
+		});
 	}
 
 	@Test
 	public void testHasName() {
 		Subscriber sub = new Subscriber("Claus", "", Email.of("claus@web.de"));
-		Assert.assertTrue("Subscriber should have a name", sub.hasName());
+		Assertions.assertTrue(sub.hasName(), "Subscriber should have a name");
 	}
 
 	@Test
 	public void testHasNoName() {
 		Subscriber sub = new Subscriber("", "", Email.of("claus@web.de"));
-		Assert.assertFalse("Subscriber should not have a name", sub.hasName());
+		Assertions.assertFalse(sub.hasName(), "Subscriber should not have a name");
 	}
 
 }

@@ -5,8 +5,8 @@ import de.naju.adebar.model.core.TimeSpan;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
-import javax.persistence.Embeddable;
-import javax.persistence.Transient;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Transient;
 import org.springframework.util.Assert;
 
 /**

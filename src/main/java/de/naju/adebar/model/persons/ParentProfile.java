@@ -1,11 +1,11 @@
 package de.naju.adebar.model.persons;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
 import org.springframework.util.Assert;
 import de.naju.adebar.documentation.infrastructure.JpaOnly;
 import de.naju.adebar.model.core.PhoneNumber;

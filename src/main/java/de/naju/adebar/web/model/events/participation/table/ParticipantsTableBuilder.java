@@ -3,8 +3,8 @@ package de.naju.adebar.web.model.events.participation.table;
 import de.naju.adebar.model.events.Event;
 import java.util.Collections;
 import java.util.List;
-import javax.persistence.ElementCollection;
-import javax.persistence.Embeddable;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embeddable;
 
 /**
  * Builder to fluently create new {@link ParticipantsTable} instances.

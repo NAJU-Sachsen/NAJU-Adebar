@@ -1,7 +1,7 @@
 package de.naju.adebar.app.search;
 
 import java.util.Optional;
-import org.springframework.lang.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * The interpretation hierarchy defines, which interpreters to check first when a new query is

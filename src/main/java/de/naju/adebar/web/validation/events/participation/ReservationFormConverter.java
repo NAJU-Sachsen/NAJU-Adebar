@@ -3,7 +3,7 @@ package de.naju.adebar.web.validation.events.participation;
 import de.naju.adebar.model.events.Reservation;
 import de.naju.adebar.web.validation.ValidatingEntityFormConverter;
 import javax.annotation.Nonnull;
-import org.springframework.lang.NonNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;

@@ -1,6 +1,6 @@
 package de.naju.adebar.web.controller.persons;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;

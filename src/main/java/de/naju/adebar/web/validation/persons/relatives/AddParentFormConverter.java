@@ -7,7 +7,7 @@ import de.naju.adebar.model.persons.PersonFactory;
 import de.naju.adebar.util.Validation;
 import de.naju.adebar.web.validation.NewOrExistingEntityForm.SubmittedData;
 import de.naju.adebar.web.validation.NewOrExistingValidatingEntityFormConverter;
-import org.springframework.lang.NonNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.validation.Errors;

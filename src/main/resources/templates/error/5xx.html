@@ -61,22 +61,22 @@
         <tr class="row danger">
           <th class="col-md-3">Status-Code</th>
           <td class="col-md-9"
-              th:text="${#request.getAttribute('javax.servlet.error.status_code')}"></td>
+              th:text="${status}"></td>
         </tr>
         <tr class="row danger">
           <th class="col-md-3">URI</th>
           <td class="col-md-9"
-              th:text="${#request.getAttribute('javax.servlet.error.request_uri')}"></td>
+              th:text="${path}"></td>
         </tr>
         <tr class="row danger">
           <th class="col-md-3">Exception</th>
           <td class="col-md-9"
-              th:text="${#request.getAttribute('javax.servlet.error.exception').getRootCause().getClass()}"></td>
+              th:text="${exception}"></td>
         </tr>
-        <tr class="row danger" th:if="${#request.getAttribute('javax.servlet.error.exception')}">
+        <tr class="row danger" th:if="${exception}">
           <th class="col-md-3">Message</th>
           <td class="col-md-9"
-              th:text="${#request.getAttribute('javax.servlet.error.exception').getRootCause().getMessage()}"></td>
+              th:text="${message}"></td>
         </tr>
         </tbody>
       </table>
@@ -84,14 +84,14 @@
     </div>
   </div>
 
-  <div class="row" th:if="${#request.getAttribute('javax.servlet.error.exception')}">
+  <div class="row" th:if="${trace}">
     <div class="col-md-12">
       <button type="button" class="btn btn-link" data-toggle="collapse" data-target="#stack-trace">
         Stack-Trace einblenden
       </button>
 
       <p id="stack-trace" class="well collapse"
-         th:text="${T(org.apache.commons.lang3.exception.ExceptionUtils).getStackTrace(#request.getAttribute('javax.servlet.error.exception'))}"></p>
+         th:text="${trace}"></p>
 
     </div>
   </div>

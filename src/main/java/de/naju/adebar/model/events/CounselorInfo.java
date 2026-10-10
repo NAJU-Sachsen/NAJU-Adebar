@@ -3,11 +3,11 @@ package de.naju.adebar.model.events;
 import de.naju.adebar.documentation.infrastructure.JpaOnly;
 import de.naju.adebar.model.events.rooms.scheduling.ParticipationTime;
 import java.util.Objects;
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Embedded;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Embedded;
 
 /**
  * Stores information about an activist for one specific {@link Event} he/she attends as counselor.

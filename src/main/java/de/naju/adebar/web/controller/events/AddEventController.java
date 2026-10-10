@@ -10,7 +10,7 @@ import de.naju.adebar.model.events.EventRepository;
 import de.naju.adebar.util.Assert2;
 import de.naju.adebar.web.validation.events.AddEventForm;
 import de.naju.adebar.web.validation.events.AddEventFormConverter;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;

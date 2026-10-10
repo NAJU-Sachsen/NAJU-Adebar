@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.lang.NonNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 import com.querydsl.core.BooleanBuilder;
 import de.naju.adebar.app.events.search.interpreters.DateQueryInterpreter;

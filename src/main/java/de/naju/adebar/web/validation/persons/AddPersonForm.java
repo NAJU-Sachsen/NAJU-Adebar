@@ -6,7 +6,7 @@ import de.naju.adebar.web.validation.core.AddressForm;
 import de.naju.adebar.web.validation.persons.activist.AddActivistForm;
 import de.naju.adebar.web.validation.persons.participant.AddParticipantForm;
 import de.naju.adebar.web.validation.persons.referent.AddReferentForm;
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
 
 /**
  * POJO representation of the data inside the 'add person' form. The form is structured into "sub

@@ -9,9 +9,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import javax.transaction.Transactional;
-import org.junit.Before;
-import org.junit.Test;
+import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -29,7 +29,7 @@ public class NewsletterControllerWebIntegrationTests extends WebIntegrationTests
 	@Autowired
 	private NewsletterRepository newsletterRepository;
 
-	@Before
+	@BeforeEach
 	public void setup() {
 		initializeNewsletters();
 	}

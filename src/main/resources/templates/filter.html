@@ -17,7 +17,7 @@
 <body>
 
 <!-- central navigation -->
-<nav th:replace="navigation :: topNav(page='events')"></nav>
+<nav th:replace="~{navigation :: topNav(page='events')}"></nav>
 
 <!-- page specific content-->
 <main id="main"><a href="overview.html"> <span
@@ -171,7 +171,7 @@
 			<label class="control-label" th:for="|${field.defaultName}-value|"
 						 th:text="${field.name}"></label>
 
-			<div th:replace="__${renderingService.fetch(filter)}__"></div>
+			<div th:replace="~{__${renderingService.fetch(filter)}__}"></div>
 
 		</div>
 
@@ -190,7 +190,7 @@
 				</option>
 			</select>
 
-			<div th:replace="__${renderingService.fetch(field)}__"></div>
+			<div th:replace="~{__${renderingService.fetch(field)}__}"></div>
 
 		</div>
 
@@ -205,13 +205,13 @@
 				</select>
 			</div>
 
-			<div th:replace="__${renderingService.fetch(filter.actualFilter)}__"></div>
+			<div th:replace="~{__${renderingService.fetch(filter.actualFilter)}__}"></div>
 
 		</div>
 
 		<div class="filter-plain" th:fragment="plainFilter (filter)">
 
-			<div th:replace="__${renderingService.fetch(filter.filteredField)}__"></div>
+			<div th:replace="~{__${renderingService.fetch(filter.filteredField)}__}"></div>
 
 		</div>
 
@@ -223,7 +223,7 @@
 			<h3 th:text="${field.name}">Filter title</h3>
 
 			<div th:each="actualFilter : ${filter.values}"
-					 th:replace="__${renderingService.fetch(actualFilter)}__"></div>
+					 th:replace="~{__${renderingService.fetch(actualFilter)}__}"></div>
 
 			<hr/>
 
@@ -231,9 +231,9 @@
 
 		<div class="filter-join" th:fragment="joiningFilter (filter)">
 
-			<div class="filter-join-first" th:replace="__${renderingService.fetch(filter.firstFilter)}__"></div>
+			<div class="filter-join-first" th:replace="~{__${renderingService.fetch(filter.firstFilter)}__}"></div>
 
-			<div class="filter-join-second" th:replace="__${renderingService.fetch(filter.secondFilter)}__"></div>
+			<div class="filter-join-second" th:replace="~{__${renderingService.fetch(filter.secondFilter)}__}"></div>
 
 		</div>
 
@@ -253,7 +253,7 @@
 
 					<div class="margin-btm" th:each="filter : ${filterGroup.content}">
 
-						<div th:replace=":: topLevelFilter (filter=${filter})"></div>
+						<div th:replace="~{:: topLevelFilter (filter=${filter})}"></div>
 
 					</div>
 
@@ -270,7 +270,7 @@
 
 			<div class="filter-group-container scroll-item-4 form-category filter-group" th:each="filterGroup : ${filterForm.filterGroups}" th:attrappend="data-controlled-by='#' + ${filterGroup.togglerId}" th:id="${filterGroup.groupId}">
 
-				<div th:replace=":: group (${filterGroup})"></div>
+				<div th:replace="~{:: group (${filterGroup})}"></div>
 
 			</div>
 

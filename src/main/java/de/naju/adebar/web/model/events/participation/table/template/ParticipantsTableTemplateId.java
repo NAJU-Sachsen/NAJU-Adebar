@@ -3,11 +3,11 @@ package de.naju.adebar.web.model.events.participation.table.template;
 import de.naju.adebar.app.security.user.Username;
 import de.naju.adebar.documentation.infrastructure.JpaOnly;
 import java.io.Serializable;
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Embedded;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Embedded;
 
 /**
  * Wrapper for the data that should form the primary key of a {@link ParticipantsTableTemplate}.

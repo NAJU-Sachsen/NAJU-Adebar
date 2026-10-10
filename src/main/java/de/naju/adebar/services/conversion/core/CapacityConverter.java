@@ -2,7 +2,7 @@ package de.naju.adebar.services.conversion.core;
 
 import de.naju.adebar.model.core.Capacity;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.lang.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class CapacityConverter implements Converter<String, Capacity> {
 

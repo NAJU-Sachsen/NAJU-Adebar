@@ -2,19 +2,16 @@ package de.naju.adebar.app.persons.filter.legacy.predicate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import java.util.List;
-import javax.transaction.Transactional;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 import com.querydsl.core.BooleanBuilder;
 import de.naju.adebar.app.persons.filter.legacy.FilterTestBootstrapper;
 import de.naju.adebar.app.persons.legacy.filter.predicate.NameFilter;
 import de.naju.adebar.model.persons.Person;
 
 @SpringBootTest
-@RunWith(SpringRunner.class)
 @Transactional
 public class NameFilterUnitTests extends FilterTestBootstrapper {
 
@@ -22,7 +19,7 @@ public class NameFilterUnitTests extends FilterTestBootstrapper {
 	private NameFilter filter;
 
 	@Override
-	@Before
+	@BeforeEach
 	public void setUp() {
 		super.setUp();
 		this.predicate = new BooleanBuilder();

@@ -3,13 +3,11 @@ package de.naju.adebar.model.persons;
 import de.naju.adebar.model.core.Address;
 import de.naju.adebar.model.core.Email;
 import de.naju.adebar.model.persons.details.JuleicaCard;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -18,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Rico Bergmann
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
 public class ActivistManagementIntegrationTest {
@@ -32,7 +29,7 @@ public class ActivistManagementIntegrationTest {
 	private ActivistProfileRepository activistRepo;
 	private Person claus;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		Address clausAddress = new Address("Hinner der Boje 7", "24103", "Auf'm Meer");
 		this.claus = personFactory.buildNew("Claus", "Störtebecker", Email.of("der_kaeptn@web.de"))
@@ -44,8 +41,8 @@ public class ActivistManagementIntegrationTest {
 
 	@Test
 	public void testSaveActivist() {
-		Assert.assertTrue(claus.toString() + " should have been saved!",
-				activistRepo.existsById(claus.getId()));
+		Assertions.assertTrue(activistRepo.existsById(claus.getId()),
+				claus.toString() + " should have been saved!");
 	}
 
 	@Test
@@ -58,7 +55,7 @@ public class ActivistManagementIntegrationTest {
 		// save the updated person
 		claus = personManager.updatePerson(claus);
 
-		Assert.assertTrue("Person should have Juleica card", claus.getActivistProfile().hasJuleica());
+		Assertions.assertTrue(claus.getActivistProfile().hasJuleica(), "Person should have Juleica card");
 	}
 
 }

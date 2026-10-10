@@ -9,16 +9,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.Transient;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Transient;
 import org.springframework.util.Assert;
 
 /**
@@ -38,7 +39,8 @@ public class RoomSpecification implements Iterable<Room> {
 	protected boolean extraSpaceForCounselors;
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(generator = "hibernate_sequence")
+	@SequenceGenerator(name = "hibernate_sequence", allocationSize = 1)
 	@Column(name = "id")
 	private long id;
 

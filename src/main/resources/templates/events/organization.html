@@ -24,7 +24,7 @@
 <!--/*@thymesVar id="matchingPersons" type="java.util.Collection<de.naju.adebar.model.persons.Person>"*/-->
 
 <!-- central navigation -->
-<nav th:replace="navigation :: topNav(page='events')"></nav>
+<nav th:replace="~{navigation :: topNav(page='events')}"></nav>
 
 <!-- page specific content-->
 <main id="main">
@@ -69,7 +69,7 @@
 
         <!-- add counselor failed dialog -->
         <div class="modal modal-error fade" id="add-counselor-failed-dialog" tabindex="-1"
-             th:if="${#httpServletRequest.getParameter('add-counselor') == 'failed'}">
+             th:if="${(param['add-counselor'] != null and param['add-counselor'][0] == 'failed')}">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-body">
@@ -450,7 +450,7 @@
                             <span class="glyphicon glyphicon-grain"></span>
                           </th>
                           <td class="col-md-11 remarks"
-                              th:utext="${#strings.replace( #strings.escapeXml( counselorInfo.remarks ),T(java.lang.System).getProperty('line.separator'),'&lt;br /&gt;')}"></td>
+                              th:utext="${#strings.replace( #strings.escapeXml( counselorInfo.remarks ),'&#10;','&lt;br /&gt;')}"></td>
                         </tr>
                         </tbody>
                       </table>

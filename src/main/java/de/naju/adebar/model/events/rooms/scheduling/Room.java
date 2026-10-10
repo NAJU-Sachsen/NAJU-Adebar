@@ -3,10 +3,10 @@ package de.naju.adebar.model.events.rooms.scheduling;
 import de.naju.adebar.documentation.infrastructure.JpaOnly;
 import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.persons.details.Gender;
-import javax.persistence.Embeddable;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Transient;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Transient;
 
 /**
  * Value object to describe a room. Each room consists of a certain amount of beds which could maybe

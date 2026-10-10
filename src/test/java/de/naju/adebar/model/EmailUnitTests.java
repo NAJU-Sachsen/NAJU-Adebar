@@ -2,8 +2,10 @@ package de.naju.adebar.model;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import de.naju.adebar.model.core.Email;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class EmailUnitTests {
 
@@ -26,9 +28,10 @@ public class EmailUnitTests {
 		}
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void rejectsNull() {
-		Email.of(null);
+		assertThrows(IllegalArgumentException.class, () ->
+			Email.of(null));
 	}
 
 	@Test

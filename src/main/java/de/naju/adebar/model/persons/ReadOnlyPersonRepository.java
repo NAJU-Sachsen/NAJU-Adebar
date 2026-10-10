@@ -28,13 +28,13 @@ public interface ReadOnlyPersonRepository extends //
 	 * @return all non-archived persons
 	 */
 	@Override
-	@Query("SELECT p FROM person p WHERE p.archived=0")
-	Iterable<Person> findAll();
+	@Query("SELECT p FROM person p WHERE p.archived = false")
+	List<Person> findAll();
 
 	/**
 	 * @return all non-archived persons
 	 */
-	@Query("SELECT p FROM person p WHERE p.archived=0 ORDER BY p.lastName")
+	@Query("SELECT p FROM person p WHERE p.archived = false ORDER BY p.lastName")
 	Iterable<Person> findAllOrderByLastName();
 
 	/**
@@ -47,14 +47,14 @@ public interface ReadOnlyPersonRepository extends //
 	 * @param pageable the pageable to put the result into
 	 * @return all non-archived persons
 	 */
-	@Query("SELECT p FROM person p WHERE p.archived=0 ORDER BY p.lastName")
+	@Query("SELECT p FROM person p WHERE p.archived = false ORDER BY p.lastName")
 	Page<Person> findAllPagedOrderByLastName(Pageable pageable);
 
 	/**
 	 * @param id must not be {@code null}.
 	 * @return the person with that ID. This person is not archived
 	 */
-	@Query("SELECT p FROM person p WHERE p.id=?1 AND p.archived=0")
+	@Query("SELECT p FROM person p WHERE p.id=?1 AND p.archived = false")
 	Person findOne(PersonId id);
 
 	/**
@@ -62,7 +62,7 @@ public interface ReadOnlyPersonRepository extends //
 	 * @return the person with that ID. The person may not be archived.
 	 */
 	@Override
-	@Query("SELECT p FROM person p WHERE  p.id=?1 AND p.archived=0")
+	@Query("SELECT p FROM person p WHERE  p.id=?1 AND p.archived = false")
 	Optional<Person> findById(PersonId id);
 
 	/**
@@ -88,7 +88,7 @@ public interface ReadOnlyPersonRepository extends //
 	/**
 	 * @return all non-archived persons
 	 */
-	@Query("SELECT p FROM person p WHERE p.archived=0")
+	@Query("SELECT p FROM person p WHERE p.archived = false")
 	Stream<Person> streamAll();
 
 	/**

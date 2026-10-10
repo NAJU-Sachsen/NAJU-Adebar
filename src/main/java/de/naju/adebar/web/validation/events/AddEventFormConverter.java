@@ -10,7 +10,7 @@ import de.naju.adebar.web.validation.events.participation.AccommodationFormConve
 import de.naju.adebar.web.validation.events.participation.ParticipationInfoFormConverter;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import org.springframework.lang.NonNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;

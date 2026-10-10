@@ -1,11 +1,11 @@
 package de.naju.adebar.app.news;
 
 import java.time.LocalDateTime;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import org.springframework.data.domain.AbstractAggregateRoot;
 import org.springframework.util.Assert;
 import de.naju.adebar.documentation.infrastructure.JpaOnly;

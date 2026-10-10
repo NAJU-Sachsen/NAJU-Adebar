@@ -2,7 +2,7 @@ package de.naju.adebar.web.validation.chapters;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import de.naju.adebar.util.Validation;
 
 /**

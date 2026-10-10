@@ -1,8 +1,8 @@
 package de.naju.adebar.model.events;
 
 import java.util.Optional;
-import javax.persistence.Transient;
-import org.springframework.lang.NonNull;
+import jakarta.persistence.Transient;
+import org.jspecify.annotations.NonNull;
 import org.springframework.util.Assert;
 
 /**

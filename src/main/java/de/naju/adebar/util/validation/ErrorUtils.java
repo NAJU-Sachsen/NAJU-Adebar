@@ -1,7 +1,7 @@
 package de.naju.adebar.util.validation;
 
-import javax.validation.constraints.NotEmpty;
-import org.springframework.lang.NonNull;
+import jakarta.validation.constraints.NotEmpty;
+import org.jspecify.annotations.NonNull;
 import org.springframework.validation.Errors;
 
 public class ErrorUtils {

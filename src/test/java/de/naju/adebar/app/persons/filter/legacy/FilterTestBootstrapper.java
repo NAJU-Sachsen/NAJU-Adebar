@@ -10,10 +10,13 @@ import de.naju.adebar.model.persons.details.Gender;
 import de.naju.adebar.model.persons.details.JuleicaCard;
 import de.naju.adebar.model.persons.qualifications.Qualification;
 import de.naju.adebar.model.persons.qualifications.QualificationRepository;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.jupiter.api.BeforeEach;
+
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
-import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -69,7 +72,7 @@ public class FilterTestBootstrapper {
 	@Autowired
 	protected QualificationRepository qualificationRepo;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		System.out.println(personRepo.findAll());
 
@@ -134,4 +137,13 @@ public class FilterTestBootstrapper {
 		}
 
 	}
+
+	/**
+	 * The persons are fetched without any ordering, so the filter results may only be compared
+	 * ignoring their order.
+	 */
+	protected static void assertSameElements(Object[] expected, Object[] actual, String message) {
+		assertThat(actual).as(message).containsExactlyInAnyOrder(expected);
+	}
+
 }

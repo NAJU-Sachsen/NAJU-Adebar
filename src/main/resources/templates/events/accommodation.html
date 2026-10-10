@@ -22,7 +22,7 @@
 <!--/*@thymesVar id="editAccommodation" type="de.naju.adebar.web.validation.events.accommodation.EditAccommodationForm"*/-->
 
 <!-- central navigation -->
-<nav th:replace="navigation :: topNav(page='events')"></nav>
+<nav th:replace="~{navigation :: topNav(page='events')}"></nav>
 
 <!-- page specific content-->
 <main id="main">
@@ -682,7 +682,7 @@
                                 <span class="glyphicon glyphicon-grain"></span> Bemerkungen
                               </th>
                               <td class="col-md-9"
-                                  th:utext="${#strings.replace( #strings.escapeXml( participantProfile.remarks ),T(java.lang.System).getProperty('line.separator'),'&lt;br /&gt;')}">
+                                  th:utext="${#strings.replace( #strings.escapeXml( participantProfile.remarks ),'&#10;','&lt;br /&gt;')}">
                                 So Zeug
                               </td>
                             </tr>
@@ -830,7 +830,7 @@
                                   Bermerkungen
                                 </th>
                                 <td class="col-md-9 remarks"
-                                    th:utext="${#strings.replace( #strings.escapeXml( participationDetails.remarks ),T(java.lang.System).getProperty('line.separator'),'&lt;br /&gt;')}">
+                                    th:utext="${#strings.replace( #strings.escapeXml( participationDetails.remarks ),'&#10;','&lt;br /&gt;')}">
                                   Wichtige Infos
                                 </td>
                               </tr>

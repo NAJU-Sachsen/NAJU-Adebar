@@ -1,15 +1,13 @@
 package de.naju.adebar.model.newsletter;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.stereotype.Component;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import de.naju.adebar.app.newsletter.PersistentNewsletterManager;
 import de.naju.adebar.app.newsletter.PersistentSubscriberManager;
@@ -20,7 +18,6 @@ import de.naju.adebar.model.core.Email;
  *
  * @author Rico Bergmann
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
 @Rollback
@@ -42,7 +39,7 @@ public class NewsletterIntegrationTest {
 	private Newsletter hifaNewsletter;
 	private Subscriber hans;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		hifaNewsletter = new Newsletter("HIFA");
 		hans = new Subscriber("Hans", "Wurst", Email.of("hans.wurst@web.de"));
@@ -53,19 +50,19 @@ public class NewsletterIntegrationTest {
 
 	@Test
 	public void testSubscription() {
-		Assert.assertFalse(String.format("%s should not have subscribed already", hans),
-				hifaNewsletter.hasSubscriber(hans));
+		Assertions.assertFalse(hifaNewsletter.hasSubscriber(hans),
+				String.format("%s should not have subscribed already", hans));
 		newsletterManager.subscribe(hans, hifaNewsletter);
-		Assert.assertTrue(String.format("%s should have subscribed", hans),
-				hifaNewsletter.hasSubscriber(hans));
+		Assertions.assertTrue(hifaNewsletter.hasSubscriber(hans),
+				String.format("%s should have subscribed", hans));
 	}
 
 	@Test
 	public void testDeletion() {
 		newsletterManager.subscribe(hans, hifaNewsletter);
 		newsletterManager.unsubscribe(hans, hifaNewsletter);
-		Assert.assertFalse(String.format("%s should have unsubscribed", hans),
-				hifaNewsletter.hasSubscriber(hans));
+		Assertions.assertFalse(hifaNewsletter.hasSubscriber(hans),
+				String.format("%s should have unsubscribed", hans));
 	}
 
 	/**
@@ -75,8 +72,8 @@ public class NewsletterIntegrationTest {
 	public void testNewsletterDeletion() {
 		newsletterManager.subscribe(hans, hifaNewsletter);
 		newsletterManager.deleteNewsletter(hifaNewsletter.getId());
-		Assert.assertFalse(String.format("%s should be deleted", hans),
-				subscriberRepo.existsById(hans.getId()));
+		Assertions.assertFalse(subscriberRepo.existsById(hans.getId()),
+				String.format("%s should be deleted", hans));
 	}
 
 	/**
@@ -86,8 +83,8 @@ public class NewsletterIntegrationTest {
 	public void testUnsubscription() {
 		newsletterManager.subscribe(hans, hifaNewsletter);
 		newsletterManager.unsubscribe(hans, hifaNewsletter);
-		Assert.assertFalse(String.format("%s should be deleted", hans),
-				subscriberRepo.existsById(hans.getId()));
+		Assertions.assertFalse(subscriberRepo.existsById(hans.getId()),
+				String.format("%s should be deleted", hans));
 	}
 
 	@Test // #59

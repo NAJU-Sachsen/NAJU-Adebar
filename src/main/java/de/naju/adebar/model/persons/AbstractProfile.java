@@ -1,7 +1,7 @@
 package de.naju.adebar.model.persons;
 
 import java.util.Optional;
-import javax.persistence.Transient;
+import jakarta.persistence.Transient;
 import org.springframework.util.Assert;
 import de.naju.adebar.model.persons.events.AbstractPersonRelatedEvent;
 

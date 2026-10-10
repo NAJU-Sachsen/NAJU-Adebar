@@ -1,8 +1,8 @@
 package de.naju.adebar.model.persons.details;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Transient;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Transient;
 import de.naju.adebar.documentation.infrastructure.JpaOnly;
 
 /**

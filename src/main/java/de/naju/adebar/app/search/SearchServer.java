@@ -1,7 +1,7 @@
 package de.naju.adebar.app.search;
 
 import java.util.List;
-import org.springframework.lang.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * A {@code SearchServer} is a service which searches for entities of a certain class, given some

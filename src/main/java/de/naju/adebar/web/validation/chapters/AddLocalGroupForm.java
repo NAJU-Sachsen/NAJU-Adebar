@@ -1,6 +1,6 @@
 package de.naju.adebar.web.validation.chapters;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Model POJO for new local groups to add. The fields are set by Thymeleaf when the associated form

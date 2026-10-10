@@ -2,7 +2,7 @@ package de.naju.adebar.services.conversion.core;
 
 import de.naju.adebar.model.core.Age;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.lang.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Converter used to provide {@link Age} instances when a String is given instead

@@ -20,7 +20,7 @@
 <!--/*@thymesVar id="matchingPersons" type="java.util.Collection<de.naju.adebar.model.persons.Person>"*/-->
 
 <!-- central navigation -->
-<nav th:replace="navigation :: topNav(page='events')"></nav>
+<nav th:replace="~{navigation :: topNav(page='events')}"></nav>
 
 <!-- page specific content-->
 <main id="main">
@@ -122,7 +122,7 @@
                   </div>
                   <div class="row">
                     <p class="col-md-12 description"
-                       th:utext="${#strings.replace( #strings.escapeXml( event.organizationInfo.getContactInformationFor(contact) ),T(java.lang.System).getProperty('line.separator'),'&lt;br /&gt;')}">
+                       th:utext="${#strings.replace( #strings.escapeXml( event.organizationInfo.getContactInformationFor(contact) ),'&#10;','&lt;br /&gt;')}">
                       Hat vielleicht noch Fragen.
                     </p>
                   </div>

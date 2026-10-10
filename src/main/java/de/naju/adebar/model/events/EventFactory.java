@@ -1,7 +1,7 @@
 package de.naju.adebar.model.events;
 
 import java.time.LocalDateTime;
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
 import org.javamoney.moneta.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

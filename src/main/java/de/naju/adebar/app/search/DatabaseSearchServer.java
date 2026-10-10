@@ -3,7 +3,7 @@ package de.naju.adebar.app.search;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.lang.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * A {@link SearchServer} which runs on a database and therefore may provide database-specific

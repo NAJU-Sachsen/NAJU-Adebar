@@ -3,8 +3,8 @@ package de.naju.adebar.app.filter;
 import java.util.Objects;
 import java.util.Optional;
 import javax.annotation.Nonnull;
-import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 public class JoiningFilter extends CompoundFilter {
 

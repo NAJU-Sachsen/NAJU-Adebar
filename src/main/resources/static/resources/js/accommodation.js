@@ -56,6 +56,9 @@ function fetchParticipantDetails(e) {
         btn.popover({
           content: res,
           html: true,
+          // the details are rendered (and escaped) by our own template and contain tables, which
+          // Bootstrap's sanitizer would strip otherwise
+          sanitize: false,
           placement: 'top',
           container: 'body',
           trigger: 'focus'

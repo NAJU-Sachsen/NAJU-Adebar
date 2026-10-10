@@ -4,13 +4,11 @@ import static org.hamcrest.CoreMatchers.endsWith;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import org.junit.Before;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.FilterChainProxy;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -23,7 +21,6 @@ import de.naju.adebar.app.security.user.UserAccountManager;
  * @author Rico Bergmann
  */
 @SpringBootTest
-@RunWith(SpringRunner.class)
 public abstract class WebIntegrationTestsBase {
 
 	protected MockMvc mvc;
@@ -37,7 +34,7 @@ public abstract class WebIntegrationTestsBase {
 	@Autowired
 	private FilterChainProxy securityFilterChain;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		context.getServletContext()
 				.setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, context);

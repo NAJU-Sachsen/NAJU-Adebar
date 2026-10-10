@@ -1,6 +1,6 @@
 package de.naju.adebar.app.filter;
 
-import org.springframework.lang.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class EqualityFilter extends ComparingFilter {
 

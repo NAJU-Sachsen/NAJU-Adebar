@@ -1,7 +1,7 @@
 package de.naju.adebar.app.filter;
 
 import java.util.Objects;
-import org.springframework.lang.NonNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.util.Assert;
 
 public class InvertableFilter extends CompoundFilter {

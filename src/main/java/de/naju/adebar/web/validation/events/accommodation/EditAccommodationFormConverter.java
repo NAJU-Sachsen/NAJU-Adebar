@@ -7,7 +7,7 @@ import de.naju.adebar.util.validation.ErrorUtils;
 import de.naju.adebar.web.validation.ValidatingEntityFormConverter;
 import java.util.List;
 import java.util.Objects;
-import org.springframework.lang.NonNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 

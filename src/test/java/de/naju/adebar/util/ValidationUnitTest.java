@@ -1,7 +1,9 @@
 package de.naju.adebar.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.Test;
 
 /**
  * Basic testing of the {@link Validation} functions
@@ -22,10 +24,11 @@ public class ValidationUnitTest {
   private String[] invalidPhoneNumbers = {"++123456789", "2134a498", "1234   56978", "3692#58741",
       "741258//321469", "13254+78941", "123456"};
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void testNullEmail() {
-    Validation.isEmail(null);
-  }
+		assertThrows(IllegalArgumentException.class, () ->
+			Validation.isEmail(null));
+	}
 
   @Test
   public void testValidEmails() {
@@ -87,10 +90,11 @@ public class ValidationUnitTest {
     }
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void testNullPhoneNumber() {
-    Validation.isPhoneNumber(null);
-  }
+		assertThrows(IllegalArgumentException.class, () ->
+			Validation.isPhoneNumber(null));
+	}
 
   @Test
   public void testValidPhoneNumbers() {

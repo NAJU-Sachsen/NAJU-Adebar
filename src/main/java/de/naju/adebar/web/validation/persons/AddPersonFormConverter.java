@@ -16,7 +16,7 @@ import de.naju.adebar.web.validation.persons.participant.AddParticipantForm;
 import de.naju.adebar.web.validation.persons.participant.AddParticipantFormConverter;
 import de.naju.adebar.web.validation.persons.referent.AddReferentForm;
 import de.naju.adebar.web.validation.persons.referent.AddReferentFormConverter;
-import org.springframework.lang.NonNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;

@@ -26,7 +26,7 @@
   <body>
 
     <!-- central navigation -->
-    <nav th:replace="navigation :: topNav(page='persons')"></nav>
+    <nav th:replace="~{navigation :: topNav(page='persons')}"></nav>
 
     <!-- page specific content-->
     <main id="main" th:object="${form}">
@@ -147,10 +147,10 @@
       <!-- the form -->
       <form id="add-person" class="row display-category" method="post" th:action="@{/persons/add}">
 
-        <input type="hidden" name="return-to" th:value="${#request.getParameter('return-to')}"
-          th:if="${#request.getParameter('return-to') != null}" />
-        <input type="hidden" name="return-action" th:value="${#request.getParameter('return-action')}"
-          th:if="${#request.getParameter('return-action') != null}" />
+        <input type="hidden" name="return-to" th:value="${param['return-to'][0]}"
+          th:if="${param['return-to'] != null}" />
+        <input type="hidden" name="return-action" th:value="${param['return-action'][0]}"
+          th:if="${param['return-action'] != null}" />
 
         <!-- general info -->
         <div class="col-md-4">
@@ -352,7 +352,7 @@
               </div>
               <hr />
               <div class="form-group" th:classappend="${#fields.hasErrors('participantForm.events')} ? 'has-error'"
-                th:unless="${#httpServletRequest.getParameter('return-action') == 'add-participant'}">
+                th:unless="${(param['return-action'] != null and param['return-action'][0] == 'add-participant')}">
                 <label for="events" class="control-label">Veranstaltungen</label>
                 <div>
                   <select class="selectpicker" id="events" multiple="multiple" data-live-search="true"

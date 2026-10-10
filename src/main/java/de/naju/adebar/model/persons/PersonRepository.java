@@ -21,4 +21,7 @@ public interface PersonRepository
 	@Override
 	Person findOne(PersonId id);
 
+	@Override
+	boolean existsById(PersonId id);
+
 }

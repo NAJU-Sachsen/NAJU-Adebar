@@ -3,9 +3,9 @@ package de.naju.adebar.model.core;
 import de.naju.adebar.documentation.ddd.ValueObject;
 import de.naju.adebar.util.Validation;
 import java.util.Objects;
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Transient;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Transient;
 import org.springframework.util.Assert;
 
 /**

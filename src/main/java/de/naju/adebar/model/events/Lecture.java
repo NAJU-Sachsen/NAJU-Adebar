@@ -2,9 +2,9 @@ package de.naju.adebar.model.events;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.OneToOne;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.OneToOne;
 import org.springframework.util.Assert;
 import de.naju.adebar.model.persons.Person;
 

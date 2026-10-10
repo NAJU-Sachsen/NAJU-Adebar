@@ -3,7 +3,7 @@ package de.naju.adebar.web.services.events.participation.table;
 import java.io.File;
 import java.io.InputStream;
 import java.util.concurrent.ThreadLocalRandom;
-import org.apache.commons.lang.WordUtils;
+import org.apache.commons.text.WordUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import de.naju.adebar.app.storage.TempStorageService;

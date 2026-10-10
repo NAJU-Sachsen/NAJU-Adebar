@@ -1,7 +1,9 @@
 package de.naju.adebar.infrastructure.database.simple;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.Test;
 
 public class SimpleTableRowUnitTests {
 
@@ -37,22 +39,28 @@ public class SimpleTableRowUnitTests {
 	 * of errors
 	 */
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void rejectsNullColumnNames() {
-		SimplifiedTableRow row = new SimplifiedTableRow();
-		row.append(null, "foo");
+		assertThrows(IllegalArgumentException.class, () -> {
+			SimplifiedTableRow row = new SimplifiedTableRow();
+			row.append(null, "foo");
+		});
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void rejectsEmptyColumnNames() {
-		SimplifiedTableRow row = new SimplifiedTableRow();
-		row.append("", "foo");
+		assertThrows(IllegalArgumentException.class, () -> {
+			SimplifiedTableRow row = new SimplifiedTableRow();
+			row.append("", "foo");
+		});
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void rejectsWhitespaceColumnNames() {
-		SimplifiedTableRow row = new SimplifiedTableRow();
-		row.append("\t\n", "foo");
+		assertThrows(IllegalArgumentException.class, () -> {
+			SimplifiedTableRow row = new SimplifiedTableRow();
+			row.append("\t\n", "foo");
+		});
 	}
 
 }

@@ -5,7 +5,7 @@ import de.naju.adebar.documentation.DesignSmell;
 import de.naju.adebar.model.persons.ActivistProfile;
 import de.naju.adebar.model.persons.details.JuleicaCard;
 import de.naju.adebar.web.validation.ValidatingEntityFormConverter;
-import org.springframework.lang.NonNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 

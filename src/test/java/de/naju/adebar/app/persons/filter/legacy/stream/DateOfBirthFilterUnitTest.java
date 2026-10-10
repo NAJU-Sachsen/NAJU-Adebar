@@ -4,20 +4,16 @@ import de.naju.adebar.app.filter.legacy.DateFilterType;
 import de.naju.adebar.app.persons.filter.legacy.FilterTestBootstrapper;
 import de.naju.adebar.app.persons.legacy.filter.stream.DateOfBirthFilter;
 import de.naju.adebar.model.persons.Person;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.stereotype.Component;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Arrays;
 
 /**
  * @author Rico Bergmann
  */
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
 @Rollback
@@ -29,8 +25,8 @@ public class DateOfBirthFilterUnitTest extends FilterTestBootstrapper {
 	public void testDobExact() {
 		Person[] result = {berta, heinz};
 		dateOfBirthFilter = new DateOfBirthFilter(bertaDob, DateFilterType.EXACT);
-		Assert.assertArrayEquals("Arrays do not match", result,
-				dateOfBirthFilter.filter(personRepo.streamAll()).toArray());
+		assertSameElements(result, dateOfBirthFilter.filter(personRepo.streamAll()).toArray(),
+				"Arrays do not match");
 	}
 
 	@Test
@@ -38,16 +34,16 @@ public class DateOfBirthFilterUnitTest extends FilterTestBootstrapper {
 		Person[] result = {claus, fritz};
 		dateOfBirthFilter = new DateOfBirthFilter(bertaDob, DateFilterType.BEFORE);
 		System.out.println(Arrays.toString(dateOfBirthFilter.filter(personRepo.streamAll()).toArray()));
-		Assert.assertArrayEquals("Arrays do not match", result,
-				dateOfBirthFilter.filter(personRepo.streamAll()).toArray());
+		assertSameElements(result, dateOfBirthFilter.filter(personRepo.streamAll()).toArray(),
+				"Arrays do not match");
 	}
 
 	@Test
 	public void testDobAfter() {
 		Person[] result = {hans};
 		dateOfBirthFilter = new DateOfBirthFilter(bertaDob, DateFilterType.AFTER);
-		Assert.assertArrayEquals("Arrays do not match", result,
-				dateOfBirthFilter.filter(personRepo.streamAll()).toArray());
+		assertSameElements(result, dateOfBirthFilter.filter(personRepo.streamAll()).toArray(),
+				"Arrays do not match");
 	}
 
 }

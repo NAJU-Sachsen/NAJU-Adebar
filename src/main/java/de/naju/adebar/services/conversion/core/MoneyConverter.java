@@ -2,7 +2,7 @@ package de.naju.adebar.services.conversion.core;
 
 import org.javamoney.moneta.Money;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.lang.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class MoneyConverter implements Converter<String, Money> {
 
