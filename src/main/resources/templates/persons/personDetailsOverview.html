@@ -489,8 +489,7 @@
 									${address.city}| : 'keine Angabe']] <small
 											th:if="${NOT address.empty()}">( <a
 											href="http://www.openstreetmap.org/search?query=Hauptstraße 3, 09876 Entenhausen"
-											target="_blank"
-											th:href="${address} ? |https://www.openstreetmap.org/search?query=${address.street} ${address.zip} ${address.city}|">
+											th:href="${address} ? |https://www.openstreetmap.org/search?query=${address.street} ${address.zip} ${address.city}|" target="_blank">
 										<span class="glyphicon glyphicon-map-marker"></span> wo ist
 										das?
 									</a>)

@@ -17,7 +17,7 @@ public class CurrencyFormatter {
 	 */
 	public String format(MonetaryAmount amount) {
 		if (amount.getCurrency().equals(Monetary.getCurrency("EUR"))) {
-			return amount.getNumber().toString() + "€";
+			return "" + amount.getNumber().doubleValue() + "€";
 		}
 		return amount.toString();
 	}

@@ -6,6 +6,7 @@ import de.naju.adebar.model.events.ParticipationInfo;
 import de.naju.adebar.web.validation.ValidatingEntityFormConverter;
 import java.util.HashSet;
 import java.util.List;
+import org.javamoney.moneta.Money;
 import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
@@ -44,9 +45,16 @@ public class ParticipationInfoFormConverter
 			throw new IllegalArgumentException("Form is invalid: " + form);
 		}
 
+		Money intFee = form.getIntParticipationFee() != null
+				? Money.of(form.getIntParticipationFee(), "EUR")
+				: null;
+		Money extFee = form.getExtParticipationFee() != null
+				? Money.of(form.getExtParticipationFee(), "EUR")
+				: null;
+
 		entity.specifyParticipationInfo().specifyArrivalOptions(form.getArrivalOptions())
-				.specifyExternalParticipationFee(form.getExtParticipationFee())
-				.specifyInternalParticipationFee(form.getIntParticipationFee())
+				.specifyExternalParticipationFee(extFee)
+				.specifyInternalParticipationFee(intFee)
 				.specifyMinimumParticipantAge(form.getMinParticipantAge());
 
 		entity.specifyParticipantsList().specifyParticipantsLimit(form.getParticipantsLimit());
@@ -57,9 +65,16 @@ public class ParticipationInfoFormConverter
 			throw new IllegalArgumentException("Form is invalid: " + form);
 		}
 
+		Money intFee = form.getIntParticipationFee() != null
+				? Money.of(form.getIntParticipationFee(), "EUR")
+				: null;
+		Money extFee = form.getExtParticipationFee() != null
+				? Money.of(form.getExtParticipationFee(), "EUR")
+				: null;
+
 		entity.updateArrivalOptions(form.getArrivalOptions())
-				.updateInternalParticipationFee(form.getIntParticipationFee())
-				.updateExternalParticipationFee(form.getExtParticipationFee())
+				.updateInternalParticipationFee(intFee)
+				.updateExternalParticipationFee(extFee)
 				.updateMinimumParticipantAge(form.getMinParticipantAge());
 	}
 

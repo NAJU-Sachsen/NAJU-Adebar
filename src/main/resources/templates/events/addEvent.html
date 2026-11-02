@@ -231,7 +231,7 @@
             <label for="ext-participation-fee" class="control-label">Teilnahmebeitrag
               (nicht-Mitglieder)</label>
             <div class="input-group">
-              <input type="number" min="0" class="form-control" id="ext-participation-fee"
+              <input type="number" min="0" step="0.1" class="form-control" id="ext-participation-fee"
                      placeholder="externer TNB"
                      th:field="*{participationInfo.extParticipationFee}"/>
               <span class="input-group-addon">optional</span>
@@ -247,7 +247,7 @@
             <label for="int-participation-fee" class="control-label">Teilnahmebeitrag
               (NABU-Mitglieder)</label>
             <div class="input-group">
-              <input type="number" min="0" class="form-control"
+              <input type="number" min="0" step="0.1" class="form-control"
                      id="int-participation-fee"
                      placeholder="interner TNB"
                      th:field="*{participationInfo.intParticipationFee}"/>

@@ -13,14 +13,14 @@ public class ParticipationInfoForm {
 
 	private Capacity participantsLimit;
 	private Age minParticipantAge;
-	private Money intParticipationFee;
-	private Money extParticipationFee;
+	private Double intParticipationFee;
+	private Double extParticipationFee;
 	private List<ArrivalOption> arrivalOptions = new ArrayList<>();
 
 	public ParticipationInfoForm() {}
 
 	public ParticipationInfoForm(Capacity participantsLimit, Age minParticipantAge,
-			Money intParticipationFee, Money extParticipationFee,
+			Double intParticipationFee, Double extParticipationFee,
 			Collection<ArrivalOption> arrivalOptions) {
 		this.participantsLimit = participantsLimit;
 		this.minParticipantAge = minParticipantAge;
@@ -45,19 +45,19 @@ public class ParticipationInfoForm {
 		this.minParticipantAge = minParticipantAge;
 	}
 
-	public Money getIntParticipationFee() {
+	public Double getIntParticipationFee() {
 		return intParticipationFee;
 	}
 
-	public void setIntParticipationFee(Money intParticipationFee) {
+	public void setIntParticipationFee(Double intParticipationFee) {
 		this.intParticipationFee = intParticipationFee;
 	}
 
-	public Money getExtParticipationFee() {
+	public Double getExtParticipationFee() {
 		return extParticipationFee;
 	}
 
-	public void setExtParticipationFee(Money extParticipationFee) {
+	public void setExtParticipationFee(Double extParticipationFee) {
 		this.extParticipationFee = extParticipationFee;
 	}
 

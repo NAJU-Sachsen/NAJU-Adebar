@@ -61,11 +61,18 @@ public class EditEventFormConverter implements ValidatingEntityFormConverter<Eve
 			endTime = entity.getEndTime().toLocalTime();
 		}
 
+		Double intFee = entity.getParticipationInfo().getInternalParticipationFee() != null
+				? entity.getParticipationInfo().getInternalParticipationFee().getNumber().doubleValue()
+				: null;
+		Double extFee = entity.getParticipationInfo().getExternalParticipationFee() != null
+				? entity.getParticipationInfo().getExternalParticipationFee().getNumber().doubleValue()
+				: null;
+
 		ParticipationInfoForm participationInfoForm =
 				new ParticipationInfoForm(entity.getParticipantsList().getParticipantsLimit(),
 						entity.getParticipationInfo().getMinimumParticipantAge(),
-						entity.getParticipationInfo().getInternalParticipationFee(),
-						entity.getParticipationInfo().getExternalParticipationFee(),
+						intFee,
+						extFee,
 						entity.getParticipationInfo().getArrivalOptions());
 
 		AddressForm addressForm = new AddressForm(entity.getPlace());

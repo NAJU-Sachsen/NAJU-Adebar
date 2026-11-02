@@ -70,13 +70,13 @@
 
           <div class="col-md-2 category-menu">
             <div class="pull-right">
-            
+
               <!-- edit event button -->
               <button type="button" class="btn btn-default btn-sm" data-toggle="modal"
                       data-target="#edit-event-dialog" th:unless="${event.canceled}">
                 <span class="glyphicon glyphicon-pencil"></span> Anpassen
               </button>
-            
+
               <!-- edit event dialog -->
               <div class="modal fade" id="edit-event-dialog" tabindex="-1" role="dialog">
                 <div class="modal-dialog modal-lg">
@@ -193,7 +193,7 @@
                                 Teilnahmebeitrag (nicht-Mitglieder)
                               </label>
                               <div class="input-group">
-                                <input type="number" min="0" class="form-control" id="edit-event-ext-participation-fee" th:field="*{participationInfo.extParticipationFee}">
+                                <input type="number" min="0" step="0.1" class="form-control" id="edit-event-ext-participation-fee" th:field="*{participationInfo.extParticipationFee}">
                                 <span class="input-group-addon">optional</span>
                               </div>
                             </div>
@@ -202,7 +202,7 @@
                                 Teilnahmebeitrag (NABU-Mitglieder)
                               </label>
                               <div class="input-group">
-                                <input type="number" min="0" class="form-control" id="edit-event-int-participation-fee" th:field="*{participationInfo.intParticipationFee}">
+                                <input type="number" min="0" step="0.1" class="form-control" id="edit-event-int-participation-fee" th:field="*{participationInfo.intParticipationFee}">
                                 <span class="input-group-addon">optional</span>
                               </div>
                             </div>
@@ -211,7 +211,7 @@
                               <label for="edit-event-arrival-opts" class="control-label">
                                 Anreise
                               </label>
-  
+
                               <ul class="list-group" id="edit-event-arrival-opts" th:remove="all-but-first">
                                 <li class="list-group-item" th:each="arrival : *{participationInfo.arrivalOptions}" th:inline="text">
                                   [[${arrival.description}]]
@@ -233,7 +233,7 @@
                                   </button>
                                 </li>
                               </ul>
-  
+
                               <div class="clearfix">
                                 <div class="form-inline pull-right">
                                   <label for="arrival-opt" class="control-label margin-right">Neue
@@ -245,7 +245,7 @@
                                   </button>
                                 </div>
                               </div>
-  
+
                             </div>
                             <hr>
                             <div class="form-group" th:classappend="${#fields.hasErrors('belonging')} ? 'has-error'">
@@ -293,7 +293,7 @@
                                 Erforderlich
                               </p>
                             </div>
-  
+
                           </div>
                         </div>
                       </form>
@@ -309,12 +309,12 @@
                   </div>
                 </div>
               </div>
-              
+
               <!-- cancel event button -->
               <button type="submit" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#cancel-event-dialog" th:unless="${event.canceled}">
                 Absagen
               </button>
-              
+
               <!-- cancel event dialog -->
               <div class="modal fade" id="cancel-event-dialog" tabindex="-1" role="dialog">
                 <div class="modal-dialog">
@@ -327,7 +327,7 @@
                       <form id="cancel-event-form" method="post" th:action="@{/events/{id}/cancel(id=${event.id})}"></form>
                       <p>Die Veranstaltung wird <strong>abgesagt</strong>. Sie kann danach nicht weiter bearbeitet werden!</p>
                     </div>
-                    
+
                     <div class="modal-footer">
                       <button type="button" class="btn btn-default" data-dismiss="modal">
                         Lieber doch nicht ...
@@ -336,10 +336,10 @@
                         Wirklich absagen.
                       </button>
                     </div>
-                  
+
                   </div>
                 </div>
-              
+
               </div>
 
             </div>
