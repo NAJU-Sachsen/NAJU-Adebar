@@ -1,0 +1,12 @@
+
+#event-participation-timeline {
+  margin-left: 100px;
+}
+
+#family-relations-graph {
+  width: 1170px;
+  height: 877px;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  padding: 15px;
+}

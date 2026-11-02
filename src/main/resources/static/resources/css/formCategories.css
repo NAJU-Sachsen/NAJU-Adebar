@@ -1,0 +1,14 @@
+
+.form-category-content {
+  background-color: inherit;
+  cursor: inherit;
+}
+
+.form-category-content.disabled {
+  background-color: #eaeaea;
+  cursor: not-allowed !important;
+}
+
+.form-category-content.disabled * {
+  cursor: not-allowed !important;
+}

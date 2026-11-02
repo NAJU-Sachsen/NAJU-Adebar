@@ -10,30 +10,30 @@ import de.naju.adebar.model.newsletter.Subscriber;
  */
 public class TechnicalSubscriberJSON {
 
-  private Subscriber subscriber;
-  private Iterable<Long> subscribedNewsletters;
+	private Subscriber subscriber;
+	private Iterable<Long> subscribedNewsletters;
 
-  /**
-   * @param subscriber the normal subscriber object
-   * @param subscribedNewsletters the newsletters the subscriber signed up to
-   */
-  public TechnicalSubscriberJSON(Subscriber subscriber, Iterable<Long> subscribedNewsletters) {
-    this.subscriber = subscriber;
-    this.subscribedNewsletters = subscribedNewsletters;
-  }
+	/**
+	 * @param subscriber the normal subscriber object
+	 * @param subscribedNewsletters the newsletters the subscriber signed up to
+	 */
+	public TechnicalSubscriberJSON(Subscriber subscriber, Iterable<Long> subscribedNewsletters) {
+		this.subscriber = subscriber;
+		this.subscribedNewsletters = subscribedNewsletters;
+	}
 
-  /**
-   * @return the subscriber
-   */
-  public Subscriber getSubscriber() {
-    return subscriber;
-  }
+	/**
+	 * @return the subscriber
+	 */
+	public Subscriber getSubscriber() {
+		return subscriber;
+	}
 
-  /**
-   * @return the subscribed newsletters
-   */
-  public Iterable<Long> getSubscribedNewsletters() {
-    return subscribedNewsletters;
-  }
+	/**
+	 * @return the subscribed newsletters
+	 */
+	public Iterable<Long> getSubscribedNewsletters() {
+		return subscribedNewsletters;
+	}
 
 }

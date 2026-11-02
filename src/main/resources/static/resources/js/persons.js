@@ -50,8 +50,9 @@ $('#add-person-isReferent').click(function() {
 });
 
 // disable nabu membership number if checkbox is not selected
-$('#add-person-isNabuMember').click(function() {
-    $('#add-person-nabuNr').prop('disabled', function(i,v){return !v;});
+$('#add-person-isNabuMember').change(function() {
+    const disableMembershipNumber = $(this).find(':selected').val() !== 'IS_MEMBER';
+    $('#add-person-nabuNr').prop('disabled', disableMembershipNumber);
 });
 
 // show gender select only if gender should be filtered
@@ -73,11 +74,11 @@ $('#filter-dob-type').on('change', function() {
 });
 
 var filterNabuType = $('#filter-nabu-type');
-var filterNabuMembershipType = (filterNabuType.find('option:selected').val().toString() === 'ENFORCE');
+var filterNabuMembershipType = (filterNabuType.find('option:selected').val().toString() === 'IS_MEMBER');
 
 // show nabu membership number input only if only for nabu members should be filtered
 filterNabuType.on('change', function() {
-    if ($(this).find('option:selected').val().toString() === 'ENFORCE' && !filterNabuMembershipType) {
+    if ($(this).find('option:selected').val().toString() === 'IS_MEMBER' && !filterNabuMembershipType) {
         $('#filter-nabu-membership-number').slideToggle();
         filterNabuMembershipType = !filterNabuMembershipType;
     } else if (filterNabuMembershipType){
@@ -194,6 +195,34 @@ $('#persons').on('change', function(obj) {
     $.ajax(request);
 });
 
+// sync select recipients
+
+function updateRecipients(recipients) {
+  let href = 'mailto:recipients@naju-sachsen.de?bcc=';
+
+  for (mail of recipients) {
+    href += mail + ';';
+  }
+
+  $('#edit-recipients-modal').find('a.send-email').attr('href', href);
+}
+
+$('select.toggle-recipient').on('changed.bs.select', function() {
+    $(this).selectpicker('toggle');
+    const recipients = $(this).val();
+    $('select.recipient-list').val(recipients);
+    updateRecipients(recipients);
+});
+
+
+$('select.recipient-list').on('change', function() {
+    const selectPicker = $('select.toggle-recipient');
+    const recipients = $('select.recipient-list').val();
+    selectPicker.val(recipients);
+    selectPicker.selectpicker('refresh');
+    updateRecipients(recipients);
+});
+
 $(function() {
     $('#content').find('.no-results').hide();
     $('#content').find('.searching').hide();
@@ -203,4 +232,5 @@ $(function() {
             keyboard: false
         });
     }
+
 });

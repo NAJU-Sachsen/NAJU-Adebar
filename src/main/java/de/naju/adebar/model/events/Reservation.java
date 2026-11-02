@@ -1,141 +1,150 @@
 package de.naju.adebar.model.events;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Embedded;
 import org.springframework.util.Assert;
-import de.naju.adebar.util.Validation;
+import de.naju.adebar.documentation.infrastructure.JpaOnly;
+import de.naju.adebar.model.core.Capacity;
+import de.naju.adebar.model.core.Email;
+import de.naju.adebar.model.support.NumericEntityId;
 
 /**
- * A reservation for an event
- * 
+ * A reservation for an event.
+ *
  * @author Rico Bergmann
  */
 @Embeddable
 public class Reservation {
-  private final static int SINGLE_RESERVATION = 1;
 
-  @Column(name = "description")
-  private String description;
+	@Embedded
+	private NumericEntityId id;
 
-  @Column(name = "contactEmail")
-  private String contactEmail;
+	@Column(name = "description")
+	private String description;
 
-  @Column(name = "slots")
-  private int numberOfSlots;
+	@Embedded
+	@AttributeOverrides(@AttributeOverride(name = "value", column = @Column(name = "contactEmail")))
+	private Email contactEmail;
 
-  // constructors
+	@Embedded
+	@AttributeOverrides(@AttributeOverride(name = "value", column = @Column(name = "slots")))
+	private Capacity slots;
 
-  /**
-   * @param description the reservation's description
-   */
-  public Reservation(String description) {
-    this(description, SINGLE_RESERVATION, null);
-  }
+	public static Reservation generateFor(String description, Capacity slots) {
+		return new Reservation(description, null, slots);
+	}
 
-  /**
-   * @param description the reservation's description
-   * @param numberOfSlots the number of slots to reserve
-   */
-  public Reservation(String description, int numberOfSlots) {
-    this(description, numberOfSlots, null);
-  }
+	public static Reservation generateFor(String description, Email contact, Capacity slots) {
+		return new Reservation(description, contact, slots);
+	}
 
-  /**
-   * @param description the reservation's description
-   * @param numberOfSlots the number of slots to reserve
-   * @param contactEmail address to contact for further requests
-   */
-  public Reservation(String description, int numberOfSlots, String contactEmail) {
-    Assert.hasText(description, "Description may not be null nor empty, but was " + description);
-    if (contactEmail != null && !contactEmail.isEmpty()) {
-      Assert.isTrue(Validation.isEmail(contactEmail), "Not a valid email address: " + contactEmail);
-    } else {
-      this.contactEmail = null;
-    }
+	Reservation(Reservation base) {
+		this(base.description, base.contactEmail, base.slots);
+	}
 
-    this.description = description;
-    this.numberOfSlots = numberOfSlots;
-    this.contactEmail = contactEmail;
-  }
+	private Reservation(String description, Email contactEmail, Capacity slots) {
+		Assert.hasText(description, "description may not be null nor empty");
+		Assert.notNull(slots, "slots may not be null");
+		this.id = new NumericEntityId();
+		this.description = description;
+		this.contactEmail = contactEmail;
+		this.slots = slots;
+	}
 
-  /**
-   * Default constructor just for JPA's sake
-   */
-  @SuppressWarnings("unused")
-  private Reservation() {}
+	@JpaOnly
+	private Reservation() {}
 
-  // getter and setter
+	public NumericEntityId getId() {
+		return id;
+	}
 
-  /**
-   * @return the description
-   */
-  public String getDescription() {
-    return description;
-  }
+	public String getDescription() {
+		return description;
+	}
 
-  /**
-   * @return the contact email
-   */
-  public String getContactEmail() {
-    return contactEmail;
-  }
+	public Email getContactEmail() {
+		return contactEmail;
+	}
 
-  /**
-   * @param contactEmail the contact email
-   */
-  public void setContactEmail(String contactEmail) {
-    if (contactEmail != null) {
-      Assert.isTrue(Validation.isEmail(contactEmail), "Not a valid email address: " + contactEmail);
-    }
-    this.contactEmail = contactEmail;
-  }
+	public Capacity getNumberOfSlots() {
+		return slots;
+	}
 
-  /**
-   * @return the number of reserved slots
-   */
-  public int getNumberOfSlots() {
-    return numberOfSlots;
-  }
+	public boolean hasContactEmail() {
+		return contactEmail != null;
+	}
 
-  /**
-   * @param numberOfSlots the number of reserved slots
-   */
-  public void setNumberOfSlots(int numberOfSlots) {
-    this.numberOfSlots = numberOfSlots;
-  }
+	void setId(NumericEntityId id) {
+		this.id = id;
+	}
 
-  /**
-   * @param description the description
-   */
-  @SuppressWarnings("unused")
-  private void setDescription(String description) {
-    this.description = description;
-  }
+	@JpaOnly
+	private void setDescription(String description) {
+		this.description = description;
+	}
 
-  // overridden from Object
+	@JpaOnly
+	private void setContactEmail(Email contactEmail) {
+		this.contactEmail = contactEmail;
+	}
 
-  @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((description == null) ? 0 : description.hashCode());
-    return result;
-  }
+	@JpaOnly
+	private void setSlots(Capacity slots) {
+		this.slots = slots;
+	}
 
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (!(obj instanceof Reservation))
-      return false;
-    Reservation other = (Reservation) obj;
-    if (description == null) {
-      if (other.description != null)
-        return false;
-    } else if (!description.equals(other.description))
-      return false;
-    return true;
-  }
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		Reservation other = (Reservation) obj;
+		if (id == null) {
+			if (other.id != null) {
+				return false;
+			}
+		} else if (!id.equals(other.id)) {
+			return false;
+		}
+		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Reservation [id=" + id + ", description=" + description + ", contactEmail="
+				+ contactEmail + ", slots=" + slots + "]";
+	}
+
 }

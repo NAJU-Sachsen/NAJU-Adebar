@@ -1,77 +1,83 @@
 package de.naju.adebar.app.security.user;
 
-import javax.persistence.Embeddable;
+import java.io.Serializable;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 import org.springframework.util.Assert;
 
 /**
  * Just a password. Each instance is immutable
- * 
+ *
  * @author Rico Bergmann
  *
  */
 @Embeddable
-public class Password {
-  private String password;
+public class Password implements Serializable {
 
-  /**
-   * @param password the password
-   */
-  public Password(String password) {
-    Assert.hasText(password, "Password may not be null nor empty, but was: " + password);
-    this.password = password;
-  }
+	private static final long serialVersionUID = -1198768616494735194L;
 
-  /**
-   * Default constructor just for JPA's sake
-   */
-  @SuppressWarnings("unused")
-  private Password() {}
+	@Column(name = "password")
+	private String value;
 
-  /**
-   * @return the password
-   */
-  public String getPassword() {
-    return password;
-  }
+	/**
+	 * @param password the password
+	 */
+	public Password(String password) {
+		Assert.hasText(password, "Password may not be null nor empty, but was: " + password);
+		this.value = password;
+	}
 
-  /**
-   * @param password the password
-   */
-  @SuppressWarnings("unused")
-  private void setPassword(String password) {
-    Assert.hasText(password, "Password may not be null nor empty, but was: " + password);
-    this.password = password;
-  }
+	/**
+	 * Default constructor just for JPA's sake
+	 */
+	@SuppressWarnings("unused")
+	private Password() {}
 
-  // overridden from Object
+	/**
+	 * @return the password
+	 */
+	public String getValue() {
+		return value;
+	}
 
-  @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((password == null) ? 0 : password.hashCode());
-    return result;
-  }
+	/**
+	 * @param value the password
+	 */
+	@SuppressWarnings("unused")
+	private void setValue(String value) {
+		Assert.hasText(value, "Password may not be null nor empty, but was: " + value);
+		this.value = value;
+	}
 
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
-    Password other = (Password) obj;
-    if (password == null) {
-      if (other.password != null)
-        return false;
-    } else if (!password.equals(other.password))
-      return false;
-    return true;
-  }
+	// overridden from Object
 
-  @Override
-  public String toString() {
-    return "XXXXXXX";
-  }
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((value == null) ? 0 : value.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Password other = (Password) obj;
+		if (value == null) {
+			if (other.value != null)
+				return false;
+		} else if (!value.equals(other.value))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "XXXXXXX";
+	}
 }

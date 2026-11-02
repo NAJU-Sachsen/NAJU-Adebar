@@ -1,0 +1,103 @@
+package de.naju.adebar.infrastructure.database.simple;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataAccessException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.transaction.annotation.Transactional;
+import de.naju.adebar.infrastructure.database.MalformedSqlException;
+
+@SpringBootTest
+@Transactional
+@Sql("/sql/newsletter_test_data.sql")
+public class SimpleDatabaseQueryExecutorIntegrationTests {
+
+	@Autowired
+	private SimpleDatabaseQueryExecutor queryExec;
+
+	@Test
+	@WithMockUser
+	public void requiresAdminPrivileges() {
+		assertThrows(AccessDeniedException.class, () -> {
+			String query = "SELECT * FROM subscriber";
+			queryExec.runQuery(query);
+		});
+	}
+
+	@Test
+	@WithMockUser(roles = "ADMIN")
+	public void executesSelectQueries() {
+		String query = "SELECT * FROM subscriber";
+		SimplifiedResultSet resultSet = queryExec.runQuery(query);
+
+		assertThat(resultSet).hasSize(2);
+		assertThat(resultSet.getColumnNames()).hasSize(4);
+		assertThat(resultSet.getResultSet())
+				.anySatisfy((row) -> row.getColumn("EMAIL").equals("john@email.com"));
+		assertThat(resultSet.getResultSet())
+				.anySatisfy((row) -> row.getColumn("EMAIL").equals("jane@email.com"));
+	}
+
+	@Test
+	@WithMockUser(roles = "ADMIN")
+	public void executesJoins() {
+		String query = "SELECT * FROM subscriber AS s " //
+				+ "JOIN newsletter_subscribers AS n ON s.id = n.subscriber_id";
+		SimplifiedResultSet resultSet = queryExec.runQuery(query);
+
+		assertThat(resultSet).hasSize(2);
+	}
+
+	@Test
+	@WithMockUser(roles = "ADMIN")
+	public void doesNotExecuteInserts() {
+		assertThrows(DataAccessException.class, () -> {
+			String insert = "INSERT INTO subscriber (email) VALUES ('john.smith@email.com')";
+			queryExec.runQuery(insert);
+		});
+	}
+
+	@Test
+	@WithMockUser(roles = "ADMIN")
+	public void doesNotExecuteUpdates() {
+		assertThrows(DataAccessException.class, () -> {
+			String update = "UPDATE subscriber SET first_name = 'Joe' WHERE email = 'john@email.com'";
+			queryExec.runQuery(update);
+		});
+	}
+
+	@Test
+	@WithMockUser(roles = "ADMIN")
+	public void throwsMalformedSqlExceptionIfMalformedQuery() {
+		assertThrows(MalformedSqlException.class, () -> {
+			String query = "SELECT WHERE last_name = 'Foo'";
+			queryExec.runQuery(query);
+		});
+	}
+
+	@Test
+	@WithMockUser(roles = "ADMIN")
+	public void extractsAllColumns() {
+		String query = "SELECT * FROM subscriber";
+		SimplifiedResultSet resultSet = queryExec.runQuery(query);
+
+		assertThat(resultSet.getResultSet()).hasSize(2);
+		assertThat(resultSet.getResultSet()).allMatch((row) -> row.getColumnCount() == 4);
+	}
+
+	@Test
+	@WithMockUser(roles = "ADMIN")
+	public void respectsColumnRenames() {
+		String query = "SELECT first_name AS fn FROM subscriber";
+		SimplifiedResultSet resultSet = queryExec.runQuery(query);
+
+		// beware that column names will be all uppercase
+		assertThat(resultSet.getColumnNames()).containsExactly("FN");
+	}
+}

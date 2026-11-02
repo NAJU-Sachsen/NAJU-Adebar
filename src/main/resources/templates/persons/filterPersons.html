@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+
+<html lang="de" xmlns:th="http://www.thymeleaf.org"
+			xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="utf-8"/>
+	<meta content="width=device-width,initial-scale=1" name="viewport"/>
+	<meta th:name="_csrf" th:content="${_csrf.token}"/>
+	<title>Personen Filtern | Adebar</title>
+
+
+	<link rel="stylesheet" type="text/css" href="../../static/resources/css/bootstrap.min.css"
+				th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../static/resources/css/style.css"
+				th:href="@{/resources/css/style.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../static/resources/css/formCategories.css"
+				th:href="@{/resources/css/formCategories.css}"/>
+	<link rel="stylesheet" type="text/css" href="../../static/resources/css/filterPersons.css"
+				th:href="@{/resources/css/filterPersons.css}"/>
+
+	<link rel="shortcut icon" th:href="@{/resources/res/favicon.ico}"/>
+</head>
+<body>
+
+<!-- central navigation -->
+<nav th:replace="~{navigation :: topNav(page='persons', static=true)}"></nav>
+
+<!-- page specific content-->
+<main id="main">
+
+	<form id="filters" method="post" class="row" th:action="@{/persons/filter}">
+
+		<div class="col-md-9 padding-lg">
+
+			<h1 class="page-title">Nach Personen suchen</h1>
+			<hr/>
+
+			<div class="row no-filters">
+				<div class="alert alert-info">
+					Zur Zeit sind keine Filter ausgewählt
+				</div>
+			</div>
+
+			<div class="row">
+
+				<div th:replace="~{filter :: %form(filterForm=${filterForm})}"></div>
+
+			</div>
+
+		</div>
+
+		<div class="col-md-3 padding-lg">
+			<div class="panel panel-default">
+
+				<div class="panel-heading">
+					<h2 class="panel-title">Filtereinstellungen</h2>
+				</div>
+
+				<ul class="list-group" th:remove="all-but-first">
+					<li class="list-group-item" th:each="filterGroup : ${filterForm.filterGroups}">
+              <span class="checkbox">
+                <label th:inline="text">
+                  <input type="checkbox" data-toggle="collapse-inline"
+												 th:id="${filterGroup.togglerId}"
+												 th:attrappend="data-target='#' + ${filterGroup.groupId}"/> nach [[${filterGroup.name}]]-Details filtern
+                </label>
+              </span>
+					</li>
+				</ul>
+
+				<div class="panel-body" id="filter-quick-nav-title">
+					<h3 class="h4">Springe zu:</h3>
+				</div>
+				<ul class="nav nav-pills nav-stacked" th:remove="all-but-first">
+					<li role="presentation" th:each="filterGroup : ${filterForm.filterGroups}">
+						<a th:href="'#' + ${filterGroup.groupId}" th:inline="text">
+							<span class="glyphicon glyphicon-chevron-right"></span>
+							[[${filterGroup.name}]]
+						</a>
+					</li>
+					<li role="presentation">
+						<a href="#filter-participant"><span class="glyphicon glyphicon-chevron-right"></span>
+							Teilnehmende</a>
+					</li>
+					<li role="presentation">
+						<a href="#filter-activist"><span class="glyphicon glyphicon-chevron-right"></span>
+							Aktive</a>
+					</li>
+					<li role="presentation">
+						<a href="#filter-referent"><span class="glyphicon glyphicon-chevron-right"></span>
+							Referierende</a>
+					</li>
+					<li role="presentation">
+						<a href="#filter-events">
+							<span class="glyphicon glyphicon-chevron-right"></span>
+							Veranstaltungen
+						</a>
+					</li>
+					<li role="presentation">
+						<a href="#filter-local-groups"><span class="glyphicon glyphicon-chevron-right"></span>
+							Ortsgruppen</a>
+					</li>
+				</ul>
+
+				<hr/>
+
+				<ul class="list-group">
+					<li class="list-group-item">
+              <span class="checkbox">
+                <label>
+                  <input type="checkbox" name="exclude-marketing-optout"/> nur Personen einschließen, die Veranstaltungswerbung zugestimmt haben
+                </label>
+              </span>
+					</li>
+					<li class="list-group-item">
+						<span class="checkbox">
+							<label>
+								<input type="checkbox" name="use-parents"/> anstelle der Personen die Eltern anzeigen
+							</label>
+						</span>
+					</li>
+				</ul>
+
+				<div class="panel-footer clearfix">
+					<div class="pull-right">
+						<button type="submit" form="filters" class="btn btn-success">Filtern</button>
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+
+	</form>
+
+</main>
+<script type="text/javascript" src="../../static/resources/js/jquery.min.js"
+				th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript" src="../../static/resources/js/bootstrap.min.js"
+				th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script src="../js/collapse.js" type="text/javascript"
+				th:src="@{/resources/js/collapse.js}"></script>
+<script src="../static/resources/js/filter.js"
+				th:src="@{/resources/js/filter.js}"></script>
+<script src="../../static/resources/js/init.js" th:src="@{/resources/js/init.js}"></script>
+<script src="../../static/resources/js/filterPersons.js"
+				th:src="@{/resources/js/filterPersons.js}"></script>
+</body>
+</html>

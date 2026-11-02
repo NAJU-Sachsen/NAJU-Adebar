@@ -1,6 +1,6 @@
 package de.naju.adebar.services.conversion.newsletter;
 
-import de.naju.adebar.model.human.Person;
+import de.naju.adebar.model.persons.Person;
 import de.naju.adebar.model.newsletter.Subscriber;
 import org.springframework.stereotype.Service;
 
@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class PersonToSubscriberConverter {
 
-  public Subscriber convertPerson(Person person) {
-    return new Subscriber(person.getFirstName(), person.getLastName(), person.getEmail());
-  }
+	public Subscriber convertPerson(Person person) {
+		return new Subscriber(person.getFirstName(), person.getLastName(), person.getEmail());
+	}
 
 }

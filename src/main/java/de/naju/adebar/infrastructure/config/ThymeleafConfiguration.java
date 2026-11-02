@@ -13,14 +13,14 @@ import de.naju.adebar.infrastructure.thymeleaf.ExtendedDialect;
 @Configuration
 public class ThymeleafConfiguration {
 
-  /**
-   * Our custom dialect
-   * 
-   * @return the dialect
-   */
-  @Bean
-  public ExtendedDialect extendedDialect() {
-    return new ExtendedDialect();
-  }
+	/**
+	 * Our custom dialect
+	 * 
+	 * @return the dialect
+	 */
+	@Bean
+	public ExtendedDialect extendedDialect() {
+		return new ExtendedDialect();
+	}
 
 }

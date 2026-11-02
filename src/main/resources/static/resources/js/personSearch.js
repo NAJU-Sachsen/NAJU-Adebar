@@ -1,20 +1,22 @@
 function initSearch(modal, searchType = 'simpleSearch') {
-  var firstName = modal.find('.first-name');
-  var lastName = modal.find('.last-name');
-  var city = modal.find('.city');
-  var btn = modal.find('.search');
+  const firstName = modal.find('.first-name');
+  const lastName = modal.find('.last-name');
+  const city = modal.find('.city');
+  const btn = modal.find('.search');
 
-  btn.on('click', function() {
-    performSearch(modal, firstName.val(), lastName.val(), city.val(), searchType);
+  btn.on('click', function () {
+    performSearch(modal, firstName.val(), lastName.val(), city.val(),
+        searchType);
   });
 }
 
-function performSearch(modal, firstName, lastName, city, searchType = 'simpleSearch') {
-  var table = modal.find('tbody.matches');
+function performSearch(modal, firstName, lastName, city,
+    searchType = 'simpleSearch') {
+  const table = modal.find('tbody.matches');
 
   const csrfToken = $('#csrf').val();
 
-  var request = {
+  const request = {
     async: true,
     data: {
       firstname: firstName,
@@ -24,7 +26,7 @@ function performSearch(modal, firstName, lastName, city, searchType = 'simpleSea
     },
     dataType: 'json',
     method: 'POST',
-    success: function(response) {
+    success: function (response) {
       modal.find('.searching').hide();
       displayMatchingPersons(table, response);
     },

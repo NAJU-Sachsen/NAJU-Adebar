@@ -23,6 +23,7 @@ target/
 .DS_Store
 Servers/
 .metadata
+.sts4-cache/
 
 # Intelli-J specific
 .idea/
@@ -32,3 +33,15 @@ libraries/
 # local test files
 [lL]ocalTest*
 
+# DBeaver
+.dbeaver-data-sources.xml
+
+# others
+*log*
+*bckp*.sql
+
+# Visual Studio Code
+*.code-workspace
+
+# local secrets
+.env

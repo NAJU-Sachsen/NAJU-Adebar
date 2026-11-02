@@ -10,23 +10,30 @@ import org.springframework.util.Assert;
 /**
  * The {@link UserDetailsService} for our {@link UserAccount} implementation. Completely straight
  * forward.
- * 
+ *
  * @author Rico Bergmann
  *
  */
 @Service
 public class UserAccountService implements UserDetailsService {
-  private UserAccountRepository userRepository;
+	private UserAccountRepository userRepository;
 
-  @Autowired
-  public UserAccountService(UserAccountRepository userRepo) {
-    Assert.notNull(userRepo, "User account repository should not be null");
-    this.userRepository = userRepo;
-  }
+	@Autowired
+	public UserAccountService(UserAccountRepository userRepo) {
+		Assert.notNull(userRepo, "User account repository should not be null");
+		this.userRepository = userRepo;
+	}
 
-  @Override
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    return userRepository.findByUsername(username)
-        .orElseThrow(() -> new UsernameNotFoundException("For username " + username));
-  }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.springframework.security.core.userdetails.UserDetailsService#loadUserByUsername(java.lang.
+	 * String)
+	 */
+	@Override
+	public UserDetails loadUserByUsername(String username) {
+		return userRepository.findByUsername(Username.of(username))
+				.orElseThrow(() -> new UsernameNotFoundException("For username " + username));
+	}
 }
