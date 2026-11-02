@@ -42,3 +42,6 @@ libraries/
 
 # Visual Studio Code
 *.code-workspace
+
+# local secrets
+.env
